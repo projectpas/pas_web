@@ -2,18 +2,18 @@
     <div class="col-md-12 shadow-box-cstm" *ngIf="isViewMode == false">
         <div class="col-md-4">
             <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+                <label class="control-label labels-font-header wauto">Vendor Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                     {{ vendorCodeandName?.vendorName }}
                 </span>
             </p>
         </div>
         <div class="col-md-4">
             <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+                <label class="control-label labels-font-header wauto">Vendor Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                     {{ vendorCodeandName?.vendorCode }}
                 </span>
             </p>
@@ -102,7 +102,7 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 10px !important; margin-bottom: 5px !important;" class="row" *ngIf="showAdvancedSearchCard == true && isViewMode == false">
+                    <div  class="row advance-search-div" *ngIf="showAdvancedSearchCard == true && isViewMode == false">
                         <div class="col">
                             <div class="advance-search-card" >
                                 <div class="col-md-1">
@@ -176,7 +176,7 @@
                     </tr>
                     <tr>
                         <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                            <input style="width:100%;" pInputText type="text"
+                            <input class="table-header-input-width" pInputText type="text"
                                    (input)="dt.filter($event.target.value, col.field, 'contains')" />
                         </th>
                         <th class="table-actions-column" ></th>

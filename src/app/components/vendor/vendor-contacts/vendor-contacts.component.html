@@ -1,21 +1,21 @@
 ﻿﻿<div class="card new-card">
-  <div class="card-body" style="padding: 1px 5px;">
+  <div class="card-body padding-1-5">
     <div class="x_content">
       <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+            <label class="control-label labels-font-header wauto">Vendor Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+            <label class="control-label labels-font-header wauto">Vendor Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorCode }}
             </span>
           </p> 
@@ -180,7 +180,7 @@
                               <th class="table-actions-column">Actions</th>
                           </tr>
                           <tr>
-                              <th></th>
+                              <th class="table-column-width"></th>
                               <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                   [hidden]="col.field == 'isDefaultContact'">
                                   <input class="table-header-input-width" pInputText type="text" (input)="
@@ -374,18 +374,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+          <label class="control-label labels-font-header wauto">Vendor Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+          <label class="control-label labels-font-header wauto">Vendor Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorCode }}
           </span>
         </p>
@@ -399,27 +399,27 @@
       <table class="table table-bordered header-table-width" *ngIf="contactauditHisory.length > 0; else noDatavailable">
         <thead>
           <tr>
-            <th style="min-width: 90px;">Is Primary</th>
-            <th style="min-width: 50px;">Prefix</th>
-            <th style="min-width: 70px;">First Name</th>
-            <th style="min-width: 80px;">Middle Name</th>
-            <th style="min-width: 70px;">Last Name</th>
-            <th style="min-width: 50px;">Suffix</th>
-            <th style="min-width: 100px;">Contact Title</th>
-            <th style="min-width: 100px;">Email</th>
-            <th style="min-width: 100px;">Tag</th>
-            <th style="min-width: 100px;">Attention</th>
-            <th style="min-width: 120px;">Work Phone</th>
-            <th style="min-width: 90px;">Mobile Phone</th>
-            <th style="min-width: 90px;">Alternate Phone</th>
-            <th style="min-width: 90px;">Fax</th>           
-            <th style="min-width: 80px;">Memo</th>
-            <th style="min-width: 50px;">Is Active</th>
-            <th style="min-width: 120px;">Created Date</th>
-            <th style="min-width: 80px;">Created By</th>
-            <th style="min-width: 120px;">Updated Date</th>
-            <th style="min-width: 80px;">Updated By</th>            
-            <th style="min-width: 60px;">Is Deleted</th>
+            <th >Is Primary</th>
+            <th>Prefix</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Suffix</th>
+            <th>Contact Title</th>
+            <th>Email</th>
+            <th >Tag</th>
+            <th >Attention</th>
+            <th >Work Phone</th>
+            <th >Mobile Phone</th>
+            <th >Alternate Phone</th>
+            <th>Fax</th>           
+            <th>Memo</th>
+            <th>Is Active</th>
+            <th>Created Date</th>
+            <th >Created By</th>
+            <th >Updated Date</th>
+            <th >Updated By</th>            
+            <th >Is Deleted</th>
           </tr>
         </thead>
         <tbody class="audithistory-cstm">
@@ -571,8 +571,8 @@
       </div>
       <ng-template #noDatavailable>
         <div class="text-center">
-          <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;" />
-          <h4 style="color: #ff5663;">No History Found</h4>
+          <img src="../../../assets/images/binoculars.png" class="no-history-found-image" />
+          <h4 class="no-history-found-msg">No History Found</h4>
         </div>
       </ng-template>
     </div>
@@ -594,18 +594,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+            <label class="control-label labels-font-header wauto">Vendor Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+            <label class="control-label labels-font-header wauto">Vendor Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorCode }}
             </span>
           </p>
@@ -710,18 +710,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+              <label class="control-label labels-font-header wauto">Vendor Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                   {{ vendorCodeandName?.vendorName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+              <label class="control-label labels-font-header wauto">Vendor Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorCode }}
               </span>
             </p>
@@ -857,7 +857,7 @@
                 </div>
                 <div *ngIf="workPhone.errors" [ngClass]="'error'">
                   <div *ngIf="workPhone.errors.pattern">
-                    <span style="color:red">Please enter atleast 6 digits</span>
+                    <span class="clr-red">Please enter atleast 6 digits</span>
                   </div>
                 </div>
               </div>
@@ -871,7 +871,7 @@
                   [(ngModel)]="sourceVendor.email" #contactEmail="ngModel" [pattern]="emailPattern" required />
                   <div *ngIf="contactEmail.errors" [ngClass]="'error'">
                     <div *ngIf="contactEmail.errors.pattern">
-                      <span style="color:red">Email address is not valid</span>
+                      <span class="clr-red">Email address is not valid</span>
                     </div>
                   </div>
               </div>
@@ -886,7 +886,7 @@
                   [(ngModel)]="sourceVendor.mobilePhone" />
                   <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
                     <div *ngIf="mobilePhone.errors.pattern">
-                      <span style="color: red;">Please enter atleast 10 digits</span>
+                      <span class="clr-red">Please enter atleast 10 digits</span>
                     </div>
                   </div>
               </div>
@@ -901,7 +901,7 @@
                   [(ngModel)]="sourceVendor.alternatePhone" />
                   <div *ngIf="alternatePhone.errors" [ngClass]="'error'">
                     <div *ngIf="alternatePhone.errors.pattern">
-                      <span style="color: red;">Please enter atleast 6 digits</span>
+                      <span class="clr-red">Please enter atleast 6 digits</span>
                     </div>
                   </div>
               </div>
@@ -915,7 +915,7 @@
                   (keypress)="patternMobilevalidationWithSpl($event)" name="fax" #fax="ngModel" [(ngModel)]="sourceVendor.fax" />
                   <div *ngIf="fax.errors" [ngClass]="'error'">
                     <div *ngIf="fax.errors.pattern">
-                      <span style="color: red;">Please enter atleast 6 digits</span>
+                      <span class="clr-red">Please enter atleast 6 digits</span>
                     </div>
                   </div>
               </div>
@@ -991,18 +991,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+              <label class="control-label labels-font-header wauto">Vendor Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+              <label class="control-label labels-font-header wauto">Vendor Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorCode }}
               </span>
             </p>
@@ -1033,18 +1033,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+              <label class="control-label labels-font-header wauto">Vendor Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+              <label class="control-label labels-font-header wauto">Vendor Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorCode }}
               </span>
             </p>
@@ -1108,29 +1108,29 @@
                 (onPage)="pageIndexChangeForInt($event)">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
-                    <th *ngFor="let col of ataHeaders">
+                    <th class="table-column-width" *ngFor="let col of ataHeaders">
                       {{ col.header }}
                     </th>
-                    <th class="action-width">Action</th>
+                    <th class="table-actions-column">Actions</th>
                   </tr>
                   <tr>
-                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-                      <input style="width:100%;" pInputText type="text" (input)="
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                      <input class="table-header-input-width" pInputText type="text" (input)="
                         ata.filter(
                           $event.target.value,
                           col.field,
                           'contains'
                         )" />
                     </th>
-                    <th></th>
+                    <th class="table-actions-column"></th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
                   <tr>
-                    <td class="uiTable_td_ovrflw_control" *ngFor="let col of ataHeaders">
+                    <td class="table-column-width" *ngFor="let col of ataHeaders">
                       {{ rowData[col.field] }}
                     </td>
-                    <td class="action-width">
+                    <td class="action-icons-cstm table-column-width">
                       <div *ngIf="currentATADeletedstatus == false">
 
                           <span *ngIf="!isViewMode" data-toggle="modal" data-target="#editATAChapter"><a class="btn nobg"
@@ -1160,19 +1160,19 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns *ngIf="ataListDataValues?.length == 0">
                   <tr>
-                    <td [attr.colspan]="8" style="color: red; font-weight: bold; text-align: center">
+                    <td [attr.colspan]="8" class="no-records-msg no-records-cstm">
                       No records found
                     </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="summary" id="footer">
                   <label id="footer" class="footer">Total:</label>
-                  <input style="width: 5%;" [(ngModel)]="ata._totalRecords" pInputText name="noofrecordsata" type="text"
+                  <input class="footer-input-width" [(ngModel)]="ata._totalRecords" pInputText name="noofrecordsata" type="text"
                     disabled />
                   &nbsp;&nbsp;
                   <label id="footer" class="footer1">Pages Count:</label>
 
-                  <input style="width: 5%;" name="pagecountata"
+                  <input class="footer-input-width" name="pagecountata"
                     [ngModel]="getPageCount(ata._totalRecords, pageSizeForATA)" pInputText type="text" disabled />
                 </ng-template>
               </p-table>
@@ -1313,18 +1313,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+          <label class="control-label labels-font-header wauto">Vendor Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ vendorCodeandName?.vendorName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+          <label class="control-label labels-font-header wauto">Vendor Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ vendorCodeandName?.vendorCode }}
           </span>
         </p>
@@ -1358,18 +1358,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+          <label class="control-label labels-font-header wauto">Vendor Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ vendorCodeandName?.vendorName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+          <label class="control-label labels-font-header wauto">Vendor Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ vendorCodeandName?.vendorCode }}
           </span>
         </p>
@@ -1407,18 +1407,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+              <label class="control-label labels-font-header wauto">Vendor Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+              <label class="control-label labels-font-header wauto">Vendor Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ vendorCodeandName?.vendorCode }}
               </span>
             </p>
@@ -1517,7 +1517,7 @@
           </div>
           <ng-template #noDatavailable>
             <div class="text-center">
-              <h4 style="color: #ff5663;">No History Found</h4>
+              <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
         </div>
@@ -1540,18 +1540,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+            <label class="control-label labels-font-header wauto">Vendor Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+            <label class="control-label labels-font-header wauto">Vendor Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ vendorCodeandName?.vendorCode }}
             </span>
           </p>

@@ -1,20 +1,20 @@
 ﻿﻿<div class="card new-card">
-    <div class="card-body" style="padding: 1px 5px;">
+    <div class="card-body padding-1-5">
         <div class="x_panel">
             <div class="x_content">
                 <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <label class="control-label labels-font-header wauto" >Vendor Name: </label>
+                            <span class="span-header-red text-capital">
                                 {{ vendorCodeandName?.vendorName }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <label class="control-label labels-font-header wauto">Vendor Code: </label>
+                            <span class="span-header-red text-capital">
                                 {{ vendorCodeandName?.vendorCode }}
                             </span>
                         </p>
@@ -108,10 +108,13 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <!-- <div class="col">
                                                 <div class="">
                                                     <div class="col"
-                                                         style="width: 370px; float: right; padding-top: 3px;">
+                                                         style="width: 370px; float: right; padding-top: 3px;"> -->
+                                                         <div class="pull-right buttons-div-align">
+                                                            <div class="col">
+                                                            <div class="col buttons-top-padding">
                                                         <div class="form-group">
                                                             <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
@@ -137,11 +140,14 @@
                                     </ng-template> 
                                     <ng-template *ngIf="isViewMode" pTemplate="caption">
                                         <div class="row">
-                                            <div class="col">
+                                            <!-- <div class="col">
                                                 <div class="">
                                                     <div class="col"
-                                                         style="width: 350px; float: right; padding-top: 3px;">
-                                                        <div class="form-group">
+                                                         style="width: 350px; float: right; padding-top: 3px;"> -->
+                                                         <div class="pull-right buttons-div-align">
+                                                            <div class="col">
+                                                            <div class="col buttons-top-padding">
+                                                         <div class="form-group">
                                                             <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                                             </div>
@@ -315,7 +321,7 @@
 	</div>
 </div>
 
-<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
 
         <h4 class="modal-title">History of Billing Information</h4>
@@ -442,7 +448,7 @@
             </div>
             <ng-template #noDatavailable>
                 <div class="text-center">
-                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
                     <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
             </ng-template>
@@ -462,18 +468,18 @@
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                   <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+                    <label class="control-label labels-font-header wauto">Vendor Name:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <span class="span-header-red text-capital">
                         {{ vendorCodeandName?.vendorName }}
                     </span>
                   </p>
                 </div>
                 <div class="col-md-6">
                   <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+                    <label class="control-label labels-font-header wauto">Vendor Code:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <span class="span-header-red text-capital">
                         {{ vendorCodeandName?.vendorCode }}
                     </span>
                   </p>

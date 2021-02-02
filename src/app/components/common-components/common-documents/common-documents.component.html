@@ -43,17 +43,13 @@
                     [(ngModel)]="selectedColumns"
                     [ngModelOptions]="{ standalone: true }"
                     optionLabel="header"
-                    selectedItemsLabel="{0} columns selected"
-                    [style]="{ minWidth: '200px' }"
+                    selectedItemsLabel="{0} columns selected"                   
                     defaultLabel="Choose Columns"
-                    style="float:left"
+                  class="multiselect-field"
                   ></p-multiSelect>
                 </div>
                 <div class="col" >
-                  <div
-                    style=" float: right;"
-                    class="inner-addon right-addon w200 inline-block g-filter-search-cstm"
-                  >
+                  <div class="global-search-field inner-addon right-addon inline-block">
                     <i class="fa fa-search"></i>
                     <input
                       type="text"
@@ -63,7 +59,7 @@
                       (input)="
                         documents.filterGlobal($event.target.value, 'contains')
                       "
-                      placeholder=" Filter" style="height: 28px !important;"
+                      placeholder=" Filter"
                     />
                   </div>
                 </div>
@@ -72,7 +68,7 @@
                 <div class="col" >
                   <button *ngIf="isViewMode == false"
                     type="button"
-                    class="btn btn-primary new-table-button"
+                    class="btn btn-primary exports-button"
                     pButton
                     icon="fa-download"
                     matTooltip="Download  Data"
@@ -80,7 +76,6 @@
                     iconPos="left"
                     label="Export  Data"
                     (click)="selectedOnly = false; targetData = documents;"
-                    style="padding: 5px 10px !important;"
                     data-toggle="modal"
                     data-target="#downloadConfirmation"
                   ></button>
@@ -92,7 +87,7 @@
 
                   <button *ngIf="isViewMode == false"
                     type="button"
-                    class="btn btn-primary new-table-button"
+                    class="btn btn-primary exports-button"
                     pButton
                     icon="fa-download"
                     matTooltip="Download Selected Data"
@@ -100,7 +95,6 @@
                     iconPos="left"
                     label="Export Selected Data"
                     (click)="documents.exportCSV({ selectionOnly: true })"
-                    style="padding: 5px 10px !important;"
                   ></button>
                 </div>
                 <div class="col">
@@ -490,16 +484,15 @@
               >
                 <ng-template pTemplate="header" let-columns>
                   <tr>
-                    <th *ngFor="let col of columns">
+                    <th class="table-column-width" *ngFor="let col of columns">
                       {{ col.header }}
                     </th>
-                    <th>
+                    <th class="table-actions-column">
                       Download
                     </th>
                   </tr>
                   <tr>
-                    <th
-                      style="width:auto"
+                    <th class="table-column-width"
                       *ngFor="let col of columns"
                       [ngSwitch]="col.field"
                     >
@@ -512,7 +505,7 @@
                         "
                       />
                     </th>
-                    <th></th>
+                    <th class="table-actions-column"></th>
                   </tr>
                 </ng-template>
                 <ng-template
@@ -523,12 +516,12 @@
                   let-i="rowIndex"
                 >
                   <tr>
-                    <td *ngFor="let col of columns">
+                    <td class="table-column-width" *ngFor="let col of columns">
                       <ng-container *ngIf="col.field == 'fileName'">
                         {{ part[col.field] }}
                       </ng-container>
                     </td>
-                    <td class="text_c">
+                    <td class="table-actions-column action-icons-cstm" class="text_c">
                       <button *ngIf="part.attachmentId!=0"
                         (click)="downloadFile(part)"
                         matTooltip="Download"  matTooltipPosition="above"
@@ -552,7 +545,7 @@
                   <tr>
                     <td
                       [attr.colspan]="2"
-                      style="color: red; font-weight: bold; text-align: center"
+                     class="no-records-msg no-records-cstm"
                     >
                       No records found
                     </td>
@@ -745,10 +738,10 @@
                   [columns]="sourceViewforDocumentListColumns">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th *ngFor="let col of columns">
+                      <th class="table-column-width" *ngFor="let col of columns">
                         {{ col.header }}
                       </th>
-                      <th>
+                      <th class="table-actions-column">
                         Download
                       </th>
                     </tr>
@@ -760,7 +753,7 @@
                     let-columns="columns"
                     let-i="rowIndex">
                     <tr>
-                      <td *ngFor="let col of columns">
+                      <td class="table-column-width" *ngFor="let col of columns">
                         <ng-container *ngIf="col.field == 'fileName'">
                           {{ part[col.field] }}
                         </ng-container>
@@ -784,7 +777,7 @@
                         </span> -->
   
                     <!-- </td> -->
-                    <td class="text_c">
+                    <td class="table-actions-column action-icons-cstm" class="text_c">
                       <button *ngIf="part.attachmentId!=0"
                         (click)="downloadFile(part)"
                         matTooltip="Download"  matTooltipPosition="above"
@@ -807,7 +800,7 @@
                     <tr>
                       <td
                         [attr.colspan]="2"
-                        style="color: red; font-weight: bold; text-align: center"
+                       class="no-records-cstm no-records-msg"
                       >
                         No records found
                       </td>
