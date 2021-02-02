@@ -266,6 +266,13 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getPickTicket(salesOrderId)
     );
   }
+
+  generatePickTicket(salesOrderId: number, salesOrderPartId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.generatePickTicket(salesOrderId, salesOrderPartId)
+    );
+  }
+
   getPickTicketList(salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPickTicketList(salesOrderId)
@@ -547,6 +554,10 @@ export class SalesOrderService {
 
   GetSalesOrderPartsViewById(salesOrderId) {
     return this.salesOrderEndPointSevice.getSalesOrderPartsViewById(salesOrderId)
+  }
+
+  updatePickTicket(data) {
+    return this.salesOrderEndPointSevice.updatePickTicket(data);
   }
   //ed --nitin
 }
