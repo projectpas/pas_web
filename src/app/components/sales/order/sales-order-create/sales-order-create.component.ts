@@ -1519,7 +1519,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.allEmployeeList = res;
       this.firstCollection = res;
       this.employeesList = res;
-      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', currentEmployeeId, res);
+      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
       if (!this.isEdit) {
         this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
       }
