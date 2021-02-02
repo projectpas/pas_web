@@ -1991,7 +1991,7 @@
     <h4 class="modal-title">Certified Attachment Details</h4>
   </div>
   <div class="modal-body">
-    <p-table
+    <!-- <p-table
       #table3
       class="table-responsive1 rpo-table-cstm"
       [paginator]="allVendorCertifiedocumentsList.length > 0"
@@ -2142,7 +2142,9 @@
           </td>
         </tr>
       </ng-template>
-    </p-table>
+    </p-table> -->
+    <app-common-documents [moduleName]="CertifiedModuleName"   [referenceId]="vendorId"
+    [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
   </div>
   <div class="modal-footer">
     <button
@@ -2173,7 +2175,7 @@
     <h4 class="modal-title">Vendor Audit Attachment Details</h4>
   </div>
   <div class="modal-body">
-    <p-table
+    <!-- <p-table
       #table4
       class="table-responsive1 rpo-table-cstm"
       [paginator]="allVendorAuditdocumentsList.length > 0"
@@ -2328,7 +2330,9 @@
           </td>
         </tr>
       </ng-template>
-    </p-table>
+    </p-table> -->
+    <app-common-documents [moduleName]="AuditModuleName"   [referenceId]="vendorId"
+    [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
   </div>
   <div class="modal-footer">
     <button

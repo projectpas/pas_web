@@ -88,7 +88,7 @@
             </select>
           </td>
           <td>
-            <input type="text" pInputText pKeyFilter="pnum" class="form-control w100 text-right"
+            <input type="text" pInputText pKeyFilter="pnum" class="form-control w100 text-right input_adjust"
               value="{{ material.quantity }}" (keyup)="
                 calculateQtySummation();
                 calculateExtendedCost(material);
@@ -105,12 +105,12 @@
             {{material.stockType}}
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right" pInputText pKeyFilter="money"
+            <input type="text" class="form-control w100 text-right input_adjust" pInputText pKeyFilter="money"
               value="{{ material.unitCost }}" (change)="calculateExtendedCost(material)" [(ngModel)]="material.unitCost"
               name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right" pInputText pKeyFilter="money" [disabled]="true"
+            <input type="text" class="form-control w100 text-right input_adjust" pInputText pKeyFilter="money" [disabled]="true"
               value="{{ material.extendedCost }}" [(ngModel)]="material.extendedCost" name="extCost_{{ i }}"
               maxlength="15" [required]="!isWorkOrder" />
           </td>

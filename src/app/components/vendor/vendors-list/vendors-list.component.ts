@@ -30,6 +30,8 @@ declare var $ : any;
     providers: [DatePipe],
 })
 export class VendorsListComponent implements OnInit {
+    CertifiedModuleName:any;
+    AuditModuleName:any;
     allVendorCertifiedocumentsList: any = [];
     allVendorCertifiedocumentsListOriginal: any = [];
     allVendorAuditdocumentsList: any = [];
@@ -559,6 +561,8 @@ export class VendorsListComponent implements OnInit {
     openView(content, row) {
         this.vendorId = row.vendorId;
         this.isSpinnerVisible = true;
+        this.CertifiedModuleName="VendorCertified";
+        this.AuditModuleName="VendorAudit";
         this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
             this.vendorData = res;    
             this.isSpinnerVisible = false;        

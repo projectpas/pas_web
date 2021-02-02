@@ -156,6 +156,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 { label: 'Receiving Customer Work' }
             ];
         } else {
+            this.getWorkOrderDefaultSetting();
             this.getEmployeeData();
             this.loadTagTypes('');
             this.loadEmployeeData('');
@@ -1301,5 +1302,23 @@ export class CustomerWorkSetupComponent implements OnInit {
     changeOfStatus(status){
         this.disableUpdateButton=false;
     }
-
+    workorderSettings:any;
+    getWorkOrderDefaultSetting() {
+        const mcId= this.authService.currentUser
+        ? this.authService.currentUser.masterCompanyId
+        : null;
+          this.commonService.workOrderDefaultSettings(mcId, 1).subscribe(res => {
+         
+            // this.receivingForm.siteId=res[0].defaultSiteId;
+            // this.receivingForm.warehouseId=res[0].defaultWearhouseId;
+            // this.receivingForm.locationId=res[0].defaultLocationId;
+            // this.receivingForm.shelfId=res[0].defaultShelfId;
+            // this.receivingForm.binId=res[0].defaultBinId;
+            // this.loadSiteData('fromOnload');
+            // this.siteValueChange(this.receivingForm.siteId)
+            // this.wareHouseValueChange( this.receivingForm.warehouseId)
+            // this.locationValueChange(this.receivingForm.locationId)
+            // this.shelfValueChange(this.receivingForm.shelfId)
+          })
+      }
 }
