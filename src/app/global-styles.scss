@@ -97,9 +97,6 @@
 .buttons-div-align{
   padding-left:0px;
 }
-.body-padding{
- padding:10px !important;
-}
 .buttons-top-padding{
   padding-top: 3px;
 }
@@ -389,10 +386,34 @@ margin-top: 10px;
   position: sticky;
   top: 0;
 }
-
+.body-padding{
+  padding:10px !important;
+ }
 .tableFixHead {
   // overflow-y: auto;
   // height: 400px;
+}
+.padding-1-5{
+  padding: 1px 5px !important;
+}
+.m-t-30{
+  margin-top:30px !important;
+}
+.m-t-60{
+  margin-top:60px !important;
+}
+.m-r-5{
+  margin-right:5px !important;
+}
+.width-auto{
+  width: auto !important;
+}
+.text-capital{
+  text-transform: capitalize !important;
+}
+.view-active-inactive{
+  text-align-last: end; 
+  padding-right: 2%;
 }
 .tableFixHead thead th {
   position: sticky;

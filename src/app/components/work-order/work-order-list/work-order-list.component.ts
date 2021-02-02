@@ -20,6 +20,7 @@ import {
 import { Billing } from '../../../models/work-order-billing.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from "@angular/common";
+import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-details.model';
 @Component({
     selector: 'app-work-order-list',
     templateUrl: './work-order-list.component.html',
@@ -111,6 +112,8 @@ export class WorkOrderListComponent implements OnInit {
     private onDestroy$: Subject<void> = new Subject<void>();
 
     isSpinnerVisible: boolean = false;
+    rowDataToDelete: any = {};
+    currentDeletedstatus: boolean = false;
     customerWarningListId: any;
     warningMessage: string;
     restrictMessage: string;
@@ -151,6 +154,7 @@ export class WorkOrderListComponent implements OnInit {
     quoteExclusionList: any;
     freight: any;
     isContractAvl: any;
+    AuditDetails = SingleScreenAuditDetails;
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private authService: AuthService,
@@ -411,6 +415,8 @@ export class WorkOrderListComponent implements OnInit {
 
     getAllWorkOrderList(data) {
         this.isSpinnerVisible = true;
+        const isdelete = this.currentDeletedstatus ? true : false;
+        data.filters.isDeleted = isdelete;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.workOrderService.getWorkOrderList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderData = res;
@@ -915,18 +921,18 @@ export class WorkOrderListComponent implements OnInit {
 
     }
 
-    delete(rowData) {
-        this.isSpinnerVisible = false;
-        this.workOrderService.deleteActionforWorkOrder(rowData.workOrderId).subscribe(res => {
-            this.getAllWorkOrderList(this.lazyLoadEventData);
-            this.isSpinnerVisible = false;
-            this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
+    // delete(rowData) {
+    //     this.isSpinnerVisible = false;
+    //     this.workOrderService.deleteActionforWorkOrder(rowData.workOrderId).subscribe(res => {
+    //         this.getAllWorkOrderList(this.lazyLoadEventData);
+    //         this.isSpinnerVisible = false;
+    //         this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
 
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
+    //     },
+    //         err => {
+    //             this.isSpinnerVisible = false;
+    //         })
+    // }
 
     getWorkOrderPartListByWorkOrderId(rowData) {
         const { workOrderId } = rowData;
@@ -1102,5 +1108,70 @@ export class WorkOrderListComponent implements OnInit {
                 this.isSpinnerVisible = false;
             });
 
+    }
+
+
+    delete(rowData) {
+        this.rowDataToDelete = rowData;
+    }
+    deleteWO() {
+        this.isSpinnerVisible = false;
+        this.workOrderService.deleteActionforWorkOrder(this.rowDataToDelete.workOrderId).subscribe(res => {
+            this.getAllWorkOrderList(this.lazyLoadEventData);
+            this.isSpinnerVisible = false;
+            this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
+
+        },
+            err => {
+                this.isSpinnerVisible = false;
+            })
+        // const { purchaseOrderId } = this.rowDataToDelete;
+        // this.purchaseOrderService.deletePO(purchaseOrderId, this.userName).subscribe(res => {
+        //     this.isSpinnerVisible = true;
+        //     this.getList(this.lazyLoadEventData);
+        //     this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
+        // }, err => {
+        //     this.isSpinnerVisible = false;
+        // });
+    }
+
+
+    closeDeleteModal() {
+        $("#woDelete").modal("hide");
+    }
+
+
+    getDeleteListByStatus(value) {
+        this.currentDeletedstatus = true;
+        //const pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
+        this.pageIndex = this.lazyLoadEventData.rows > 10 ? parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows : 0;
+        this.pageSize = this.lazyLoadEventData.rows;
+        this.lazyLoadEventData.first = this.pageIndex;
+        if (value == true) {
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters, status: this.currentStatus };
+            this.isSpinnerVisible = true;
+            this.getAllWorkOrderList(this.lazyLoadEventData);
+        } else {
+            this.currentDeletedstatus = false;
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters, status: this.currentStatus };
+            this.isSpinnerVisible = true;
+            this.getAllWorkOrderList(this.lazyLoadEventData);
+        }
+    }
+
+    restorerecord: any = {}
+
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('WorkOrder', 'WorkOrderId', this.restorerecord.workOrderId).subscribe(res => {
+            this.getDeleteListByStatus(true)
+            this.modal.close();
+            this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 } 
