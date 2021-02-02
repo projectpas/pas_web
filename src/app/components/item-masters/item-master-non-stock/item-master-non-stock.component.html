@@ -3,13 +3,13 @@
         <div class="col-md-8">
             <div class="form-group">
                 <label class="radiobtn-label">Item Type:</label>
-                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                         <input type="radio" name="stock" class="form-control" (click)="stock()">
                         <span class="checkmark"></span>Stock
                     </label>
                 </div>
-                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                         <input type="radio" name="stock" class="form-control" [checked]="true" (click)="nonStock()">
                         <span class="checkmark"></span>Non-Stock
@@ -19,15 +19,15 @@
         </div>
     </div>
     <div class="card new-card">
-        <div class="card-header bg-primary">
+        <div class="card-header header">
           <div class="row">
             <div class="col">
-              <h4 class="new-card-heading">Item Master Setup (Non-Stock)</h4>
+              <h4 class="header-name">Item Master Setup (Non-Stock)</h4>
             </div>
             <div>
               <button
                 type="button"
-                class="btn-sm new-btn-primary"
+                class="btn-sm header-button"
                 [routerLink]="['/itemmastersmodule/itemmasterpages/app-item-master-list']">
                 Item Master List
               </button>
@@ -52,7 +52,7 @@
                                 <div class="ui-helper-clearfix">{{partName}}</div>
                             </ng-template>
                         </p-autoComplete>
-                        <div *ngIf="disableSavePartName" style="color:red">Already Exist</div>
+                        <div *ngIf="disableSavePartName" class="clr-red">Already Exist</div>
                         <label class="control-label">PN Description <strong class="clr-red">*</strong></label>
                         <p-autoComplete (onKeyUp)=descriptionHandler($event) (onSelect)="partdescriptionId($event)" [suggestions]="descriptionCollection" name="partdescription" (completeMethod)="filterdescription($event)" [(ngModel)]="sourceItemMaster.partdescription" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPNDesc()" required>
                             <ng-template let-partDescription pTemplate="item">
@@ -227,7 +227,7 @@
     </div>
 </ng-template>
 
-<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #contentEdit let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Item Classification</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Item Classification</h4>
@@ -260,7 +260,7 @@
                         </ng-template>
 
                     </p-autoComplete>
-                    <div *ngIf="disableClassdesc" style="color:Red">Already Exist</div>
+                    <div *ngIf="disableClassdesc" class="clr-red">Already Exist</div>
                 </div>
             </div>
             <div class="form-group">
@@ -273,7 +273,7 @@
                         </ng-template>
 
                     </p-autoComplete>
-                    <div *ngIf="disabletypeSave" style="color:Red">Already Exist</div>
+                    <div *ngIf="disabletypeSave" class="clr-red">Already Exist</div>
                     <div class="clear"></div>
                 </div>
             </div>
@@ -397,7 +397,7 @@
     </div>
 
 </ng-template>
-<ng-template #modeledt let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #modeledt let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Manufacturer</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Manufacturer</h4>
