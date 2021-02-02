@@ -6,7 +6,7 @@
                     <div class="col-md-4">
                         <p class="fs12">
                             <label class="control-label labels-font-header wauto">Vendor Name: </label>
-                            <span class="span-header- text-capital">
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
@@ -238,7 +238,7 @@
                                                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                             </span>
                                                             <ng-container *ngIf="!isViewMode">
-                                                                <span><a class="btn nobg" (click)="restoreDomesticShipping(restoreDomesticShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                                <span><a class="btn nobg btn-users-cstm" (click)="restoreDomesticShipping(restoreDomesticShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                             </ng-container>                                                            
                                                         </div>
                                                     </td>                                                    
@@ -1501,7 +1501,8 @@
                                                                     <i class="fa fa-history"></i>
                                                                 </a>
                                                             </span>
-                                                            <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restoreInternationalShipping(restoreInternationalShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                            <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm" (click)="restoreInternationalShipping(restoreInternationalShippingId,rowData);" 
+                                                                matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1736,10 +1737,14 @@
                                        class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                 </span>
                             </td>
-
-                            <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                            <ng-container *ngFor="let col of columns">
+                            <td class="table-column-width" *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                             </td>
+                            <td *ngIf="col.field == 'memo'">
+                                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                            </td>
+                        </ng-container>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns>
@@ -2016,9 +2021,14 @@
                                                class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                         </span>
                                     </td>
-                                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                    <ng-container *ngFor="let col of columns">
+                                    <td class="table-column-width" *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                     </td>
+                                    <td class="table-column-width" *ngIf="col.field == 'memo'">
+                                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                    </td>
+                                    </ng-container>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="emptymessage" let-columns>

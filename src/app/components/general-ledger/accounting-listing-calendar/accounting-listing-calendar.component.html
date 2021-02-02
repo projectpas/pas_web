@@ -40,7 +40,7 @@
 
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th class="table-column-width"
+                    <th style="width:130px !important"
                         *ngFor="let col of columns"
                         pResizableColumn
                         pReorderableColumn
@@ -48,7 +48,7 @@
                         {{ col.header }}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="table-actions-column"
+                    <th style="width:130px !important;position: sticky !important;"
                         *ngIf="selectedColumns.length > 0">
                         Actions
                     </th>
@@ -56,7 +56,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle>
-                    <td class="table-column-width"
+                    <td style="width:130px !important"
                         *ngFor="let col of columns"
                         class="ui-resizable-column"
                         pReorderableRowHandle
@@ -71,7 +71,7 @@
                                 : rowData[col.field]
                         }}
                     </td>
-                    <td class="action-icons-cstm table-actions-column" *ngIf="selectedColumns.length > 0">
+                    <td style="width:130px !important;position: sticky !important;" *ngIf="selectedColumns.length > 0">
                         <span data-toggle="modal" data-target="#view">
                             <a class="btn btn-info boxed-float-btn nobg"
                                data-toggle="tooltip"
