@@ -29,6 +29,7 @@ import { SalesOrderService } from '../../../../services/salesorder.service';
 import { SalesOrderReference } from '../../../../models/sales/salesOrderReference';
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { DBkeys } from '../../../../services/db-Keys';
+
 @Component({ 
     selector: 'app-work-order-add',
     templateUrl: './work-order-add.component.html',
@@ -36,6 +37,7 @@ import { DBkeys } from '../../../../services/db-Keys';
     animations: [fadeInOut],
     providers: [SalesOrderService]
 })
+
 export class WorkOrderAddComponent implements OnInit {
     @Input() isView: boolean = false;
     @Input() isEdit;
@@ -233,13 +235,15 @@ export class WorkOrderAddComponent implements OnInit {
     legalEntity: any;
     managementStructureId: any;
     isDeleteMpnPart:boolean=false;
-currentDeletedMpnIndex:any;
-quotestatusofCurrentPart:any;
-isSpinnerVisible: boolean = false; 
+    currentDeletedMpnIndex:any;
+    quotestatusofCurrentPart:any;
+    isSpinnerVisible: boolean = false; 
     subWOPartNoId: any=0;
     defaultTab = 'materialList';
     isViewForApprovedPart: boolean = false;
     customerId: any;
+    arrayCustomerIdList:any[] = [];
+    mpnDropdownList:any=[];
     
     constructor(
         private alertService: AlertService,
@@ -254,10 +258,11 @@ isSpinnerVisible: boolean = false;
         private quoteService: WorkOrderQuoteService,
         private salesOrderReferenceStorage: SalesOrderReferenceStorage,
 		public vendorService: VendorService,
-
-    ) {
+    ) 
+    {
         this.moduleName = 'Work Order';
     }
+
     async ngOnInit() {
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;  
         if(this.salesOrderReferenceData){
@@ -284,8 +289,8 @@ isSpinnerVisible: boolean = false;
         this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
         // if(!this.isSubWorkOrder){
         this.getTaskList();
-    // }
-    this.createModeData();
+        // }
+        this.createModeData();
         this.workOrderService.creditTerms = this.creditTerms;
         this.mpnFlag = true;
         this.isDetailedView = true;
@@ -306,12 +311,8 @@ isSpinnerVisible: boolean = false;
                 // workOrderId:133,
                 workOrderId: this.workOrderId,
                 // workFlowId: this.workFlowId,
-                workFlowWorkOrderId: this.workFlowWorkOrderId
-               
+                workFlowWorkOrderId: this.workFlowWorkOrderId               
             }
-            
-            // this.getWorkOrderWorkFlowNos();
-
         }
         if(!this.isSubWorkOrder){
             this.workOrderStatus();
@@ -337,8 +338,9 @@ isSpinnerVisible: boolean = false;
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit)?(formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) + '.00'): '0.00';
         }
     }
+
     ngOnChanges(changes: SimpleChanges) {
-// this is for get mpn dropdown list api after save mpn grid in sub wo   
+    // this is for get mpn dropdown list api after save mpn grid in sub wo   
         if(changes.subWoMpnGridUpdated){
             this.subWoMpnGridUpdated=changes.subWoMpnGridUpdated.currentValue;
            if(this.subWoMpnGridUpdated==true){
@@ -383,22 +385,22 @@ isSpinnerVisible: boolean = false;
             )
         }
       }
-      mpnDropdownList:any=[];
-      dropdownlistSubWoMpn(){
-  this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId).subscribe(res=>{
-  this.mpnDropdownList = res.map(x => {
-      return {
-        value:
-        {
-            datas: x,
-            partNumber: x.partNumber,
-            subWOPartNoId: x.subWOPartNoId,
-            subWorkOrderScopeId: x.subWorkOrderScopeId,
-            workFlowId:x.workflowId
-        },
-        label: x.partNumber + "-" + x.subWOPartNoId
-    }
-  });
+      
+    dropdownlistSubWoMpn(){
+    this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId).subscribe(res=>{
+        this.mpnDropdownList = res.map(x => {
+            return {
+                value:
+                {
+                    datas: x,
+                    partNumber: x.partNumber,
+                    subWOPartNoId: x.subWOPartNoId,
+                    subWorkOrderScopeId: x.subWorkOrderScopeId,
+                    workFlowId:x.workflowId
+                },
+                label: x.partNumber + "-" + x.subWOPartNoId
+            }
+    });
     if(this.mpnDropdownList && this.mpnDropdownList.length !=0){
         // this.workFlowId=this.mpnDropdownList[0].value.workFlowId;
         // if(this.workFlowId !=0){
@@ -604,8 +606,12 @@ isSpinnerVisible: boolean = false;
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-    createModeData() {
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
+    createModeData() {
         this.loginDetailsForCreate = {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
             createdBy: this.userName,
@@ -628,8 +634,11 @@ isSpinnerVisible: boolean = false;
         // adding Form Object Dynamically
         // this.generateLaborForm();
     }
+
     filterCustomerName(event) {
         const value = event.query.toLowerCase()
+        if(this.arrayCustomerIdList.length == 0) {			
+            this.arrayCustomerIdList.push(0); }	
         if (this.isRecCustomer) {
             this.commonService.getReceivingCustomers(value).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
@@ -640,13 +649,19 @@ isSpinnerVisible: boolean = false;
             })
         }
         else {
-            this.commonService.getCustomerNameandCode(value, this.workOrderGeneralInformation.workOrderTypeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.autoCompleteSmartDropDownCustomerList(this.workOrderGeneralInformation.workOrderTypeId, value, true, 20, this.arrayCustomerIdList.join(), this.currentUserMasterCompanyId).subscribe(res => {
+                const responseData = res;
+                this.isSpinnerVisible = false;
                 this.customerNamesList = res;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.handleError(err);
-            })
+              })
+
+            // this.commonService.getCustomerNameandCode(value, this.workOrderGeneralInformation.workOrderTypeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            //     this.customerNamesList = res;
+            // },
+            // err => {
+            //     // this.isSpinnerVisible = false;
+            //     this.handleError(err);
+            // })
         }
     }
     selectedCustomerType() {
