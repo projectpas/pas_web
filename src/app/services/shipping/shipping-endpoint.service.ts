@@ -50,7 +50,6 @@ export class ShippingEndpoint extends EndpointFactory {
 
     receiveParts<T>(receiveParts: ReceiveParts[]): Observable<T> {
         var listObj = [];
-        debugger;
         for (let part of receiveParts) {
             let Obj = {
                 'itemMasterId': part.itemMasterId,
