@@ -71,7 +71,7 @@ export interface ISalesQuote {
 
   creditLimitTermsId: number;
 
-  employeeId: number;
+  employeeId: any;
 
   employeeName: string;
 

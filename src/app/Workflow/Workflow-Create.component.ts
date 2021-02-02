@@ -356,21 +356,26 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         }else{
             this.validateCOstflow()
         }
-
-    
-   
     }
+
+     onChangeberThresholdAmount() {
+	 	this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.berThresholdAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2) : '0.00';
+     }
+    
 validateCOstflow(){
     if (this.sourceWorkFlow.fixedAmount) {
         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
+        this.onChangeberThresholdAmount();
    }
     // check on is percentOfNew enable
     if (this.sourceWorkFlow.percentOfNew1) {
         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
+        this.onChangeberThresholdAmount();
     }
     // check on is .percentOfReplacement enable
     if (this.sourceWorkFlow.percentOfReplacement) {
         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
+        this.onChangeberThresholdAmount();
     }
 
     // 1 and 2 check box 
@@ -378,6 +383,7 @@ validateCOstflow(){
         const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
         const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
         this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
+        this.onChangeberThresholdAmount();
     }
 
     // 2 and 3  check box 
@@ -385,12 +391,14 @@ validateCOstflow(){
         const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
         const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
         this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+        this.onChangeberThresholdAmount();
     }
     // 1 and 3  check box 
     if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
         const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
         const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
         this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
+        this.onChangeberThresholdAmount();
     }
 
     //1 and 2 and 3 check box
@@ -399,10 +407,12 @@ validateCOstflow(){
         const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
         const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
         this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+        this.onChangeberThresholdAmount();
     }
     //1 and 2 and 3 check box all uncheck 
     if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
         this.sourceWorkFlow.berThresholdAmount = 0.00;
+        //this.onChangeberThresholdAmount();
     }
 
     this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
@@ -1263,6 +1273,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
     calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
         if (this.sourceWorkFlow.berThresholdAmount == undefined || this.sourceWorkFlow.berThresholdAmount == 0) {
             this.sourceWorkFlow.berThresholdAmount = 0;
+            this.onChangeberThresholdAmount();
         }
         this.MaterialCost = 0;
         this.TotalCharges = 0;

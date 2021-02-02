@@ -1407,6 +1407,7 @@ export class SalesOrderCreateComponent implements OnInit {
 
   enableHeaderSave() {
     this.enableHeaderSaveBtn = true;
+    this.enableUpdateButton = false;
   }
 
   checkValidOnChange(condition, value) {
@@ -1576,6 +1577,8 @@ export class SalesOrderCreateComponent implements OnInit {
     } else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
     }
+
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   getDepartmentlist(divisionId) {
@@ -1594,6 +1597,8 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesQuote.managementStructureId = this.salesQuote.buId;
       this.salesQuote.divisionId = 0;
     }
+
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   getDepartmentId(departmentId) {
@@ -1605,6 +1610,8 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesQuote.managementStructureId = this.salesQuote.divisionId;
       this.salesQuote.departmentId = 0;
     }
+
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   loadSOStatus() {

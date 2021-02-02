@@ -4,6 +4,8 @@ import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
+import { AuthService } from '../services/auth.service';
+
 declare var $ : any;
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
@@ -41,7 +43,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     deleteRowRecord:any={};
 
     constructor(private modalService: NgbModal,private vendorservice: VendorService, 
-         private alertService: AlertService, 
+         private alertService: AlertService, private authService: AuthService,
         private commonService: CommonService) {
     }
 
@@ -156,6 +158,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         })
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
+
     onChargeTypeChange(event, charge): void {
         console.log("eveene",event, charge)
         this.isSpinnerVisible = true;
@@ -194,18 +202,32 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 return arrayVendlsit.push(acc.vendorId);
             }, 0)
         }
-        this.vendorservice.getVendorNameCodeListwithFilter(strText, 20, arrayVendlsit).subscribe(res => {
-            this.allVendors = res.map(x => {
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, arrayVendlsit, this.currentUserMasterCompanyId)
+            .subscribe(res => {
                 this.isSpinnerVisible = false;
-                return {
-                    vendorId: x.vendorId,
-                    vendorName: x.vendorName
-                }
+                this.allVendors = res.map(x => {
+                    return {
+                        vendorId: x.value,
+                        vendorName: x.label
+                    }
+                });
+                this.vendorCollection = this.allVendors;
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-            this.vendorCollection = this.allVendors;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
+
+        // this.vendorservice.getVendorNameCodeListwithFilter(strText, 20, arrayVendlsit).subscribe(res => {
+        //     this.allVendors = res.map(x => {
+        //         this.isSpinnerVisible = false;
+        //         return {
+        //             vendorId: x.vendorId,
+        //             vendorName: x.vendorName
+        //         }
+        //     });
+        //     this.vendorCollection = this.allVendors;
+        // }, error => {
+        //     this.isSpinnerVisible = false;
+        // });
     }
 
     onVendorSelected(charge, event) {

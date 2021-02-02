@@ -249,6 +249,13 @@ export class VendorsListComponent implements OnInit {
         this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-general-information');
         this.vendorService.listCollection = undefined;
   }
+
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser
+        ? this.authService.currentUser.masterCompanyId
+        : null;
+  }
+
     //Load Data for Vendor List
     loadData(event) {
         this.lazyLoadEventData = event;
@@ -271,6 +278,7 @@ export class VendorsListComponent implements OnInit {
 
     getList(data) {
         this.isSpinnerVisible = true;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         this.vendorService.getAllVendorList(data).subscribe(res => {
 
 
@@ -1017,8 +1025,8 @@ export class VendorsListComponent implements OnInit {
             error => this.onDataLoadFailed(error))
     }
     exportCSV(dt) {
-        this.isSpinnerVisible = true;
-        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+        this.isSpinnerVisible = true;        
+        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}		
         let filters = Object.keys(dt.filters);
         filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;

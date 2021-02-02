@@ -3,13 +3,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { QuickAppProMaterialModule } from '../modules/material.module';
-import { CommonModule } from '@angular/common'; //<-- This one
+import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
 import { RouterModule, Routes } from '@angular/router';
 import { GroupByPipe } from '../pipes/group-by.pipe';
 
 import { WorkOrdersPagesRoutingModule } from './workorderpages-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import {EditorModule} from 'primeng/editor';
+import { EditorModule } from 'primeng/editor';
 
 import { WorkOrderPagesComponent } from './workorderpages.component';
 import { DirectLabourAddComponent } from '../components/work-order/work-order-setup/direct-labour-add/direct-labour-add.component';
@@ -78,7 +78,7 @@ import { WorkOrderSmartComponent } from '../components/work-order/work-order-set
 import { WorkOrderViewComponent } from '../components/work-order/work-order-setup/work-order-view/work-order-view.component';
 import { AccordionModule } from 'primeng/accordion';
 import { CommunicationService } from '../shared/services/communication.service';
-import {ShippingComponent} from '../shared/components/shipping/shipping.component';
+import { ShippingComponent } from '../shared/components/shipping/shipping.component';
 import { SalesQuoteService } from '../services/salesquote.service';
 import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.service";
 
@@ -191,7 +191,7 @@ import { TreeTableModule } from 'primeng/treetable';
     QuoteViewComponent,
     CommonTeardownComponent,
     TeardownOverviewComponent,
-    MemoComponent, 
+    MemoComponent,
     EmailComponent,
     PhoneComponent,
     TextComponent,
@@ -218,7 +218,8 @@ import { TreeTableModule } from 'primeng/treetable';
     SalesOrderService,
     SalesOrderEndpointService,
     SalesQuoteService,
-    SalesQuoteEndpointService
+    SalesQuoteEndpointService,
+    DatePipe
   ],
   exports: [SubWorkOrderComponent, EmailComponent]
 })
