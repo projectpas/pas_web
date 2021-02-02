@@ -269,18 +269,16 @@
                                     <label>Entry Date</label>
                                     <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="entryDate" [maxDate]="minDateValue" [(ngModel)]="stockLineForm.entryDate" (ngModelChange)="enableSave()"></p-calendar>
                                 </div>
-                               
-                               
                                 <div class="form-group">
                                     <label>PO Num</label>
-                                    <select [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId" (change)="onChangePONum(stockLineForm.purchaseOrderId)" (ngModelChange)="enableSave()">
+                                    <select [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId" (change)="onChangePONum(stockLineForm.purchaseOrderId)" (ngModelChange)="enableSave()" [disabled]="stockLineForm.repairOrderId > 0" >
                                         <option value="0">-- Select --</option>
                                         <option *ngFor="let po of allPolistInfo" [ngValue]="po.purchaseOrderId">{{po.purchaseOrderNumber}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>RO Num</label>
-                                    <select [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId" (change)="onChangeRONum(stockLineForm.repairOrderId)" (ngModelChange)="enableSave()">
+                                    <select [(ngModel)]="stockLineForm.repairOrderId" name="repairOrderId" (change)="onChangeRONum(stockLineForm.repairOrderId)" (ngModelChange)="enableSave()" [disabled]="stockLineForm.purchaseOrderId > 0">
                                         <option value="0">-- Select --</option>
                                         <option *ngFor="let manufacturer of allRolistInfo" [ngValue]="manufacturer.repairOrderId">{{manufacturer.repairOrderNumber}}
                                     </select>
