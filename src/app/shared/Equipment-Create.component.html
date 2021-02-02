@@ -4,7 +4,7 @@
       }}<i (click)="addRow()" class="fa fa-plus"></i></span>
   </div>
   <form #toolsCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-equip">
+    <table class="table table-bordered table-fixed workflow-table-equip workflowTable-class">
       <tr>
         <th><label>Tool Name</label></th>
         <th> <label for="">{{moduleName}} ID</label></th>
@@ -30,7 +30,7 @@
       </p-autoComplete>
         </td>
         <td>
-          {{ eqp.assetName }}
+          {{ eqp.assetIdName }}
         </td>
         <td>
           {{ eqp.assetDescription }}

@@ -167,7 +167,7 @@
                             </div>
                         </div>
                         <div style="margin-top:8px;">
-                            <div class="col-md-6">
+                            <div class="col-md-11">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Memo<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
@@ -178,8 +178,8 @@
                                         <div class="form-group memo-popup-cstm mat_emo">
                                             <div [innerHTML]="sourceWorkFlow.memo"
                                                 [matTooltip]="parsedText(sourceWorkFlow.memo)" class="form-control"
-                                                style="width:200% !important"
-                                                class="text_editor_box">
+                                               
+                                                class="text_editor_box memo_cehck">
                                             </div>
                                         </div>
                                     </span>
@@ -523,8 +523,8 @@
                 <div class="card" *ngIf="sourceWorkFlow.workflowId">
                     <div class="card-body">
                         <div class="form-group col-sm-6">
-                            <div class="col-sm-1" style="margin-right: 85px;">
-                                <strong> <label> Tasks </label></strong>
+                            <div class="col-sm-1 class-task">
+                                <strong> <label class="fot-label"> Tasks </label></strong>
                             </div>
                             <div class="form-row">
                                 <div class="col-sm-5">
@@ -541,8 +541,8 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-6" [hidden]="!showActionAttribute">
-                            <div class="col-sm-1" style="margin-right: 70px;">
-                                <strong><label>Task Attribute</label></strong>
+                            <div class="col-sm-1 class-Attribue">
+                                <strong><label class="fot-label">Task Attribute</label></strong>
                             </div>
                             <div class="col-sm-5">
                                 <div class="inner-addon inline-block display-flex">
@@ -638,7 +638,7 @@
                                     <div id="tab_Measurements"
                                         *ngIf="workFlow != undefined && workFlow.measurements != undefined"
                                         class="tab-pane fade pan">
-                                        <grd-measurement [UpdateMode]="UpdateMode" [workFlow]='workFlow'>
+                                        <grd-measurement (childEvent)="updateStatus($event)" [UpdateMode]="UpdateMode" [workFlow]='workFlow'>
                                         </grd-measurement>
                                     </div>
                                 </div>
@@ -763,7 +763,7 @@
     </div>
 
     <div id="quoteVer" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog modal-sm" style="text-align: center;">
+        <div class="modal-dialog modal-sm" style="text-align: center;"> 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="text-align:start;">

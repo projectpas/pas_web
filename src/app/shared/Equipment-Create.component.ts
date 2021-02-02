@@ -114,12 +114,13 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     clearautoCompleteInput(currentRecord) {
         currentRecord.partNumber = undefined;
     }
-    onPartSelect(event, equipment,index) {
+    onPartSelect(event, equipment,index) { 
             this.workFlow.equipments[index].assetId = event.assetId;
             this.workFlow.equipments[index].partNumber = event;
             this.workFlow.equipments[index].assetDescription = event.description;
             this.workFlow.equipments[index].assetTypeId = event.assetTypeId;
             this.workFlow.equipments[index].assetName = event.name,
+            this.workFlow.equipments[index].assetIdName = event.assetIdName,
             this.workFlow.equipments[index].assetTypeName = event.assetTypeName
             var anyEquipment = this.workFlow.equipments.filter(ev =>
                 ev.taskId == this.workFlow.taskId && ev.assetId == event.assetId);
@@ -167,6 +168,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                                 "description": x.description,
                                 "name": x.name,
                                 "class": x.assetAttributeTypeName,
+                                'assetIdName':x.assetId
                     }
                 }); 
             }, error => {
