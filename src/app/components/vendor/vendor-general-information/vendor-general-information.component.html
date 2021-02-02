@@ -143,7 +143,7 @@
                                             <td style="width: 65%; margin-right: 10px !important;">
                                                 <div *ngIf="vendorPhone.errors" [ngClass]="'error'">
                                                     <div *ngIf="vendorPhone.errors.pattern">
-                                                      <span style="color: red;">Please enter atleast 6 digits</span>
+                                                      <span class="clr-red">Please enter atleast 6 digits</span>
                                                     </div>
                                                   </div>
                                             </td>
@@ -168,7 +168,7 @@
                                            [pattern]="emailPattern" [(ngModel)]="sourceVendor.vendorEmail" (ngModelChange)="enableSave()" required />
                                     <div *ngIf="vendorEmail.errors" [ngClass]="'error'">
                                         <div *ngIf="vendorEmail.errors.pattern">
-                                            <span style="color:red">User Email not valid</span>
+                                            <span class="clr-red">User Email not valid</span>
                                         </div>
                                     </div>
                                     <div *ngIf="disableSaveVendorEmail" class="clr-red">
@@ -184,7 +184,7 @@
                                            (input)="convertUrlToLowerCase($event)" />
                                     <div *ngIf="url.errors" [ngClass]="'error'">
                                         <div *ngIf="url.errors.pattern">
-                                            <span style="color:red">URL not valid</span>
+                                            <span class="clr-red">URL not valid</span>
                                         </div>
                                     </div>
                                 </div>
@@ -423,7 +423,7 @@
                                 <div class="ui-helper-clearfix">{{ vendorName }}</div>
                             </ng-template>
                         </p-autoComplete>
-                        <div *ngIf="disablesaveForClassification" style="color:red">
+                        <div *ngIf="disablesaveForClassification" class="clr-red">
                             Already Exist
                         </div>
                         <div class="clear"></div>
@@ -504,7 +504,7 @@
                                    [pattern]="urlPattern" #urlIntegration="ngModel" (input)="convertUrlToLowerCase($event)" required />
                             <div *ngIf="urlIntegration.errors" [ngClass]="'error'">
                                 <div *ngIf="urlIntegration.errors.pattern">
-                                    <span style="color:red">URL not valid</span>
+                                    <span class="clr-red">URL not valid</span>
                                 </div>
                             </div>
                         </div>
@@ -658,10 +658,10 @@
                                      [columns]="sourceViewforDocumentListColumns">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
-                                        <th *ngFor="let col of columns">
+                                        <th class="table-column-width" *ngFor="let col of columns">
                                             {{ col.header }}
                                         </th>
-                                        <th>
+                                        <th class="table-actions-column">
                                             Download
                                         </th>
                                     </tr>
@@ -672,12 +672,12 @@
                                              let-columns="columns"
                                              let-i="rowIndex">
                                     <tr>
-                                        <td *ngFor="let col of columns">
+                                        <td class="table-column-width" *ngFor="let col of columns">
                                             <ng-container *ngIf="col.field == 'fileName'">
                                                 {{ part[col.field] }}
                                             </ng-container>
                                         </td>
-                                        <td>
+                                        <td class="action-icons-cstm table-column-width">
                                             <a (click)="downloadFileUpload(part)" *ngIf="part.attachmentDetailId"
                                                matTooltip="Download" matTooltipPosition="above"
                                                class="btn nobg btn-cstm">
@@ -699,7 +699,7 @@
                                              *ngIf="sourceViewforDocument.length == 0">
                                     <tr>
                                         <td [attr.colspan]="2"
-                                            style="color: red; font-weight: bold; text-align: center">
+                                            class="no-records-msg no-records-cstm">
                                             No records found
                                         </td>
                                     </tr>
@@ -830,10 +830,10 @@
                                      [columns]="sourceViewforDocumentListColumns">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
-                                        <th *ngFor="let col of columns">
+                                        <th class="table-column-width" *ngFor="let col of columns">
                                             {{ col.header }}
                                         </th>
-                                        <th>
+                                        <th class="table-actions-column">
                                             Download
                                         </th>
                                     </tr>
@@ -844,12 +844,12 @@
                                              let-columns="columns"
                                              let-i="rowIndex">
                                     <tr>
-                                        <td *ngFor="let col of columns">
+                                        <td class="table-column-width" *ngFor="let col of columns">
                                             <ng-container *ngIf="col.field == 'fileName'">
                                                 {{ part[col.field] }}
                                             </ng-container>
                                         </td>
-                                        <td>
+                                        <td class="action-icons-cstm table-column-width">
                                             <a  [href]="rowData.link" *ngIf="!part.attachmentDetailId"
                                             download="{{rowData.fileName}}"
                                             matTooltip="Download" matTooltipPosition="above"
@@ -869,7 +869,7 @@
                                              *ngIf="sourceViewforDocumentVendorAudit.length == 0">
                                     <tr>
                                         <td [attr.colspan]="2"
-                                            style="color: red; font-weight: bold; text-align: center">
+                                            class="no-records-cstm no-records-msg">
                                             No records found
                                         </td>
                                     </tr>
@@ -937,37 +937,37 @@
                      [rowsPerPageOptions]="[5,10,15,20]">
                      <ng-template pTemplate="colgroup" let-columns>
                         <colgroup>
-                            <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
-                            <col [ngStyle]="{'width': '80px'}">
+                            <col *ngFor="let col of columns" class="table-column-width">
+                            <col class="table-actions-column">
                         </colgroup>
                     </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                        <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                             [pSortableColumn]="col.field">
                             {{ col.header }}
                             <p-sortIcon [field]="col.field">
                             </p-sortIcon>
                         </th>
-                        <th>Action</th>
+                        <th class="table-actions-column">Actions</th>
                     </tr>                    
                     <tr>
-                        <th  *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                             <input type="text"
                                    (input)="table4.filter($event.target.value, col.field,'contains') "
                                    *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                   style="width:100%;" pInputText>
+                                   class="table-header-input-width" pInputText>
                             <input type="date" class="hidePlaceHolder"
                                    *ngIf="col.field == 'createdDate'" name="createdDate"
-                                   style="width:100%;"
+                                   class="table-header-input-width"
                                    (change)="dateFilterForTableNew($event.target.value, col.field )">
 
                             <input type="date" class="hidePlaceHolder"
                                    *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                   style="width:100%;"
+                                   class="table-header-input-width"
                                    (change)="dateFilterForTableNew($event.target.value, col.field )">
                         </th>
-                        <th style="width:140px;position:sticky"></th>
+                        <th class="table-actions-column"></th>
 
                     </tr>
                 </ng-template>
@@ -978,7 +978,7 @@
                              let-rowIndex="rowIndex">
                     <tr [pSelectableRow]="rowData">
                         <ng-container *ngFor="let col of columns">
-                            <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                            <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
                                 class="ui-resizable-column"
                                 pReorderableRowHandle>
                                 {{
@@ -989,7 +989,7 @@
                                     : rowData[col.field]
                                 }}
                             </td>
-                            <td *ngIf="col.field == 'fileName'">
+                            <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                 <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData)">
                                     {{ rowData[col.field] }}
                                 </a>
@@ -1002,12 +1002,12 @@
 
                                 </a>
                             </td>
-                            <td *ngIf="col.field == 'docMemo'">
+                            <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                 <div [innerHTML]="rowData[col.field]"></div>
                             </td>
                         </ng-container>
 
-                        <td style="width: 70px; text-align: center !important;">
+                        <td class="action-icons-cstm table-column-width">
                             <span data-toggle="modal"
                                   data-target="#addDocumentDetailsNew">
                                 <a class="btn nobg"
@@ -1034,7 +1034,7 @@
                              *ngIf="sourceViewforDocumentList.length == 0">
                     <tr>
                         <td [attr.colspan]="10"
-                            style="color: red; font-weight: bold; text-align: center">
+                            class="no-records-cstm no-records-msg">
                             No records found
                         </td>
 
@@ -1043,13 +1043,13 @@
 
                 <ng-template pTemplate="summary" id="footer">
                     <label id="footer" class="footer">Total:</label>
-                    <input style="width: 5%;" [(ngModel)]="table4.totalRecords" name="no'of records" disabled
+                    <input class="footer-input-width" [(ngModel)]="table4.totalRecords" name="no'of records" disabled
                            pInputText type="text" />
 
                     &nbsp;&nbsp;
                     <label id="footer" class="footer1">Pages Count:</label>
 
-                    <input style="width: 5%;" [ngModel]="getPageCount(table4.totalRecords,isCertifiedTablePageSize)"
+                    <input class="footer-input-width" [ngModel]="getPageCount(table4.totalRecords,isCertifiedTablePageSize)"
                            name="page count" disabled pInputText type="text" />
                 </ng-template>
 
@@ -1090,36 +1090,36 @@
                      [rowsPerPageOptions]="[5,10,15,20]" >
                      <ng-template pTemplate="colgroup" let-columns>
                         <colgroup>
-                            <col *ngFor="let col of columns" style="width:130px">
-                            <col [ngStyle]="{'width': '80px'}">    
+                            <col *ngFor="let col of columns" class="table-column-width">
+                            <col class="table-actions-column">    
                         </colgroup>
                     </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                        <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                             [pSortableColumn]="col.field">
                             {{ col.header }}
                             <p-sortIcon [field]="col.field">
                             </p-sortIcon>
                         </th>
-                        <th>Action</th>
+                        <th class="table-column-actions">Actions</th>
                     </tr>
                     <tr>
-                        <th  *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                             <input type="text"
                                    (input)="table5.filter($event.target.value, col.field,'contains') "
                                    *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                   style="width:100%;" pInputText>
+                                   class="table-header-input-width" pInputText>
                             <input type="date" class="hidePlaceHolder"
                                    *ngIf="col.field == 'createdDate'" name="createdDate"
-                                   style="width:100%;"
+                                   class="table-header-input-width"
                                    (change)="dateFilterForTableNewAudit($event.target.value, col.field )">
                             <input type="date" class="hidePlaceHolder"
                                    *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                   style="width:100%;"
+                                   class="table-header-input-width"
                                    (change)="dateFilterForTableNewAudit($event.target.value, col.field )">
                         </th>
-                        <th style="width:140px;position:sticky"></th>
+                        <th class="table-actions-column"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body"
@@ -1128,7 +1128,7 @@
                              let-rowIndex="rowIndex">
                     <tr [pSelectableRow]="rowData">
                         <ng-container *ngFor="let col of columns">
-                            <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                            <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
                                 class="ui-resizable-column"
                                 pReorderableRowHandle>
                                 {{
@@ -1139,7 +1139,7 @@
                                     : rowData[col.field]
                                 }}
                             </td>
-                            <td *ngIf="col.field == 'fileName'">
+                            <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                 <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData)">
                                     {{ rowData[col.field] }}
                                 </a>
@@ -1151,11 +1151,11 @@
                                     {{ rowData[col.field] }}
                                 </a>
                             </td>
-                            <td *ngIf="col.field == 'docMemo'">
+                            <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                 <div [innerHTML]="rowData[col.field]"></div>
                             </td>
                         </ng-container>
-                        <td style="text-align: center !important;" >
+                        <td class="action-icons-cstm table-column-width" >
                             <span data-toggle="modal"
                                   data-target="#addDocumentDetailsAudit">
                                 <a class="btn nobg"
@@ -1182,7 +1182,7 @@
                              *ngIf="table5.totalRecords == 0">
                     <tr>
                         <td [attr.colspan]="10"
-                            style="color: red; font-weight: bold; text-align: center">
+                            class="no-records-msg no-records-cstm">
                             No records found
                         </td>
                     </tr>
@@ -1190,13 +1190,13 @@
 
                 <ng-template pTemplate="summary" id="footer1"  let-state>
                     <label id="footer" class="footer">Total:</label>
-                    <input style="width: 5%;" [(ngModel)]="table5.totalRecords" name="records" disabled
+                    <input class="footer-input-width" [(ngModel)]="table5.totalRecords" name="records" disabled
                            pInputText type="text" />
 
                     &nbsp;&nbsp;
                     <label id="footer" class="footer1">Pages Count:</label>
 
-                    <input style="width: 5%;" [ngModel]="getPageCount(table5.totalRecords,vendorAuditTablePageSize)"
+                    <input class="footer-input-width" [ngModel]="getPageCount(table5.totalRecords,vendorAuditTablePageSize)"
                            name="pages" disabled pInputText type="text" />
                 </ng-template>
 

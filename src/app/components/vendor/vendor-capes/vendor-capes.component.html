@@ -6,18 +6,18 @@
           <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
             <div class="col-md-4">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+                <label class="control-label labels-font-header wauto">Vendor Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                    {{ vendorCodeandName?.vendorName }}
                 </span>
               </p>
             </div>
             <div class="col-md-4">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+                <label class="control-label labels-font-header wauto">Vendor Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                  {{ vendorCodeandName?.vendorCode }}
                 </span>
               </p>
@@ -51,17 +51,15 @@
                                           (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
                                         pButton icon="fa-download" iconPos="left" label="Export Data"  -->
                               <div class="excel-upload  excel-upload-cstm">
-                                <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
+                                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                                 data-toggle="modal" 
-                                (click)="exportCSV()"
-                                 style="padding:5px 10px !important; width: 115px !important;">
+                                (click)="exportCSV()">
                                           Export Data
                                   </button>
 
-                            <button type="button" class="btn btn-primary new-table-button"
+                            <button type="button" class="btn btn-primary exports-button"
                                     matTooltip="Download Sample File" matTooltipPosition="above"
-                                    (click)="sampleExcelDownload()"
-                                    style="padding: 5px 10px !important;">
+                                    (click)="sampleExcelDownload()">
                                 Sample File Download
                             </button>
                               <input type="file" name="upload[]" id="upload"
@@ -170,7 +168,7 @@
                                       </td>
                                       <td *ngIf="field.isEditable" style="width: 5%" >
                                         <!-- <div *ngIf="field.isEditable"> -->
-                                          <i class="fa fa-pencil fa-lg pull-right" style="font-size:12px !important" data-toggle="modal" data-target="#capes-memo" matTooltip="Memo" matTooltipPosition="above" 
+                                          <i class="fa fa-pencil fa-lg pull-right capes-memo"  data-toggle="modal" data-target="#capes-memo" matTooltip="Memo" matTooltipPosition="above" 
                                           (click)="onAddTextAreaInfo('memo',i, field); isAdd = true;"> </i>
                                         <!-- </div>                                       -->
                                       </td>
@@ -228,7 +226,7 @@
       <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
     </div>
     <div class="modal-body">
-      <table class="table table-bordered table-fixed workflow-table-material">
+      <!-- <table class="table table-bordered table-fixed workflow-table-material">
       <thead>
         <th style="color: #fff;">{{textAreaLabel}}</th>
       </thead>
@@ -241,7 +239,7 @@
         </td>
         </tr>
       </tbody>
-      </table>
+      </table> -->
       <p-editor [(ngModel)]="textAreaInfo" 
           [style]="{'height':'320px'}" name="textAreaInfo" 
           required></p-editor>
