@@ -406,13 +406,13 @@
           <h4 class="modal-title">Edit Memo</h4>
         </div>
         <div class="modal-body">
-          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" (ngModelChange)="enableSave()"
           [style]="{'height':'320px'}" name="textAreaInfo" 
           required></p-editor>
           <div class="editor-buttons">
-            <button type="button" class="btn btn-primary editor-buttons-margin"
-             data-dismiss="modal" (click)="onSaveTextAreaInfo()">Save</button>
-            <button type="button" class="btn btn-danger editor-buttons-margin"
+            <button type="button" (ngModelChange)="enableSaveMemo()" class="btn btn-primary editor-buttons-margin"
+             data-dismiss="modal" (click)="onSaveTextAreaInfo()"  [disabled]="disableSaveMemo">Save</button>
+            <button type="button"  class="btn btn-danger editor-buttons-margin"
               data-dismiss="modal">Close</button>
           </div>
         </div>
