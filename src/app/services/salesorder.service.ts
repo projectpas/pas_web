@@ -559,5 +559,9 @@ export class SalesOrderService {
   updatePickTicket(data) {
     return this.salesOrderEndPointSevice.updatePickTicket(data);
   }
+
+  getpickticketHistory(pickticketid) {
+    return this.salesOrderEndPointSevice.getpickticketHistory(pickticketid)
+  }
   //ed --nitin
 }

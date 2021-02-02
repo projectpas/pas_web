@@ -647,5 +647,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.updatePickTicket(data));
       });
   }
+
+  getpickticketHistory(pickticketid) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/salesorder/sales-order-pick-ticket-history/?soPickTicketId=${pickticketid}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getpickticketHistory(pickticketid));
+      });
+  }
   //end nitin
 }
