@@ -1,14 +1,14 @@
 ﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary new-card-header">
+    <div class="card-header header">
         <div class="row">
           <div class="col">
-            <h4 class="new-card-heading">Account Calendar Listing</h4>
+            <h4 class="header-name">Account Calendar Listing</h4>
           </div>
           <div>
             <button
                type="button"
-               class="btn-sm new-btn-primary"
+               class="btn-sm header-button"
                [routerLink]="[
                '/generalledgermodule/generalledgerpage/app-accounting-calendar'
               ]">
@@ -17,7 +17,7 @@
          </div>
         </div>
     </div>
-    <div class="card-body new-card-body">
+    <div class="card-body header-body">
         <p-table #dt
                  class="rpo-table-cstm rro-table-cstm"
                  [value]="data"
@@ -40,7 +40,7 @@
 
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th style="width:120px"
+                    <th class="table-column-width"
                         *ngFor="let col of columns"
                         pResizableColumn
                         pReorderableColumn
@@ -48,7 +48,7 @@
                         {{ col.header }}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th style="width:200px;position:sticky"
+                    <th class="table-actions-column"
                         *ngIf="selectedColumns.length > 0">
                         Actions
                     </th>
@@ -56,7 +56,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle>
-                    <td style="width:120px"
+                    <td class="table-column-width"
                         *ngFor="let col of columns"
                         class="ui-resizable-column"
                         pReorderableRowHandle
@@ -71,7 +71,7 @@
                                 : rowData[col.field]
                         }}
                     </td>
-                    <td style="width:200px; text-align: left" *ngIf="selectedColumns.length > 0">
+                    <td class="action-icons-cstm table-actions-column" *ngIf="selectedColumns.length > 0">
                         <span data-toggle="modal" data-target="#view">
                             <a class="btn btn-info boxed-float-btn nobg"
                                data-toggle="tooltip"
@@ -117,14 +117,14 @@
 
             <ng-template pTemplate="summary" id="footer">
                 <label id="footer" class="footer">Total:</label>
-                <input style="width: 5%;"
+                <input class="footer-input-width"
                        [(ngModel)]="totalRecords"
                        [disabled]="true"
                        pInputText
                        type="text" />
                 &nbsp;&nbsp;
                 <label id="footer" class="footer1">Pages Count:</label>
-                <input style="width: 5%;"
+                <input class="footer-input-width"
                        [(ngModel)]="totalPages"
                        [disabled]="true"
                        pInputText

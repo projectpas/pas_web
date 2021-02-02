@@ -1,14 +1,14 @@
 ﻿﻿﻿
         <div class="card new-card">
-            <div class="card-header bg-primary">
+            <div class="card-header header">
               <div class="row">
                 <div class="col">
-                  <h4 class="new-card-heading">{{isEditMode ? 'Edit' : 'Create'}} Stock Line</h4>
+                  <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Stock Line</h4>
                 </div>
                 <div>
                   <button
                     type="button"
-                    class="btn-sm new-btn-primary"
+                    class="btn-sm header-button"
                     [routerLink]="[
                     '/stocklinemodule/stocklinepages/app-stock-line-list']">
                     Stock Line List
@@ -16,7 +16,7 @@
                 </div>
               </div>
             </div>
-                <div class="card-body new-card-body">
+                <div class="card-body header-body">
             <form #stockLineSetupForm="ngForm">
                 <div class="form-row">                            
                     <div class="col-md-3">
@@ -1148,7 +1148,7 @@
                     <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-bordered table-fixed workflow-table-material">
+                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
                         <thead>
                             <th style="color: #fff;">{{textAreaLabel}}</th>
                         </thead>
@@ -1160,11 +1160,13 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                    <div style="float:right">
-                        <button type="button" class="btn btn-primary" style="padding: 6px 12px !important;margin-top: 10px;"
+                    </table> -->
+                    <p-editor [(ngModel)]="textAreaInfo"  (ngModelChange)="enableSaveMemo()"
+                    [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+                    <div class="editor-buttons">
+                        <button type="button" class="btn btn-primary editor-buttons-margin"
                         data-dismiss="modal" (click)="onSaveTextAreaInfo()"[disabled]="disableSaveMemo" >Save</button>
-                        <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
                          data-dismiss="modal">Close</button>
                     </div>
                   </div> 
@@ -1298,7 +1300,7 @@
                     <h4 class="modal-title">Edit Memo</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-bordered table-fixed workflow-table-material">
+                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
                         <thead>
                             <th style="color: #fff;">Memo</th>
                         </thead>
@@ -1310,11 +1312,13 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                    <div style="float:right">
-                        <button type="button" class="btn btn-primary" style="padding: 6px 12px !important;margin-top: 10px;"
+                    </table> -->
+                    <p-editor [(ngModel)]="documentInformation.docMemo"
+                    [style]="{'height':'320px'}"  (ngModelChange)="enableSaveMemo()" name="textAreaInfo" required></p-editor>
+                    <div class="editor-buttons">
+                        <button type="button" class="btn btn-primary editor-buttons-margin"
                         data-dismiss="modal" (click)="onSaveTextAreaInfo()" [disabled]="disableSaveMemo">Save</button>
-                        <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
                          data-dismiss="modal">Close</button>
                     </div>
                   </div> 
