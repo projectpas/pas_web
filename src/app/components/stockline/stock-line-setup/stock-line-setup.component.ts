@@ -900,7 +900,7 @@ export class StockLineSetupComponent implements OnInit {
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.obtainFromType == this.otherModuleId) {
-			this.stockLineForm.obtainFrom = res.obtainFrom;
+			this.stockLineForm.obtainFrom = res.obtainFromName;
 		}
 
 		//owner
@@ -926,7 +926,7 @@ export class StockLineSetupComponent implements OnInit {
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.ownerType == this.otherModuleId) {
-			this.stockLineForm.owner = res.owner;
+			this.stockLineForm.owner = res.ownerName;
 		}
 
 		//traceable to
@@ -952,7 +952,7 @@ export class StockLineSetupComponent implements OnInit {
 			}, error => this.saveFailedHelper(error));
 		}
 		else if (res.traceableToType == this.otherModuleId) {
-			this.stockLineForm.traceableTo = res.traceableTo;
+			this.stockLineForm.traceableTo = res.tracableToName;
 		}
 	}
 
@@ -1412,7 +1412,8 @@ export class StockLineSetupComponent implements OnInit {
 			partNumber: this.stockLineForm.itemMasterId != undefined ? this.stockLineForm.itemMasterId.partnumber : '',
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
-			obtainFrom: this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : '',
+			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
+			obtainFrom:  this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
 			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,
 			ownerType: this.stockLineForm.ownerType > 0 ? this.stockLineForm.ownerType : null,
 			traceableToType: this.stockLineForm.traceableToType > 0 ? this.stockLineForm.traceableToType : null,
@@ -1426,8 +1427,13 @@ export class StockLineSetupComponent implements OnInit {
 			locationId: this.stockLineForm.locationId > 0 ? this.stockLineForm.locationId : null,
 			shelfId: this.stockLineForm.shelfId > 0 ? this.stockLineForm.shelfId : null,
 			binId: this.stockLineForm.binId > 0 ? this.stockLineForm.binId : null,
-			owner: this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : '',
-			traceableTo: this.stockLineForm.traceableTo ? editValueAssignByCondition('value', this.stockLineForm.traceableTo) : '',
+
+			ownerName: this.stockLineForm.ownerType == 4 ? this.stockLineForm.owner : (this.stockLineForm.owner ? getValueFromObjectByKey('label', this.stockLineForm.owner) : ''),
+			owner: this.stockLineForm.ownerType == 4 ? null : (this.stockLineForm.owner ? editValueAssignByCondition('value', this.stockLineForm.owner) : ''),
+
+			traceableToName: this.stockLineForm.traceableToType == 4 ? this.stockLineForm.traceableTo : (this.stockLineForm.traceableTo ? getValueFromObjectByKey('label', this.stockLineForm.traceableTo) : ''),
+			traceableTo: this.stockLineForm.traceableToType == 4 ? null : (this.stockLineForm.traceableTo ? editValueAssignByCondition('value', this.stockLineForm.traceableTo) : ''),
+
 			requestorId: this.stockLineForm.requestorId ? getValueFromObjectByKey('value', this.stockLineForm.requestorId) : '',
 			inspectionBy: this.stockLineForm.inspectionBy ? getValueFromObjectByKey('value', this.stockLineForm.inspectionBy) : '',
 			workOrderId: this.stockLineForm.workOrderId && this.getValueFromObj(this.stockLineForm.workOrderId) != 0 ? this.getValueFromObj(this.stockLineForm.workOrderId) : null,
