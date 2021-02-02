@@ -1502,16 +1502,16 @@ export class SalesOrderCreateComponent implements OnInit {
     }
 
     this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
-    let currentEmployeeId = this.salesQuote.employeeId;
-    if (this.salesQuote.employeeId) {
-      let employeeObject: any = this.salesQuote.employeeId;
-      if (employeeObject.employeeId) {
-        currentEmployeeId = employeeObject.employeeId;
-        this.arrayEmplsit.push(employeeObject.employeeId);
-      }
-    } else {
-      currentEmployeeId = this.employeeId;
-    }
+    //let currentEmployeeId = this.salesQuote.employeeId;
+    // if (this.salesQuote.employeeId) {
+    //   let employeeObject: any = this.salesQuote.employeeId;
+    //   if (employeeObject.employeeId) {
+    //     currentEmployeeId = employeeObject.employeeId;
+    //     this.arrayEmplsit.push(employeeObject.employeeId);
+    //   }
+    // } else {
+    //   currentEmployeeId = this.employeeId;
+    // }
 
     this.isSpinnerVisible = true;
     this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
@@ -1519,14 +1519,9 @@ export class SalesOrderCreateComponent implements OnInit {
       this.allEmployeeList = res;
       this.firstCollection = res;
       this.employeesList = res;
-      // this.salesQuote.employeeName = getObjectById(
-      //   "value",
-      //   this.employeeId ? this.employeeId : this.salesQuote.employeeId,
-      //   this.allEmployeeList
-      // );
-      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', currentEmployeeId, res);
+      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
       if (!this.isEdit) {
-        this.getEmployeerOnLoad(currentEmployeeId);
+        this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
       }
     }, err => {
       this.isSpinnerVisible = false;
