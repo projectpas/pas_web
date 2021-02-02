@@ -304,7 +304,7 @@ export class VendorsListComponent implements OnInit {
                 this.totalPages = 0;
                 this.isSpinnerVisible = false;
             }            
-        }, error => this.onDataLoadFailed(error))
+        })
     }
 
     globalSearch(value) {
@@ -1042,10 +1042,7 @@ export class VendorsListComponent implements OnInit {
             dt.exportCSV();
             dt.value = this.allVendorList;
             this.isSpinnerVisible = false;
-        },error => {
-                this.onDataLoadFailed(error)
-            },
-        );
+        });
     }
 
     dateFilterForTable(date, field) {
@@ -1066,17 +1063,21 @@ export class VendorsListComponent implements OnInit {
     }
 
     dateFilterForTableVendorList(date, field) {
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');
         this.dateObject={}
-                date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-            if(field=='createdDate'){
-                this.dateObject={'createdDate':date}
-            }else if(field=='updatedDate'){
-                this.dateObject={'updatedDate':date}
+            if(dateyear > minyear){
+                if(field=='createdDate'){
+                    this.dateObject={'createdDate':date}
+                }else if(field=='updatedDate'){
+                    this.dateObject={'updatedDate':date}
+                }
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status ,...this.dateObject};
+                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+                this.getList(PagingData); 
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status ,...this.dateObject};
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData); 
         }else{
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,  status: this.status,...this.dateObject};
             if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
