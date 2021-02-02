@@ -44,7 +44,6 @@ export class SalesMarginComponent implements OnInit {
 
 
   onSave(event: Event): void {
-    
     event.preventDefault();
     this.save.emit(this.part);
   }
