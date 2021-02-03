@@ -190,7 +190,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.unitSalesPrice = '0.00';
 		this.stockLineForm.coreUnitCost = '0.00';
 		this.stockLineForm.lotCost = '0.00';
-		this.stockLineForm.inspectionDate = new Date();
+		// this.stockLineForm.inspectionDate = new Date();
 	}
 
 	ngOnInit() {
@@ -1931,5 +1931,16 @@ export class StockLineSetupComponent implements OnInit {
 				MessageSeverity.error
 			);
 		}
+	}
+
+	onChangeInspectedDate() {
+		if (this.stockLineForm.inspectionBy) {
+			this.stockLineForm.inspectionDate = new Date();
+		} else {
+			this.stockLineForm.inspectionDate = null;
+		}
+	}
+	onChangeReceivedNum() {
+
 	}
 }
