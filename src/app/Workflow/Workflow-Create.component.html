@@ -211,7 +211,7 @@
                                                     <input type="checkbox" [checked]="sourceWorkFlow.isFixedAmount"
                                                         name="ber-type" class="trigger2" data-rel="ber-fixed"
                                                         (click)="isFixedcheck('fixed');isFixedUnchecked($event);berDetermination($event.target.value,'html');"
-                                                        value="1">
+                                                        value="">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     Fixed Amount
                                                 </label>
@@ -225,10 +225,11 @@
                                             <div class="col-sm-4">
                                             </div>
                                             <div class="col-sm-4">
-                                                <label class="w80">Amount: </label>
+                                                <label class="w60">Amount:</label>
                                                 <input  class="form-control w70 text-right" type="text"
                                                     name="fixedAmount" [(ngModel)]="sourceWorkFlow.fixedAmount"                                        
-                                                    (input)="berDetermination($event.target.value,'html')">
+                                                    (input)="berDetermination($event.target.value,'html')" />
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -241,7 +242,7 @@
                                                     <input type="checkbox" [checked]="sourceWorkFlow.isPercentageOfNew"
                                                         name="ber-type" class="trigger2" data-rel="ber-new"
                                                         (click)="isFixedcheck('percentage');isPercentageUnchecked($event); berDetermination($event.target.value,'html');"
-                                                        value="2">
+                                                        value="">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     % of Cost of New
                                                 </label>
@@ -251,14 +252,15 @@
                                     <div class="col-md-8">
                                         <div [hidden]="!ispercent">
                                             <div class="col-sm-4">
-                                                <label class="w80">Cost of New:</label>
+                                                <label style="width:68px !important">Cost of New:  </label>
                                                 <input type="text" [(ngModel)]="sourceWorkFlow.costOfNew" 
                                                     class="form-control w70 text-right" id="" name="" pInputText
                                                     pKeyFilter="money"  (ngModelChange)="checkEnableUpdate()"
                                                     (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew)">
+                                               
                                             </div>
                                             <div class="col-sm-4">
-                                                <label class="w70">Percent:</label>
+                                                <label class="w60">Percent:</label>
                                                 <select [(ngModel)]="sourceWorkFlow.percentageOfNew"
                                                     class="form-control w70"  (ngModelChange)="checkEnableUpdate()"
                                                     (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew);">
@@ -267,13 +269,16 @@
                                                         [ngValue]="percent.value">
                                                         {{percent.label}}%</option>
                                                 </select>
+                                            
                                             </div>
                                             <div class="col-sm-4">
-                                                <label class="w80">Amount: </label>
+                                                <label class="w60">Amount:</label>
                                                 <input type="text" class="form-control w70 text-right" pInputText
                                                     pKeyFilter="money" value="{{sourceWorkFlow.percentOfNew}}"
                                                     disabled />
-                                            </div>
+                                             </div>
+                                                
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -286,7 +291,7 @@
                                                         [checked]="sourceWorkFlow.isPercentageOfReplacement"
                                                         name="ber-type" class="trigger2" data-rel="ber-replace"
                                                         (click)="isFixedcheck('percentreplace');isPercentreplcaeUnchecked($event); berDetermination($event.target.value,'html');"
-                                                        value="3">
+                                                        value="">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     % of Replacement Cost
                                                 </label>
@@ -294,21 +299,22 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <div [hidden]="!percentreplcae" >
+                                        <div [hidden]="!percentreplcae">
                                             <div class="col-sm-4">
-                                                <div>
-                                                    <label class="w80">Cost of Replace:</label>
-                                                    <input [(ngModel)]="sourceWorkFlow.costOfReplacement" pInputText
+                                                <!-- <div> -->
+                                                    <label style="margin-left: -16px !important ;width: 84px !important;">Cost of Replace:  </label>
+                                                    <input  [(ngModel)]="sourceWorkFlow.costOfReplacement" pInputText
                                                         pKeyFilter="money" class="form-control w70 amount text-right"
                                                         type="text"  (ngModelChange)="checkEnableUpdate()"
                                                         (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement)">
-                                                </div>
+                                                   
+                                                    <!-- </div> -->
                                             </div>
                                             <div class="col-sm-4">
-                                                <div style="float:left;">
-                                                    <label class="w70">Percent:</label>
-                                                </div>
-                                                <div style="float:left;">
+                                                <!-- <div style="float:left;"> -->
+                                                    <label class="w60">Percent:</label>
+                                                <!-- </div> -->
+                                                <!-- <div style="float:left;"> -->
                                                     <select [(ngModel)]="sourceWorkFlow.percentageOfReplacement"
                                                         class="form-control w70"  (ngModelChange)="checkEnableUpdate()"
                                                         (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement); ">
@@ -317,15 +323,17 @@
                                                             [ngValue]="percent.value">{{percent.label}}%
                                                         </option>
                                                     </select>
-                                                </div>
+                                                <!-- </div> -->
+                                            
                                             </div>
                                             <div class="col-sm-4">
-                                                <div style="float:left;">
-                                                    <label class="w80">Amount:</label>
+                                                <!-- <div style="float:left;"> -->
+                                                    <label class="w60">Amount: </label>
                                                     <input type="text" class="form-control w70 text-right" pInputText
                                                         pKeyFilter="money"
                                                         value="{{sourceWorkFlow.percentOfReplacement}}" disabled />
-                                                </div>
+                                                   
+                                                        <!-- </div> -->
                                             </div>
                                         </div>
                                     </div>
