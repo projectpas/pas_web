@@ -33,5 +33,5 @@ export interface ISalesOrderCustomerApproval {
     marginAmountExtended: number
     customerApprovedDate?: Date;
     salesOrderQuotePartId: number;
-    actionStatus: string;
+    actionStatus: any;
 }

@@ -120,7 +120,6 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     addPartStocklineMapper<T>(mapperObject: any): Observable<T>
     {
-        debugger;
         return this.http.post<T>(this.addStocklineMapperData, JSON.stringify(mapperObject), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.addPartStocklineMapper(mapperObject));

@@ -1,75 +1,67 @@
-﻿﻿<div class="card new-card">
-    <div class="card-header bg-primary">
-        <div class="row">
-            <div class="col">
-                <h4 class="new-card-heading">{{isEditMode ? 'Edit' : 'Create'}} Stock Line</h4>
-            </div>
-            <div>
-                <button type="button" class="btn-sm new-btn-primary" [routerLink]="[
+﻿﻿﻿
+        <div class="card new-card">
+            <div class="card-header header">
+              <div class="row">
+                <div class="col">
+                  <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Stock Line</h4>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn-sm header-button"
+                    [routerLink]="[
                     '/stocklinemodule/stocklinepages/app-stock-line-list']">
                     Stock Line List
-                </button>
+                  </button>
+                </div>
+              </div>
             </div>
-        </div>
-    </div>
-    <div class="card-body new-card-body">
-        <form #stockLineSetupForm="ngForm">
-            <div class="form-row">
-                <div class="col-md-3">
-                    <div class="card card-stock">
-                        <div class="card-header">
-                            <h5>General</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group" *ngIf="isEditMode">
-                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
-                                    <label>
-                                        <input type="checkbox" name="isCustomerStock"
-                                            [(ngModel)]="stockLineForm.isCustomerStock" disabled>
-                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        Customer Stock - Rotable
-                                    </label>
-                                </div>
+                <div class="card-body header-body">
+            <form #stockLineSetupForm="ngForm">
+                <div class="form-row">                            
+                    <div class="col-md-3">
+                        <div class="card card-stock">
+                            <div class="card-header">
+                                <h5>General</h5>
                             </div>
-                            <div class="form-group">
-                                <label>PN <span class="clr-red">*</span>
-                                </label>
-                                <div class="inner-addon right-addon inline-block">
-                                    <p-autoComplete field="partnumber" class="pautocomp-cstm"
-                                        [(ngModel)]="stockLineForm.itemMasterId" name="partNumber"
-                                        [suggestions]="partNumbersCollection"
-                                        (completeMethod)="filterPartNumbers($event)" [size]="30" [minLength]="1"
-                                        [dropdown]="true" (onSelect)="onPartNumberSelected($event.itemMasterId);"
-                                        #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true"
-                                        (ngModelChange)="enableSave()" required></p-autoComplete>
-                                    <div *ngIf="partNum.invalid && (partNum.dirty || partNum.touched)"
-                                        class="alert alert-danger alert-danger-cstm">
-                                        <div *ngIf="partNum.errors.required">
-                                            <small> Part Number is required </small>
+                            <div class="card-body">
+                                <div class="form-group" *ngIf="isEditMode">
+                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                        <label>
+                                            <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" disabled>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Customer Stock - Rotable 
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>PN <span class="clr-red">*</span>
+                                    </label>
+                                    <div class="inner-addon right-addon inline-block">
+                                        <p-autoComplete field="partnumber" class="pautocomp-cstm" [(ngModel)]="stockLineForm.itemMasterId" name="partNumber" [suggestions]="partNumbersCollection" (completeMethod)="filterPartNumbers($event)" [size]="30" [minLength]="1" [dropdown]="true" (onSelect)="onPartNumberSelected($event.itemMasterId);" #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()" required></p-autoComplete>
+                                        <div *ngIf="partNum.invalid && (partNum.dirty || partNum.touched)" class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="partNum.errors.required">
+                                                    <small> Part Number is required </small>
+                                                </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>PN Description</label>
-                                <input class="form-control" type="text" name="pnDescription"
-                                    [(ngModel)]="stockLineForm.partDescription" (ngModelChange)="enableSave()" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Revised PN</label>
-                                <input class="form-control" type="text" name="revisedPart"
-                                    [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled>
-                            </div>
-                            <div class="form-group" style="margin-top: 10px;">
-                                <div>
-                                    <label class="radio-cstm wauto">
-                                        <input type="radio" name="oemPma" class="form-control" value="true"
-                                            (change)="onCheckOem();" [(ngModel)]="stockLineForm.oem"
-                                            (ngModelChange)="enableSave()" disabled>
-                                        <span class="checkmark"></span> OEM
-                                    </label>
+                                <div class="form-group">
+                                    <label>PN Description</label>
+                                    <input class="form-control" type="text" name="pnDescription" [(ngModel)]="stockLineForm.partDescription" (ngModelChange)="enableSave()" disabled>
                                 </div>
-                            </div>
+                                <div class="form-group">
+                                    <label>Revised PN</label>
+                                    <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled>
+                                </div>
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <div>
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="oemPma" class="form-control" value="true" (change)="onCheckOem();"  [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()" disabled>
+                                            <span class="checkmark"></span> OEM
+                                        </label>
+                                    </div> 
+                                </div>
 
                             <div class="form-group" style="margin-top: 10px;">
                                 <div>
@@ -376,6 +368,32 @@
                                 </p-autoComplete>
                             </div>
                             <div class="form-group">
+                                <label>Receiver Num <span class="clr-red">*</span></label>
+                                <!-- <input class="form-control" type="text" name="receiverNumber"
+                                    [(ngModel)]="stockLineForm.receiverNumber" #receiverNumber="ngModel"
+                                    (ngModelChange)="enableSave()" required>
+                                <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
+                                    class="alert alert-danger alert-danger-cstm">
+                                    <div *ngIf="receiverNumber.errors.required">
+                                        <small> Received Num is required </small>
+                                    </div>
+                                </div> -->
+                                <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.receiverNumber" name="receiverNumber"
+                                    [suggestions]="polistInfo" (completeMethod)="filterPoNumber($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (onSelect)="onChangeReceivedNum(stockLineForm.receiverNumber)"
+                                    [forceSelection]="false" (ngModelChange)="enableSave()" #receiverNumber="ngModel"
+                                    required>
+                                </p-autoComplete>
+                                <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
+                                    class="alert alert-danger alert-danger-cstm">
+                                    <div *ngIf="receiverNumber.errors.required">
+                                        <small> Received Num is required </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label>Received Date <span class="clr-red">*</span></label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="receivedDate"
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -385,18 +403,6 @@
                                     class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="receivedDate.errors.required">
                                         <small> Received Date is required </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Receiver Num <span class="clr-red">*</span></label>
-                                <input class="form-control" type="text" name="receiverNumber"
-                                    [(ngModel)]="stockLineForm.receiverNumber" #receiverNumber="ngModel"
-                                    (ngModelChange)="enableSave()" required>
-                                <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
-                                    class="alert alert-danger alert-danger-cstm">
-                                    <div *ngIf="receiverNumber.errors.required">
-                                        <small> Received Num is required </small>
                                     </div>
                                 </div>
                             </div>
@@ -938,7 +944,8 @@
                                     [(ngModel)]="stockLineForm.inspectionBy" name="inspectionBy"
                                     [suggestions]="certifyByNames" (completeMethod)="filterEmployees($event)"
                                     [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                    (ngModelChange)="enableSave()" [forceSelection]="true">
+                                    (ngModelChange)="enableSave()" (onSelect)="onChangeInspectedDate()"
+                                    [forceSelection]="true">
                                 </p-autoComplete>
                             </div>
                             <div class="form-group">
@@ -1410,7 +1417,7 @@
                     <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-bordered table-fixed workflow-table-material">
+                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
                         <thead>
                             <th style="color: #fff;">{{textAreaLabel}}</th>
                         </thead>
@@ -1422,13 +1429,14 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                    <div style="float:right">
-                        <button type="button" class="btn btn-primary"
-                            style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal"
-                            (click)="onSaveTextAreaInfo()" [disabled]="disableSaveMemo">Save</button>
-                        <button type="button" class="btn btn-danger"
-                            style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal">Close</button>
+                    </table> -->
+                    <p-editor [(ngModel)]="textAreaInfo"  (ngModelChange)="enableSaveMemo()"
+                    [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+                    <div class="editor-buttons">
+                        <button type="button" class="btn btn-primary editor-buttons-margin"
+                        data-dismiss="modal" (click)="onSaveTextAreaInfo()"[disabled]="disableSaveMemo" >Save</button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
+                         data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -1550,7 +1558,7 @@
                     <h4 class="modal-title">Edit Memo</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-bordered table-fixed workflow-table-material">
+                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
                         <thead>
                             <th style="color: #fff;">Memo</th>
                         </thead>
@@ -1562,13 +1570,14 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                    <div style="float:right">
-                        <button type="button" class="btn btn-primary"
-                            style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal"
-                            (click)="onSaveTextAreaInfo()" [disabled]="disableSaveMemo">Save</button>
-                        <button type="button" class="btn btn-danger"
-                            style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal">Close</button>
+                    </table> -->
+                    <p-editor [(ngModel)]="documentInformation.docMemo"
+                    [style]="{'height':'320px'}"  (ngModelChange)="enableSaveMemo()" name="textAreaInfo" required></p-editor>
+                    <div class="editor-buttons">
+                        <button type="button" class="btn btn-primary editor-buttons-margin"
+                        data-dismiss="modal" (click)="onSaveTextAreaInfo()" [disabled]="disableSaveMemo">Save</button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
+                         data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

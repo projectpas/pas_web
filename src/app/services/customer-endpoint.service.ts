@@ -292,7 +292,7 @@ export class CustomerEndpoint extends EndpointFactory {
     getCustomerAll(data) {
         return this.http.post(this._customerList, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCustomerAll(data));
+                return this.handleErrorCommon(error, () => this.getCustomerAll(data));
             });
     }
 

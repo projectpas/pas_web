@@ -209,6 +209,12 @@ export class CustomersListComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     geListByStatus(status) {
         const pageIndex = 0;
         this.pageIndex = pageIndex;
@@ -268,6 +274,7 @@ export class CustomersListComponent implements OnInit {
         this.isSpinnerVisible = true;
         data.filters.isDeleted = this.currentDeletedstatus;
         data.filters.status = this.currentstatus;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;      
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.customerService.getCustomerAll(PagingData).subscribe(res => {  
             if(res)
@@ -588,7 +595,7 @@ export class CustomersListComponent implements OnInit {
     exportCSV(dt){
 		this.isSpinnerVisible = true;
 		const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus,"isDeleted":isdelete},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":this.currentstatus,"isDeleted":isdelete},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
