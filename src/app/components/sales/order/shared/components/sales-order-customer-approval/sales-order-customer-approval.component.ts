@@ -270,12 +270,13 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         if (data && data.length > 0) {
           this.loadApprovalListView(data[0]);
         }
-
-        if (data[0][0].actionStatus == "Approved") {
-          this.salesOrderService.generatePickTicket(data[0][0].salesOrderId, data[0][0].salesOrderPartId).subscribe(res => {
-          });
+        
+        for (let i = 0; i < data[0].length; i++) {
+          if (data[0][i].actionStatus == "Approved") {
+            this.salesOrderService.generatePickTicket(data[0][i].salesOrderId, data[0][i].salesOrderPartId).subscribe(res => {
+            });
+          }
         }
-
       }, error => this.dataLoadError(error));
   }
   selectAllApproval(type, isSelected) {

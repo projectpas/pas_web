@@ -130,7 +130,6 @@ export class VendorCapesComponent implements OnInit {
     }
 
     ngOnInit() {
-        debugger;
         if(!this.isViewMode)
         {
             this.vendorId = this.router.snapshot.params['id'];

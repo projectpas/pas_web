@@ -1278,20 +1278,18 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         this.MaterialCost = 0;
         this.TotalCharges = 0;
         this.TotalExpertiseCost = 0;
-
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             for (let wf of this.workFlowList) {
-                this.MaterialCost += wf.totalMaterialCostValue != undefined ? parseFloat(wf.totalMaterialCostValue.toString().replace(/\,/g, '')) : 0;
-                this.TotalCharges += wf.extendedCostSummation != undefined ? parseFloat(wf.extendedCostSummation.toString().replace(/\,/g, '')) : 0;
-                this.TotalExpertiseCost += wf.totalExpertiseCost != undefined ? parseFloat(wf.totalExpertiseCost.toString().replace(/\,/g, '')) : 0;
+                this.MaterialCost += (wf.totalMaterialCostValue != undefined && wf.totalMaterialCostValue != "") ? parseFloat(wf.totalMaterialCostValue.toString().replace(/\,/g, '')) : 0;
+                this.TotalCharges += (wf.extendedCostSummation != undefined && wf.extendedCostSummation != "") ? parseFloat(wf.extendedCostSummation.toString().replace(/\,/g, '')) : 0;
+                this.TotalExpertiseCost += (wf.totalExpertiseCost != undefined && wf.totalExpertiseCost != "") ? parseFloat(wf.totalExpertiseCost.toString().replace(/\,/g, '')) : 0;
             }
         }
-
+        // laborOverheadCost
         this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : '0.00';
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
-      
         const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
@@ -2234,6 +2232,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 this.isUpdateAfterCreate = true;
                 this._workflowService.enableUpdateMode = true;
                 this._workflowService.currentWorkFlowId = result.workflowId;
+                this.disableUpdateButton=true;
                 this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this._workflowService.currentWorkFlowId}`);
             }, error => {
                 this.isSpinnerVisible = false;
@@ -2285,6 +2284,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
                 this.sourceWorkFlow.workflowId = result.workflowId;
                 this.UpdateMode = true;
+                this.disableUpdateButton=true;
             }, error => {
                 this.isSpinnerVisible = false;
             });

@@ -5,16 +5,16 @@
                 <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <label class="control-label labels-font-header wauto">Vendor Name: </label>
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <label class="control-label labels-font-header wauto">Vendor Code: </label>
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -200,12 +200,12 @@
                                                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                                             </span>
                                                             <span *ngIf="!isViewMode" requirePermission="canDelete">
-                                                                <button class="btn nobg"
+                                                                <a class="btn nobg"
                                                                         (click)=" openDelete(deleteContent, rowData);domesticShipInfo.reset();"
                                                                         matTooltip="Delete"
                                                                         matTooltipPosition="above">
                                                                     <i class="fa fa-trash"></i>
-                                                                </button>
+                                                            </a>
                                                             </span>
                                                             <button (click)="openShipVia(rowData)" data-target="#contentDomesticShipVia"
                                                                     data-toggle="modal" class="btn btn-danger nobg" style="padding: 0px;"
@@ -238,7 +238,7 @@
                                                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                             </span>
                                                             <ng-container *ngIf="!isViewMode">
-                                                                <span><a class="btn nobg" (click)="restoreDomesticShipping(restoreDomesticShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                                <span><a class="btn nobg btn-users-cstm" (click)="restoreDomesticShipping(restoreDomesticShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                             </ng-container>                                                            
                                                         </div>
                                                     </td>                                                    
@@ -464,7 +464,7 @@
                                             <div class="col-md-12 shadow-box-cstm">
                                                 <div class="col-md-4">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Name:
                                                         </label>
                                                         <span class="span-header-red" style="text-transform: capitalize">
@@ -474,20 +474,20 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Code:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local === undefined? vendorData.vendorCode : local?.vendorCode }}
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Site Name:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{ vendorHistoryRowData.siteName }}
                                                         </span>
                                                     </p>
@@ -582,7 +582,7 @@
                                                 </div>
                                                 <ng-template #noDatavailable>
                                                     <div class="text-center">
-                                                        <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                                                        <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
                                                         <h4 class="no-history-found-msg">No History Found </h4>
                                                     </div>
                                                 </ng-template>
@@ -610,30 +610,30 @@
                                             <div class="col-md-12 shadow-box-cstm">
                                                 <div class="col-md-4">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Name:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local === undefined ? vendorData.vendorName : getVendorName() }}
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Code:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local === undefined ? vendorData.vendorCode :local?.vendorCode }}
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Site Name:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{shipViaNewObj.siteName }}
                                                         </span>
                                                     </p>
@@ -916,20 +916,20 @@
                                     <div class="col-md-12 shadow-box-cstm">
                                         <div class="col-md-6">
                                             <p class="fs12">
-                                                <label class="control-label labels-font-header" style="width: auto;">
+                                                <label class="control-label labels-font-header wauto">
                                                     Vendor Name:
                                                 </label>
-                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                <span class="span-header-red text-capital">
                                                     {{getVendorName() }}
                                                 </span>
                                             </p>
                                         </div>
                                         <div class="col-md-6">
                                             <p class="fs12">
-                                                <label class="control-label labels-font-header" style="width: auto;">
+                                                <label class="control-label labels-font-header wauto">
                                                     Vendor Code:
                                                 </label>
-                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                <span class="span-header-red text-capital">
                                                     {{local?.vendorCode }}
                                                 </span>
                                             </p>
@@ -959,16 +959,16 @@
                                     <div class="col-md-12 shadow-box-cstm">
                                         <div class="col-md-6">
                                             <p class="fs12">
-                                                <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
-                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                <label class="control-label labels-font-header wauto">Vendor Name: </label>
+                                                <span class="span-header-red text-capital">
                                                     {{getVendorName() }}
                                                 </span>
                                             </p>
                                         </div>
                                         <div class="col-md-6">
                                             <p class="fs12">
-                                                <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
-                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                <label class="control-label labels-font-header wauto">Vendor Code: </label>
+                                                <span class="span-header-red text-capital">
                                                     {{local?.vendorCode }}
                                                 </span>
                                             </p>
@@ -978,10 +978,10 @@
                                 <div class="modal-body">
                                     <div class="col-md-6">
                                         <p class="fs12">
-                                            <label class="control-label labels-font-header" style="width: auto;">
+                                            <label class="control-label labels-font-header wauto">
                                                 Site Name:
                                             </label>
-                                            <span class="span-header-red" style="text-transform: capitalize">
+                                            <span class="span-header-red text-capital">
                                                 {{selectedRowforRestorDomesticShipVia.siteName }}
                                             </span>
                                         </p>
@@ -1005,20 +1005,20 @@
                                             <div class="col-md-12 shadow-box-cstm">
                                                 <div class="col-md-6">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Name:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local === undefined ? vendorData.vendorName : getVendorName() }}
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Code:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local === undefined ? vendorData.vendorName : local?.vendorCode }}
                                                         </span>
                                                     </p>
@@ -1086,20 +1086,20 @@
                                     <div class="col-md-12 shadow-box-cstm">
                                         <div class="col-md-6">
                                             <p class="fs12">
-                                                <label class="control-label labels-font-header" style="width: auto;">
+                                                <label class="control-label labels-font-header wauto">
                                                     Vendor Name:
                                                 </label>
-                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                <span class="span-header-red text-capital">
                                                     {{getVendorName() }}
                                                 </span>
                                             </p>
                                         </div>
                                         <div class="col-md-6">
                                             <p class="fs12">
-                                                <label class="control-label labels-font-header" style="width: auto;">
+                                                <label class="control-label labels-font-header wauto">
                                                     Vendor Code:
                                                 </label>
-                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                <span class="span-header-red text-capital">
                                                     {{local?.vendorCode }}
                                                 </span>
                                             </p>
@@ -1169,20 +1169,20 @@
                                             <div class="col-md-12 shadow-box-cstm">
                                                 <div class="col-md-6">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Name:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local == undefined ? vendorData.vendorName : getVendorName() }}
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p class="fs12">
-                                                        <label class="control-label labels-font-header" style="width: auto;">
+                                                        <label class="control-label labels-font-header wauto">
                                                             Vendor Code:
                                                         </label>
-                                                        <span class="span-header-red" style="text-transform: capitalize">
+                                                        <span class="span-header-red text-capital">
                                                             {{local == undefined ? vendorData.vendorCode : local?.vendorCode }}
                                                         </span>
                                                     </p>
@@ -1276,7 +1276,7 @@
                                     <div style="text-align: right;">
                                         <a *ngIf="isViewMode == false"
                                            data-toggle="modal" data-target="#addInternationalShippingInfo">
-                                            <button type="button" style="background-color: #337ab7 !important;" class="btn-sm new-btn-primary"
+                                            <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"
                                                     matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="onAddShippingInfo();">
                                                 Add International Shipping Information
                                             </button>
@@ -1313,37 +1313,33 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+                                                        <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                                                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                                                 label="Export Data" 
                                                                 data-toggle="modal" 
                                                                 (click)="selectedOnly = false; targetData = interShipInfo;"
-                                                                 data-target="#downloadInternConfirmation"
-                                                               
-                                                                style="padding:5px 10px !important;"></button>
+                                                                 data-target="#downloadInternConfirmation"></button>
                                                                 <!-- (click)="interShipInfo.exportCSV()" -->
-                                                        <button type="button" class="btn btn-primary new-table-button"
+                                                        <button type="button" class="btn btn-primary exports-button"
                                                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                                                 icon="fa-download" iconPos="left" label="Export Selected Data"
-                                                                (click)="interShipInfo.exportCSV({selectionOnly:true})"
-                                                                style="padding:5px 10px !important;"></button>
+                                                                (click)="interShipInfo.exportCSV({selectionOnly:true})"></button>
                                                         <div class="col"
                                                              style="width: 370px; float: right; padding-top: 3px;">
                                                             <div class="form-group">
-                                                                <div class="pull-left"
-                                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                                <div class="pull-left radio-buttons-align">
                                                                     <label class="radio-cstm wauto">
                                                                         <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="geListByStatusInternational('Active')" [(ngModel)]="currentstatus2">
                                                                         <span class="checkmark"></span>Active
                                                                     </label>
                                                                 </div>
-                                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                <div class="pull-left radio-buttons-align">
                                                                     <label class="radio-cstm wauto">
                                                                         <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="geListByStatusInternational('InActive')" [(ngModel)]="currentstatus2">
                                                                         <span class="checkmark"></span>In-Active
                                                                     </label>
                                                                 </div>
-                                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                <div class="pull-left radio-buttons-align">
                                                                     <label class="radio-cstm wauto">
                                                                         <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)="geListByStatusInternational('ALL')" [(ngModel)]="currentstatus2">
                                                                         <span class="checkmark"></span>All
@@ -1470,11 +1466,11 @@
                                                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                                             </span>
                                                             <span *ngIf="!isViewMode" requirePermission="canDelete">
-                                                                <button class="btn nobg"
+                                                                <a class="btn nobg"
                                                                         (click)="deleteVendorInterShipping(rowData);interShipInfo.reset()" matTooltip="Delete" 
                                                                         matTooltipPosition="above">
                                                                     <i class="fa fa-trash"></i>
-                                                                </button>
+                                                            </a>
                                                             </span>
                                                             <button data-target="#internationalShipVia" data-toggle="modal" class="btn btn-danger nobg"
                                                                     style="padding: 0px;" matTooltip="Add Ship Via" matTooltipPosition="above"
@@ -1505,7 +1501,8 @@
                                                                     <i class="fa fa-history"></i>
                                                                 </a>
                                                             </span>
-                                                            <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restoreInternationalShipping(restoreInternationalShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                            <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm" (click)="restoreInternationalShipping(restoreInternationalShippingId,rowData);" 
+                                                                matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1553,20 +1550,20 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Vendor Name:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <span class="span-header-red text-capital">
                         {{getVendorName() }}
                     </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Vendor Code:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <span class="span-header-red text-capital">
                         {{local?.vendorCode }}
                     </span>
                 </p>
@@ -1596,20 +1593,20 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto" >
                         Vendor Name:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <span class="span-header-red text-capital">
                         {{getVendorName() }}
                     </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Vendor Code:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <span class="span-header-red text-capital">
                         {{local?.vendorCode }}
                     </span>
                 </p>
@@ -1658,20 +1655,20 @@
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">
+                        <label class="control-label labels-font-header wauto">
                             Vendor Name:
                         </label>
-                        <span class="span-header-red" style="text-transform: capitalize">
+                        <span class="span-header-red text-capital">
                             {{local === undefined ? vendorData.vendorName :getVendorName() }}
                         </span>
                     </p>
                 </div>
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">
+                        <label class="control-label labels-font-header wauto">
                             Vendor Code:
                         </label>
-                        <span class="span-header-red" style="text-transform: capitalize">
+                        <span class="span-header-red text-capital">
                             {{local === undefined ? vendorData.vendorCode : local?.vendorCode }}
                         </span>
                     </p>
@@ -1740,10 +1737,14 @@
                                        class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                 </span>
                             </td>
-
-                            <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                            <ng-container *ngFor="let col of columns">
+                            <td class="table-column-width" *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                             </td>
+                            <td *ngIf="col.field == 'memo'">
+                                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                            </td>
+                        </ng-container>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns>
@@ -1786,20 +1787,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -1913,20 +1914,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorName : getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorCode : local?.vendorCode }}
                             </span>
                         </p>
@@ -2020,9 +2021,14 @@
                                                class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                         </span>
                                     </td>
-                                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                    <ng-container *ngFor="let col of columns">
+                                    <td class="table-column-width" *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                     </td>
+                                    <td class="table-column-width" *ngIf="col.field == 'memo'">
+                                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                    </td>
+                                    </ng-container>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="emptymessage" let-columns>
@@ -2094,30 +2100,30 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorName : getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorCode : local?.vendorCode }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Export License:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital" >
                                 {{vendorIntHistoryRowData.exportLicense }}
                             </span>
                         </p>
@@ -2216,20 +2222,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -2264,30 +2270,30 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorName : getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorCode : local?.vendorCode }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Export License:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{shipppingDetails.exportLicense}}
                             </span>
                         </p>
@@ -2540,20 +2546,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto" >
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -2588,20 +2594,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -2636,30 +2642,30 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorName : getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorCode : local?.vendorCode }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Ship Via:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{ selectedShipViaInterHistory.shipViaName }}
                             </span>
                         </p>
@@ -2752,20 +2758,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorName : getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local === undefined ? vendorData.vendorCode : local?.vendorCode }}
                             </span>
                         </p>
@@ -2832,20 +2838,20 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Name:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{getVendorName() }}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">
+                            <label class="control-label labels-font-header wauto">
                                 Vendor Code:
                             </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -2877,16 +2883,16 @@
                 <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <label class="control-label labels-font-header wauto">Vendor Name: </label>
+                            <span class="span-header-red text-capital">
                                 {{getVendorName()}}
                             </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
+                            <label class="control-label labels-font-header wauto" >Vendor Code: </label>
+                            <span class="span-header-red text-capital">
                                 {{local?.vendorCode }}
                             </span>
                         </p>
@@ -2917,16 +2923,16 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <label class="control-label labels-font-header wauto">Vendor Name: </label>
+                    <span class="span-header-red text-capital">
                         {{getVendorName() }}
                     </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <label class="control-label labels-font-header wauto">Vendor Code: </label>
+                    <span class="span-header-red text-capital">
                         {{local?.vendorCode }}
                     </span>
                 </p>
@@ -2936,10 +2942,10 @@
     <div class="modal-body">
         <div class="col-md-6">
             <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">
+                <label class="control-label labels-font-header wauto">
                     Site Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                     {{restoreDomesticRecord.siteName }}
                 </span>
             </p>
@@ -2961,16 +2967,16 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <label class="control-label labels-font-header wauto">Vendor Name: </label>
+                    <span class="span-header-red text-capital">
                         {{getVendorName() }}
                     </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
+                    <label class="control-label labels-font-header wauto">Vendor Code: </label>
+                    <span class="span-header-red text-capital">
                         {{local?.vendorCode }}
                     </span>
                 </p>
@@ -2980,10 +2986,10 @@
     <div class="modal-body">
         <div class="col-md-6">
             <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">
+                <label class="control-label labels-font-header wauto">
                     Export License:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                     {{selectedRowRestoreInternationalShipping.exportLicense }}
                 </span>
             </p>

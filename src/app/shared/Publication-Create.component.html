@@ -5,15 +5,15 @@
     <table class="table table-bordered table-fixed workflow-table-pub">
         <thead class="thead-light">
             <tr>
-                <th style="min-width: 120px;"> Pub ID<span class="clr-red" >*</span></th>
-                <th> Pub Desc </th>
+                <th class="w120_clas"> Pub ID<span class="clr-red" >*</span></th>
+                <th class="w150_clas"> Pub Desc </th>
                 <th> Pub Type </th>
                 <th> Revision Date </th>
-                <th> Sequence </th>
+                <!-- <th> Sequence </th> -->
                 <th> Source </th>
-                <th> Aircraft </th>
-                <th> Model </th>
-                <th style="min-width: 180px;"> Dash Number </th>
+                <!-- <th> Aircraft </th> -->
+                <!-- <th> Model </th> -->
+                <!-- <th > Dash Number </th> -->
                 <th> Location </th>
                 <th> Verified By </th>
                 <th> Verified Date </th>
@@ -44,24 +44,25 @@
                     {{publ.publicationDescription}}
                 </td>
                 <td>
-                    <select class="form-control wf-pub-id full-width" [(ngModel)]="publ.publicationType" >
+                    <!-- <select class="form-control wf-pub-id full-width" [(ngModel)]="publ.publicationType" >
                         <option value="0">--select--</option>
                         <option *ngFor="let type of publicationTypes" [value]="type.publicationTypeId">
                             {{type.name}}
                         </option>
-                    </select>
+                    </select> -->
+                    {{publ.publicationTypeName}}
                 </td>
                 <td>
                     {{publ.revisionDate}}
                 </td>
-                <td class="text-right">
+                <!-- <td class="text-right">
                     {{publ.sequence}}
-                </td>
+                </td> -->
                 <td>
                     {{publ.source}}
                 </td> 
-                <td>
-                    <select class="form-control wf-pub-id full-width" id="ddlAircraftManufacturer"
+                <!-- <td> -->
+                    <!-- <select class="form-control wf-pub-id full-width" id="ddlAircraftManufacturer"
                         [(ngModel)]="publ.aircraftManufacturer"
                         (change)="getModelByAircraftId(publ,i)">
                         <option value="0">--select--</option>
@@ -69,10 +70,11 @@
                             value="{{manufact.aircraftTypeId}}">
                             {{manufact.description}}
                         </option>
-                    </select>
-                </td>
+                    </select> -->
+                   
+                <!-- </td> -->
 
-                <td> 
+                <!-- <td> 
                     <select class="form-control wf-pub-id full-width" id="ddlModel" [(ngModel)]="publ.model"
                         (change)="getDashNumberByModelandAircraftIds(publ, i,'html')">
                         <option value="0">--select--</option>
@@ -81,13 +83,13 @@
                             {{model.modelName}}
                         </option>
                     </select>
-                </td>
-                <td>
+                </td> -->
+                <!-- <td>
                     <ng-multiselect-dropdown class="form-control" [placeholder]="'--Select--'"
                         [data]="getDynamicVariableData('dashNumberListByModelId',i)"
                         [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings">
                     </ng-multiselect-dropdown>
-                </td>
+                </td> -->
                 <td>
                     {{publ.location}}
                 </td>
@@ -101,7 +103,7 @@
                 <td>
                     <select class="form-control custom-select dropdown-select wf-pub-id" disabled="disabled"
                         [(ngModel)]="publ.status">
-                        <option value="0">--Select--</option>
+                        <!-- <option value="0">--Select--</option> -->
                         <option value="true">Active</option>
                         <option value="false">In Active</option>
                     </select>

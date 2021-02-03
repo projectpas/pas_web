@@ -100,6 +100,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     partListData: any[] = [];
     integrationvalues: any[] = [];
     cmmList: any[];
+    disableSaveMemo: boolean = true;
     capabilityTypeData: any[];
     managementStructureData: any = [];
     isDeleteCapabilityPopupOpened: boolean = false;
@@ -428,6 +429,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         if(this.selectedItemMasterCapData.addedDate){
             this.selectedItemMasterCapData.addedDate = new Date(this.selectedItemMasterCapData.addedDate);
         }
+    }
+
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
     }
 
     getManagementStructureDetails(id,empployid=0,editMSID=0) {
@@ -1316,7 +1321,9 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     onAddTextAreaInfo(value , content) {
         this.textAreaInfo = this.selectedItemMasterCapData.memo;
+        this.disableSaveMemo=true;
         $('#capes-memo').modal('show');
+        
         //this.modal = this.modalService.open(content, { size: 'sm' });
 		// if(value == 'memo') {
 		// 	//this.textAreaLabel = 'Memo';

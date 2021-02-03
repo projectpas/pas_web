@@ -18,7 +18,7 @@ import { ConfigurationService } from "../services/configuration.service";
 import { getObjectById } from "../generic/autocomplete";
 import { AuthService } from "../services/auth.service";
 import { CommonService } from "../services/common.service";
-
+ 
 @Component({
     selector: 'grd-publication',
     templateUrl: './Publication-Create.component.html',
@@ -217,16 +217,25 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
             this.publicationDropdown = res;
-
+if(this.publicationDropdown && this.publicationDropdown.length==1){
+    // this.onPublicationChange(event, this.workFlow.publication[0], 0);
+    this.workFlow.publication[0].publicationId=this.publicationDropdown[0].publicationRecordId
+    this.loadPublicationById(this.workFlow.publication[0], true);
+    const pubData = this.publicationDropdown;
+    for (var i = 0; i < pubData.length; i++) {
+        if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
+            this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
+            break
+        }
+    }
+}
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
     showAlert: boolean = false;
-    public onPublicationChange(event, wfPublication, index) {
-        console.log("event", wfPublication)
-        console.log("workflow", this.workFlow)
+     onPublicationChange(event, wfPublication, index) {
         var isEpnExist = this.workFlow.publication.filter(x => x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
         if (isEpnExist.length > 1) {
             wfPublication.publicationId = '';
@@ -379,9 +388,9 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     bindEditModeData(data) {
         this.workFlow.publication = data.map((x, index) => {
             if (x.publicationId) {
-                this.getAircraftByPublicationId(x, index);
-                this.getModelByAircraftId(x, index);
-                this.getDashNumberByModelandAircraftIds(x, index, 'onload');
+                // this.getAircraftByPublicationId(x, index);
+                // this.getModelByAircraftId(x, index);
+                // this.getDashNumberByModelandAircraftIds(x, index, 'onload');
             }
             return {
                 ...x
@@ -394,6 +403,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
             res => {
                 this.isSpinnerVisible = false;
+                wfPublication.publicationTypeName=res[0].publicationTypeName;
                 if (res[0] != undefined && res[0] != null) {
                     this.publications.push(res[0]);
 
@@ -424,7 +434,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     downloadFileUpload(rowData) {
-        console.log("lin", rowData);
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }

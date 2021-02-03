@@ -150,6 +150,11 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     let searchQuery = JSON.parse(JSON.stringify(this.query));
     searchQuery.partSearchParamters.restrictDER = !searchQuery.partSearchParamters.restrictDER;
     searchQuery.partSearchParamters.restrictPMA = !searchQuery.partSearchParamters.restrictPMA;
+    if (searchQuery.partSearchParamters.conditionIds !== undefined && searchQuery.partSearchParamters.conditionIds.length == 0)
+    {
+      searchQuery.partSearchParamters.conditionIds.push(searchQuery.partSearchParamters.conditionId);
+    }
+    
     if (!programaticSearch) {
       $event.preventDefault();
     }

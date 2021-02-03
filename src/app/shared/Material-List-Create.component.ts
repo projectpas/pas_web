@@ -453,7 +453,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.itemClassification = this.itemclaColl[i][0].itemClassification;
                     material.unitOfMeasure = this.itemclaColl[i][0].unitOfMeasure;
                     material.unitOfMeasureId = this.itemclaColl[i][0].unitOfMeasureId;
-                    material.unitCost = this.itemclaColl[i][0].unitCost;
+                    // material.unitCost = this.itemclaColl[i][0].unitCost;
+                        material.conditionCodeId=this.itemclaColl[i][0].conditionId;
+                        material.conditionCodeId = material.conditionCodeId? material.conditionCodeId : this.conditionList[0].value; 
                 }
             }; 
             this.materialMandatory.forEach(element => {
@@ -462,7 +464,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.MaterialMandatoriesName=element.materialMandatoriesName;
                 }
             });
-            material.conditionCodeId = this.conditionList[0].value;
+        
             this.getPNDetails(material);
         }
     }
@@ -830,13 +832,15 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
                         this.isSpinnerVisible = false;
                         if (partDetail) {
-                            part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["pP_UnitPurchasePrice"], 2);
+                            const unitCost = parseFloat(part.unitCost.toString().replace(/\,/g, ''));
+                            // part.unitCost = part.unitCost !=0 ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
+                            part.unitCost =unitCost !=0 ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
                             part.billingRate = partDetail["sP_FSP_FlatPriceAmount"];
                             part.markupPercentageId = partDetail["sP_CalSPByPP_MarkUpPercOnListPrice"];
                             part.stockType = part.stockType ? part.stockType : partDetail["stockType"];
                             part.price = part.price ? formatNumberAsGlobalSettingsModule(part.price, 2) : formatNumberAsGlobalSettingsModule(partDetail["salePrice"], 2);
                             this.calculateExtendedCost(part);
-                            this.calculateExtendedPrice(part);
+                            // this.calculateExtendedPrice(part);
                         } 
                     }, error => {
                         this.isSpinnerVisible = false;
