@@ -46,9 +46,12 @@
             </tr>
             <tr>
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input class="table-header-input-width" pInputText type="text"
+                    <input class="table-header-input-width" pInputText type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                         (input)="ntaeDataTable.filter($event.target.value, col.field, col.filterMatchMode)">
-
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                        name="createdDate" (change)="ntaeDataTable.filter($event.target.value, col.field)" />
+                      <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                        name="updatedDate" (change)="ntaeDataTable.filter($event.target.value,col.field)" />
                 </th>
                 <th class="table-column-width" *ngIf="selectedTab == 'Equivalency'"></th>
                 <th class="table-actions-column"></th>
@@ -261,15 +264,17 @@
                 <thead>
                     <tr>
 
-                        <th>PN</th>
+                        <th>PN <span class="clr-red">*</span></th>
                         <th>PN Description</th>
                         <th>Manufacturer</th>
                         <th *ngIf="selectedTab == 'Equivalency'">Classification</th>
                         <th *ngIf="selectedTab == 'Equivalency'">Document</th>
-                        <th>Created By</th>
+                       
                         <th>Created Date</th>
-                        <th>Updated By</th>
+                        <th>Created By</th>
+                       
                         <th>Updated Date</th>
+                        <th>Updated By</th>
                         <th>Is Deleted</th>
                     </tr>
                 </thead>
@@ -318,10 +323,11 @@
                                 (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
                                 download>{{fileItem?.ad.fileName}}</a></td>
                         <!-- <td>{{ntae.isActive}}</td> -->
-                        <td>{{ntae.createdBy}}</td>
                         <td>{{ntae.createdDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
-                        <td>{{ntae.updatedBy}}</td>
+                        <td>{{ntae.createdBy}}</td>
                         <td>{{ntae.updatedDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
+                        <td>{{ntae.updatedBy}}</td>
+                       
                         <td style="background-color: #fff !important;"><p style="background-color: #fff !important;"><input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>

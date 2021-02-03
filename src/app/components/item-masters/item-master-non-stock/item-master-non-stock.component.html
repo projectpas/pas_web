@@ -135,7 +135,9 @@
                         <label class="control-label">List Price </label>
                         <input class="form-control text-right" type="text" name="listPrice" pKeyFilter="money" [(ngModel)]="sourceItemMaster.listPrice" (change)="onChangeListPrice()">
                         <label class="control-label">Price Date </label>
-                        <p-calendar [showIcon]="true" name="priceDate" [(ngModel)]="sourceItemMaster.priceDate"></p-calendar>
+                        <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                         name="priceDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                         [(ngModel)]="sourceItemMaster.priceDate"></p-calendar>
                     </div>
                 </div>
             </div>
