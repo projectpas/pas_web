@@ -70,18 +70,18 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Open Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="openDate"
-                                                [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="openDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Closed/Cancelled Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="closedDate"
-                                                [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="closedDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Need By</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="needByDate"
-                                                [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="needByDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Priority</label>
@@ -883,9 +883,9 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>MFG Date</label>
-                                                            <p-calendar class="pas-clder"
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
-                                                                        [showIcon]="true"></p-calendar>
+                                                                       name="manufacturingDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>MFG Trace</label>
@@ -903,8 +903,9 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Expiration Date</label>
-                                                            <p-calendar class="pas-clder" [showIcon]="true"
-                                                                        [ngModelOptions]="{standalone: true}"
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                                                         name="expirationDate"
+                                                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].expirationDate">
                                                             </p-calendar>
                                                         </div>
@@ -936,16 +937,17 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Certified Date</label>
-                                                            <p-calendar class="pas-clder"
+                                                            <p-calendar  [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
-                                                                        [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                                                                        name="certifiedDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDate">
                                                             </p-calendar>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Certified Due Date</label>
-                                                            <p-calendar class="pas-clder" [showIcon]="true"
-                                                                        [ngModelOptions]="{standalone: true}"
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                                                        name="certifiedDueDate"
+                                                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDueDate">
                                                             </p-calendar>
                                                         </div>
@@ -964,9 +966,9 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Tag Date</label>
-                                                            <p-calendar class="pas-clder" [showIcon]="true"
-                                                                        [ngModelOptions]="{standalone: true}"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                                   name="tagDate"     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
                                                             </p-calendar>
                                                         </div>
                                                         <div class="form-group">
