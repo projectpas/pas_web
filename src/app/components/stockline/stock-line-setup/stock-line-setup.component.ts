@@ -1061,6 +1061,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.itarNumber = partDetails.itarNumber;
 			this.stockLineForm.nationalStockNumber = partDetails.nationalStockNumber;
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
+			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
