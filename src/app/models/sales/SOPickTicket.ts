@@ -12,7 +12,8 @@ export class SOPickTicket {
     memo:string;
     pickedById:number;
     confirmedById:number;
-    isConfirmed:boolean;
+    //isConfirmed:boolean;
+    qtyRemaining:number;
   
     constructor() { }
   }

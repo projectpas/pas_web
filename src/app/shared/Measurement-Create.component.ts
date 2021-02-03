@@ -44,14 +44,15 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.row = {};
         }
         this.row.taskId = this.workFlow.taskId;
+     
+    }
+
+    ngOnChanges(): void {
         if(this.workFlow.measurements && this.workFlow.measurements.length !=0){
             this.workFlow.measurements.map((x, index) => {
                     this.workFlow.measurements[index].partName=x; 
             })
         }
-    }
-
-    ngOnChanges(): void {
     }
 
     addRow(): void {

@@ -70,7 +70,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _vendorCheckpaymentUpdate: string = environment.baseUrl + "/api/Vendor/vendorCheckPayment";
 	private readonly _vendorShipAddressdetails: string = "/api/Vendor/vendorShippingAddressDetails";
 	private readonly _vendorDomesticpaymentUpdate: string = environment.baseUrl + "/api/Vendor/vendorDomesticPayment";
-	private readonly _vendorInternationalpaymentUpdate: string = "/api/Vendor/vendorInternationalPayment";
+	private readonly _vendorInternationalpaymentUpdate: string = environment.baseUrl + "/api/Vendor/vendorInternationalPayment";
 	private readonly _vendorDefaultUpdate: string = "/api/Vendor/updatevendorDefault";
 	private readonly _vendorFinanceUrl: string = environment.baseUrl +"/api/Vendor/vendorFinancePost";
 	private readonly _shippingInfoUrl: string = environment.baseUrl + "/api/Vendor/vendorShippingPost";
@@ -1784,7 +1784,7 @@ export class VendorEndpointService extends EndpointFactory {
 	getAllVendorList(data) {
 		return this.http.post(this.vendorListUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getAllVendorList(data));
+				return this.handleErrorCommon(error, () => this.getAllVendorList(data));
 			});
 	}
 

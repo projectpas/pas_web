@@ -7825,7 +7825,7 @@ html {
 
 .cat-heading,
 .scat-heading {
-  font-size: 15px;
+  font-size: 11px;
   display: block;
   background: #295d92;
   padding: 5px;
@@ -13735,7 +13735,7 @@ body .ui-table .ui-table-tbody>tr>td a.btn {
 .workflow-table-equip label,
 .workflow-table-charges label,
 .workflow-table-material tr th {
-  font-size: 10.5px !important;
+  font-size: 10px !important;
   padding: 3px !important;
 }
 
@@ -17113,4 +17113,28 @@ input[type="date"]::-webkit-clear-button {
 }
 ng-multiselect-dropdown{
   border-radius: 4px !important;
+}
+.workflow-table-measment td {
+  padding: 3px !important;
+}
+.class-Attribue{
+  margin-right: 70px;
+}
+.class-task{
+  margin-right: 30px;
+}
+.workflowTable-class td{
+  padding:3px !important
+}
+.input_adjust{
+  max-width: 30px !important;
+}
+.w150_clas{
+  min-width: 150px !important;
+}
+.memo_cehck{
+  width: 99% !important;
+}
+.w120_clas{
+  min-width: 120px !important;
 }

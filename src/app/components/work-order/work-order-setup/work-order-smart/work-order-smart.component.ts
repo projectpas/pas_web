@@ -61,7 +61,7 @@ export class WorkOrderSmartComponent implements OnInit {
     technicianOriginalList: Object;
     inspectorsOriginalList: any;
     isSpinnerEnable: boolean = false;
-    masterCompanyId = 1;
+    masterCompanyId:any;
     workorderSettings: any;
     expertiseTypeList: any;
     technicianByExpertiseTypeList: any;
@@ -91,7 +91,9 @@ export class WorkOrderSmartComponent implements OnInit {
 
 
     ngOnInit() {
-
+this.masterCompanyId=this.authService.currentUser
+? this.authService.currentUser.masterCompanyId
+: null;
         // comment due to getting error in labor need to check all scenarios
         // if(this.isSubWorkOrder==false){
             this.getAllWorkOrderTypes();
