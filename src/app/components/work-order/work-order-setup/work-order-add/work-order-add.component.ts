@@ -48,7 +48,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() employeesOriginalData;
     @Input() techStationList;
     @Input() salesPersonOriginalList;
-    @Input() salesAgentsOriginalList;
+    @Input() salesAgentsOriginalList; 
     @Input() csrOriginalList;
     @Input() technicianOriginalList; 
     @Input() technicianByExpertiseTypeList; 
@@ -1001,6 +1001,7 @@ this.getWorkOrderWorkFlowNos();
                 result => {
                     this.isSpinnerVisible = false;
                     this.disableSaveForEdit=true;
+                    this.disableSaveForPart=true;
                     this.saveWorkOrderGridLogic(result, generalInfo);
              
                         this.alertService.showMessage(
@@ -1020,6 +1021,7 @@ this.getWorkOrderWorkFlowNos();
                 result => {
                     this.isSpinnerVisible = false;
                     this.isEdit = true;
+                    this.disableSaveForPart=true;
                     this.router.navigate([`workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`]);
                     this.saveWorkOrderGridLogic(result, generalInfo)
                      if(window.location.href.includes('app-work-order-receivingcustworkid')){
@@ -3219,4 +3221,39 @@ this.restrictID=0;
     handleError(err){
         this.isSpinnerVisible = false;
       }
+      tempMemo:any;
+      type:any;
+      onAddDescription(value) {
+          this.type=value;
+          this.tempMemo = "";
+          if(value==1){
+            this.tempMemo = this.workOrderGeneralInformation.notes;
+          }else{
+            this.tempMemo = this.workOrderGeneralInformation.memo;
+          }
+
+    }
+
+    onSaveDescription() {
+        if( this.type==1){
+            this.workOrderGeneralInformation.notes=  this.tempMemo;
+          }else{
+          this.workOrderGeneralInformation.memo=  this.tempMemo;
+          }
+
+        this.disableSaveForEdit=false;
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    disableSaveForPart:boolean=true;
+    getValid(){
+        this.disableSaveForPart=false;
+    }
 } 
