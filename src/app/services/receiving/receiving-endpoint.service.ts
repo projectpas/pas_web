@@ -92,11 +92,11 @@ export class ReceivingEndpointService extends EndpointFactory {
             });
     }
 
-    getReceivingPODataById<T>(receivingId: any): Observable<T> {
-        let url = `${this.receivingPurchaseOrderDataGet}/${receivingId}`;
+    getReceivingPODataById<T>(receivingId: any,employeeId = 0): Observable<T> {
+        let url = `${this.receivingPurchaseOrderDataGet}?receivingId=${receivingId !== undefined ? receivingId : '0'}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getReceivingPODataById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataById(receivingId,employeeId));
             });
     }
 

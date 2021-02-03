@@ -62,9 +62,9 @@ export class ReceivingService {
             this.receivingEndpoing.getItemMasterDataById<any[]>(itemid));
     }
 
-    getPurchaseOrderDataById(receivingId: any) {
+    getPurchaseOrderDataById(receivingId: any,employeeId = 0) {
         return Observable.forkJoin(
-            this.receivingEndpoing.getReceivingPODataById<PurchaseOrder>(receivingId));
+            this.receivingEndpoing.getReceivingPODataById<PurchaseOrder>(receivingId,employeeId));
     }
 
     getPurchaseOrderDataForEditById(receivingId: any) {

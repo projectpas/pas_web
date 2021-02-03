@@ -1,4 +1,5 @@
-﻿import { Vendor } from "../../../../models/vendor.model";
+﻿import { ManagementStructure } from './../../../../models/managementstructure.model';
+import { Vendor } from "../../../../models/vendor.model";
 import { AddressModel } from "../../../../models/address.model";
 import { Dropdown } from "primeng/dropdown";
 
@@ -114,6 +115,9 @@ export class PurchaseOrderPart {
     itemMaster: any;
     visible: boolean;
     conditionId: number;
+    condition: string;
+    glAccountId: number;
+    glAccount: string;
     shipViaId: number;
     shippingAccountInfo: string;
 
@@ -158,12 +162,6 @@ export class PurchaseOrderPart {
     isDisabledTLboxes: boolean;
     toggleIcon: boolean;
     isEnabled: boolean;
-
-    companyId: number;
-    businessUnitId: number;
-    divisionId: number;
-    departmentId: number;
-
     companyText: string;
     businessUnitText: string;
     divisionText: string;
@@ -175,6 +173,21 @@ export class PurchaseOrderPart {
     BusinessUnitList: DropDownData[];
     DivisionList: DropDownData[];
     DepartmentList: DropDownData[];
+    companyId: number = 0;
+    businessUnitId: number = 0;
+    divisionId: number = 0;
+    departmentId: number =0;
+
+    maincompanylist: [];    
+    parentBulist: [];
+    parentDivisionlist: [];
+    parentDepartmentlist: [];
+    parentCompanyId: number = 0;
+    parentbuId: number = 0;
+    parentDivisionId: number = 0;
+    parentDeptId: number = 0;
+
+
     SiteList: DropDownData[];
     WareHouseList: DropDownData[];
     LocationList: DropDownData[];
@@ -184,6 +197,8 @@ export class PurchaseOrderPart {
     timeLife: TimeLife[];
     stockLineDraft: StockLine[];
     timeLifeDraft: TimeLife[];
+
+    
 }
 
 export class TimeLife {
@@ -303,7 +318,6 @@ export class StockLine {
     unitSalesPrice: number;
     coreUnitCost: number;
     gLAccountId: number;
-    glAccountId: number;
     assetId: number;
     isHazardousMaterial: boolean;
     isPMA: boolean;
@@ -497,6 +511,15 @@ export class StockLineDraft {
     traceableToObject: DropDownData;
     createdBy: string;
     updatedBy: string;
+    
+    maincompanylist: [];
+    parentCompanyId: number = 0;
+    parentBulist: [];
+    parentDivisionlist: [];
+    parentDepartmentlist: [];
+    parentbuId: number = 0;
+    parentDivisionId: number = 0;
+    parentDeptId: number = 0;
 }
 
 export class ReceiveParts {
@@ -516,7 +539,6 @@ export class DropDownData {
         this.Key = key;
         this.Value = value;
     }
-
     Key: string;
     Value: string;
 }
