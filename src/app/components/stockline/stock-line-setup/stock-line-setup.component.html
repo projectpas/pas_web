@@ -571,13 +571,13 @@
                             <div class="form-group">
                                 <label matTooltip="Export Control Classification Number"
                                     matTooltipPosition="above">ECCN</label>
-                                <input class="form-control" type="text" name="ExportECCN"
+                                <input class="form-control" type="text" name="ExportECCN" disabled
                                     [(ngModel)]="stockLineForm.exportECCN" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
                                 <label matTooltip="International Traffic in Arms Regulations Number"
                                     matTooltipPosition="above">ITAR</label>
-                                <input class="form-control" type="text" name="ITARNumber"
+                                <input class="form-control" type="text" name="ITARNumber" disabled
                                     [(ngModel)]="stockLineForm.itarNumber" (ngModelChange)="enableSave()">
                             </div>
                         </div>
