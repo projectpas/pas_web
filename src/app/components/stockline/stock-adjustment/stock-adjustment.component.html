@@ -31,8 +31,8 @@
 					<div class="col-md-3">
 						<span><b class="clr-red">SL#:</b> {{sourceStockLineSetup.stockLineNumber}}</span>
 					</div>
-					<div class="col-md-3">
-						<span><b class="clr-red">Is Serialized:</b> {{sourceStockLineSetup.isSerialized ? sourceStockLineSetup.isSerialized : false}}</span>
+					<div class="col-md-3">						
+						<span><b class="clr-red">Is Serialized:</b><input style="margin-left: 10px;" type="checkbox" name="isSerialized" [(ngModel)]="sourceStockLineSetup.isSerialized" disabled></span>
 					</div>
 				</div>
 				<div class="table-responsive mtop10" id="smovement">
