@@ -330,12 +330,21 @@
                             </tr>
                             <tr>
                                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input *ngIf="col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
+                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')">
-                                    <input *ngIf="col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
+                                    
+                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')" [disabled]="isOpenAdvancedSearch">
 
-                                </th>
+                                    <input type="date" class="hidePlaceHolder table-header-input-width"
+                                           *ngIf="col.field == 'createdDate'" name="createdDate"
+                                           (change)="dateFilterForItemMasterList($event.target.value, col.field ,$event.target)">
+                                           
+                                    <input type="date" class="hidePlaceHolder table-header-input-width"
+                                           *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                           (change)="dateFilterForItemMasterList($event.target.value, col.field ,$event.target)"> 
+                               
+                                        </th>
                                 <th class="table-actions-column"></th>
                             </tr>
                         </ng-template>
@@ -430,7 +439,7 @@
 
                               <div style="display: flow-root;">
                                 <div>
-                                    <button
+                                    <!-- <button
                                     type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
@@ -440,7 +449,20 @@
                                     iconPos="left"
                                     label="Export Data"
                                     (click)="dt.exportCSV()"
-                                  ></button>
+                                  ></button> -->
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary exports-button"
+                                    matTooltip="Download Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Data"
+                                    data-toggle="modal" 
+                                    (click)="nonstockselectedOnly = false; nonstocktargetData = dt;"
+                                     data-target="#downloadnonstockConfirmation"
+                                  ></button>                                  
                                   <button
                                     type="button"
                                     class="btn btn-primary exports-button"
@@ -449,8 +471,8 @@
                                     pButton
                                     icon="fa-download"
                                     iconPos="left"
-                                    label="Export Selected Data"
-                                    (click)="dt.exportCSV({ selectionOnly: true })"
+                                    label="Export Selected Data"                                    
+                                    (click)="dt.exportCSV({selectionOnly:true})"
                                   ></button>
                                   <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
@@ -596,10 +618,19 @@
 
                             <tr>
                                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input class="table-header-input-width" *ngIf="col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
+                                    <input class="table-header-input-width" *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
-                                    <input class="table-header-input-width" *ngIf="col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
+                                    <input class="table-header-input-width" *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" [disabled]="isOpenAdvancedSearch">
+                                    
+                                    <input type="date" class="hidePlaceHolder table-header-input-width"
+							            *ngIf="col.field == 'createdDate'" name="createdDate"
+                                        (change)="dateFilterForItemNonstockList($event.target.value, col.field ,$event.target)">
+                                        
+						            <input type="date" class="hidePlaceHolder table-header-input-width"
+							            *ngIf="col.field == 'updatedDate'" name="updatedDate"
+							            (change)="dateFilterForItemNonstockList($event.target.value, col.field ,$event.target)">                                
+                                  
                                 </th>
                                 <th class="table-actions-column"></th>
                             </tr>
@@ -975,6 +1006,28 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="downloadnonstockConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="nonstocktargetData">
+				<strong>
+					<span>
+						You are attempting to export {{nonstocktargetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(nonstockselectedOnly)?nonstocktargetData.exportCSV({ selectionOnly: true }):exportCSV(nonstocktargetData); closeDeleteModal();">Confirm</button>
 				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
 			</div>
 		</div>
