@@ -463,7 +463,7 @@
 
                               <div style="display: flow-root;">
                                 <div>
-                                    <button
+                                    <!-- <button
                                     type="button"
                                     class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
@@ -473,7 +473,20 @@
                                     iconPos="left"
                                     label="Export Data"
                                     (click)="dt.exportCSV()"
-                                  ></button>
+                                  ></button> -->
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary exports-button"
+                                    matTooltip="Download Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Data"
+                                    data-toggle="modal" 
+                                    (click)="nonstockselectedOnly = false; nonstocktargetData = dt;"
+                                     data-target="#downloadnonstockConfirmation"
+                                  ></button>                                  
                                   <button
                                     type="button"
                                     class="btn btn-primary exports-button"
@@ -482,8 +495,8 @@
                                     pButton
                                     icon="fa-download"
                                     iconPos="left"
-                                    label="Export Selected Data"
-                                    (click)="dt.exportCSV({ selectionOnly: true })"
+                                    label="Export Selected Data"                                    
+                                    (click)="dt.exportCSV({selectionOnly:true})"
                                   ></button>
                                   <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
@@ -1028,37 +1041,28 @@
 	</div>
 </div>
 
-<ng-template #restorePopupId let-c="close" let-d="dismiss" data-backdrop="static">
-    <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Restore?</h4>
-  
-      <button
-        type="button"
-        class="close"
-        aria-label="Close"
-        (click)="dismissModel()"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-        <strong>
-            Part Number:
-          <span class="new-label">
-            {{deletePartDesc}}
-            </span>
-        </strong>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="restoreRecord()">
-        Yes
-      </button>
-      <button type="button" class="btn btn-danger" (click)="dismissModel()">
-        No
-      </button>
-    </div>
-  </ng-template>
-  
+<div class="modal fade" id="downloadnonstockConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="nonstocktargetData">
+				<strong>
+					<span>
+						You are attempting to export {{nonstocktargetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(nonstockselectedOnly)?nonstocktargetData.exportCSV({ selectionOnly: true }):exportCSV(nonstocktargetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
