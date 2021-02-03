@@ -14,7 +14,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12 mt8">
             <div class="tab-content">
                 <div class="tab-pane active" id="home">
-                    <div class="col-sm-6" style="margin-left: 30px">
+                    <div class="col-sm-6 accounting-calendar-div">
                         <div class="form-group col-sm-12">
                             <label class="col-sm-3">Ledger Name<strong class="clr-red">*</strong></label>
                             <div class="col-sm-5 inner-addon right-addon inline-block">
@@ -50,7 +50,8 @@
         </div>
 
         <div [@fadeInOut] class="col-md-12 col-sm-12 col-xs-12">
-            <button *ngIf="showManual" (click)="addPeriod()" class="btn btn-warning pull-right add-cal-btn" style="font-size: 12px;padding: 2px 5px;">Add Period <i class="fa fa-plus"></i></button>
+            <button *ngIf="showManual" (click)="addPeriod()" class="btn btn-warning pull-right add-cal-btn accounting-period-button" 
+            >Add Period <i class="fa fa-plus"></i></button>
             <!-- <div id="" class="accountCalendarTable table-responsive default-bg clear calendar-table-12 col-10 input-85" *ngIf="showTable">
                 <table class="table table-bordered table-striped"> -->
                     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="showTable">

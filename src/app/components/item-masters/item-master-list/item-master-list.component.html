@@ -870,6 +870,11 @@
 
 
                         </ng-template>
+                        <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" class="table-column-width">
+                            </colgroup>
+                        </ng-template>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
 
