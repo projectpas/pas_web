@@ -330,12 +330,21 @@
                             </tr>
                             <tr>
                                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input *ngIf="col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
+                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')">
-                                    <input *ngIf="col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
+                                    
+                                    <input *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')" [disabled]="isOpenAdvancedSearch">
 
-                                </th>
+                                    <input type="date" class="hidePlaceHolder table-header-input-width"
+                                           *ngIf="col.field == 'createdDate'" name="createdDate"
+                                           (change)="dateFilterForItemMasterList($event.target.value, col.field ,$event.target)">
+                                           
+                                    <input type="date" class="hidePlaceHolder table-header-input-width"
+                                           *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                           (change)="dateFilterForItemMasterList($event.target.value, col.field ,$event.target)"> 
+                               
+                                        </th>
                                 <th class="table-actions-column"></th>
                             </tr>
                         </ng-template>
@@ -596,10 +605,19 @@
 
                             <tr>
                                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input class="table-header-input-width" *ngIf="col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
+                                    <input class="table-header-input-width" *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
-                                    <input class="table-header-input-width" *ngIf="col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
+                                    <input class="table-header-input-width" *ngIf="col.field !== 'createdDate' && col.field !== 'updatedDate' && col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" [disabled]="isOpenAdvancedSearch">
+                                    
+                                    <input type="date" class="hidePlaceHolder table-header-input-width"
+							            *ngIf="col.field == 'createdDate'" name="createdDate"
+                                        (change)="dateFilterForItemNonstockList($event.target.value, col.field ,$event.target)">
+                                        
+						            <input type="date" class="hidePlaceHolder table-header-input-width"
+							            *ngIf="col.field == 'updatedDate'" name="updatedDate"
+							            (change)="dateFilterForItemNonstockList($event.target.value, col.field ,$event.target)">                                
+                                  
                                 </th>
                                 <th class="table-actions-column"></th>
                             </tr>
