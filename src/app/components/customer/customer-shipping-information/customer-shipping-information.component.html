@@ -38,7 +38,7 @@
                       <div style="text-align: right;">
                         <a *ngIf="isViewMode == false" 
                           data-toggle="modal" data-target="#addShippingInfo">
-                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm new-btn-primary"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
+                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
                             Add Domestic Shipping Information
                           </button>
                         </a>              
@@ -265,7 +265,7 @@
                       <div style="text-align: right;">
                         <a *ngIf="isViewMode == false" 
                          data-toggle="modal" data-target="#addInternationalShippingInfo">
-                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm new-btn-primary"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
+                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
                             Add International Shipping Information
                           </button>
                         </a>              
@@ -672,7 +672,9 @@
                         }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                     </span>
                   </td>
-                  <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                  <ng-container *ngFor="let col of columns">
+                  <td  class="table-column-width" *ngIf="col.field != 'memo'" 
+                   class="ui-resizable-column" pReorderableRowHandle>
                     {{
                       col.field == 'createdDate'
                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -681,6 +683,10 @@
                         : rowData[col.field]
                     }}
                   </td>
+                  <td class="table-column-width" *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                </td>
+                </ng-container>
                   
                 </tr>
               </ng-template>
@@ -1255,7 +1261,8 @@
                           }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                       </span>
                     </td>
-                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                    <ng-container *ngFor="let col of columns">
+                    <td  *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
                       {{
                         col.field == 'createdDate'
                           ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -1264,6 +1271,10 @@
                           : rowData[col.field]
                       }}
                     </td>
+                    <td class="table-column-width" *ngIf="col.field == 'memo'">
+                      <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                  </td>
+                  </ng-container>
                     
                   </tr>
                 </ng-template>

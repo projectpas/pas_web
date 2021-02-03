@@ -1,288 +1,241 @@
 ﻿<div *ngIf="!isSubWorkOrder">
-
-    <!-- <div class="inline-block display-flex">
-        <h3 class="po-head lead">Work Order List</h3>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <a matTooltip="Create Work Order" class="plusicon-cstm new-margin" [routerLink]="[
-            '/workordersmodule/workorderspages/app-work-order-add'
-          ]">
-            <i class="fa fa-plus-circle fa-lg"></i>
-        </a>
-    </div> -->
-
     <div class="card new-card">
         <div class="header">
-          <div class="row">
-            <div class="col">
-              <h4 class="header-name">Work Order List</h4>
-            </div>
-            <div>
-              <button
-                type="button"
-                class="btn-sm header-button "
-                [routerLink]="['/workordersmodule/workorderspages/app-work-order-add']"
-              >
-              Create Work Order
-              </button>
-            </div>
-          </div>
-        </div>
-
-    
-
-    <div class="card-body new-card-body">
-    <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="workOrderData" [first]="0"
-             [rows]="pageSize" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
-             [columns]="selectedColumns" selectionMode="multiple" expandableRows="true" rowExpandMode="single" [lazy]="true"
-             (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
-             [totalRecords]="totalRecords" [scrollable]="true" [metaKeySelection]="true"
-             [dataKey]="workOrderPartListDataKeys" scrollHeight="450px" (onPage)="pageIndexChange($event)">
-        <ng-template pTemplate="caption">
             <div class="row">
                 <div class="col">
-                <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
-                               [(ngModel)]="selectedColumns" [style]="{ minWidth: '200px' }" style="float:left"
-                               (onChange)="columnsChanges()"></p-multiSelect>
+                    <h4 class="header-name">Work Order List</h4>
                 </div>
-                <div class="col">
-                    <div
-                      style="width: auto !important; float: right;"
-                      class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                    >
-                    <i class="fa fa-search"></i>
-                    <input type="text" pInputText size="50" class="form-control"
-                           (input)="globalSearch($event.target.value)" placeholder=" Filter" />
+                <div>
+                    <button type="button" class="btn-sm header-button "
+                        [routerLink]="['/workordersmodule/workorderspages/app-work-order-add']">
+                        Create Work Order
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
-                        style="padding: 5px 12px !important;" label="Export Data" matTooltip="Download Data"
-                        matTooltipPosition="above" (click)="dt.exportCSV()"></button>
-                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
-                        label="Export Selected Data" style="padding: 5px 12px !important;"
-                        matTooltip="Download Selected Data" matTooltipPosition="above"
-                        (click)="dt.exportCSV({selectionOnly:true})"></button>
-                <!-- <div class="excel-upload  excel-upload-cstm">
-                  <input
-                    type="file"
-                    name="upload[]"
-                    id="upload"
-                    (change)="customExcelUpload($event)"
-                    class="uploaddoc upload-file"
-                    accept=".xlsx, .xls, .csv"
-                  />
-                  <label for="upload">
-                    <span matTooltip="Upload Data (Excel)">
-                      <i class="fa fa-upload"></i>
-                    </span>
-                  </label>
-                  &nbsp; &nbsp;
-                  <a
-                    matTooltip="Create Customer"
-                    class="btn btn-success nobg btn-cstm"
-                    [routerLink]="[
-                      '/workordersmodule/workorderspages/app-work-order-add'
-                    ]"
-                    ><span><i class="fa fa-plus"></i></span
-                  ></a>
-                </div> -->
-            </div>
-            <div class="col">
-                <div class="">
-                  <div
-                    class="col"
-                    style="width: 656px; float: right; padding-top: 3px;"
-                  >
-                    <div class="form-group">
-                      <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
-                      <div
-                        class="pull-left"
-                        style="margin-top: 4px; margin-right: 15px;"
-                      >
-                            <label class="radio-cstm wauto">
-                                <input type="radio" name="viewType" class="form-control" value="mpn" [(ngModel)]="viewType"
-                                       (click)="changeOfStatus('','mpn')">
-                                <span class="checkmark"></span>MPN View
-                            </label>
+
+
+
+        <div class="card-body new-card-body">
+            <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="workOrderData" [first]="0" [rows]="pageSize"
+                [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
+                selectionMode="multiple" expandableRows="true" rowExpandMode="single" [lazy]="true"
+                (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
+                [totalRecords]="totalRecords" [scrollable]="true" [metaKeySelection]="true"
+                [dataKey]="workOrderPartListDataKeys" scrollHeight="450px" (onPage)="pageIndexChange($event)">
+                <ng-template pTemplate="caption">
+                    <div class="row">
+                        <div class="col">
+                            <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
+                                [(ngModel)]="selectedColumns" [style]="{ minWidth: '200px' }" style="float:left"
+                                (onChange)="columnsChanges()"></p-multiSelect>
                         </div>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                                <input type="radio" name="viewType" class="form-control" value="wp" [(ngModel)]="viewType"
-                                       (click)="changeOfStatus('','wp')">
-                                <span class="checkmark"></span>WO View
-                            </label>
+                        <div class="col">
+                            <div style="width: auto !important; float: right;"
+                                class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                                <i class="fa fa-search"></i>
+                                <input type="text" pInputText size="50" class="form-control"
+                                    (input)="globalSearch($event.target.value)" placeholder=" Filter" />
+                            </div>
                         </div>
-        
-                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                                <input type="radio" name="woStatus" class="form-control" value="open"
-                                       [(ngModel)]="currentStatus" (click)="changeOfStatus('open', '')">
-                                <span class="checkmark"></span>Open
-                            </label>
-                        </div>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                                <input type="radio" name="woStatus" class="form-control" value="closed"
-                                       [(ngModel)]="currentStatus" (click)="changeOfStatus('closed', '')">
-                                <span class="checkmark"></span>Closed
-                            </label>
-                        </div>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                                <input type="radio" name="woStatus" class="form-control" value="canceled"
-                                       [(ngModel)]="currentStatus" (click)="changeOfStatus('canceled', '')">
-                                <span class="checkmark"></span>Cancelled
-                            </label>
-                        </div>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                                <input type="radio" name="woStatus" class="form-control" value="all" [(ngModel)]="currentStatus"
-                                       (click)="changeOfStatus('all', '')">
-                                <span class="checkmark"></span>All
-                            </label>
-                        </div>
-                        </div>
-                        </div>
-        
-        
                     </div>
-                </div>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="colgroup" let-columns>
-            <colgroup>
-                <col *ngFor="let col of columns" style="width:140px">
-            </colgroup>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field"
-                    style="text-align:center;">
-                    {{ col.header }}
-                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                </th>
-                <th style="width:80px;position:sticky" *ngIf="selectedColumns.length > 0">
-                    Actions
-                </th>
-            </tr>
-            <tr>
-                <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <!-- <input type="text" style="width:100%;" pInputText   (keyup)="filterData($event)"> -->
-                    <input *ngIf="col.field !== 'openDate'
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+                                matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
+                                data-toggle="modal"
+                                (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
+
+                            <!-- <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
+                                iconPos="left" style="padding: 5px 12px !important;" label="Export Data"
+                                matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()"></button> -->
+                            <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
+                                iconPos="left" label="Export Selected Data" style="padding: 5px 12px !important;"
+                                matTooltip="Download Selected Data" matTooltipPosition="above"
+                                (click)="dt.exportCSV({selectionOnly:true})"></button>
+
+                        </div>
+                        <div class="pull-right buttons-div-align">
+                            <div class="col">
+                                <div class="col buttons-top-padding">
+                                    <div class="form-group">
+                                        <div class="pull-left radio-buttons-align">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="viewType" class="form-control" value="mpn"
+                                                    [(ngModel)]="viewType" (click)="changeOfStatus('','mpn')">
+                                                <span class="checkmark"></span>MPN View
+                                            </label>
+                                        </div>
+                                        <div class="pull-left radio-buttons-align">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="viewType" class="form-control" value="wp"
+                                                    [(ngModel)]="viewType" (click)="changeOfStatus('','wp')">
+                                                <span class="checkmark"></span>WO View
+                                            </label>
+                                        </div>
+
+                                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                                        <div class="pull-left radio-buttons-align">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="woStatus" class="form-control" value="open"
+                                                    [(ngModel)]="currentStatus" (click)="changeOfStatus('open', '')">
+                                                <span class="checkmark"></span>Open
+                                            </label>
+                                        </div>
+                                        <div class="pull-left radio-buttons-align">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="woStatus" class="form-control" value="closed"
+                                                    [(ngModel)]="currentStatus" (click)="changeOfStatus('closed', '')">
+                                                <span class="checkmark"></span>Closed
+                                            </label>
+                                        </div>
+                                        <div class="pull-left radio-buttons-align">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="woStatus" class="form-control"
+                                                    value="canceled" [(ngModel)]="currentStatus"
+                                                    (click)="changeOfStatus('canceled', '')">
+                                                <span class="checkmark"></span>Cancelled
+                                            </label>
+                                        </div>
+                                        <div class="pull-left radio-buttons-align">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="woStatus" class="form-control" value="all"
+                                                    [(ngModel)]="currentStatus" (click)="changeOfStatus('all', '')">
+                                                <span class="checkmark"></span>All
+                                            </label>
+                                        </div>
+                                        <div class="checkbox-cstm pull-left checkbox-align">
+                                            <label class="checkbox-label-align">
+                                                <!--  -->
+                                                <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
+                                                    id="cparent"
+                                                    (click)="getDeleteListByStatus($event.target.checked)" />
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Show Deleted List
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col *ngFor="let col of columns" style="width:140px">
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                            [pSortableColumn]="col.field" style="text-align:center;">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        <th style="width:80px;position:sticky" *ngIf="selectedColumns.length > 0">
+                            Actions
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                            <input *ngIf="col.field !== 'openDate'
                     && col.field !== 'customerRequestDateType'
                     && col.field !== 'promisedDateType'
                     && col.field !== 'estimatedShipDateType'
+                    && col.field !== 'createdDate'
+                    && col.field !== 'updatedDate'
                     && col.field !== 'estimatedCompletionDateType'" style="width:100%;" pInputText type="text"
-                           (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
-                    <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;"
-                           (change)="dt.filter($event.target.value, col.field, 'contains')">
-                    <input type="date" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate"
-                           style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                    <input type="date" *ngIf="col.field == 'promisedDateType'" name="promisedDate" style="width:100%;"
-                           (change)="dt.filter($event.target.value, col.field, 'contains')">
-                    <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate"
-                           style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                    <input type="date" *ngIf="col.field == 'estimatedCompletionDateType'" name="estimatedCompletionDate"
-                           style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                </th>
-                <th style="width:80px;position:sticky"></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded" let-columns="columns">
-            <!-- <tr class="ui-widget-header"> -->
-            <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
-                (dblclick)="openViewOnDbl(rowData)">
-                <!--  <td>
-                   <a [pRowToggler]="rowData">
-                     <i
-                       (click)="getWorkOrderPartListByWorkOrderId(rowData)"
-                       [ngClass]="
-                         expanded
-                           ? 'fa fa-fw fa-chevron-circle-down'
-                           : 'fa fa-fw fa-chevron-circle-right'
-                       "
-                     ></i>
-                     <span> {{ rowData.workOrderNum }}</span>
-                   </a>
+                                (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
+                            <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;"
+                                (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <input type="date" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate"
+                                style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <input type="date" *ngIf="col.field == 'promisedDateType'" name="promisedDate"
+                                style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate"
+                                style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <input type="date" *ngIf="col.field == 'estimatedCompletionDateType'"
+                                name="estimatedCompletionDate" style="width:100%;"
+                                (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:100%;"
+                                (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:100%;"
+                                (change)="dt.filter($event.target.value, col.field, 'contains')">
 
-                 </td> -->
-                <!-- [ngStyle]="{'color': convertDate(col.field , rowData)   == 'Multiple' ? 'green' : 'red'  }" -->
-                <td *ngFor="let col of columns" style="text-overflow: ellipsis; "
-                    [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" [matTooltipDisabled]="rowData['partNoType'] != 'Multiple' ||
+                        </th>
+                        <th style="width:80px;position:sticky"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded"
+                    let-columns="columns">
+                    <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
+                        (dblclick)="openViewOnDbl(rowData)">
+                        <td *ngFor="let col of columns" style="text-overflow: ellipsis; "
+                            [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
+                            [matTooltipDisabled]="rowData['partNoType'] != 'Multiple' ||
                     rowData['workScopeType'] != 'Multiple' || rowData['priorityType'] != 'Multiple'||
                     rowData['pnDescriptionType'] != 'Multiple' || rowData['stageType'] != 'Multiple' ||
                     rowData['customerRequestDateType'] != 'Multiple' || rowData['estimatedShipDateType'] != 'Multiple' ||
                     rowData['customerRequestDateType'] != 'Multiple' || rowData['estimatedCompletionDateType'] != 'Multiple'
                     " [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
-                    {{convertDate(col.field , rowData)}}
-                </td>
-                <td style="width:80px" *ngIf="selectedColumns.length > 0">
-                    <!-- <p-inputSwitch [(ngModel)]="rowData['isActive']"
-                                   name="isActive{{ rowIndex }}"
-                                   (onChange)="changeStatus(rowData)"></p-inputSwitch> -->
-                    <span data-toggle="modal" data-target="#viewWorkOrder">
-                        <a class="btn nobg btn-view-cstm"
-                           (click)="view(rowData)" matTooltip="View" matTooltipPosition="above">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                    </span>
-                    <span>
-                        <a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
-                           matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
-                    </span>
-                    <!-- <span data-toggle="modal" data-target="#contentHist"><a class="btn nobg btn-hist-cstm"
-                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
-                    <!-- <span data-toggle="modal" data-target="#viewWorkOrder">
-                        <a class="btn btn-info boxed-float-btn nobg"
-                           data-toggle="tooltip"
-                           (click)="view(rowData)">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                    </span> -->
-                    <!-- <button class="btn-edit ptable-wo-btns"
-                            mat-icon-button
-                            (click)="edit(rowData)"
-                            matTooltip="Edit">
-                        <mat-icon>edit</mat-icon>
-                    </button> -->
-                    <!-- <button class="btn-delete ptable-wo-btns"
-                            mat-icon-button
-                            matTooltip="Delete"
-                            data-target="#delete"
-                            data-toggle="modal"
-                            (click)="delete(rowData)">
-                        <mat-icon color="warn">delete</mat-icon>
-                    </button> -->
-                    <!-- <button class="btn-history ptable-wo-btns"
-                            mat-icon-button
-                            matTooltip="History"
-                            data-target="#contentHist"
-                            data-toggle="modal"
-                            (click)="getAuditHistoryById(rowData)">
-                        <mat-icon color="green">history</mat-icon>
-                    </button>  dt._totalRecords-->
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="summary" id="footer">
-            <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
-            &nbsp;&nbsp;
-            <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
-                   type="text" />
-        </ng-template>
-        <!-- <ng-template pTemplate="rowexpansion" let-rowData let-rowIndex="rowIndex">
-                  <tr>
-        [(ngModel)]="totalPages"
-                  </tr>
-                </ng-template> -->
-    </p-table>
-</div>
-</div>
+                            {{convertDate(col.field , rowData)}}
+                        </td>
+                        <td style="width:80px" *ngIf="selectedColumns.length > 0">
+                            <div *ngIf="currentDeletedstatus == false">
+                                <span data-toggle="modal" data-target="#viewWorkOrder">
+                                    <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
+                                        matTooltipPosition="above">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
+                                        matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                </span>
+                                <span data-toggle="modal" data-target="#woDelete">
+                                    <a class="btn nobg btn-delete-cstm" (click)="delete(rowData)" matTooltip="Delete"
+                                        matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                                </span>
+                                <!-- <span data-toggle="modal" data-target="#woHistory">
+                                    <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
+                                        matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                </span> -->
+                            </div>
+                            <div *ngIf="currentDeletedstatus == true">
+                                <span data-toggle="modal" data-target="#viewWorkOrder">
+                                    <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
+                                        matTooltipPosition="above">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </span>
+                                <!-- <span data-toggle="modal" data-target="#poHistory">
+                                    <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
+                                        matTooltip="History" matTooltipPosition="above"><i
+                                            class="fa fa-history"></i></a>
+                                </span> -->
+                                <span>
+                                    <a class="btn nobg" (click)="restore(restoreIdWo,rowData);"
+                                        matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
+                                            aria-hidden="true"></i></a>
+                                </span>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary" id="footer">
+                    <label id="footer" class="footer">Total:</label>
+                    <input style="width: 5%;" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+                    &nbsp;&nbsp;
+                    <label id="footer" class="footer1">Pages Count:</label>
+                    <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
+                        pInputText type="text" />
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
 </div>
 <!-- Modal -->
 <div id="viewWorkOrder" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -290,17 +243,20 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" (click)="closeView.emit(false); workOrderId = 0;">
+                <button type="button" class="close" data-dismiss="modal"
+                    (click)="closeView.emit(false); workOrderId = 0;">
                     &times;
                 </button>
                 <h4 class="modal-title">Work Order View</h4>
             </div>
 
             <div class="card-body" *ngIf="workOrderId">
-                <app-work-view-component [workOrderId]="workOrderId" [currencyList]="currencyList" [employeesOriginalData]="employeesOriginalData"></app-work-view-component>
+                <app-work-view-component [workOrderId]="workOrderId" [currencyList]="currencyList"
+                    [employeesOriginalData]="employeesOriginalData"></app-work-view-component>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeView.emit(false); workOrderId = 0;">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="closeView.emit(false); workOrderId = 0;">
                     Close
                 </button>
             </div>
@@ -320,7 +276,7 @@
                             <p>
                                 <span class="label"><b> MPN Type : </b></span><span class="value">
                                     {{
-                  viewWorkOrderHeader.singleMPN
+                                    viewWorkOrderHeader.singleMPN
                                     }}
                                 </span>
 
@@ -332,7 +288,7 @@
                             <p>
                                 <span class="label"><b> Work Order Type : </b></span><span class="value">
                                     {{
-                      viewWorkOrderHeader.workOrderType
+                                    viewWorkOrderHeader.workOrderType
                                     }}
                                 </span>
 
@@ -346,26 +302,27 @@
                             <p>
                                 <span class="label"><b>WorkOrder Number: </b></span><span class="value">
                                     {{
-                            viewWorkOrderHeader.workOrderNumber
+                                    viewWorkOrderHeader.workOrderNumber
                                     }}
                                 </span>
                             </p>
                             <p>
                                 <span class="label"><b>Open Date: </b></span><span class="value">
                                     {{
-                            viewWorkOrderHeader.openDate | date: 'MM/dd/yyyy'
+                                    viewWorkOrderHeader.openDate | date: 'MM/dd/yyyy'
                                     }}
                                 </span>
                             </p>
                             <p>
-                                <span class="label"><b>WO Status: </b></span><span class="value">{{ viewWorkOrderHeader.woStatus }}</span>
+                                <span class="label"><b>WO Status: </b></span><span class="value">{{
+                                    viewWorkOrderHeader.woStatus }}</span>
                             </p>
                         </div>
                         <div class="col-sm-3">
                             <p>
                                 <span class="label"><b>Customer Name: </b></span><span class="value">
                                     {{
-                            viewWorkOrderHeader.customerName
+                                    viewWorkOrderHeader.customerName
                                     }}
                                 </span>
                             </p>
@@ -381,14 +338,14 @@
                             <p>
                                 <span class="label"><b>Contract: </b></span><span class="value">
                                     {{
-                            viewWorkOrderHeader.isContractAvl
+                                    viewWorkOrderHeader.isContractAvl
                                     }}
                                 </span>
                             </p>
                             <p *ngIf="isContractAvl">
                                 <span class="label"> <b>Contract Reference:</b> </span><span class="value">
                                     {{
-                            viewWorkOrderHeader.contractReference
+                                    viewWorkOrderHeader.contractReference
                                     }}
                                 </span>
                             </p>
@@ -401,12 +358,13 @@
                                 </span>
                             </p>
                             <p>
-                                <span class="label"><b>Employee: </b></span><span class="value">{{ viewWorkOrderHeader.employee }}</span>
+                                <span class="label"><b>Employee: </b></span><span class="value">{{
+                                    viewWorkOrderHeader.employee }}</span>
                             </p>
                             <p>
                                 <span class="label"><b>Sales person: </b></span><span class="value">
                                     {{
-                            viewWorkOrderHeader.salesperson
+                                    viewWorkOrderHeader.salesperson
                                     }}
                                 </span>
                             </p>
@@ -416,19 +374,17 @@
 
                 <div class="table-responsive" *ngIf="viewWorkOrderMPN" style="height: 300px;">
                     <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
-                           id="mpn-list-table">
+                        id="mpn-list-table">
                         <thead>
                             <tr>
                                 <th rowspan="2">MPN *</th>
                                 <th rowspan="2">MPN Description *</th>
                                 <th rowspan="2">Revised MPN</th>
-                                <!-- <th rowspan="2">Work Scope *</th> -->
                                 <th rowspan="2">NTE</th>
                                 <th rowspan="2">Condition Id *</th>
                                 <th rowspan="2">Stock Line Num *</th>
                                 <th rowspan="2">Serial Num *</th>
                                 <th rowspan="2">CMM/Pub Ref</th>
-                                <!-- <th rowspan="2">Workflow ID </th> -->
                                 <th rowspan="2">Stage *</th>
                                 <th rowspan="2">Status *</th>
                                 <th rowspan="2">Priority *</th>
@@ -441,7 +397,6 @@
                                 <th rowspan="2">Tech Station</th>
                                 <th rowspan="2">Tear Down Report</th>
                                 <th colspan="2">TAT (Days)</th>
-                                <!-- <th rowspan="2"></th> -->
                             </tr>
                             <tr>
                                 <th>PMA</th>
@@ -533,7 +488,7 @@
         <div class="card" *ngIf="showMPN">
             <div class="card-body">
                 <p-dropdown [options]="mpnPartNumbersList" placeholder="Select Part Number" class="p-dropdown-custom-md"
-                            (onChange)="changeofMPN($event.value)">
+                    (onChange)="changeofMPN($event.value)">
                 </p-dropdown>
             </div>
         </div>
@@ -742,12 +697,15 @@
                         <div class="h-300" *ngIf="billing">
                             <!-- <h3>No Data Found</h3> -->
                             <app-work-order-billing [billingorInvoiceForm]="billing" [legalEntityList]="legalEntityList"
-                                                    [currencyList]="currencyList" [savedWorkOrderData]="savedWorkOrderData"
-                                                    [employeesOriginalData]="employeesOriginalData" [isEditBilling]="isEditBilling"
-                                                    (saveWOBilling)="saveWorkOrderBilling($event)" (updateWOBilling)="saveWorkOrderBilling($event)"
-                                                    [workOrderQuoteId]="workOrderQuoteId" [quoteExclusionList]="quoteExclusionList"
-                                                    [quoteMaterialList]="quoteMaterialList" [quoteFreightsList]="quoteFreightsList"
-                                                    [quoteChargesList]="quoteChargesList" [quoteLaborList]="quoteLaborList" [taskList]="taskList" [buildMethodDetails]="buildMethodDetails" [isViewMode]="isView"></app-work-order-billing>
+                                [currencyList]="currencyList" [savedWorkOrderData]="savedWorkOrderData"
+                                [employeesOriginalData]="employeesOriginalData" [isEditBilling]="isEditBilling"
+                                (saveWOBilling)="saveWorkOrderBilling($event)"
+                                (updateWOBilling)="saveWorkOrderBilling($event)" [workOrderQuoteId]="workOrderQuoteId"
+                                [quoteExclusionList]="quoteExclusionList" [quoteMaterialList]="quoteMaterialList"
+                                [quoteFreightsList]="quoteFreightsList" [quoteChargesList]="quoteChargesList"
+                                [quoteLaborList]="quoteLaborList" [taskList]="taskList"
+                                [buildMethodDetails]="buildMethodDetails" [isViewMode]="isView">
+                            </app-work-order-billing>
                         </div>
                         <div class="h-300" *ngIf="!billing">
                             <h3>No Data Found</h3>
@@ -769,16 +727,17 @@
                     <p-tabPanel>
                         <ng-template pTemplate="header" style="height: 36px; width: 134px;">
                             Communication
-                            <i (click)="showOtherCommunicationOptions()" class="fa fa-caret-down" aria-hidden="true"></i>
+                            <i (click)="showOtherCommunicationOptions()" class="fa fa-caret-down"
+                                aria-hidden="true"></i>
                             <div class="vertical-menu-wolist" *ngIf="communicationOptionShow">
                                 <a (click)="otherCommunicationOptionSelected('memo')"
-                                   style="color: #333333 !important">Memo</a>
+                                    style="color: #333333 !important">Memo</a>
                                 <a (click)="otherCommunicationOptionSelected('email')"
-                                   style="color: #333333 !important">Email</a>
+                                    style="color: #333333 !important">Email</a>
                                 <a (click)="otherCommunicationOptionSelected('phone')"
-                                   style="color: #333333 !important">Phone</a>
+                                    style="color: #333333 !important">Phone</a>
                                 <a (click)="otherCommunicationOptionSelected('text')"
-                                   style="color: #333333 !important">Text</a>
+                                    style="color: #333333 !important">Text</a>
                             </div>
 
                         </ng-template>
@@ -833,7 +792,7 @@
                             <h3>workFlowWorkOrderId : {{workFlowWorkOrderId }}</h3>
 
                             <app-teardown-overview *ngIf="workFlowWorkOrderId"
-                                                   [workFlowWorkOrderId1]="workFlowWorkOrderId"></app-teardown-overview>
+                                [workFlowWorkOrderId1]="workFlowWorkOrderId"></app-teardown-overview>
                         </div>
                     </p-tabPanel>
 
@@ -844,15 +803,15 @@
                             <i (click)="showOtherOptions()" class="fa fa-caret-down" aria-hidden="true"></i>
                             <div class="vertical-menu-wolist" *ngIf="otherOptionShow">
                                 <a (click)="otherOptionSelected('freight')"
-                                   style="color: #333333 !important">Freight</a>
+                                    style="color: #333333 !important">Freight</a>
                                 <a (click)="otherOptionSelected('contactGrid')"
-                                   style="color: #333333 !important">Contact Grid</a>
+                                    style="color: #333333 !important">Contact Grid</a>
                                 <a (click)="otherOptionSelected('accounting')"
-                                   style="color: #333333 !important">Accounting</a>
+                                    style="color: #333333 !important">Accounting</a>
                                 <a (click)="otherOptionSelected('charges')"
-                                   style="color: #333333 !important">Charges</a>
+                                    style="color: #333333 !important">Charges</a>
                                 <a (click)="otherOptionSelected('exclusion')"
-                                   style="color: #333333 !important">Exclusion</a>
+                                    style="color: #333333 !important">Exclusion</a>
                             </div>
 
                         </ng-template>
@@ -863,36 +822,10 @@
                                 <div class="x_panel" *ngIf="workOrderChargesList">
                                     <div class="tab-content">
                                         <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                            <!-- <table class="table table-bordered ">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">Charge Type </th>
-                                                        <th class="text-center">Description</th>
-                                                        <th class="text-center">Quantity</th>
-                                                        <th class="text-center">Unit Cost</th>
-                                                        <th class="text-center">Extented Cost</th>
-                                                        <th class="text-center">Unit Price</th>
-                                                        <th class="text-center">Extended Price</th>
-                                                        <th class="text-center">vendorName</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    <tr *ngFor="let w  of workOrderChargesList; let i=index;">
-                                                        <td>{{w.chargeType}}</td>
-                                                        <td>{{w.description}}</td>
-                                                        <td>{{w.quantity}}</td>
-                                                        <td>{{w.unitCost}}</td>
-                                                        <td>{{w.extendedCost}}</td>
-                                                        <td>{{w.unitPrice}}</td>
-                                                        <td>{{w.extendedPrice}}</td>
-                                                        <td>{{w.vendorName}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table> -->
                                             <app-work-order-charges workFlowObject="[]" [isWorkOrder]="isWorkOrder"
-                                                                    [workOrderChargesList]="workOrderChargesList" [taskList]="taskList"
-                                                                    (refreshData)="getChargesListByWorkOrderId(0, 0)"></app-work-order-charges>
+                                                [workOrderChargesList]="workOrderChargesList" [taskList]="taskList"
+                                                (refreshData)="getChargesListByWorkOrderId(0, 0)">
+                                            </app-work-order-charges>
                                         </div>
                                     </div>
                                     <div class="clear"></div>
@@ -908,51 +841,16 @@
 
                         <div *ngIf="selectedOtherSubTask === 'exclusion'">
                             <app-work-order-exclusions [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
-                                                       [workOrderExclusionsList]="workOrderExclusionsList" [taskList]="taskList"
-                                                       (refreshData)="getExclusionListByWorkOrderId(0, 0)" [isView]="isView"></app-work-order-exclusions>
+                                [workOrderExclusionsList]="workOrderExclusionsList" [taskList]="taskList"
+                                (refreshData)="getExclusionListByWorkOrderId(0, 0)" [isView]="isView">
+                            </app-work-order-exclusions>
 
-                            <!-- <div class="equipment-tab-content">
-                                <div class="x_panel" *ngIf="workOrderExclusionsList">
-                                    <div class="tab-content">
-                                        <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                            <table class="table table-bordered ">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">EPN</th>
-                                                        <th class="text-center">EPN Description</th>
-                                                        <th class="text-center">Quantity</th>
-                                                        <th class="text-center">Unit Cost</th>
-                                                        <th class="text-center">Extended Cost</th>
-                                                        <th class="text-center">Memo</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    <tr *ngFor="let w  of workOrderExclusionsList; let i=index;">
-                                                        <td>{{w.epn}}</td>
-                                                        <td>{{w.epnDescription}}</td>
-                                                        <td>{{w.quantity}}</td>
-                                                        <td>{{w.unitCost}}</td>
-                                                        <td>{{w.extendedCost}}</td>
-                                                        <td>{{w.memo}}</td>
-
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br />
-                                </div>
-                            </div> -->
 
                         </div>
                         <div *ngIf="selectedOtherSubTask === 'freight'">
-                            <app-work-order-freight [freightForm]="freight" [workOrderFreightList]="workOrderFreightList"
-                                                    [savedWorkOrderData]="savedWorkOrderData" [taskList]="taskList" [isView]="isView">
+                            <app-work-order-freight [freightForm]="freight"
+                                [workOrderFreightList]="workOrderFreightList" [savedWorkOrderData]="savedWorkOrderData"
+                                [taskList]="taskList" [isView]="isView">
                             </app-work-order-freight>
                         </div>
                     </p-tabPanel>
@@ -969,98 +867,6 @@
 
 
 
-                    <!-- <p-tabPanel header="Publications">
-
-                         <div class="equipment-tab-content" >
-                             <div class="x_panel" *ngIf="workOrderPublicationList">
-                                 <div class="tab-content">
-                                     <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                         <table class="table table-bordered ">
-                                             <thead>
-                                                 <tr>
-                                                     <th class="text-center">Publication ID</th>
-                                                     <th class="text-center">Description</th>
-                                                     <th class="text-center">Type</th>
-                                                     <th class="text-center">Revision Date</th>
-                                                     <th class="text-center">Sequence</th>
-                                                     <th class="text-center">Source</th>
-                                                     <th class="text-center">AirCraft Manufacturer</th>
-                                                     <th class="text-center">AirCraft Model</th>
-                                                     <th class="text-center">AirCraft DashNumber</th>
-                                                     <th class="text-center">Location</th>
-                                                     <th class="text-center">VerifiedBy</th>
-                                                     <th class="text-center">VerifiedDate</th>
-                                                     <th class="text-center">Status</th>
-                                                 </tr>
-                                             </thead>
-
-                                             <tbody>
-                                               <tr *ngFor="let w  of workOrderPublicationList; let i=index;">
-                                                     <td>{{w.publicationName}}</td>
-                                                     <td>{{w.publicationDescription}}</td>
-                                                     <td>{{w.publicationType}}</td>
-                                                     <td>{{w.revisionDate | date: 'MM-dd-YYYY'}}</td>
-                                                     <td>{{w.sequence}}</td>
-                                                     <td>{{w.source}}</td>
-                                                     <td>{{w.airCraftManufacturer}}</td>
-                                                     <td>{{w.model}}</td>
-                                                     <td></td>
-                                                     <td>{{w.location}}</td>
-                                                     <td>{{w.verifiedBy}}</td>
-                                                     <td>{{w.verifiedDate | date: 'MM-dd-YYYY'}}</td>
-                                                     <td>{{w.status}}</td>
-                                                 </tr>
-                                             </tbody>
-                                         </table>
-                                     </div>
-                                 </div>
-                                 <div class="clear"></div>
-                                 <br />
-                                 <br />
-                                 <br />
-                                 <br />
-                             </div>
-                         </div>
-                     </p-tabPanel>  -->
-                    <!-- <p-tabPanel  header="Directions" >
-
-                        <div class="equipment-tab-content" >
-                            <div class="x_panel" *ngIf="workOrderDirectionList">
-                                <div class="tab-content">
-                                    <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                        <table class="table table-bordered ">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">Action</th>
-                                                    <th class="text-center">Direction Name</th>
-                                                    <th class="text-center">Sequence</th>
-                                                    <th class="text-center">Memo</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                              <tr *ngFor="let w  of workOrderDirectionList; let i=index;">
-                                                    <td>{{w.action}}</td>
-                                                    <td>{{w.directionName}}</td>
-                                                    <td>{{w.sequence}}</td>
-                                                    <td>{{w.memo}}</td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="clear"></div>
-                                <br />
-                                <br />
-                                <br />
-                                <br />
-                            </div>
-                        </div>
-                    </p-tabPanel> -->
-
-
-
                 </p-tabView>
             </div>
         </div>
@@ -1073,14 +879,12 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Message</h4>
-                <!-- <p id="clockdiv" class="clockdiv"></p> -->
             </div>
             <div class="pad_msf">
                 <p *ngIf="warningID != 0" class="mar_o">
                     <strong>Warning Message</strong>
                     :{{warningMessage}}
                 </p>
-                <!-- <p *ngIf="warningMessage != undefined">Not able to create customer work because cuatomer having restrcitions</p> -->
                 <p *ngIf="restrictID != 0" class="mar_o">
                     <strong>Restrcition Message</strong>
                     {{restrictMessage}}
@@ -1092,13 +896,76 @@
             </div>
             <div class="modal-footer" style="padding:10px;">
                 <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
-                        style="padding: 6px 12px !important;">
+                    style="padding: 6px 12px !important;">
                     Ok
                 </button>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #downloadConfirmation let-c="close" let-d="dismiss" data-backdrop="static">
+    <!-- <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-sm"> -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Are You Sure Want to Download?</h4>
+            <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" *ngIf="targetData && !selectedOnly">
+            <strong>
+                <span>
+                    You are attempting to export {{targetData.totalRecords}} of records.
+                </span>
+            </strong>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary"
+                (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeModal();">Confirm</button>
+            <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+        </div>
+    </div>
+    <!-- </div>
+    </div> -->
+</ng-template>
+
+<div class="modal fade" id="woDelete" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+            </div>
+            <div class="modal-body">
+                <h6 class="modal-body">WO Number : {{rowDataToDelete.workOrderNum}}</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="deleteWO(); closeDeleteModal();">Yes</button>
+                <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #restoreIdWo let-c="close" let-d="dismiss" data-backdrop="static">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h6 class="modal-body">PO Number : {{restorerecord.workOrderNum}}</h6>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">
@@ -1112,4 +979,4 @@
             <div></div>
         </div>
     </div>
-</div> 
+</div>

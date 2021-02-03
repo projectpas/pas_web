@@ -332,7 +332,7 @@
               </span>
               <span
                 ><a
-                  class="btn nobg"
+                  class="btn nobg btn-users-cstm"
                   (click)="restore(restoreId, rowData)"
                   matTooltip="Restore Record"
                   matTooltipPosition="above"
@@ -574,9 +574,9 @@
             <div class="text-center">
               <img
                 src="../../../assets/images/binoculars.png"
-                style="height: 100px; width: 100px;"
+                class="no-history-found-image"
               />
-              <h4 style="color: #ff5663;">No History Found</h4>
+              <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
         </div>
@@ -635,7 +635,7 @@
                     Close All
                 </button>
             </div>
-            <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+            <div class="col-sm-6" class="view-active-inactive">
                 <button type="button" name="isActive" [ngClass]="vendorData.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
                     <span class="value">{{vendorData.isActive ? 'Active' : 'In-Active'}}</span>
                 </button>
@@ -1439,14 +1439,14 @@
                       <colgroup>
                         <col
                           *ngFor="let col of columns"
-                          style="width: 130px;"
+                         class="table-column-width"
                         />
                       </colgroup>
                     </ng-template>
 
                     <ng-template pTemplate="header" let-columns>
                       <tr>
-                        <th
+                        <th class="table-column-width"
                           *ngFor="let col of columns"
                           pResizableColumn
                           pReorderableColumn
@@ -1458,7 +1458,7 @@
                       </tr>
                       <tr>
                         <th
-                          style="width: auto;"
+                          class="table-column-width"
                           *ngFor="let col of columns"
                           [ngSwitch]="col.field">
                           <input style="width: 100%;" pInputText type="text" (input)=" vMemo.filter($event.target.value, col.field, 'contains')"/>
@@ -1471,7 +1471,7 @@
                       let-columns="columns"
                       let-rowIndex="rowIndex">
                       <tr>
-                        <td *ngFor="let col of columns">
+                        <td class="table-column-width" *ngFor="let col of columns">
                           <ng-container *ngIf="col.field != 'notes'">
                             {{ rowData[col.field] }}
                           </ng-container>
@@ -1484,7 +1484,7 @@
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns>
                       <tr *ngIf="allVendorPOROList.length == 0">
-                        <td colspan="11"  style="color: red; font-weight: bold; text-align: center;">
+                        <td colspan="11"   class="no-records-cstm no-records-msg">
                           No records found
                         </td>
                       </tr>
@@ -1497,11 +1497,7 @@
                       <tr>
                         <td
                           colspan="11"
-                          style="
-                            color: red;
-                            font-weight: bold;
-                            text-align: center;
-                          "
+                          class="no-records-cstm no-records-msg"
                         >
                           No records found
                         </td>
@@ -1510,7 +1506,7 @@
                     <ng-template pTemplate="summary" id="footer">
                       <label id="footer" class="footer">Total:</label>
                       <input
-                        style="width: 5%;"
+                      class="footer-input-width"
                         [(ngModel)]="vMemo._totalRecords"
                         [disabled]="true"
                         pInputText
@@ -1519,7 +1515,7 @@
                       &nbsp;&nbsp;
                       <label id="footer" class="footer1">Pages Count:</label>
                       <input
-                        style="width: 5%;"
+                      class="footer-input-width"
                         [ngModel]="
                           getPageCount(vMemo._totalRecords, viewPageSize)
                         "
@@ -1991,7 +1987,7 @@
     <h4 class="modal-title">Certified Attachment Details</h4>
   </div>
   <div class="modal-body">
-    <p-table
+    <!-- <p-table
       #table3
       class="table-responsive1 rpo-table-cstm"
       [paginator]="allVendorCertifiedocumentsList.length > 0"
@@ -2006,12 +2002,12 @@
     >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" style="width: 130px;" />
+          <col *ngFor="let col of columns" class="table-column-width" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th
+          <th class="table-column-width"
             *ngFor="let col of columns"
             pResizableColumn
             pReorderableColumn
@@ -2028,7 +2024,7 @@
           </th>
         </tr>
         <tr>
-          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
             <input
               type="text"
               (input)="
@@ -2066,7 +2062,7 @@
         let-i="rowIndex"
       >
         <tr *ngIf="allVendorCertifiedocumentsList.length > 0">
-          <td *ngFor="let col of columns">
+          <td class="table-column-width" *ngFor="let col of columns">
             <div *ngIf="col.field != 'download' && col.field !== 'docMemo'">
               <span>
                 {{
@@ -2108,7 +2104,7 @@
       <ng-template pTemplate="summary" id="footer">
         <label id="footer" class="footer">Total:</label>
         <input
-          style="width: 5%;"
+          class="footer-input-width"
           [(ngModel)]="table3._totalRecords"
           name="no'of records"
           disabled
@@ -2120,7 +2116,7 @@
         <label id="footer" class="footer1">Pages Count:</label>
 
         <input
-          style="width: 5%;"
+        class="footer-input-width"
           [ngModel]="getPageCount(table3._totalRecords, pageSize)"
           name="page count"
           disabled
@@ -2136,13 +2132,15 @@
         <tr>
           <td
             [attr.colspan]="10"
-            style="color: red; font-weight: bold; text-align: center;"
+            class="no-records-cstm no-records-msg"
           >
             No records found
           </td>
         </tr>
       </ng-template>
-    </p-table>
+    </p-table> -->
+    <app-common-documents [moduleName]="CertifiedModuleName"   [referenceId]="vendorId"
+    [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
   </div>
   <div class="modal-footer">
     <button
@@ -2173,7 +2171,7 @@
     <h4 class="modal-title">Vendor Audit Attachment Details</h4>
   </div>
   <div class="modal-body">
-    <p-table
+    <!-- <p-table
       #table4
       class="table-responsive1 rpo-table-cstm"
       [paginator]="allVendorAuditdocumentsList.length > 0"
@@ -2188,12 +2186,13 @@
     >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" style="width: 130px;" />
+          <col *ngFor="let col of columns" class="table-column-width" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th
+          class="table-column-width"
             *ngFor="let col of columns"
             pResizableColumn
             pReorderableColumn
@@ -2210,7 +2209,7 @@
           </th>
         </tr>
         <tr>
-          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
             <input
               type="text"
               (input)="
@@ -2252,7 +2251,7 @@
         let-i="rowIndex"
       >
         <tr *ngIf="allVendorAuditdocumentsList.length > 0">
-          <td *ngFor="let col of columns">
+          <td class="table-column-width" *ngFor="let col of columns">
             <div *ngIf="col.field != 'download' && col.field !== 'docMemo'">
               <span>
                 {{
@@ -2294,7 +2293,7 @@
       <ng-template pTemplate="summary" id="footer">
         <label id="footer" class="footer">Total:</label>
         <input
-          style="width: 5%;"
+         class="footer-input-width"
           [(ngModel)]="table4._totalRecords"
           name="no'of records"
           disabled
@@ -2306,7 +2305,7 @@
         <label id="footer" class="footer1">Pages Count:</label>
 
         <input
-          style="width: 5%;"
+         class="footer-input-width"
           [ngModel]="getPageCount(table4._totalRecords, pageSize)"
           name="page count"
           disabled
@@ -2322,13 +2321,15 @@
         <tr>
           <td
             [attr.colspan]="10"
-            style="color: red; font-weight: bold; text-align: center;"
+            class="no-records-cstm no-records-msg"
           >
             No records found
           </td>
         </tr>
       </ng-template>
-    </p-table>
+    </p-table> -->
+    <app-common-documents [moduleName]="AuditModuleName"   [referenceId]="vendorId"
+    [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
   </div>
   <div class="modal-footer">
     <button

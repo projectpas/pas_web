@@ -280,7 +280,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     "Success",
-                    `Part updated.`,
+                    `Part ` + this.selectedPartActionType + `d successfully.`,
                     MessageSeverity.success
                 );
             });

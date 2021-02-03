@@ -107,14 +107,13 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.reCalculate();
         }
         if(this.workFlow.exclusions && this.workFlow.exclusions.length !=0){
-        this.workFlow.exclusions.map((x, index) => {
-            // this.masterItemMasterId= this.workFlow.itemMasterId
-            this.workFlow.exclusions[index].partNameRef=x.partNumber;
-                this.workFlow.exclusions[index].partName={partNumber:x.partNumber,itemMasterId:x.itemMasterId};
-                this.workFlow.exclusions[index].conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
-                x.unitCost = x.unitCost ?   formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00';
-                        x.extendedCost =  x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2):'0.00';
-        })
+    //     this.workFlow.exclusions.map((x, index) => {
+    //         x.partNameRef=x.partNumber;
+    //             x.partName={partNumber:x.partNumber,itemMasterId:x.itemMasterId};
+    //             x.conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
+    //             x.unitCost = x.unitCost ?   formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00';
+    //                     x.extendedCost =  x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2):'0.00';
+    //     }) 
     }
         this.getConditionsList();
     }
@@ -128,6 +127,16 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.addRow();
         }
         this.masterItemMasterId=this.masterItemMasterId;
+
+        if(this.workFlow.exclusions && this.workFlow.exclusions.length !=0){
+        this.workFlow.exclusions.map((x, index) => {
+            x.partNameRef=x.partNumber;
+                x.partName={partNumber:x.partNumber,itemMasterId:x.itemMasterId};
+                x.conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
+                x.unitCost = x.unitCost ?   formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00';
+                        x.extendedCost =  x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2):'0.00';
+        }) 
+    }
     }
 
     get userName(): string {

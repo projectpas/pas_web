@@ -1,9 +1,9 @@
 <div class="form-group">
-    <div class="row" *ngIf="isViewMode == false" style="padding-bottom: 8px;">
-        <button type="button" class="btn btn-primary" (click)="addPartNumber()" [disabled]="salesQuote.isApproved">
+    <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" style="padding-bottom: 8px;">
+        <button *ngIf="isViewMode == false" type="button" class="btn btn-primary" (click)="addPartNumber()" [disabled]="salesQuote.isApproved">
             Add PN
         </button>
-        <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+        <div [ngClass]="(isViewMode == false) ? 'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex' : 'table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
             style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="soq-table">
@@ -21,7 +21,7 @@
                             </ng-container>
                         </th>
                         <th colspan="15"></th>
-                        <th style="position: sticky !important; min-width: 100px">Actions</th>
+                        <th *ngIf="isViewMode == false" style="position: sticky !important; min-width: 100px">Actions</th>
                     </tr>
                     <ng-container *ngIf="summaryParts.length > 0">
                         <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
@@ -68,7 +68,7 @@
                                         </span>
                                     </td>
                                     <td colspan="15" style="background-color: #EAF2C5 !important;"></td>
-                                    <td class="center">
+                                    <td *ngIf="isViewMode == false" class="center">
                                         <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
                                             matTooltip="View Stock Line" matTooltipPosition="above"
                                             style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
@@ -126,7 +126,7 @@
                                     <th style="min-width: 80px !important;">Cntrl Num</th>
                                     <th style="min-width: 92px !important;">Cntrl ID Num</th>
                                     <th style="min-width: 120px">Notes</th>
-                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                    <th *ngIf="isViewMode == false" style="min-width: 120px; position: sticky !important">Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let part of summaryPart.childParts; let stockIndex = index"
@@ -302,8 +302,7 @@
                                     <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
                                         <div [innerHTML]="part.notes" class="text_editor_box"></div>
                                     </td>
-                                    <td class="zui-sticky-col" style="width:107px !important"
-                                        *ngIf="isViewMode == false">
+                                    <td *ngIf="isViewMode == false" class="zui-sticky-col" style="width:107px !important">
                                         <a class="btn nobg" data-toggle="tooltip"
                                             style="margin-left: 2px; padding-left: 2px; padding-right: 2px"
                                             (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">

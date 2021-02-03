@@ -11,6 +11,10 @@ input[type="text"], input[type="number"], select {
 textarea {
     border-radius: 5px !important;
 }
+.financial-div{
+    max-width: 10% !important;
+     margin-right: 120px !important;
+}
 .currency, .credit{
     display: flex;
 }

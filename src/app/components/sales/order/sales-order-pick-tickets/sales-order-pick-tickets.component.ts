@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import * as $ from "jquery";
-import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+declare var $ : any;
+import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { AuthService } from "../../../../services/auth.service";
@@ -8,6 +8,11 @@ import * as moment from 'moment';
 import { MenuItem } from "primeng/api";
 import { SalesOrderService } from "../../../../services/salesorder.service";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
+import { SalesOrderpickTicketComponent } from "../sales-order-pickTicket/sales-order-pickTicket.component";
+import { SOPickTicket } from "../../../../models/sales/SOPickTicket";
+import { AlertService, MessageSeverity } from '../../../../services/alert.service';
+import { DatePipe } from "@angular/common";
+import { NumberFormat } from 'xlsx/types';
 
 @Component({
   selector: "app-sales-order-pick-tickets",
@@ -45,12 +50,17 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   home: any;
   salesOrderId: any;
   searchParameters: any;
-  
+  PickTicketDetails = new SOPickTicket();
+  disableSave: boolean = true;
+  pickticketauditHistory: any[] = [];
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
     public currencyService: CurrencyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private alertService: AlertService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -79,20 +89,20 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       { field: "serialNumber", header: "Serial Num", width: "130px" },
       { field: "uom", header: "UOM", width: "130px" },
       { field: "qty", header: "Qty Ordered", width: "130px" },
-      { field: "serialNumber", header: "Qty to Pick", width: "130px" },
-      { field: "woNumber", header: "Qty Picked", width: "130px" },
-      { field: "uomName", header: "Qty Remaining", width: "130px" },
-      { field: "woNumber", header: "Status", width: "130px" },
+      { field: "qtyReserved", header: "Qty to Pick", width: "130px" },
+      { field: "qtyToShip", header: "Qty Picked", width: "130px" },
+      { field: "qtyRemaining", header: "Qty Remaining", width: "130px" },
+      { field: "strStatus", header: "Status", width: "130px" },
       { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
-      { field: "woNumber", header: "SO Num", width: "130px" },
+      { field: "soNumber", header: "SO Num", width: "130px" },
       { field: "woNumber", header: "WO Num", width: "130px" },
-      { field: "woNumber", header: "Customer", width: "130px" },
-      { field: "woNumber", header: "PO Num", width: "130px" },
-      { field: "woNumber", header: "Ship To City", width: "130px" },
-      { field: "woNumber", header: "Ship to Country", width: "130px" },
-      { field: "woNumber", header: "Picked By", width: "130px" },
+      { field: "customer", header: "Customer", width: "130px" },
+      { field: "poNumber", header: "PO Num", width: "130px" },
+      { field: "shipToCity", header: "Ship To City", width: "130px" },
+      { field: "shipToCountry", header: "Ship to Country", width: "130px" },
+      { field: "pickedByName", header: "Picked By", width: "130px" },
       { field: "woNumber", header: "Confirmed By", width: "130px" },
-      { field: "woNumber", header: "Memo", width: "130px" }
+      { field: "memo", header: "Memo", width: "130px" }
     ];
     this.selectedColumns = this.headers;
   }
@@ -155,10 +165,162 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   }
 
   convertDate(key, data) {
-    if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
+    if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate' || key === 'soPickTicketDate') && data[key]) {
       return moment(data[key]).format('MM/DD/YYYY');
     } else {
       return data[key];
+    }
+  }
+
+  printPickTicket(rowData: any) {
+    this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
+    let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
+    instance.modalReference = this.modal;
+
+    instance.onConfirm.subscribe($event => {
+      if (this.modal) {
+        this.modal.close();
+      }
+    });
+    instance.salesOrderId = rowData.salesOrderId;
+    instance.salesOrderPartId = rowData.salesOrderPartId;
+  }
+
+  // PickTicketDetails = {
+  //   salesOrderId: 0,
+  //   salesOrderPartId:0,
+  //   stockLineNumber:'',
+  //   qty:0,
+  //   qtyToShip:0,
+  //   partNumber: '',
+  //   partDescription: '',
+  //   soPickTicketNumber:'',
+  //   soPickTicketDate:null,
+  //   soPickTicketId:0,
+  //   memo:''
+  // }
+  QtyRem : Number = 0;
+  openEdit(rowData){
+    // this.soPickTicket = rowData;
+    this.QtyRem = rowData.qtyRemaining;
+    this.PickTicketDetails = rowData;
+  }
+
+  memoPopupContent: any;
+  onClickMemo() {
+    this.memoPopupContent = this.PickTicketDetails.memo;
+  }
+
+  onClickPopupSave() {
+    this.PickTicketDetails.memo = this.memoPopupContent;
+    this.memoPopupContent = '';
+    $('#memo-popup-pt').modal("hide");
+    this.disabledMemo = true;
+    //this.disableSave = false;
+}
+
+  disabledMemo: boolean = false;
+
+  enableSaveMemo() {
+      this.disabledMemo = false;
+  }
+
+  closeMemoModel() {
+    $('#memo-popup-pt').modal("hide");
+    this.disabledMemo = true;
+  }
+
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+  }
+
+  closeMyModel(type) {
+    $(type).modal("hide");
+    //this.disableSave = true;
+  }
+
+  get employeeId() {
+    return this.authService.currentUser
+      ? this.authService.currentUser.employeeId
+      : "";
+  }
+
+  updatePickTicket(){
+    const data = {
+      ...this.PickTicketDetails,
+      IsActive : true,
+      CreatedBy:this.userName,
+      UpdatedBy:this.userName,
+      pickedById: this.employeeId,
+      confirmedById: this.employeeId
+     }
+     this.salesOrderService.updatePickTicket(data).subscribe(response => {
+      this.alertService.showMessage(
+        'Success',
+        `Updated Pick Ticket Sucessfully`,
+        MessageSeverity.success
+      );
+      $('#editpickticket').modal("hide");
+      this.onSearch();
+      console.log("response",response);
+    },err => {
+      this.isSpinnerVisible = false;		
+    })
+     console.log("data ", data);
+  }
+
+  enableSave() {
+      this.disableSave = false;
+  }
+
+  getpickticketHistory(rowData) {
+    this.isSpinnerVisible = true;
+    this.salesOrderService.getpickticketHistory(rowData.soPickTicketId).subscribe(res => {
+        //this.auditHistory = res;
+                        this.pickticketauditHistory  = res.map(x => {
+                          return {
+                              ...x,                    
+                              createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '',
+                              updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '',
+                          }
+                      });  
+        this.isSpinnerVisible = false;
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  getColorCodeForHistory(i, field, value) {
+    const data = this.pickticketauditHistory;
+    const dataLength = data.length;
+    if (i >= 0 && i <= dataLength) {
+        if ((i + 1) === dataLength) {
+            return true;
+        } else {
+            return data[i + 1][field] === value
+        }
+    }
+  }
+
+  closepickticketHistoryModal() {
+    $("#pickticketHistory").modal("hide");
+  }
+
+  checkQtyToPicked(value){
+    if(value > this.QtyRem){
+      this.PickTicketDetails.qtyToShip = 0;
+      this.disableSave = true;
+      this.alertService.showMessage(
+        'Error',
+        `Qty to pick is greater than Qty Remaining`,
+        MessageSeverity.error
+      );
     }
   }
 }

@@ -645,7 +645,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'SO Quotes',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quotes&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Report&rs:Command=Render');
                   },
                 },
                 {

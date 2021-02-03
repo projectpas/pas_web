@@ -30,6 +30,8 @@ declare var $ : any;
     providers: [DatePipe],
 })
 export class VendorsListComponent implements OnInit {
+    CertifiedModuleName:any;
+    AuditModuleName:any;
     allVendorCertifiedocumentsList: any = [];
     allVendorCertifiedocumentsListOriginal: any = [];
     allVendorAuditdocumentsList: any = [];
@@ -249,6 +251,13 @@ export class VendorsListComponent implements OnInit {
         this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-general-information');
         this.vendorService.listCollection = undefined;
   }
+
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser
+        ? this.authService.currentUser.masterCompanyId
+        : null;
+  }
+
     //Load Data for Vendor List
     loadData(event) {
         this.lazyLoadEventData = event;
@@ -271,6 +280,7 @@ export class VendorsListComponent implements OnInit {
 
     getList(data) {
         this.isSpinnerVisible = true;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         this.vendorService.getAllVendorList(data).subscribe(res => {
 
 
@@ -296,7 +306,7 @@ export class VendorsListComponent implements OnInit {
                 this.totalPages = 0;
                 this.isSpinnerVisible = false;
             }            
-        }, error => this.onDataLoadFailed(error))
+        })
     }
 
     globalSearch(value) {
@@ -551,6 +561,8 @@ export class VendorsListComponent implements OnInit {
     openView(content, row) {
         this.vendorId = row.vendorId;
         this.isSpinnerVisible = true;
+        this.CertifiedModuleName="VendorCertified";
+        this.AuditModuleName="VendorAudit";
         this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
             this.vendorData = res;    
             this.isSpinnerVisible = false;        
@@ -1017,8 +1029,8 @@ export class VendorsListComponent implements OnInit {
             error => this.onDataLoadFailed(error))
     }
     exportCSV(dt) {
-        this.isSpinnerVisible = true;
-        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+        this.isSpinnerVisible = true;        
+        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}		
         let filters = Object.keys(dt.filters);
         filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
@@ -1034,10 +1046,7 @@ export class VendorsListComponent implements OnInit {
             dt.exportCSV();
             dt.value = this.allVendorList;
             this.isSpinnerVisible = false;
-        },error => {
-                this.onDataLoadFailed(error)
-            },
-        );
+        });
     }
 
     dateFilterForTable(date, field) {
@@ -1058,17 +1067,21 @@ export class VendorsListComponent implements OnInit {
     }
 
     dateFilterForTableVendorList(date, field) {
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');
         this.dateObject={}
-                date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-            if(field=='createdDate'){
-                this.dateObject={'createdDate':date}
-            }else if(field=='updatedDate'){
-                this.dateObject={'updatedDate':date}
+            if(dateyear > minyear){
+                if(field=='createdDate'){
+                    this.dateObject={'createdDate':date}
+                }else if(field=='updatedDate'){
+                    this.dateObject={'updatedDate':date}
+                }
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status ,...this.dateObject};
+                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+                this.getList(PagingData); 
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status ,...this.dateObject};
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData); 
         }else{
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,  status: this.status,...this.dateObject};
             if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){

@@ -186,7 +186,7 @@
                     <ng-container *ngIf="rowData.isDeleted">
                                 <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewCap" (click)="onViewCapes(rowData)"
                                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                <span *ngIf="!isEnableItemMasterView"><a class="btn nobg"
+                                <span *ngIf="!isEnableItemMasterView"><a class="btn nobg btn-users-cstm"
                                     (click)="restore(restoreCapabilityContent, rowData)"
                                      matTooltip="Restore Record"
                                       matTooltipPosition="above"><i class="fa fa-undo"></i></a> </span>
@@ -249,15 +249,15 @@
                 <div class="form-row mt-2">
                     <div class="col-sm-4">
                         <p>
-                            <span class="label"><strong>PN</strong>: </span><span
+                            <span class="label"><strong>PN <span class="clr-red">*</span></strong>: </span><span
                                 class="value">{{ selectedItemMasterCapData.partNo }}</span>
                         </p>
                         <p>
-                            <span class="label"><strong>PN Description</strong> : </span><span
+                            <span class="label"><strong>PN Description <span class="clr-red">*</span></strong> : </span><span
                                 class="value">{{ selectedItemMasterCapData.pnDiscription }}</span>
                         </p>
                         <p>
-                            <span class="label"><strong>Cap Type</strong> : </span><span
+                            <span class="label"><strong>Cap Type <span class="clr-red">*</span></strong> : </span><span
                                 class="value">{{ selectedItemMasterCapData.capabilityType }}</span>
                         </p>                    
                         <p>
@@ -343,16 +343,18 @@
                                 <th>Caps Type <strong class="clr-red">*</strong></th>
                                 <th>PN<strong class="clr-red">*</strong></th>
                                 <th>PN Description<strong class="clr-red">*</strong></th>
-                                <th colspan="4">Management Structure <strong class="clr-red">*</strong></th>
+                                <th style="min-width:520px !important" colspan="4">Management Structure <strong class="clr-red">*</strong></th>
                                 <th>Added Date</th>
                                 <th>Is Verified</th>
                                 <th>Verified By</th>
                                 <th>Verified Date</th>
                                 <th>Memo</th>
-                                <th>Created By</th>
+                               
                                 <th>Created Date</th>
-                                <th>Updated By</th>
+                                <th>Created By</th>
+                                
                                 <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
@@ -361,10 +363,10 @@
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'capabilityType', audit.capabilityType) ? 'black' : 'red' }">{{audit.capabilityType}}</td>
                                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partNo', audit.partNo) ? 'black' : 'red' }">{{audit.partNo}}</td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'pnDiscription', audit.pnDiscription) ? 'black' : 'red' }">{{audit.pnDiscription}}</td>
-                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'level1', audit.level1) ? 'black' : 'red' }">{{audit.level1}}</td>
-                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
-                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
-                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
+                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level1', audit.level1) ? 'black' : 'red' }">{{audit.level1}}</td>
+                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
+                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
+                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
                                 <td><p >{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
                                 <td style="text-align: center;"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
@@ -373,10 +375,12 @@
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
                                     <p [innerHTML]="audit.memo"></p>
                                 </td>
-                                <td >{{audit.createdBy}}</td>
                                 <td><p >{{audit.createdDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
-                                <td >{{audit.updatedBy}}</td>
+
+                                <td >{{audit.createdBy}}</td>
                                 <td><p >{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+
+                                <td >{{audit.updatedBy}}</td>
                                 <td style="text-align: center;"><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                             </tr>
                         </tbody>
@@ -406,13 +410,13 @@
           <h4 class="modal-title">Edit Memo</h4>
         </div>
         <div class="modal-body">
-          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" (ngModelChange)="enableSave()"
           [style]="{'height':'320px'}" name="textAreaInfo" 
           required></p-editor>
           <div class="editor-buttons">
-            <button type="button" class="btn btn-primary editor-buttons-margin"
-             data-dismiss="modal" (click)="onSaveTextAreaInfo()">Save</button>
-            <button type="button" class="btn btn-danger editor-buttons-margin"
+            <button type="button" (ngModelChange)="enableSaveMemo()" class="btn btn-primary editor-buttons-margin"
+             data-dismiss="modal" (click)="onSaveTextAreaInfo()"  [disabled]="disableSaveMemo">Save</button>
+            <button type="button"  class="btn btn-danger editor-buttons-margin"
               data-dismiss="modal">Close</button>
           </div>
         </div>
@@ -456,7 +460,7 @@
                         <table class="table table-bordered header-table-width" >
                                 <thead>
                                     <tr> 
-                                        <th >Capability Type</th>
+                                        <th >Capability Type <span class="clr-red">*</span></th>
                                         <th style="width: 600px;text-align: center;" colspan="4">Managment Structure
                                             <span class="clr-red">*</span></th>
                                         <th >Date Added</th>
@@ -542,7 +546,7 @@
                                         </td> 
                                         <td style="width: 200px;">
                                             <div [innerHTML]="selectedItemMasterCapData.memo"                                            
-                                             style="margin-left:10px; width: 90% !important;" 
+                                             style="margin-left:10px; width: 90% !important;line-height:1.5 !important;" 
                                              [matTooltip]="parsedText(selectedItemMasterCapData.memo)" 
                                              class="text_editor_box"></div>
                                             <i class="fa fa-pencil pull-right" 

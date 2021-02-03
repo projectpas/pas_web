@@ -38,6 +38,7 @@ export class SalesOrderCustomerApprovalView implements ISalesOrderCustomerApprov
     marginAmountExtended: number
     customerApprovedDate?: Date;
     salesOrderQuotePartId: number;
+    actionStatus: string;
     constructor() {
 
     }

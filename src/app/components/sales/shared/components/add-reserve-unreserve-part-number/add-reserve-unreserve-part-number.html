@@ -6,10 +6,10 @@
         </button>
         <h4 class="modal-title">{{selectedPartActionType}}</h4>
     </div>
-    <div>
+    <!-- <div>
         <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter.min}} <span>m</span> :
             {{counter.sec}} <span>s</span></p>
-    </div>
+    </div> -->
 
     <div class="modal-body">
         <div class="row margin-row">
@@ -138,9 +138,10 @@
                                 name="reservedById" title="Reserved By" appendTo='body' [baseZIndex]="9999"
                                 field="label"
                                 required="selectedPartActionType == 'Reserve' || selectedPartActionType == 'Reserve & Issue' || selectedPartActionType == 'Unreserve'"
-                                [suggestions]="employees" [disabled]="rowData.isSelected == false"
+                                [suggestions]="employees" disabled="true"
                                 (completeMethod)="filterReservedBy($event)" [dropdown]="true">
                             </p-autoComplete>
+                            <!-- [disabled]="rowData.isSelected == false" -->
                         </ng-container>
                     </td>
                 </tr>

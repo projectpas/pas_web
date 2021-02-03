@@ -35,7 +35,7 @@
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
           <th style="width:200px;position:sticky" class="table-actions-column">
-            Actions
+            Actions1
           </th>
         </tr>
         <tr>
@@ -55,15 +55,33 @@
         <tr [pSelectableRow]="rowData" pReorderableRowHandle>
           <td [ngStyle]="{'width': col.width}" *ngFor="let col of columns" class="ui-resizable-column"
             pReorderableRowHandle>
-            <span>{{rowData[col.field]}}</span>
+            <span *ngIf="col.field == 'soPickTicketDate'" class="float-right">
+              {{convertDate(col.field , rowData)}}
+            </span>
+            <span *ngIf="col.field != 'soPickTicketDate'">
+              {{rowData[col.field]}}
+            </span>
           </td>
           <td class="action-icons-cstm table-column-width">
             <div>
               <span>
                 <a class="btn nobg" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
               </span>
+              <!-- <span>
+                <a (click)="openOrderToEdit(rowData)" matTooltip="Edit" class="btn nobg" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+              </span> -->
+              <span data-toggle="modal"
+                data-target="#editpickticket">
+                <a class="btn nobg" 
+                (click)="openEdit(rowData)" matTooltip="Edit" 
+                matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
               <span>
-                <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"><i class="fa fa-print"></i></a>
+                <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(rowData);"><i
+                    class="fa fa-print"></i></a>
+              </span>
+              <span data-toggle="modal" data-target="#pickticketHistory">
+                <a class="btn nobg btn-hist-cstm" (click)="getpickticketHistory(rowData)"
+                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
               </span>
             </div>
           </td>
@@ -99,4 +117,292 @@
       <div></div>
     </div>
   </div>
+</div>
+
+<div
+    class="modal fade"
+    id="editpickticket"
+    role="dialog"
+    data-backdrop="static"
+    >
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button 
+            type="button"
+            class="close font_chck"
+            (click)="closeMyModel('#editpickticket')">
+            &times;
+          </button>
+          <h4 class="modal-title"> Edit Pick Ticket</h4>
+          </div> 
+        <!-- </div> -->
+        <div class="modal-body">
+        <form #addPickTicketForm="ngForm" class="form-horizontal">
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Pick Ticket Number</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="soPickTicketNumber"
+                    [(ngModel)]="PickTicketDetails.soPickTicketNumber"
+                    (ngModelChange)="enableSave()"
+                    [disabled]="true"/>
+                </div>
+                <div class="form-group">
+                  <label>PN </label>
+                  <input
+                  class="form-control"
+                  type="text"
+                    name="PartNumber"
+                    [(ngModel)]="PickTicketDetails.partNumber"
+                    (ngModelChange)="enableSave()"
+                    [disabled]="true"/>
+                </div>
+                <div class="form-group">
+                  <label>PN Description</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="PartDescription"
+                    [(ngModel)]="PickTicketDetails.partDescription"
+                    (ngModelChange)="enableSave()"
+                    [disabled]="true"/>
+                </div>
+                <div class="form-group">
+                  <label>Qty Ordered</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="qty"
+                    [(ngModel)]="PickTicketDetails.qty"
+                    (ngModelChange)="enableSave()"
+                    [disabled]="true"/>
+                </div>
+                <div class="form-group">
+                  <label>Qty to pick</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="qtyToShip"
+                    [(ngModel)]="PickTicketDetails.qtyToShip"
+                    (ngModelChange)="enableSave()"
+                    (input)="checkQtyToPicked($event.target.value)" pKeyFilter="pint" pInputText required/>
+                    <!-- <span
+                                  *ngIf="PickTicketDetails.qtyToShip > PickTicketDetails.qtyRemaining"
+                                  style="color: red;"><br />Already exists</span> -->
+                </div>
+                <div class="form-group">
+                  <span class="label">Memo </span>
+                  <div class="col-sm-11">
+                    <span>                    
+                      <div class="form-group memo-popup-cstm mat_emo">
+                        <div
+                        (ngModelChange)="enableSave()"
+                          [innerHTML]=" PickTicketDetails.memo"
+                          [matTooltip]="parsedText(PickTicketDetails.memo)"
+                          class="form-control"
+                          style="width: 109%;"
+                          class="text_editor_box"
+                        ></div>
+                      </div>
+                    </span>
+                  </div>
+                  <div class="col-sm-1">
+                    <span style="margin-left:10px">
+                      <a
+                      class="btn nobg" 
+                      data-toggle="modal"
+                      (ngModelChange)="enableSave()"
+                      data-target="#memo-popup-pt"
+                      (click)="onClickMemo()"
+                      matTooltip="Add Memo"
+                      matTooltipPosition="above"><i class="fa fa-pencil" style="color: #2275ce;
+                      font-size: 14px;"></i>
+                      </a>
+                    </span>
+                  </div>
+                </div>
+                <!-- <div class="form-group">
+                  <label>Confirm</label>
+                  <input
+                       type="checkbox"
+                       name="cisConfirmed"
+                       id="cisConfirmed"
+                       [(ngModel)]="PickTicketDetails.isConfirmed"
+                       (ngModelChange)="enableSave()"/>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <!-- <button
+              type="button"
+              *ngIf="!isEditButton"
+              class="btn btn-primary pull-right submit-btn"
+              style="text-align:center"
+              (click)="updatePickTicket()"
+              [disabled]="!addPickTicketForm.valid || disableSave">
+              Save
+            </button> -->
+            <button
+              type="button"
+              class="btn btn-primary pull-right submit-btn"
+              style="text-align:center"
+              (click)="updatePickTicket()"
+              [disabled]="!addPickTicketForm.valid || disableSave">
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="closeMyModel('#editpickticket')">
+              Close
+            </button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="memo-popup-pt" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close"  (click)="closeMemoModel()">
+              &times;
+            </button>
+            <h4 class="modal-title">Add Memo</h4>
+          </div>
+          <div class="modal-body">
+            <p-editor
+            spellcheck="true"
+             [(ngModel)]="memoPopupContent"  (ngModelChange)="enableSaveMemo()"
+             [style]="{ height: '320px' }"
+             name="memoPopupContent"
+             required
+           ></p-editor>
+            <div class="editor-buttons">
+              <button
+                type="button"
+                class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo"
+                (click)="onClickPopupSave()">
+                Save
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger editor-buttons-margin"
+                (click)="closeMemoModel()" >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="pickticketHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closepickticketHistoryModal()">&times;</button>
+                <h4 class="modal-title">History of Pick Ticket</h4>
+            </div>
+            <div class="modal-body" *ngIf="pickticketauditHistory">
+                <div class="table-responsive">
+                    <table class="table table-bordered" *ngIf="pickticketauditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>PT Num</th>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Qty Ordered</th>
+                                <th>Qty To Pick</th>
+                                <th>Qty Picked</th>
+                                <th>Qty Remaining</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <!-- <th>Is Deleted</th> -->
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <tr *ngFor="let audit of pickticketauditHistory; let i = index;">
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'soPickTicketNumber', audit.soPickTicketNumber)  ? 'black' : 'red'  }">
+                                    {{audit.soPickTicketNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
+                                    {{audit.partNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+                                    {{audit.partDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qty', audit.qty)  ? 'black' : 'red'  }">
+                                    {{audit.qty}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qty', audit.qty)  ? 'black' : 'red'  }">
+                                    {{audit.qty}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qtyToShi', audit.qtyToShi)  ? 'black' : 'red'  }">
+                                    {{audit.qtyToShi}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qtyRemaining', audit.qtyRemaining)  ? 'black' : 'red'  }">
+                                    {{audit.qtyRemaining}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'strStatus', audit.strStatus)  ? 'black' : 'red'  }">
+                                    {{audit.strStatus}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                    {{audit.createdBy}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                    {{audit.updatedBy}}</td>
+                                <!-- <td>
+                                    <p style="background-color: #fff !important;"> <input type="checkbox"
+                                            name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closepickticketHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -270,6 +270,13 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         if (data && data.length > 0) {
           this.loadApprovalListView(data[0]);
         }
+        
+        for (let i = 0; i < data[0].length; i++) {
+          if (data[0][i].actionStatus == "Approved") {
+            this.salesOrderService.generatePickTicket(data[0][i].salesOrderId, data[0][i].salesOrderPartId).subscribe(res => {
+            });
+          }
+        }
       }, error => this.dataLoadError(error));
   }
   selectAllApproval(type, isSelected) {
@@ -428,10 +435,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   openConfirmationModal() {
     if (this.hasPartsSelected()) {
       this.modal = this.modalService.open(this.customerApprovalConfirmationModal, { size: "sm" });
-      this.modal.result.then(
-        () => { },
-        () => { }
-      );
     }
   }
 
@@ -559,6 +562,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.salesOrderService.sentForInternalApproval(payLoad)
       .subscribe(
         res => {
+          debugger;
           $('#quoteVersion').modal('hide');
           this.alertService.showMessage(
             "Success",
