@@ -769,9 +769,13 @@ updatedBy: this.userName
             })
         }
     }
-
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
 	async getJobTitles() {
-		await this.commonService.getJobTitles().subscribe(res => {
+		await this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
 			this.jobTitles = res;
 		})
 	}

@@ -211,7 +211,7 @@
                                                     <input type="checkbox" [checked]="sourceWorkFlow.isFixedAmount"
                                                         name="ber-type" class="trigger2" data-rel="ber-fixed"
                                                         (click)="isFixedcheck('fixed');isFixedUnchecked($event);berDetermination($event.target.value,'html');"
-                                                        value="1">
+                                                        value="">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     Fixed Amount
                                                 </label>
@@ -241,7 +241,7 @@
                                                     <input type="checkbox" [checked]="sourceWorkFlow.isPercentageOfNew"
                                                         name="ber-type" class="trigger2" data-rel="ber-new"
                                                         (click)="isFixedcheck('percentage');isPercentageUnchecked($event); berDetermination($event.target.value,'html');"
-                                                        value="2">
+                                                        value="">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     % of Cost of New
                                                 </label>
@@ -286,7 +286,7 @@
                                                         [checked]="sourceWorkFlow.isPercentageOfReplacement"
                                                         name="ber-type" class="trigger2" data-rel="ber-replace"
                                                         (click)="isFixedcheck('percentreplace');isPercentreplcaeUnchecked($event); berDetermination($event.target.value,'html');"
-                                                        value="3">
+                                                        value="">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     % of Replacement Cost
                                                 </label>

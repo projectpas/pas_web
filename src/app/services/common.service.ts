@@ -360,9 +360,9 @@ export class CommonService extends EndpointFactory {
     });;
   }
 
-  getJobTitles(masterCompanyId?) {
-    const masterCompany = masterCompanyId > 0 ? masterCompanyId : 1;
-    return this.http.get<any>(`${this.baseUrl}/api/common/jobtitletypes?masterCompanyId=${masterCompany}`, this.getRequestHeaders()).catch(error => {
+  getJobTitles(masterCompanyId) {
+    // const masterCompany = masterCompanyId > 0 ? masterCompanyId : 1;
+    return this.http.get<any>(`${this.baseUrl}/api/common/jobtitletypes?masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getJobTitles(masterCompanyId));
     });;
   }
@@ -385,9 +385,9 @@ export class CommonService extends EndpointFactory {
     });;
   }
 
-  getExpertise() {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/expertisetypes?masterCompanyId=1 `, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getExpertise());
+  getExpertise(masterCompanyId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/common/expertisetypes?masterCompanyId=${masterCompanyId} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getExpertise(masterCompanyId));
     });;
   }
   getExpertiseEmployeesByCategory(value) {
