@@ -126,35 +126,21 @@ this.masterCompanyId=this.authService.currentUser
             //Receiving Customer
             this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
         }
-        //if (!this.recCustomerId)
-        //     this.getMultiplePartsNumbers();
-        // if(this.isSubWorkOrder==false){
-        if (this.workOrderId || this.recCustomerId) {
-
+     if (this.workOrderId || this.recCustomerId) {
             if (this.recCustomerId) {
                 this.showTabsGrid = false;
                 this.workOrderId = 0;
                     this.getWorkOrderDefaultSetting();
             }
              else {    // uncomment this else by mahesh  , due to comment this  this.recCustomerId is undefined and handel bellow  promisedDate etc assing nulls 
-
                 this.recCustomerId = 0;
             }
-// if(this.workOrderId && this.recCustomerId){ //fix reccustomer id is comming undefined issue
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+  this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 setTimeout(()=>{
                     this.isSpinnerEnable = true;
                 },2000)
-                //if (this.recCustomerId || (res.receivingCustomerWorkId != null && res.receivingCustomerWorkId > 0)) {
-                //    if(res.receivingCustomerWorkId > 0)
-                //        this.getPartNosByCustomer(res.customerId, res.workOrderId);
-                //    else
-                //        this.getPartNosByCustomer(res.customerId,0);
-                //}
                 this.getPartNosByCustomer(res.customerId, 0);
                 this.isEdit = true;
-
-
                 const workOrderData = res;
                 const data = {
                     ...res,
@@ -164,7 +150,6 @@ this.masterCompanyId=this.authService.currentUser
                     partNumbers: res.partNumbers.map(x => {
                         return {
                             ...x,
-                            // customerRequestDate: this.recCustomerId == 0 ? new Date(x.customerRequestDate) : null,
                             promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
                             estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
                             estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
@@ -174,23 +159,14 @@ this.masterCompanyId=this.authService.currentUser
                     })
                 }
                 this.editWorkOrderGeneralInformation = data;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
             })
-        // }
         }
         else {
             this.getWorkOrderDefaultSetting();
         }
-    // }
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        // console.log("cnages",changes);
-        // console.log("cnages",this.subWoMpnGridUpdated);
-        // this.subWOPartNoId=this.subWOPartNoId;
         this.subWoMpnGridUpdated=this.subWoMpnGridUpdated;
     }
     ngOnDestroy(): void {
@@ -198,30 +174,17 @@ this.masterCompanyId=this.authService.currentUser
     }
     getAllExpertiseType() {
         this.commonService.getExpertise().subscribe(res => {
-
           this.expertiseTypeList = res.map(x => {
-            // return {
-            //   label: x.expertiseType,
-            //   value: x.employeeExpertiseId
-            // }
             if(x.expertiseType =='Technician'){
                this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                return;
             }
           });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
       }
       getExpertiseEmployeeByExpertiseId(value) {
         this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
           this.technicianByExpertiseTypeList = res;
-         },
-         err => {
-             // this.isSpinnerVisible = false;
-             this.errorHandling(err);
          })
       }
     getWorkOrderDefaultSetting(value?) {
@@ -235,19 +198,12 @@ this.masterCompanyId=this.authService.currentUser
                     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
                         return {
                             ...x,
-                            // workOrderScopeId: data.defaultScopeId, // true
-                            workOrderStageId: data.defaultStageCodeId,
+                           workOrderStageId: data.defaultStageCodeId,
                             workOrderPriorityId: data.defaultPriorityId, // true
-                            // workOrderStatusId: data.defaultStatusId, // status
-                            // conditionId: data.defaultConditionId
                         }
                     })
                 }
             } 
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
@@ -258,22 +214,11 @@ this.masterCompanyId=this.authService.currentUser
         const { customerId } = object;
         this.commonService.getCustomerNameandCodeById(customerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             object.customer = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
     getAllWorkOrderTypes(): void {
-        // this.workOrderService.getAllWorkOrderTypes().pipe(takeUntil(this.onDestroy$)).subscribe(
-        //     result => {
-        //         this.workOrderTypes = result;
-        //     }
-        // );
-
         this.commonService.smartDropDownList('WorkOrderType', 'ID', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            // this.workOrderTypes = res;
             this.workOrderTypes = res.map(x => {
                 return {
                     id: x.value,
@@ -281,10 +226,6 @@ this.masterCompanyId=this.authService.currentUser
                 }
               });
 
-         },
-         err => {
-             // this.isSpinnerVisible = false;
-             this.errorHandling(err);
          })
     }
 
@@ -293,10 +234,6 @@ this.masterCompanyId=this.authService.currentUser
     getAllWorkOrderStatus(): void {
         this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
-         },
-         err => {
-             // this.isSpinnerVisible = false;
-             this.errorHandling(err);
          })
     }
 
@@ -312,12 +249,6 @@ this.masterCompanyId=this.authService.currentUser
             this.getCSRList();
             this.getAgentsList();
             this.getTechnicianList();
-            // this.getInspectiorsList();
-            // this.getSalesAgentsList();
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
     getSalesPersonList() {
@@ -326,10 +257,6 @@ this.masterCompanyId=this.authService.currentUser
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.salesPersonOriginalList = res;
                 this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
             })
         }
     }
@@ -339,10 +266,6 @@ this.masterCompanyId=this.authService.currentUser
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.csrOriginalList = res;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
             })
         }
     }
@@ -353,29 +276,15 @@ this.masterCompanyId=this.authService.currentUser
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.agentsOriginalList = res;
                 this.salesAgentsOriginalList = [...this.salesAgentsOriginalList, ...this.agentsOriginalList];
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
             })
         }
     }
-
-    // getSalesAgentsList() {
-    //     this.salesAgentsOriginalList = [...this.salesPersonOriginalList , ...this.agentsOriginalList ];
-    //     // this.salesAgentsOriginalList.push(this.salesPersonOriginalList);
-    //     // this.salesAgentsOriginalList.push(this.agentsOriginalList);
-    // }
 
     getTechnicianList() {
         const id = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.technicianOriginalList = res;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
             })
         }
     }
@@ -390,10 +299,6 @@ this.masterCompanyId=this.authService.currentUser
                     name: x.label
                 }
             });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
@@ -406,27 +311,12 @@ this.masterCompanyId=this.authService.currentUser
                     name: x.label
                 }
             });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
     getAllWorkScpoes(): void {
-     this.commonService.smartDropDownList('WorkScope', 'WorkScopeId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+     this.commonService.smartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workScopesList = res;
-            // .map(x => {
-            //     return {
-            //         ...x,
-            //         techStationId: x.value,
-            //         name: x.label
-            //     }
-            // });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
@@ -441,20 +331,12 @@ this.masterCompanyId=this.authService.currentUser
                     label: x.workOrderStage
                 }
             });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
     getAllPriority() {
         this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.priorityList = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
@@ -462,44 +344,26 @@ this.masterCompanyId=this.authService.currentUser
     getMultiplePartsNumbers() {
         this.workOrderService.getMultipleParts().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.partNumberOriginalData = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
 
     async getPartNosByCustomer(customerId, workOrderId) {
-        // this.partNumberOriginalData = null;
-        //this.workOrderService.getPartNosByCustomer(customerId).subscribe(res => {
-        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+       await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 
             this.partNumberOriginalData = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         });
     }
 
     getCurrency() {
         this.commonService.smartDropDownList('Currency', 'CurrencyId', 'symbol').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.currencyList = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
     }
 
     getLegalEntity() {
         this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.legalEntityList = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
 
     }
@@ -522,47 +386,6 @@ this.masterCompanyId=this.authService.currentUser
             setTimeout(()=>{
                 this.isSpinnerEnable = true;
             },2000)
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
-    }
-    moduleName:any='';
-    errorHandling(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
-    handleError(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Failed due to some  error',
-                MessageSeverity.error
-            );
-        }
     }
 }
