@@ -1,13 +1,10 @@
 <div *ngIf="isSpinnerEnable">
-  <!-- ; else loader  -->
-  <!-- Edit  -->
   <div *ngIf="
     (isEdit &&
     editWorkOrderGeneralInformation &&
     workOrderTypes &&
     workOrderStatusList &&
     creditTerms &&
-    employeesOriginalData &&
     workScopesList &&
     workOrderStagesList &&
     priorityList &&
@@ -18,7 +15,7 @@
   ">
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
-      [jobTitles]="jobTitles" [employeesOriginalData]="employeesOriginalData"
+      [jobTitles]="jobTitles" 
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
       [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
       [workScopesList]="workScopesList" [workOrderStagesList]="workOrderStagesList" [priorityList]="priorityList"
@@ -34,7 +31,6 @@
       workOrderTypes &&
       workOrderStatusList &&
       creditTerms &&
-      employeesOriginalData &&
       workScopesList &&
       workOrderStagesList &&
       priorityList &&
@@ -49,7 +45,7 @@
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
       [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList"
       [creditTerms]="creditTerms" [jobTitles]="jobTitles" [currencyList]="currencyList"
-      [employeesOriginalData]="employeesOriginalData" [salesPersonOriginalList]="salesPersonOriginalList"
+      [salesPersonOriginalList]="salesPersonOriginalList"
       [salesAgentsOriginalList]="salesAgentsOriginalList" [csrOriginalList]="csrOriginalList"
       [technicianOriginalList]="technicianOriginalList" [workScopesList]="workScopesList"
       [workOrderStagesList]="workOrderStagesList" [workorderSettings]="workorderSettings" [priorityList]="priorityList"

@@ -589,9 +589,13 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       this.employeeList = employee;
     }
   } 
-
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
   getAllExpertiseType() {
-    this.commonService.getExpertise().subscribe(res => {
+    this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
       this.expertiseTypeList = res.map(x => {
         return {
           label: x.expertiseType,

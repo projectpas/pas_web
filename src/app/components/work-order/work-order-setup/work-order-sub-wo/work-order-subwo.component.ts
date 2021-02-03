@@ -451,8 +451,13 @@ this.alertService.showMessage(
             })
         }
         expertiseTypeList:any=[];
+        get currentUserMasterCompanyId(): number {
+            return this.authService.currentUser
+              ? this.authService.currentUser.masterCompanyId
+              : null;
+        }
         getAllExpertiseType() {
-            this.commonService.getExpertise().subscribe(res => {
+            this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
     
               this.expertiseTypeList = res.map(x => {
                 // return {
