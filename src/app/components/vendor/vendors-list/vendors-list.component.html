@@ -1541,12 +1541,14 @@
           </div>
           <div id="step10" class="panel-collapse collapse">
             <div>
-              <app-vendor-documents
+              <!-- <app-vendor-documents
                 *ngIf="vendorId"
                 [vendorId]="vendorId"
                 [viewMode]="isViewMode"
               >
-              </app-vendor-documents>
+              </app-vendor-documents> -->
+
+              <app-common-documents [moduleName]="moduleNameVendor" [referenceId]="vendorId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
             </div>
           </div>
         </div>

@@ -94,8 +94,74 @@ export class WorkOrderSmartComponent implements OnInit {
 this.masterCompanyId=this.authService.currentUser
 ? this.authService.currentUser.masterCompanyId
 : null;
-        // comment due to getting error in labor need to check all scenarios
-        // if(this.isSubWorkOrder==false){
+
+if (this.isSubWorkOrder) {
+    this.subWorkOrderId = this.subWorkOrderId;
+} else {
+    // get the workOrderId on Edit Mode
+    this.workOrderId = this.acRouter.snapshot.params['id'];
+    //Receiving Customer
+    this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
+   
+}
+if (this.workOrderId || this.recCustomerId) {
+    if (this.recCustomerId) {
+        this.showTabsGrid = false;
+        this.workOrderId = 0;
+            this.getWorkOrderDefaultSetting();
+    }
+     else {    // uncomment this else by mahesh  , due to comment this  this.recCustomerId is undefined and handel bellow  promisedDate etc assing nulls 
+        this.recCustomerId = 0;
+    }
+    if(this.workOrderId !=0 || this.recCustomerId !=0){
+        this.isEdit=true;
+       }
+ 
+        }
+        else {
+            this.getWorkOrderDefaultSetting();
+        }
+        if(this.isEdit==true){
+            this.getWoDetailsById();
+                }else{
+                    this.getAllWorkOrderTypes();
+                    this.getAllWorkOrderStatus();
+                    this.getAllCreditTerms();
+                    // this.getAllCustomers();
+                    this.getAllEmployees();
+                    this.getAllTecStations();
+                    this.getJobTitles();
+                    this.getAllWorkScpoes();
+                    this.getAllWorkOrderStages();
+                    this.getAllExpertiseType();
+                    this.getAllPriority();
+                    this.getCurrency();
+                    this.getLegalEntity();
+                    if(this.isSubWorkOrder==false){
+                    this.getConditionsList();
+                    }else{
+                        this.conditionList=this.conditionListfromSubWo;
+                        setTimeout(()=>{
+                            this.isSpinnerEnable = true;
+                        },2000)
+                }
+                }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.subWoMpnGridUpdated=this.subWoMpnGridUpdated;
+    }
+    ngOnDestroy(): void {
+        this.onDestroy$.next();
+    }
+
+
+    getWoDetailsById(){
+        this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            setTimeout(()=>{
+                this.isSpinnerEnable = true;
+            },2000)
+            //load all data when edit api is loaded started
             this.getAllWorkOrderTypes();
             this.getAllWorkOrderStatus();
             this.getAllCreditTerms();
@@ -116,61 +182,29 @@ this.masterCompanyId=this.authService.currentUser
                 setTimeout(()=>{
                     this.isSpinnerEnable = true;
                 },2000)
-}
-
-        if (this.isSubWorkOrder) {
-            this.subWorkOrderId = this.subWorkOrderId;
-        } else {
-            // get the workOrderId on Edit Mode
-            this.workOrderId = this.acRouter.snapshot.params['id'];
-            //Receiving Customer
-            this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
         }
-     if (this.workOrderId || this.recCustomerId) {
-            if (this.recCustomerId) {
-                this.showTabsGrid = false;
-                this.workOrderId = 0;
-                    this.getWorkOrderDefaultSetting();
+        //ended
+            this.getPartNosByCustomer(res.customerId, 0);
+            this.isEdit = true;
+            const workOrderData = res;
+            const data = {
+                ...res,
+                workOrderNumber: res.workOrderNum,
+                openDate: new Date(res.openDate),
+                customerId: res.customerId,
+                partNumbers: res.partNumbers.map(x => {
+                    return {
+                        ...x,
+                        promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
+                        estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
+                        estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
+                        receivedDate: this.recCustomerId == 0 && res.receivingCustomerWorkId == null ? null : new Date(x.receivedDate)
+                    }
+
+                })
             }
-             else {    // uncomment this else by mahesh  , due to comment this  this.recCustomerId is undefined and handel bellow  promisedDate etc assing nulls 
-                this.recCustomerId = 0;
-            }
-  this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                setTimeout(()=>{
-                    this.isSpinnerEnable = true;
-                },2000)
-                this.getPartNosByCustomer(res.customerId, 0);
-                this.isEdit = true;
-                const workOrderData = res;
-                const data = {
-                    ...res,
-                    workOrderNumber: res.workOrderNum,
-                    openDate: new Date(res.openDate),
-                    customerId: res.customerId,
-                    partNumbers: res.partNumbers.map(x => {
-                        return {
-                            ...x,
-                            promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
-                            estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
-                            estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
-                            receivedDate: this.recCustomerId == 0 && res.receivingCustomerWorkId == null ? null : new Date(x.receivedDate)
-                        }
-
-                    })
-                }
-                this.editWorkOrderGeneralInformation = data;
-            })
-        }
-        else {
-            this.getWorkOrderDefaultSetting();
-        }
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        this.subWoMpnGridUpdated=this.subWoMpnGridUpdated;
-    }
-    ngOnDestroy(): void {
-        this.onDestroy$.next();
+            this.editWorkOrderGeneralInformation = data;
+        })
     }
     getAllExpertiseType() {
         this.commonService.getExpertise().subscribe(res => {
