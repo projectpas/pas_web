@@ -254,7 +254,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       pickedById: this.employeeId,
       confirmedById: this.employeeId
      }
-    debugger;
+    
      this.salesOrderService.updatePickTicket(data).subscribe(response => {
       this.alertService.showMessage(
         'Success',
