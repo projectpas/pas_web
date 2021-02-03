@@ -190,7 +190,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.stockLineForm.unitSalesPrice = '0.00';
 		this.stockLineForm.coreUnitCost = '0.00';
 		this.stockLineForm.lotCost = '0.00';
-		this.stockLineForm.inspectionDate = new Date();
+		// this.stockLineForm.inspectionDate = new Date();
 	}
 
 	ngOnInit() {
@@ -1061,6 +1061,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.itarNumber = partDetails.itarNumber;
 			this.stockLineForm.nationalStockNumber = partDetails.nationalStockNumber;
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
+			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
 			this.stockLineForm.daysReceived = partDetails.daysReceived;
@@ -1931,5 +1932,16 @@ export class StockLineSetupComponent implements OnInit {
 				MessageSeverity.error
 			);
 		}
+	}
+
+	onChangeInspectedDate() {
+		if (this.stockLineForm.inspectionBy) {
+			this.stockLineForm.inspectionDate = new Date();
+		} else {
+			this.stockLineForm.inspectionDate = null;
+		}
+	}
+	onChangeReceivedNum() {
+
 	}
 }
