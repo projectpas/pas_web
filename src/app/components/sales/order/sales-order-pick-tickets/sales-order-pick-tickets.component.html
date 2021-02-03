@@ -79,6 +79,10 @@
                 <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(rowData);"><i
                     class="fa fa-print"></i></a>
               </span>
+              <span data-toggle="modal" data-target="#pickticketHistory">
+                <a class="btn nobg btn-hist-cstm" (click)="getpickticketHistory(rowData)"
+                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+              </span>
             </div>
           </td>
         </tr>
@@ -185,7 +189,11 @@
                     type="text"
                     name="qtyToShip"
                     [(ngModel)]="PickTicketDetails.qtyToShip"
-                    (ngModelChange)="enableSave()" required/>
+                    (ngModelChange)="enableSave()"
+                    (input)="checkQtyToPicked($event.target.value)" pKeyFilter="pint" pInputText required/>
+                    <!-- <span
+                                  *ngIf="PickTicketDetails.qtyToShip > PickTicketDetails.qtyRemaining"
+                                  style="color: red;"><br />Already exists</span> -->
                 </div>
                 <div class="form-group">
                   <span class="label">Memo </span>
@@ -218,7 +226,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label>Confirm</label>
                   <input
                        type="checkbox"
@@ -226,7 +234,7 @@
                        id="cisConfirmed"
                        [(ngModel)]="PickTicketDetails.isConfirmed"
                        (ngModelChange)="enableSave()"/>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -295,3 +303,106 @@
       </div>
     </div>
   </div>
+  <div id="pickticketHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closepickticketHistoryModal()">&times;</button>
+                <h4 class="modal-title">History of Pick Ticket</h4>
+            </div>
+            <div class="modal-body" *ngIf="pickticketauditHistory">
+                <div class="table-responsive">
+                    <table class="table table-bordered" *ngIf="pickticketauditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>PT Num</th>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Qty Ordered</th>
+                                <th>Qty To Pick</th>
+                                <th>Qty Picked</th>
+                                <th>Qty Remaining</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <!-- <th>Is Deleted</th> -->
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <tr *ngFor="let audit of pickticketauditHistory; let i = index;">
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'soPickTicketNumber', audit.soPickTicketNumber)  ? 'black' : 'red'  }">
+                                    {{audit.soPickTicketNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
+                                    {{audit.partNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+                                    {{audit.partDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qty', audit.qty)  ? 'black' : 'red'  }">
+                                    {{audit.qty}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qty', audit.qty)  ? 'black' : 'red'  }">
+                                    {{audit.qty}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qtyToShi', audit.qtyToShi)  ? 'black' : 'red'  }">
+                                    {{audit.qtyToShi}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qtyRemaining', audit.qtyRemaining)  ? 'black' : 'red'  }">
+                                    {{audit.qtyRemaining}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'strStatus', audit.strStatus)  ? 'black' : 'red'  }">
+                                    {{audit.strStatus}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                    {{audit.createdBy}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                    {{audit.updatedBy}}</td>
+                                <!-- <td>
+                                    <p style="background-color: #fff !important;"> <input type="checkbox"
+                                            name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closepickticketHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
