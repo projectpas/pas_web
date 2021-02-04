@@ -203,7 +203,7 @@ export class VendorsListComponent implements OnInit {
     dateObject: any = {};
     selectedOnly: boolean = false;
     targetData: any;
-
+    moduleNameVendor:any;
     constructor(private router: ActivatedRoute, private route: Router, private datePipe: DatePipe, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, private vendorCapesService: VendorCapabilitiesService, public commonService: CommonService) {
         this.local = this.vendorService.financeCollection;
         this.dataSource = new MatTableDataSource();
@@ -563,6 +563,7 @@ export class VendorsListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.CertifiedModuleName="VendorCertified";
         this.AuditModuleName="VendorAudit";
+        this.moduleNameVendor="Vendor"
         this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
             this.vendorData = res;    
             this.isSpinnerVisible = false;        

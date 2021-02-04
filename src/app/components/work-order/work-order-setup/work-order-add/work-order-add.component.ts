@@ -48,7 +48,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() employeesOriginalData;
     @Input() techStationList;
     @Input() salesPersonOriginalList;
-    @Input() salesAgentsOriginalList;
+    @Input() salesAgentsOriginalList; 
     @Input() csrOriginalList;
     @Input() technicianOriginalList; 
     @Input() technicianByExpertiseTypeList; 
@@ -337,6 +337,7 @@ export class WorkOrderAddComponent implements OnInit {
         if(this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit){
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit)?(formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) + '.00'): '0.00';
         }
+        this.getAllEmployees('');
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -713,34 +714,7 @@ export class WorkOrderAddComponent implements OnInit {
     clearautoCompleteInput(currentRecord, field) {
         // currentRecord[field] = null;
     }
-    filterCsr(event) {
-        this.csrList = this.csrOriginalList;
 
-        if (event.query !== undefined && event.query !== null) {
-            const csr = [...this.csrOriginalList.filter(x => {
-                return x.name.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.csrList = csr;
-        }
-    }
-    filterEmployee(event): void {
-        this.employeeList = this.employeesOriginalData;
-        if (event.query !== undefined && event.query !== null) {
-            const employee = [...this.employeesOriginalData.filter(x => {
-                return x.label.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.employeeList = employee;
-        }
-    }
-    filterSalesPerson(event): void {
-        this.salesPersonList = this.salesAgentsOriginalList;
-        if (event.query !== undefined && event.query !== null) {
-            const salesPerson = [...this.salesAgentsOriginalList.filter(x => {
-                return x.name.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.salesPersonList = salesPerson;
-        }
-    }
     getMaterialListHandle(){
         if(this.isSubWorkOrder==true){
             this.getMaterialListByWorkOrderIdForSubWO();
@@ -1001,6 +975,7 @@ this.getWorkOrderWorkFlowNos();
                 result => {
                     this.isSpinnerVisible = false;
                     this.disableSaveForEdit=true;
+                    this.disableSaveForPart=true;
                     this.saveWorkOrderGridLogic(result, generalInfo);
              
                         this.alertService.showMessage(
@@ -1020,6 +995,7 @@ this.getWorkOrderWorkFlowNos();
                 result => {
                     this.isSpinnerVisible = false;
                     this.isEdit = true;
+                    this.disableSaveForPart=true;
                     this.router.navigate([`workordersmodule/workorderspages/app-work-order-edit/${result.workOrderId}`]);
                     this.saveWorkOrderGridLogic(result, generalInfo)
                      if(window.location.href.includes('app-work-order-receivingcustworkid')){
@@ -3219,4 +3195,96 @@ this.restrictID=0;
     handleError(err){
         this.isSpinnerVisible = false;
       }
+      tempMemo:any;
+      type:any;
+      onAddDescription(value) {
+          this.type=value;
+          this.tempMemo = "";
+          if(value==1){
+            this.tempMemo = this.workOrderGeneralInformation.notes;
+          }else{
+            this.tempMemo = this.workOrderGeneralInformation.memo;
+          }
+
+    }
+
+    onSaveDescription() {
+        if( this.type==1){
+            this.workOrderGeneralInformation.notes=  this.tempMemo;
+          }else{
+          this.workOrderGeneralInformation.memo=  this.tempMemo;
+          }
+
+        this.disableSaveForEdit=false;
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    disableSaveForPart:boolean=true;
+    getValid(){
+        this.disableSaveForPart=false;
+    }
+    filterCsr(event) {
+        this.csrList = this.csrOriginalList;
+
+        if (event.query !== undefined && event.query !== null) {
+            const csr = [...this.csrOriginalList.filter(x => {
+                return x.name.toLowerCase().includes(event.query.toLowerCase())
+            })]
+            this.csrList = csr;
+        }
+    }
+    filterEmployee(event): void {
+     
+        if (event.query !== undefined && event.query !== null) {
+          this.getAllEmployees(event.query)
+        }else{
+            this.getAllEmployees('');
+        }
+    }
+    filterSalesPerson(event): void {
+        this.salesPersonList = this.salesAgentsOriginalList;
+        if (event.query !== undefined && event.query !== null) {
+            const salesPerson = [...this.salesAgentsOriginalList.filter(x => {
+                return x.name.toLowerCase().includes(event.query.toLowerCase())
+            })]
+            this.salesPersonList = salesPerson;
+        }
+    }
+    setEditArray:any=[];
+    msId:any;
+     getAllEmployees(value) { 
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.setEditArray.push(this.workOrderGeneralInformation.employeeId ? this.workOrderGeneralInformation.employeeId.value : 0);
+            this.msId = this.workOrderGeneralInformation.managementStructureId;
+        } else {
+            this.setEditArray.push(0);
+            this.msId = this.authService.currentUser
+                ? this.authService.currentUser.managementStructureId
+                : null;
+        }
+        if (this.setEditArray.length == 0) {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(res => {
+           if (res && res.length != 0) {
+                  this.employeesOriginalData = res.map(x => {
+                return {
+                    ...x,
+                    employeeId: x.value,
+                    name: x.label
+                }
+            });
+            this.employeeList = this.employeesOriginalData;
+            }
+        })
+    }
 } 
