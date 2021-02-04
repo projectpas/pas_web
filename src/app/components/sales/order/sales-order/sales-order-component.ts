@@ -14,6 +14,7 @@ import { MenuItem } from "primeng/api";
 import * as moment from 'moment';
 declare var $ : any;
 import { DatePipe } from '@angular/common';
+import { AuthService } from "../../../../services/auth.service";
 
 @Component({
   selector: "app-sales-order-create",
@@ -67,7 +68,8 @@ export class SalesOrderComponent implements OnInit {
     private modalService: NgbModal,
     private router: Router,
     private commonservice: CommonService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -78,10 +80,16 @@ export class SalesOrderComponent implements OnInit {
     ];
   }
 
-  getList(data) {
+  get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
 
+  getList(data) {
     this.isSpinnerVisible = true;
-    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) };
+    PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId; 
     this.customerService.getCustomerAll(PagingData).subscribe(res => {
       this.isSpinnerVisible = false;
       this.data = res.results;
