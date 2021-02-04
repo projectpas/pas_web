@@ -237,12 +237,36 @@
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
                            <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                          <span data-toggle="modal" data-target="#restore"><a class="btn nobg" (click)="restore(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                          <span >
+                              <a class="btn nobg btn-users-cstm" 
+                              (click)="restore(restorePopupId,rowData);"
+                               matTooltip="Restore Record" 
+                                matTooltipPosition="above">
+                                <i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                          
                         </div> 
                     </td>
                 </tr>
             </ng-template>
+            <ng-template pTemplate="emptymessage"
+                                     let-columns
+                                     *ngIf="allStockInfo.length == 0">
+                            <tr>
+                                <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText
+                                   type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input class="footer-input-width" [(ngModel)]="totalPages" [disabled]="true" pInputText
+                                   type="text" />
+                        </ng-template>
+
                               <div class="row adv-row">
                                 <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
                                     <div class="col-md-12 ">
@@ -251,7 +275,7 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
-                                                <label>PN</label>
+                                                <label>PN <span class="clr-red">*</span></label>
                                                 <p-autoComplete [(ngModel)]="searchData.partNo"
                                                             (onKeyUp)=eventHandler($event) (onSelect)="partnmId($event)"
                                                             name="partNumber"
@@ -376,7 +400,7 @@
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                         <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg" (click)="restore(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg btn-users-cstm" (click)="restore(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
                                 </td>
                             </tr>
@@ -385,7 +409,7 @@
                                      let-columns
                                      *ngIf="allStockInfo.length == 0">
                             <tr>
-                                <td [attr.colspan]="14" class="no-records-cstm no-records-msg">
+                                <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
@@ -703,7 +727,7 @@
                                         <span>
                                             <a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                         </span>
-                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg" (click)="restoreNonStock(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg btn-users-cstm" (click)="restoreNonStock(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                         <span data-toggle="modal" data-target="#nonStockHistory">
                                             <a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                         </span>
@@ -713,7 +737,7 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" let-columns *ngIf="allNonstockInfo.length == 0">
                             <tr>
-                                <td [attr.colspan]="7" class="no-records-cstm no-records-msg">
+                                <td [attr.colspan]="11" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
@@ -900,6 +924,11 @@
                             </div>
 
 
+                        </ng-template>
+                        <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" class="table-column-width">
+                            </colgroup>
                         </ng-template>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -1120,7 +1149,7 @@
             <div class="modal-body">
                 <div class="text-center">
                     <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
-                    <h4 class="no-history-found-msg">>No History Found </h4>
+                    <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
             </div>
 

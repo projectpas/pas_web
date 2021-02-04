@@ -107,7 +107,7 @@ import { SalesOrderService } from '../services/salesorder.service';
 import { SalesOrderEndpointService } from '../services/salesorder-endpoint.service';
 import { FormatTimePipe } from '../pipes/timer-pipe';
 import { TreeTableModule } from 'primeng/treetable';
-
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 // import { MaterialListCreateComponent } from '../shared/Material-List-Create.component';
 // import { SharedModule } from '../shared/shared.module';
 // import { BrowserModule } from '@angular/platform-browser';
@@ -140,7 +140,8 @@ import { TreeTableModule } from 'primeng/treetable';
     FileUploadModule,
     NgMultiSelectDropDownModule,
     EditorModule,
-    TreeTableModule
+    TreeTableModule,
+    BreadcrumbModule
   ],
   declarations: [
     WorkOrderPagesComponent,

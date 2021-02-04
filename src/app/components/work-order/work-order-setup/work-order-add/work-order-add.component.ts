@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 declare var $ : any;
 import { WorkOrderPartNumber } from '../../../../models/work-order-partnumber.model';
@@ -12,7 +12,7 @@ import { Documents } from '../../../../models/work-order-documents.modal';
 import { WorkOrderQuote } from '../../../../models/work-order-quote.modal';
 import { WorkOrderLabor, AllTasks} from '../../../../models/work-order-labor.modal';
 import { CommonService } from '../../../../services/common.service';
-import {  getValueFromObjectByKey, getObjectById, getObjectByValue, editValueAssignByCondition, getValueFromArrayOfObjectById, getValueByFieldFromArrayofObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import {  getValueFromObjectByKey, getObjectById, editValueAssignByCondition, getValueFromArrayOfObjectById, getValueByFieldFromArrayofObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkFlowtService } from '../../../../services/workflow.service';
@@ -24,12 +24,11 @@ import { WorkOrderQuoteService } from '../../../../services/work-order/work-orde
 import { CustomerViewComponent } from '../../../../shared/components/customer/customer-view/customer-view.component';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
-// import { UserRoleService } from '../../../user-role/user-role-service';
 import { SalesOrderService } from '../../../../services/salesorder.service';
 import { SalesOrderReference } from '../../../../models/sales/salesOrderReference';
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { DBkeys } from '../../../../services/db-Keys';
-
+import { MenuItem } from 'primeng/api';
 @Component({ 
     selector: 'app-work-order-add',
     templateUrl: './work-order-add.component.html',
@@ -37,10 +36,10 @@ import { DBkeys } from '../../../../services/db-Keys';
     animations: [fadeInOut],
     providers: [SalesOrderService]
 })
-
 export class WorkOrderAddComponent implements OnInit {
+    breadcrumbs: MenuItem[];
     @Input() isView: boolean = false;
-    @Input() isEdit;
+    @Input() isEdit:boolean=false;
     @Input() workOrderTypes;
     @Input() workOrderStatusList;
     @Input() creditTerms;
@@ -52,7 +51,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() csrOriginalList;
     @Input() technicianOriginalList; 
     @Input() technicianByExpertiseTypeList; 
-    @Input() workScopesList; 
+    // @Input() workScopesList; 
     @Input() workOrderStagesList;
     @Input() priorityList;
     @Input() partNumberOriginalData;
@@ -61,8 +60,8 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() subWorkOrderDetails;
     @Input() showTabsGrid = false;
     @Input() workOrderId;
-    @Input() currencyList;
-    @Input() legalEntityList;
+    // @Input() currencyList;
+    // @Input() legalEntityList;
     @Input() conditionList;
     @Input() workorderSettings;
     @Input() workFlowWorkOrderId = 0; 
@@ -225,7 +224,6 @@ export class WorkOrderAddComponent implements OnInit {
     customerNames: any[];
     allCustomers: any;
     shipToSelectedvalue: any;
-    isEditMode: boolean;
     shipToContactData: any = [];
     firstNamesShipTo: any[] = [];
     vendorNames: any[];
@@ -244,7 +242,20 @@ export class WorkOrderAddComponent implements OnInit {
     customerId: any;
     arrayCustomerIdList:any[] = [];
     mpnDropdownList:any=[];
-    
+    workScopesList:any=[];
+    setEditArray:any=[];
+    msId:any;
+    disableSaveForPart:boolean=true;
+    tempMemo:any;
+    type:any;
+    customerWarningsList:any;
+    isbillingNotCreated=false;
+    freightsArr:any=[];
+    result:any={};
+    equipmentArr:any=[];
+    array:any=[];
+    currentIndex:any;
+    selectedMPNSubWo:any;
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -258,11 +269,9 @@ export class WorkOrderAddComponent implements OnInit {
         private quoteService: WorkOrderQuoteService,
         private salesOrderReferenceStorage: SalesOrderReferenceStorage,
 		public vendorService: VendorService,
-    ) 
-    {
+    ){
         this.moduleName = 'Work Order';
     }
-
     async ngOnInit() {
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;  
         if(this.salesOrderReferenceData){
@@ -277,7 +286,6 @@ export class WorkOrderAddComponent implements OnInit {
                 }
             },
             err => {
-                // this.isSpinnerVisible = false;
                 this.handleError(err);
             })
         }    
@@ -287,9 +295,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.disableSaveForEdit=false;
         }
         this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
-        // if(!this.isSubWorkOrder){
         this.getTaskList();
-        // }
         this.createModeData();
         this.workOrderService.creditTerms = this.creditTerms;
         this.mpnFlag = true;
@@ -298,26 +304,18 @@ export class WorkOrderAddComponent implements OnInit {
         if (!this.isSubWorkOrder) { // subWorkOrder false
          this.modifyWorkorderdata();
         } else { 
-            // if(!this.isSubWorkOrder){
             this.getAllCustomerContact(this.subWorkOrderDetails.customerId,'edit');
-            // }
             this.workOrderId=this.workOrderId;
-            // this.workOrderPartNumberId = this.subWorkOrderDetails.mpnid;
-            // this.workOrderPartNumberId=this.subWorkOrderDetails.workFlowWorkOrderId;
-            // this.workFlowId = this.subWorkOrderDetails.workFlowId;
             this.mainWorkOrderId = this.subWorkOrderDetails.workOrderid;
             this.subWorkOrderDetails.subWorkOrderId=this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId :this.workOrderId;
             this.savedWorkOrderData = {
-                // workOrderId:133,
                 workOrderId: this.workOrderId,
-                // workFlowId: this.workFlowId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId               
             }
         }
         if(!this.isSubWorkOrder){
             this.workOrderStatus();
             this.loadcustomerData();
-            // this.loadVendorList();
             this.getLegalEntity();
         }
         if(!this.isEdit && this.workOrderGeneralInformation){
@@ -338,8 +336,23 @@ export class WorkOrderAddComponent implements OnInit {
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit)?(formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) + '.00'): '0.00';
         }
         this.getAllEmployees('');
+        this.getAllWorkScpoes('');
+        this.getConditionsList('');
+        this.getAllTecStations('');
+        this.getAllPriority('')
+        this.workOrderGeneralInformation.workOrderNumber=this.workOrderGeneralInformation.workOrderNumber ? this.workOrderGeneralInformation.workOrderNumber : 'Creating';
+        if (this.isEdit == false) {
+            this.breadcrumbs = [
+                { label: 'Work Order' },
+                { label: 'Create Work Order' },
+            ];
+        } else {
+            this.breadcrumbs = [
+                { label: 'Work Order' },
+                { label: 'Edit Work Order' },
+            ];
+        } 
     }
-
     ngOnChanges(changes: SimpleChanges) {
     // this is for get mpn dropdown list api after save mpn grid in sub wo   
         if(changes.subWoMpnGridUpdated){
@@ -386,7 +399,6 @@ export class WorkOrderAddComponent implements OnInit {
             )
         }
       }
-      
     dropdownlistSubWoMpn(){
     this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId).subscribe(res=>{
         this.mpnDropdownList = res.map(x => {
@@ -420,18 +432,13 @@ export class WorkOrderAddComponent implements OnInit {
       this.handleError(err);
   })
       }
-      selectedMPNSubWo:any;
       changeofMPNForSubWo(data){
-        //   this.workFlowId=42;
+
           this.workFlowId=data.workFlowId;
         this.subWOPartNoId=data.subWOPartNoId;
         this.workOrderPartNumberId=data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId=data.workFlowId;
-        // this.selectedMPNSubWo=data.subWOPartNoId;
-        // if (this.workOrderGeneralInformation.partNumbers[0].workflowId == 0) {
-            
-        // }
-        // this.getWorkFlowTabsData();
+
 
         if(this.workFlowId !=0){
             this.gridActiveTab="workFlow";
@@ -442,18 +449,6 @@ export class WorkOrderAddComponent implements OnInit {
             this.gridTabChange(this.gridActiveTab)
         }
 
-
-
-
-        // if(this.workFlowId !=0){
-        //     this.subTabWorkFlowChange('viewworkFlow')
-        // }else{
-        //     this.gridTabChange('materialList');
-        // }
-        // this.gridTabChange(this.gridActiveTab)
-        
-        // this.getMaterialListByWorkOrderIdForSubWO();
-        // this.workFlowWorkOrderId=data.subWOPartNoId;
     }
       modifyWorkorderdata(){
         if (!this.isEdit) { // create new WorkOrder
@@ -551,7 +546,6 @@ export class WorkOrderAddComponent implements OnInit {
                 this.getEmployeeData();
         }
       }
-
     workorderByIdCall(){
         this.recCustomerId=this.recCustomerId ? this.recCustomerId : 0;
         this.isSpinnerVisible = true;
@@ -585,11 +579,9 @@ export class WorkOrderAddComponent implements OnInit {
       getEmployeeData(){
                this.workOrderGeneralInformation.woEmployee=this.authService.currentEmployee;
         }
-
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
-
     checkworkscope(){
         var result = false;
         if(this.workOrderGeneralInformation && this.workOrderGeneralInformation.partNumbers){
@@ -603,15 +595,12 @@ export class WorkOrderAddComponent implements OnInit {
         }
         return result;
     }
-
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
-
     createModeData() {
         this.loginDetailsForCreate = {
             masterCompanyId: this.authService.currentUser.masterCompanyId,
@@ -635,7 +624,6 @@ export class WorkOrderAddComponent implements OnInit {
         // adding Form Object Dynamically
         // this.generateLaborForm();
     }
-
     filterCustomerName(event) {
         const value = event.query.toLowerCase()
         if(this.arrayCustomerIdList.length == 0) {			
@@ -714,7 +702,6 @@ export class WorkOrderAddComponent implements OnInit {
     clearautoCompleteInput(currentRecord, field) {
         // currentRecord[field] = null;
     }
-
     getMaterialListHandle(){
         if(this.isSubWorkOrder==true){
             this.getMaterialListByWorkOrderIdForSubWO();
@@ -722,7 +709,6 @@ export class WorkOrderAddComponent implements OnInit {
             this.getMaterialListByWorkOrderId();
         }
     }
-
     resetSelectedTab(){
         this.gridActiveTab = '';
     }
@@ -757,7 +743,6 @@ export class WorkOrderAddComponent implements OnInit {
         }
         if (value !== 'billorInvoice') {
             this.billing = undefined;
-            
         }
         if (value == 'billorInvoice') {
             this.isBillAction=true;
@@ -767,7 +752,6 @@ export class WorkOrderAddComponent implements OnInit {
             this.isEditWorkordershowMsg=false;
             this.billingCreateOrEdit();
             const {customerId}=this.workOrderGeneralInformation.customerId;
-          
         }
         if (value == 'shipping') {
             this.isSpinnerVisible = true;
@@ -791,7 +775,6 @@ export class WorkOrderAddComponent implements OnInit {
             if(this.isView==false){
                 this.customerWarnings(customerId);
             }
-           
         }
         if (value == 'workOrderMain') { 
             this.isWorkOrderMainView = true;
@@ -879,7 +862,6 @@ export class WorkOrderAddComponent implements OnInit {
         this.subTabOtherOptions = '';
         this.subTabMainComponent = '';
     }
-    currentIndex:any;
     openDelete(content, index) {
      this.currentIndex=index;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -889,7 +871,6 @@ export class WorkOrderAddComponent implements OnInit {
     dismissModel() {
         this.modal.close();
     }
-
     deleteMPN() {
         if(this.showTabsGrid==true && this.workOrderGeneralInformation.partNumbers[this.currentIndex].workOrderId !=0){
             this.isDeleteMpnPart=true;
@@ -914,7 +895,6 @@ this.getWorkOrderWorkFlowNos();
         err => {
             this.handleError(err);
         })
-       
         }else{
             this.workOrderGeneralInformation.partNumbers.splice(this.currentIndex, 1); 
         }
@@ -977,7 +957,6 @@ this.getWorkOrderWorkFlowNos();
                     this.disableSaveForEdit=true;
                     this.disableSaveForPart=true;
                     this.saveWorkOrderGridLogic(result, generalInfo);
-             
                         this.alertService.showMessage(
                             this.moduleName,
                             'Work Order Updated Succesfully',
@@ -1054,7 +1033,6 @@ if(!this.workOrderQuoteId){
             this.showTabsMPNGrid = true;
         }
     }
-    array:any=[];
     checkPartExist(val,type,index){
         if (type == true) {
             this.workOrderGeneralInformation.partNumbers.forEach(element => {
@@ -1114,11 +1092,9 @@ if(!this.workOrderQuoteId){
         currentRecord.customerRequestDate = new Date(object.custReqDate);
         this.revisedPartId = object.revisedPartId;
         currentRecord.managementStructureId = object.managementStructureId;
-
         if (!this.isEdit) {
             let currentdate: any = new Date();
             currentRecord.tatDaysCurrent = moment(currentdate).diff(currentRecord.receivedDate, 'days');
-
         } 
         else {
             this.calculatePartTat(currentRecord);
@@ -1156,7 +1132,6 @@ if(!this.workOrderQuoteId){
         })
     }
     onSelectedTechnician(object, currentRecord) {
-
         if (object.employeeId != undefined && object.employeeId > 0) {
             this.commonService.getTechnicianStation(object.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 currentRecord.techStationId = res.stationId;
@@ -1166,7 +1141,6 @@ if(!this.workOrderQuoteId){
                 this.handleError(err);
             });
         }
-
     }
     getStockLineByItemMasterIdOnChangePN(workOrderPart, index) {
         this.getStockLineByItemMasterId(workOrderPart.masterPartId, workOrderPart.conditionId, index);
@@ -1183,7 +1157,6 @@ if(!this.workOrderQuoteId){
                         value: x.stockLineId,
                     }
                 });
-
             },
             err => {
                 this.handleError(err);
@@ -1194,7 +1167,6 @@ if(!this.workOrderQuoteId){
     getDynamicVariableData(variable, index) {
         return this[variable + index]
     }
-
     async getPartPublicationByItemMasterId(currentRecord,itemMasterId) {
         this.isSpinnerVisible = true;
         await this.workOrderService.getPartPublicationByItemMaster(itemMasterId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1206,7 +1178,6 @@ if(!this.workOrderQuoteId){
                 }
             });
             if(this.cmmList && this.cmmList.length>0){
-
                 currentRecord.cmmId=this.cmmList[0].value;
             }
         },
@@ -1215,7 +1186,6 @@ if(!this.workOrderQuoteId){
             this.isSpinnerVisible = false;
         })
     }
-    
     selectedCondition(value,currentRecord, index,) {
     this.conditionList.forEach(element => {
         if(element.value==value){
@@ -1234,7 +1204,6 @@ if(!this.workOrderQuoteId){
     });
         this.workOrderStatus();
      }
-
     filterRevisedPartNumber(event, index) {
         this['revisedPartNumberList' + index] = this['revisedPartOriginalData' + index]
         if (event.query !== undefined && event.query !== null) {
@@ -1289,7 +1258,6 @@ if(!this.workOrderQuoteId){
             })
         }
         this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
-
     }
     getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
         if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
@@ -1308,7 +1276,6 @@ if(!this.workOrderQuoteId){
                     this.isSpinnerVisible = false;
                 })
             }
-
         }
     }
     getWorkFlowData() {
@@ -1330,7 +1297,6 @@ if(!this.workOrderQuoteId){
     }
     changeofMPN(data) {
         this.quotestatusofCurrentPart=data.quoteStatus;
-
         this.selectedPartNumber = data;
         this.mpnGridData = data.datas;
         this.workFlowId = data.workflowId,
@@ -1343,9 +1309,7 @@ if(!this.workOrderQuoteId){
             this.subTabWorkFlowChange('viewworkFlow')
         }
     }
-
     getWorkFlowTabsData() {
-        
         if (this.gridActiveTab === 'materialList') {
             this.gridTabChange('materialList');
         }else if(this.gridActiveTab === 'labor'){
@@ -1452,23 +1416,18 @@ if(!this.workOrderQuoteId){
             this.handleError(err);
             this.isSpinnerVisible = false;
         })
-
     }
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
             this.isSpinnerVisible = true;
-            console.log("mpn fetch working fine")
             this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false
                 this.workOrderWorkFlowOriginalData = res;
-
                 if (this.isEdit && res.length === 1 && this.workOrderGeneralInformation.isSinglePN == true) {
                     this.workFlowId = res[0].workflowId;
                     this.selectedPartNumber = res[0];
                 }
-              
-                 
                 this.mpnPartNumbersList = res.map(x => {
                     return {
                         value:
@@ -1495,8 +1454,6 @@ if(!this.workOrderQuoteId){
                     }
                     else{
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
-                          console.log("quote status",this.quotestatusofCurrentPart);
-                      
                     }
                     if(this.workFlowId ==0){
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId; 
@@ -1505,7 +1462,6 @@ if(!this.workOrderQuoteId){
                      }else{
                         this.getMaterialListByWorkOrderId();
                      }
-                       
                     } 
                 }
             },
@@ -1558,7 +1514,6 @@ if(!this.workOrderQuoteId){
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    
                 }
             })
             this.isSpinnerVisible = true;
@@ -1577,8 +1532,6 @@ if(!this.workOrderQuoteId){
                 this.handleError(err);
             })
         }
-    
-
     }
     updateWorkOrderMaterialList(data) {
         if(this.isSubWorkOrder==true){
@@ -1610,7 +1563,6 @@ if(!this.workOrderQuoteId){
                 this.handleError(err);
             })
         }else{
-
         const materialArr = data.materialList.map(x => {
             return {
                 ...x,
@@ -1631,7 +1583,6 @@ if(!this.workOrderQuoteId){
                 MessageSeverity.success
             );
             this.getMaterialListByWorkOrderId();
-
         },
         err => {
             this.isSpinnerVisible = false;
@@ -1645,8 +1596,6 @@ if(!this.workOrderQuoteId){
         }
         this.labor.workOrderLaborList = [];
         this.labor.workOrderLaborList.push({})
-
-
         this.commonService.smartDropDownList('Task', 'TaskId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.taskList = res.map(x => {
                 return {
@@ -1654,7 +1603,6 @@ if(!this.workOrderQuoteId){
                     description: x.label,
                     taskId:x.value
                 }
-                
               });
               if(this.labor.workOrderLaborList && this.labor.workOrderLaborList.length !=0){
                 this.labor.workOrderLaborList[0] = {}
@@ -1663,9 +1611,7 @@ if(!this.workOrderQuoteId){
                 if(this.labor.workOrderLaborList && this.labor.workOrderLaborList.length !=0){
                     this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
                 }
-
          })
-
     },
     err => {
         this.handleError(err);
@@ -1697,7 +1643,6 @@ if(!this.workOrderQuoteId){
         this.modal.result.then(() => {
         }, () => {  })
     }
-    equipmentArr:any=[];
     saveWorkOrderEquipmentList(data) {
         this.equipmentArr=[];
         if(this.isSubWorkOrder){
@@ -1726,7 +1671,6 @@ if(!this.workOrderQuoteId){
                 }
             })
         }
-   
         this.isSpinnerVisible = true;
         this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr,this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
@@ -1921,7 +1865,7 @@ if(!this.workOrderQuoteId){
         })
     }
     }
-    result:any={};
+
     formWorkerOrderLaborJson(data) {
         if(this.isSubWorkOrder==true){
            this.result = {
@@ -1946,7 +1890,6 @@ if(!this.workOrderQuoteId){
                 "totalWorkHours": data['totalWorkHours'],
                 "labourMemo": data['labourMemo'],
                 "LaborList": [
-    
                 ],
                 "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
             }
@@ -2372,7 +2315,7 @@ if(!this.workOrderQuoteId){
             })
         }
     }
-    freightsArr:any=[];
+
     saveWorkOrderFreightsList(data) {
         this.freightsArr=[];
         if(this.isSubWorkOrder==true){
@@ -2556,7 +2499,7 @@ if(!this.workOrderQuoteId){
             })
         }
     }
-    isbillingNotCreated=false; 
+ 
     billingCreateOrEdit() {
         this.isSpinnerVisible = true;
         this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -2876,7 +2819,7 @@ if(!this.workOrderQuoteId){
         const element = document.querySelector('mat-sidenav-content') || window;
         element.scrollTo(0, 0);
     }
-    customerWarningsList:any;
+
     getCustomerWarningsList(): void {
         this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
               res.forEach(element => {
@@ -3195,8 +3138,7 @@ this.restrictID=0;
     handleError(err){
         this.isSpinnerVisible = false;
       }
-      tempMemo:any;
-      type:any;
+
       onAddDescription(value) {
           this.type=value;
           this.tempMemo = "";
@@ -3207,7 +3149,6 @@ this.restrictID=0;
           }
 
     }
-
     onSaveDescription() {
         if( this.type==1){
             this.workOrderGeneralInformation.notes=  this.tempMemo;
@@ -3226,7 +3167,6 @@ this.restrictID=0;
             return decodedString;
         }
     }
-    disableSaveForPart:boolean=true;
     getValid(){
         this.disableSaveForPart=false;
     }
@@ -3241,7 +3181,6 @@ this.restrictID=0;
         }
     }
     filterEmployee(event): void {
-     
         if (event.query !== undefined && event.query !== null) {
           this.getAllEmployees(event.query)
         }else{
@@ -3257,8 +3196,6 @@ this.restrictID=0;
             this.salesPersonList = salesPerson;
         }
     }
-    setEditArray:any=[];
-    msId:any;
      getAllEmployees(value) { 
         this.setEditArray = [];
         if (this.isEdit == true) {
@@ -3287,4 +3224,96 @@ this.restrictID=0;
             }
         })
     }
-} 
+    getAllWorkScpoes(value): void {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.workOrderGeneralInformation.partNumbers.forEach(element => {
+                if(element.workOrderScopeId){
+                    this.setEditArray.push(element.workOrderScopeId)
+                }
+            });
+            if(this.setEditArray && this.setEditArray.length==0){
+                this.setEditArray.push(0);  
+            }
+        } else {
+            this.setEditArray.push(0); 
+        }
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.workScopesList = res;
+        });
+    }
+    getConditionsList(value) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.workOrderGeneralInformation.partNumbers.forEach(element => {
+                if(element.conditionId){
+                    this.setEditArray.push(element.conditionId)
+                }
+            });
+            if(this.setEditArray && this.setEditArray.length==0){
+                this.setEditArray.push(0);  
+            }
+         } else {
+            this.setEditArray.push(0); 
+        }
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.conditionList = res;
+            // const conditionId = res.find(x => x.label.includes('As Removed'));
+            // this.workOrderGeneralInformation = {
+            //     ...this.workOrderGeneralInformation,
+            //     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
+            //         return {
+            //             ...x,
+            //             conditionId: conditionId !== undefined ? conditionId.value : null
+            //         }
+            //     })
+            // }
+        })
+    } 
+   getAllTecStations(value) {
+    this.setEditArray = [];
+    if (this.isEdit == true) {
+        this.workOrderGeneralInformation.partNumbers.forEach(element => {
+            if(element.techStationId){
+                this.setEditArray.push(element.techStationId)
+            }
+        });
+        if(this.setEditArray && this.setEditArray.length==0){
+            this.setEditArray.push(0);  
+        }
+     } else {
+        this.setEditArray.push(0); 
+    }
+    const strText ='';
+    this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+           this.techStationList = res.map(x => {
+                return {
+                    ...x,
+                    techStationId: x.value,
+                    name: x.label
+                }
+            });
+        })
+    }
+    getAllPriority(value) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.workOrderGeneralInformation.partNumbers.forEach(element => {
+                if(element.workOrderPriorityId){
+                    this.setEditArray.push(element.workOrderPriorityId)
+                }
+            });
+            if(this.setEditArray && this.setEditArray.length==0){
+                this.setEditArray.push(0);  
+            }
+        } else {
+            this.setEditArray.push(0); 
+        }
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+           this.priorityList = res;
+        })
+    }
+}  

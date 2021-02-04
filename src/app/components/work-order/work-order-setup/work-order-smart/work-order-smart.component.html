@@ -1,28 +1,27 @@
-<div *ngIf="isSpinnerEnable">
+<div >
   <div *ngIf="
     (isEdit &&
     editWorkOrderGeneralInformation &&
     workOrderTypes &&
     workOrderStatusList &&
     creditTerms &&
-    workScopesList &&
     workOrderStagesList &&
-    priorityList &&
+
     partNumberOriginalData &&
-    legalEntityList &&
-    conditionList  && jobTitles   && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList &&
-    techStationList )
+    jobTitles   && salesPersonOriginalList && salesAgentsOriginalList
+     && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList
+     )
   ">
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
       [jobTitles]="jobTitles" 
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
       [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
-      [workScopesList]="workScopesList" [workOrderStagesList]="workOrderStagesList" [priorityList]="priorityList"
-      [workorderSettings]="workorderSettings" [currencyList]="currencyList"
-      [partNumberOriginalData]="partNumberOriginalData" [legalEntityList]="legalEntityList"
-      [conditionList]="conditionList" [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
-      [techStationList]="techStationList">
+      [workOrderStagesList]="workOrderStagesList"
+      [workorderSettings]="workorderSettings" 
+      [partNumberOriginalData]="partNumberOriginalData" 
+       [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+     >
     </app-work-order-add>
   </div>
   <div *ngIf="
@@ -31,27 +30,26 @@
       workOrderTypes &&
       workOrderStatusList &&
       creditTerms &&
-      workScopesList &&
       workOrderStagesList &&
-      priorityList &&
+    
       partNumberOriginalData &&
-      legalEntityList && 
-      conditionList && jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList &&
-      techStationList 
+     
+       jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList
+       
     )
   ">
     <!-- using add form as subworkOrder also -->
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
       [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList"
-      [creditTerms]="creditTerms" [jobTitles]="jobTitles" [currencyList]="currencyList"
+      [creditTerms]="creditTerms" [jobTitles]="jobTitles" 
       [salesPersonOriginalList]="salesPersonOriginalList"
       [salesAgentsOriginalList]="salesAgentsOriginalList" [csrOriginalList]="csrOriginalList"
-      [technicianOriginalList]="technicianOriginalList" [workScopesList]="workScopesList"
-      [workOrderStagesList]="workOrderStagesList" [workorderSettings]="workorderSettings" [priorityList]="priorityList"
-      [partNumberOriginalData]="partNumberOriginalData" [legalEntityList]="legalEntityList"
-      [conditionList]="conditionList" [workOrderGeneralInformation]="workOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
-      [techStationList]="techStationList"
+      [technicianOriginalList]="technicianOriginalList" 
+      [workOrderStagesList]="workOrderStagesList" [workorderSettings]="workorderSettings" 
+      [partNumberOriginalData]="partNumberOriginalData" 
+       [workOrderGeneralInformation]="workOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+      
       (getLatestDefaultSettingByWorkOrderTypeId)="getWorkOrderDefaultSetting($event)">
     </app-work-order-add>
   </div>
@@ -62,7 +60,7 @@
   </div>
 </ng-template>
 
-<div class="preloader" *ngIf="!isSpinnerEnable">
+<div class="preloader" *ngIf="isSpinnerEnable">
   <div class="loading">
       <div class="lds-roller">
           <div></div>

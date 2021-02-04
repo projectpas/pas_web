@@ -13,6 +13,7 @@ import { DBkeys } from "../../../../services/db-Keys";
 import { MenuItem } from "primeng/api";
 declare var $ : any;
 import { DatePipe } from '@angular/common';
+import { AuthService } from "../../../../services/auth.service";
 
 @Component({
   selector: "app-sales-quote",
@@ -66,7 +67,8 @@ export class SalesQuoteComponent implements OnInit {
     private modalService: NgbModal,
     private router: Router,
     private commonservice: CommonService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -77,9 +79,16 @@ export class SalesQuoteComponent implements OnInit {
     ];
   }
 
+  get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
+
   getList(data) {
     this.isSpinnerVisible = true;
-    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) };
+    PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId; 
     this.customerService.getCustomerAll(PagingData).subscribe(res => {
       this.isSpinnerVisible = false;
       this.data = res['results'];
