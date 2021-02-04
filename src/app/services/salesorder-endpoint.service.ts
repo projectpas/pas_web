@@ -33,7 +33,8 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getrelesereservepartUrl: string = environment.baseUrl + "/api/salesorder/releasestocklinereservedparts"
   private readonly getSalesOrderViewDetails: string = environment.baseUrl + "/api/SalesOrder/getview";
   private readonly getSalesOrdePickTicketDetails: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticket";
-  private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketlist";
+  //private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketlist";
+  private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketapprovelist";
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
 
   // private readonly searchSalesOrder: string = "/api/salesorder/search";

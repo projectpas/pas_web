@@ -80,29 +80,57 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
 
+  // initColumns() {
+  //   this.headers = [
+  //     { field: "soPickTicketNumber", header: "PT Num", width: "130px" },
+  //     { field: "soPickTicketDate", header: "PT Date", width: "130px" },
+  //     { field: "partNumber", header: "PN", width: "130px" },
+  //     { field: "partDescription", header: "PN Description", width: "130px" },
+  //     { field: "serialNumber", header: "Serial Num", width: "130px" },
+  //     { field: "uom", header: "UOM", width: "130px" },
+  //     { field: "qty", header: "Qty Ordered", width: "130px" },
+  //     { field: "qtyReserved", header: "Qty to Pick", width: "130px" },
+  //     { field: "qtyToShip", header: "Qty Picked", width: "130px" },
+  //     { field: "qtyRemaining", header: "Qty Remaining", width: "130px" },
+  //     { field: "strStatus", header: "Status", width: "130px" },
+  //     { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
+  //     { field: "soNumber", header: "SO Num", width: "130px" },
+  //     { field: "woNumber", header: "WO Num", width: "130px" },
+  //     { field: "customer", header: "Customer", width: "130px" },
+  //     { field: "poNumber", header: "PO Num", width: "130px" },
+  //     { field: "shipToCity", header: "Ship To City", width: "130px" },
+  //     { field: "shipToCountry", header: "Ship to Country", width: "130px" },
+  //     { field: "pickedByName", header: "Picked By", width: "130px" },
+  //     { field: "woNumber", header: "Confirmed By", width: "130px" },
+  //     { field: "memo", header: "Memo", width: "130px" }
+  //   ];
+  //   this.selectedColumns = this.headers;
+  // }
+
   initColumns() {
     this.headers = [
-      { field: "soPickTicketNumber", header: "PT Num", width: "130px" },
-      { field: "soPickTicketDate", header: "PT Date", width: "130px" },
-      { field: "partNumber", header: "PN", width: "130px" },
+      { field: "partNumber", header: "PN Num", width: "130px" },
       { field: "partDescription", header: "PN Description", width: "130px" },
       { field: "serialNumber", header: "Serial Num", width: "130px" },
-      { field: "uom", header: "UOM", width: "130px" },
-      { field: "qty", header: "Qty Ordered", width: "130px" },
-      { field: "qtyReserved", header: "Qty to Pick", width: "130px" },
-      { field: "qtyToShip", header: "Qty Picked", width: "130px" },
-      { field: "qtyRemaining", header: "Qty Remaining", width: "130px" },
-      { field: "strStatus", header: "Status", width: "130px" },
-      { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
-      { field: "soNumber", header: "SO Num", width: "130px" },
-      { field: "woNumber", header: "WO Num", width: "130px" },
-      { field: "customer", header: "Customer", width: "130px" },
-      { field: "poNumber", header: "PO Num", width: "130px" },
-      { field: "shipToCity", header: "Ship To City", width: "130px" },
-      { field: "shipToCountry", header: "Ship to Country", width: "130px" },
-      { field: "pickedByName", header: "Picked By", width: "130px" },
-      { field: "woNumber", header: "Confirmed By", width: "130px" },
-      { field: "memo", header: "Memo", width: "130px" }
+      { field: "qty", header: "Qty Ord", width: "130px" },
+      { field: "qtyToShip", header: "Qty To Picked", width: "130px" },
+      { field: "qtyToPick", header: "Qty To Pick", width: "130px" },
+      { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
+      { field: "quantityAvailable", header: "Ready To Pick", width: "130px" },
+      { field: "status", header: "Status", width: "130px" },
+      { field: "salesOrderNumber", header: "SO Num", width: "130px" },
+      { field: "salesOrderQuoteNumber", header: "SOQ Num", width: "130px" },
+      // { field: "strStatus", header: "Status", width: "130px" },
+      // { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
+      // { field: "soNumber", header: "SO Num", width: "130px" },
+      // { field: "woNumber", header: "WO Num", width: "130px" },
+      // { field: "customer", header: "Customer", width: "130px" },
+      // { field: "poNumber", header: "PO Num", width: "130px" },
+      // { field: "shipToCity", header: "Ship To City", width: "130px" },
+      // { field: "shipToCountry", header: "Ship to Country", width: "130px" },
+      // { field: "pickedByName", header: "Picked By", width: "130px" },
+      // { field: "woNumber", header: "Confirmed By", width: "130px" },
+      // { field: "memo", header: "Memo", width: "130px" }
     ];
     this.selectedColumns = this.headers;
   }
@@ -146,6 +174,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.pickTickes = response[0];
+        console.log("this.pickTickes ",this.pickTickes);
         this.showPaginator = this.totalRecords > 0;
       }, error => {
         this.isSpinnerVisible = false;
