@@ -8,6 +8,7 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { MenuItem } from 'primeng/api';
 import { CreditTermsService } from '../../../services/Credit Terms.service';
 import { CommonService } from '../../../services/common.service';
+import { AuthService } from '../../../services/auth.service';
 @Component({
 	selector: 'app-customer-create',
 	templateUrl: './customer-steps-primeng.component.html',
@@ -46,7 +47,8 @@ export class CustomerStepsPrimengComponent {
 		private route: Router,
 		location: Location,
 		private commonservice: CommonService,
-		public creditTermService: CreditTermsService
+		public creditTermService: CreditTermsService,
+		private authService: AuthService,
 	) {
 	}
 	ngOnInit() {
@@ -167,9 +169,13 @@ export class CustomerStepsPrimengComponent {
 		}
 	}	 
 
-
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
 	async getJobTitles() {
-		await this.commonservice.getJobTitles().subscribe(res => {
+		await this.commonservice.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
 			this.jobTitles = res;
 		})
 	}

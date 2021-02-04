@@ -1,15 +1,15 @@
 
   <!-- Edit  -->
-  <div *ngIf="editWorkOrderGeneralInformation && workOrderStatusList && creditTerms && jobTitles && employeesOriginalData && salesAgentsOriginalList && salesPersonOriginalList && csrOriginalList && technicianOriginalList && workScopesList && workOrderStagesList && priorityList && currencyList && legalEntityList && conditionList && technicianByExpertiseTypeList &&techStationList && workOrderId">
+  <div *ngIf="editWorkOrderGeneralInformation && workOrderStatusList && creditTerms && jobTitles && employeesOriginalData && salesAgentsOriginalList && salesPersonOriginalList && csrOriginalList && technicianOriginalList  && workOrderStagesList    && technicianByExpertiseTypeList  && workOrderId">
       <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit" [isView]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
       [jobTitles]="jobTitles" [employeesOriginalData]="employeesOriginalData"
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
       [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
-      [workScopesList]="workScopesList" [workOrderStagesList]="workOrderStagesList" [priorityList]="priorityList"
-      [workorderSettings]="workorderSettings" [currencyList]="currencyList"
-      [partNumberOriginalData]="partNumberOriginalData" [legalEntityList]="legalEntityList"
-      [conditionList]="conditionList" [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
-      [techStationList]="techStationList" [workOrderId]="workOrderId" isListView="true">
+      [workOrderStagesList]="workOrderStagesList" 
+      [workorderSettings]="workorderSettings" 
+      [partNumberOriginalData]="partNumberOriginalData" 
+      [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+ [workOrderId]="workOrderId" isListView="true">
     </app-work-order-add>
   </div>
