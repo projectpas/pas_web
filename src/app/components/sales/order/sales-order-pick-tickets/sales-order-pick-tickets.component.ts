@@ -53,6 +53,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   PickTicketDetails = new SOPickTicket();
   disableSave: boolean = true;
   pickticketauditHistory: any[] = [];
+  pickTicketItemInterfaceheader: any[];
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
@@ -133,6 +134,18 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       // { field: "memo", header: "Memo", width: "130px" }
     ];
     this.selectedColumns = this.headers;
+
+    this.pickTicketItemInterfaceheader = [
+      { field: "partNumber", header: "PN", width: "100px" },
+      { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
+      { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
+      { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
+      { field: "qtyToReserve", header: "Qty To Pick", width: "100px" },
+      { field: "serialNumber", header: "Serial Num", width: "100px" },
+      { field: "manufacturer", header: "Manufacturer", width: "100px" },
+      { field: "stockType", header: "Stock Type", width: "100px" },
+      { field: "tracableToName", header: "Tracable To", width: "100px" },
+    ];
   }
 
   refresh(id) {
@@ -351,5 +364,19 @@ export class SalesOrderPickTicketsComponent implements OnInit {
         MessageSeverity.error
       );
     }
+  }
+
+  parts: any[] = [];
+  pickticketItemInterface(itemMasterId,conditionId){
+    this.salesOrderService
+      .getStockLineforPickTicket(itemMasterId,conditionId)
+      .subscribe((response: any) => {
+        this.isSpinnerVisible = false;
+        this.parts = response[0];
+        console.log("this.pickTickes ",this.parts);
+        this.showPaginator = this.totalRecords > 0;
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
   }
 }

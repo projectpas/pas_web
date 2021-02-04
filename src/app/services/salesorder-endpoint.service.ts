@@ -88,6 +88,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getFreightAudihistory: string = environment.baseUrl + '/api/SalesOrder/sales-order-freight-history';
   private readonly getChargesAudihistory: string = environment.baseUrl + '/api/SalesOrder/sales-order-charges-history';
   private readonly updatepickticket: string = environment.baseUrl + "/api/SalesOrder/updatepickticket";
+  private readonly getstocklineforPickTicketUrl: string = environment.baseUrl + "/api/salesorder/searchstocklinefrompickticketpop"
   //**End  savesarvice end point creation implementation --nitin
 
 
@@ -653,6 +654,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/salesorder/sales-order-pick-ticket-history/?soPickTicketId=${pickticketid}`)
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getpickticketHistory(pickticketid));
+      });
+  }
+
+  getStockLineforPickTicket(itemMasterId: number, conditionId: number): Observable<PartAction> {
+    const URL = `${this.getstocklineforPickTicketUrl}?itemMasterId=${itemMasterId}&conditionId=${conditionId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getReservestockpartlists(itemMasterId, conditionId));
       });
   }
   //end nitin
