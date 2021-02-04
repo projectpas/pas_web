@@ -128,8 +128,17 @@
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <ng-container *ngIf="col.field!='isVerified'">
                         <input class="table-header-input-width" pInputText type="text"
+                        *ngIf="col.field != 'addedDate' && col.field != 'verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'"
                             (input)="capabilityListTable.filter($event.target.value, col.field, 'contains')">
-                    </ng-container>
+                            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'addedDate'"
+                            name="addedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'verifiedDate'"
+                            name="verifiedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                            name="createdDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                          <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                            name="updatedDate" (change)="capabilityListTable.filter($event.target.value,col.field)" />
+                        </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                     </ng-container>
                 </th>
@@ -249,11 +258,11 @@
                 <div class="form-row mt-2">
                     <div class="col-sm-4">
                         <p>
-                            <span class="label"><strong>PN <span class="clr-red">*</span></strong>: </span><span
+                            <span class="label"><strong>PN </strong>: </span><span
                                 class="value">{{ selectedItemMasterCapData.partNo }}</span>
                         </p>
                         <p>
-                            <span class="label"><strong>PN Description <span class="clr-red">*</span></strong> : </span><span
+                            <span class="label"><strong>PN Description </strong> : </span><span
                                 class="value">{{ selectedItemMasterCapData.pnDiscription }}</span>
                         </p>
                         <p>
@@ -294,7 +303,7 @@
                             <div class="col-md-6">
                                 <div class="card" style="margin-top: 6px;">
                                     <div class="card-header" style="padding: 0 10px;">
-                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
+                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="clr-red">*</span></h5>
                                     </div>
                                     <div class="card-body" style="padding: 8px 12px 6px;">
                                         <div class="form-group" style="margin-bottom: 4px;">

@@ -1,4 +1,4 @@
-﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 <div *ngIf="!isSubWorkOrder">
     <div class="card new-card">
         <div class="header">
@@ -51,9 +51,8 @@
                                 iconPos="left" style="padding: 5px 12px !important;" label="Export Data"
                                 matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()"></button> -->
                             <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
-                                iconPos="left" label="Export Selected Data" style="padding: 5px 12px !important;"
-                                matTooltip="Download Selected Data" matTooltipPosition="above"
-                                (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
+                                matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
 
                         </div>
                         <div class="pull-right buttons-div-align">

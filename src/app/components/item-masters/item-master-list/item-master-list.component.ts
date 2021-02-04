@@ -258,7 +258,9 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	lazyLoadEventDataInputNonStock: any;
 	pageNumber = 0;
 	selectedOnly: boolean = false;
-    targetData: any;
+	nonstockselectedOnly: boolean = false;
+	targetData: any;
+	nonstocktargetData : any;
 
 	/** item-master-list ctor */
 	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
@@ -348,6 +350,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 	closeDeleteModal() {
 		$("#downloadConfirmation").modal("hide");
+		$("#downloadnonstockConfirmation").modal("hide");
 	}
 
 	openEdits(row) {
@@ -1744,7 +1747,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			}
 	}
 
-	exportCSV(dt) {
+	exportCSV(dt) {		
 		this.isSpinnerVisible = true;
         if(this.radioButtonValue == "Stock"){
 			this.getAllStockDataforDownload(dt);
@@ -1810,7 +1813,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				dt._value = results[0]['results'];
 				dt._value.itemType = 'Non-Stock';
 				dt.exportCSV();
-				dt.value = this.allStockInfo;
+				dt.value = this.allNonstockInfo;
 				this.isSpinnerVisible = false;
 			},
 			error => this.onDataLoadFailed(error)
