@@ -29,7 +29,7 @@ import { SalesOrderService } from '../../../../services/salesorder.service';
 import { SalesOrderReference } from '../../../../models/sales/salesOrderReference';
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { DBkeys } from '../../../../services/db-Keys';
-
+import { MenuItem } from 'primeng/api';
 @Component({ 
     selector: 'app-work-order-add',
     templateUrl: './work-order-add.component.html',
@@ -39,8 +39,9 @@ import { DBkeys } from '../../../../services/db-Keys';
 })
 
 export class WorkOrderAddComponent implements OnInit {
+    breadcrumbs: MenuItem[];
     @Input() isView: boolean = false;
-    @Input() isEdit;
+    @Input() isEdit:boolean=false;
     @Input() workOrderTypes;
     @Input() workOrderStatusList;
     @Input() creditTerms;
@@ -52,7 +53,7 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() csrOriginalList;
     @Input() technicianOriginalList; 
     @Input() technicianByExpertiseTypeList; 
-    @Input() workScopesList; 
+    // @Input() workScopesList; 
     @Input() workOrderStagesList;
     @Input() priorityList;
     @Input() partNumberOriginalData;
@@ -61,8 +62,8 @@ export class WorkOrderAddComponent implements OnInit {
     @Input() subWorkOrderDetails;
     @Input() showTabsGrid = false;
     @Input() workOrderId;
-    @Input() currencyList;
-    @Input() legalEntityList;
+    // @Input() currencyList;
+    // @Input() legalEntityList;
     @Input() conditionList;
     @Input() workorderSettings;
     @Input() workFlowWorkOrderId = 0; 
@@ -244,7 +245,7 @@ export class WorkOrderAddComponent implements OnInit {
     customerId: any;
     arrayCustomerIdList:any[] = [];
     mpnDropdownList:any=[];
-    
+    workScopesList:any=[];
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -338,6 +339,24 @@ export class WorkOrderAddComponent implements OnInit {
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit)?(formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) + '.00'): '0.00';
         }
         this.getAllEmployees('');
+        this.getAllWorkScpoes('');
+        this.getConditionsList('');
+        this.getAllTecStations('');
+        this.getAllPriority('')
+        this.workOrderGeneralInformation.workOrderNumber=this.workOrderGeneralInformation.workOrderNumber ? this.workOrderGeneralInformation.workOrderNumber : 'Creating';
+        if (this.isEdit == false) {
+
+            this.breadcrumbs = [
+                { label: 'Work Order' },
+                { label: 'Create Work Order' },
+            ];
+        } else {
+
+            this.breadcrumbs = [
+                { label: 'Work Order' },
+                { label: 'Edit Work Order' },
+            ];
+        } 
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -1458,7 +1477,6 @@ if(!this.workOrderQuoteId){
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
             this.isSpinnerVisible = true;
-            console.log("mpn fetch working fine")
             this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false
                 this.workOrderWorkFlowOriginalData = res;
@@ -1495,7 +1513,6 @@ if(!this.workOrderQuoteId){
                     }
                     else{
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
-                          console.log("quote status",this.quotestatusofCurrentPart);
                       
                     }
                     if(this.workFlowId ==0){
@@ -3287,4 +3304,76 @@ this.restrictID=0;
             }
         })
     }
-} 
+    getAllWorkScpoes(value): void {
+
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            // this.setEditArray.push(this.workOrderGeneralInformation.currencyId ? this.workOrderGeneralInformation.currencyId : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.workScopesList = res;
+        });
+    }
+    getConditionsList(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            // this.setEditArray.push(this.workOrderGeneralInformation.currencyId ? this.workOrderGeneralInformation.currencyId : 0);
+        } else {
+            this.setEditArray.push(0);
+        } 
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.conditionList = res;
+
+            // const conditionId = res.find(x => x.label.includes('As Removed'));
+            // this.workOrderGeneralInformation = {
+            //     ...this.workOrderGeneralInformation,
+            //     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
+            //         return {
+            //             ...x,
+            //             conditionId: conditionId !== undefined ? conditionId.value : null
+            //         }
+            //     })
+            // }
+        })
+    } 
+
+
+    
+   getAllTecStations(value) {
+    this.setEditArray = [];
+    if (this.isEditMode == true) {
+        // this.setEditArray.push(this.workOrderGeneralInformation.currencyId ? this.workOrderGeneralInformation.currencyId : 0);
+    } else {
+        this.setEditArray.push(0);
+    }
+    const strText ='';
+    this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        //  this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.techStationList = res.map(x => {
+                return {
+                    ...x,
+                    techStationId: x.value,
+                    name: x.label
+                }
+            });
+        })
+    }
+
+    getAllPriority(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            // this.setEditArray.push(this.workOrderGeneralInformation.currencyId ? this.workOrderGeneralInformation.currencyId : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        // this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.priorityList = res;
+        })
+    }
+}  

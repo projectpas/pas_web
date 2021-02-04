@@ -1,4 +1,5 @@
 ﻿<div [@fadeInOut] class="page-content work_order_cont">
+    <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
     <div class="right_col" role="main">
         <form #workOrderForm="ngForm">
             <div class="col-md-12">
@@ -1031,8 +1032,8 @@
             <div *ngIf="billing && quoteMaterialList && (gridActiveTab == 'billorInvoice') && !isSubWorkOrder"
                 [ngClass]="{hidedata : gridActiveTab !== 'billorInvoice'}">
                 <!-- workOrderMaterialList -->
-                <app-work-order-billing [billingorInvoiceForm]="billing" [legalEntityList]="legalEntityList"
-                    [currencyList]="currencyList" [savedWorkOrderData]="savedWorkOrderData" 
+                <app-work-order-billing [billingorInvoiceForm]="billing" 
+                    [savedWorkOrderData]="savedWorkOrderData" 
                     [employeesOriginalData]="employeesOriginalData" [isEditBilling]="isEditBilling" [isbillingNotCreated]="isbillingNotCreated"
                     (saveWOBilling)="saveWorkOrderBilling($event)" (updateWOBilling)="saveWorkOrderBilling($event)"
                     [workOrderQuoteId]="workOrderQuoteId" [quoteExclusionList]="quoteExclusionList" [workFlowWorkOrderId]="workFlowWorkOrderId"

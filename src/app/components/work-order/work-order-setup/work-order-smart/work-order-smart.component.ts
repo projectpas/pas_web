@@ -36,7 +36,7 @@ export class WorkOrderSmartComponent implements OnInit {
     creditTerms: any;
     employeesOriginalData: any;
     techStationList: any;
-    workScopesList: { label: string; value: number; }[];
+    // workScopesList: { label: string; value: number; }[];
     workOrderStagesList: any;
     priorityList: any;
     workOrderTypes: any;
@@ -95,21 +95,21 @@ export class WorkOrderSmartComponent implements OnInit {
             this.getAllWorkOrderStatus();
             this.getAllCreditTerms();
         
-            this.getAllTecStations();
+            // this.getAllTecStations();
             this.getJobTitles();
-            this.getAllWorkScpoes();
+            // this.getAllWorkScpoes();
             this.getAllWorkOrderStages();
             this.getAllExpertiseType();
-            this.getAllPriority();
-            this.getCurrency();
-            this.getLegalEntity();
+            // this.getAllPriority();
+            // this.getCurrency();
+            // this.getLegalEntity();
             if(this.isSubWorkOrder==false){
-            this.getConditionsList();
+            // this.getConditionsList();
             }else{
                 this.conditionList=this.conditionListfromSubWo;
-                setTimeout(()=>{
-                    this.isSpinnerEnable = true;
-                },2000)
+                // setTimeout(()=>{
+                //     this.isSpinnerEnable = true;
+                // },2000)
 }
 
         if (this.isSubWorkOrder) {
@@ -129,9 +129,10 @@ export class WorkOrderSmartComponent implements OnInit {
 
                 this.recCustomerId = 0;
             }
+            this.isSpinnerEnable = true;
  this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 setTimeout(()=>{
-                    this.isSpinnerEnable = true;
+                    this.isSpinnerEnable = false;
                 },2000)
               this.getPartNosByCustomer(res.customerId, 0);
                 this.isEdit = true;
@@ -186,7 +187,7 @@ export class WorkOrderSmartComponent implements OnInit {
       }
     getWorkOrderDefaultSetting(value?) {
       const  value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
-        this.commonService.workOrderDefaultSettings(this.masterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res.length > 0) {
                 const data = res[0];
                 this.workorderSettings=res[0];
@@ -302,26 +303,6 @@ export class WorkOrderSmartComponent implements OnInit {
  
 
 
-    async getAllTecStations() {
-        await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.techStationList = res.map(x => {
-                return {
-                    ...x,
-                    techStationId: x.value,
-                    name: x.label
-                }
-            });
-        })
-    }
-
-    getAllWorkScpoes(): void {
-     this.commonService.smartDropDownList('WorkScope', 'WorkScopeId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.workScopesList = res;
-
-        })
-    }
-
-
     getAllWorkOrderStages(): void {
         this.workOrderService.getWorkOrderStageAndStatus().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
            this.workOrderStagesList = res.map(x => {
@@ -331,21 +312,22 @@ export class WorkOrderSmartComponent implements OnInit {
                     label: x.workOrderStage
                 }
             });
+            this.isSpinnerEnable = false;
         })
     }
 
-    getAllPriority() {
-        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.priorityList = res;
-        })
-    }
+    // getAllPriority() {
+    //     this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.priorityList = res;
+    //     })
+    // }
 
 
-    getMultiplePartsNumbers() {
-        this.workOrderService.getMultipleParts().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.partNumberOriginalData = res;
-        })
-    }
+    // getMultiplePartsNumbers() {
+    //     this.workOrderService.getMultipleParts().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.partNumberOriginalData = res;
+    //     })
+    // }
 
 
     async getPartNosByCustomer(customerId, workOrderId) {
@@ -355,38 +337,20 @@ export class WorkOrderSmartComponent implements OnInit {
         });
     }
 
-    getCurrency() {
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'symbol').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.currencyList = res;
-        })
-    }
+    // getCurrency() {
+    //     this.commonService.smartDropDownList('Currency', 'CurrencyId', 'symbol').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.currencyList = res;
+    //     })
+    // }
 
-    getLegalEntity() {
-        this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.legalEntityList = res;
-        })
+    // getLegalEntity() {
+    //     this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.legalEntityList = res;
+    //     })
 
-    }
+    // }
 
 
-    getConditionsList() { 
-        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.conditionList = res;
-
-            const conditionId = res.find(x => x.label.includes('As Removed'));
-            this.workOrderGeneralInformation = {
-                ...this.workOrderGeneralInformation,
-                partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
-                    return {
-                        ...x,
-                        conditionId: conditionId !== undefined ? conditionId.value : null
-                    }
-                })
-            }
-            setTimeout(()=>{
-                this.isSpinnerEnable = true;
-            },2000)
-        })
-    }
+ 
 
 }
