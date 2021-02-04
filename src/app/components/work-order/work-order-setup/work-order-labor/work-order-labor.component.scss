@@ -47,6 +47,10 @@ select:disabled{
 p-radioButton label{
   width: unset;
 }
+.p-radiobutton-label-horizontal .ui-radiobutton-label {
+  width: unset !important;
+  margin-right: 10px;
+}
 
 .emp-labour-cstm p-autocomplete .ui-autocomplete {
   width: calc(100% - 17px) !important;

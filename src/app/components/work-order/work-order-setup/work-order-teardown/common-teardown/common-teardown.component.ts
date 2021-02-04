@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
-declare var $ : any;
+declare var $: any;
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { WorkOrderService } from '../../../../../services/work-order/work-order.service';
@@ -25,22 +25,22 @@ export class CommonTeardownComponent implements OnInit {
     updatedDate = new Date()
     technicianOriginalList = [];
     inspectorsOriginalList = [];
-    checkMandatoryFields:boolean=false;
-    isSpinnerVisible:boolean = false;
-    showViewTemplate:boolean=false;
+    checkMandatoryFields: boolean = false;
+    isSpinnerVisible: boolean = false;
+    showViewTemplate: boolean = false;
     @Input() workOrderId;
     @Input() isEdit;
     @Input() jobTitles;
     @Input() workFlowWorkOrderId;
-    @Input() getsaveTearDownData; 
+    @Input() getsaveTearDownData;
     @Input() tearDownReasons;
-    @Input() isView:boolean=false;
+    @Input() isView: boolean = false;
     @Input() workOrderGeneralInformation: any = {};
-    @Input() savedWorkOrderData:any;
-    @Input() isSubWorkOrder:boolean=false;
-    @Input() subWOPartNoId:any;
-    @Input() subWorkOrderDetails:any;
-    workFlowWorkOrderIdEdited:any;
+    @Input() savedWorkOrderData: any;
+    @Input() isSubWorkOrder: boolean = false;
+    @Input() subWOPartNoId: any;
+    @Input() subWorkOrderDetails: any;
+    workFlowWorkOrderIdEdited: any;
     teadownTypesList: any;
     RemovalReasonsList: any;
     additionalComments: any;
@@ -55,7 +55,7 @@ export class CommonTeardownComponent implements OnInit {
     prelinnaryReview: any;
     woSettingsTeardownsList: any = [];
     constructor(private workOrderService: WorkOrderService, private authService: AuthService,
-        private alertService: AlertService, private commonService: CommonService, ) {
+        private alertService: AlertService, private commonService: CommonService,) {
     }
 
     ngOnInit(): void {
@@ -67,65 +67,65 @@ export class CommonTeardownComponent implements OnInit {
         this.getTechnicianList();
         this.getInspectiorsList();
         this.getTearDownListFromWOSettings();
-        console.log("viewData",this.getsaveTearDownData)
-        if(this.getsaveTearDownData && this.getsaveTearDownData.length != 0 &&  this.getsaveTearDownData  !=undefined && this.getsaveTearDownData  !=null && this.getsaveTearDownData  !='' ){
-            this.showViewTemplate=true;
-            console.log("view in ngonInt",this.showViewTemplate);
+        // console.log("viewData",this.getsaveTearDownData)
+        if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != undefined && this.getsaveTearDownData != null && this.getsaveTearDownData != '') {
+            this.showViewTemplate = true;
+            // console.log("view in ngonInt",this.showViewTemplate);
         }
     }
 
-    getTearDownListFromWOSettings(){
-        this.workOrderService.getTearDownTypesFromWOSettings(this.workOrderGeneralInformation['masterCompanyId'] ? this.workOrderGeneralInformation['masterCompanyId'] :this.authService.currentUser.masterCompanyId, this.workOrderGeneralInformation['workOrderTypeId'] ? this.workOrderGeneralInformation['workOrderTypeId'] :1)
-        .subscribe(
-            res => {
-                if(res && res['result']){
-                    this.woSettingsTeardownsList = [];
+    getTearDownListFromWOSettings() {
+        this.workOrderService.getTearDownTypesFromWOSettings(this.workOrderGeneralInformation['masterCompanyId'] ? this.workOrderGeneralInformation['masterCompanyId'] : this.authService.currentUser.masterCompanyId, this.workOrderGeneralInformation['workOrderTypeId'] ? this.workOrderGeneralInformation['workOrderTypeId'] : 1)
+            .subscribe(
+                res => {
+                    if (res && res['result']) {
+                        this.woSettingsTeardownsList = [];
+                    }
+                    else if (res) {
+                        this.woSettingsTeardownsList = res;
+                    }
                 }
-                else if(res){
-                    this.woSettingsTeardownsList = res;
-                }
-            }
-        )
+            )
     }
 
-    checkForTeardownAvalabilityFromWO(name){
+    checkForTeardownAvalabilityFromWO(name) {
         let result = false;
         this.woSettingsTeardownsList.forEach(
             x => {
-                if(x['name'].toLowerCase() == name.toLowerCase()){
+                if (x['name'].toLowerCase() == name.toLowerCase()) {
                     result = true;
                 }
             }
         )
         return result;
     }
-    getReasonsByChecked(){
-        if(this.getsaveTearDownData){
-            if(this.getsaveTearDownData.isRemovalReasons){
+    getReasonsByChecked() {
+        if (this.getsaveTearDownData) {
+            if (this.getsaveTearDownData.isRemovalReasons) {
                 this.worOrderTearDownReasonListById(1);
-            }else if(this.getsaveTearDownData.isPmaDerBulletins){
+            } else if (this.getsaveTearDownData.isPmaDerBulletins) {
                 this.worOrderTearDownReasonListById(2);
-            }else if(this.getsaveTearDownData.isPreliinaryReview){
+            } else if (this.getsaveTearDownData.isPreliinaryReview) {
                 this.worOrderTearDownReasonListById(3);
-            }else if(this.getsaveTearDownData.isPreAssmentResults){
+            } else if (this.getsaveTearDownData.isPreAssmentResults) {
                 this.worOrderTearDownReasonListById(4);
-            }else if(this.getsaveTearDownData.isDiscovery){
+            } else if (this.getsaveTearDownData.isDiscovery) {
                 this.worOrderTearDownReasonListById(5);
-            }else if(this.getsaveTearDownData.isPreAssemblyInspection){
+            } else if (this.getsaveTearDownData.isPreAssemblyInspection) {
                 this.worOrderTearDownReasonListById(6);
-            }else if(this.getsaveTearDownData.isWorkPerformed){
+            } else if (this.getsaveTearDownData.isWorkPerformed) {
                 this.worOrderTearDownReasonListById(7);
-            }else if(this.getsaveTearDownData.isTestDataUsed){
+            } else if (this.getsaveTearDownData.isTestDataUsed) {
                 this.worOrderTearDownReasonListById(8);
-            }else if(this.getsaveTearDownData.isBulletinsModification){
+            } else if (this.getsaveTearDownData.isBulletinsModification) {
                 this.worOrderTearDownReasonListById(9);
-            }else if(this.getsaveTearDownData.isFinalTest){
+            } else if (this.getsaveTearDownData.isFinalTest) {
                 this.worOrderTearDownReasonListById(10);
-            }else if(this.getsaveTearDownData.isFinalInspection){
+            } else if (this.getsaveTearDownData.isFinalInspection) {
                 this.worOrderTearDownReasonListById(11);
-            }else if(this.getsaveTearDownData.isAdditionalComments){
+            } else if (this.getsaveTearDownData.isAdditionalComments) {
                 this.worOrderTearDownReasonListById(12);
-            }else{
+            } else {
                 this.worOrderTearDownReasonListById(1);
             }
         }
@@ -135,13 +135,13 @@ export class CommonTeardownComponent implements OnInit {
         // console.log("chnages",changes);
         this.technicianList = this.technicianOriginalList;
         if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != null) {
-              this.showViewTemplate=true;
-            console.log("view in ng onchanges",this.showViewTemplate);
+            this.showViewTemplate = true;
+            // console.log("view in ng onchanges",this.showViewTemplate);
             this.getReasonsByChecked();
             this.assignDatatoFields(this.getsaveTearDownData);
         } else {
             this.saveTearDownData = { ...new TearDown() };
-            this.showViewTemplate=false;
+            this.showViewTemplate = false;
         }
     }
     ngOnDestroy(): void {
@@ -185,7 +185,7 @@ export class CommonTeardownComponent implements OnInit {
                 // console.log("inspector", res);
             })
         }
-    } 
+    }
     getTechnicianList() {
         const id = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
         if (id !== undefined) {
@@ -201,55 +201,55 @@ export class CommonTeardownComponent implements OnInit {
     //         console.log("reasons list", res);
     //     })
     // }
-    getTeardownServicesList(){
+    getTeardownServicesList() {
         this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name').subscribe(res => {
             // console.log("tearodown types list",res);
-              this.teadownTypesList = res.map(x => {
-                  return {
-                      ...x,
-                      teardownTypeId: x.value,
-                      name: x.label
-                  }
-              });
+            this.teadownTypesList = res.map(x => {
+                return {
+                    ...x,
+                    teardownTypeId: x.value,
+                    name: x.label
+                }
+            });
             //   console.log("this.teardownList",this.teadownTypesList);
-          })
-      }
-      worOrderTearDownReasonListById(id){
-        this.workOrderService.worOrderTearDownReasonListById(id).subscribe(res => {
-this.deStructureReasonsData(id,res);
-      })
+        })
     }
-    deStructureReasonsData(id,data){
-    const dataForReasons = data.map(x => {
+    worOrderTearDownReasonListById(id) {
+        this.workOrderService.worOrderTearDownReasonListById(id).subscribe(res => {
+            this.deStructureReasonsData(id, res);
+        })
+    }
+    deStructureReasonsData(id, data) {
+        const dataForReasons = data.map(x => {
             return {
                 ...x,
                 value: x.teardownReasonId,
                 label: x.reason
             }
         });
-    if(id === 1){
-        this.RemovalReasonsList= dataForReasons;
-    }else if(id==3){
-        this.prelinnaryReview= dataForReasons
-    }else if(id==4){
-        this.preAssesmentResults= dataForReasons
-    }else if(id==5){
-        this.tearDownDescovery= dataForReasons
-    }else if(id==6){
-        this.preAssemblyInspection= dataForReasons
-    }else if(id==7){
-     this.workPerformed=  dataForReasons 
-    }else if(id==8){
-        this.testDataUsed= dataForReasons
-    }else if(id==9){
-        this.bullitensAndModifications= dataForReasons
-    }else if(id==10){
-        this.finalTest= dataForReasons
-    }else if(id==11){
-        this.finalInspection= dataForReasons
-    }else if(id==12){
-        this.additionalComments= dataForReasons
-    }
+        if (id === 1) {
+            this.RemovalReasonsList = dataForReasons;
+        } else if (id == 3) {
+            this.prelinnaryReview = dataForReasons
+        } else if (id == 4) {
+            this.preAssesmentResults = dataForReasons
+        } else if (id == 5) {
+            this.tearDownDescovery = dataForReasons
+        } else if (id == 6) {
+            this.preAssemblyInspection = dataForReasons
+        } else if (id == 7) {
+            this.workPerformed = dataForReasons
+        } else if (id == 8) {
+            this.testDataUsed = dataForReasons
+        } else if (id == 9) {
+            this.bullitensAndModifications = dataForReasons
+        } else if (id == 10) {
+            this.finalTest = dataForReasons
+        } else if (id == 11) {
+            this.finalInspection = dataForReasons
+        } else if (id == 12) {
+            this.additionalComments = dataForReasons
+        }
     }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -281,7 +281,7 @@ this.deStructureReasonsData(id,res);
     TearDownReasons: any;
     selectedReason(value, type) {
         // console.log("value",value)
-        if (value != 0) { 
+        if (value != 0) {
             this.workOrderService.getteardownreasonbyidData(value).subscribe(res => {
                 this.TearDownReasons = res;
                 if (this.TearDownReasons) {
@@ -309,91 +309,91 @@ this.deStructureReasonsData(id,res);
                         this.saveTearDownData.workOrderAdditionalComments.memo = this.TearDownReasons.memo;
                     }
                 }
-             })
+            })
         }
     }
-    tearDownView(){
-        this.isView=true;
-        this.workFlowWorkOrderId=this.workFlowWorkOrderId
+    tearDownView() {
+        this.isView = true;
+        this.workFlowWorkOrderId = this.workFlowWorkOrderId
         // console.log("this is true",this.workFlowWorkOrderId);
     }
-    checkValue(event,source,type){
-// console.log("event check value",event,source, type);
-if(event.target.checked && type !=2){
-    this.worOrderTearDownReasonListById(type);
-}
-if(type==1){
-    source.reasonId=0;
-    source.memo='';
-    // this.saveTearDownData.isRemovalReasons=true;
-}else if(type==2){
-    source.airworthinessDirecetives='';
-    source.mandatoryService='';
-    source.requestedService='';
-    source.serviceLetters='';
-    source.pmaParts='';
-    source.derRepairs='';
-}else if(type==3){
-    source.memo='';
-    source.reasonId=0;
-    source.inspectorId=0;
-    source.inspectorDate=new Date(); 
-}
-else if(type==4){
-    source.reasonId=0;
-    source.memo='';
-    source.technicianId=0;
-    source.inspectorId=0;
-    source.technicianDate=new Date();
-}else if(type==5){
+    checkValue(event, source, type) {
+        // console.log("event check value",event,source, type);
+        if (event.target.checked && type != 2) {
+            this.worOrderTearDownReasonListById(type);
+        }
+        if (type == 1) {
+            source.reasonId = 0;
+            source.memo = '';
+            // this.saveTearDownData.isRemovalReasons=true;
+        } else if (type == 2) {
+            source.airworthinessDirecetives = '';
+            source.mandatoryService = '';
+            source.requestedService = '';
+            source.serviceLetters = '';
+            source.pmaParts = '';
+            source.derRepairs = '';
+        } else if (type == 3) {
+            source.memo = '';
+            source.reasonId = 0;
+            source.inspectorId = 0;
+            source.inspectorDate = new Date();
+        }
+        else if (type == 4) {
+            source.reasonId = 0;
+            source.memo = '';
+            source.technicianId = 0;
+            source.inspectorId = 0;
+            source.technicianDate = new Date();
+        } else if (type == 5) {
 
-    source.reasonId=0;
-    source.memo='';
-    source.technicianId=0;
-    source.technicianDate=new Date();
-    source.inspectorId=0;
-    source.inspectorDate=new Date();
-}
-else if(type==6){
-    source.memo='';
-    source.reasonId=0;
-    source.technicianId=0;
-    source.technicianDate=new Date();
-    source.inspectorId=0;
-    source.inspectorDate=new Date();
-}else if(type==7){
-    source.reasonId=0;
-    source.memo='';
-    source.technicianId=0;
-    source.technicianDate=new Date();
-    source.inspectorId=0;
-    source.inspectorDate=new Date();
-}
-else if(type==8){
-    source.reasonId=0;
-    source.memo='';
-}else if(type==9){
-    source.reasonId=0;
-    source.memo='';
-}else if(type==10){
-    source.reasonId=0;
-    source.memo='';
-    source.technicianId=0;
-    source.technicianDate=new Date();
-    source.inspectorId=0;
-    source.inspectorDate=new Date();
-}else if(type==11){
-    source.reasonId=0;                  
-    source.memo='';
-    source.inspectorId=0;
-    source.inspectorDate=new Date();
-}
-else if(type==12){
-    source.reasonId=0;
-    source.memo='';
-}
-}
-  createTearDownData(form:NgForm) {
+            source.reasonId = 0;
+            source.memo = '';
+            source.technicianId = 0;
+            source.technicianDate = new Date();
+            source.inspectorId = 0;
+            source.inspectorDate = new Date();
+        }
+        else if (type == 6) {
+            source.memo = '';
+            source.reasonId = 0;
+            source.technicianId = 0;
+            source.technicianDate = new Date();
+            source.inspectorId = 0;
+            source.inspectorDate = new Date();
+        } else if (type == 7) {
+            source.reasonId = 0;
+            source.memo = '';
+            source.technicianId = 0;
+            source.technicianDate = new Date();
+            source.inspectorId = 0;
+            source.inspectorDate = new Date();
+        }
+        else if (type == 8) {
+            source.reasonId = 0;
+            source.memo = '';
+        } else if (type == 9) {
+            source.reasonId = 0;
+            source.memo = '';
+        } else if (type == 10) {
+            source.reasonId = 0;
+            source.memo = '';
+            source.technicianId = 0;
+            source.technicianDate = new Date();
+            source.inspectorId = 0;
+            source.inspectorDate = new Date();
+        } else if (type == 11) {
+            source.reasonId = 0;
+            source.memo = '';
+            source.inspectorId = 0;
+            source.inspectorDate = new Date();
+        }
+        else if (type == 12) {
+            source.reasonId = 0;
+            source.memo = '';
+        }
+    }
+    createTearDownData(form: NgForm) {
         // console.log("save form",form.valid);
         this.saveTearDownData = {
             ...this.saveTearDownData,
@@ -402,7 +402,7 @@ else if(type==12){
             updatedDate: this.updatedDate,
             createdBy: this.userName,
             updatedBy: this.userName,
-            
+
         }
         this.saveTearDownData.workOrderPreAssmentResults.technicianId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreAssmentResults.technicianId);
         this.saveTearDownData.workOrderPreAssmentResults.inspectorId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreAssmentResults.inspectorId);
@@ -417,87 +417,87 @@ else if(type==12){
         this.saveTearDownData.workOrderFinalInspection.inspectorId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderFinalInspection.inspectorId);
         this.saveTearDownData.workOrderPreliinaryReview.inspectorId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreliinaryReview.inspectorId);
         const data = this.saveTearDownData;
-     if(this.isSubWorkOrder==true){
-        //  console.log("sub Data",this.subWorkOrderDetails)
-        this.saveTearDownData.subWOPartNoId=this.subWOPartNoId,
-        this.saveTearDownData.subWorkOrderId=this.subWorkOrderDetails.subWorkOrderId;
-        this.saveTearDownData.workOrderId= this.subWorkOrderDetails.workOrderId;
-     }
+        if (this.isSubWorkOrder == true) {
+            //  console.log("sub Data",this.subWorkOrderDetails)
+            this.saveTearDownData.subWOPartNoId = this.subWOPartNoId,
+                this.saveTearDownData.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId;
+            this.saveTearDownData.workOrderId = this.subWorkOrderDetails.workOrderId;
+        }
         // if (form.validation) {
-            // alert("service success")
-  
-    // }
-    // console.log("tear down saved data",this.saveTearDownData)
-    if(this.saveTearDownData.isRemovalReasons ==true && (this.saveTearDownData.workOrderRemovalReasons.memo == '' || this.saveTearDownData.workOrderRemovalReasons.reasonId == 0)){
-        this.checkMandatoryFields=true;
-        // console.log("alert 1")
-return this.validator();
-    }else if(this.saveTearDownData.isPmaDerBulletins ==true && (this.saveTearDownData.workOrderPmaDerBulletins.airworthinessDirecetives == '' || this.saveTearDownData.workOrderPmaDerBulletins.mandatoryService == '' || this.saveTearDownData.workOrderPmaDerBulletins.requestedService == '' || this.saveTearDownData.workOrderPmaDerBulletins.serviceLetters == '' || this.saveTearDownData.workOrderPmaDerBulletins.pmaParts == '' || this.saveTearDownData.workOrderPmaDerBulletins.derRepairs == '' )){
-        this.checkMandatoryFields=true;
-        // console.log("alert 2")
-return this.validator();
-    }else if(this.saveTearDownData.isPreliinaryReview ==true && (this.saveTearDownData.workOrderPreliinaryReview.memo == '' || this.saveTearDownData.workOrderPreliinaryReview.reasonId == 0 || this.saveTearDownData.workOrderPreliinaryReview.inspectorId == 0)){
-        this.checkMandatoryFields=true;
-        // console.log("alert 3")
-        return this.validator();  
-    }else if(this.saveTearDownData.isPreAssmentResults ==true && (this.saveTearDownData.workOrderPreAssmentResults.memo == '' || this.saveTearDownData.workOrderPreAssmentResults.reasonId == 0 || this.saveTearDownData.workOrderPreAssmentResults.technicianId == 0 || this.saveTearDownData.workOrderPreAssmentResults.inspectorId == 0)){
-        this.checkMandatoryFields=true;
-        // console.log("alert 4")
-        return this.validator();  
-    }else if(this.saveTearDownData.isDiscovery ==true && (this.saveTearDownData.workOrderDiscovery.memo == '' || this.saveTearDownData.workOrderDiscovery.reasonId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == 0 || this.saveTearDownData.workOrderDiscovery.inspectorId == 0)){
-        this.checkMandatoryFields=true;
-        console.log("alert 5")
-        return this.validator();
-    }else if(this.saveTearDownData.isPreAssemblyInspection ==true && (this.saveTearDownData.workOrderPreAssemblyInspection.memo == '' || this.saveTearDownData.workOrderPreAssemblyInspection.reasonId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == 0)){
-        // console.log("alert 6")
-        this.checkMandatoryFields=true;
-        return this.validator();
-    }
-    else if(this.saveTearDownData.isWorkPerformed ==true && (this.saveTearDownData.workOrderWorkPerformed.memo == '' || this.saveTearDownData.workOrderWorkPerformed.reasonId == 0 || this.saveTearDownData.workOrderWorkPerformed.technicianId == 0 || this.saveTearDownData.workOrderWorkPerformed.inspectorId == 0)){
-        // this.checkMandatoryFields=true;
-        // console.log("alert 7")
-        return this.validator();
-    }else if(this.saveTearDownData.isTestDataUsed ==true && (this.saveTearDownData.workOrderTestDataUsed.memo == '' || this.saveTearDownData.workOrderTestDataUsed.reasonId == 0)){
-        this.checkMandatoryFields=true;
-        // console.log("alert 8")
-        return this.validator();
-            } else if(this.saveTearDownData.isBulletinsModification ==true && (this.saveTearDownData.workOrderBulletinsModification.memo == '' || this.saveTearDownData.workOrderBulletinsModification.reasonId == 0)){
-                this.checkMandatoryFields=true;
-                // console.log("alert 9")
-                return this.validator();
-                    }else if(this.saveTearDownData.isFinalTest ==true && (this.saveTearDownData.workOrderFinalTest.memo == '' || this.saveTearDownData.workOrderFinalTest.reasonId == 0 || this.saveTearDownData.workOrderFinalTest.technicianId == 0 || this.saveTearDownData.workOrderFinalTest.inspectorId == 0)){
-                        this.checkMandatoryFields=true;
-                        // console.log("alert 10")
-                        return this.validator();  
-    }else if(this.saveTearDownData.isFinalInspection ==true && (this.saveTearDownData.workOrderFinalInspection.memo == '' || this.saveTearDownData.workOrderFinalInspection.reasonId == 0)){
-        this.checkMandatoryFields=true;
-        // console.log("alert 11")
-        return this.validator();
-    }else if(this.saveTearDownData.isAdditionalComments ==true && (this.saveTearDownData.workOrderAdditionalComments.memo == '' || this.saveTearDownData.workOrderAdditionalComments.reasonId == 0)){
-        this.checkMandatoryFields=true;
-        // console.log("alert 12")
-        return this.validator();
-            }
-            this.isSpinnerVisible = true;
-                  this.workOrderService.createworkOrderTearDownData(data,this.isSubWorkOrder).subscribe(res => {
+        // alert("service success")
+
+        // }
+        // console.log("tear down saved data",this.saveTearDownData)
+        if (this.saveTearDownData.isRemovalReasons == true && (this.saveTearDownData.workOrderRemovalReasons.memo == '' || this.saveTearDownData.workOrderRemovalReasons.reasonId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 1")
+            return this.validator();
+        } else if (this.saveTearDownData.isPmaDerBulletins == true && (this.saveTearDownData.workOrderPmaDerBulletins.airworthinessDirecetives == '' || this.saveTearDownData.workOrderPmaDerBulletins.mandatoryService == '' || this.saveTearDownData.workOrderPmaDerBulletins.requestedService == '' || this.saveTearDownData.workOrderPmaDerBulletins.serviceLetters == '' || this.saveTearDownData.workOrderPmaDerBulletins.pmaParts == '' || this.saveTearDownData.workOrderPmaDerBulletins.derRepairs == '')) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 2")
+            return this.validator();
+        } else if (this.saveTearDownData.isPreliinaryReview == true && (this.saveTearDownData.workOrderPreliinaryReview.memo == '' || this.saveTearDownData.workOrderPreliinaryReview.reasonId == 0 || this.saveTearDownData.workOrderPreliinaryReview.inspectorId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 3")
+            return this.validator();
+        } else if (this.saveTearDownData.isPreAssmentResults == true && (this.saveTearDownData.workOrderPreAssmentResults.memo == '' || this.saveTearDownData.workOrderPreAssmentResults.reasonId == 0 || this.saveTearDownData.workOrderPreAssmentResults.technicianId == 0 || this.saveTearDownData.workOrderPreAssmentResults.inspectorId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 4")
+            return this.validator();
+        } else if (this.saveTearDownData.isDiscovery == true && (this.saveTearDownData.workOrderDiscovery.memo == '' || this.saveTearDownData.workOrderDiscovery.reasonId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == 0 || this.saveTearDownData.workOrderDiscovery.inspectorId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 5")
+            return this.validator();
+        } else if (this.saveTearDownData.isPreAssemblyInspection == true && (this.saveTearDownData.workOrderPreAssemblyInspection.memo == '' || this.saveTearDownData.workOrderPreAssemblyInspection.reasonId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == 0)) {
+            // console.log("alert 6")
+            this.checkMandatoryFields = true;
+            return this.validator();
+        }
+        else if (this.saveTearDownData.isWorkPerformed == true && (this.saveTearDownData.workOrderWorkPerformed.memo == '' || this.saveTearDownData.workOrderWorkPerformed.reasonId == 0 || this.saveTearDownData.workOrderWorkPerformed.technicianId == 0 || this.saveTearDownData.workOrderWorkPerformed.inspectorId == 0)) {
+            // this.checkMandatoryFields=true;
+            // console.log("alert 7")
+            return this.validator();
+        } else if (this.saveTearDownData.isTestDataUsed == true && (this.saveTearDownData.workOrderTestDataUsed.memo == '' || this.saveTearDownData.workOrderTestDataUsed.reasonId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 8")
+            return this.validator();
+        } else if (this.saveTearDownData.isBulletinsModification == true && (this.saveTearDownData.workOrderBulletinsModification.memo == '' || this.saveTearDownData.workOrderBulletinsModification.reasonId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 9")
+            return this.validator();
+        } else if (this.saveTearDownData.isFinalTest == true && (this.saveTearDownData.workOrderFinalTest.memo == '' || this.saveTearDownData.workOrderFinalTest.reasonId == 0 || this.saveTearDownData.workOrderFinalTest.technicianId == 0 || this.saveTearDownData.workOrderFinalTest.inspectorId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 10")
+            return this.validator();
+        } else if (this.saveTearDownData.isFinalInspection == true && (this.saveTearDownData.workOrderFinalInspection.memo == '' || this.saveTearDownData.workOrderFinalInspection.reasonId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 11")
+            return this.validator();
+        } else if (this.saveTearDownData.isAdditionalComments == true && (this.saveTearDownData.workOrderAdditionalComments.memo == '' || this.saveTearDownData.workOrderAdditionalComments.reasonId == 0)) {
+            this.checkMandatoryFields = true;
+            // console.log("alert 12")
+            return this.validator();
+        }
+        this.isSpinnerVisible = true;
+        this.workOrderService.createworkOrderTearDownData(data, this.isSubWorkOrder).subscribe(res => {
             this.saveTearDownData = res;
             this.isSpinnerVisible = false;
-            this.showViewTemplate=true;
+            this.showViewTemplate = true;
             this.assignDatatoFields(this.saveTearDownData);
             this.alertService.showMessage(
-                '',' WorkOrder TearDown saved Successfully',
+                '', ' WorkOrder TearDown saved Successfully',
                 MessageSeverity.success
             );
         }, err => {
             this.isSpinnerVisible = false;
         })
     }
-    validator(){
-            this.alertService.showMessage(
-                'Alert',' Please Add Mandatory Fields',
-                MessageSeverity.success
-            );
-            return;
+    validator() {
+        this.alertService.showMessage(
+            'Alert', ' Please Add Mandatory Fields',
+            MessageSeverity.success
+        );
+        return;
     }
     assignDatatoFields(data) {
         if (data) {
