@@ -735,13 +735,13 @@
                         <h4 class="modal-title">Edit {{type==1 ? 'Notes' : 'Memo'}}</h4>
                     </div> 
                     <div class="modal-body">
-                        <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo"
+                        <p-editor [(ngModel)]="tempMemo" (ngModelChange)="memoValidate()" [style]="{'height':'320px'}" name="tempMemo"
                         required>
                     </p-editor>
                     </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" 
-                            
+                            [disabled]="disableForMemo"
                                 (click)="onSaveDescription()">
                                 Save
                             </button>
@@ -905,7 +905,11 @@
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === ' '}"
                             (click)="gridTabChange('subWO')">Sub-WO</a> 
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
+                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'communication'}"
+                        (click)="gridTabChange('communication')">Communication</a> 
+                    </li>
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'communication'}"
                             (click)="gridTabChange('communication')">Communication</a>
@@ -914,9 +918,8 @@
                             <a class="dropdown-item" (click)="selectedCommunicationTab='email'">Email</a>
                             <a class="dropdown-item" (click)="selectedCommunicationTab='phone'">Phone</a>
                             <a class="dropdown-item" (click)="selectedCommunicationTab='text'">Text</a>
-                            <!-- <a class="dropdown-item">Chat</a> -->
                         </div>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" id="pills-contact-tab" role="tab"
                             [ngClass]="{active : gridActiveTab === 'documents'}"
@@ -1067,8 +1070,8 @@
 
             </div>
 
-            <div [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
-                <div *ngIf="(selectedCommunicationTab == 'memo')">
+            <div *ngIf="(gridActiveTab == 'communication')" [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
+                <!-- <div *ngIf="(selectedCommunicationTab == 'memo')">
                     <app-memo [workOrderId]="workOrderId" [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" [selectedPartNumber]="selectedPartNumber" [customerContactList]="customerContactList" [isView]="isView || isViewForApprovedPart"></app-memo>
                 </div>
                 <div *ngIf="(selectedCommunicationTab == 'email')">
@@ -1079,13 +1082,18 @@
                 </div>
                 <div *ngIf="(selectedCommunicationTab == 'phone')">
                     <app-phone [workOrderId]="workOrderId" [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" [selectedPartNumber]="selectedPartNumber" [customerContactList]="customerContactList" [isView]="isView || isViewForApprovedPart"></app-phone>
-                </div>
+                </div> -->
+                <app-communication [isViewMode]="false"   [idForContact]="workOrderGeneralInformation.customerId" [type]="1" 
+                [moduleName]="moduleNamee"  [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"></app-communication>
             </div>
             <div *ngIf="documents && (gridActiveTab == 'documents')"
                 [ngClass]="{hidedata: gridActiveTab !== 'documents'}">
-                <app-work-order-documents [documentForm]="documents" [workFlowWorkOrderId]="workFlowWorkOrderId" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
+                <!-- <app-work-order-documents [documentForm]="documents" [workFlowWorkOrderId]="workFlowWorkOrderId" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [savedWorkOrderData]="savedWorkOrderData" [documentsDestructuredData]="documentsDestructuredData" [isView]="isView || isViewForApprovedPart">
-                </app-work-order-documents>
+                </app-work-order-documents> -->
+                <div>
+                    <app-common-documents   [moduleName]="moduleNamee" [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
+                  </div> 
             </div>
 
 

@@ -37,6 +37,8 @@ import { MenuItem } from 'primeng/api';
     providers: [SalesOrderService]
 })
 export class WorkOrderAddComponent implements OnInit {
+    workOrderModule="WorkOrder";
+    subWorkOrderModule="SubWorkOrder"
     breadcrumbs: MenuItem[];
     @Input() isView: boolean = false;
     @Input() isEdit:boolean=false;
@@ -256,6 +258,8 @@ export class WorkOrderAddComponent implements OnInit {
     array:any=[];
     currentIndex:any;
     selectedMPNSubWo:any;
+    moduleNamee:any;
+    disableForMemo:boolean=false;
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -291,6 +295,7 @@ export class WorkOrderAddComponent implements OnInit {
         }    
         if(this.isEdit==true){
             this.disableSaveForEdit=true;
+            this.isDetailedView=true;
         }else{
             this.disableSaveForEdit=false;
         }
@@ -303,7 +308,9 @@ export class WorkOrderAddComponent implements OnInit {
         this.selectedCustomer = new Customer();
         if (!this.isSubWorkOrder) { // subWorkOrder false
          this.modifyWorkorderdata();
+        this.moduleNamee= this.workOrderModule;
         } else { 
+            this.moduleNamee= this.subWorkOrderModule;
             this.getAllCustomerContact(this.subWorkOrderDetails.customerId,'edit');
             this.workOrderId=this.workOrderId;
             this.mainWorkOrderId = this.subWorkOrderDetails.workOrderid;
@@ -3140,6 +3147,7 @@ this.restrictID=0;
       }
 
       onAddDescription(value) {
+          this.disableForMemo=true;
           this.type=value;
           this.tempMemo = "";
           if(value==1){
@@ -3315,5 +3323,9 @@ this.restrictID=0;
         this.commonService.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
            this.priorityList = res;
         })
+    }
+ 
+    memoValidate(){
+        this.disableForMemo=false;
     }
 }  

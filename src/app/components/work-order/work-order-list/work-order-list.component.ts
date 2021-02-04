@@ -21,6 +21,7 @@ import { Billing } from '../../../models/work-order-billing.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from "@angular/common";
 import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-details.model';
+import { MenuItem } from 'primeng/api';
 @Component({
     selector: 'app-work-order-list',
     templateUrl: './work-order-list.component.html',
@@ -31,6 +32,7 @@ import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-det
 /** WorkOrderList component*/
 export class WorkOrderListComponent implements OnInit {
     /** WorkOrderList ctor */
+    breadcrumbs: MenuItem[];
     workOrderData: any;
     isLoader: boolean = true;
     isView: boolean = true;
@@ -167,6 +169,10 @@ export class WorkOrderListComponent implements OnInit {
         this.moduleName = 'Work Order';
     }
     ngOnInit() {
+        this.breadcrumbs = [
+            { label: 'Work Order ' },
+            { label: 'Work Order List' },
+        ];
         this.getWorkOrderDefaultSetting();
         this.getCustomerWarningsList();
         this.getTaskList();
