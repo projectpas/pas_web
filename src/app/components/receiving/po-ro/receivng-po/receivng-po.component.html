@@ -905,6 +905,7 @@
                                                             <label>Expiration Date</label>
                                                             <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                          name="expirationDate"
+                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
                                                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].expirationDate">
                                                             </p-calendar>
@@ -948,6 +949,7 @@
                                                             <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         name="certifiedDueDate"
                                                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDueDate">
                                                             </p-calendar>
                                                         </div>
@@ -1391,6 +1393,25 @@
         </div>
     </div>
 </div>
+
+<ng-template class="modal fade" #rPOAlert let-c="close" let-d="dismiss" data-backdrop="static">    
+    <div class="modal-content"> 
+        <div class="modal-header">		
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">              
+            <h5 [ngStyle]="{'color':'red'}">                    
+                <div [innerHTML]="alertText"></div>                    
+            </h5>
+        </div>
+        <div class="modal-footer">
+            <button type="button"  class="btn btn-primary" (click)="dismissModel();">close</button>			
+        </div>
+    </div>    
+</ng-template>
 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

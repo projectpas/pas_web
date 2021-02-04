@@ -67,7 +67,7 @@ export class ShippingEndpoint extends EndpointFactory {
 
         return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.receiveParts(receiveParts));
+                return this.handleErrorCommon(error, () => this.receiveParts(receiveParts));
             });
 
     }

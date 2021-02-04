@@ -1,5 +1,6 @@
-﻿import { AppModuleEnum } from './../../../../enum/appmodule.enum';
-import { StockLine } from './../../repair-order/receiving-ro/RepairOrder.model';
+﻿import { ShippingVia } from './../../../../models/shipping-via';
+import { AppModuleEnum } from './../../../../enum/appmodule.enum';
+//import { StockLine } from './../../repair-order/receiving-ro/RepairOrder.model';
 import { Component, OnInit } from '@angular/core';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { CreditTermsService } from '../../../../services/Credit Terms.service';
@@ -9,7 +10,7 @@ import { ConditionService } from '../../../../services/condition.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
 import { CurrencyService } from '../../../../services/currency.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router'
 import { EmployeeService } from '../../../../services/employee.service';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
@@ -43,7 +44,7 @@ import { DBkeys } from '../../../../services/db-Keys';
 import { AuthService } from '../../../../services/auth.service';
 import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
-import { AppModuleEnum } from '../../../../enum/appmodule.enum';
+
 
 
 @Component({
@@ -120,7 +121,9 @@ export class ReceivngPoComponent implements OnInit {
     companyModuleId: number = 0;   
     vendorModuleId: number = 0;   
     customerModuleId: number = 0;   
-    otherModuleId: number = 0;    
+    otherModuleId: number = 0; 
+    alertText: string = '';   
+    modal: NgbModalRef;
     constructor(public binservice: BinService,
         private purchaseOrderService: PurchaseOrderService,
         public manufacturerService: ManufacturerService,
@@ -183,13 +186,15 @@ export class ReceivngPoComponent implements OnInit {
             this.arrayCustlist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {        
-            for (let customer of response) {
-                var dropdown = new DropDownData();
-                dropdown.Key = customer.value.toLocaleString();
-                dropdown.Value = customer.label
-                this.CustomerList.push(dropdown);
-            }
-            stockLine.filteredRecords = this.CustomerList;
+            stockLine.filteredRecords = [];
+            const data = response.map(x => {
+                return {
+                    Key: x.value.toString(),
+                    Value: x.label
+                }
+            });
+            this.CustomerList = data;    
+            stockLine.filteredRecords = this.CustomerList;                
          }, err => {
             this.isSpinnerVisible = false;
         });
@@ -199,6 +204,7 @@ export class ReceivngPoComponent implements OnInit {
         if (this.arrayVendlsit.length == 0) {
             this.arrayVendlsit.push(0); }
 		this.vendorService.getVendorNameCodeListwithFilter(filterVal,20,this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {			            
+            stockLine.filteredRecords = [];
             const data = res.map(x => {
                 return {
                     Key: x.vendorId,
@@ -212,18 +218,24 @@ export class ReceivngPoComponent implements OnInit {
 		});
     }
 
+    dismissModel() {		
+		this.modal.close();					
+    }
+
     getCompanyList(strText = '',stockLine) {
         if (this.arrayComplist.length == 0) {
             this.arrayComplist.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayComplist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-              for (let company of response) {
-                var dropdown = new DropDownData();
-                dropdown.Key = company.value.toLocaleString();
-                dropdown.Value = company.label
-                this.CompanyList.push(dropdown);
-            }             
-            stockLine.filteredRecords = this.CompanyList;  
+            stockLine.filteredRecords = [];
+            const data = response.map(x => {
+                return {
+                    Key: x.value.toString(),
+                    Value: x.label
+                }
+            });
+            this.CompanyList = data;    
+            stockLine.filteredRecords = this.CustomerList;     
         }, err => {
             this.isSpinnerVisible = false;
         });
@@ -381,6 +393,14 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
+                var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId)
+                if(!shippingVia || shippingVia == undefined)
+                {
+                 var shippingVia = new DropDownData(); 
+                 shippingVia.Key = this.poDataHeader.shipViaId.toString();
+                 shippingVia.Value = this.poDataHeader.shipVia.toString();
+                 this.ShippingViaList.push(shippingVia);
+                }  
             });
     }
 
@@ -681,13 +701,13 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.manufacturerId = part.itemMaster.manufacturerId;
             stockLine.visible = false;
             stockLine.shippingReference = '';
-            stockLine.shippingViaId = null;
-            stockLine.shelfId = null;
-            stockLine.warehouseId = null;
-            stockLine.binId = null;
+            stockLine.shippingViaId = this.poDataHeader.shipViaId;
+            stockLine.shelfId = 0;
+            stockLine.warehouseId = 0;
+            stockLine.binId = 0;
             stockLine.repairOrderId = null;
-            stockLine.locationId = null;
-            stockLine.shippingAccount = '';
+            stockLine.locationId = 0;
+            stockLine.shippingAccount = this.poDataHeader.shippingAccountNo;
             stockLine.conditionId = 0;
             stockLine.masterCompanyId = this.currentUserMasterCompanyId;
             stockLine.serialNumberNotProvided = false;
@@ -933,6 +953,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     onFilter(event, stockLine, type): void { 
+        debugger;
         if (event.query !== undefined && event.query !== null) { 
             if (type == AppModuleEnum.Customer) {           
                 this.getCustomers(event.query,stockLine);            
@@ -946,6 +967,7 @@ export class ReceivngPoComponent implements OnInit {
 
    
     onObtainFromChange(event, stockLine) {
+        debugger;
         stockLine.obtainFrom = '';
         stockLine.obtainFromObject = {};
 
@@ -1042,6 +1064,426 @@ export class ReceivngPoComponent implements OnInit {
             this.ownerother = false;
         }
     }
+
+    moveStockLinePage(type: string, index: number, part: PurchaseOrderPart): void {
+        var count = type == 'stockline' ? part.stocklineListObj.length : part.timeLifeList.length;
+        if (index >= 0 && index < count) {
+            // if (part.itemMaster.isSerialized) {
+            //     part.currentSLIndex = index;
+            // }
+            part.currentSLIndex = index;
+            part.currentSERIndex = index;
+            part.currentTLIndex = index;
+            
+        }
+    }
+
+    
+    moveStockLineMainPage(type: string, index: number, part: PurchaseOrderPart): void {
+        var count = type == 'stockline' ? part.stocklineListObj.length : part.timeLifeList.length;
+        if (index >= 0 && index < count) {
+            // if (part.itemMaster.isSerialized) {
+            part.currentSLIndex = index;
+            part.currentSERIndex = index;
+            part.currentTLIndex = index;
+            
+            // }
+            // part.currentSERIndex = index;
+            // part.currentTLIndex = index;
+        }
+    }
+
+    public paginatorFocusOut(event: any, part: PurchaseOrderPart): void {
+        if (event.target.value == '') {           
+            part.currentTLIndex = 0;
+            part.currentSERIndex = 0;
+            part.currentSLIndex = 0;
+        }
+    }
+
+    public gotoStockLineMainPage(event: any, part: PurchaseOrderPart): void {
+        let value = event.target.value;
+        let index: number = 0;
+        if (value == '') {
+            return;
+        }
+        index = Number.parseInt(value) - 1;
+        if (index < part.stocklineListObj.length && index >= 0) {
+            part.currentSLIndex = index;
+            part.currentSERIndex = index;
+            part.currentTLIndex = index; 
+        }
+        else {
+            this.alertService.showMessage(this.pageTitle, "Invalid stock line page", MessageSeverity.error);
+            event.target.value = "1";          
+            part.currentSLIndex = 0;
+            part.currentSERIndex = 0;
+            part.currentTLIndex = 0; 
+            return;
+        }
+    }
+
+    public gotoStockLinePage(event: any, part: PurchaseOrderPart): void {
+        let value = event.target.value;
+        let index: number = 0;
+        if (value == '') {
+            return;
+        }
+        index = Number.parseInt(value) - 1;
+        if (index < part.stocklineListObj.length && index >= 0) {
+            part.currentSLIndex = index;
+            part.currentSERIndex = index;
+            part.currentTLIndex = index;    
+        }
+        else {
+            this.alertService.showMessage(this.pageTitle, "Invalid stock line page", MessageSeverity.error);
+            event.target.value = "1";
+            part.currentSLIndex = index;
+            part.currentSERIndex = index;
+            part.currentTLIndex = index;    
+            return;
+        }
+    }
+
+    togglePartSerialized(part: PurchaseOrderPart): void {
+        this.isSpinnerVisible = true;
+        if (part.itemMaster.isSerialized == null) {
+            part.itemMaster.isSerialized == false;
+        }        
+        this.itemmaster.updateItemMasterSerialized(part.itemMaster.itemMasterId, part.itemMaster.isSerialized).subscribe(
+            result => {
+                var obj = part.stocklineListObj[this.currentSLIndex];               
+                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.partNumber == part.itemMaster.partNumber);
+                for (let childPart of childParts) {
+                    childPart.itemMaster.isSerialized = part.itemMaster.isSerialized;
+                }
+                this.isSpinnerVisible = false;
+                this.alertService.showMessage(this.pageTitle, "Part " + part.itemMaster.partNumber + " IsSerialized feature " + (part.itemMaster.isSerialized ? "enabled" : "disabled") + " successfully.", MessageSeverity.success);
+            },
+            error => {
+                this.isSpinnerVisible = false;
+                part.itemMaster.isSerialized = !part.itemMaster.isSerialized;
+                this.alertService.showMessage(this.pageTitle, 'Something went wrong while updating Item Master', MessageSeverity.error);
+            });
+    }
+
+    togglePartTimeLife(part: PurchaseOrderPart, event) {
+
+        if ((part.itemMaster.isSerialized == null || part.itemMaster.isSerialized == false) && part.itemMaster.isTimeLife == true) {
+            part.itemMaster.isTimeLife = false;
+            this.alertService.showMessage(this.pageTitle, "Part is not serialized, please make the part serialzed before making it timeLife.", MessageSeverity.error);
+            return false;
+        }
+        this.isSpinnerVisible = true;
+        this.itemmaster.updateItemMasterTimeLife(part.itemMaster.itemMasterId, part.itemMaster.isTimeLife).subscribe(
+            result => {
+                part.timeLifeList = [];
+                if (part.quantityActuallyReceived) {
+                    if (part.itemMaster.isTimeLife == true) {
+                        part.currentSLIndex = 0;
+                        part.currentSERIndex = 0;
+                        part.currentTLIndex = 0;
+                        for (var i = 0; i < part.quantityActuallyReceived; i++) {
+                            let timeLife: TimeLifeDraft = new TimeLifeDraft();
+                            timeLife.timeLifeDraftCyclesId = 0;
+                            timeLife.purchaseOrderId = part.purchaseOrderId;
+                            timeLife.purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
+                            timeLife.cyclesRemainingHrs = null;
+                            timeLife.cyclesRemainingMin = null;
+                            timeLife.cyclesSinceInspectionHrs = null;
+                            timeLife.cyclesSinceInspectionMin = null;
+                            timeLife.cyclesSinceNewHrs = null;
+                            timeLife.cyclesSinceNewMin = null;
+                            timeLife.cyclesSinceOVHHrs = null;
+                            timeLife.cyclesSinceOVHMin = null;
+                            timeLife.cyclesSinceRepairHrs = null;
+                            timeLife.cyclesSinceRepairMin = null;
+                            timeLife.timeRemainingHrs = null;
+                            timeLife.timeRemainingMin = null;
+                            timeLife.timeSinceInspectionHrs = null;
+                            timeLife.timeSinceInspectionMin = null;
+                            timeLife.timeSinceNewHrs = null;
+                            timeLife.timeSinceNewMin = null;
+                            timeLife.timeSinceOVHHrs = null;
+                            timeLife.timeSinceOVHMin = null;
+                            timeLife.timeSinceRepairHrs = null;
+                            timeLife.timeSinceRepairMin = null;
+                            timeLife.lastSinceNewHrs = null;
+                            timeLife.lastSinceNewMin = null;
+                            timeLife.lastSinceInspectionHrs = null;
+                            timeLife.lastSinceInspectionMin = null;
+                            timeLife.lastSinceOVHHrs = null;
+                            timeLife.lastSinceOVHMin = null;
+                            timeLife.detailsNotProvided = false;
+                            part.timeLifeList.push(timeLife);
+                        }
+                    }
+                }
+
+                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.partNumber == part.itemMaster.partNumber);
+                for (let childPart of childParts) {
+                    childPart.itemMaster.isTimeLife = part.itemMaster.isTimeLife;
+                }
+                this.isSpinnerVisible = false;
+                this.alertService.showMessage(this.pageTitle, "Part " + part.itemMaster.partNumber + " IsTimeLife feature " + (part.itemMaster.isTimeLife ? "enabled" : "disabled") + " successfully.", MessageSeverity.success);
+            },
+            error => {
+                this.isSpinnerVisible = false;
+                part.itemMaster.isSerialized = !part.itemMaster.isSerialized;
+                this.alertService.showMessage(this.pageTitle, 'Something went wrong while update Item Master', MessageSeverity.error);
+            });
+        this.receiving_po_header = false;
+    }
+
+    onSerialNumberNotProvided(stockLine: StockLine) {
+        stockLine.isDisabledSNboxes = !stockLine.isDisabledSNboxes;
+        stockLine.serialNumber = '';
+        stockLine.serialNumberNotProvided = !stockLine.serialNumberNotProvided;
+    }
+
+    onChangeTimeLife(part: PurchaseOrderPart) {
+        // part.timeLifeList[part.currentTLIndex].detailsNotProvided = part.detailsNotProvided;
+        part.timeLifeList[part.currentTLIndex].timeLifeDraftCyclesId = 0;
+        part.timeLifeList[part.currentTLIndex].purchaseOrderId = part.purchaseOrderId;
+        part.timeLifeList[part.currentTLIndex].purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
+        part.timeLifeList[part.currentTLIndex].cyclesRemainingHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesRemainingMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceNewHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceNewMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceOVHHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceOVHMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceRepairHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceRepairMin = null;
+        part.timeLifeList[part.currentTLIndex].timeRemainingHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeRemainingMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceInspectionHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceInspectionMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceNewHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceNewMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceOVHHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceOVHMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceRepairHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceRepairMin = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceNewHrs = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceNewMin = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceInspectionHrs = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceInspectionMin = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceOVHHrs = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceOVHMin = null;
+    }
+
+    onSubmitToReceive() {
+        let errorMessages: string[] = this.validatePage();
+        this.alertText = '';
+        var index = 0;
+        if (errorMessages.length > 0) {
+            for(let i=0; i < errorMessages.length; i++) {
+                this.alertText = this.alertText + errorMessages[i] + "<br/>"
+            }
+            // this.isSpinnerVisible = false;
+			// this.modal = this.modalService.open('rPOAlert', { size: 'sm', backdrop: 'static', keyboard: false });												
+			// return;
+            this.alertService.showMessage(this.pageTitle, this.alertText, MessageSeverity.error);
+            return;
+        }
+        let partsToPost: ReceiveParts[] = this.extractAllAllStockLines();
+        this.isSpinnerVisible = true;
+        this.shippingService.receiveParts(partsToPost).subscribe(data => {
+            this.isSpinnerVisible = false;
+            this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
+            this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
+            return;
+            //this.route.navigate([`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`]);
+        },err=>{
+          this.isSpinnerVisible = false;}
+        );
+
+    }
+
+    
+    validatePage() {
+        let partsToFetch: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
+        let errorMessages: string[] = [];
+
+        for (let item of partsToFetch) {
+            if (item.itemMaster.glAccountId == 0) {
+                errorMessages.push("Please select GL Account of Part No. " + item.itemMaster.partNumber);
+            }
+            if (item.conditionId == undefined || item.conditionId == 0) {
+                errorMessages.push("Please select Condition of Part No. " + item.itemMaster.partNumber);
+            }
+            if (item.quantityRejected == undefined || (item.quantityRejected != undefined && item.quantityRejected.toString() == '')) {
+                errorMessages.push("Please enter Quantity Rejected of Part No." + item.itemMaster.partNumber);
+            }
+            if (item.stocklineListObj == undefined || item.stocklineListObj.length == 0)
+                errorMessages.push("No part received for Part No." + item.itemMaster.PartNumber);
+
+            if (item.stocklineListObj == undefined || item.stocklineListObj.length == 0)
+                errorMessages.push("No part received for shippingViaId" + item.itemMaster.shippingViaId);
+
+            if (item.stocklineListObj == undefined || item.stocklineListObj.length == 0)
+                errorMessages.push("No part received for shipping Reference" + item.itemMaster.shippingReference);
+
+            var ofPartMsg = " of Part No. " + item.itemMaster.partNumber;
+            if (item.stocklineListObj != undefined && item.stocklineListObj.length > 0) {
+                for (var i = 0; i < item.stocklineListObj.length; i++) {
+                    item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
+                    item.stocklineListObj[i].conditionId = item.conditionId;
+                    item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
+                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
+                    item.stocklineListObj[i].isPMA = item.itemMaster.pma;
+                    item.stocklineListObj[i].isDER = item.itemMaster.der;
+                    item.stocklineListObj[i].purchaseOrderExtendedCost = item.stocklineListObj[i].purchaseOrderExtendedCost == undefined ||
+                        item.stocklineListObj[i].purchaseOrderExtendedCost.toString() == '' ? 0 :
+                        item.stocklineListObj[i].purchaseOrderExtendedCost;
+
+                    if (item.stocklineListObj[i].purchaseOrderUnitCost == undefined || (item.stocklineListObj[i].purchaseOrderUnitCost != undefined && item.stocklineListObj[i].purchaseOrderUnitCost.toString() == '')) {
+                        errorMessages.push("Please enter Unit Cost in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
+                    //item.stocklineListObj[i].oEM = item.itemMaster.oemPNId;
+                    if (item.stocklineListObj[i].managementStructureId == undefined || item.stocklineListObj[i].managementStructureId == 0) {
+                        errorMessages.push("Please select Management Structure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
+
+                    if (item.stocklineListObj[i].siteId == undefined || item.stocklineListObj[i].siteId == 0) {
+                        errorMessages.push("Please select Site in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
+
+
+                    if (item.stocklineListObj[i].shippingViaId == undefined || item.stocklineListObj[i].shippingViaId == 0) {
+                        errorMessages.push("Please select shipping Via in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
+
+                    if (item.stocklineListObj[i].shippingReference == undefined || item.stocklineListObj[i].shippingReference == '') {
+                        errorMessages.push("Please select shipping Reference in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                    }
+
+
+                    if (item.itemMaster.isSerialized == true) {
+                        item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined ? item.stocklineListObj[i].serialNumber.trim() : '';
+                        if (!item.stocklineListObj[i].serialNumberNotProvided && (item.stocklineListObj[i].serialNumber == undefined || item.stocklineListObj[i].serialNumber == '')) {
+                            errorMessages.push("Please enter Serial Number in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
+                        }
+                        if (!item.stocklineListObj[i].serialNumberNotProvided) {
+                            for (var j = i + 1; j < item.stocklineListObj.length; j++) {
+                                if (!item.stocklineListObj[i].serialNumberNotProvided && item.stocklineListObj[j].serialNumber == item.stocklineListObj[i].serialNumber) {
+                                    errorMessages.push("Duplicate Serial Number is entered in Stock Line Page " + (i + 1).toString() + " and Page " + (j + 1).toString());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (item.timeLifeList != undefined && item.timeLifeList.length > 0) {
+                // need to have some check to make sure atleast one field is entered.
+                for (var i = 0; i < item.timeLifeList.length; i++) {
+                    var timeLife = item.timeLifeList[i];
+                    if (timeLife.detailsNotProvided != true) {
+                        if (timeLife.cyclesRemainingHrs == null && timeLife.cyclesRemainingMin == null 
+                            && timeLife.cyclesSinceNewHrs == null 
+                            && timeLife.cyclesSinceNewMin == null 
+                            && timeLife.cyclesSinceOVHHrs == null 
+                            && timeLife.cyclesSinceOVHMin == null 
+                            && timeLife.cyclesSinceInspectionHrs == null 
+                            && timeLife.cyclesSinceInspectionMin == null 
+                            && timeLife.cyclesSinceRepairHrs == null 
+                            && timeLife.cyclesSinceRepairMin == null 
+                            && timeLife.timeRemainingHrs == null 
+                            && timeLife.timeRemainingMin == null 
+                            && timeLife.timeSinceNewHrs == null 
+                            && timeLife.timeSinceNewMin == null 
+                            && timeLife.timeSinceOVHHrs == null 
+                            && timeLife.timeSinceOVHMin == null 
+                            && timeLife.timeSinceInspectionHrs == null 
+                            && timeLife.timeSinceInspectionMin == null 
+                            && timeLife.timeSinceRepairHrs == null 
+                            && timeLife.timeSinceRepairMin == null 
+                            && timeLife.lastSinceNewHrs == null 
+                            && timeLife.lastSinceNewMin == null 
+                            && timeLife.lastSinceOVHHrs == null 
+                            && timeLife.lastSinceOVHMin == null 
+                            && timeLife.lastSinceInspectionHrs == null
+                             && timeLife.lastSinceInspectionMin == null) {
+                            errorMessages.push("Please enter atleast one field in Time Life Page - " + (i + 1).toString() + ofPartMsg);
+                        }
+                    }
+                }
+            }
+
+        }
+        return errorMessages;
+    }
+
+    
+    extractAllAllStockLines(): ReceiveParts[] {
+        let receiveParts: ReceiveParts[] = [];
+        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
+        for (let part of allParts) {
+            let receivePart: ReceiveParts = new ReceiveParts();
+            receivePart.itemMasterId = part.itemMaster.itemMasterId;
+            receivePart.isSerialized = part.itemMaster.isSerialized;
+            receivePart.purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
+            receivePart.stockLines = part.stocklineListObj;
+            receivePart.quantityActuallyReceived = part.quantityActuallyReceived ? parseInt(part.quantityActuallyReceived.toString()) : null;
+            receivePart.quantityRejected = part.quantityRejected;
+            receivePart.isSameDetailsForAllParts = part.isSameDetailsForAllParts ? part.isSameDetailsForAllParts : false;
+            receivePart.timeLife = this.getTimeLife(part.timeLifeList, part.purchaseOrderPartRecordId);
+            receiveParts.push(receivePart);
+        }
+        for (let part of allParts) {
+            for (let sl of part.stocklineListObj) {
+                sl.createdBy = this.userName;
+                sl.updatedBy = this.userName;
+                debugger;
+                if (sl.tagType && sl.tagType.length > 0) {
+                    for (let i = 0; i < sl.tagType.length; i++) {
+                        sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
+                    }
+                    sl.tagType = sl.tagType.join();
+                } else {
+                    sl.tagType = "";
+                }
+            }
+            if (part.isSameDetailsForAllParts) {
+                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                for (let slObj of part.stocklineListObj) {
+                    slObj = stockLineToCopy;
+                }
+            }
+        }
+        return receiveParts;
+    }
+
+    getTimeLife(timeLife, purchaseOrderPartRecordId) {
+        let tmLife = [];
+        tmLife = timeLife.map(x => {
+            return {
+                cyclesRemaining: ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00')),
+                timeRemaining: ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00')),
+                cyclesSinceNew: ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00')),
+                timeSinceNew: ((x.timeSinceNewHrs ? x.timeSinceNewHrs : '00') + ':' + (x.timeSinceNewMin ? x.timeSinceNewMin : '00')),
+                lastSinceNew: ((x.lastSinceNewHrs ? x.lastSinceNewHrs : '00') + ':' + (x.lastSinceNewMin ? x.lastSinceNewMin : '00')),
+                cyclesSinceOVH: ((x.cyclesSinceOVHHrs ? x.cyclesSinceOVHHrs : '00') + ':' + (x.cyclesSinceOVHMin ? x.cyclesSinceOVHMin : '00')),
+                timeSinceOVH: ((x.timeSinceOVHHrs ? x.timeSinceOVHHrs : '00') + ':' + (x.timeSinceOVHMin ? x.timeSinceOVHMin : '00')),
+                lastSinceOVH: ((x.lastSinceOVHHrs ? x.lastSinceOVHHrs : '00') + ':' + (x.lastSinceOVHMin ? x.lastSinceOVHMin : '00')),
+                cyclesSinceInspection: ((x.cyclesSinceInspectionHrs ? x.cyclesSinceInspectionHrs : '00') + ':' + (x.cyclesSinceInspectionMin ? x.cyclesSinceInspectionMin : '00')),
+                timeSinceInspection: ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00')),
+                lastSinceInspection: ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00')),
+                cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
+                timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
+                purchaseOrderPartRecordId: purchaseOrderPartRecordId,
+            }
+        })
+        return tmLife;
+    }
+
+  
+
+
+
 
 
 
@@ -1311,11 +1753,6 @@ export class ReceivngPoComponent implements OnInit {
             }
         }
     }
-
-    
-
-   
-
     private onDataLoadFailed(error: any): void {
         console.log(error);
         this.alertService.stopLoadingMessage();
@@ -1325,11 +1762,6 @@ export class ReceivngPoComponent implements OnInit {
     btnactive(event) {
 
     }
-
-  
-
-
-
 
     getManagementStructureOnEdit(part, stock) {
         this.commonService.getManagementStructureDetails(part.managementStructureId).subscribe(res => {
@@ -1355,22 +1787,7 @@ export class ReceivngPoComponent implements OnInit {
     //             }
     //         });
     //     })
-    // }
-
-
- 
-
-    public paginatorFocusOut(event: any, part: PurchaseOrderPart): void {
-        if (event.target.value == '') {
-            if (!part.isSameDetailsForAllParts) {
-                part.currentSLIndex = 0;
-                part.currentSERIndex = 0;
-            }
-
-            part.currentTLIndex = 0;
-            part.currentSERIndex = 0;
-        }
-    }
+    // } 
 
  
     getManagementDetails(stockLine) {
@@ -1378,83 +1795,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.CompanyList = res;
             console.log(stockLine.CompanyList);
         });
-    }
-
-    public gotoStockLineMainPage(event: any, part: PurchaseOrderPart): void {
-        let value = event.target.value;
-        let index: number = 0;
-        if (value == '') {
-            return;
-        }
-        index = Number.parseInt(value) - 1;
-        if (index < part.stocklineListObj.length && index >= 0) {
-            if (!part.isSameDetailsForAllParts) {
-                part.currentSLIndex = index;
-                // part.currentSERIndex = index;
-            }
-            // part.currentTLIndex = index;
-        }
-        else {
-            this.alertService.showMessage(this.pageTitle, "Invalid stock line page", MessageSeverity.error);
-            event.target.value = "1";
-            if (!part.isSameDetailsForAllParts) {
-                part.currentSLIndex = 0;
-                // part.currentSERIndex = 0;
-            }
-            // part.currentTLIndex = 0;
-            // part.currentSERIndex = 0;
-            return;
-        }
-    }
-
-    public gotoStockLinePage(event: any, part: PurchaseOrderPart): void {
-        let value = event.target.value;
-        let index: number = 0;
-        if (value == '') {
-            return;
-        }
-        index = Number.parseInt(value) - 1;
-        if (index < part.stocklineListObj.length && index >= 0) {
-            if (!part.isSameDetailsForAllParts && part.itemMaster.isSerialized) {
-                // part.currentSLIndex = index;
-                part.currentSERIndex = index;
-            }
-            part.currentTLIndex = index;
-        }
-        else {
-            this.alertService.showMessage(this.pageTitle, "Invalid stock line page", MessageSeverity.error);
-            event.target.value = "1";
-            if (!part.isSameDetailsForAllParts) {
-                // part.currentSLIndex = 0;
-                part.currentSERIndex = 0;
-            }
-            part.currentTLIndex = 0;
-            part.currentSERIndex = 0;
-            return;
-        }
-    }
-
-    moveStockLineMainPage(type: string, index: number, part: PurchaseOrderPart): void {
-        var count = type == 'stockline' ? part.stocklineListObj.length : part.timeLifeList.length;
-        if (index >= 0 && index < count) {
-            // if (part.itemMaster.isSerialized) {
-            part.currentSLIndex = index;
-            // }
-            // part.currentSERIndex = index;
-            // part.currentTLIndex = index;
-        }
-    }
-
-    moveStockLinePage(type: string, index: number, part: PurchaseOrderPart): void {
-        var count = type == 'stockline' ? part.stocklineListObj.length : part.timeLifeList.length;
-        if (index >= 0 && index < count) {
-            // if (part.itemMaster.isSerialized) {
-            //     part.currentSLIndex = index;
-            // }
-            part.currentSERIndex = index;
-            part.currentTLIndex = index;
-        }
-    }
+    } 
 
     getStockLineCompanies(stockLine: StockLine): void {
         var companies = this.managementStructure.filter(function (management) {
@@ -1647,231 +1988,13 @@ export class ReceivngPoComponent implements OnInit {
     
     
 
-    onSerialNumberNotProvided(stockLine: StockLine) {
-        stockLine.isDisabledSNboxes = !stockLine.isDisabledSNboxes;
-        stockLine.serialNumber = '';
-        stockLine.serialNumberNotProvided = !stockLine.serialNumberNotProvided;
-    }
-
-    onChangeTimeLife(part: PurchaseOrderPart) {
-        // part.timeLifeList[part.currentTLIndex].detailsNotProvided = part.detailsNotProvided;
-        part.timeLifeList[part.currentTLIndex].timeLifeDraftCyclesId = 0;
-        part.timeLifeList[part.currentTLIndex].purchaseOrderId = part.purchaseOrderId;
-        part.timeLifeList[part.currentTLIndex].purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
-        part.timeLifeList[part.currentTLIndex].cyclesRemainingHrs = null;
-        part.timeLifeList[part.currentTLIndex].cyclesRemainingMin = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionHrs = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionMin = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceNewHrs = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceNewMin = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceOVHHrs = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceOVHMin = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceRepairHrs = null;
-        part.timeLifeList[part.currentTLIndex].cyclesSinceRepairMin = null;
-        part.timeLifeList[part.currentTLIndex].timeRemainingHrs = null;
-        part.timeLifeList[part.currentTLIndex].timeRemainingMin = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceInspectionHrs = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceInspectionMin = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceNewHrs = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceNewMin = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceOVHHrs = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceOVHMin = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceRepairHrs = null;
-        part.timeLifeList[part.currentTLIndex].timeSinceRepairMin = null;
-        part.timeLifeList[part.currentTLIndex].lastSinceNewHrs = null;
-        part.timeLifeList[part.currentTLIndex].lastSinceNewMin = null;
-        part.timeLifeList[part.currentTLIndex].lastSinceInspectionHrs = null;
-        part.timeLifeList[part.currentTLIndex].lastSinceInspectionMin = null;
-        part.timeLifeList[part.currentTLIndex].lastSinceOVHHrs = null;
-        part.timeLifeList[part.currentTLIndex].lastSinceOVHMin = null;
-    }
-
-    onSubmitToReceive() {
-        let errorMessages: string[] = this.validatePage();
-        let msg = '';
-        var index = 0;
-        if (errorMessages.length > 0) {
-            this.alertService.showMessage(this.pageTitle, errorMessages[0], MessageSeverity.error);
-            return;
-        }
-        let partsToPost: ReceiveParts[] = this.extractAllAllStockLines();
-        this.shippingService.receiveParts(partsToPost).subscribe(data => {
-            this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
-            this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
-            return;
-            //this.route.navigate([`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`]);
-        },
-            error => {
-                var message = '';
-                if (error.error.constructor == Array) {
-                    message = error.error[0].errorMessage;
-                }
-                else {
-                    message = error.error.Message;
-                }
-                this.alertService.showMessage(this.pageTitle, message, MessageSeverity.error);
-            }
-        );
-
-    }
-
-    extractAllAllStockLines(): ReceiveParts[] {
-        let receiveParts: ReceiveParts[] = [];
-
-        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
-
-        for (let part of allParts) {
-            let receivePart: ReceiveParts = new ReceiveParts();
-            receivePart.itemMasterId = part.itemMaster.itemMasterId;
-            receivePart.isSerialized = part.itemMaster.isSerialized;
-            receivePart.purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
-            receivePart.stockLines = part.stocklineListObj;
-            receivePart.quantityActuallyReceived = part.quantityActuallyReceived ? parseInt(part.quantityActuallyReceived.toString()) : null;
-            receivePart.quantityRejected = part.quantityRejected;
-            receivePart.isSameDetailsForAllParts = part.isSameDetailsForAllParts ? part.isSameDetailsForAllParts : false;
-            // receivePart.timeLife = part.timeLifeList;;
-            receivePart.timeLife = this.getTimeLife(part.timeLifeList, part.purchaseOrderPartRecordId);
-            receiveParts.push(receivePart);
-        }
-        for (let part of allParts) {
-            for (let sl of part.stocklineListObj) {
-                sl.createdBy = this.userName;
-                sl.updatedBy = this.userName;
-                if (sl.tagType && sl.tagType.length > 0) {
-                    for (let i = 0; i < sl.tagType.length; i++) {
-                        sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                    }
-                    sl.tagType = sl.tagType.join();
-                } else {
-                    sl.tagType = "";
-                }
-            }
-            if (part.isSameDetailsForAllParts) {
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
-                for (let slObj of part.stocklineListObj) {
-                    slObj = stockLineToCopy;
-                }
-            }
-        }
-        return receiveParts;
-    }
-
-    getTimeLife(timeLife, purchaseOrderPartRecordId) {
-        let tmLife = [];
-        tmLife = timeLife.map(x => {
-            return {
-                cyclesRemaining: ((x.cyclesRemainingHrs ? x.cyclesRemainingHrs : '00') + ':' + (x.cyclesRemainingMin ? x.cyclesRemainingMin : '00')),
-                timeRemaining: ((x.timeRemainingHrs ? x.timeRemainingHrs : '00') + ':' + (x.timeRemainingMin ? x.timeRemainingMin : '00')),
-                cyclesSinceNew: ((x.cyclesSinceNewHrs ? x.cyclesSinceNewHrs : '00') + ':' + (x.cyclesSinceNewMin ? x.cyclesSinceNewMin : '00')),
-                timeSinceNew: ((x.timeSinceNewHrs ? x.timeSinceNewHrs : '00') + ':' + (x.timeSinceNewMin ? x.timeSinceNewMin : '00')),
-                lastSinceNew: ((x.lastSinceNewHrs ? x.lastSinceNewHrs : '00') + ':' + (x.lastSinceNewMin ? x.lastSinceNewMin : '00')),
-                cyclesSinceOVH: ((x.cyclesSinceOVHHrs ? x.cyclesSinceOVHHrs : '00') + ':' + (x.cyclesSinceOVHMin ? x.cyclesSinceOVHMin : '00')),
-                timeSinceOVH: ((x.timeSinceOVHHrs ? x.timeSinceOVHHrs : '00') + ':' + (x.timeSinceOVHMin ? x.timeSinceOVHMin : '00')),
-                lastSinceOVH: ((x.lastSinceOVHHrs ? x.lastSinceOVHHrs : '00') + ':' + (x.lastSinceOVHMin ? x.lastSinceOVHMin : '00')),
-                cyclesSinceInspection: ((x.cyclesSinceInspectionHrs ? x.cyclesSinceInspectionHrs : '00') + ':' + (x.cyclesSinceInspectionMin ? x.cyclesSinceInspectionMin : '00')),
-                timeSinceInspection: ((x.timeSinceInspectionHrs ? x.timeSinceInspectionHrs : '00') + ':' + (x.timeSinceInspectionMin ? x.timeSinceInspectionMin : '00')),
-                lastSinceInspection: ((x.lastSinceInspectionHrs ? x.lastSinceInspectionHrs : '00') + ':' + (x.lastSinceInspectionMin ? x.lastSinceInspectionMin : '00')),
-                cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
-                timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
-                purchaseOrderPartRecordId: purchaseOrderPartRecordId,
-            }
-        })
-        return tmLife;
-    }
-
-    validatePage() {
-        let partsToFetch: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
-        let errorMessages: string[] = [];
-
-        for (let item of partsToFetch) {
-            if (item.itemMaster.glAccountId == 0) {
-                errorMessages.push("Please select GL Account of Part No. " + item.itemMaster.partNumber);
-            }
-            if (item.conditionId == undefined || item.conditionId == 0) {
-                errorMessages.push("Please select Condition of Part No. " + item.itemMaster.partNumber);
-            }
-            if (item.quantityRejected == undefined || (item.quantityRejected != undefined && item.quantityRejected.toString() == '')) {
-                errorMessages.push("Please enter Quantity Rejected of Part No." + item.itemMaster.partNumber);
-            }
-            if (item.stocklineListObj == undefined || item.stocklineListObj.length == 0)
-                errorMessages.push("No part received for Part No." + item.itemMaster.PartNumber);
-
-            if (item.stocklineListObj == undefined || item.stocklineListObj.length == 0)
-                errorMessages.push("No part received for shippingViaId" + item.itemMaster.shippingViaId);
-
-            if (item.stocklineListObj == undefined || item.stocklineListObj.length == 0)
-                errorMessages.push("No part received for shipping Reference" + item.itemMaster.shippingReference);
-
-            var ofPartMsg = " of Part No. " + item.itemMaster.partNumber;
-            if (item.stocklineListObj != undefined && item.stocklineListObj.length > 0) {
-                for (var i = 0; i < item.stocklineListObj.length; i++) {
-                    item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
-                    item.stocklineListObj[i].conditionId = item.conditionId;
-                    item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
-                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
-                    item.stocklineListObj[i].isPMA = item.itemMaster.pma;
-                    item.stocklineListObj[i].isDER = item.itemMaster.der;
-                    item.stocklineListObj[i].purchaseOrderExtendedCost = item.stocklineListObj[i].purchaseOrderExtendedCost == undefined ||
-                        item.stocklineListObj[i].purchaseOrderExtendedCost.toString() == '' ? 0 :
-                        item.stocklineListObj[i].purchaseOrderExtendedCost;
-
-                    if (item.stocklineListObj[i].purchaseOrderUnitCost == undefined || (item.stocklineListObj[i].purchaseOrderUnitCost != undefined && item.stocklineListObj[i].purchaseOrderUnitCost.toString() == '')) {
-                        errorMessages.push("Please enter Unit Cost in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }
-
-                    //item.stocklineListObj[i].oEM = item.itemMaster.oemPNId;
-
-                    if (item.stocklineListObj[i].companyId == undefined || item.stocklineListObj[i].companyId == 0) {
-                        errorMessages.push("Please select Company in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }
-
-                    if (item.stocklineListObj[i].siteId == undefined || item.stocklineListObj[i].siteId == 0) {
-                        errorMessages.push("Please select Site in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }
-
-
-                    if (item.stocklineListObj[i].shippingViaId == undefined || item.stocklineListObj[i].shippingViaId == 0) {
-                        errorMessages.push("Please select shipping Via in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }
-
-                    if (item.stocklineListObj[i].shippingReference == undefined || item.stocklineListObj[i].shippingReference == '') {
-                        errorMessages.push("Please select shipping Reference in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                    }
-
-
-                    if (item.itemMaster.isSerialized == true) {
-                        item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined ? item.stocklineListObj[i].serialNumber.trim() : '';
-                        if (!item.stocklineListObj[i].serialNumberNotProvided && (item.stocklineListObj[i].serialNumber == undefined || item.stocklineListObj[i].serialNumber == '')) {
-                            errorMessages.push("Please enter Serial Number in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
-                        }
-                        if (!item.stocklineListObj[i].serialNumberNotProvided) {
-                            for (var j = i + 1; j < item.stocklineListObj.length; j++) {
-                                if (!item.stocklineListObj[i].serialNumberNotProvided && item.stocklineListObj[j].serialNumber == item.stocklineListObj[i].serialNumber) {
-                                    errorMessages.push("Duplicate Serial Number is entered in Stock Line Page " + (i + 1).toString() + " and Page " + (j + 1).toString());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (item.timeLifeList != undefined && item.timeLifeList.length > 0) {
-                // need to have some check to make sure atleast one field is entered.
-                for (var i = 0; i < item.timeLifeList.length; i++) {
-                    var timeLife = item.timeLifeList[i];
-                    if (timeLife.detailsNotProvided != true) {
-                        if (timeLife.cyclesRemainingHrs == null && timeLife.cyclesRemainingMin == null && timeLife.cyclesSinceNewHrs == null && timeLife.cyclesSinceNewMin == null && timeLife.cyclesSinceOVHHrs == null && timeLife.cyclesSinceOVHMin == null && timeLife.cyclesSinceInspectionHrs == null && timeLife.cyclesSinceInspectionMin == null && timeLife.cyclesSinceRepairHrs == null && timeLife.cyclesSinceRepairMin == null && timeLife.timeRemainingHrs == null && timeLife.timeRemainingMin == null && timeLife.timeSinceNewHrs == null && timeLife.timeSinceNewMin == null && timeLife.timeSinceOVHHrs == null && timeLife.timeSinceOVHMin == null && timeLife.timeSinceInspectionHrs == null && timeLife.timeSinceInspectionMin == null && timeLife.timeSinceRepairHrs == null && timeLife.timeSinceRepairMin == null && timeLife.lastSinceNewHrs == null && timeLife.lastSinceNewMin == null && timeLife.lastSinceOVHHrs == null && timeLife.lastSinceOVHMin == null && timeLife.lastSinceInspectionHrs == null && timeLife.lastSinceInspectionMin == null) {
-                            errorMessages.push("Please enter atleast one field in Time Life Page - " + (i + 1).toString() + ofPartMsg);
-                        }
-                    }
-                }
-            }
-
-        }
-        return errorMessages;
-    }
+   
 
   
+   
+
+  
+
 
   
 
@@ -1914,21 +2037,14 @@ export class ReceivngPoComponent implements OnInit {
     //     });
     // }
 
-   
-
-
     toggleSameDetailsForAllParts(part: PurchaseOrderPart): void {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
-
         if (part.isSameDetailsForAllParts) {
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
-                // var serialNumber = part.stocklineListObj[i].serialNumber;
-                // var serialNumberNotProvided = part.stocklineListObj[i].serialNumberNotProvided;
-
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
-                // part.stocklineListObj[i].serialNumber = serialNumber;
-                // part.stocklineListObj[i].serialNumberNotProvided = serialNumberNotProvided;
+                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                part.timeLifeList[i] = timeLifeToCopy;               
             }
         }
     }
@@ -1938,101 +2054,13 @@ export class ReceivngPoComponent implements OnInit {
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
+                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                part.timeLifeList[i] = timeLifeToCopy; 
             }
         }
     }
 
-    togglePartSerialized(part: PurchaseOrderPart): void {
-
-        if (part.itemMaster.isSerialized == null) {
-            part.itemMaster.isSerialized == false;
-        }
-        
-        this.itemmaster.updateItemMasterSerialized(part.itemMaster.itemMasterId, part.itemMaster.isSerialized).subscribe(
-            result => {
-                var obj = part.stocklineListObj[this.currentSLIndex];
-                // part.stocklineListObj = [];
-                // this.createStockLineItems(part);
-                // part.stocklineListObj[0] = obj;
-                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.partNumber == part.itemMaster.partNumber && !x.itemMaster.isParent);
-                for (let childPart of childParts) {
-                    childPart.itemMaster.isSerialized = part.itemMaster.isSerialized;
-                }
-                this.alertService.showMessage(this.pageTitle, "Part " + part.itemMaster.partNumber + " IsSerialized feature " + (part.itemMaster.isSerialized ? "enabled" : "disabled") + " successfully.", MessageSeverity.success);
-            },
-            error => {
-                part.itemMaster.isSerialized = !part.itemMaster.isSerialized;
-                this.alertService.showMessage(this.pageTitle, 'Something went wrong while updating Item Master', MessageSeverity.error);
-            });
-    }
-
-    togglePartTimeLife(part: PurchaseOrderPart, event) {
-
-        if ((part.itemMaster.isSerialized == null || part.itemMaster.isSerialized == false) && part.itemMaster.isTimeLife == true) {
-            part.itemMaster.isTimeLife = false;
-            this.alertService.showMessage(this.pageTitle, "Part is not serialized, please make the part serialzed before making it timeLife.", MessageSeverity.error);
-            return false;
-        }
-
-
-        this.itemmaster.updateItemMasterTimeLife(part.itemMaster.itemMasterId, part.itemMaster.isTimeLife).subscribe(
-            result => {
-                part.timeLifeList = [];
-                if (part.quantityActuallyReceived) {
-                    if (part.itemMaster.isTimeLife == true) {
-                        part.currentSLIndex = 0;
-                        part.currentSERIndex = 0;
-                        part.currentTLIndex = 0;
-                        for (var i = 0; i < part.quantityActuallyReceived; i++) {
-                            let timeLife: TimeLifeDraft = new TimeLifeDraft();
-                            timeLife.timeLifeDraftCyclesId = 0;
-                            timeLife.purchaseOrderId = part.purchaseOrderId;
-                            timeLife.purchaseOrderPartRecordId = part.purchaseOrderPartRecordId;
-                            timeLife.cyclesRemainingHrs = null;
-                            timeLife.cyclesRemainingMin = null;
-                            timeLife.cyclesSinceInspectionHrs = null;
-                            timeLife.cyclesSinceInspectionMin = null;
-                            timeLife.cyclesSinceNewHrs = null;
-                            timeLife.cyclesSinceNewMin = null;
-                            timeLife.cyclesSinceOVHHrs = null;
-                            timeLife.cyclesSinceOVHMin = null;
-                            timeLife.cyclesSinceRepairHrs = null;
-                            timeLife.cyclesSinceRepairMin = null;
-                            timeLife.timeRemainingHrs = null;
-                            timeLife.timeRemainingMin = null;
-                            timeLife.timeSinceInspectionHrs = null;
-                            timeLife.timeSinceInspectionMin = null;
-                            timeLife.timeSinceNewHrs = null;
-                            timeLife.timeSinceNewMin = null;
-                            timeLife.timeSinceOVHHrs = null;
-                            timeLife.timeSinceOVHMin = null;
-                            timeLife.timeSinceRepairHrs = null;
-                            timeLife.timeSinceRepairMin = null;
-                            timeLife.lastSinceNewHrs = null;
-                            timeLife.lastSinceNewMin = null;
-                            timeLife.lastSinceInspectionHrs = null;
-                            timeLife.lastSinceInspectionMin = null;
-                            timeLife.lastSinceOVHHrs = null;
-                            timeLife.lastSinceOVHMin = null;
-                            timeLife.detailsNotProvided = false;
-                            part.timeLifeList.push(timeLife);
-                        }
-                    }
-                }
-
-                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.partNumber == part.itemMaster.partNumber && !x.itemMaster.isParent);
-                for (let childPart of childParts) {
-                    childPart.itemMaster.isTimeLife = part.itemMaster.isTimeLife;
-                }
-                this.alertService.showMessage(this.pageTitle, "Part " + part.itemMaster.partNumber + " IsTimeLife feature " + (part.itemMaster.isTimeLife ? "enabled" : "disabled") + " successfully.", MessageSeverity.success);
-            },
-            error => {
-                part.itemMaster.isSerialized = !part.itemMaster.isSerialized;
-                this.alertService.showMessage(this.pageTitle, 'Something went wrong while update Item Master', MessageSeverity.error);
-            });
-        this.receiving_po_header = false;
-    }
-
+   
     quantityRejectedFocusOut(event, part) {
         if (event.target.value == "") {
             event.target.value = "0";
