@@ -21,6 +21,7 @@ import { Billing } from '../../../models/work-order-billing.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from "@angular/common";
 import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-details.model';
+import { MenuItem } from 'primeng/api';
 @Component({
     selector: 'app-work-order-list',
     templateUrl: './work-order-list.component.html',
@@ -155,6 +156,8 @@ export class WorkOrderListComponent implements OnInit {
     freight: any;
     isContractAvl: any;
     AuditDetails = SingleScreenAuditDetails;
+    breadcrumbs: MenuItem[];
+    home: any;
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private authService: AuthService,
@@ -165,6 +168,10 @@ export class WorkOrderListComponent implements OnInit {
         private datePipe: DatePipe
     ) {
         this.moduleName = 'Work Order';
+        this.breadcrumbs = [
+            { label: 'Work Order' },
+            { label: 'Work Order List' },
+        ];
     }
     ngOnInit() {
         this.getWorkOrderDefaultSetting();
@@ -1092,10 +1099,11 @@ export class WorkOrderListComponent implements OnInit {
                     return {
                         ...x,
                         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
-                        estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy') : '',
-                        estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy') : '',
-                        customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy') : '',
-                        promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy') : '',
+                        estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
 

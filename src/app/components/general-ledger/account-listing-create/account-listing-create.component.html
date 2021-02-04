@@ -7,7 +7,7 @@
                     {{editMode ? 'Edit' : 'Create' }} GL Account</h4>
             </div>
             <div>
-                <button type="button" class="btn-sm header-button" style="line-height:1; font-size:12px !important;" [routerLink]="[
+                <button type="button" class="btn-sm header-button" [routerLink]="[
             '/generalledgermodule/generalledgerpage/app-account-listing'
             ]">
                     GL Account List
@@ -22,7 +22,7 @@
             <div class="x_content">
                 <form #accountListCreateForm="ngForm">
                     <div class="tab-pane active" id="home">
-                        <div class="form-row" style="margin-left: 13px;margin-top: 10px;">
+                        <div class="form-row" class="account-listing-div">
                             <div class="col-md-3">
                                 <!-- <div class="form-group">
                                     <label class="">Ledger Name<span class="clr-red">*</span></label>
