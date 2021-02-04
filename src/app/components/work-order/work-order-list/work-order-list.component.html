@@ -696,8 +696,8 @@
                     <p-tabPanel header="Billing/Invocing">
                         <div class="h-300" *ngIf="billing">
                             <!-- <h3>No Data Found</h3> -->
-                            <app-work-order-billing [billingorInvoiceForm]="billing" [legalEntityList]="legalEntityList"
-                                [currencyList]="currencyList" [savedWorkOrderData]="savedWorkOrderData"
+                            <app-work-order-billing [billingorInvoiceForm]="billing" 
+                                [savedWorkOrderData]="savedWorkOrderData"
                                 [employeesOriginalData]="employeesOriginalData" [isEditBilling]="isEditBilling"
                                 (saveWOBilling)="saveWorkOrderBilling($event)"
                                 (updateWOBilling)="saveWorkOrderBilling($event)" [workOrderQuoteId]="workOrderQuoteId"
