@@ -483,7 +483,7 @@
                                                [(ngModel)]="workOrderPartNumber.quantity" disabled>
                                     </td>
                                     <td>
-                                        <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel"
+                                        <p-dropdown filter="true" placeholder="Select" name="scope{{i}}" #scope="ngModel"
                                         [options]="workScopesList" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                         [(ngModel)]="workOrderPartNumber.workOrderScopeId" [disabled]="isView || quotestatusofCurrentPart =='Approved'"
                                         (onChange)="getWorkFlowByPNandScope(workOrderPartNumber)" required appendTo="body">
@@ -516,7 +516,7 @@
                                                disabled>
                                     </td>
                                     <td>
-                                        <p-dropdown placeholder="Select" [options]="conditionList"  (ngModelChange)="getValid()"
+                                        <p-dropdown filter="true" placeholder="Select" [options]="conditionList"  (ngModelChange)="getValid()"
                                                     name="condition{{i}}" #condition="ngModel" (onChange)="selectedCondition($event.value,workOrderPartNumber,i)"
                                                     class="p-dropdown-custom-md" [(ngModel)]="workOrderPartNumber.conditionId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
@@ -553,28 +553,28 @@
                                                disabled>
                                     </td>
                                     <td>
-                                        <p-dropdown class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"
+                                        <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"
                                                     [options]="cmmList" class="p-dropdown-custom-md p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.cmmId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
                                         <span class="inline-block">
-                                            <p-dropdown [options]="workFlowList" name="workFlow{{i}}"
+                                            <p-dropdown filter="true" [options]="workFlowList" name="workFlow{{i}}"
                                                         #workFlow="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                         [(ngModel)]="workOrderPartNumber.workflowId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                             </p-dropdown>
                                         </span>
                                     </td>
                                     <td>
-                                        <p-dropdown [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel"  (ngModelChange)="getValid()"
+                                        <p-dropdown filter="true" [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel"  (ngModelChange)="getValid()"
                                                     placeholder="Select" class="p-dropdown-custom-md p-dropdown-mh120"
                                                     (onChange)="selectedStage($event.value,workOrderPartNumber,i)"
                                                     [(ngModel)]="workOrderPartNumber.workOrderStageId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
-                                        <p-dropdown [options]="workOrderStatusList" placeholder="Select"
+                                        <p-dropdown filter="true" [options]="workOrderStatusList" placeholder="Select"
                                                     name="status{{i}}" #status="ngModel"
                                                     class="p-dropdown-custom-md custome_pd-totext p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.workOrderStatusId" disabled required appendTo="body">
@@ -582,7 +582,7 @@
                                         <!-- <span>{{workOrderPartNumber.workOrderStatus}}</span> -->
                                     </td>
                                     <td>
-                                        <p-dropdown [options]="priorityList" placeholder="Select" name="priority{{i}}"
+                                        <p-dropdown filter="true" [options]="priorityList" placeholder="Select" name="priority{{i}}"
                                                     #priority="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.workOrderPriorityId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
@@ -647,7 +647,7 @@
                                         </p-autoComplete>
                                     </td>
                                     <td>
-                                        <p-dropdown placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel"  (ngModelChange)="getValid()"
+                                        <p-dropdown filter="true" placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel"  (ngModelChange)="getValid()"
                                                     [options]="techStationList" class="p-dropdown-custom-md p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.techStationId"[disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
