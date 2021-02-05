@@ -15,6 +15,27 @@ input[type="text"], input[type="number"], select {
 textarea {
     border-radius: 5px !important;
 }
+.serialized-left{
+    margin-left: 10px !important;
+}
+.stock-adjust{
+    position: relative !important;
+}
+.stock-adjust-check{
+    top: 6px !important; position: absolute !important;
+}
+.stock-adjust-check-header{
+    margin-left: 20px !important;
+}
+.remaining-width{
+    width: 55% !important;
+}
+.width-150{
+    width: 150px !important;
+}
+.vertical-top{
+    vertical-align: top !important;
+}
 table th {
     padding: 4px;
     text-align: center;
