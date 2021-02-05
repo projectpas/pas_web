@@ -181,8 +181,8 @@
                                         <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                         <thead>
                                             <tr>
-                                                <th>Code</th>
-                                                <th>Name</th>
+                                                <th>Code <span class="clr-red">*</span></th>
+                                                <th>Name <span class="clr-red">*</span></th>
                                                 <th>Description</th>
                                                 <th>IsActive</th>
                                                 <th>Created Date</th>
@@ -411,7 +411,7 @@
                         </div>
 
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Description : <span _ngcontent-c22="" class="clr-red">*</span> </label>
+                            <label class="control-label col-sm-4 text-left">Description :  </label>
                             <div class="col-sm-8">
                                 <div class="inner-addon right-addon inline-block"> {{managementViewData.description}} </div>
                             </div>

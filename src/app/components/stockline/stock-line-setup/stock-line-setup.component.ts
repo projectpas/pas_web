@@ -1418,7 +1418,7 @@ export class StockLineSetupComponent implements OnInit {
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
 			obtainFromName: this.stockLineForm.obtainFromType == 4 ? this.stockLineForm.obtainFrom : (this.stockLineForm.obtainFrom ? getValueFromObjectByKey('label', this.stockLineForm.obtainFrom) : ''),
-			obtainFrom:  this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
+			obtainFrom: this.stockLineForm.obtainFromType == 4 ? null : (this.stockLineForm.obtainFrom ? editValueAssignByCondition('value', this.stockLineForm.obtainFrom) : ''),
 			obtainFromType: this.stockLineForm.obtainFromType > 0 ? this.stockLineForm.obtainFromType : null,
 			ownerType: this.stockLineForm.ownerType > 0 ? this.stockLineForm.ownerType : null,
 			traceableToType: this.stockLineForm.traceableToType > 0 ? this.stockLineForm.traceableToType : null,
@@ -1879,6 +1879,9 @@ export class StockLineSetupComponent implements OnInit {
 
 	enableSave() {
 		this.disableSaveForEdit = false;
+		if (!this.stockLineForm.inspectionBy) {
+			this.stockLineForm.inspectionDate = null;
+		}
 	}
 
 	enableSaveDocument() {

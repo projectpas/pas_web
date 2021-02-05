@@ -13,7 +13,7 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                <div class="checkbox-cstm checkbox-cstm-d m-t-10" >
                                     <label>
                                         <input type="checkbox" name="isCustomerStock" [(ngModel)]="viewSLInfo.isCustomerStock" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -34,7 +34,7 @@
                                 <input class="form-control" type="text" name="revisedPart" [(ngModel)]="viewSLInfo.revisedPart" disabled>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="oem" [(ngModel)]="viewSLInfo.oem" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm">
-                                    <label style="width: 100%; margin-top: 10px;">
+                                    <label class="stock-line-check">
                                         <input type="checkbox" name="isPMA" [(ngModel)]="viewSLInfo.isPMA" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         PMA
@@ -52,12 +52,12 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.isPMA">
-                                <label  style="width: 100%; margin-top: 10px;">OEM PN <span class="clr-red">*</span></label>
+                                <label class="stock-line-check">OEM PN <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="oemPnPartNum" [(ngModel)]="viewSLInfo.oemPnPartNum" disabled>
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm">
-                                    <label style="width: 100%; margin-top: 10px;">
+                                    <label class="stock-line-check">
                                         <input type="checkbox" name="isDER" [(ngModel)]="viewSLInfo.isDER" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         DER
@@ -73,7 +73,7 @@
                                 <input class="form-control" type="text" name="conditionId" [(ngModel)]="viewSLInfo.condition" disabled>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                     <label>
                                         <input type="checkbox" name="isSerialized" [(ngModel)]="viewSLInfo.isSerialized" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -81,7 +81,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-top: 35px;" *ngIf="viewSLInfo.isSerialized">
+                            <div class="form-group stock-top-35"  *ngIf="viewSLInfo.isSerialized">
                                 <label>Serial Num <span class="clr-red">*</span></label>
                                 <input class="form-control" type="text" name="serialNumber" [(ngModel)]="viewSLInfo.serialNumber" disabled>
                             </div>
@@ -89,7 +89,7 @@
                                 <label>Stockline Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
                             </div>
-                            <div class="form-group" style="margin-top: 35px;" *ngIf="!viewSLInfo.isSerialized">
+                            <div class="form-group stock-top-35" *ngIf="!viewSLInfo.isSerialized">
                                 <label>Stockline Num</label>
                                 <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
                             </div>
@@ -134,7 +134,7 @@
                                 <input class="form-control text-right" type="text" name="openDays" [(ngModel)]="viewSLInfo.openDays" disabled>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                     <label>
                                         <input type="checkbox" name="shelfLife" [(ngModel)]="viewSLInfo.shelfLife" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -396,7 +396,7 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="blackListed" [(ngModel)]="viewSLInfo.blackListed" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -405,11 +405,11 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.blackListed">
-                                 <div [innerHTML]="viewSLInfo.blackListedReason" class="form-control"
-                                      style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                                 <div [innerHTML]="viewSLInfo.blackListedReason" class="form-control stock-reason"
+                                     class="text_editor_box" disabled></div>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="accident" [(ngModel)]="viewSLInfo.accident" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -418,11 +418,11 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.accident">
-                                 <div [innerHTML]="viewSLInfo.accidentReason" class="form-control"
-                                      style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                                 <div [innerHTML]="viewSLInfo.accidentReason" class="form-control stock-reason"
+                                      class="text_editor_box" disabled></div>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="incident" [(ngModel)]="viewSLInfo.incident" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -431,8 +431,8 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="viewSLInfo.incident">
-                                 <div [innerHTML]="viewSLInfo.incidentReason" class="form-control"
-                                 style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                                 <div [innerHTML]="viewSLInfo.incidentReason" class="form-control stock-reason"
+                                 class="text_editor_box" disabled></div>
                             </div>                              
                         </div>
                     </div>
@@ -444,19 +444,19 @@
                             <h5><b>Management Structure</b> <span class="text-danger">*</span></h5>
                         </div>
                         <div class="card-body">
-                            <div class="form-group" style="margin-bottom: 4px;">
+                            <div class="form-group m-b-4">
                                 <input class="form-control" type="text" name="companyName"
                                     [(ngModel)]="managementStructure.level1" disabled>
                             </div>
-                            <div class="form-group" style="margin-bottom: 4px;">
+                            <div class="form-group m-b-4" >
                                 <input class="form-control" type="text" name="BUName"
                                     [(ngModel)]="managementStructure.level2" disabled>
                             </div>
-                            <div class="form-group" style="margin-bottom: 4px;">
+                            <div class="form-group m-b-4" >
                                 <input class="form-control" type="text" name="divisionName"
                                     [(ngModel)]="managementStructure.level3" disabled>
                             </div>
-                            <div class="form-group" style="margin-bottom: 4px;">
+                            <div class="form-group m-b-4">
                                 <input class="form-control" type="text" name="deptName"
                                     [(ngModel)]="managementStructure.level4" disabled>
                             </div>                    
@@ -526,8 +526,8 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Memo</label>
-                                 <div [innerHTML]="viewSLInfo.memo" class="form-control"
-                                 style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                                 <div [innerHTML]="viewSLInfo.memo" class="form-control stock-reason"
+                                 class="text_editor_box" disabled></div>
                             </div>   
                         </div>
                     </div>
@@ -626,19 +626,19 @@
                        </ng-template>
                        <ng-template pTemplate="summary" id="footer">
                            <label id="footer" class="footer">Total:</label>
-                           <input style="width: 5%;" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
+                           <input class="footer-input-width" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
                                   pInputText type="text" />
 
                            &nbsp;&nbsp;
                            <label id="footer" class="footer1">Pages Count:</label>
 
-                           <input style="width: 5%;" [ngModel]="getPageCount(table3._totalRecords, table3.rows)"
+                           <input class="footer-input-width" [ngModel]="getPageCount(table3._totalRecords, table3.rows)"
                                   name="page count" disabled pInputText type="text" />
                        </ng-template>
                        <ng-template pTemplate="emptymessage" let-columns
                                     *ngIf="allDocumentsList.length == 0">
                            <tr>
-                               <td [attr.colspan]="7" style="color: red; font-weight: bold; text-align: center;">
+                               <td [attr.colspan]="7" class="no-records-cstm no-records-msg">
                                    No records found
                                </td>
                            </tr>

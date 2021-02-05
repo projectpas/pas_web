@@ -271,7 +271,7 @@
                       </ng-template>
                       <ng-template pTemplate="emptymessage" let-columns>
                           <tr>
-                              <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
+                              <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                                   No records found
                               </td>
                           </tr>
@@ -626,6 +626,14 @@
         </span>
       </p>
       <p>
+        <span class="label"><b>Tag: <span class="clr-red">*</span> </b></span><span
+          class="value">{{ sourceVendorforView.tagName }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Attention: </b></span><span
+          class="value">{{ sourceVendorforView.attention }}</span>
+      </p>
+      <p>
         <span class="label"><b>Prefix: </b></span><span class="value">{{ sourceVendorforView.prefix }}</span>
       </p>
       <p>
@@ -657,14 +665,8 @@
         <span class="label"><b>Email: <span class="clr-red">*</span> </b></span><span
           class="value">{{ sourceVendorforView.email }}</span>
       </p>
-      <p>
-        <span class="label"><b>Tag: <span class="clr-red">*</span> </b></span><span
-          class="value">{{ sourceVendorforView.tagName }}</span>
-      </p>
-      <p>
-        <span class="label"><b>Attention: <span class="clr-red">*</span> </b></span><span
-          class="value">{{ sourceVendorforView.attention }}</span>
-      </p>
+     
+     
       <p>
         <span class="label"><b>Mobile Phone : </b></span><span
           class="value">{{ sourceVendorforView.mobilePhone }}</span>
