@@ -130,8 +130,8 @@
                                   <td style="position:sticky; width:80px">
                                       <span data-toggle="modal"
                                       data-target="#pickticketieminterface">
-                                          <a class="btn nobg" (click)="pickticketItemInterface(summaryPart.itemMasterId,summaryPart.conditionId,rowIndex)"
-                                              matTooltip="Add PT" matTooltipPosition="above">
+                                          <a class="btn nobg" (click)="pickticketItemInterface(summaryPart.itemMasterId,summaryPart.conditionId,summaryPart.salesOrderId,summaryPart.salesOrderPartId,rowIndex)"
+                                              matTooltip="Add PT" matTooltipPosition="above" [class.disabled]="summaryPart.qtyToShip >= summaryPart.qty" [ngClass]="{'btn_disabled': summaryPart.qtyToShip >= summaryPart.qty}">
                                               <i class="fa fa-plus"></i>
                                           </a>
                                       </span>
@@ -161,7 +161,7 @@
                                 <th>Picked By</th>
                                 <th>Picked Date</th>
                                 <th>Confirmed By</th>
-                                <!-- <th>PT Num</th> -->
+                                <th>Confirmed Date</th>
                                 <th>Ctrl Num</th>
                                 <th>ID Num</th>
                                 <th style="min-width: 120px; position: sticky !important">Actions</th>
@@ -190,9 +190,9 @@
                                 <td>
                                   {{ part.confirmedBy }}
                                 </td>
-                                <!-- <td>
-                                  {{ part.soPickTicketNumber }}
-                                </td> -->
+                                <td>
+                                  {{ part.ConfirmedDate | date : "MM/dd/yyyy"}}
+                                </td>
                                 <td>
                                   {{ part.controlNumber }}
                                 </td>
@@ -585,11 +585,11 @@
              </th>
          </tr> -->
          <tr>
-             <!-- <th class="text-left"> -->
+             <th class="text-left">
                  <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
                  <!-- <p-checkbox [(ngModel)]="selectAllParts" name="selectAllParts" binary="true" (onChange)="onChangeOfSelectAllQuotes($event)">
-                 </p-checkbox>
-             </th> -->
+                 </p-checkbox> -->
+             </th>
              <th *ngFor="let col of pickTicketItemInterfaceheader">
                  {{col.header}}
              </th>
@@ -597,22 +597,23 @@
      </ng-template>
      <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
          <tr pReorderableRowHandle>
-             <!-- <td>
+             <td>
                  <span>
-                     <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}" (onChange)="onChangeOfPartSelection($event)"
+                     <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}"
                                  binary="true">
                      </p-checkbox>
+                     <!-- (onChange)="onChangeOfPartSelection($event)" -->
                  </span>
-             </td> -->
+             </td>
              <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
-                 <ng-container *ngIf="col.field != 'qtyToReserve'">
+                 <ng-container *ngIf="col.field != 'qtyToShip'">
                      {{part[col.field]}}
                  </ng-container>
 
-                 <!--qtyToReserve-->
-                 <ng-container *ngIf="col.field =='qtyToReserve'">
+                 <!--qtyToShip-->
+                 <ng-container *ngIf="col.field =='qtyToShip'">
                      <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num" required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
-                            [(ngModel)]="part.qtyToReserve" [disabled]="rowData.isSelected == false" />
+                            [(ngModel)]="part.qtyToShip" [disabled]="rowData.isSelected == false" />
                  </ng-container>
              </td>
          </tr>
@@ -626,10 +627,10 @@
         </ng-template>
         </p-table>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">
+          <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-success">
               Save
           </button>
-          <button type="button" class="btn btn-danger">
+          <button type="button" (click)="closeMyModel('#pickticketieminterface')" class="btn btn-danger">
               Close
           </button>
       </div>

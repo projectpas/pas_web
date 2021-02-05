@@ -22,6 +22,7 @@ import { MarginSummary } from "../models/sales/MarginSummaryForSalesorder";
 import { SalesOrderBillingAndInvoicing } from "../models/sales/salesOrderBillingAndInvoicing";
 import { SalesOrderShipping } from "../models/sales/salesOrderShipping";
 import { environment } from 'src/environments/environment';
+import { SOPickTicket } from "../models/sales/SOPickTicket";
 @Injectable()
 export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getNewSalesOrderInstanceUrl: string = environment.baseUrl + "/api/salesorder/new";
@@ -36,6 +37,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   //private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketlist";
   private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketapprovelist";
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
+  private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
 
   // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
@@ -657,12 +659,21 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getStockLineforPickTicket(itemMasterId: number, conditionId: number): Observable<PartAction> {
-    const URL = `${this.getstocklineforPickTicketUrl}?itemMasterId=${itemMasterId}&conditionId=${conditionId}`;
+  getStockLineforPickTicket(itemMasterId: number, conditionId: number,salesOrderId: number): Observable<PartAction> {
+    const URL = `${this.getstocklineforPickTicketUrl}?itemMasterId=${itemMasterId}&conditionId=${conditionId}&salesOrderId=${salesOrderId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getReservestockpartlists(itemMasterId, conditionId));
+        return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId, conditionId,salesOrderId));
+      });
+  }
+
+  savepickticketiteminterface(parts: SOPickTicket): Observable<SOPickTicket> {
+    let url: string = `${this.savepickticketiteminterfaceUrl}`;
+    return this.http
+      .post(url, parts, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.savepickticketiteminterface(parts));
       });
   }
   //end nitin
