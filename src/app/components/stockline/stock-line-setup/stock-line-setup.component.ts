@@ -15,7 +15,7 @@ import { CommonService } from '../../../services/common.service';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { GlAccountService } from '../../../services/glAccount/glAccount.service';
-import { getValueFromArrayOfObjectById, getValueFromObjectByKey, editValueAssignByCondition, getObjectById, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
+import { getValueFromArrayOfObjectById, getValueFromObjectByKey, editValueAssignByCondition, getObjectById, getObjectByValue, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
@@ -77,6 +77,7 @@ export class StockLineSetupComponent implements OnInit {
 	allTagTypes: any = [];
 	allPolistInfo: any = [];
 	polistInfo: any = [];
+	receicerlistInfo: any = [];
 	allRolistInfo: any = [];
 	rolistInfo: any = []
 	textAreaInfo: string;
@@ -157,6 +158,7 @@ export class StockLineSetupComponent implements OnInit {
 	divisionlist: any[] = [];
 	managementValidCheck: boolean;
 	selectedPartNumber: any;
+	receiverNumber: any;
 
 	constructor(private alertService: AlertService, private stocklineser: StocklineService, private commonService: CommonService, private conditionService: ConditionService, private binService: BinService, private siteService: SiteService, private vendorService: VendorService, private manufacturerService: ManufacturerService, private integrationService: IntegrationService, private itemMasterService: ItemMasterService, private glAccountService: GlAccountService, private router: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe, private authService: AuthService, private configurations: ConfigurationService, private modalService: NgbModal) {
 		this.stockLineForm.siteId = 0;
@@ -654,7 +656,6 @@ export class StockLineSetupComponent implements OnInit {
 					expirationDate: res.expirationDate ? new Date(res.expirationDate) : '',
 					tagDate: res.tagDate ? new Date(res.tagDate) : '',
 					shelfLifeExpirationDate: res.shelfLifeExpirationDate ? new Date(res.shelfLifeExpirationDate) : '',
-					receiverNumber: res.receiver,
 					quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '0',
 					quantityReserved: (res.quantityReserved || res.quantityReserved == 0) ? formatNumberAsGlobalSettingsModule(res.quantityReserved, 0) : '0',
 					quantityIssued: (res.quantityIssued || res.quantityIssued == 0) ? formatNumberAsGlobalSettingsModule(res.quantityIssued, 0) : '0',
@@ -672,7 +673,11 @@ export class StockLineSetupComponent implements OnInit {
 					repairOrderId: this.getInactiveObjectOnEdit('value', res.repairOrderId, this.allRolistInfo, 'RepairOrder', 'RepairOrderId', 'RepairOrderNumber'),
 					nhaItemMasterId: this.getInactiveObjectNHATLAOnEdit('nhaItemMasterId', res.nhaItemMasterId, this.allNHAInfo),
 					tlaItemMasterId: this.getInactiveObjectNHATLAOnEdit('tlaItemMasterId', res.tlaItemMasterId, this.allTLAInfo),
+					receiverNumber : res.receiver,					
 				};
+				
+				this.receiverNumber = res.receiver;
+
 				this.loadModuleTypes();
 				this.getSiteDetailsOnEdit(res);
 				this.onPartNumberSelectedOnEdit(res.itemMasterId);
@@ -972,6 +977,19 @@ export class StockLineSetupComponent implements OnInit {
 		];
 		this.polistInfo = polistData;
 
+	}
+
+	filterReceiverNumber(event) {
+		const polistData = [
+			...this.allPolistInfo.filter(x => {
+				return x.purchaseOrderNumber.toLowerCase().includes(event.query.toLowerCase());
+			})
+		];
+		const receverlist = polistData.map(function(item) {
+			return item['purchaseOrderNumber'];
+		  });
+
+		  this.receicerlistInfo = receverlist;
 	}
 
 	filterRoNumber(event) {
@@ -1413,7 +1431,8 @@ export class StockLineSetupComponent implements OnInit {
 			inspectionDate: this.stockLineForm.inspectionDate ? this.datePipe.transform(this.stockLineForm.inspectionDate, "MM/dd/yyyy") : '',
 			entryDate: this.datePipe.transform(this.stockLineForm.entryDate, "MM/dd/yyyy"),
 			expirationDate: this.datePipe.transform(this.stockLineForm.expirationDate, "MM/dd/yyyy"),
-			manufacturingDate: this.datePipe.transform(this.stockLineForm.manufacturingDate, "MM/dd/yyyy"),
+			manufacturingDate: this.datePipe.transform(this.stockLineForm.manufacturingDate, "MM/dd/yyyy"), 
+			//receiverNumber: this.stockLineForm.receiverNumber != undefined && this.stockLineForm.receiverNumber.purchaseOrderNumber != undefined? this.stockLineForm.receiverNumber.purchaseOrderNumber : this.stockLineForm.receiverNumber,
 			partNumber: this.stockLineForm.itemMasterId != undefined ? this.stockLineForm.itemMasterId.partnumber : '',
 			itemMasterId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.itemMasterId),
 			vendorId: this.stockLineForm.vendorId ? editValueAssignByCondition('value', this.stockLineForm.vendorId) : '',
@@ -1534,6 +1553,7 @@ export class StockLineSetupComponent implements OnInit {
 			return;
 		}
 
+		this.saveStockLineForm.receiverNumber = this.receiverNumber;
 		this.stocklineser.newStockLine(this.saveStockLineForm).subscribe(res => {
 			this.isSpinnerVisible = false;
 			this.stockLineId = res.stockLineId;
@@ -1947,8 +1967,5 @@ export class StockLineSetupComponent implements OnInit {
 		} else {
 			this.stockLineForm.inspectionDate = null;
 		}
-	}
-	onChangeReceivedNum() {
-
 	}
 }
