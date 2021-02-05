@@ -249,6 +249,7 @@
       </div>
       <div class="modal-body">
         <div class="table-responsive stockline-audit">
+          <div class="tableFixHead">
           <table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
                 <tr>
@@ -272,14 +273,14 @@
                 </tr>
               <tr>
                 <th>Is Customer Stock</th>
-                <th>PN</th>
+                <th>PN <span class="clr-red">*</span></th>
                 <th>PN Description</th>
                 <th>Revised PN</th>
                 <th>OEM</th>
                 <th>PMA</th>
                 <th>DER</th>
                 <th>Item Group</th>
-                <th>Cond</th>
+                <th>Cond <span class="clr-red">*</span></th>
                 <th>Is Serialized</th>
                 <th>Serial Num</th>
                 <th>Stockline Num</th>
@@ -296,7 +297,7 @@
                 <th>NHA</th>
                 <th>TLA</th>
                 <th>Aircraft Tail Num</th>
-                <th>Manufacturer</th>
+                <th>Manufacturer <span class="clr-red">*</span></th>
                 <th>Mfg. Lot Num</th>
                 <th>Mfg. Batch Num</th>
                 <th>Mfg. Date</th>
@@ -308,8 +309,8 @@
                 <th>PO Num</th>
                 <th>RO Num</th>
                 <th>Requestor</th>
-                <th>Received Date</th>
-                <th>Receiver Num</th>
+                <th>Received Date <span class="clr-red">*</span></th>
+                <th>Receiver Num <span class="clr-red">*</span></th>
                 <th>Reconciliation Num</th>
                 <th>WO Num</th>
                 <th>Obtain From Type</th>
@@ -320,7 +321,7 @@
                 <th>Traceable To</th>
                 <th>ECCN</th>
                 <th>ITAR</th>
-                <th>Qty On Hand</th>
+                <th>Qty On Hand <span class="clr-red">*</span></th>
                 <th>Qty Reserved</th>
                 <th>Qty Issued</th>
                 <th>Qty Avail</th>
@@ -329,7 +330,7 @@
                 <th>Unit Sale Price</th>
                 <th>Core Cost/Unit</th>
                 <th>GL Account</th>
-                <th>Site</th>
+                <th>Site <span class="clr-red">*</span></th>
                 <th>Warehouse</th>
                 <th>Location</th>
                 <th>Shelf</th>
@@ -494,6 +495,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
               <h4 style="color: #ff5663;">No History Found</h4>

@@ -26,7 +26,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group" *ngIf="isEditMode">
-                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                         <label>
                                             <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -54,7 +54,7 @@
                                     <label>Revised PN</label>
                                     <input class="form-control" type="text" name="revisedPart" [(ngModel)]="stockLineForm.revisedPart" (ngModelChange)="enableSave()" disabled>
                                 </div>
-                                <div class="form-group" style="margin-top: 10px;">
+                                <div class="form-group m-t-10">
                                     <div>
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="oemPma" class="form-control" value="true" (change)="onCheckOem();"  [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()" disabled>
@@ -63,7 +63,7 @@
                                     </div> 
                                 </div>
 
-                            <div class="form-group" style="margin-top: 10px;">
+                            <div class="form-group m-t-10">
                                 <div>
                                     <label class="radio-cstm wauto">
                                         <input type="radio" name="oemPma" class="form-control" value="false"
@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                <div class="checkbox-cstm m-t-10">
                                     <label>
                                         <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER"
                                             (ngModelChange)="enableSave()" disabled>
@@ -117,7 +117,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                <div class="checkbox-cstm checkbox-cstm-d mt-10">
                                     <label>
                                         <input type="checkbox" name="isSerialized"
                                             [(ngModel)]="stockLineForm.isSerialized" (ngModelChange)="enableSave()"
@@ -747,7 +747,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="checkbox-cstm">
-                                    <label style="margin-top:10px">
+                                    <label class="m-t-10">
                                         <input type="checkbox" name="blackListed"
                                             [(ngModel)]="stockLineForm.blackListed" (ngModelChange)="enableSave()">
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -757,15 +757,15 @@
                             </div>
                             <div class="form-group memo-popup-cstm col-sm-12" *ngIf="stockLineForm.blackListed == true"
                                 (ngModelChange)="enableSave()">
-                                <div class="col-sm-11" style="margin-top:-8px">
+                                <div class="col-sm-11 blacklist-memo-div">
                                     <span>
                                         <div [innerHTML]="stockLineForm.blackListedReason"
                                             [matTooltip]="parsedText(stockLineForm.blackListedReason)"
-                                            class="form-control" style="width:100%;" class="text_editor_box"></div>
+                                            class="form-control " class="text_editor_box memo-width"></div>
                                     </span>
                                 </div>
-                                <div class="col-sm-1" style="margin-top:-4px">
-                                    <i class="fa fa-pencil" style="margin-top:-3px" data-toggle="modal"
+                                <div class="col-sm-1 black-reason">
+                                    <i class="fa fa-pencil black-reason-icon-align" data-toggle="modal"
                                         data-target="#textarea-popup" (ngModelChange)="enableSave()"
                                         matTooltip="Add Black List Reason" matTooltipPosition="above"
                                         (click)="onAddTextAreaInfo('blackListedReason')"></i>
@@ -773,7 +773,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm">
-                                    <label style="margin-top:10px">
+                                    <label class="m-t-10">
                                         <input type="checkbox" name="accident" [(ngModel)]="stockLineForm.accident"
                                             (ngModelChange)="enableSave()">
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -782,14 +782,15 @@
                                 </div>
                             </div>
                             <div class="form-group memo-popup-cstm col-sm-12" *ngIf="stockLineForm.accident == true">
-                                <div class="col-sm-11" style="margin-top:-8px">
+                                <div class="col-sm-11 blacklist-memo-div">
                                     <span>
                                         <div [innerHTML]="stockLineForm.accidentReason"
-                                            [matTooltip]="parsedText(stockLineForm.accidentReason)" class="form-control"
-                                            style="width:100%;" class="text_editor_box"></div>
+                                            [matTooltip]="parsedText(stockLineForm.accidentReason)"
+                                             class="form-control"
+                                             class="text_editor_box memo-width"></div>
                                     </span>
                                 </div>
-                                <div class="col-sm-1" style="margin-top:-4px">
+                                <div class="col-sm-1 black-reason">
                                     <i class="fa fa-pencil" data-toggle="modal" (ngModelChange)="enableSave()"
                                         data-target="#textarea-popup" matTooltip="Add Accident Reason"
                                         matTooltipPosition="above" (click)="onAddTextAreaInfo('accidentReason')"></i>
@@ -797,7 +798,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm">
-                                    <label style="margin-top:10px">
+                                    <label class="m-t-10">
                                         <input type="checkbox" name="incident" [(ngModel)]="stockLineForm.incident"
                                             (ngModelChange)="enableSave()">
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -806,16 +807,16 @@
                                 </div>
                             </div>
                             <div class="form-group memo-popup-cstm col-sm-12" *ngIf="stockLineForm.incident == true">
-                                <div class="col-sm-11" style="margin-top:-8px">
+                                <div class="col-sm-11 blacklist-memo-div">
                                     <span>
                                         <div [innerHTML]="stockLineForm.incidentReason" class="form-control"
                                             (ngModelChange)="enableSave()"
                                             [matTooltip]="parsedText(stockLineForm.incidentReason)"
-                                            matTooltipPosition="above" style="width:100%;" class="text_editor_box">
+                                            matTooltipPosition="above" class="text_editor_box  memo-width">
                                         </div>
                                     </span>
                                 </div>
-                                <div class="col-sm-1" style="margin-top:-4px">
+                                <div class="col-sm-1 black-reason">
                                     <i class="fa fa-pencil" data-toggle="modal" data-target="#textarea-popup"
                                         matTooltip="Add Incident Reason" matTooltipPosition="above"
                                         (ngModelChange)="enableSave()"
@@ -831,7 +832,7 @@
                         <div class="card-header">
                             <h5>Management Structure <span class="clr-red">*</span></h5>
                         </div>
-                        <div class="card-body" style="padding: 12px 12px 4px;">
+                        <div class="card-body structure-card-body">
                             <!-- [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''" -->
                             <div class="form-group">
                                 <select class="form-control" name="primaryCompany" [(ngModel)]="headerInfo.companyId"
@@ -964,21 +965,21 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="checkbox-cstm">
-                                    <label style="margin-left:5px">
+                                    <label class="memo-label">
                                         Memo
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group memo-popup-cstm col-sm-12" style="margin-bottom:10px">
-                                <div class="col-sm-11" style="margin-top:-8px">
+                            <div class="form-group memo-popup-cstm col-sm-12 stock-memo-margin">
+                                <div class="col-sm-11 blacklist-memo-div">
                                     <span>
-                                        <div [innerHTML]="stockLineForm.memo"
+                                        <div [innerHTML]="stockLineForm.memo "
                                             [matTooltip]="parsedText(stockLineForm.memo)" class="form-control"
-                                            style="width:100%;" class="text_editor_box"></div>
+                                            class="text_editor_box  memo-width"></div>
                                     </span>
                                 </div>
-                                <div class="col-sm-1" style="margin-top:-4px">
-                                    <i class="fa fa-pencil" style="margin-top:-3px" data-toggle="modal"
+                                <div class="col-sm-1 black-reason">
+                                    <i class="fa fa-pencil black-reason-icon-align" data-toggle="modal"
                                         data-target="#textarea-popup" matTooltip="Add Memo"
                                         (ngModelChange)="enableSave()" matTooltipPosition="above"
                                         (click)="onAddTextAreaInfo('memo')"></i>
@@ -1006,17 +1007,16 @@
                             <div>
                                 <div class="form-row">
                                     <div class="col-md-8">
-                                        <h6 class="panel-title" style="padding-left: 10px; margin-top: 20px;">Attachment
+                                        <h6 class="panel-title stock-attachment-header">Attachment
                                             Details</h6>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="checkbox-cstm"
-                                            style="margin-left: 0; margin-bottom: -20px; margin-top: 10px; margin-right: 0px !important; text-align: right;">
-                                            <label style="width: 120px;">
+                                        <div class="checkbox-cstm check-box-div">
+                                            <label class="check-box-label">
                                                 <input type="checkbox" [(ngModel)]="isShowDeletedList" name="cparent" />
-                                                <span style="margin-top: 5px;" class="cr"><i
+                                                <span class="cr check-box-span"><i
                                                         class="cr-icon pi pi-check"></i></span>
-                                                <p style="font-weight: bold;"> Show Deleted List </p>
+                                                <p class="font-bold"> Show Deleted List </p>
                                             </label>
                                         </div>
                                     </div>
@@ -1039,48 +1039,48 @@
                                             <colgroup>
                                                 <ng-container *ngFor="let col of columns">
                                                     <col *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'"
-                                                        style="width:125px" />
+                                                       class="table-column-width" />
                                                     <col *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                        style="width:100px" />
+                                                    class="table-column-width" />
                                                 </ng-container>
                                             </colgroup>
                                         </ng-template>
                                         <ng-template pTemplate="header" let-columns>
                                             <tr>
-                                                <th *ngFor="let col of columns" style="width: 100px;">
+                                                <th *ngFor="let col of columns" class="table-column-width">
                                                     {{ col.header }}
                                                 </th>
-                                                <th style="width: 100px;">Action</th>
+                                                <th class="table-actions-column">Actions</th>
                                             </tr>
 
                                         </ng-template>
                                         <ng-template pTemplate="header" let-columns>
                                             <tr>
-                                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                     [pSortableColumn]="col.field">
                                                     {{ col.header }}
                                                     <p-sortIcon [field]="col.field">
                                                     </p-sortIcon>
                                                 </th>
-                                                <th>Action</th>
+                                                <th class="table-actions-column">Actions</th>
                                             </tr>
                                             <tr>
-                                                <th style="width:120px" *ngFor="let col of columns"
+                                                <th class="action-icons-cstm table-column-width" *ngFor="let col of columns"
                                                     [ngSwitch]="col.field">
                                                     <input type="text"
                                                         (input)="dt.filter($event.target.value, col.field,'contains') "
                                                         *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                        style="width:100%;" pInputText>
-                                                    <input type="date" class="hidePlaceHolder"
+                                                      class="table-header-input-width" pInputText>
+                                                    <input type="date" class="hidePlaceHolder table-header-input-width"
                                                         *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                        style="width:100%;"
+                                                       
                                                         (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                                    <input type="date" class="hidePlaceHolder"
+                                                    <input type="date" class="hidePlaceHolder table-header-input-width"
                                                         *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                        style="width:100%;"
+                                                       
                                                         (change)="dateFilterForTableNew($event.target.value, col.field )">
                                                 </th>
-                                                <th style="width:140px;position:sticky"></th>
+                                                <th class="table-actions-column"></th>
 
                                             </tr>
                                         </ng-template>
@@ -1088,7 +1088,7 @@
                                             let-rowIndex="rowIndex">
                                             <tr [pSelectableRow]="rowData" pReorderableRowHandle>
                                                 <ng-container *ngFor="let col of columns">
-                                                    <td *ngIf="col.field != 'fileName' && col.field !='docMemo'"
+                                                    <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field !='docMemo'"
                                                         class="ui-resizable-column" pReorderableRowHandle>
                                                         {{
                                                         col.field == 'createdDate'
@@ -1098,7 +1098,7 @@
                                                         : rowData[col.field]
                                                         }}
                                                     </td>
-                                                    <td *ngIf="col.field == 'fileName'">
+                                                    <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                                         <a class="filelink" *ngIf="rowData.isFileFromServer == true"
                                                             (click)="downloadFileUpload(rowData)">
                                                             {{ rowData[col.field] }}
@@ -1111,11 +1111,11 @@
 
                                                         </a>
                                                     </td>
-                                                    <td *ngIf="col.field == 'docMemo'">
+                                                    <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                                         <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
                                                     </td>
                                                 </ng-container>
-                                                <td style="width: 110px;" *ngIf="!isShowDeletedList">
+                                                <td class="table-column-width action-icons-cstm" *ngIf="!isShowDeletedList">
                                                     <span data-toggle="modal" data-target="#addDocumentDetailsNew">
                                                         <a class="btn nobg"
                                                             (click)="editStockLineDocument(rowData,rowIndex)"
@@ -1146,12 +1146,12 @@
                                         </ng-template>
                                         <ng-template pTemplate="summary" id="footer">
                                             <label id="footer" class="footer">Total:</label>
-                                            <input style="width: 5%;" [(ngModel)]="dt._totalRecords"
+                                            <input class="footer-input-width" [(ngModel)]="dt._totalRecords"
                                                 name="no'of records" disabled pInputText type="text" />
                                             &nbsp;&nbsp;
                                             <label id="footer" class="footer1">Pages Count:</label>
 
-                                            <input style="width: 5%;"
+                                            <input class="footer-input-width"
                                                 [ngModel]="getPageCount(dt._totalRecords, dt.rows)" name="page count"
                                                 disabled pInputText type="text" />
                                         </ng-template>
@@ -1183,28 +1183,28 @@
                                 <tr>
                                     <td>Remaining</td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text" 
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesRemaining"
                                             [(ngModel)]="sourceTimeLife.cyclesRemaining" />
                                         <div *ngIf="cyclesRemaining.errors">
                                             <div *ngIf="cyclesRemaining.errors" [ngClass]="'error'">
                                                 <div *ngIf="cyclesRemaining.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeRemaining"
                                             [(ngModel)]="sourceTimeLife.timeRemaining" />
                                         <div *ngIf="timeRemaining.errors">
                                             <div *ngIf="timeRemaining.errors" [ngClass]="'error'">
                                                 <div *ngIf="timeRemaining.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
@@ -1215,42 +1215,42 @@
                                 <tr>
                                     <td>Since New</td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceNew"
                                             [(ngModel)]="sourceTimeLife.cyclesSinceNew" />
                                         <div *ngIf="cyclesSinceNew.errors">
                                             <div *ngIf="cyclesSinceNew.errors" [ngClass]="'error'">
                                                 <div *ngIf="cyclesSinceNew.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceNew"
                                             [(ngModel)]="sourceTimeLife.timeSinceNew" />
                                         <div *ngIf="timeSinceNew.errors">
                                             <div *ngIf="timeSinceNew.errors" [ngClass]="'error'">
                                                 <div *ngIf="timeSinceNew.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="lastSinceNew"
                                             [(ngModel)]="sourceTimeLife.lastSinceNew" />
                                         <div *ngIf="lastSinceNew.errors">
                                             <div *ngIf="lastSinceNew.errors" [ngClass]="'error'">
                                                 <div *ngIf="lastSinceNew.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
@@ -1260,42 +1260,42 @@
                                 <tr>
                                     <td>Since Ovh</td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceOVH"
                                             [(ngModel)]="sourceTimeLife.cyclesSinceOVH" />
                                         <div *ngIf="cyclesSinceOVH.errors">
                                             <div *ngIf="cyclesSinceOVH.errors" [ngClass]="'error'">
                                                 <div *ngIf="cyclesSinceOVH.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceOVH"
                                             [(ngModel)]="sourceTimeLife.timeSinceOVH" />
                                         <div *ngIf="timeSinceOVH.errors">
                                             <div *ngIf="timeSinceOVH.errors" [ngClass]="'error'">
                                                 <div *ngIf="timeSinceOVH.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="lastSinceOVH"
                                             [(ngModel)]="sourceTimeLife.lastSinceOVH" />
                                         <div *ngIf="lastSinceOVH.errors">
                                             <div *ngIf="lastSinceOVH.errors" [ngClass]="'error'">
                                                 <div *ngIf="lastSinceOVH.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
@@ -1305,7 +1305,7 @@
                                 <tr>
                                     <td>Since Insp</td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern"
                                             #cyclesSinceInspection="ngModel" mask="000:00"
                                             (ngModelChange)="enableSave()" name="cyclesSinceInspection"
@@ -1313,35 +1313,35 @@
                                         <div *ngIf="cyclesSinceInspection.errors">
                                             <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
                                                 <div *ngIf="cyclesSinceInspection.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceInspection"
                                             [(ngModel)]="sourceTimeLife.timeSinceInspection" />
                                         <div *ngIf="timeSinceInspection.errors">
                                             <div *ngIf="timeSinceInspection.errors" [ngClass]="'error'">
                                                 <div *ngIf="timeSinceInspection.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="lastSinceInspection"
                                             [(ngModel)]="sourceTimeLife.lastSinceInspection" />
                                         <div *ngIf="lastSinceInspection.errors">
                                             <div *ngIf="lastSinceInspection.errors" [ngClass]="'error'">
                                                 <div *ngIf="lastSinceInspection.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
@@ -1351,28 +1351,28 @@
                                 <tr>
                                     <td>Since Repair</td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="cyclesSinceRepair"
                                             [(ngModel)]="sourceTimeLife.cyclesSinceRepair" />
                                         <div *ngIf="cyclesSinceRepair.errors">
                                             <div *ngIf="cyclesSinceRepair.errors" [ngClass]="'error'">
                                                 <div *ngIf="cyclesSinceRepair.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="clr2">
-                                        <input class="form-control" matInput type="text" style="width: 55%;"
+                                        <input class="form-control width-input" matInput type="text"
                                             placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel"
                                             mask="000:00" (ngModelChange)="enableSave()" name="timeSinceRepair"
                                             [(ngModel)]="sourceTimeLife.timeSinceRepair" />
                                         <div *ngIf="timeSinceRepair.errors">
                                             <div *ngIf="timeSinceRepair.errors" [ngClass]="'error'">
                                                 <div *ngIf="timeSinceRepair.errors.pattern">
-                                                    <span style="color: red;">Please enter valid time format
+                                                    <span class="clr-red">Please enter valid time format
                                                         (hhh:mm)</span>
                                                 </div>
                                             </div>
@@ -1457,15 +1457,15 @@
                                     <label>Memo</label>
                                     <span>
                                         <div [innerHTML]="documentInformation.docMemo" class="form-control"
-                                            style="width:90%;" class="text_editor_box"></div>
-                                        <i class="fa fa-pencil" data-toggle="modal" data-target="#memo-popup"
+                                            class="text_editor_box doc-memo-width"></div>
+                                        <i class="fa fa-pencil doc-memo-pencil-align" data-toggle="modal" data-target="#memo-popup"
                                             matTooltip="Add Memo" (ngModelChange)="enableSaveDocument()"
                                             matTooltipPosition="above" (click)="onAddTextAreaInfo('memo')"
-                                            style="float: right;margin-top: -18px;"></i>
+                                        ></i>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-12" style="margin-top: 10px;">
+                            <div class="col-md-12 m-t-10">
                                 <div class="form-group">
                                     <label style="float: none;">Attachments <span class="clr-red">*</span></label>
                                     <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple"
@@ -1479,6 +1479,7 @@
                                 <h6 class="panel-title" style="padding-left: 10px;">
                                     Attachment Details:
                                 </h6>
+                                <div class="tableFixHead">
 
                                 <table class="table-responsive ptable-cus-pma">
                                     <tr>
@@ -1508,18 +1509,17 @@
                                         </td>
                                     </tr>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
+                        <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"                        
                             (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
                             [disabled]="!addDocumentForm.valid ||disableFileAttachmentSubmit==false || selectedFileAttachment.length == 0">
                             Add
                         </button>
-                        <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
+                        <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"                          
                             (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
                             [disabled]="!addDocumentForm.valid || disableSaveForEditDocument">
                             Update
