@@ -32,6 +32,7 @@ import { MenuItem } from 'primeng/api';
 /** WorkOrderList component*/
 export class WorkOrderListComponent implements OnInit {
     /** WorkOrderList ctor */
+    breadcrumbs: MenuItem[];
     workOrderData: any;
     isLoader: boolean = true;
     isView: boolean = true;
@@ -174,6 +175,10 @@ export class WorkOrderListComponent implements OnInit {
         ];
     }
     ngOnInit() {
+        this.breadcrumbs = [
+            { label: 'Work Order ' },
+            { label: 'Work Order List' },
+        ];
         this.getWorkOrderDefaultSetting();
         this.getCustomerWarningsList();
         this.getTaskList();
