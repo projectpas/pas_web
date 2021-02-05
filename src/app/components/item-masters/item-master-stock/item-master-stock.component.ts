@@ -485,10 +485,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
         { field: 'fileSize', header: 'File Size' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedBy', header: 'Updated By' },
         { field: 'createdDate', header: 'Created Date' },
+      
+        { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
+      
+        { field: 'updatedBy', header: 'Updated By' },
 
     ];
 
@@ -5974,5 +5976,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     ConsumeUOMdescription($event) {}
     SOLDUOMdescription($event) {}
     savewarnings() {}
-    dismissModelNew() {}
+    dismissModelNew() {
+        this.isDeleteMode=false;
+        this.modal.close();
+    }
 }

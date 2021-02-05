@@ -16,9 +16,7 @@ import { DatePipe } from '@angular/common';
 import { StocklineService } from '../../services/stockline.service';
 import { ConfigurationService } from '../../services/configuration.service';
 import { WorkOrderService } from '../../services/work-order/work-order.service';
-import { WorkOrderType } from '../../models/work-order-type.model';
 import { WorkOrderSettingsService } from '../../services/work-order-settings.service';
-
 @Component({
     selector: 'app-create-work-order-settings',
     templateUrl: './create-work-order-settings.component.html',
@@ -32,11 +30,11 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     receivingForm: any = {};
     isEditMode: boolean = false;
     private onDestroy$: Subject<void> = new Subject<void>();
-    breadcrumbs: MenuItem[] = [
-        { label: 'Admin' },
-        { label: 'Work Order Settings' },
-        { label: 'Create Work Order Settings' }
-    ];
+    // breadcrumbs: MenuItem[] = [
+    //     { label: 'Admin' },
+    //     { label: 'Work Order Settings' },
+    //     { label: 'Create Work Order Settings' }
+    // ];
     workOrderViewList= [{label: "MPN View",value: 1,woListViewRBId:1},
     {label: "WO View",value: 2,woListViewRBId:2}]
    workOrderStatusRbList =[{label: "Open",value: 3,woListStatusRBId:3},
@@ -99,6 +97,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     moduleName: string = "WO Settings";
     dropdownSettings = {};
     isSpinnerVisible:boolean=false;
+    breadcrumbs: MenuItem[];
     constructor(
         private workOrderService: WorkOrderService,
         private commonService: CommonService, private customerService: CustomerService, private binService: BinService, private siteService: SiteService, private conditionService: ConditionService, private datePipe: DatePipe, private _actRoute: ActivatedRoute, private receivingCustomerWorkOrderService: WorkOrderSettingsService, private authService: AuthService, private router: Router, private alertService: AlertService, private stocklineService: StocklineService, private configurations: ConfigurationService) {
@@ -149,6 +148,17 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             this.loadSiteData('');
             this.loadConditionData('');
         }
+        if (!this.receivingCustomerWorkId) {
+            this.breadcrumbs = [
+                { label: 'Work Order Settings' },
+                { label: 'Create Work Order Settings' },
+            ];
+        } else {
+            this.breadcrumbs = [
+                { label: 'Work Order Settings' },
+                { label: 'Edit Work Order Settings' },
+            ];
+        } 
     }
 
     // api/workOrder/getworblist

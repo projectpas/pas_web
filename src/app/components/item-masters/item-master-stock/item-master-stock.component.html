@@ -327,7 +327,10 @@
                                     <div class="expdate-input"
                                          *ngIf="sourceItemMaster.isExpirationDateAvailable">
                                          <label style="text-align: left; font-weight: lighter !important;">Lesser Of</label>
-                                        <p-calendar [showIcon]="true"  (ngModelChange)="getmemo()" name="expirationDate" [minDate]="currentDate" [(ngModel)]="sourceItemMaster.expirationDate"></p-calendar>
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                         (ngModelChange)="getmemo()" name="expirationDate"
+                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [minDate]="currentDate" 
+                                         [(ngModel)]="sourceItemMaster.expirationDate"></p-calendar>
                                     </div>
                                     <div class="snumber-block2" *ngIf="sourceItemMaster.isExpirationDateAvailable">
                                         <div class="form-group col-sm-12">
@@ -929,7 +932,7 @@
                                                                 <th *ngFor="let col of columns" style="width: 100px;">
                                                                     {{ col.header }}
                                                                 </th>
-                                                                <th style="width: 100px;">Action</th>
+                                                                <th style="width: 100px;">Actions</th>
                                                             </tr>
 
                                                         </ng-template>
@@ -945,7 +948,8 @@
 
                                                             </tr>
                                                             <tr>
-                                                                <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                                <th style="width:120px" *ngFor="let col of columns" 
+                                                                [ngSwitch]="col.field">
                                                                     <input type="text"
                                                                            (input)="table4.filter($event.target.value, col.field,'contains') "
                                                                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
@@ -1242,9 +1246,14 @@
                                         [ngSwitch]="col.field">
                                         <input class="table-header-input-width"
                                                pInputText
-                                               type="text"
+                                               type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-                                    </th>
+                                               <!-- <input type="text" class="table-header-input-width" (input)="dt.filter($event.target.value,col.field,'contains')" *ngIf=" col.field != 'fileCreatedDate' && col.field != 'fileUpdatedDate'" pInputText > -->
+                                               <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+              name="createdDate" (change)="dt.filter($event.target.value, col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+              name="updatedDate" (change)="dt.filter($event.target.value,col.field)" />
+                                            </th>
                                     <th class="table-actions-column"></th>
                                 </tr>
                             </ng-template>
@@ -1506,8 +1515,13 @@
                                         [ngSwitch]="col.field">
                                         <input class="table-header-input-width"
                                                pInputText
-                                               type="text"
+                                               type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                                (input)="ataDataTable.filter($event.target.value, col.field, 'contains')" />
+
+                                               <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                                               name="createdDate" (change)="ataDataTable.filter($event.target.value, col.field)" />
+                                             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                                               name="updatedDate" (change)="ataDataTable.filter($event.target.value,col.field)" />
                                     </th>
                                     <th class="table-actions-column"></th>
                                 </tr>
@@ -1575,7 +1589,7 @@
                                          let-columns
                                          *ngIf="ataMappedList?.length == 0">
                                 <tr>
-                                    <td [attr.colspan]="6" class="no-records-cstm no-records-msg">
+                                    <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
@@ -1667,20 +1681,20 @@
                                             <th></th>
                                         </tr>
                                         <tr>
-                                            <th>Cond *</th>
-                                            <th>UOM *</th>
-                                            <th>Currency *</th>
-                                            <th>FX Rate *</th>
+                                            <th>Cond <span class="clr-red">*</span></th>
+                                            <th>UOM <span class="clr-red">*</span></th>
+                                            <th>Currency <span class="clr-red">*</span></th>
+                                            <th>FX Rate <span class="clr-red">*</span></th>
                                             <th>Vendor List Price</th>
                                             <th>Last List Price Date</th>
                                             <th>Purchase Disc %</th>
                                             <th>Purchase Disc Amount</th>
                                             <th>Last Purchase Disc Date</th>
                                             <th>Unit Purchase Price</th>
-                                            <th class="bg4">Sale Price *</th>
-                                            <th class="bg2">UOM *</th>
-                                            <th class="bg2">Currency *</th>
-                                            <th class="bg2">FX Rate *</th>
+                                            <th class="bg4">Sale Price <span class="clr-red">*</span></th>
+                                            <th class="bg2">UOM <span class="clr-red">*</span></th>
+                                            <th class="bg2">Currency <span class="clr-red">*</span></th>
+                                            <th class="bg2">FX Rate <span class="clr-red">*</span></th>
                                             <th class="bg2">Flat Price Amount</th>
                                             <th class="bg2">Last Flat Price Date</th>
                                             <th class="bg3">Mark % on List Price</th>
@@ -2062,7 +2076,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm" style="width: 150px !important">
-                                        Model
+                                        Model <span class="clr-red">*</span>
                                         <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown"  [disabled]="!selectedAircraftId"  style="width: 20px !important;
                                     margin-left: 7px; " (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
                                     </label>
@@ -2073,7 +2087,7 @@
                             <div class="col-md-2" *ngIf="!modelUnknown">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm" style="width: 190px !important">
-                                        DashNumber
+                                        DashNumber <span class="clr-red">*</span>
                                         
                                         <input type="checkbox" name="unknownDashNumber" [(ngModel)]="dashNumberUnknown"  [disabled]="selectedModelId.length == 0"  style="width: 20px !important;
                                         margin-left: 7px; " (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
@@ -3307,27 +3321,29 @@
                 <div class="form-row mt-2 aircraft-view-popup" >
                     <div class="col-sm-5">
                         <p>
-                            <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType }}</span>
+                            <span class="label"><b>Aircraft: <span class="clr-red">*</span></b></span><span class="value">{{ viewAircraftData.aircraftType }}</span>
                         </p>
     
                         <p>
-                            <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+                            <span class="label"><b>Model: <span class="clr-red">*</span></b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber }}</span>
-                        </p>
-                        <p>
-                            <span class="label"><b>Created By: </b></span><span class="value">{{ viewAircraftData.createdBy }}</span>
+                            <span class="label"><b>Dash Numbers: <span class="clr-red">*</span></b></span><span class="value">{{ viewAircraftData.dashNumber }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Created Date: </b></span><span class="value">{{ viewAircraftData.createdDate | date: 'MM/dd/yyyy, h:mm a'}}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Updated By: </b></span><span class="value">{{ viewAircraftData.updatedBy }}</span>
+                            <span class="label"><b>Created By: </b></span><span class="value">{{ viewAircraftData.createdBy }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Updated Date: </b></span><span class="value">{{ viewAircraftData.updatedDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
                         </p>
+                       
+                        <p>
+                            <span class="label"><b>Updated By: </b></span><span class="value">{{ viewAircraftData.updatedBy }}</span>
+                        </p>
+                        
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -3365,17 +3381,19 @@
                             <span class="label"><b>ATA Sub Chapter: </b></span><span class="value">{{ viewATAData.ataSubChapterDescription }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Created By: </b></span><span class="value">{{ viewATAData.createdBy }}</span>
-                        </p>
-                        <p>
                             <span class="label"><b>Created Date: </b></span><span class="value">{{ viewATAData.createdDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
                         </p>
                         <p>
-                            <span class="label"><b>Updated By: </b></span><span class="value">{{ viewATAData.updatedBy }}</span>
+                            <span class="label"><b>Created By: </b></span><span class="value">{{ viewATAData.createdBy }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Updated Date: </b></span><span class="value">{{ viewATAData.updatedDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
                         </p>
+                       
+                        <p>
+                            <span class="label"><b>Updated By: </b></span><span class="value">{{ viewATAData.updatedBy }}</span>
+                        </p>
+                       
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -3400,7 +3418,7 @@
                 <button type="button" class="close"x data-dismiss="modal">
                     &times;
                 </button>
-                <h4 class="modal-title">Edit AirCraft Details</h4>
+                <h4 class="modal-title">Edit Aircraft Details</h4>
                 <div class="col-sm-12 font-padding">
                     <div class="col-sm-3">
                         Aircraft:
@@ -3422,7 +3440,7 @@
                     <div class="form-row mt-2">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="popup-plusicon-cstm">Aircraft 
+                                <label class="popup-plusicon-cstm">Aircraft  <span class="clr-red">*</span>
                                 </label>
                             <p-dropdown class="p-dropdown-100" name="aircraftTypeId" [options]="manufacturerData" filter="true" [(ngModel)]="editAirCraftData.aircraftTypeId" (onChange)="getAircraftModelByManfacturerforEdit($event.originalEvent.target.textContent);checkCanAircraftEditable()" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                             </div>
@@ -3431,7 +3449,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm" style="width: 150px !important">
-                                    Model  
+                                    Model  <span class="clr-red">*</span>
                                     <input type="checkbox" [checked]="editAirCraftData.isModelUnknown" name="unknownmodel" [(ngModel)]="editAirCraftData.isModelUnknown"  style="width: 20px !important;
                          margin-left: 7px; " (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
                                 </label>
@@ -3442,7 +3460,7 @@
                         <div class="col-md-2" *ngIf="!editAirCraftData.isModelUnknown">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm" style="width: 190px !important">
-                                    DashNumber
+                                    DashNumber <span class="clr-red">*</span>
                                     <input type="checkbox"  [checked]="editAirCraftData.isDashNumberUnknown" name="unknownDashNumber" [(ngModel)]="editAirCraftData.isDashNumberUnknown" [disabled]="!editAirCraftData.aircraftModelId || editAirCraftData.isModelUnknown" style="width: 20px !important;
                             margin-left: 7px; " (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
                                 </label>
@@ -3514,13 +3532,15 @@
 					<table class="table table-bordered header-table-width">
                         <thead>
                             <tr>
-                                <th>Aircraft</th>
-                                <th>Aircraft Model</th>
-                                <th>Dash Numbers</th>                                
-                                <th>Created By</th>
+                                <th>Aircraft <span class="clr-red">*</span></th>
+                                <th>Aircraft Model <span class="clr-red">*</span></th>
+                                <th>Dash Numbers <span class="clr-red">*</span></th>                                
+                                
                                 <th>Created Date</th>
-                                <th>Updated By</th>
+                                <th>Created By</th>
+                               
                                 <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
@@ -3559,10 +3579,11 @@
                 }">
                                 <span *ngIf="audit.dashNumber != 'Unknown'">{{ audit.dashNumber }}</span>
                             </td>
-                            <td>{{ audit.updatedBy }}</td>
-                            <td><p style="width: 120px; text-align: center;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                            <td>{{ audit.createdBy }}</td>
                             <td><p style="width: 120px; text-align: center;">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                            <td>{{ audit.createdBy }}</td>
+                            <td><p style="width: 120px; text-align: center;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                            <td>{{ audit.updatedBy }}</td>
+                            
                             <td style="background-color: #fff !important;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                         </tr>
                     </table>
@@ -3605,10 +3626,12 @@
                                 <th>ATA Chapter Name</th>
                                 <th>ATA Sub Chapter</th>
                                 <th>ATA Sub Code</th>
-                                <th>Created By</th>
+                              
                                 <th>Created Date</th>
-                                <th>Updated By</th>
+                                <th>Created By</th>
+                                
                                 <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
@@ -3645,12 +3668,13 @@
                   }">
                                     {{audit.ataSubChapterCode}}
                                 </td>
+                                <td>{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</td>
                                 <td>{{ audit.createdBy }}</td>
-                                <td><p style="width: 120px;">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-
+                               
+                                <td>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</td>
                                 <td>{{ audit.updatedBy }}</td>
-                                <td><p style="width: 120px;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                                <td style="background-color: #fff !important;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                               
+                                <td style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></td>
                             </tr>
                         </tbody>
                     </table>
@@ -3897,10 +3921,11 @@
                             {{ audit.fileName }}
                         </td>
                         <td>{{ audit.fileSize }}</td>
-                        <td>{{ audit.updatedBy }}</td>
-                        <td>{{ audit.updatedDate | date: 'MM-dd-yyyy' }}</td>
-                        <td>{{ audit.createdBy }}</td>
+                       
                         <td>{{ audit.createdDate | date: 'MM-dd-yyyy' }}</td>
+                        <td>{{ audit.createdBy }}</td>
+                        <td>{{ audit.updatedDate | date: 'MM-dd-yyyy' }}</td>
+                        <td>{{ audit.updatedBy }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -3951,20 +3976,20 @@
                         <th colspan="1"></th>
                     </tr>
                     <tr>
-                        <th style="width: 100px;">Cond *</th>
-                        <th style="width: 100px;">UOM *</th>
-                        <th style="width: 100px;">Currency *</th>
-                        <th style="width: 100px;">FX Rate *</th>
+                        <th style="width: 100px;">Cond <span class="clr-red">*</span></th>
+                        <th style="width: 100px;">UOM <span class="clr-red">*</span></th>
+                        <th style="width: 100px;">Currency <span class="clr-red">*</span></th>
+                        <th style="width: 100px;">FX Rate <span class="clr-red">*</span></th>
                         <th style="width: 100px;">Vendor List Price</th>
                         <th style="width: 100px;">Last List Price Date</th>
                         <th style="width: 100px;">Purchase Disc %</th>
                         <th style="width: 100px;">Purchase Disc Amount</th>
                         <th style="width: 100px;">Last Purchase Disc Date</th>
                         <th style="width: 100px;">Unit Purchase Price</th>
-                        <th style="width: 100px;" class="bg4">Sale Price *</th>
-                        <th style="width: 100px;" class="bg2">UOM *</th>
-                        <th style="width: 100px;" class="bg2">Currency *</th>
-                        <th style="width: 100px;" class="bg2">FX Rate *</th>
+                        <th style="width: 100px;" class="bg4">Sale Price <span class="clr-red">*</span></th>
+                        <th style="width: 100px;" class="bg2">UOM <span class="clr-red">*</span></th>
+                        <th style="width: 100px;" class="bg2">Currency <span class="clr-red">*</span></th>
+                        <th style="width: 100px;" class="bg2">FX Rate <span class="clr-red">*</span></th>
                         <th style="width: 100px;" class="bg2">Flat Price Amount</th>
                         <th style="width: 100px;" class="bg2">Last Flat Price Date</th>
                         <th style="width: 100px;" class="bg3">Mark % on List Price</th>
@@ -3975,10 +4000,12 @@
                         <th style="width: 100px;" class="bg3">Sale Disc Amount</th>
                         <th style="width: 100px;" class="bg3">Last Sales Disc Date</th>
                         <th style="width: 100px;" class="bg3">Unit Sale Price</th>                        
-                        <th style="width: 100px;">Updated By</th>
-                        <th style="width: 120px;">Updated Date</th>
-                        <th style="width: 100px;">Created By</th>
+                       
+                        
                         <th style="width: 120px;">Created Date</th>
+                        <th style="width: 100px;">Created By</th>
+                        <th style="width: 120px;">Updated Date</th>
+                        <th style="width: 100px;">Updated By</th>
                         <th style="width: 100px;">Is Deleted</th>
                     </tr>
                 </thead>
@@ -4158,10 +4185,13 @@
                           }">
                           <p style="width: 100px;">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
-                        <td><p style="width: 100px;"> {{ audit.updatedBy }}</p></td>
-                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p style="width: 100px;"> {{ audit.createdBy }}</p></td>
+                     
                         <td><p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                      
+                        <td><p style="width: 100px;"> {{ audit.createdBy }}</p></td>
+                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p style="width: 100px;"> {{ audit.updatedBy }}</p></td>
+
                         <td style="background-color: #fff !important;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>

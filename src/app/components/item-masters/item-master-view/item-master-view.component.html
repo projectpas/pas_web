@@ -909,20 +909,20 @@
 
                                     </tr>
                                     <tr>
-                                        <th>Cond *</th>
-                                        <th>UOM *</th>
-                                        <th>Currency *</th>
-                                        <th>FX Rate *</th>
+                                        <th>Cond <span class="clr-red">*</span></th>
+                                        <th>UOM <span class="clr-red">*</span></th>
+                                        <th>Currency <span class="clr-red">*</span></th>
+                                        <th>FX Rate <span class="clr-red">*</span></th>
                                         <th>Vendor List Price</th>
                                         <th>Last List Price Date</th>
                                         <th>Purchase Disc %</th>
                                         <th>Purchase Disc Amount</th>
                                         <th>Last Purchase Disc Date</th>
                                         <th>Unit Purchase Price</th>
-                                        <th class="bg4">Sale Price *</th>
-                                        <th class="bg2">UOM *</th>
-                                        <th class="bg2">Currency *</th>
-                                        <th class="bg2">FX Rate *</th>
+                                        <th class="bg4">Sale Price <span class="clr-red">*</span></th>
+                                        <th class="bg2">UOM <span class="clr-red">*</span></th>
+                                        <th class="bg2">Currency <span class="clr-red">*</span></th>
+                                        <th class="bg2">FX Rate <span class="clr-red">*</span></th>
                                         <th class="bg2">Flat Price Amount</th>
                                         <th class="bg2">Last Flat Price Date</th>
                                         <th class="bg3">Mark % on List Price</th>
@@ -1263,14 +1263,14 @@
             <div class="modal-body" *ngIf="viewAircraftData">
                 <div class="col-sm-12">
                     <p>
-                        <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType }}</span>
+                        <span class="label"><b>Aircraft: <span class="clr-red">*</span></b></span><span class="value">{{ viewAircraftData.aircraftType }}</span>
                     </p>
 
                     <p>
-                        <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+                        <span class="label"><b>Model: <span class="clr-red">*</span></b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
                     </p>
                     <p>
-                        <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber }}</span>
+                        <span class="label"><b>Dash Numbers: <span class="clr-red">*</span></b></span><span class="value">{{ viewAircraftData.dashNumber }}</span>
                     </p>
                     <p>
                         <span class="label"><b>Created By: </b></span><span class="value">{{ viewAircraftData.createdBy }}</span>
@@ -1400,9 +1400,9 @@
 					<table class="table table-bordered header-table-width" >
                         <thead>
                             <tr>
-                                <th>Aircraft</th>
-                                <th>Aircraft Model</th>
-                                <th>Dash Numbers</th>
+                                <th>Aircraft <span class="clr-red">*</span></th>
+                                <th>Aircraft Model <span class="clr-red">*</span></th>
+                                <th>Dash Numbers <span class="clr-red">*</span></th>
                                 <th>Created By</th>
                                 <th>Created Date</th>
                                 <th>Updated By</th>
@@ -1591,20 +1591,20 @@
                         <th colspan="5"></th>
                     </tr>
                     <tr>
-                        <th>Cond *</th>
-                        <th >UOM *</th>
-                        <th >Currency *</th>
-                        <th >FX Rate *</th>
+                        <th>Cond <span class="clr-red">*</span></th>
+                        <th >UOM <span class="clr-red">*</span></th>
+                        <th >Currency <span class="clr-red">*</span></th>
+                        <th >FX Rate <span class="clr-red">*</span></th>
                         <th >Vendor List Price</th>
                         <th >Last List Price Date</th>
                         <th >Purchase Disc %</th>
                         <th >Purchase Disc Amount</th>
                         <th >Last Purchase Disc Date</th>
                         <th >Unit Purchase Price</th>
-                        <th  class="bg4">Sale Price *</th>
-                        <th  class="bg2">UOM *</th>
-                        <th  class="bg2">Currency *</th>
-                        <th  class="bg2">FX Rate *</th>
+                        <th  class="bg4">Sale Price <span class="clr-red">*</span></th>
+                        <th  class="bg2">UOM <span class="clr-red">*</span></th>
+                        <th  class="bg2">Currency <span class="clr-red">*</span></th>
+                        <th  class="bg2">FX Rate <span class="clr-red">*</span></th>
                         <th  class="bg2">Flat Price Amount</th>
                         <th  class="bg2">Last Flat Price Date</th>
                         <th  class="bg3">Mark % on List Price</th>
@@ -1615,10 +1615,13 @@
                         <th  class="bg3">Sale Disc Amount</th>
                         <th  class="bg3">Last Sales Disc Date</th>
                         <th  class="bg3">Unit Sale Price</th>                        
-                        <th >Updated By</th>
-                        <th >Updated Date</th>
-                        <th >Created By</th>
+                       
                         <th >Created Date</th>
+                        <th >Created By</th>
+                        <th >Updated Date</th>
+                        <th >Updated By</th>
+
+                       
                         <th >Is Deleted</th>
                     </tr>
                 </thead>
@@ -1798,10 +1801,13 @@
                           }">
                           <p >      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
-                        <td><p > {{ audit.updatedBy }}</p></td>
-                        <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p > {{ audit.createdBy }}</p></td>
+                      
+                      
+                      
                         <td><p > {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > {{ audit.createdBy }}</p></td>
+                        <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > {{ audit.updatedBy }}</p></td>
                         <td><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>

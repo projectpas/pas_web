@@ -12,14 +12,14 @@
                 <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 
 
-                <div class="card-header bg-primary new-card-header">
+                <div class="card-header header">
                     <div class="row">
                         <div class="col">
-                            <h4 class="new-card-heading">Management Structure</h4>
+                            <h4 class="header-name">Management Structure</h4>
                         </div>
                         <div>
                             <button type="button"
-                                    class="btn-sm new-btn-primary"
+                                    class="btn-sm header-button"
                                     (click)="open(contentEdit)">
                                 Add Root Management Structure
                             </button>
@@ -43,20 +43,20 @@
                             <!-- <button (click)="expandAll($event)">Expand All</button> -->
                         </div> 
                     
-                <p-treeTable [value]="gridData" [columns]="cols1" [metaKeySelection]="true" selectionMode="multiple" [(selection)]="selectedNode">
+                <p-treeTable class="rpo-table-cstm rro-table-cstm" [value]="gridData" [columns]="cols1" [metaKeySelection]="true" selectionMode="multiple" [(selection)]="selectedNode">
 
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th *ngFor="let col of columns"  [ngStyle]= "{'width': col.field == 'code'  ? '180px' : ''  }">
+                            <th class="table-column-width" *ngFor="let col of columns"  [ngStyle]= "{'width': col.field == 'code'  ? '180px' : ''  }">
                                 {{col.header}}
                             </th>
-                            <th>Action</th>
+                            <th class="table-actions-column" >Actions</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
 
                         <tr *ngIf="!rowData.isDeleted" [ttSelectableRow]="rowNode">                           
-                            <td *ngFor="let col of columns; let i = index">
+                            <td class="table-column-width" *ngFor="let col of columns; let i = index">
 
                                 <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
                                 {{ col.field == 'createdDate' || col.field == 'updatedDate'  ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a') : rowData[col.field]}}
@@ -67,7 +67,7 @@
                                     }} -->
                             </td>
 
-                            <td>
+                            <td class="action-icons-cstm table-column-width">
                                 <a  *ngIf="!currentDeletedstatus" (click)="openEdit(contentEdit,rowNode)"
                                    matTooltip="Add Child" matTooltipPosition="above"
                                    class="btn btn-pluspo-cstm viewBtn nobg"><span><i class="fa fa-plus"></i></span></a>
@@ -115,7 +115,7 @@
                         </tr>
                         <tr *ngIf="rowData.isDeleted && currentDeletedstatus" [ttSelectableRow]="rowNode">
                             
-                             <td *ngFor="let col of columns; let i = index">
+                             <td class="table-column-width" *ngFor="let col of columns; let i = index">
  
                                  <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
                                  {{ col.field == 'createdDate' || col.field == 'updatedDate'  ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a') : rowData[col.field]}}
@@ -126,7 +126,7 @@
                                      }} -->
                              </td>
  
-                             <td>                                
+                             <td class="action-icons-cstm table-column-width">                                
                                  <span data-toggle="modal" data-target="#view">
                                      <a class="btn viewBtn boxed-float-btn nobg"
                                         data-toggle="tooltip" title=""
@@ -176,12 +176,13 @@
                                 <h4 class="modal-title">History of Managment Strcture</h4>
                             </div>
                             <div class="modal-body" *ngIf="auditHistory">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                        <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                         <thead>
                                             <tr>
-                                                <th>Code</th>
-                                                <th>Name</th>
+                                                <th>Code <span class="clr-red">*</span></th>
+                                                <th>Name <span class="clr-red">*</span></th>
                                                 <th>Description</th>
                                                 <th>IsActive</th>
                                                 <th>Created Date</th>
@@ -207,10 +208,11 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                     <ng-template #noDatavailable>
                                         <div class="text-center">
-                                            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                                            <h4 style="color: #ff5663;">No History Found </h4>
+                                            <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+                                            <h4 class="no-history-found-msg">No History Found </h4>
                                         </div>
                                     </ng-template>
                                 </div>
@@ -258,7 +260,7 @@
                     <div class="col-sm-12 managemet-data-block-bg">
                         <div class="col-sm-8">
                             <div  class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Legal Entity<span _ngcontent-c22="" class="clr-red">*:</span></label>
+                                <label class="control-label col-sm-4 text-left">Legal Entity : <span _ngcontent-c22="" class="clr-red">*</span></label>
                                 <div class="col-sm-8">
                                     <div class="inner-addon right-addon inline-block">
 
@@ -270,19 +272,19 @@
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Code<span _ngcontent-c22="" class="clr-red">*:</span></label>
+                                <label class="control-label col-sm-4 text-left">Code : <span _ngcontent-c22="" class="clr-red">*</span></label>
                                 <div class="col-sm-8">
                                     <div class="inner-addon right-addon inline-block"> <input type="text" (ngModelChange)="msAddChange()" class="form-control names" id="label" name="label" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.code" required> </div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Name<span _ngcontent-c22="" class="clr-red">*:</span></label>
+                                <label class="control-label col-sm-4 text-left">Name : <span _ngcontent-c22="" class="clr-red">*</span></label>
                                 <div class="col-sm-8">
                                     <div class="inner-addon right-addon inline-block"> <input type="text" (ngModelChange)="msAddChange()" class="form-control names" id="alias" name="alias" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.name" required> </div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Description:</label>
+                                <label class="control-label col-sm-4 text-left">Description :</label>
                                 <div class="col-sm-8">
                                     <div class="inner-addon right-addon inline-block"> <input type="text" (ngModelChange)="msAddChange()" class="form-control names" id="alias" name="alias" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.description"> </div>
                                 </div>
@@ -344,7 +346,7 @@
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
@@ -361,7 +363,7 @@
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="restoreItemAndCloseModel()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="restoreItemAndCloseModel()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
@@ -389,27 +391,27 @@
                 <div class="col-sm-12 managemet-data-block-bg">
                     <div class="col-sm-12">
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">LegalEntity<span _ngcontent-c22="" class="clr-red">*:</span></label>
+                            <label class="control-label col-sm-4 text-left">LegalEntity : <span _ngcontent-c22="" class="clr-red"> *</span></label>
                             <div class="col-sm-8">
                                 <div class="inner-addon right-addon inline-block">  {{managementViewData.legalEntityName}} </div>
                             </div>
                         </div>
                         
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Code<span _ngcontent-c22="" class="clr-red">*:</span></label>
+                            <label class="control-label col-sm-4 text-left">Code : <span _ngcontent-c22="" class="clr-red">*</span></label>
                             <div class="col-sm-8">
                                 <div class="inner-addon right-addon inline-block">  {{managementViewData.code}} </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Name<span _ngcontent-c22="" class="clr-red">*:</span>:</label>
+                            <label class="control-label col-sm-4 text-left">Name : <span _ngcontent-c22="" class="clr-red">*</span></label>
                             <div class="col-sm-8">
                                 <div class="inner-addon right-addon inline-block"> {{managementViewData.name}} </div>
                             </div>
                         </div>
 
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Description<span _ngcontent-c22="" class="clr-red">*:</span>:</label>
+                            <label class="control-label col-sm-4 text-left">Description :  </label>
                             <div class="col-sm-8">
                                 <div class="inner-addon right-addon inline-block"> {{managementViewData.description}} </div>
                             </div>

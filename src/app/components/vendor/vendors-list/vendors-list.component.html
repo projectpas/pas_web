@@ -349,7 +349,7 @@
         *ngIf="allVendorList?.length == 0">
         <tr>
           <td
-            [attr.colspan]="13"
+            [attr.colspan]="14"
             class="no-records-cstm no-records-msg">
             No records found
           </td>
@@ -1484,7 +1484,7 @@
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns>
                       <tr *ngIf="allVendorPOROList.length == 0">
-                        <td colspan="11"   class="no-records-cstm no-records-msg">
+                        <td colspan="13"   class="no-records-cstm no-records-msg">
                           No records found
                         </td>
                       </tr>
@@ -1496,7 +1496,7 @@
                     >
                       <tr>
                         <td
-                          colspan="11"
+                          colspan="13"
                           class="no-records-cstm no-records-msg"
                         >
                           No records found
@@ -1541,12 +1541,14 @@
           </div>
           <div id="step10" class="panel-collapse collapse">
             <div>
-              <app-vendor-documents
+              <!-- <app-vendor-documents
                 *ngIf="vendorId"
                 [vendorId]="vendorId"
                 [viewMode]="isViewMode"
               >
-              </app-vendor-documents>
+              </app-vendor-documents> -->
+
+              <app-common-documents [moduleName]="moduleNameVendor" [referenceId]="vendorId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
             </div>
           </div>
         </div>

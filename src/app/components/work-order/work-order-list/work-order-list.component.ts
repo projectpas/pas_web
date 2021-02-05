@@ -21,6 +21,7 @@ import { Billing } from '../../../models/work-order-billing.model';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from "@angular/common";
 import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-details.model';
+import { MenuItem } from 'primeng/api';
 @Component({
     selector: 'app-work-order-list',
     templateUrl: './work-order-list.component.html',
@@ -31,6 +32,7 @@ import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-det
 /** WorkOrderList component*/
 export class WorkOrderListComponent implements OnInit {
     /** WorkOrderList ctor */
+    breadcrumbs: MenuItem[];
     workOrderData: any;
     isLoader: boolean = true;
     isView: boolean = true;
@@ -155,6 +157,7 @@ export class WorkOrderListComponent implements OnInit {
     freight: any;
     isContractAvl: any;
     AuditDetails = SingleScreenAuditDetails;
+    home: any;
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private authService: AuthService,
@@ -165,8 +168,16 @@ export class WorkOrderListComponent implements OnInit {
         private datePipe: DatePipe
     ) {
         this.moduleName = 'Work Order';
+        this.breadcrumbs = [
+            { label: 'Work Order' },
+            { label: 'Work Order List' },
+        ];
     }
     ngOnInit() {
+        this.breadcrumbs = [
+            { label: 'Work Order ' },
+            { label: 'Work Order List' },
+        ];
         this.getWorkOrderDefaultSetting();
         this.getCustomerWarningsList();
         this.getTaskList();
@@ -328,22 +339,22 @@ export class WorkOrderListComponent implements OnInit {
 
     convertDate(key, data) {
         if (key === 'openDate' && data[key]) {
-            return moment(data['openDate']).format('MM-DD-YYYY');
+            return moment(data['openDate']).format('MM/DD/YYYY');
         }
         else if (key === 'customerRequestDateType' && data[key]) {
-            return data['customerRequestDateType'] !== 'Multiple' ? moment(data['customerRequestDate']).format('MM-DD-YYYY') : data['customerRequestDateType'];
+            return data['customerRequestDateType'] !== 'Multiple' ? moment(data['customerRequestDate']).format('MM/DD/YYYY') : data['customerRequestDateType'];
         }
         else if (key === 'promisedDateType' && data[key]) {
-            return data['promisedDateType'] !== 'Multiple' ? moment(data['promisedDate']).format('MM-DD-YYYY') : data['promisedDateType'];
+            return data['promisedDateType'] !== 'Multiple' ? moment(data['promisedDate']).format('MM/DD/YYYY') : data['promisedDateType'];
         }
         else if (key === 'estimatedShipDateType' && data[key]) {
-            return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM-DD-YYYY') : data['estimatedShipDateType'];
+            return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM/DD/YYYY') : data['estimatedShipDateType'];
         } else if (key === 'estimatedCompletionDateType' && data[key]) {
-            return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM-DD-YYYY') : data['estimatedCompletionDateType'];
+            return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM/DD/YYYY') : data['estimatedCompletionDateType'];
         } else if (key === 'createdDate' && data[key]) {
-            return moment(data['createdDate']).format('MM-DD-YYYY h:m:a');
+            return moment(data['createdDate']).format('MM/DD/YYYY h:m:a');
         } else if (key === 'updatedDate' && data[key]) {
-            return moment(data['updatedDate']).format('MM-DD-YYYY h:m:a');
+            return moment(data['updatedDate']).format('MM/DD/YYYY h:m:a');
         } else {
             return data[key];
         }
@@ -1092,10 +1103,11 @@ export class WorkOrderListComponent implements OnInit {
                     return {
                         ...x,
                         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
-                        estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy') : '',
-                        estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy') : '',
-                        customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy') : '',
-                        promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy') : '',
+                        estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
 

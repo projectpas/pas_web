@@ -248,7 +248,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions?.length == 0">
                                                 <tr>
-                                                    <td [attr.colspan]="12" class="no-records-cstm no-records-msg">
+                                                    <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                                                         No records found
                                                     </td>
                                                 </tr>
@@ -586,7 +586,7 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions.length == 0">
                                 <tr>
-                                    <td colspan="12" class="no-records-cstm no-records-msg">
+                                    <td colspan="15" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
@@ -669,15 +669,15 @@
             <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
-                        <th>Tag</th>
+                        <th>Tag <span class="clr-red">*</span></th>
                         <th>Attention</th>
-                        <th>Site Name</th>
-                        <th>Address1</th>
+                        <th>Site Name <span class="clr-red">*</span></th>
+                        <th>Address1 <span class="clr-red">*</span></th>
                         <th>Address2</th>
-                        <th>City</th>
-                        <th>State</th>
-                        <th>Postal Code</th>
-                        <th>Country</th>
+                        <th>City <span class="clr-red">*</span></th>
+                        <th>State <span class="clr-red">*</span></th>
+                        <th>Postal Code <span class="clr-red">*</span></th>
+                        <th>Country <span class="clr-red">*</span></th>
                         <th>Is Primary</th>
                         <th>Is Active</th>
                         <th>Created Date</th>

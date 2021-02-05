@@ -246,7 +246,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions?.length == 0">
                                                 <tr>
-                                                    <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
+                                                    <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                                                         No records found
                                                     </td>
                                                 </tr>
@@ -500,15 +500,15 @@
                                                 <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                     <thead>
                                                         <tr>
-                                                            <th>TagName</th>
+                                                            <th>Tag Name <span class="clr-red">*</span></th>
                                                             <th>Attention</th>
-                                                            <th>Site Name</th>
-                                                            <th>Address1</th>
+                                                            <th>Site Name <span class="clr-red">*</span></th>
+                                                            <th>Address1 <span class="clr-red">*</span></th>
                                                             <th>Address2</th>
-                                                            <th>City</th>
-                                                            <th>State/Prov</th>
-                                                            <th>Postal Code</th>
-                                                            <th>Country</th>
+                                                            <th>City <span class="clr-red">*</span></th>
+                                                            <th>State/Prov <span class="clr-red">*</span></th>
+                                                            <th>Postal Code <span class="clr-red">*</span></th>
+                                                            <th>Country <span class="clr-red">*</span></th>
                                                             <th>Is Primary</th>
                                                             <th>Is Active</th>
                                                             <th>Created Date</th>
@@ -2141,7 +2141,7 @@
                                 <th>Start Date</th>
                                 <th>Expiration Date</th>
                                 <th>Amount</th>
-                                <th>Country</th>
+                                <th>Country <span class="clr-red">*</span></th>
                                 <th>IsPrimary</th>
                                 <th>Is Active</th>
                                 <th>Created Date</th>

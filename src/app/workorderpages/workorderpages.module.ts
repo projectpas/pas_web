@@ -107,10 +107,12 @@ import { SalesOrderService } from '../services/salesorder.service';
 import { SalesOrderEndpointService } from '../services/salesorder-endpoint.service';
 import { FormatTimePipe } from '../pipes/timer-pipe';
 import { TreeTableModule } from 'primeng/treetable';
-
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
+import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
 // import { MaterialListCreateComponent } from '../shared/Material-List-Create.component';
 // import { SharedModule } from '../shared/shared.module';
-// import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser'; 
 
 @NgModule({
   imports: [
@@ -140,7 +142,10 @@ import { TreeTableModule } from 'primeng/treetable';
     FileUploadModule,
     NgMultiSelectDropDownModule,
     EditorModule,
-    TreeTableModule
+    TreeTableModule,
+    BreadcrumbModule,
+    CommonDocumentsModule,
+    CommonCommunicationModule
   ],
   declarations: [
     WorkOrderPagesComponent,

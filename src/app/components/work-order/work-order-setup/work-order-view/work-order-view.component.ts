@@ -150,8 +150,13 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
             this.getWorkOrderDefaultSetting();
         }
     }
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
     getAllExpertiseType() {
-        this.commonService.getExpertise().subscribe(res => {
+        this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
 
           this.expertiseTypeList = res.map(x => {
             // return {
@@ -228,7 +233,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 
 
     getJobTitles() {
-        this.commonService.getJobTitles().subscribe(res => {
+        this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
             this.getSalesPersonList();
             this.getCSRList();

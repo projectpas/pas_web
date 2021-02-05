@@ -8,7 +8,7 @@ import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { ActionService } from '../../../../Workflow/ActionService';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
-declare var $ : any;
+declare var $: any;
 import { AuthService } from '../../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { Pipe, PipeTransform } from "@angular/core";
@@ -198,7 +198,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
     currentRow: any = {};
     openDelete(content, row) {
-        console.log("delete model")
+        // console.log("delete model")
         this.currentRow = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
@@ -220,7 +220,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         } else {
             this.workOrderService.deleteWorkOrderMaterialList(this.currentRow.workOrderMaterialsId, this.userName).subscribe(res => {
@@ -233,7 +233,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         }
         this.modal.close();
@@ -262,7 +262,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         } else {
             this.isSpinnerVisible = true;
@@ -284,7 +284,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         }
     }
@@ -296,7 +296,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         } else {
             this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
@@ -304,7 +304,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         }
     }
@@ -609,7 +609,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 err => {
                     // this.isSpinnerVisible = false;
                     this.reservedList = []
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
         }
     }
@@ -689,7 +689,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    // this.errorHandling(err);
                 })
 
         })
@@ -985,7 +985,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         },
             err => {
                 // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+                // this.errorHandling(err);
             });
     }
 
@@ -1055,24 +1055,24 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         //     window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
     }
     moduleName: any = '';
-    errorHandling(err) {
-        if (err['error']['errors']) {
-            err['error']['errors'].forEach(x => {
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else {
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
+    // errorHandling(err) {
+    //     if (err['error']['errors']) {
+    //         err['error']['errors'].forEach(x => {
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 x['message'],
+    //                 MessageSeverity.error
+    //             );
+    //         })
+    //     }
+    //     else {
+    //         this.alertService.showMessage(
+    //             this.moduleName,
+    //             'Saving data Failed due to some input error',
+    //             MessageSeverity.error
+    //         );
+    //     }
+    // }
     handleError(err) {
         if (err['error']['errors']) {
             err['error']['errors'].forEach(x => {
@@ -1092,6 +1092,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
 
-    clearautoCompleteInput(workOrderGeneralInformation, employeeId) {}
+    clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
 }
 
