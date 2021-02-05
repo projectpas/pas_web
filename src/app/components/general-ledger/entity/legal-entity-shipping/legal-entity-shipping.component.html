@@ -1,5 +1,5 @@
 ﻿
-<div class="right_col" role="main" style="padding: 2px 6px">
+<div  role="main" style="padding: 2px 6px">
     <div>
         <div class="x_content">
             <div *ngIf="isViewMode == false">
@@ -27,7 +27,7 @@
                            href="#step1">Domestic Shipping Info</a>
                       </h4>
                   </div>
-                  <div id="step1" class="panel-collapse collapse in show">
+                  <div id="step1" class="panel-collapse collapse">
                       <div class="panel-body m-lr-7">
                           <div class="col-sm-12">
                             <div style="text-align: right;">
@@ -266,7 +266,7 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" let-columns>
                             <tr>
-                                <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
+                                <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
@@ -1423,7 +1423,7 @@
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns >
                         <tr>
-                            <td colspan="9" style="color: red; font-weight: bold; text-align: center">
+                            <td colspan="13" class="no-records-cstm no-records-msg">
                                 No records found
                             </td>
                         </tr>
@@ -1923,7 +1923,7 @@
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns >
                         <tr>
-                            <td colspan="9" style="color: red; font-weight: bold; text-align: center">
+                            <td colspan="13" class="no-records-msg no-records-cstm">
                                 No records found
                             </td>
                         </tr>

@@ -1,4 +1,4 @@
-﻿<div class="right_col" role="main">
+﻿<div role="main">
     <div>
         <div class="x_content">
             <div *ngIf="isViewMode == false">
@@ -87,7 +87,7 @@
                             class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                              (click)="dt.exportCSV({selectionOnly:true})" ></button>
                             <div class="excel-upload  excel-upload-cstm" *ngIf="isViewMode==false ">
-                                <button name="download" id="download" type="button" class="btn btn-primary"
+                                <button name="download" id="download" type="button" class="btn btn-primary exports-button"
                                         matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForContact()"
                                         >
                                     Sample File Download

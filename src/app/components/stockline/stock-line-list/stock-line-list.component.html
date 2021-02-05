@@ -87,8 +87,7 @@
                   <div class="col">
                     <div class="">
                     <div
-                      class="col"
-                      style="float: right; padding: 3px 0 0; width: 250px;"
+                      class="col stockline-radios"
                     >
                       <div class="form-group">
                         <div class="pull-left radio-buttons-align">
@@ -141,7 +140,8 @@
                 </tr>
                 <tr>
                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" style="width:100%;" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
+                        <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
+                        class="table-header-input-width" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains')" >
                         <!-- <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate' || col.field == 'expirationDate' || col.field == 'tagDate'"
                             name="receivedDate" class="table-header-input-width" [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
