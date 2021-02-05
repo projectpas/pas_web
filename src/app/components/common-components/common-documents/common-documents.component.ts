@@ -172,7 +172,6 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     enableSave() {
-        debugger;
         if ((this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0)) {
             this.disableSave = false;
         } else {
