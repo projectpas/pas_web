@@ -143,12 +143,19 @@
                         <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
                         class="table-header-input-width" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains')" >
-                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate' || col.field == 'expirationDate' || col.field == 'tagDate'"
+                        <!-- <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate' || col.field == 'expirationDate' || col.field == 'tagDate'"
                             name="receivedDate" class="table-header-input-width" [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
-                        <input type="date"   class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                         -->
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'receivedDate'"
+                            name="receivedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'expirationDate'"
+                            name="expirationDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'tagDate'"
+                            name="tagDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                             name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                        <input type="date"   class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
+                        <input type="date"   class="hidePlaceHolder table-header-input-width"  *ngIf="col.field == 'updatedDate'"
                             name="updatedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
                     </th>
                     <th class="table-actions-column"></th>
@@ -215,7 +222,8 @@
 			</div>
 			<div class="modal-body" *ngIf="targetData">
 				<strong>
-					<span *ngIf="selectedOnly">
+					<!-- <span *ngIf="selectedOnly"> -->
+          <span> 
 						You are attempting to export {{targetData.totalRecords}} of records. 
 					</span> 
 				</strong>

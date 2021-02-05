@@ -33,8 +33,8 @@
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <select class="form-control custom-select wf-pub-id" [(ngModel)]="material.taskId" name="task_{{ i }}"
-              required (change)="onTaskChange(material)">
+            <select class="form-control custom-select wf-pub-id qtyWidth" [(ngModel)]="material.taskId"
+              name="task_{{ i }}" required (change)="onTaskChange(material)">
               <option value="">Select </option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{
                 task.description
@@ -70,7 +70,7 @@
             </p-dropdown>
           </td>
           <td>
-            <select class="form-control wf-pub-id full-width" [(ngModel)]="material.materialMandatoriesId"
+            <select class="form-control wf-pub-id full-width qtyWidth" [(ngModel)]="material.materialMandatoriesId"
               (change)="onSelectMaterialManditory(material)" style="margin:auto;" name="mandi_{{ i }}">
               <option value="0">--select--</option>
               <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.materialMandatoriesId }}">
@@ -79,7 +79,7 @@
             </select>
           </td>
           <td *ngIf="isQuote==true || isWorkOrder==true">
-            <select class="form-control wf-pub-id" [(ngModel)]="material.provisionId" name="provision_{{ i }}"
+            <select class="form-control wf-pub-id qtyWidth" [(ngModel)]="material.provisionId" name="provision_{{ i }}"
               (change)="getProvisionDetails($event,material,i)" required>
               <option value="">--Select--</option>
               <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
@@ -88,7 +88,7 @@
             </select>
           </td>
           <td>
-            <input type="text" pInputText pKeyFilter="pnum" class="form-control w100 text-right input_adjust"
+            <input type="text" pInputText pKeyFilter="pnum" class="form-control w100  qtyWidth text-right input_adjust"
               value="{{ material.quantity }}" (keyup)="
                 calculateQtySummation();
                 calculateExtendedCost(material);
@@ -105,12 +105,12 @@
             {{material.stockType}}
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right input_adjust" pInputText pKeyFilter="money"
+            <input type="text" class="form-control w100 text-right input_adjust qtyWidth" pInputText pKeyFilter="money"
               value="{{ material.unitCost }}" (change)="calculateExtendedCost(material)" [(ngModel)]="material.unitCost"
               name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right input_adjust" pInputText pKeyFilter="money"
+            <input type="text" class="form-control w100 text-right input_adjust qtyWidth" pInputText pKeyFilter="money"
               [disabled]="true" value="{{ material.extendedCost }}" [(ngModel)]="material.extendedCost"
               name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
           </td>

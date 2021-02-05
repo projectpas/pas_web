@@ -563,5 +563,11 @@ export class SalesOrderService {
   getpickticketHistory(pickticketid) {
     return this.salesOrderEndPointSevice.getpickticketHistory(pickticketid)
   }
+
+  getStockLineforPickTicket(itemMasterId: number, conditionId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getStockLineforPickTicket(itemMasterId, conditionId)
+    );
+  }
   //ed --nitin
 }
