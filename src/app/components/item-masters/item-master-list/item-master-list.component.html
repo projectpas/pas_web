@@ -668,8 +668,8 @@
                                     <td class="table-column-width" *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{rowData[col.field]}}
                                     </td>
-                                    <td class="table-column-width" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
-                                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                                    <td style="text-align: left !important;" class="table-column-width" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
+                                        <p class="m-0 p-0 text-left">{{rowData[col.field]}}</p>
                                     </td>                                        
                                     <td class="table-column-width" *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}</p>
