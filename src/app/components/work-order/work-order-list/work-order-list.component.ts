@@ -157,7 +157,6 @@ export class WorkOrderListComponent implements OnInit {
     freight: any;
     isContractAvl: any;
     AuditDetails = SingleScreenAuditDetails;
-    breadcrumbs: MenuItem[];
     home: any;
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
