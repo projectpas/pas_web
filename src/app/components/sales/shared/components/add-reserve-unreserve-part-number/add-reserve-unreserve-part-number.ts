@@ -85,7 +85,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "partNumber", header: "PN", width: "100px" },
                 { field: "partDescription", header: "PN Description   ", width: "200px" },
                 { field: "stockLineNumber", header: "Stk Line Num   ", width: "100px" },
-                { field: "controlNumber", header: "Cntr Num   ", width: "800px" },
+                { field: "controlNumber", header: "Cntr Num   ", width: "80px" },
                 { field: "condition", header: "Condition Type    ", width: "100px" },
                 { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
                 { field: "quantity", header: "Qty Required ", width: "100px" },
@@ -132,7 +132,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
                 for (let i = 0; i < this.parts.length; i++) {
-                    
+
                     if (this.parts[i].oemDer == null)
                         this.parts[i].oemDer = this.parts[i].stockType;
 
@@ -161,7 +161,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
                 for (let i = 0; i < this.parts.length; i++) {
-                    
+
                     if (this.parts[i].oemDer == null)
                         this.parts[i].oemDer = this.parts[i].stockType;
 
@@ -258,32 +258,51 @@ export class SalesReserveUnreserveComponent implements OnInit {
     }
 
     savereserveissuesparts(parts) {
-        let tempParts = [];
-        parts.filter(x => {
-            x.createdBy = this.userName;
-            x.updatedBy = this.userName;
-
-            if (x.reservedById != null)
-                x.reservedById = x.reservedById.value;
-
-            if (x.isSelected == true) {
-                tempParts.push(x);
-            }
-        })
-        parts = [];
-        parts = [...tempParts];
-
-        this.isSpinnerVisible = true;
-        this.salesOrderService
-            .savereserveissuesparts(parts)
-            .subscribe(data => {
+        let invalidQty = false;
+        for (let i = 0; i < parts.length; i++) {
+            let selectedItem = parts[i];
+            var errmessage = '';
+            if (this.selectedPartActionType == "Reserve" && selectedItem.qtyToReserve > selectedItem.quantityAvailable) {
                 this.isSpinnerVisible = false;
-                this.alertService.showMessage(
-                    "Success",
-                    `Part ` + this.selectedPartActionType + `d successfully.`,
-                    MessageSeverity.success
-                );
-            });
+                invalidQty = true;
+                errmessage = errmessage + '<br />' + "You cannot reserve more than available QTY"
+            }
+        }
+        if (invalidQty) {
+            this.isSpinnerVisible = false;
+            this.alertService.resetStickyMessage();
+            this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+        }
+        else {
+            this.disableSubmitButtonForAction = true;
+            let tempParts = [];
+            parts.filter(x => {
+                x.createdBy = this.userName;
+                x.updatedBy = this.userName;
+
+                if (x.reservedById != null)
+                    x.reservedById = x.reservedById.value;
+
+                if (x.isSelected == true) {
+                    tempParts.push(x);
+                }
+            })
+            parts = [];
+            parts = [...tempParts];
+
+            this.isSpinnerVisible = true;
+            this.salesOrderService
+                .savereserveissuesparts(parts)
+                .subscribe(data => {
+                    this.isSpinnerVisible = false;
+                    this.alertService.showMessage(
+                        "Success",
+                        `Part ` + this.selectedPartActionType + `d successfully.`,
+                        MessageSeverity.success
+                    );
+                    this.close.emit(true);
+                });
+        }
     }
 
     interval: any;

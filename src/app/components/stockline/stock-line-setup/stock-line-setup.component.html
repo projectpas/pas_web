@@ -354,29 +354,23 @@
                             </div>
                             <div class="form-group">
                                 <label>Receiver Num <span class="clr-red">*</span></label>
-                                <!-- <input class="form-control" type="text" name="receiverNumber"
-                                    [(ngModel)]="stockLineForm.receiverNumber" #receiverNumber="ngModel"
-                                    (ngModelChange)="enableSave()" required>
-                                <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
+                                <!-- <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
+                                    [(ngModel)]="stockLineForm.receiverNumber" name="receiverNumber"
+                                    [suggestions]="receicerlistInfo" (completeMethod)="filterReceiverNumber($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    (onSelect)="onChangeReceivedNum(stockLineForm.receiverNumber)"
+                                    [forceSelection]="false" (ngModelChange)="enableSave()" #receiverNumber="ngModel"
+                                    required>
+                                </p-autoComplete> -->
+                                <p-autoComplete class="pautocomp-cstm" name="receiverNumber" [suggestions]="receicerlistInfo" 
+                                (completeMethod)="filterReceiverNumber($event)" placeholder="Select" [dropdown]="true" 
+                                (ngModelChange)="enableSave()" errorMessage="Records not found" [(ngModel)]="receiverNumber" required></p-autoComplete>
+                                <!-- <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
                                     class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="receiverNumber.errors.required">
                                         <small> Received Num is required </small>
                                     </div>
                                 </div> -->
-                                <p-autoComplete field="purchaseOrderNumber" class="pautocomp-cstm"
-                                    [(ngModel)]="stockLineForm.receiverNumber" name="receiverNumber"
-                                    [suggestions]="polistInfo" (completeMethod)="filterPoNumber($event)" [size]="30"
-                                    [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                    (onSelect)="onChangeReceivedNum(stockLineForm.receiverNumber)"
-                                    [forceSelection]="false" (ngModelChange)="enableSave()" #receiverNumber="ngModel"
-                                    required>
-                                </p-autoComplete>
-                                <div *ngIf="receiverNumber.invalid && (receiverNumber.dirty || receiverNumber.touched)"
-                                    class="alert alert-danger alert-danger-cstm">
-                                    <div *ngIf="receiverNumber.errors.required">
-                                        <small> Received Num is required </small>
-                                    </div>
-                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Received Date <span class="clr-red">*</span></label>
@@ -571,13 +565,13 @@
                             <div class="form-group">
                                 <label matTooltip="Export Control Classification Number"
                                     matTooltipPosition="above">ECCN</label>
-                                <input class="form-control" type="text" name="ExportECCN"
+                                <input class="form-control" type="text" name="ExportECCN" disabled
                                     [(ngModel)]="stockLineForm.exportECCN" (ngModelChange)="enableSave()">
                             </div>
                             <div class="form-group">
                                 <label matTooltip="International Traffic in Arms Regulations Number"
                                     matTooltipPosition="above">ITAR</label>
-                                <input class="form-control" type="text" name="ITARNumber"
+                                <input class="form-control" type="text" name="ITARNumber" disabled
                                     [(ngModel)]="stockLineForm.itarNumber" (ngModelChange)="enableSave()">
                             </div>
                         </div>
