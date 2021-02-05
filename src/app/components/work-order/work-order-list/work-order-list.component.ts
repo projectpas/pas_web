@@ -340,22 +340,22 @@ export class WorkOrderListComponent implements OnInit {
 
     convertDate(key, data) {
         if (key === 'openDate' && data[key]) {
-            return moment(data['openDate']).format('MM-DD-YYYY');
+            return moment(data['openDate']).format('MM/DD/YYYY');
         }
         else if (key === 'customerRequestDateType' && data[key]) {
-            return data['customerRequestDateType'] !== 'Multiple' ? moment(data['customerRequestDate']).format('MM-DD-YYYY') : data['customerRequestDateType'];
+            return data['customerRequestDateType'] !== 'Multiple' ? moment(data['customerRequestDate']).format('MM/DD/YYYY') : data['customerRequestDateType'];
         }
         else if (key === 'promisedDateType' && data[key]) {
-            return data['promisedDateType'] !== 'Multiple' ? moment(data['promisedDate']).format('MM-DD-YYYY') : data['promisedDateType'];
+            return data['promisedDateType'] !== 'Multiple' ? moment(data['promisedDate']).format('MM/DD/YYYY') : data['promisedDateType'];
         }
         else if (key === 'estimatedShipDateType' && data[key]) {
-            return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM-DD-YYYY') : data['estimatedShipDateType'];
+            return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM/DD/YYYY') : data['estimatedShipDateType'];
         } else if (key === 'estimatedCompletionDateType' && data[key]) {
-            return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM-DD-YYYY') : data['estimatedCompletionDateType'];
+            return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM/DD/YYYY') : data['estimatedCompletionDateType'];
         } else if (key === 'createdDate' && data[key]) {
-            return moment(data['createdDate']).format('MM-DD-YYYY h:m:a');
+            return moment(data['createdDate']).format('MM/DD/YYYY h:m:a');
         } else if (key === 'updatedDate' && data[key]) {
-            return moment(data['updatedDate']).format('MM-DD-YYYY h:m:a');
+            return moment(data['updatedDate']).format('MM/DD/YYYY h:m:a');
         } else {
             return data[key];
         }
