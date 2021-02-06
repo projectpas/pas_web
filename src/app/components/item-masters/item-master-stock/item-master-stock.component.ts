@@ -5976,5 +5976,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     ConsumeUOMdescription($event) {}
     SOLDUOMdescription($event) {}
     savewarnings() {}
-    dismissModelNew() {}
+    dismissModelNew() {
+        this.isDeleteMode=false;
+        this.modal.close();
+    }
 }

@@ -1810,7 +1810,14 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		  this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
 			results => {
 				this.loadingIndicator = false;
-				dt._value = results[0]['results'];
+				dt._value = results[0]['results'].map(x=>{
+					return{
+						...x,
+						createdDate:x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+						updatedDate:x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+
+					}
+				});
 				dt._value.itemType = 'Non-Stock';
 				dt.exportCSV();
 				dt.value = this.allNonstockInfo;

@@ -705,7 +705,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.shelfId = 0;
             stockLine.warehouseId = 0;
             stockLine.binId = 0;
-            stockLine.repairOrderId = null;
+            stockLine.repairOrderId = 0;
             stockLine.locationId = 0;
             stockLine.shippingAccount = this.poDataHeader.shippingAccountNo;
             stockLine.conditionId = 0;
@@ -715,9 +715,9 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.purchaseOrderExtendedCost = part.unitCost;
             stockLine.currentDate = new Date();
             stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
-            stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId.toString();
+            stockLine.obtainFrom = this.purchaseOrderData.vendor.vendorId;
             stockLine.ownerType = AppModuleEnum.Vendor;
-            stockLine.owner = this.purchaseOrderData.vendor.vendorId.toString();           
+            stockLine.owner = this.purchaseOrderData.vendor.vendorId;           
             
             
             stockLine.maincompanylist = part.maincompanylist;

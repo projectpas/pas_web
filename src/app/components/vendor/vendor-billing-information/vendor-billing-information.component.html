@@ -265,7 +265,7 @@
 
                                     <ng-template pTemplate="emptymessage" let-columns>
                                         <tr>
-                                            <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
+                                            <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                                                 No records found
                                             </td>
                                         </tr>
@@ -355,15 +355,15 @@
             <table class="table table-bordered header-table-width" *ngIf="billingauditHisory.length> 0 else noDatavailable">
                 <thead>
                     <tr>
-                        <th>Tag</th>
+                        <th>Tag <span class="clr-red">*</span></th>
                         <th>Attention</th>
-                        <th>Site Name</th>
-                        <th>Address1</th>
+                        <th>Site Name <span class="clr-red">*</span></th>
+                        <th>Address1 <span class="clr-red">*</span></th>
                         <th>Address2</th>
-                        <th>City</th>
-                        <th>State/Prov</th>
-                        <th>Postal Code</th>
-                        <th>Country</th>
+                        <th>City <span class="clr-red">*</span></th>
+                        <th>State/Prov <span class="clr-red">*</span></th>
+                        <th>Postal Code <span class="clr-red">*</span></th>
+                        <th>Country <span class="clr-red">*</span></th>
                         <th>Is Primary</th>
                         <th>Is Active</th>
                         <th>Created Date</th>

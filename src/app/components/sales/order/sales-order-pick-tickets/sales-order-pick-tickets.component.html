@@ -1,6 +1,6 @@
 <div class="card new-card">
   <div class="card-body header-body">
-    <p-table #dt [value]="pickTickes" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
+    <!-- <p-table #dt [value]="pickTickes" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
       paginator="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
       selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
       (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
@@ -35,7 +35,7 @@
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
           <th style="width:200px;position:sticky" class="table-actions-column">
-            Actions1
+            Actions
           </th>
         </tr>
         <tr>
@@ -66,11 +66,11 @@
             <div>
               <span>
                 <a class="btn nobg" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-              </span>
+              </span> -->
               <!-- <span>
                 <a (click)="openOrderToEdit(rowData)" matTooltip="Edit" class="btn nobg" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
               </span> -->
-              <span data-toggle="modal"
+              <!-- <span data-toggle="modal"
                 data-target="#editpickticket">
                 <a class="btn nobg" 
                 (click)="openEdit(rowData)" matTooltip="Edit" 
@@ -101,8 +101,147 @@
         <label id="footer" class="footer1">Pages Count:</label>
         <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
       </ng-template>
-    </p-table>
-  </div>
+    </p-table> -->
+
+    <div [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+            style="min-height: 130px !important;">
+            <div class="tableFixHead">
+                <table class="table table-bordered" id="so-table">
+                    <tr class="header-table-width" style="font-size: 10px">
+                        <th *ngFor="let summaryColumn of headers">
+                            <span>
+                                {{ summaryColumn.header }}
+                            </span>
+                        </th>
+                        <!-- <th colspan="26"></th> -->
+                        <th>Actions</th>
+                    </tr>
+                    <ng-container *ngIf="pickTickes.length > 0">
+                      <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
+                          <tbody>
+                              <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                                  <td *ngFor="let summaryColumn of headers"
+                                      style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                      <span>
+                                          {{summaryPart[summaryColumn.field]}}
+                                      </span>
+                                  </td>
+                                  <!-- <td colspan="26" style="background-color: #EAF2C5 !important;"></td> -->
+                                  <td style="position:sticky; width:80px">
+                                      <span data-toggle="modal"
+                                      data-target="#pickticketieminterface">
+                                          <a class="btn nobg" (click)="pickticketItemInterface(summaryPart.itemMasterId,summaryPart.conditionId,rowIndex)"
+                                              matTooltip="Add PT" matTooltipPosition="above">
+                                              <i class="fa fa-plus"></i>
+                                          </a>
+                                      </span>
+                                      <!-- <span>
+                                          <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
+                                              matTooltip="View Stock Line" matTooltipPosition="above">
+                                              <i class="fa fa-eye"></i>
+                                          </a>
+                                      </span>
+                                      <span>
+                                          <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                              [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
+                                              class="btn nobg"
+                                              (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
+                                              matTooltip="Delete" matTooltipPosition="above">
+                                              <i class="fa fa-trash"></i>
+                                          </a>
+                                      </span> -->
+                                  </td>
+                              </tr>
+                              <tr class="child-header splitship-head child-header-back">
+                                <th style="background-color: #fff !important;"></th>
+                                <th>PT Num</th>
+                                <th>Serial Num </th>
+                                <th>Stk Line Num</th>
+                                <th>Qty Picked</th>
+                                <th>Picked By</th>
+                                <th>Picked Date</th>
+                                <th>Confirmed By</th>
+                                <!-- <th>PT Num</th> -->
+                                <th>Ctrl Num</th>
+                                <th>ID Num</th>
+                                <th style="min-width: 120px; position: sticky !important">Actions</th>
+                            </tr>
+                            <tr class="child-data splitship-child child-data-back"
+                                *ngFor="let part of summaryPart.sopickticketchild; let stockIndex = index">
+                                <td></td>
+                                <td>
+                                    {{ part.soPickTicketNumber }}
+                                </td>
+                                <td>
+                                    {{ part.serialNumber }}
+                                </td>
+                                <td>
+                                    {{ part.stockLineNumber }}
+                                </td>
+                                <td>
+                                    {{ part.qtyToShip }}
+                                </td>
+                                <td>
+                                  {{ part.pickedBy }}
+                                </td>
+                                <td>
+                                  {{ part.pickedDate | date : "MM/dd/yyyy" }}
+                                </td>
+                                <td>
+                                  {{ part.confirmedBy }}
+                                </td>
+                                <!-- <td>
+                                  {{ part.soPickTicketNumber }}
+                                </td> -->
+                                <td>
+                                  {{ part.controlNumber }}
+                                </td>
+                                <td>
+                                    {{ part.idNumber }}
+                                </td>
+                                <td class="zui-sticky-col" style="width:107px !important">
+                                        <span>
+                                            <!-- <a [class.disabled]="isEditDisabled(salesQuote, part)"
+                                                [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
+                                                class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-pencil"></i>
+                                            </a> -->
+                                            <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(rowData);"><i
+                                              class="fa fa-print"></i></a>
+                                        </span>
+                                        <span>
+                                          <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(rowData);"><i
+                                            class="fa fa-print"></i></a>
+                                        </span>
+                                        <span>
+                                          <a class="btn nobg" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                        </span>
+                                        <span data-toggle="modal"
+                                          data-target="#editpickticket">
+                                                <a class="btn nobg" 
+                                                (click)="openEdit(rowData)" matTooltip="Edit" 
+                                                matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                        </span>
+                                  </td>
+                              </tr>
+                            </tbody>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="pickTickes.length == 0">
+                        <tbody>
+                            <tr>
+                                <td colspan="48"
+                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    No records found
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
@@ -404,5 +543,98 @@
                 <button type="button" class="btn btn-danger" (click)="closepickticketHistoryModal()">Close</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pickticketieminterface" role="dialog"  data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button 
+            type="button"
+            class="close font_chck"
+            (click)="closeMyModel('#pickticketieminterface')">
+            &times;
+          </button>
+          <h4 class="modal-title"> Pick Item Interface</h4>
+        </div> 
+        <div class="modal-body">
+        <form #ptiteminterface="ngForm" class="form-horizontal">
+          <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom" [columns]="pickTicketItemInterfaceheader" [scrollable]="true"
+          [resizableColumns]="true" selectionMode="single" [responsive]="true"
+          [metaKeySelection]="true" [style]="{ width: '100%' }">
+          <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+             <col [ngStyle]="{'width': '50px'}" />
+
+             <col *ngFor="let col of pickTicketItemInterfaceheader" [ngStyle]="{'width': col.width}" />
+         </colgroup>
+         </ng-template>
+         <ng-template pTemplate="header" let-columns>
+         <!-- <tr>
+             <th>
+             </th>
+             <th colspan="9">
+                 Materials
+             </th>
+             <th colspan="4">
+                 Stockline
+             </th>
+             <th colspan="4">
+
+             </th>
+         </tr> -->
+         <tr>
+             <!-- <th class="text-left"> -->
+                 <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                 <!-- <p-checkbox [(ngModel)]="selectAllParts" name="selectAllParts" binary="true" (onChange)="onChangeOfSelectAllQuotes($event)">
+                 </p-checkbox>
+             </th> -->
+             <th *ngFor="let col of pickTicketItemInterfaceheader">
+                 {{col.header}}
+             </th>
+         </tr>
+     </ng-template>
+     <ng-template pTemplate="body" let-part let-rowData let-i="rowIndex" let-columns="columns">
+         <tr pReorderableRowHandle>
+             <!-- <td>
+                 <span>
+                     <p-checkbox [(ngModel)]="rowData.isSelected" name="isSelected{{i}}" (onChange)="onChangeOfPartSelection($event)"
+                                 binary="true">
+                     </p-checkbox>
+                 </span>
+             </td> -->
+             <td *ngFor="let col of pickTicketItemInterfaceheader" pReorderableRowHandle>
+                 <ng-container *ngIf="col.field != 'qtyToReserve'">
+                     {{part[col.field]}}
+                 </ng-container>
+
+                 <!--qtyToReserve-->
+                 <ng-container *ngIf="col.field =='qtyToReserve'">
+                     <input type="number" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num" required="col.field =='qtyToReserve'" name="qtyToReserve{{i}}" value="{{part.qtyToReserve}}"
+                            [(ngModel)]="part.qtyToReserve" [disabled]="rowData.isSelected == false" />
+                 </ng-container>
+             </td>
+         </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
+         <tr>
+             <td [attr.colspan]="18" class="no-records-cstm" style="text-align: left;">
+                 No records found
+             </td>
+         </tr>
+        </ng-template>
+        </p-table>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">
+              Save
+          </button>
+          <button type="button" class="btn btn-danger">
+              Close
+          </button>
+      </div>
+        </form>
+        </div>
+      </div>
     </div>
 </div>
