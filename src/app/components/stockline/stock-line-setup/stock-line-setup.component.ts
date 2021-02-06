@@ -124,11 +124,12 @@ export class StockLineSetupComponent implements OnInit {
 		{ field: 'docMemo', header: 'Memo' },
 		{ field: 'fileName', header: 'File Name' },
 		{ field: 'fileSize', header: 'File Size' },
+		{ field: 'createdDate', header: 'Created Date' },
 
 		{ field: 'createdBy', header: 'Created By' },
-		{ field: 'createdDate', header: 'Created Date' },
-		{ field: 'updatedBy', header: 'Updated By' },
 		{ field: 'updatedDate', header: 'Updated Date' },
+
+		{ field: 'updatedBy', header: 'Updated By' },
 	];
 	selectedColumnsCertified = this.attachDocumentsColumns;
 	allDocumentListOriginal: any = [];
