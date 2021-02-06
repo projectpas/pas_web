@@ -270,7 +270,7 @@
                                                             <div class="form-group memo-popup-cstm mat_emo">
                                                                 <div [innerHTML]="workOrderGeneralInformation.notes"
                                                                     [matTooltip]="parsedText(workOrderGeneralInformation.notes)"
-                                                                   
+                                                                    matTooltipPosition="above"
                                                                     class="form-control text_editor_box memo_cehck1">
                                                                 </div>
                                                             </div>
@@ -338,7 +338,7 @@
                                                 <label for="employee">
                                                     Employee
                                                 </label>
-                                                <p-autoComplete field="name"
+                                                <!-- <p-autoComplete field="name"
                                                     [(ngModel)]="workOrderGeneralInformation.woEmployee"
                                                     name="employees" #employees="ngModel" (ngModelChange)="getmemo($event)"
                                                     errorMessage="Records not found" [forceSelection]="true"
@@ -347,7 +347,11 @@
                                                     (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
                                                     [size]="30" [minLength]="1" [dropdown]="true"
                                                     class="p-autoComplete-ctsm" [disabled]="isView">
-                                                </p-autoComplete>
+                                                </p-autoComplete> -->
+                                                <input type="text" class="form-control wo-input"
+                                                            name="woEmployee" #woEmployee="ngModel"
+                                                            [(ngModel)]="workOrderGeneralInformation.woEmployee"
+                                                            required [readonly]="true">
                                             </div> 
                                         </div>
                                         <div class="col-md-3">
@@ -366,7 +370,7 @@
                                                 </label>
                                                 <span>
                                                     <div class="form-group memo-popup-cstm mat_emo">
-                                                        <div [innerHTML]="workOrderGeneralInformation.memo"
+                                                        <div [innerHTML]="workOrderGeneralInformation.memo"  matTooltipPosition="above"
                                                             [matTooltip]="parsedText(workOrderGeneralInformation.memo)" 
                                                            
                                                             class="form-control text_editor_box memo_cehck1 adjust_he">
@@ -479,7 +483,7 @@
                                                disabled>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w100 text_right" name="quantity{{i}}"
+                                        <input type="number" class="form-control w100 text_right qty_width" name="quantity{{i}}"
                                                [(ngModel)]="workOrderPartNumber.quantity" disabled>
                                     </td>
                                     <td>
@@ -490,30 +494,44 @@
                             </p-dropdown>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="customerReference{{i}}"
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level1)">{{workOrderPartNumber.customerReference}}</p>
+                                        <!-- <input type="text" class="form-control w100" name="customerReference{{i}}"
                                                #customerReference="ngModel"
-                                               [(ngModel)]="workOrderPartNumber.customerReference" disabled>
+                                               [(ngModel)]="workOrderPartNumber.customerReference" disabled> -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="companyName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level1" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level1)">{{workOrderPartNumber.level1}}</p>
+                                        <!-- <input type="text" class="form-control w100 managemnt_Wdt" name="companyName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level1" disabled  matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level1)"> -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="buName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level2" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level2)">{{workOrderPartNumber.level2}}</p>
+                                        <!-- <input type="text" class="form-control w100 managemnt_Wdt" name="buName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level2" disabled matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level2)" > -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="divisionName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level3" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level3)">{{workOrderPartNumber.level3}}</p>
+                                        <!-- <input type="text" class="form-control w100 managemnt_Wdt" name="divisionName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level3" disabled matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level3)" > -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="deptName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level4" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level4)">{{workOrderPartNumber.level4}}</p>
+                                        <!-- <input type="text" class="form-control w100" name="deptName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level4" disabled matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level4)" > -->
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w50"
                                                [(ngModel)]="workOrderPartNumber.nte" name="nte{{i}}" #nte="ngModel"
-                                               disabled>
+                                              >
                                     </td>
                                     <td>
                                         <p-dropdown filter="true" placeholder="Select" [options]="conditionList"  (ngModelChange)="getValid()"
@@ -530,7 +548,7 @@
             #serialNumber="ngModel" [(ngModel)]="workOrderPartNumber.condition"
             disabled> -->
                                     </td>
-                                    <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1" style="text-align:center;">
+                                    <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1" class="text_center" >
                                         <input type="checkbox" name="contract {{i}}" #contract="ngModel"  (ngModelChange)="getValid()" 
                                                class="form-control w60" [(ngModel)]="workOrderPartNumber.isMPNContract" disabled>
                                         <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> Contract -->
@@ -610,7 +628,7 @@
                                         <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}"
                                                     class="calender-cstm" #estimatedCompletionDate="ngModel"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    [minDate]="workOrderPartNumber.receivedDate"  (ngModelChange)="getValid()"
+                                                    [minDate]="workOrderPartNumber.promisedDate"   [maxDate]="workOrderPartNumber.estimatedShipDate" (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -622,12 +640,12 @@
                                                     [minDate]="workOrderPartNumber.receivedDate" #estimatedShipDate="ngModel"
                                                     required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td class="text_center">
                                         <!-- [disabled]="isView" -->
                                         <input type="checkbox" class="form-control w60" name="isPMA{{i}}"
                                                #isPMA="ngModel" [(ngModel)]="workOrderPartNumber.isPMA" disabled>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td class="text_center">
                                         <input type="checkbox" class="form-control w60" name="isDER{{i}}"
                                                #isDER="ngModel" [(ngModel)]="workOrderPartNumber.isDER" disabled>
 
@@ -636,7 +654,7 @@
                                         <p-autoComplete field="name" [(ngModel)]="workOrderPartNumber.partTechnicianId"
                                                         name="technician{{i}}" #technician="ngModel"  (ngModelChange)="getValid()"
                                                         errorMessage="Records not found" [forceSelection]="true" [dropdown]="true"
-                                                        [suggestions]="technicianList"
+                                                        [suggestions]="technicianList" required
                                                         (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                                                         (completeMethod)="filterTechnician($event)"
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'partTechnicianId' )"
@@ -652,12 +670,12 @@
                                                     [(ngModel)]="workOrderPartNumber.techStationId"[disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
-                                    <td style="display:none">
+                                    <!-- <td style="display:none">
                                         <p-dropdown placeholder="Select" name="tearDown{{i}}" #tearDown="ngModel"  (ngModelChange)="getValid()"
                                                     [options]="tearDownReportList" class="p-dropdown-custom-md"
                                                     [(ngModel)]="workOrderPartNumber.tearDownReport"[disabled]="isView || quotestatusofCurrentPart =='Approved'">
                                         </p-dropdown>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <!-- {{workOrderPartNumber.tatDaysCurrent}} -->
                                         <input type="number" class="form-control w50" name="tatDaysCurrent{{i}}"
@@ -728,7 +746,7 @@
             </div>
         </form>
         <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-lg" style="max-width: 500px !important;">
+            <div class="modal-dialog modal-sm" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -754,7 +772,7 @@
             </div>
         </div>
     </div>
-    <div class="card" *ngIf="showTabsGrid" style="margin-top: 7px;">
+    <div class="card mn-t7" *ngIf="showTabsGrid" >
         <div *ngIf="showTabsMPNGrid">
             <div class="card-header" *ngIf="!workOrderGeneralInformation.isSinglePN">
                 Multiple MPN
@@ -762,7 +780,7 @@
             <div class="card-body">
                 <div class="col-md-12" [hidden]="workOrderGeneralInformation.isSinglePN && !showTabsGrid">
                     <div class="col-md-2">
-                        <label class="control-label col-sm-3" style=" margin-right: 4px;margin-top: 6px;">MPN
+                        <label class="control-label col-sm-3 label_adjf">MPN
                         </label>
                         <div class="col-sm-7">
                             <p-dropdown [options]="mpnPartNumbersList" name="partNumber" #partNumber="ngModel"
@@ -804,7 +822,7 @@
         </div>
         <div class="card-body" *ngIf="showGridMenu" style="padding: 0px;">
             <div class="col-md-2" *ngIf="isSubWorkOrder==true">
-  <label class="control-label col-sm-3" style=" margin-right: 4px;margin-top: 6px;">MPN
+  <label class="control-label col-sm-3 label_adjf" >MPN
   </label>
   <div class="col-sm-7">
       <p-dropdown [options]="mpnDropdownList"  name="subWOPartNoId" #subWOPartNoId="ngModel"
@@ -813,7 +831,7 @@
       </p-dropdown>
   </div>
 </div>
-            <div class="card col-md-12" style="background: #ffffff; margin-top: 0px;">
+            <div class="card col-md-12 div_bsck" >
                 <!--#f1f1f1-->
                 <ul class="nav nav-pills nav-pills-cstm back_filsd" id="pills-tab" role="tablist"
                     style="margin-top: 2px;" *ngIf="!hideWOHeader">
@@ -1188,19 +1206,3 @@
         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     </div>
 </div>
-<!-- <div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-        <div class="lds-roller">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-</div> -->
-
-<!-- *ngIf="!isSpinnerVisible" -->
