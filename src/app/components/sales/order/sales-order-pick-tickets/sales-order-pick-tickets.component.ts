@@ -419,7 +419,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
                 this.alertService.stopLoadingMessage();
                 this.alertService.showMessage(
                     "Success",
-                    `Item Added Successfully..`,
+                    `Item Picked Successfully..`,
                     MessageSeverity.success
                 );
                 $('#pickticketieminterface').modal("hide");
