@@ -516,6 +516,22 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
+                                        <label>
+                                            Notes
+                                        </label>
+                                        <span>
+                                            <div class="form-group memo-popup-cstm mat_emo">
+                                                <div [innerHTML]="sourceWorkFlow.memo"
+                                                    class="form-control"
+                                                    style="width:100% !important"
+                                                    class="text_editor_box">
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-header" style="padding: 4px 10px;">
                                             <h5 style="margin-bottom: 0;font-size: 15px;">Total Workflow Cost</h5>
@@ -561,22 +577,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
-                                        <label>
-                                            Notes
-                                        </label>
-                                        <span>
-                                            <div class="form-group memo-popup-cstm mat_emo">
-                                                <div [innerHTML]="sourceWorkFlow.memo"
-                                                    class="form-control"
-                                                    style="height: 100px !important; width:100% !important"
-                                                    class="text_editor_box">
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
+                               
                             
                             </div>
                         </div>

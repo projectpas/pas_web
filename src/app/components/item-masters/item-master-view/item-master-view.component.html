@@ -1318,11 +1318,13 @@
                                 <th>Memo</th>
                                 <th>File Name</th>
                                 <th>File Size</th>
-
-                                <th>Updated By</th>
-                                <th>Updated Date</th>
-                                <th>Created By</th>
                                 <th>Created Date</th>
+                                <th>Created By</th>
+                                
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -1361,12 +1363,13 @@
               }">
                                     {{ audit.fileName }}
                                 </td>
-                                <td>{{ audit.fileSize }}</td>
-
-                                <td>{{ audit.updatedBy }}</td>
-                                <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                                <td>{{ audit.createdBy }}</td>
+                                <td>{{ audit.fileSize }}</td>                               
+                              
+                               
                                 <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                                <td>{{ audit.createdBy }}</td>
+                                <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                                <td>{{ audit.updatedBy }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1492,10 +1495,11 @@
                                 <th>ATA Chapter Name</th>
                                 <th>ATA Sub Chapter</th>
                                 <th>ATA Sub Code</th>
-                                <th>Created By</th>
                                 <th>Created Date</th>
-                                <th>Updated By</th>
+                                <th>Created By</th>
                                 <th>Updated Date</th>
+                                <th>Updated By</th>
+                                
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
