@@ -14,9 +14,6 @@
                 </div>
             </div>
         </div>
-
-
-
         <div class="card-body new-card-body">
             <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="workOrderData" [first]="0" [rows]="pageSize"
                 [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
@@ -53,7 +50,6 @@
                             <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
                                 iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                                 matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
-
                         </div>
                         <div class="pull-right buttons-div-align">
                             <div class="col">
@@ -73,7 +69,6 @@
                                                 <span class="checkmark"></span>WO View
                                             </label>
                                         </div>
-
                                         <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
                                         <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
@@ -161,7 +156,6 @@
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
                             <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:100%;"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
-
                         </th>
                         <th style="width:80px;position:sticky"></th>
                     </tr>
@@ -218,9 +212,7 @@
                                         matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                             aria-hidden="true"></i></a>
                                 </span>
-
                             </div>
-
                         </td>
                     </tr>
                 </ng-template>
@@ -232,12 +224,11 @@
                     <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
                         pInputText type="text" />
                 </ng-template>
-
             </p-table>
         </div>
     </div>
 </div>
-<!-- Modal -->
+
 <div id="viewWorkOrder" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
@@ -263,6 +254,7 @@
         </div>
     </div>
 </div>
+
 <div *ngIf="isSubWorkOrder">
     <h4 class="modal-title">Work Order View</h4>
     <div class="card-body" *ngIf="viewWorkOrderHeader">
@@ -873,6 +865,7 @@
     </div>
 
 </div>
+
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">
         <div class="modal-content">
@@ -905,8 +898,6 @@
 </div>
 
 <ng-template #downloadConfirmation let-c="close" let-d="dismiss" data-backdrop="static">
-    <!-- <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog modal-sm"> -->
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">Are You Sure Want to Download?</h4>
@@ -927,8 +918,6 @@
             <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
         </div>
     </div>
-    <!-- </div>
-    </div> -->
 </ng-template>
 
 <div class="modal fade" id="woDelete" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -966,6 +955,7 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
+
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">
