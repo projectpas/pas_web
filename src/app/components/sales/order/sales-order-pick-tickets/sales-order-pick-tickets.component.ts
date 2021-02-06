@@ -81,6 +81,12 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
 
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
   // initColumns() {
   //   this.headers = [
   //     { field: "soPickTicketNumber", header: "PT Num", width: "130px" },
@@ -117,21 +123,12 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       { field: "qtyToShip", header: "Qty To Picked", width: "130px" },
       { field: "qtyToPick", header: "Qty To Pick", width: "130px" },
       { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
-      { field: "quantityAvailable", header: "Ready To Pick", width: "130px" },
+      { field: "readyToPick", header: "Ready To Pick", width: "130px" },
       { field: "status", header: "Status", width: "130px" },
       { field: "salesOrderNumber", header: "SO Num", width: "130px" },
       { field: "salesOrderQuoteNumber", header: "SOQ Num", width: "130px" },
-      // { field: "strStatus", header: "Status", width: "130px" },
-      // { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
-      // { field: "soNumber", header: "SO Num", width: "130px" },
-      // { field: "woNumber", header: "WO Num", width: "130px" },
-      // { field: "customer", header: "Customer", width: "130px" },
-      // { field: "poNumber", header: "PO Num", width: "130px" },
-      // { field: "shipToCity", header: "Ship To City", width: "130px" },
-      // { field: "shipToCountry", header: "Ship to Country", width: "130px" },
-      // { field: "pickedByName", header: "Picked By", width: "130px" },
-      // { field: "woNumber", header: "Confirmed By", width: "130px" },
-      // { field: "memo", header: "Memo", width: "130px" }
+      { field: "customerName", header: "Customer Name", width: "130px" },
+      { field: "customerCode", header: "Customer Code", width: "130px" },
     ];
     this.selectedColumns = this.headers;
 
@@ -140,7 +137,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       { field: "stockLineNumber", header: "Stk Line Num", width: "200px" },
       { field: "qtyOnHand", header: "Qty On Hand", width: "50px" },
       { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
-      { field: "qtyToReserve", header: "Qty To Pick", width: "100px" },
+      { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
       { field: "serialNumber", header: "Serial Num", width: "100px" },
       { field: "manufacturer", header: "Manufacturer", width: "100px" },
       { field: "stockType", header: "Stock Type", width: "100px" },
@@ -356,27 +353,79 @@ export class SalesOrderPickTicketsComponent implements OnInit {
 
   checkQtyToPicked(value){
     if(value > this.QtyRem){
-      this.PickTicketDetails.qtyToShip = 0;
-      this.disableSave = true;
-      this.alertService.showMessage(
-        'Error',
-        `Qty to pick is greater than Qty Remaining`,
-        MessageSeverity.error
-      );
+    //   this.PickTicketDetails.qtyToShip = 0;
+    //   this.disableSave = true;
+    //   this.alertService.showMessage(
+    //     'Error',
+    //     `Qty to pick is greater than Qty Remaining`,
+    //     MessageSeverity.error
+    //   );
     }
   }
 
   parts: any[] = [];
-  pickticketItemInterface(itemMasterId,conditionId){
+  pickticketItemInterface(itemMasterId,conditionId,salesOrderId,salesOrderPartId){
     this.salesOrderService
-      .getStockLineforPickTicket(itemMasterId,conditionId)
+      .getStockLineforPickTicket(itemMasterId,conditionId,salesOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response[0];
         console.log("this.pickTickes ",this.parts);
-        this.showPaginator = this.totalRecords > 0;
+        for (let i = 0; i < this.parts.length; i++) {
+          console.log(this.parts[i].oemDer);
+          if (this.parts[i].oemDer == null)
+              this.parts[i].oemDer = this.parts[i].stockType;
+
+          // this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          // this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i]['isSelected'] = false;
+          this.parts[i]['salesOrderId'] = salesOrderId;
+          this.parts[i]['salesOrderPartId'] = salesOrderPartId;
+          // if(this.parts[i].qtyToReserve){
+          if (this.parts[i].qtyToReserve == 0) {
+              this.parts[i].qtyToReserve = null
+          }
+          // }
+      }
+        //this.showPaginator = this.totalRecords > 0;
       }, error => {
         this.isSpinnerVisible = false;
       });
+  }
+
+  savepickticketiteminterface(parts){
+    let tempParts = [];
+        parts.filter(x => {
+            x.createdBy = this.userName;
+            x.updatedBy = this.userName;
+            x.pickedById = this.employeeId;
+            x.masterCompanyId = this.masterCompanyId;
+
+            // if (x.reservedById!=null)
+            //     x.reservedById = x.reservedById.employeeId;
+
+            if (x.isSelected == true) {
+                tempParts.push(x)
+                
+            }
+        })
+        parts = [];
+        parts = tempParts;
+        console.log("parts ",parts);
+
+        this.salesOrderService
+            .savepickticketiteminterface(parts)
+            .subscribe(data => {
+                this.alertService.stopLoadingMessage();
+                this.alertService.showMessage(
+                    "Success",
+                    `Item Picked Successfully..`,
+                    MessageSeverity.success
+                );
+                $('#pickticketieminterface').modal("hide");
+                this.onSearch();
+                // this.partActionModalClose.emit(true)
+               
+            },error => this.isSpinnerVisible = false);
   }
 }
