@@ -722,7 +722,7 @@ export class ReceivngPoComponent implements OnInit {
             
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
-            stockLine.managementStructureId = part.managementStructureId;
+            stockLine.managementStructureEntityId = part.managementStructureId;
             stockLine.parentBulist= part.parentBulist;
             stockLine.parentDivisionlist = part.parentDivisionlist;
             stockLine.parentDepartmentlist = part.parentDepartmentlist;
@@ -781,13 +781,13 @@ export class ReceivngPoComponent implements OnInit {
 		stockLine.parentDeptId = 0;		
         if (stockLine.parentCompanyId != 0 && stockLine.parentCompanyId != null 
             && stockLine.parentCompanyId != undefined) {
-                stockLine.managementStructureId = stockLine.parentCompanyId;
+                stockLine.managementStructureEntityId = stockLine.parentCompanyId;
 			this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentCompanyId,this.employeeId ).subscribe(res => {
                 stockLine.parentBulist = res;
             });
 		 } 
 		  else {
-            stockLine.managementStructureId = 0;
+            stockLine.managementStructureEntityId = 0;
 		 }
     }
 
@@ -797,13 +797,13 @@ export class ReceivngPoComponent implements OnInit {
         stockLine.parentDivisionId = 0;
         stockLine.parentDeptId = 0;	 	
 	 	if (stockLine.parentbuId != 0 && stockLine.parentbuId != null && stockLine.parentbuId != undefined) {
-            stockLine.managementStructureId = stockLine.parentbuId;
+            stockLine.managementStructureEntityId = stockLine.parentbuId;
 	 		this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentbuId,this.employeeId ).subscribe(res => {
                 stockLine.parentDivisionlist = res;
 	 		});
 	 	}
 	 	 else {
-            stockLine.managementStructureId  = stockLine.parentCompanyId;	 		 
+            stockLine.managementStructureEntityId  = stockLine.parentCompanyId;	 		 
 	 		}	
 	}       
     
@@ -812,21 +812,21 @@ export class ReceivngPoComponent implements OnInit {
 		stockLine.parentDepartmentlist = [];	
         if (stockLine.parentDivisionId != 0 && stockLine.parentDivisionId != null 
                && stockLine.parentDivisionId != undefined) {
-                stockLine.managementStructureId = stockLine.parentDivisionId; 
+                stockLine.managementStructureEntityId = stockLine.parentDivisionId; 
 				this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentDivisionId ,this.employeeId ).subscribe(res => {
                     stockLine.parentDepartmentlist = res;
                 });   
 		}
 		 else {
-            stockLine.managementStructureId  = stockLine.parentbuId;			
+            stockLine.managementStructureEntityId  = stockLine.parentbuId;			
 		 }	
     }
     selectedDepartment(departmentId, stockLine) {
         if (stockLine.parentDeptId != 0 && stockLine.parentDeptId != null && stockLine.parentDeptId != undefined) {
-			stockLine.managementStructureId = stockLine.parentDeptId;			
+			stockLine.managementStructureEntityId = stockLine.parentDeptId;			
 		}
 		 else {
-			stockLine.managementStructureId = stockLine.parentDivisionId;
+			stockLine.managementStructureEntityId = stockLine.parentDivisionId;
 		 }		
     }
 
@@ -1343,7 +1343,7 @@ export class ReceivngPoComponent implements OnInit {
                         errorMessages.push("Please enter Unit Cost in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
                     //item.stocklineListObj[i].oEM = item.itemMaster.oemPNId;
-                    if (item.stocklineListObj[i].managementStructureId == undefined || item.stocklineListObj[i].managementStructureId == 0) {
+                    if (item.stocklineListObj[i].managementStructureEntityId == undefined || item.stocklineListObj[i].managementStructureEntityId == 0) {
                         errorMessages.push("Please select Management Structure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
 
