@@ -110,12 +110,14 @@ export class RepairOrderPart {
     itemMaster: any;
     visible: boolean;
     conditionId: number;
+    condition: string;
     quantityRepaired: number;
     quantityToRepair: number;
 
     public stocklineListObj: StockLine[];
     public timeLifeList: TimeLife[];
     roPartSplitAddress: AddressModel;
+    roPartSplitUserName:string;
     // UI Properties
     // below properties does not play role on the server side and are being used to show the data on UI and should be limited to UI only.
     siteId: number;
@@ -123,6 +125,8 @@ export class RepairOrderPart {
     binId: number;
     warehouseId: number;
     locationId: number;
+    glAccountId: number;
+    glAccount: string;
 
     managementStructureName: string[];
     statusText: string;
@@ -177,6 +181,15 @@ export class RepairOrderPart {
     detailsNotProvided: boolean;
     shipViaId: number;
     shippingAccountInfo: string;
+
+    maincompanylist: [];    
+    parentBulist: [];
+    parentDivisionlist: [];
+    parentDepartmentlist: [];
+    parentCompanyId: number = 0;
+    parentbuId: number = 0;
+    parentDivisionId: number = 0;
+    parentDeptId: number = 0;
 }
 
 export class TimeLife {
@@ -341,6 +354,15 @@ export class StockLine {
     traceableToObject: DropDownData;
     createdBy: string;
     updatedBy: string;
+
+    maincompanylist: [];
+    parentCompanyId: number = 0;
+    parentBulist: [];
+    parentDivisionlist: [];
+    parentDepartmentlist: [];
+    parentbuId: number = 0;
+    parentDivisionId: number = 0;
+    parentDeptId: number = 0;
 }
 
 export class ReceiveParts {
@@ -352,6 +374,7 @@ export class ReceiveParts {
     timeLife: TimeLife[];
     managementStructureEntityId: any;
     quantityActuallyReceived: any;
+    quantityRejected: number;
 }
 
 export class DropDownData {

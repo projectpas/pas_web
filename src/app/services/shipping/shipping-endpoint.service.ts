@@ -49,25 +49,27 @@ export class ShippingEndpoint extends EndpointFactory {
     }
 
     receiveParts<T>(receiveParts: ReceiveParts[]): Observable<T> {
-        var listObj = [];
+        var ary = [];
         for (let part of receiveParts) {
-            let Obj = {
+            let receiveParts = {
                 'itemMasterId': part.itemMasterId,
                 'isSerialized': part.isSerialized,
                 'isSameDetailsForAllParts': part.isSameDetailsForAllParts,
                 'purchaseOrderPartRecordId': part.purchaseOrderPartRecordId,
+                'repairOrderPartRecordId':0,
+                'altEquiPartNumberId':0, 
+                'mappingType':0,
                 'quantityRejected': part.quantityRejected,
                 'quantityActuallyReceived': part.quantityActuallyReceived,
                 'stockLines': part.stockLines,
                 'timeLife': part.timeLife
             };
 
-            listObj.push(Obj);
+            ary.push(receiveParts);
         }
-
-        return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
+        return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(ary)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.receiveParts(receiveParts));
+                return this.handleErrorCommon(error, () => this.receiveParts(receiveParts));
             });
 
     }

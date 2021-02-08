@@ -24,6 +24,8 @@ export class ReceivingEndpointService extends EndpointFactory {
     private readonly _updateStockLinesUrl: string = "/api/receivingro/UpdateStockLines";
     private readonly _createStockLinesUrl: string = "/api/receivingPart/CreateStockLine";
     private readonly _createStockLinesForRepairOrderUrl: string = "/api/receivingRO/CreateStockLine";
+    private readonly receivingRepairOrderDataById: string = "/api/receivingro/getRepairOrderPartById";
+
 
     get getAll() { return this.configurations.baseUrl + this.getAllURL; }
     get removeById() { return this.configurations.baseUrl + this.removeByIdURL; }
@@ -34,7 +36,7 @@ export class ReceivingEndpointService extends EndpointFactory {
     get ReceivePartsURL() { return this.configurations.baseUrl + this._receivePartsUrl; }
     get UpdateStockLinesURL() { return this.configurations.baseUrl + this._updateStockLinesUrl; }
     get CreateStockLinesURL() { return this.configurations.baseUrl + this._createStockLinesUrl; }
-
+    get receivingRepairOrderDataGet() { return this.configurations.baseUrl + this.receivingRepairOrderDataById; }
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 
         super(http, configurations, injector);
@@ -92,11 +94,11 @@ export class ReceivingEndpointService extends EndpointFactory {
             });
     }
 
-    getReceivingPODataById<T>(receivingId: any): Observable<T> {
-        let url = `${this.receivingPurchaseOrderDataGet}/${receivingId}`;
+    getReceivingPODataById<T>(receivingId: any,employeeId = 0): Observable<T> {
+        let url = `${this.receivingPurchaseOrderDataGet}?receivingId=${receivingId !== undefined ? receivingId : '0'}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getReceivingPODataById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataById(receivingId,employeeId));
             });
     }
 
@@ -142,15 +144,16 @@ export class ReceivingEndpointService extends EndpointFactory {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingRO/getRepairOrderHeaderById/${repairOrderId}`)
     }
 
-    getReceivingROPartById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getRepairOrderPartById/${repairOrderId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getReceivingROPartById(repairOrderId));
+    getReceivingROPartById(repairOrderId,employeeId = 0) {                
+        let url = `${this.receivingRepairOrderDataGet}?repairOrderId=${repairOrderId !== undefined ? repairOrderId : '0'}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;              
+        return this.http.get<any>(url, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getReceivingROPartById(repairOrderId,employeeId));
         });
     }
 
     receiveParts<T>(receiveParts: ReceiveParts[]): Observable<T> {
         var listObj = [];
-
         for (let part of receiveParts) {
             let Obj = {
                 'itemMasterId': part.itemMasterId,
@@ -159,17 +162,17 @@ export class ReceivingEndpointService extends EndpointFactory {
                 'repairOrderPartRecordId': part.repairOrderPartRecordId,
                 'quantityActuallyReceived': part.quantityActuallyReceived,
                 'stockLines': part.stockLines,
-                'timeLife': part.timeLife
+                'timeLife': part.timeLife,                              
+                'altEquiPartNumberId':0, 
+                'mappingType':0,
+                'quantityRejected': part.quantityRejected,
             };
-
             listObj.push(Obj);
         }
-
         return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.receiveParts(receiveParts));
             });
-
     }
 
     getReceivingROPartsForViewById(repairOrderId) {

@@ -360,6 +360,7 @@ export class WorkOrderAddComponent implements OnInit {
                 { label: 'Edit Work Order' },
             ];
         }
+        console.log("work order general info",this.workOrderGeneralInformation);
     }
     ngOnChanges(changes: SimpleChanges) {
         // this is for get mpn dropdown list api after save mpn grid in sub wo   
@@ -936,7 +937,7 @@ export class WorkOrderAddComponent implements OnInit {
         const data1 = {
             ...generalInfo,
             customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
-            // employeeId: generalInfo.woEmployee ? generalInfo.woEmployee.employeeId : generalInfo.employeeId,
+            woEmployee: {employeeId: this.authService.currentEmployee.employeeId, Name: this.userName },
             employeeId: this.authService.currentEmployee.employeeId,
             salesPersonId: generalInfo.salesPerson ? generalInfo.salesPerson.employeeId : generalInfo.salesPersonId,
             csrId: generalInfo.csr ? generalInfo.csr.employeeId : generalInfo.csrId,
@@ -1065,7 +1066,6 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
     onSelectedPartNumber(object, currentRecord, index) {
-        debugger;
         if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
@@ -1531,6 +1531,9 @@ export class WorkOrderAddComponent implements OnInit {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
+AltPartMasterPartId : null,
+// ItemMasterId = 25
+MandatorySupplementalId :x.materialMandatoriesId,
                 }
             })
             this.isSpinnerVisible = true;
