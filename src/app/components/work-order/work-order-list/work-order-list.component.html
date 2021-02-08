@@ -216,6 +216,13 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan="18" style="color: red; font-weight: bold; text-align: center">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
                 <ng-template pTemplate="summary" id="footer">
                     <label id="footer" class="footer">Total:</label>
                     <input style="width: 5%;" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />

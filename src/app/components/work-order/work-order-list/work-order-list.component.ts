@@ -1061,7 +1061,7 @@ export class WorkOrderListComponent implements OnInit {
     }
 
     exportCSV(dt) {
-        this.isSpinnerVisible = true;
+        // this.isSpinnerVisible = true;
         let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "workOrderStatus": this.currentStatus }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
@@ -1069,7 +1069,7 @@ export class WorkOrderListComponent implements OnInit {
         });
         this.workOrderService
             .getWorkOrderList(PagingData).subscribe(res => {
-                const vList = res.map(x => {
+                const vList = res['results'].map(x => {
                     return {
                         ...x,
                         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
@@ -1085,9 +1085,9 @@ export class WorkOrderListComponent implements OnInit {
                 dt.exportCSV();
                 dt.value = this.workOrderData;
                 this.modal.close();
-                this.isSpinnerVisible = false;
+                // this.isSpinnerVisible = false;
             }, err => {
-                this.isSpinnerVisible = false;
+                // this.isSpinnerVisible = false;
             });
 
     }
