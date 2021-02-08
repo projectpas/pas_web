@@ -38,6 +38,7 @@ export class PolistComponent implements OnInit {
     orderId: number;
     orderType: string = 'Purchase Order';
     PovendorId: number;
+    isReceivingpo:boolean;
     dateObject: any = {};
     filterSearchText: string;
     strVendorName: string;
@@ -710,6 +711,9 @@ export class PolistComponent implements OnInit {
         this.PovendorId = rowData.vendorId;
         this.orderId = rowData.purchaseOrderId;
         this.orderType = 'Purchase Order';
+        if(this.isReceivingPolist == true){
+            this.isReceivingpo = true;
+        }
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 

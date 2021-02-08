@@ -946,11 +946,11 @@ export class ReceivingRoComponent implements OnInit {
         part.visible = true;
         if (part.stocklineListObj.length != quantity) {
             this.createStockLineItems(part);
-
             if (part.itemMaster.isTimeLife) {
                 part.timeLifeList = [];
                 for (var i = 0; i < quantity; i++) {
                     let timeLife: TimeLife = new TimeLife();
+                    //let timeLife: TimeLifeDraft = new TimeLifeDraft();
                     timeLife.timeLifeCyclesId = 0;
                     timeLife.repairOrderId = part.repairOrderId;
                     timeLife.repairOrderPartRecordId = part.repairOrderPartRecordId;
@@ -1068,13 +1068,15 @@ export class ReceivingRoComponent implements OnInit {
 		stockLine.parentDeptId = 0;		
         if (stockLine.parentCompanyId != 0 && stockLine.parentCompanyId != null 
             && stockLine.parentCompanyId != undefined) {
-                stockLine.managementStructureId = stockLine.parentCompanyId;
+                //stockLine.managementStructureId = stockLine.parentCompanyId;
+                stockLine.managementStructureEntityId = stockLine.parentCompanyId;
 			this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentCompanyId,this.employeeId ).subscribe(res => {
                 stockLine.parentBulist = res;
             });
 		 } 
 		  else {
-            stockLine.managementStructureId = 0;
+            //stockLine.managementStructureId = 0;
+            stockLine.managementStructureEntityId = 0;
 		 }
     }
 
@@ -1098,13 +1100,15 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.parentDivisionId = 0;
         stockLine.parentDeptId = 0;	 	
 	 	if (stockLine.parentbuId != 0 && stockLine.parentbuId != null && stockLine.parentbuId != undefined) {
-            stockLine.managementStructureId = stockLine.parentbuId;
+            //stockLine.managementStructureId = stockLine.parentbuId;
+            stockLine.managementStructureEntityId  = stockLine.parentCompanyId;	
 	 		this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentbuId,this.employeeId ).subscribe(res => {
                 stockLine.parentDivisionlist = res;
 	 		});
 	 	}
 	 	 else {
-            stockLine.managementStructureId  = stockLine.parentCompanyId;	 		 
+            //stockLine.managementStructureId  = stockLine.parentCompanyId;	 		 
+            stockLine.managementStructureEntityId  = stockLine.parentCompanyId;	
 	 		}	
     }
     
@@ -1124,13 +1128,14 @@ export class ReceivingRoComponent implements OnInit {
 		stockLine.parentDepartmentlist = [];	
         if (stockLine.parentDivisionId != 0 && stockLine.parentDivisionId != null 
                && stockLine.parentDivisionId != undefined) {
-                stockLine.managementStructureId = stockLine.parentDivisionId; 
+                //stockLine.managementStructureId = stockLine.parentDivisionId; 
+                stockLine.managementStructureEntityId = stockLine.parentDivisionId; 
 				this.commonService.getManagementStructurelevelWithEmployee(stockLine.parentDivisionId ,this.employeeId ).subscribe(res => {
                     stockLine.parentDepartmentlist = res;
                 });   
-		}
-		 else {
-            stockLine.managementStructureId  = stockLine.parentbuId;			
+		}else {
+            //stockLine.managementStructureId  = stockLine.parentbuId;
+            stockLine.managementStructureEntityId  = stockLine.parentbuId;			
 		 }	
     }
 
@@ -1142,10 +1147,12 @@ export class ReceivingRoComponent implements OnInit {
 
     selectedDepartment(departmentId, stockLine) {
         if (stockLine.parentDeptId != 0 && stockLine.parentDeptId != null && stockLine.parentDeptId != undefined) {
-			stockLine.managementStructureId = stockLine.parentDeptId;			
+            //stockLine.managementStructureId = stockLine.parentDeptId;	
+            stockLine.managementStructureEntityId = stockLine.parentDeptId;	
 		}
 		 else {
-			stockLine.managementStructureId = stockLine.parentDivisionId;
+            //stockLine.managementStructureId = stockLine.parentDivisionId;
+            stockLine.managementStructureEntityId = stockLine.parentDivisionId;
 		 }		
     }
 
@@ -1195,31 +1202,42 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.partNumber = part.itemMaster.partNumber;
             stockLine.quantity = part.quantityActuallyReceived; //1;
             stockLine.stockLineId = 0;
+            //stockLine.stockLineDraftId = 0;            
             stockLine.createdDate = new Date();
             stockLine.manufacturerId = part.itemMaster.manufacturerId;
             stockLine.visible = false;
-            stockLine.shippingReference = '';
-            stockLine.shippingViaId = null;
-            stockLine.shelfId = null;
-            stockLine.warehouseId = null;
-            stockLine.binId = null;
-            //stockLine.repairOrderId = null;
-            stockLine.locationId = null;
-            stockLine.shippingAccount = '';
+            stockLine.shippingReference = '';            
+            //stockLine.shippingViaId = null;
+            stockLine.shippingViaId = this.repairOrderHeaderData.shipViaId;
+            stockLine.shelfId = 0;
+            stockLine.warehouseId = 0;
+            stockLine.binId = 0;
+            //stockLine.repairOrderId = 0;
+            stockLine.locationId = 0;
+            //stockLine.shippingAccount = '';
+            stockLine.shippingAccount = this.repairOrderHeaderData.shippingAccountNo;
             stockLine.conditionId = 0;
             stockLine.masterCompanyId = this.currentUserMasterCompanyId;
+            stockLine.createdBy = this.userName;
+            stockLine.updatedBy = this.userName;            
             stockLine.serialNumberNotProvided = false;
             stockLine.repairOrderUnitCost = 0;
             stockLine.repairOrderExtendedCost = part.unitCost;
             stockLine.currentDate = new Date();
-            stockLine.obtainFromType = 2;
-            stockLine.obtainFrom = this.repairOrderHeaderData.vendorId.toString();
-            stockLine.ownerType = 2;
-            stockLine.owner = this.repairOrderHeaderData.vendorId.toString();
+            // stockLine.obtainFromType = 2;
+            // stockLine.obtainFrom = this.repairOrderHeaderData.vendorId.toString();
+            // stockLine.ownerType = 2;
+            // stockLine.owner = this.repairOrderHeaderData.vendorId.toString();
+
+            stockLine.obtainFromType = AppModuleEnum.Vendor; // default is vendor and set the value from purchase order.
+            stockLine.obtainFrom = this.repairOrderHeaderData.vendorId;
+            stockLine.ownerType = AppModuleEnum.Vendor;
+            stockLine.owner = this.repairOrderHeaderData.vendorId;   
 
             stockLine.maincompanylist = part.maincompanylist;
             stockLine.parentCompanyId = part.parentCompanyId;
-            stockLine.managementStructureId = part.managementStructureId;
+            //stockLine.managementStructureId = part.managementStructureId;
+            stockLine.managementStructureEntityId = part.managementStructureId;
             stockLine.parentBulist= part.parentBulist;
             stockLine.parentDivisionlist = part.parentDivisionlist;
             stockLine.parentDepartmentlist = part.parentDepartmentlist;
@@ -1236,7 +1254,6 @@ export class ReceivingRoComponent implements OnInit {
                     stockLine.repairOrderExtendedCost = part.quantityActuallyReceived * part.unitCost;
                 }
             }
-
             this.getStockLineSite(stockLine);
             part.stocklineListObj.push(stockLine);
         }
@@ -1809,8 +1826,8 @@ export class ReceivingRoComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.receivingService.receiveParts(partsToPost).subscribe(data => {
             this.alertService.showMessage(this.pageTitle, 'Stockline drafted successfully.', MessageSeverity.success);
-            //return this.route.navigate(['/receivingmodule/receivingpages/app-edit-ro']);
-            this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${this.repairOrderId}`);
+            
+            //this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${this.repairOrderId}`);
         },err=>{this.isSpinnerVisible = false;});
     }
 
@@ -1870,6 +1887,9 @@ export class ReceivingRoComponent implements OnInit {
                 cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
                 timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
                 repairOrderPartRecordId: repairOrderPartRecordId,
+                masterCompanyId : this.currentUserMasterCompanyId,
+                createdBy : this.userName,
+                updatedBy : this.userName
             }
         })
         return tmLife;
@@ -1920,7 +1940,7 @@ export class ReceivingRoComponent implements OnInit {
                     //     errorMessages.push("Please select Company in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     // }
 
-                    if (item.stocklineListObj[i].managementStructureId == undefined || item.stocklineListObj[i].managementStructureId == 0) {
+                    if (item.stocklineListObj[i].managementStructureEntityId == undefined || item.stocklineListObj[i].managementStructureEntityId == 0) {
                         errorMessages.push("Please select Management Structure in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
 
