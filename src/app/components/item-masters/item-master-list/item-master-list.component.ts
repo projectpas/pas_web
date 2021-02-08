@@ -129,6 +129,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	Update: boolean = false;
 	allRolesInfo: any[] = [];
 	activeIndex: number;
+	rowDataToDelete: any = {};
+	rowDataToDeleteStock: any={};
 	sourceItemMaster: any;
 	allEquipmentInfo: any[];
 	allNonstockInfo: any[] = [];
@@ -1113,16 +1115,36 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.purchaseSalesInfo = res;
 		});
 	}
+	
+	RestoreItem(rowData){
+        this.rowDataToDeleteStock = rowData;
+        $("#itemRestore").modal("show");
+	}
+	
+	restoreNonStockItem(rowData){
+        this.rowDataToDelete = rowData;
+        $("#nonStockRestore").modal("show");
+	}
+	closeItemRestore() {
+        $("#itemRestore").modal("hide");
+	} 
+	closeNonStockRestore() {
+        $("#nonStockRestore").modal("hide");
+    } 
 
-	restore(record) {
-        this.commonService.updatedeletedrecords11('ItemMaster', 'itemMasterId', record.itemMasterId).subscribe(res => {
+
+	
+	restore() {
+		const {itemMasterId}=this.rowDataToDeleteStock;
+        this.commonService.updatedeletedrecords11('ItemMaster', 'ItemMaster', itemMasterId).subscribe(res => {
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         })
 	}
 
-	restoreNonStock(record) {
-        this.commonService.updatedeletedrecords11('ItemMasterNonStock', 'ItemMasterNonStockId', record.itemMasterId).subscribe(res => {
+	restoreNonStock() {
+		const {itemMasterId}=this.rowDataToDelete;
+        this.commonService.updatedeletedrecords11('ItemMasterNonStock', 'ItemMasterNonStockId', itemMasterId).subscribe(res => {
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         })

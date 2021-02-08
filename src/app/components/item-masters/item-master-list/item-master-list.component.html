@@ -321,10 +321,12 @@
                                         </div>
                                         <div >
                                             <div class="form-group adv-search-icons">
-                                                <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)" class="btn btn-primary  height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"
+                                                 class="btn btn-primary  height40 black-search-button btmargin search-clar-button">
                                                     Search 
                                                  </button> 
-                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" class="btn btn-danger height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()"
+                                                  class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
                                                     Clear
                                                  </button> 
                                             </div>
@@ -381,7 +383,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="col.field =='isSerialized' || col.field =='isTimeLife'">
                                         <input type="checkbox" disabled [checked]="rowData[col.field] == 'true'"
-                                               style="margin: 0px auto; display: block;" />
+                                             class="table-checkbox"/>
                                     </ng-container>
                                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
                                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
@@ -400,7 +402,9 @@
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                         <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg btn-users-cstm" (click)="restore(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="currentDeletedstatus" data-toggle="modal" data-target="#itemRestore"><a class="btn nobg btn-users-cstm" 
+                                            (click)="restoreItem(rowData)"
+                                             matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
                                 </td>
                             </tr>
@@ -609,10 +613,13 @@
                                         </div>
                                         <div>
                                             <div class="form-group adv-search-icons">
-                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)" class="btn btn-primary  height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" 
+                                                 (click)="advancedSearchData(searchData)"
+                                                  class="btn btn-primary  height40 black-search-button btmargin search-clar-button">
                                                     Search
                                                  </button> 
-                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" class="btn btn-danger height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" 
+                                                 class="btn btn-danger height40 black-search-button btmargin sarch-clear-button">
                                                     Clear
                                                  </button> 
                                             </div>
@@ -668,7 +675,7 @@
                                     <td class="table-column-width" *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{rowData[col.field]}}
                                     </td>
-                                    <td style="text-align: left !important;" class="table-column-width" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
+                                    <td  class="table-column-width text-left" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
                                         <p class="m-0 p-0 text-left">{{rowData[col.field]}}</p>
                                     </td>                                        
                                     <td class="table-column-width" *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
@@ -727,7 +734,9 @@
                                         <span>
                                             <a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                         </span>
-                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg btn-users-cstm" (click)="restoreNonStock(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="currentDeletedstatus" data-toggle="modal" data-target="#nonStockRestore">
+                                            <a class="btn nobg btn-users-cstm" 
+                                            (click)="restoreNonStockItem(rowData)" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                         <span data-toggle="modal" data-target="#nonStockHistory">
                                             <a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                         </span>
@@ -807,8 +816,8 @@
                                     <p>
                                         <span class="label"><b>Discount (%) on Purchases: </b></span><span class="value">{{viewItemMasterNS.discountPurchasePercent ? viewItemMasterNS.discountPurchasePercent : '-'}}</span>
                                     </p>
-                                    <div class="inline-block display-flex spacing-label" style="margin-top: 5px;">
-                                        <label class="control-label" style="width: 145px;"><b>Acquired?</b></label>
+                                    <div class="inline-block display-flex spacing-label acquired-div-margin">
+                                        <label class="control-label acquired-width"><b>Acquired?</b></label>
                                         <div class="radio-value">
                                             <label class="radio-inline">
                                                 <input type="radio" [value]="true" name="isAcquiredMethodBuy"
@@ -889,7 +898,7 @@
                              [reorderableColumns]="true">
                         <ng-template pTemplate="caption">
 
-                            <div style="text-align: right">
+                            <div class="text-right">
                                 <p-multiSelect [options]="cols2" [(ngModel)]="selectedColumns2" optionLabel="header"
                                                selectedItemsLabel="{0} columns selected"
                                                class="multiselect-field"
@@ -1086,11 +1095,63 @@
     </div>
 </ng-template>
 
+<div class="modal fade" id="itemRestore" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeItemRestore()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+            </div>
+            <div class="modal-body" *ngIf="stockTable">
+                <strong>
+                    Part Number:
+                  <span class="new-label">
+                    {{rowDataToDelete.partNumber}}
+                    </span>
+                </strong>
+            </div>
+           
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="restore(); closeItemRestore();">Yes</button>
+                <button type="button" class="btn btn-danger" (click)="closeItemRestore()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="nonStockRestore" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeItemRestore()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+            </div>
+            <div class="modal-body" *ngIf="nonStockTable">
+                <strong>
+                    Part Number:
+                  <span class="new-label">
+                    {{rowDataToDelete.partNumber}}
+                    </span>
+                </strong>
+            </div>
+                      
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="restoreNonStock(); closeNonStockRestore();">Yes</button>
+                <button type="button" class="btn btn-danger" (click)="closeNonStockRestore()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="itemMasterView" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" style="padding: 0 !important" (click)="dismissItemMasterModel()">
+                <button type="button" class="close" (click)="dismissItemMasterModel()">
                     &times;
                 </button>
                 <div class="col-sm-3">
