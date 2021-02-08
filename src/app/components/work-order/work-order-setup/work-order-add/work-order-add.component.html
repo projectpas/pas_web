@@ -1092,7 +1092,7 @@
                 <div *ngIf="(selectedCommunicationTab == 'phone')">
                     <app-phone [workOrderId]="workOrderId" [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" [selectedPartNumber]="selectedPartNumber" [customerContactList]="customerContactList" [isView]="isView || isViewForApprovedPart"></app-phone>
                 </div> -->
-                <app-communication [isViewMode]="false"   [idForContact]="workOrderGeneralInformation.customerId" [type]="1" 
+                <app-communication [isViewMode]="false"   [idForContact]="workOrderGeneralInformation.customerId.customerId" [type]="1" 
                 [moduleName]="moduleNamee"  [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"></app-communication>
             </div>
             <div *ngIf="documents && (gridActiveTab == 'documents')"

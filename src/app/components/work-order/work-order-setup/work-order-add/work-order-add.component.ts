@@ -360,6 +360,7 @@ export class WorkOrderAddComponent implements OnInit {
                 { label: 'Edit Work Order' },
             ];
         }
+        console.log("work order general info",this.workOrderGeneralInformation);
     }
     ngOnChanges(changes: SimpleChanges) {
         // this is for get mpn dropdown list api after save mpn grid in sub wo   
@@ -1065,7 +1066,6 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
     onSelectedPartNumber(object, currentRecord, index) {
-        debugger;
         if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
