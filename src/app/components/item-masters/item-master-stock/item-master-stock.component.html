@@ -1284,9 +1284,10 @@
                                                    (click)="onEditAircraft(rowData)" matTooltip="Edit"
                                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                             </span>
-                                            <span>
+                                            <span data-toggle="modal" data-target="#aircraftDelete">
                                                 <a class="btn nobg"
-                                                   (click)="onDeleteAircraft(rowData)"
+                                                  
+                                                   (click)="deleteAircraftRow(rowData)"
                                                    matTooltip="Delete"
                                                    matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                             </span>
@@ -1300,7 +1301,10 @@
                                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewAircraft"
                                                    (click)="onViewAircraft(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span>
-                                           <span data-toggle="modal" ><a class="btn nobg" (click)="restoreAircraftRow(rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                           <span data-toggle="modal" data-target="#aircraftRestore">
+                                               <a class="btn nobg" 
+                                               (click)="Restore(rowData)" 
+                                                matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                            <span>
                                             <a class="btn nobg" data-toggle="modal" data-target="#aircraftHistory"
                                                matTooltip="History" matTooltipPosition="above" (click)="getAircraftAuditHistory(rowData)"><i class="fa fa-history"></i></a>
@@ -1554,9 +1558,9 @@
                                                    (click)="onViewATA(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span> 
     
-                                            <span>
+                                            <span data-toggle="modal" data-target="#ataDelete">
                                                 <a class="btn nobg"
-                                                   (click)="deleteATAMapped(rowData)"
+                                                   (click)="deleteataRow(rowData)"
                                                    matTooltip="Delete"
                                                    matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                             </span>
@@ -1573,7 +1577,8 @@
                                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewATA"
                                                    (click)="onViewATA(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span>                                   
-                                           <span data-toggle="modal" ><a class="btn nobg" (click)="restoreATAMapped(rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                           <span data-toggle="modal" data-target="#ataRestore"><a class="btn nobg"
+                                           (click)="RestoreATA(rowData)" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                            <span data-toggle="modal"
                                                   data-target="#contentATAChapterHist">
                                                 <a class="btn nobg"
@@ -2717,7 +2722,7 @@
         <h4 class="modal-title" *ngIf="!isEditMode">Add Stock Unit Of Measure</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
-        </button>
+    </button>
     </div>
     <div class="modal-body">
         <form #stockForm="ngForm" class="form-horizontal" (ngSubmit)="saveStockunitofmeasure()">
@@ -4294,6 +4299,94 @@
         </div>
     </div>
   </div>
+
+  <div class="modal fade" id="aircraftRestore" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeRestore()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    Aircraft Type:
+                    <span class="new-label"> {{rowDataToDelete.aircraftType}}</span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="restoreAircraftRow(); closeRestore();">Yes</button>
+                <button type="button" class="btn btn-danger" (click)="closeRestore()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="aircraftDelete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    Aircraft Type:
+                    <span class="new-label"> {{rowDataToDelete.aircraftType}}</span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onDeleteAircraft()">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" >No</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div id="ataDelete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    ATA Chapter Name:
+                    <span class="new-label"> {{rowDataToDelete.ataChapterName}}</span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteATAMapped()">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+
+<div class="modal fade" id="ataRestore" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeATARestore()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    ATA Chapter Name:
+                    <span class="new-label"> {{rowDataToDelete.ataChapterName}}</span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="restoreATAMapped(); closeATARestore();">Yes</button>
+                <button type="button" class="btn btn-danger" (click)="closeATARestore()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
   <div id="purchaseSaleRestore" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">

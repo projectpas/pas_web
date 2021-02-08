@@ -313,7 +313,7 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			{ field: 'name', header: 'Name' },
 			{ field: 'description', header: 'Description' },
 			{ field: 'legalEntityName', header: 'Legal Entity' },
-			{ field: 'createdDate', header: 'created Date' },			
+			{ field: 'createdDate', header: 'Created Date' },			
 			{ field: 'createdBy', header: 'Created By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
 			{ field: 'updatedBy', header: 'Updated By' },
