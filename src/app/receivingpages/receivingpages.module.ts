@@ -57,12 +57,12 @@ import { ReceivingRoComponent } from "../components/receiving/repair-order/recei
 import { ViewRoComponent } from "../components/receiving/repair-order/view-ro/view-ro.component";
 import { ShippingService } from "../services/shipping/shipping-service";
 import { ShippingEndpoint } from "../services/shipping/shipping-endpoint.service";
-import { POViewListComponent } from "../components/receiving/po-ro/po-view-list/po-view-list.component";
+//import { POViewListComponent } from "../components/receiving/po-ro/po-view-list/po-view-list.component";
 import { CommonService } from "../services/common.service";
 import { ROViewListComponent } from "../components/receiving/repair-order/ro-view-list/ro-view-list.component";
 import { TagTypeEndpointService } from "../services/tagtype-endpoint.service";
 import { TagTypeService } from "../services/tagtype.service";
-import { POViewStockDraftListComponent } from "../components/receiving/po-ro/po-view-draftlist/po-view-draftlist.component";
+//import { POViewStockDraftListComponent } from "../components/receiving/po-ro/po-view-draftlist/po-view-draftlist.component";
 import { ROViewStockDraftListComponent } from "../components/receiving/repair-order/ro-view-draftlist/ro-view-draftlist.component";
 import { DropdownModule } from "primeng/dropdown";
 import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
@@ -104,8 +104,8 @@ import { VendorPagesModule} from '../vendorpages/vendorpages.module';
         RoComponent,
         ReceivingRoComponent,
         ViewRoComponent,
-		POViewListComponent,
-		POViewStockDraftListComponent,
+		//POViewListComponent,
+		//POViewStockDraftListComponent,
 		ROViewListComponent,
 		ROViewStockDraftListComponent
 

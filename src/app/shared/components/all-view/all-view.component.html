@@ -573,9 +573,7 @@
             [vendorId]= "capvendorId"            
             [isViewMode]="isViewMode">
           </app-vendor-capes>
-        </p-tabPanel>     
-
-       
+        </p-tabPanel>    
 
         <p-tabPanel header="Documents">
           <app-common-documents [isViewMode]="true" [moduleName]="moduleName" [offLineUpload]="true" [referenceId]="selectedPurchaseOrderId">      
@@ -585,7 +583,15 @@
         <p-tabPanel header="Communication">         
           <app-communication [isViewMode]="true"  [idForContact]="vendorIdByParams ? vendorIdByParams :vendorId" [type]="2" [moduleName]="moduleName"  [referenceId]="selectedPurchaseOrderId">            
           </app-communication>
-        </p-tabPanel> 
+        </p-tabPanel>
+        
+        <p-tabPanel header="Receiving Draft" *ngIf="this.isReceivingpo">
+          <app-po-view-draftlist *ngIf="purchaseOrderData" [purchaseOrderData]="purchaseOrderData"></app-po-view-draftlist>
+        </p-tabPanel>
+
+       <!-- <p-tabPanel header="Receiving">
+          <app-po-view-list *ngIf="purchaseOrderData" [purchaseOrderData]="purchaseOrderData"></app-po-view-list>
+       </p-tabPanel>         -->
 
       </p-tabView>
 
