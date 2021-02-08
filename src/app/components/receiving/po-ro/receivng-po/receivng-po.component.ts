@@ -1153,7 +1153,7 @@ export class ReceivngPoComponent implements OnInit {
         this.itemmaster.updateItemMasterSerialized(part.itemMaster.itemMasterId, part.itemMaster.isSerialized).subscribe(
             result => {
                 var obj = part.stocklineListObj[this.currentSLIndex];               
-                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.partNumber == part.itemMaster.partNumber);
+                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == part.purchaseOrderPartRecordId);
                 for (let childPart of childParts) {
                     childPart.itemMaster.isSerialized = part.itemMaster.isSerialized;
                 }
@@ -1220,7 +1220,7 @@ export class ReceivngPoComponent implements OnInit {
                     }
                 }
 
-                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.partNumber == part.itemMaster.partNumber);
+                var childParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == part.purchaseOrderPartRecordId);
                 for (let childPart of childParts) {
                     childPart.itemMaster.isTimeLife = part.itemMaster.isTimeLife;
                 }

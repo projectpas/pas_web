@@ -132,7 +132,7 @@ export class ShippingEndpoint extends EndpointFactory {
 
         return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateStockLine(receiveParts));
+                return this.handleErrorCommon(error, () => this.updateStockLine(receiveParts));
             });
 
     }
