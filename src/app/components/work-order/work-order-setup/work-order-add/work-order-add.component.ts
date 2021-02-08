@@ -1531,6 +1531,9 @@ export class WorkOrderAddComponent implements OnInit {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
+AltPartMasterPartId : null,
+// ItemMasterId = 25
+MandatorySupplementalId :x.materialMandatoriesId,
                 }
             })
             this.isSpinnerVisible = true;

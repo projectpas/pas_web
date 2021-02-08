@@ -1093,6 +1093,9 @@ export class StockLineSetupComponent implements OnInit {
 			this.getShelfList(partDetails.locationId);
 			this.getBinList(partDetails.shelfId);
 			this.stockLineForm.IsManufacturingDateAvailable = partDetails.IsManufacturingDateAvailable;
+			if(this.stockLineForm.conditionId){
+				this.disableCondition=false;
+			}
 			if (this.stockLineForm.isSerialized == true) {
 				this.hideSerialNumber = false;
 				this.stockLineForm.quantityOnHand = 1;
