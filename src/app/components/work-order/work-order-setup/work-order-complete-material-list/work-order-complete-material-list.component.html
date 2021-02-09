@@ -54,12 +54,13 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
-            <tr [ngClass]="{'color_pick': rowData.isRoleUp==false }">
+            <!-- [ngClass]="{'color_pick': rowData.isRoleUp==false }" -->
+            <tr>
                 <td style="text-align: center;">
                     <span *ngIf="rowData.partStatusId !=0">
-                        <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-success btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="getRollupMaterialList(rowData,i)" ></i> 
+                        <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-success"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="getRollupMaterialList(rowData,i)" ></i> 
                     </span>
-                     <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="removeRollUpList(rowData,i)"></i>   
+                     <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false" class="fa fa-minus btn-danger"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="removeRollUpList(rowData,i)"></i>   
                 </td>
                 <td *ngFor="let col of columns">
                     <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " class="m-0 p-0"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
