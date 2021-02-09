@@ -110,7 +110,6 @@ export class SalesOrderShippingComponent {
     }
 
     refresh(parts) {
-        debugger;
         this.initColumns();
         this.partsForBilling = [];
         this.parts = parts;
