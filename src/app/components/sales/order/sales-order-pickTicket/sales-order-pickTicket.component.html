@@ -3,7 +3,7 @@
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 
 </div>
-<div class="modal-content" style="width:90%">
+<div class="modal-content" style="width:90%"  id="soPickTicket">
     <div class="modal-body">
         <div class="col-sm-12">
 
@@ -12,7 +12,7 @@
             <hr />
             <div class="second-block">
                 <div class="second-block-div">
-                    <label class="col-sm-2 second-block-label"><b><img src="{{this.management.logo}}" /></b>PAS</label>
+                    <label class="col-sm-2 second-block-label"><b><img class="logo" src="{{this.endPointURL + this.management.logo}}" height="100%" width="100%"/></b></label>
                 </div>
                 <div class="second-block-div">
                     <label class="col-sm-3 second-block-label"><b>Tagline :</b></label>
@@ -51,7 +51,7 @@
 
 
             </div>
-            <div class="second-block">
+            <div class="second-block top">
                 <!-- <h5><b>Sales Order Quotation</b></h5> -->
                 <div class="second-block-div">
                     <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
@@ -98,7 +98,8 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="first-block col-sm-6">
+                <div class="second-block col-sm-6">
+                    <!-- first-block  -->
                     <br /><br />
                     <h5 style="padding-left:10px"> <b>Sold To</b> </h5>
                     <div class="col-sm-12 first-block-4">
@@ -134,7 +135,8 @@
                     </div>
                 </div>
 
-                <div class="first-block-right col-sm-6">
+                <div class="second-block col-sm-6">
+                    <!-- first-block-right -->
                     <br /><br />
                     <h5 style="padding-left:10px"> <b>Ship To</b> </h5>
                     <div class="col-sm-12 first-block-4">
@@ -173,7 +175,7 @@
         </div>
              <div class="col-sm-12">
             <div>
-                <table style="width:99%">
+                <table style="width:99%" class="t4">
                     <thead>
                         <tr>
                             <th>Line Num</th>
@@ -197,7 +199,8 @@
                                 <td>{{part.partDescription}}</td>
                                 <td>{{part.serialNumber}}</td>
                                 <td>{{part.uom}}</td>
-                                <td>{{this.salesOrderpartConditionDescription}}</td>
+                                <!-- <td>{{this.salesOrderpartConditionDescription}}</td> -->
+                                <td>{{part.conditionDescription}}</td>
                                 <td>{{part.priorityName}}</td>
                                 <td>{{part.poNumber}}</td>
                                 <td>{{part.qty}}</td>
@@ -208,7 +211,7 @@
                                     <td colspan="2"><b>Site:</b>{{part.siteName}}</td>
                                     <td colspan="2"> <b>Warehouse:</b>{{part.warehouseName}}</td>
                                     <td colspan="3"><b>Location:</b>{{part.locationName}}</td>
-                                    <td colspan="1"><b>Shelf:</b>{{part.shelfName}}</td>
+                                    <td colspan="2"><b>Shelf:</b>{{part.shelfName}}</td>
                                     <td colspan="1"><b>Bin:</b>{{part.binName}}</td>
 
 
@@ -219,7 +222,8 @@
                                         <img src="{{part.partBarcode}}" alt="barcode" class="border" />
                                     </td>
 
-                                    <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td>
+                                    <!-- <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td> -->
+                                    <td colspan="1"><b>SL Num:</b> {{part.stockLineNumber}}</td>
                                     <td colspan="3"><b>Control Id:</b>{{part.controlNumber}}</td>
                                     <td colspan="4"><b>ID #:</b>{{part.idNumber}}</td>
 
@@ -237,4 +241,5 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">No</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
 </div>

@@ -224,6 +224,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     });
     instance.salesOrderId = rowData.salesOrderId;
     instance.salesOrderPartId = rowData.salesOrderPartId;
+    instance.soPickTicketId = rowData.soPickTicketId;
   }
 
   // PickTicketDetails = {

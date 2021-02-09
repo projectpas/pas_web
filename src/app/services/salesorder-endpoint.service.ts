@@ -38,6 +38,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketapprovelist";
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
   private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
+  private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticketforprint";
 
   // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
@@ -684,6 +685,16 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .put(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.confirmPickTicket(pickticketId,confirmById));
+      });
+  }
+
+  getPickTicketPrint(salesOrderId: number,soPickTicketId: number): Observable<any> {
+    //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
+    const URL = `${this.getSalesOrdePickTicketPrint}?salesOrderId=${salesOrderId}&soPickTicketId=${soPickTicketId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId,soPickTicketId));
       });
   }
   //end nitin
