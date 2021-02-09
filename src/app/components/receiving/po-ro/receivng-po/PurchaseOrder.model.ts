@@ -684,7 +684,8 @@ export class StockLineDraft {
     businessUnitId: number = null;
     divisionId: number = null;
     departmentId: number = null;
-    createdDate: Date = null;   
+    createdDate: Date = null; 
+    updatedDate: Date = null;   
 
     //View Properties
 
