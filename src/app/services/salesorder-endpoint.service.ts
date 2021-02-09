@@ -38,6 +38,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketapprovelist";
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
   private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
+  private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticketforprint";
 
   // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
@@ -91,6 +92,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getChargesAudihistory: string = environment.baseUrl + '/api/SalesOrder/sales-order-charges-history';
   private readonly updatepickticket: string = environment.baseUrl + "/api/SalesOrder/updatepickticket";
   private readonly getstocklineforPickTicketUrl: string = environment.baseUrl + "/api/salesorder/searchstocklinefrompickticketpop"
+  private readonly confirmpickticketUrl = environment.baseUrl + "/api/salesorder/confirmpt";
   //**End  savesarvice end point creation implementation --nitin
 
 
@@ -674,6 +676,25 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .post(url, parts, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.savepickticketiteminterface(parts));
+      });
+  }
+
+  confirmPickTicket(pickticketId: number,confirmById:string): Observable<boolean> {
+    const URL = `${this.confirmpickticketUrl}/${pickticketId}?confirmById=${confirmById}`;
+    return this.http
+      .put(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.confirmPickTicket(pickticketId,confirmById));
+      });
+  }
+
+  getPickTicketPrint(salesOrderId: number,soPickTicketId: number): Observable<any> {
+    //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
+    const URL = `${this.getSalesOrdePickTicketPrint}?salesOrderId=${salesOrderId}&soPickTicketId=${soPickTicketId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId,soPickTicketId));
       });
   }
   //end nitin

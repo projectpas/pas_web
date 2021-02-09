@@ -168,9 +168,8 @@
                             [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
                             [matTooltipDisabled]="rowData['partNoType'] != 'Multiple' ||
                     rowData['workScopeType'] != 'Multiple' || rowData['priorityType'] != 'Multiple'||
-                    rowData['pnDescriptionType'] != 'Multiple' || rowData['stageType'] != 'Multiple' ||
-                    rowData['customerRequestDateType'] != 'Multiple' || rowData['estimatedShipDateType'] != 'Multiple' ||
-                    rowData['customerRequestDateType'] != 'Multiple' || rowData['estimatedCompletionDateType'] != 'Multiple'
+                   ( rowData['customerRequestDateType'] != 'Multiple' &&  rowData['customerRequestDateType'] != null) || rowData['estimatedShipDateType'] != 'Multiple' ||
+                    rowData['estimatedCompletionDateType'] != 'Multiple'
                     " [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
                             {{convertDate(col.field , rowData)}}
                         </td>
@@ -213,6 +212,13 @@
                                             aria-hidden="true"></i></a>
                                 </span>
                             </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan="18" style="color: red; font-weight: bold; text-align: center">
+                            No records found
                         </td>
                     </tr>
                 </ng-template>
@@ -948,10 +954,10 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">PO Number : {{restorerecord.workOrderNum}}</h6>
+        <h6 class="modal-body">WO Number : {{restorerecord.workOrderNum}}</h6>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>

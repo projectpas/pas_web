@@ -577,5 +577,17 @@ export class SalesOrderService {
     );
   }
 
+  confirmPickTicket(pickticketId: number,confirmById:string): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.confirmPickTicket(pickticketId,confirmById)
+    );
+  }
+
+  getPickTicketPrint(salesOrderId: number,soPickTicketId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPickTicketPrint(salesOrderId,soPickTicketId)
+    );
+  }
+
   //ed --nitin
 }

@@ -13,6 +13,7 @@ import { SOPickTicket } from "../../../../models/sales/SOPickTicket";
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { DatePipe } from "@angular/common";
 import { NumberFormat } from 'xlsx/types';
+import { StocklineViewComponent } from "../../../../shared/components/stockline/stockline-view/stockline-view.component";
 
 @Component({
   selector: "app-sales-order-pick-tickets",
@@ -223,6 +224,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     });
     instance.salesOrderId = rowData.salesOrderId;
     instance.salesOrderPartId = rowData.salesOrderPartId;
+    instance.soPickTicketId = rowData.soPickTicketId;
   }
 
   // PickTicketDetails = {
@@ -427,5 +429,40 @@ export class SalesOrderPickTicketsComponent implements OnInit {
                 // this.partActionModalClose.emit(true)
                
             },error => this.isSpinnerVisible = false);
+  }
+
+  confirmselected:number;
+  ptNumber:number;
+  confirmedById:any;
+  ConfirmPTpopup(confirm, part) {
+    this.confirmselected = part.soPickTicketId;
+    this.ptNumber = part.soPickTicketNumber;
+    this.modal = this.modalService.open(confirm, { size: "sm", backdrop: 'static', keyboard: false });
+    this.modal.result.then(
+      () => { },
+      () => { }
+    );
+  }
+
+  confirmPickTicket(): void {
+    this.isSpinnerVisible = true;
+    this.confirmedById = this.employeeId;
+    this.salesOrderService.confirmPickTicket(this.confirmselected,this.confirmedById).subscribe(response => {
+      this.isSpinnerVisible = false;
+      this.modal.close();
+      this.alertService.showMessage(
+        "Success",
+        `Pick Ticket confirmed successfully.`,
+        MessageSeverity.success
+      );
+      this.onSearch();
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  viewStockSelectedRow(rowData) {
+    this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+    this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
 }

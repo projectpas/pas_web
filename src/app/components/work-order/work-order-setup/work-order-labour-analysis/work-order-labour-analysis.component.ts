@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
+declare var $ : any;
 @Component({
     selector: 'app-work-order-labour-analysis',
     templateUrl: './work-order-labour-analysis.component.html',
@@ -37,8 +38,6 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     selectedColumns = this.headers;
     workOrderId: any;
     constructor(private workOrderService: WorkOrderService, ) { }
-
-
     ngOnInit() {
         this.workOrderId = this.savedWorkOrderData.workOrderId;
         if (this.data.length != 0) {
@@ -79,5 +78,8 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
 
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
+    }
+    closeModal() {
+        $("#downloadConfirmation").modal("hide");
     }
 }

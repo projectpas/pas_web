@@ -41,21 +41,21 @@
                         <div class="form-row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>PO Num</label>
+                                    <label>PO Num <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="purchaseOrderNumber"
                                            [(ngModel)]="poDataHeader.purchaseOrderNumber" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Vendor Name</label>
+                                    <label>Vendor Name <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="vendorName"
                                            [(ngModel)]="poDataHeader.vendorName" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Requisitioner</label>
+                                    <label>Requisitioner <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="requestedBy"
                                            [(ngModel)]="poDataHeader.requisitioner" disabled required>
                                 </div>
@@ -69,34 +69,34 @@
                         <div class="form-row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Open Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="openDate"
-                                                [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
+                                    <label>Open Date <span class="clr-red">*</span></label>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="openDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Closed/Cancelled Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="closedDate"
-                                                [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="closedDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
                                 </div>
                                 <div class="form-group">
-                                    <label>Need By</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="needByDate"
-                                                [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
+                                    <label>Need By <span class="clr-red">*</span></label>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="needByDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
-                                    <label>Priority</label>
+                                    <label>Priority <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="priority"
                                            [(ngModel)]="poDataHeader.priority" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Vendor Code</label>
+                                    <label>Vendor Code <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="vendorCode"
                                            [(ngModel)]="poDataHeader.vendorCode" disabled required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Vendor Contact</label>
+                                    <label>Vendor Contact <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="vendorContact"
                                            [(ngModel)]="poDataHeader.vendorContact" disabled required>
                                 </div>
@@ -121,7 +121,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Status</label>
+                                    <label>Status <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="status"
                                            [(ngModel)]="poDataHeader.status" disabled required>
                                 </div>
@@ -196,7 +196,7 @@
                     <div class="col-md-3">
                         <div class="card management-structure-card">
                             <div class="card-header management-structure-card-header">
-                                <h5 class="management-structure-header">Management Structure</h5>
+                                <h5 class="management-structure-header">Management Structure <span class="clr-red">*</span></h5>
                             </div>
                             <div class="card-body structure-card-body">
                                 <div class="form-group" style="margin-bottom: 2px; margin-top: 5px;">
@@ -323,8 +323,7 @@
                                 <tr class="child-header splitship-head child-header-back"
                                 [hidden]="!part.visible"
                                 *ngIf="!part.isParent">
-                                    <th class="min-width-40"></th>
-                                    <th class="min-width-60"></th>
+                                    <th class="min-width-40"></th>                                   
                                     <th>PN</th>
                                     <th class="min-width-60" >Qty Ord</th>
                                     <th class="min-width-60">Qty Received</th>
@@ -337,12 +336,11 @@
                                     <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                     <th></th>
                                     <th></th>
-                                    <th class="min-width-120">Qty to Receive <span class="clr-red">*</span></th>                                   
+                                    <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>                                   
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back" 
                                     [hidden]="!part.visible"
-                                    *ngIf="!part.isParent">
-                                    <td>&nbsp;</td>
+                                    *ngIf="!part.isParent">                                  
                                     <td>&nbsp;</td>
                                     <td>{{part?.itemMaster?.partNumber}}</td>
                                     <td class="right">{{part?.quantityOrdered}}</td>
@@ -378,18 +376,18 @@
                                 </tr>
 
                                 <tr class="more-info" *ngIf="part.showStockLineGrid" [hidden]="!part.visible">
-                                    <td colspan="13">
+                                    <td colspan="12">
                                         <div class="form-row" style="margin-top: 10px;padding: 0px 7px;">
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label>PN</label>
+                                                    <label>PN <span class="clr-red">*</span></label>
                                                     <input type="text" pInputText pKeyFilter="pnum" class="form-control"
                                                            value="{{part.itemMaster?.partNumber}}" disabled  required/>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label>PN Description</label>
+                                                    <label>PN Description <span class="clr-red">*</span></label>
                                                     <input type="text" pInputText class="form-control" disabled required
                                                            [value]="part.itemMaster?.partDescription" />
                                                 </div>
@@ -560,12 +558,12 @@
                                                             <div class="card-body" style="padding: 12px 12px 4px;">
                                                                 <div class="form-group">
                                                                     <select class="form-control"
-                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].companyId"
+                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].parentCompanyId"
                                                                             #selects="ngModel"
                                                                             [ngModelOptions]="{standalone: true}"
-                                                                            (change)="selectedLegalEntity(part.stocklineListObj[part.currentSLIndex].companyId, part.stocklineListObj[part.currentSLIndex]); isCheckedSameDetailsForAllParts(part)">
-                                                                        <option value="0">Select Legal Entity</option>
-                                                                        <option *ngFor="let company of part.stocklineListObj[part.currentSLIndex].CompanyList"
+                                                                            (change)="selectedLegalEntity(part.stocklineListObj[part.currentSLIndex].parentCompanyId, part.stocklineListObj[part.currentSLIndex]); isCheckedSameDetailsForAllParts(part)" required>
+                                                                        <option value="0">Select</option>
+                                                                        <option *ngFor="let company of part.stocklineListObj[part.currentSLIndex].maincompanylist"
                                                                                 [value]="company.value">
                                                                             {{company.label}}
                                                                         </option>
@@ -573,25 +571,24 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <select class="form-control"
-                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].businessUnitId"
+                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].parentbuId"
                                                                             #selects="ngModel"
                                                                             [ngModelOptions]="{standalone: true}"
-                                                                            (change)="selectedBusinessUnit(part.stocklineListObj[part.currentSLIndex].businessUnitId, part.stocklineListObj[part.currentSLIndex])">
+                                                                            (change)="selectedBusinessUnit(part.stocklineListObj[part.currentSLIndex].parentbuId, part.stocklineListObj[part.currentSLIndex])">
                                                                         <option value="0">Select</option>
-                                                                        <option *ngFor="let businessUnit of part.stocklineListObj[part.currentSLIndex].BusinessUnitList"
-                                                                                [value]="businessUnit.value">
-                                                                            {{businessUnit.label}}
+                                                                        <option  [value]="businessUnit.value" *ngFor="let businessUnit of part.stocklineListObj[part.currentSLIndex].parentBulist">                                                                       
+                                                                          {{businessUnit.label}}
                                                                         </option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <select class="form-control"
-                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].divisionId"
+                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].parentDivisionId"
                                                                             #selects="ngModel"
                                                                             [ngModelOptions]="{standalone: true}"
-                                                                            (change)="selectedDivision(part.stocklineListObj[part.currentSLIndex].divisionId, part.stocklineListObj[part.currentSLIndex])">
+                                                                            (change)="selectedDivision(part.stocklineListObj[part.currentSLIndex].parentDivisionId, part.stocklineListObj[part.currentSLIndex])">
                                                                         <option value="0">Select</option>
-                                                                        <option *ngFor="let division of part.stocklineListObj[part.currentSLIndex].DivisionList"
+                                                                        <option *ngFor="let division of part.stocklineListObj[part.currentSLIndex].parentDivisionlist"
                                                                                 [value]="division.value">
                                                                             {{division.label}}
                                                                         </option>
@@ -599,64 +596,19 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <select class="form-control"
-                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].departmentId"
+                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].parentDeptId"
                                                                             #selects="ngModel"
                                                                             [ngModelOptions]="{standalone: true}"
-                                                                            (change)="selectedDepartment(part.stocklineListObj[part.currentSLIndex].departmentId, part.stocklineListObj[part.currentSLIndex])">
+                                                                            (change)="selectedDepartment(part.stocklineListObj[part.currentSLIndex].parentDeptId, part.stocklineListObj[part.currentSLIndex])">
                                                                         <option value="0">Select</option>
-                                                                        <option *ngFor="let department of part.stocklineListObj[part.currentSLIndex].DepartmentList"
+                                                                        <option *ngFor="let department of part.stocklineListObj[part.currentSLIndex].parentDepartmentlist"
                                                                                 [value]="department.value">
                                                                             {{department.label}}
                                                                         </option>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                        </div>
-
-                                                        <!-- <div class="form-group">
-                                                                <label>Company <span class="clr-red">*</span></label>
-                                                                <select class="form-control"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].companyId"
-                                                                        #selects="ngModel"
-                                                                        [ngModelOptions]="{standalone: true}"
-                                                                        (change)="selectedLegalEntity(part.stocklineListObj[part.currentSLIndex].companyId, part.stocklineListObj[part.currentSLIndex]); isCheckedSameDetailsForAllParts(part)">
-                                                                    <option value="0">Select</option>
-                                                                    <option *ngFor="let company of part.stocklineListObj[part.currentSLIndex].CompanyList" [value]="company.value">{{company.label}}</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>BU</label>
-                                                                <select class="form-control"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].businessUnitId"
-                                                                        #selects="ngModel"
-                                                                        [ngModelOptions]="{standalone: true}"
-                                                                        (change)="selectedBusinessUnit(part.stocklineListObj[part.currentSLIndex].businessUnitId, part.stocklineListObj[part.currentSLIndex])">
-                                                                    <option value="0">Select</option>
-                                                                    <option *ngFor="let businessUnit of part.stocklineListObj[part.currentSLIndex].BusinessUnitList" [value]="businessUnit.value">{{businessUnit.label}}</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Division</label>
-                                                                <select class="form-control"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].divisionId"
-                                                                        #selects="ngModel"
-                                                                        [ngModelOptions]="{standalone: true}"
-                                                                        (change)="selectedDivision(part.stocklineListObj[part.currentSLIndex].divisionId, part.stocklineListObj[part.currentSLIndex])">
-                                                                    <option value="0">Select</option>
-                                                                    <option *ngFor="let division of part.stocklineListObj[part.currentSLIndex].DivisionList" [value]="division.value">{{division.label}}</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Dept</label>
-                                                                <select class="form-control"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].departmentId"
-                                                                        #selects="ngModel"
-                                                                        [ngModelOptions]="{standalone: true}"
-                                                                        (change)="selectedDepartment(part.stocklineListObj[part.currentSLIndex].departmentId, part.stocklineListObj[part.currentSLIndex])">
-                                                                    <option value="0">Select</option>
-                                                                    <option *ngFor="let department of part.stocklineListObj[part.currentSLIndex].DepartmentList" [value]="department.value">{{department.label}}</option>
-                                                                </select>
-                                                            </div> -->
+                                                       </div>
                                                         <div class="form-group">
                                                             <label>Site <span class="clr-red">*</span></label>
                                                             <select class="form-control"
@@ -728,7 +680,6 @@
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label>Obtain From </label>
-
                                                             <select class="form-control"
                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFromType"
                                                                     #selects="ngModel" [ngModelOptions]="{standalone: true}"
@@ -737,50 +688,46 @@
                                                                 <option *ngFor="let item of moduleListDropdown"
                                                                         [ngValue]="item.moduleId">
                                                                     {{item.moduleName}}
-                                                                </option>
-                                                                <!-- <option value="1">Customer</option>
-                                                                        <option value="2">Vendor</option>
-                                                                        <option value="3">Company</option>
-                                                                        <option value="4">Other</option> -->
+                                                                </option>                                                               
                                                             </select>
                                                         </div>
                                                         <div class="form-group"
                                                              *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType != undefined && part.stocklineListObj[part.currentSLIndex].obtainFromType > 0">
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == 1"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == customerModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFromObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="CustomerList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].obtainFromType)"
-                                                                                    (onSelect)="onObtainSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onObtainSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].obtainFromType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
 
                                                                     </p-autoComplete>
 
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == 2"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == vendorModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFromObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="VendorList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].obtainFromType)"
-                                                                                    (onSelect)="onObtainSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onObtainSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].obtainFromType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
 
                                                                     </p-autoComplete>
 
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == 9"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == companyModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFromObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="CompanyList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].obtainFromType)"
-                                                                                    (onSelect)="onObtainSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onObtainSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].obtainFromType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <input *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == 4"
+                                                                    <input *ngIf="part.stocklineListObj[part.currentSLIndex].obtainFromType == otherModuleId"
                                                                            class="form-control" type="text"
                                                                            [ngModelOptions]="{standalone: true}"
                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].obtainFrom"
@@ -812,37 +759,37 @@
                                                              *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType != undefined && part.stocklineListObj[part.currentSLIndex].ownerType > 0">
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == 1"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == customerModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].ownerObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="CustomerList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].ownerType)"
-                                                                                    (onSelect)="onOwnerSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onOwnerSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].ownerType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == 2"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == vendorModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].ownerObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="VendorList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].ownerType)"
-                                                                                    (onSelect)="onOwnerSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onOwnerSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].ownerType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == 9"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == companyModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].ownerObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="CompanyList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].ownerType)"
-                                                                                    (onSelect)="onOwnerSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onOwnerSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].ownerType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <input *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == 4"
+                                                                    <input *ngIf="part.stocklineListObj[part.currentSLIndex].ownerType == otherModuleId"
                                                                            class="form-control" type="text"
                                                                            [ngModelOptions]="{standalone: true}"
                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].owner"
@@ -874,37 +821,37 @@
                                                              *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType != undefined && part.stocklineListObj[part.currentSLIndex].traceableToType > 0">
                                                             <div class="form-row">
                                                                 <div class="col-sm-12">
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == 1"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == customerModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableToObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="CustomerList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].traceableToType)"
-                                                                                    (onSelect)="onTraceableToSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onTraceableToSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].traceableToType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == 2"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == vendorModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableToObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="VendorList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].traceableToType)"
-                                                                                    (onSelect)="onTraceableToSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onTraceableToSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].traceableToType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == 9"
+                                                                    <p-autoComplete *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == companyModuleId"
                                                                                     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableToObject"
-                                                                                    [suggestions]="part.stocklineListObj[part.currentSLIndex].filteredRecords"
+                                                                                    [suggestions]="CompanyList"
                                                                                     (completeMethod)="onFilter($event, part.stocklineListObj[part.currentSLIndex], part.stocklineListObj[part.currentSLIndex].traceableToType)"
-                                                                                    (onSelect)="onTraceableToSelect(part.stocklineListObj[part.currentSLIndex])"
+                                                                                    (onSelect)="onTraceableToSelect(part.stocklineListObj[part.currentSLIndex],part.stocklineListObj[part.currentSLIndex].traceableToType)"
                                                                                     [dropdown]="true" [size]="32" [minLength]="1"
                                                                                     field="Value" class="autocomp-customer-cstm"
                                                                                     [forceSelection]="true">
                                                                     </p-autoComplete>
 
-                                                                    <input *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == 4"
+                                                                    <input *ngIf="part.stocklineListObj[part.currentSLIndex].traceableToType == otherModuleId"
                                                                            class="form-control" type="text"
                                                                            [ngModelOptions]="{standalone: true}"
                                                                            [(ngModel)]="part.stocklineListObj[part.currentSLIndex].traceableTo"
@@ -936,9 +883,9 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>MFG Date</label>
-                                                            <p-calendar class="pas-clder"
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
-                                                                        [showIcon]="true"></p-calendar>
+                                                                       name="manufacturingDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>MFG Trace</label>
@@ -956,8 +903,10 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Expiration Date</label>
-                                                            <p-calendar class="pas-clder" [showIcon]="true"
-                                                                        [ngModelOptions]="{standalone: true}"
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                                                         name="expirationDate"
+                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
+                                                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].expirationDate">
                                                             </p-calendar>
                                                         </div>
@@ -982,27 +931,25 @@
                                                                    [maxLength]="200">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Cert By</label>
-                                                            <!-- <select [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedBy" name="certifiedBy">
-                                                                    <option value="0">-- Select --</option>
-                                                                    <option *ngFor="let item of allEmployeeList" [ngValue]="item.value">{{item.label}}</option>
-                                                                </select> -->
+                                                            <label>Cert By</label>                                                            
                                                             <input class="form-control"
                                                                    [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedBy"
                                                                    type="text" pInputText [maxLength]="200">
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Certified Date</label>
-                                                            <p-calendar class="pas-clder"
+                                                            <p-calendar  [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
-                                                                        [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                                                                        name="certifiedDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDate">
                                                             </p-calendar>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Certified Due Date</label>
-                                                            <p-calendar class="pas-clder" [showIcon]="true"
-                                                                        [ngModelOptions]="{standalone: true}"
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                                                        name="certifiedDueDate"
+                                                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDueDate">
                                                             </p-calendar>
                                                         </div>
@@ -1021,9 +968,9 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Tag Date</label>
-                                                            <p-calendar class="pas-clder" [showIcon]="true"
-                                                                        [ngModelOptions]="{standalone: true}"
-                                                                        [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
+                                                            <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                                   name="tagDate"     [(ngModel)]="part.stocklineListObj[part.currentSLIndex].tagDate">
                                                             </p-calendar>
                                                         </div>
                                                         <div class="form-group">
@@ -1446,6 +1393,25 @@
         </div>
     </div>
 </div>
+
+<ng-template class="modal fade" #rPOAlert let-c="close" let-d="dismiss" data-backdrop="static">    
+    <div class="modal-content"> 
+        <div class="modal-header">		
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">              
+            <h5 [ngStyle]="{'color':'red'}">                    
+                <div [innerHTML]="alertText"></div>                    
+            </h5>
+        </div>
+        <div class="modal-footer">
+            <button type="button"  class="btn btn-primary" (click)="dismissModel();">close</button>			
+        </div>
+    </div>    
+</ng-template>
 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
