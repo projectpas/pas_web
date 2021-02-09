@@ -1,14 +1,15 @@
-<app-page-header title="Settings" icon="settings"></app-page-header>
+<!-- <app-page-header title="Settings" icon="settings"></app-page-header> -->
 
-<div [@fadeInOut] class="page-content">
+<div [@fadeInOut] class="page-content" style="padding:10px !important">
 
     <mat-accordion class="example-headers-align">
-        <mat-expansion-panel #profile hideToggle="true" (opened)="navigateToFragment('profile')">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    {{'settings.tab.Profile' | translate}}
-                </mat-panel-title>
-                <mat-panel-description>
+        <mat-expansion-panel class="card new-card" style="background:#fff !important;border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;" #profile hideToggle="true" (opened)="navigateToFragment('profile')">
+            <mat-expansion-panel-header style="height:35px !important" class="card-header header">
+                <mat-panel-title class="header-name" style="font-size:16px">
+                  {{'settings.tab.Profile' | translate}}
+                </mat-panel-title >
+                <mat-panel-description class="header-name" style="font-size: 16px;">
                     {{'settings.description.UserProfile' | translate}}
                     <mat-icon>account_circle</mat-icon>
                 </mat-panel-description>
@@ -16,7 +17,7 @@
 
             <user-editor #userProfile></user-editor>
 
-            <mat-action-row>
+            <mat-action-row style="background: #fff !important;">
                 <button mat-raised-button *ngIf="!userProfile.isEditMode" (click)="userProfile.beginEdit()" color="primary">Edit</button>
                 <button mat-raised-button *ngIf="userProfile.isEditMode" (click)="userProfile.save()" color="primary" style="margin-right: 1em;">Save</button>
                 <button mat-raised-button *ngIf="userProfile.isEditMode" (click)="userProfile.cancel()" color="warn">Cancel</button>
