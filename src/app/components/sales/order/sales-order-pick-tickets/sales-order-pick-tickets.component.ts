@@ -55,6 +55,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   disableSave: boolean = true;
   pickticketauditHistory: any[] = [];
   pickTicketItemInterfaceheader: any[];
+  disableSubmitButton: boolean = true;
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
@@ -140,7 +141,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       { field: "qtyAvailable", header: "Qty Avail", width: "80px" },
       { field: "qtyToShip", header: "Qty To Pick", width: "100px" },
       { field: "serialNumber", header: "Serial Num", width: "100px" },
-      { field: "manufacturer", header: "Manufacturer", width: "100px" },
+      { field: "stkLineManufacturer", header: "Manufacturer", width: "100px" },
       { field: "stockType", header: "Stock Type", width: "100px" },
       { field: "tracableToName", header: "Tracable To", width: "100px" },
     ];
@@ -185,7 +186,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.pickTickes = response[0];
-        console.log("this.pickTickes ",this.pickTickes);
+        console.log("this.pickTickesList ",this.pickTickes);
         this.showPaginator = this.totalRecords > 0;
       }, error => {
         this.isSpinnerVisible = false;
@@ -366,13 +367,22 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   }
 
   parts: any[] = [];
-  pickticketItemInterface(itemMasterId,conditionId,salesOrderId,salesOrderPartId){
+  qtyToPick:number=0;
+  //pickticketItemInterface(itemMasterId,conditionId,salesOrderId,salesOrderPartId,pickticketieminterface){
+    pickticketItemInterface(rowData,pickticketieminterface){
+      const itemMasterId = rowData.itemMasterId;
+      const conditionId = rowData.conditionId;
+      const salesOrderId = rowData.salesOrderId;
+      const salesOrderPartId = rowData.salesOrderPartId;
+      this.qtyToPick = rowData.qtyToPick;
+      console.log("rowData",rowData);
+    this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.salesOrderService
       .getStockLineforPickTicket(itemMasterId,conditionId,salesOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response[0];
-        console.log("this.pickTickes ",this.parts);
+        console.log("this.pickTickesitemlist ",this.parts);
         for (let i = 0; i < this.parts.length; i++) {
           console.log(this.parts[i].oemDer);
           if (this.parts[i].oemDer == null)
@@ -383,6 +393,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
           this.parts[i]['isSelected'] = false;
           this.parts[i]['salesOrderId'] = salesOrderId;
           this.parts[i]['salesOrderPartId'] = salesOrderPartId;
+          this.parts[i].qtyToShip = this.qtyToPick;
           // if(this.parts[i].qtyToReserve){
           if (this.parts[i].qtyToReserve == 0) {
               this.parts[i].qtyToReserve = null
@@ -395,17 +406,36 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       });
   }
 
+  onChangeOfPartSelection(event) {
+    let selectedPartsLength = 0;
+    for (let i = 0; i < this.parts.length; i++) {
+        if (event == true) {
+            selectedPartsLength = selectedPartsLength + 1;
+        }
+        else {
+            if (selectedPartsLength != 0) {
+                selectedPartsLength = selectedPartsLength - 1;
+            }
+        }
+    }
+
+    if (selectedPartsLength == 0) {
+        this.disableSubmitButton = true;
+    } else {
+        this.disableSubmitButton = false;
+    }
+  }
+  
   savepickticketiteminterface(parts){
     let tempParts = [];
+    let invalidQty = false;
         parts.filter(x => {
             x.createdBy = this.userName;
             x.updatedBy = this.userName;
             x.pickedById = this.employeeId;
             x.masterCompanyId = this.masterCompanyId;
 
-            // if (x.reservedById!=null)
-            //     x.reservedById = x.reservedById.employeeId;
-
+            console.log(x.qtyToShip);
             if (x.isSelected == true) {
                 tempParts.push(x)
                 
@@ -414,8 +444,23 @@ export class SalesOrderPickTicketsComponent implements OnInit {
         parts = [];
         parts = tempParts;
         console.log("parts ",parts);
-
-        this.salesOrderService
+        for (let i = 0; i < parts.length; i++) {
+          let selectedItem = parts[i];
+          var errmessage = '';
+          if (selectedItem.qtyToShip > this.qtyToPick) {
+              this.isSpinnerVisible = false;
+              invalidQty = true;
+              errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+          }
+        }
+        if (invalidQty) {
+          this.isSpinnerVisible = false;
+          this.alertService.resetStickyMessage();
+          this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+        }
+        else{
+          this.disableSubmitButton = true;
+          this.salesOrderService
             .savepickticketiteminterface(parts)
             .subscribe(data => {
                 this.alertService.stopLoadingMessage();
@@ -424,11 +469,13 @@ export class SalesOrderPickTicketsComponent implements OnInit {
                     `Item Picked Successfully..`,
                     MessageSeverity.success
                 );
-                $('#pickticketieminterface').modal("hide");
+                //$('#pickticketieminterface').modal("hide");
+                this.dismissModel();
                 this.onSearch();
                 // this.partActionModalClose.emit(true)
                
             },error => this.isSpinnerVisible = false);
+          }
   }
 
   confirmselected:number;
@@ -464,5 +511,34 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   viewStockSelectedRow(rowData) {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
+  }
+  //soPickTicketId:number=0;
+  pickticketItemInterfaceedit(rowData,pickticketieminterface){
+    const soPickTicketId = rowData.soPickTicketId;
+    const salesOrderId = rowData.salesOrderId;
+    const salesOrderPartId = rowData.salesOrderPartId;
+    this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
+    this.salesOrderService
+      .getPickTicketEdit(soPickTicketId,salesOrderId,salesOrderPartId)
+      .subscribe((response: any) => {
+        this.isSpinnerVisible = false;
+        this.parts = response;
+        for (let i = 0; i < this.parts.length; i++) {
+          console.log(this.parts[i].oemDer);
+          if (this.parts[i].oemDer == null)
+              this.parts[i].oemDer = this.parts[i].stockType;
+
+          this.parts[i]['isSelected'] = false;
+          this.parts[i]['soPickTicketId'] = soPickTicketId;
+          this.qtyToPick = this.parts[i].qtyToPick;
+          // if(this.parts[i].qtyToReserve){
+          if (this.parts[i].qtyToReserve == 0) {
+              this.parts[i].qtyToReserve = null
+          }
+          // }
+        }
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
   }
 }

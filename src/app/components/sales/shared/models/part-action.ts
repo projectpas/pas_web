@@ -42,4 +42,5 @@ export class PartAction {
     partStatusId: number;
     soReservedAltParts: PartAction[];
     soReservedEquParts: PartAction[];
+    qtyToShip: number;
 }
