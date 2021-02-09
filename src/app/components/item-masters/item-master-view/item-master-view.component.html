@@ -31,7 +31,7 @@
                     </a>
                 </h4>
             </div>
-            <div id="step1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+            <div id="step1" class="panel-collapse collapse" style="height: 0;" aria-expanded="false">
                 <div class="panel-body">
                     <div class="modal-content p-1">
                         <div class="table-responsive default-bg clear">
@@ -133,7 +133,7 @@
                                                 </label>
                                                 <div class="col-sm-7">
                                                     <label class="wauto">
-                                                        <input type="checkbox" style="margin-left:11px;"
+                                                        <input type="checkbox"  class="margin-l-11"
                                                                name="isReceivedDateAvailable"
                                                                [(ngModel)]="viewItemMaster.isReceivedDateAvailable"
                                                                disabled>
@@ -144,7 +144,7 @@
                                                            [(ngModel)]="viewItemMaster.daysReceived"
                                                            disabled>
                                                     <span *ngIf="viewItemMaster.isReceivedDateAvailable"
-                                                          style="margin-left: 8px;">Days</span>
+                                                         class="margin-l-8">Days</span>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12">
@@ -155,7 +155,7 @@
                                                 <div class="col-sm-7">
                                                     <label class="wauto">
                                                         <input type="checkbox"
-                                                               style="margin-left:11px !important"
+                                                               class="margin-l-11"
                                                                name="isManufacturingDateAvailable"
                                                                [(ngModel)]="viewItemMaster.isManufacturingDateAvailable"
                                                                disabled>
@@ -166,7 +166,7 @@
                                                            [(ngModel)]="viewItemMaster.manufacturingDays"
                                                            disabled>
                                                     <span *ngIf="viewItemMaster.isManufacturingDateAvailable"
-                                                          style="margin-left: 8px;">Days</span>
+                                                         class="margin-l-8">Days</span>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12">
@@ -176,7 +176,7 @@
                                                 <div class="col-sm-7">
                                                     <label class="wauto">
                                                         <input type="checkbox" name="exp-date-radio"
-                                                               style="margin-left:11px !important"
+                                                               class="margin-l-11"
                                                                name="isTagDateAvailable"
                                                                [(ngModel)]="viewItemMaster.isTagDateAvailable"
                                                                disabled>
@@ -186,7 +186,7 @@
                                                            type="number" name="tagDays"
                                                            [(ngModel)]="viewItemMaster.tagDays" disabled>
                                                     <span *ngIf="viewItemMaster.isTagDateAvailable"
-                                                          style="margin-left: 8px;">Days</span>
+                                                         class="margin-l-8">Days</span>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12">
@@ -198,7 +198,7 @@
                                                     <label class="wauto">
                                                         <input type="checkbox"
                                                                name="isOpenDateAvailable"
-                                                               style="margin-left:11px !important"
+                                                               class="margin-l-11"
                                                                [(ngModel)]="viewItemMaster.isOpenDateAvailable"
                                                                disabled>
                                                     </label>
@@ -207,7 +207,7 @@
                                                            type="number" name="openDays"
                                                            [(ngModel)]="viewItemMaster.openDays" disabled>
                                                     <span *ngIf="viewItemMaster.isOpenDateAvailable"
-                                                          style="margin-left: 8px;">Days</span>
+                                                         class="margin-l-8">Days</span>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12">
@@ -219,7 +219,7 @@
                                                     <label class="wauto">
                                                         <input type="checkbox"
                                                                name="isShippedDateAvailable"
-                                                               style="margin-left:11px !important"
+                                                               class="margin-l-11"
                                                                [(ngModel)]="viewItemMaster.isShippedDateAvailable"
                                                                disabled>
                                                     </label>
@@ -229,7 +229,7 @@
                                                            [(ngModel)]="viewItemMaster.shippedDays"
                                                            disabled>
                                                     <span *ngIf="viewItemMaster.isShippedDateAvailable"
-                                                          style="margin-left: 8px;">Days</span>
+                                                         class="margin-l-8">Days</span>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12">
@@ -241,7 +241,7 @@
                                                     <label class="wauto">
                                                         <input type="checkbox"
                                                                name="isOtherDateAvailable"
-                                                               style="margin-left:11px !important"
+                                                               class="margin-l-11"
                                                                [(ngModel)]="viewItemMaster.isOtherDateAvailable"
                                                                disabled>
                                                     </label>
@@ -250,7 +250,7 @@
                                                            type="number" name="otherDays"
                                                            [(ngModel)]="viewItemMaster.otherDays" disabled>
                                                     <span *ngIf="viewItemMaster.isOtherDateAvailable"
-                                                          style="margin-left: 8px;">Days</span>
+                                                         class="margin-l-8">Days</span>
                                                 </div>
                                             </div>
                                             <div class="clear"></div>
@@ -259,15 +259,15 @@
                                 </div>
                                 <div class="inline-block display-flex">
                                     <label class="control-label">Shelf Life</label>
-                                    <input class="form-control new-checkbox" type="checkbox"
+                                    <input class="form-control new-checkbox shelf-input" type="checkbox"
                                            name="shelfLife" [(ngModel)]="viewItemMaster.shelfLife"
-                                           style="margin: 4px 10px 0 20px;" disabled>
+                                           disabled>
                                     &nbsp;
                                     <input *ngIf="viewItemMaster.shelfLife"
                                            class="form-control shelf1 number exp-date-inputs w50"
                                            type="number" name="shelfLifeAvailable"
                                            [(ngModel)]="viewItemMaster.shelfLifeAvailable" disabled>
-                                    <strong class="shelf" style="margin-left: 5px;">
+                                    <strong class="shelf margin-l-5">
                                         <span *ngIf="viewItemMaster.shelfLife">Days</span>
                                     </strong>
                                 </div>
@@ -631,11 +631,10 @@
                        aria-expanded="false">Aircraft Info</a>
                 </h4>
             </div>            
-            <div id="step2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+            <div id="step2" class="panel-collapse collapse" style="height:0" aria-expanded="false">
                   
                 <div class="panel-body">
-                    <div class="modal-content p-1"
-                         style="overflow: hidden;padding-bottom: 60px !important;">
+                    <div class="modal-content p-1 aircraft-table-div">
                          
                         <p-table #aircraft [value]="aircraftListDataValues"
                                  class="rpo-table-cstm rro-table-cstm"
@@ -647,12 +646,12 @@
                                  selectionMode="multiple"
                                  [metaKeySelection]="true">
                                  <ng-template pTemplate="caption" let-columns>
-                                    <div class="col" style="height: 25px !important;">
-                                        <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                                            <label style="width: 120px;">
+                                    <div class="col view-check-height">
+                                        <div class="checkbox-cstm view-check-align">
+                                            <label class="view-check-label-width">
                                               <input type="checkbox" name="aircraftListDataValues" (change)="getAircraftMappedDeletdDataByItemMasterId($event)" />
-                                              <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                                <p style="font-weight: bold;"> Show Deleted List </p>  
+                                              <span class="cr m-t-5"><i class="cr-icon pi pi-check"></i></span>
+                                                <p class="font-bold"> Show Deleted List </p>  
                                             </label>
                                         </div>
                                     </div>
@@ -750,20 +749,19 @@
             </div>
             <div id="step3" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div class="modal-content p-1"
-                         style="overflow: hidden;padding-bottom: 60px !important;">
+                    <div class="modal-content p-1 aircraft-table-div">
                         <p-table #ataDataTable class="rpo-table-cstm rro-table-cstm "
                                  [value]="ataMappedList" [rows]="ataPageSize" [columns]="atasub"
                                  [scrollable]="true" [style]="{width:'100%'}" [paginator]="true"
                                  [rowsPerPageOptions]="[10, 20, 50, 100]" (onPage)="ataChapterPageIndexChange($event)">
 
                                  <ng-template pTemplate="caption" let-columns>
-                                    <div class="col" style="height: 25px !important;">
-                                        <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                                            <label style="width: 120px;">
+                                    <div class="col view-check-height">
+                                        <div class="checkbox-cstm view-check-align">
+                                            <label class="view-check-label-width">
                                               <input type="checkbox" name="ataMappedList" (change)="getDeletedATAMappedDataByItemMasterId($event)" />
-                                              <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                                <p style="font-weight: bold;"> Show Deleted List </p>  
+                                              <span class="cr m-t-5"><i class="cr-icon pi pi-check"></i></span>
+                                                <p class="font-bold"> Show Deleted List </p>  
                                             </label>
                                         </div>
                                     </div>
@@ -856,7 +854,7 @@
                 </h4>
             </div>
             <div id="step4" class="panel-collapse collapse">
-                <div style="background-color: #fff !important;" class="panel-body">
+                <div class="panel-body background-white">
                     <div>
                         <app-item-master-capabilities-list *ngIf="itemMasterId"
                                                            [isEnableItemMasterView]="isEnableItemMasterView"
@@ -875,15 +873,15 @@
             </div>
             <div id="step5" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div class="modal-content" style="padding: 8px;">
+                    <div class="modal-content ps-padding">
                         <div class="table-responsive pandsalesTable">
-                            <div class="col" style="height: 35px !important;">
-                                <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                                    <label style="width: 120px;">
+                            <div class="col ps-view-check-height">
+                                <div class="checkbox-cstm view-check-align">
+                                    <label class="view-check-label-width">
                                       <input type="checkbox" name="currentDeleteStatus" 
                                       (change)="getPSListOnDeleteStatus($event.target.checked)" />
-                                      <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        <p style="font-weight: bold;"> Show Deleted List </p>  
+                                      <span  class="cr m-t-5"><i class="cr-icon pi pi-check"></i></span>
+                                        <p class="font-bold"> Show Deleted List </p>  
                                     </label>
                                 </div>
                             </div>
@@ -1156,7 +1154,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <p>
-                                            <span style="width: 25% !important;" class="label"><b>UOM:<span *ngIf="exportInfo.exportWeight" class="clr-red">*</span> </b></span><span class="value">{{exportInfo.exportWeightUnitName ? exportInfo.exportWeightUnitName : '-'}}</span>
+                                            <span class="label span-width"><b>UOM:<span *ngIf="exportInfo.exportWeight" class="clr-red">*</span> </b></span><span class="value">{{exportInfo.exportWeightUnitName ? exportInfo.exportWeightUnitName : '-'}}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -1179,7 +1177,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <p>
-                                            <span style="width: 25% !important;" class="label"><b>UOM:<span *ngIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight" class="clr-red">*</span> </b></span><span class="value">{{exportInfo.exportSizeUnitOfMeasureName ? exportInfo.exportSizeUnitOfMeasureName : '-'}}</span>
+                                            <span class="label span-width"><b>UOM:<span *ngIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight" class="clr-red">*</span> </b></span><span class="value">{{exportInfo.exportSizeUnitOfMeasureName ? exportInfo.exportSizeUnitOfMeasureName : '-'}}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -1452,7 +1450,7 @@
                             <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
                             <td>{{ audit.createdBy }}</td>
                             <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                            <td style="background-color: #fff !important;"><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                            <td class="background-white"><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                         </tr>
                     </table>
                     </div>
@@ -1564,8 +1562,8 @@
 
 <ng-template #contentPurchaseAndSalesHist
              let-c="close"
-             let-d="dismiss"
-             style="width:auto"
+             let-d="dismiss" class="wauto"
+             
              data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Purchase and Sales</h4>

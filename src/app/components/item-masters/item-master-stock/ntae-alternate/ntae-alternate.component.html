@@ -121,7 +121,7 @@
 <!--New code for dialogue-->
 <div id="alternateModalPopup" class="modal fade custom-popup" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-sm" style="max-width: 800px !important;">
+    <div class="modal-dialog modal-sm max-w-800">
         <!-- Modal content-->
         <div class="modal-content">
             <form #saveNtaeTabForm="ngForm" (submit)="saveAlternate(saveNtaeTabForm)" id="add-customerwork" name=""
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-10" style="max-width: 400px;">
+                        <div class="col-md-10 max-w-400">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
                                     Description</label>
@@ -156,7 +156,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-10" style="max-width: 400px;">
+                        <div class="col-md-10 max-w-400">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
                                     Manufacturer </label>
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
-                        <div class="col-md-10" style="max-width: 400px;">
+                        <div class="col-md-10 max-w-400">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
                                     Item Classification </label>
@@ -194,7 +194,7 @@
                         <div class="col-md-12">
                                 <div class="col-md-12 table-responsive table-overflow"
                                     *ngIf="alternateData.attachmentDetails?.length > 0">
-                                    <h4 class="panel-title" style="padding-left: 10px;">
+                                    <h4 class="panel-title attachment-padding">
                                         Attachment Details:
                                     </h4>
                                     <p-table class="table-responsive ptable-cus-pma"
@@ -330,7 +330,7 @@
                         <td>{{ntae.updatedDate | date: 'MM/dd/yyyy, h:mm a'}}</td>
                         <td>{{ntae.updatedBy}}</td>
                        
-                        <td style="background-color: #fff !important;"><p style="background-color: #fff !important;"><input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled></p></td>
+                        <td class="background-white"><p class="background-white"><input type="checkbox" name="isDeleted" [(ngModel)]="ntae.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>
             </table>
