@@ -18,14 +18,14 @@
                                 </thead>
                                 <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderPart != undefined">
                                     <ng-container *ngFor="let part of purchaseOrderPart;let row_index=index">
-                                        <tr class="basic-info" *ngIf="part.stockLine != null && part.stockLine.length > 0">
+                                        <tr class="parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0">
                                             <td class="text-right">{{row_index + 1}}</td>
                                             <td>{{part.itemMaster?.partNumber}}</td>
                                             <td class="text-right">{{part.quantityOrdered}}</td>
                                             <td class="text-right">{{part.stockLine.length}}</td>
                                             <td class="text-right">{{part.quantityOrdered - part.stockLine.length}}</td>
                                             <td class="details-control eachcol" style="padding: 4px 6px;">
-                                                <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm btn-xs margin0 btn-receiving-toggle" (click)="toggleExpandIcon(part)"></i>
+                                                <i class="fa fa-{{ part.showStockLineGridDraft ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs" (click)="toggleExpandIcon(part)"></i>
                                             </td>
                                         </tr>
 
@@ -39,7 +39,7 @@
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>PN Description: </b></span><span class="value">{{part.itemMaster?.partDescription}}</span></p>
-                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.itemMaster?.quantityRejected}}</span></p>
+                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.quantityRejected}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>Cond: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].conditionText}}</span></p>
@@ -52,10 +52,10 @@
                                                    
                                                     <div class="pull-right" style="margin-top: -37px;margin-right: 85px;"> <!--*ngIf="part.itemMaster?.isSerialized"-->
                                                         <i class="fa fa-chevron-left btn btn-primary btn-ad-icons" 
-      (click)="moveStockLinePage('stockline', part.stockLine[currentStockLineShowIndex].currentSLIndexDraft - 1, part, part.stockLine[currentSLIndexDraft])"></i>
+                                                        (click)="moveStockLinePage('stockline', part.stockLine[currentStockLineShowIndex].currentSLIndexDraft - 1, part, part.stockLine[currentSLIndexDraft])"></i>
                                                         <input [value]="part.stockLine[currentStockLineShowIndex].currentSLIndexDraft + 1" type="text" pInputText pKeyFilter="pnum" (keyup)="gotoStockLinePage($event, part, part.stockLine[currentSLIndexDraft])" class="form-control" style="width: 50px;border-radius: 0 !important;" /> <!--(focusout)="paginatorFocusOut($event, part)"-->
                                                         <i class="fa fa-chevron-right btn btn-primary btn-ad-icons" 
-    (click)="moveStockLinePage('stockline', part.stockLine[currentStockLineShowIndex].currentSLIndexDraft + 1, part, part.stockLine[currentSLIndexDraft])"></i>
+                                                         (click)="moveStockLinePage('stockline', part.stockLine[currentStockLineShowIndex].currentSLIndexDraft + 1, part, part.stockLine[currentSLIndexDraft])"></i>
                                                         <p>Page {{part.stockLine[currentStockLineShowIndex].currentSLIndexDraft + 1}} of {{part.stockLine.length}} Pages</p>
                                                     </div>
                                                 
@@ -118,12 +118,12 @@
                                                                     {{part.stockLine[currentStockLineShowIndex].purchaseOrderUnitCost}}</span></p>
                                                                 <p><span class="label"><b>Extended Cost: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].purchaseOrderExtendedCost}}</span></p>
                                                                 <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].partCertificationNumber}}</span></p>
-                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedByName}}</span></p>
+                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedBy}}</span></p>
                                                                 <p><span class="label"><b>Certified Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedDate}}</span></p>
                                                                 <p><span class="label"><b>Certified Due Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedDueDate}}</span></p>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tageTypeName}}</span></p>
+                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagType}}</span></p>
                                                                 <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagDate}}</span></p>
                                                                 <p><span class="label"><b>ESN: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
                                                                 <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].aircraftTailNumber}}</span></p>

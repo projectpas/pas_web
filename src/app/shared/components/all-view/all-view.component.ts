@@ -162,7 +162,8 @@ export class AllViewComponent implements OnInit {
       this.getPOPartsViewById(OrderId);
       this.getApproversListById(OrderId);
       this.getApprovalProcessListById(OrderId);            
-      this.tabindex = 0;     
+      this.tabindex = 0;   
+  
       if(isReceivingpo == true)
       this.viewPurchaseOrder(OrderId);
     } else if (this.OrderTypes == 'Repair Order') {
@@ -311,7 +312,7 @@ export class AllViewComponent implements OnInit {
   }
 
   getROViewById(roId) {
-    this.repairOrderService.getROViewById(roId).subscribe(res => {
+    this.repairOrderService.getROViewById(roId).subscribe(res => {     
       this.roHeaderAdd = {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
@@ -322,7 +323,7 @@ export class AllViewComponent implements OnInit {
 
   getROPartsViewById(roId) {
     this.roPartsList = [];
-    this.repairOrderService.getROPartsViewById(roId).subscribe(res => {
+    this.repairOrderService.getROPartsViewById(roId).subscribe(res => {      
       if (res) {
         res.map(x => {
           const partList = {
@@ -342,7 +343,7 @@ export class AllViewComponent implements OnInit {
     }, err => { });
   }
 
-  getRepairOrderSplit(partList) {
+  getRepairOrderSplit(partList) {    
     if (partList.roPartSplits) {
       return partList.roPartSplits.map(y => {
         const splitpart = {

@@ -120,7 +120,15 @@ export class EditRoComponent implements OnInit {
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
-            this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);
+            //this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);
+            var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId)
+                if(!shippingVia || shippingVia == undefined)
+                {
+                 var shippingVia = new DropDownData(); 
+                 shippingVia.Key = this.repairOrderHeaderData.shipViaId.toString();
+                 shippingVia.Value = this.repairOrderHeaderData.shipVia.toString();
+                 this.ShippingViaList.push(shippingVia);
+                }  
         });
 
         this.receivingService.getReceivingROPartsForEditById(this.repairOrderId).subscribe(

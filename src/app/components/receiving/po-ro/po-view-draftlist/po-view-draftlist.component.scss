@@ -121,3 +121,9 @@ p .value {
         margin-right: 15px;
     }
 }
+.btn-cstm {
+    padding: 3px 8px !important;
+}
+.btn-cstm:before {
+    font-size: 11px;
+}
