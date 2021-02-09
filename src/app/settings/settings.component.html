@@ -5,11 +5,11 @@
     <mat-accordion class="example-headers-align">
         <mat-expansion-panel class="card new-card" style="background:#fff !important;border: 1px solid rgba(0, 0, 0, 0.125);
         border-radius: 0.25rem;" #profile hideToggle="true" (opened)="navigateToFragment('profile')">
-            <mat-expansion-panel-header style="height:35px !important" class="card-header header">
-                <mat-panel-title class="header-name" style="font-size:16px">
+            <mat-expansion-panel-header style="padding: 0.35rem 1.25rem 0.15rem 1.25rem" class="card-header header">
+                <mat-panel-title class="header-name" style="font-size:15px">
                   {{'settings.tab.Profile' | translate}}
                 </mat-panel-title >
-                <mat-panel-description class="header-name" style="font-size: 16px;">
+                <mat-panel-description class="header-name" style="font-size: 15px;">
                     {{'settings.description.UserProfile' | translate}}
                     <mat-icon>account_circle</mat-icon>
                 </mat-panel-description>
@@ -18,9 +18,9 @@
             <user-editor #userProfile></user-editor>
 
             <mat-action-row style="background: #fff !important;">
-                <button mat-raised-button *ngIf="!userProfile.isEditMode" (click)="userProfile.beginEdit()" color="primary">Edit</button>
-                <button mat-raised-button *ngIf="userProfile.isEditMode" (click)="userProfile.save()" color="primary" style="margin-right: 1em;">Save</button>
-                <button mat-raised-button *ngIf="userProfile.isEditMode" (click)="userProfile.cancel()" color="warn">Cancel</button>
+                <button  class="btn btn-primary" *ngIf="!userProfile.isEditMode" (click)="userProfile.beginEdit()" >Update</button>
+                <button  class="btn btn-primary" *ngIf="userProfile.isEditMode" (click)="userProfile.save()"  style="margin-right: 1em;">Save</button>
+                <button class="btn btn-danger" *ngIf="userProfile.isEditMode" (click)="userProfile.cancel()" >Cancel</button>
             </mat-action-row>
 
         </mat-expansion-panel>

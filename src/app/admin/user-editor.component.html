@@ -1,11 +1,11 @@
-﻿<form #form="ngForm" [formGroup]="userProfileForm" style="margin-top:15px !important" novalidate (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
+﻿<form #form="ngForm" [formGroup]="userProfileForm" style="margin-top:15px !important;margin-left:-35px !important" novalidate
+ (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
 
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
        <div class="form-group col-md-4">
       
         <label style="margin-right:-10%">{{'users.editor.JobTitle' | translate}}</label>
-        <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
-           
+        <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>           
             <input matInput 
             style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" 
             formControlName="jobTitle" [readonly]="!isEditMode" />
@@ -23,8 +23,8 @@
         </div>
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
-     <div class="form-group col-md-4">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
+     <div class="form-group col-md-4" >
         <label style="margin-right:-10%">{{'users.editor.Email' | translate}}</label>
         
         <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
      <div class="form-group col-md-4">
         <label  style="margin-right:-16%;width:100px">{{'users.editor.UserName' | translate}}</label>
         
@@ -80,7 +80,7 @@
 
         <button mat-raised-button (click)="changePassword()" *ngIf="!(isChangePassword || isNewUser)" color="primary">{{'users.editor.ChangePassword' | translate}}</button>
 
-        <div *ngIf="isChangePassword || isNewUser" formGroupName="password" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+        <div *ngIf="isChangePassword || isNewUser" formGroupName="password" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
            <div class="form-group col-md-4">
             <label  style="margin-right:-10% ;width:100px">{{'users.editor.NewPassword' | translate}}</label>
 
@@ -145,7 +145,7 @@
         <div>
             <button mat-button *ngIf="user.isLockedOut" clas="btn btn-primary" (click)="unlockUser()"
              [attr.disabled]="isSaving" color="accent"><mat-icon class="mat-button-icon">lock_open</mat-icon>{{'users.editor.Unblock' | translate}}</button>
-        </div>
+            </div>
 
     </div>
 
