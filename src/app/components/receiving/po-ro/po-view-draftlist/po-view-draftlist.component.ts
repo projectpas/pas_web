@@ -25,10 +25,9 @@ export class POViewStockDraftListComponent implements OnInit {
         private alertService: AlertService) {
     }
     
-    ngOnInit() {
-        console.log(this.purchaseOrderData);
+    ngOnInit() {               
        this.purchaseOrderData.purchaseOderPart.map(x => {
-        const data = {
+       const data = {
                 ...x,
                 stockLine: this.getStockline(x),
                 timeLife: x.timeLifeDraft
@@ -46,16 +45,20 @@ export class POViewStockDraftListComponent implements OnInit {
         // console.log(this.purchaseOrderPart);
     }
 
-    getStockline(data) {
-        data.stockLineDraft = data.stockLineDraft.map((x, index) => {
-            return {
-                ...x,
-                purchaseOrderUnitCost: x.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2) : '0.00',
-                purchaseOrderExtendedCost: x.purchaseOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2) : '0.00',
-                currentSLIndexDraft: index
-            }
-        })
-        return data.stockLineDraft;
+    getStockline(data) {       
+       if(data.stockLineDraft){
+            data.stockLineDraft = data.stockLineDraft.map((x, index) => {               
+                return {
+                    ...x,
+                    purchaseOrderUnitCost: x.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2) : '0.00',
+                    purchaseOrderExtendedCost: x.purchaseOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2) : '0.00',
+                    currentSLIndexDraft: index
+                }
+            })
+            return data.stockLineDraft;
+        } else {
+            return [];
+        }
     }
 
     moveStockLinePage(type: string, index: number, part: PurchaseOrderPart, stockline): void {

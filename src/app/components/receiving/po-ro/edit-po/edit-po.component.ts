@@ -159,15 +159,13 @@ export class EditPoComponent implements OnInit {
                     }
                 }
 
-                // this.getManagementStructure().subscribe(
-                //     results => {
-                        // this.managementStructure = results[0];
+             this.getManagementStructure().subscribe(
+                results => {
+                     this.managementStructure = results[0];                       
                         var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
                         for (let parent of allParentParts) {
-                            var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
-
+                            var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => !x.isParent && x.parentId == parent.purchaseOrderPartRecordId);
                             if (splitParts.length > 0) {
-
                                 parent.hasChildren = true;
                                 parent.quantityOrdered = 0;
                                 for (let childPart of splitParts) {
@@ -188,7 +186,7 @@ export class EditPoComponent implements OnInit {
                             // part.conditionId = 0;
                             let managementHierarchy: ManagementStructure[][] = [];
                             let selectedManagementStructure: ManagementStructure[] = [];
-                            // this.getManagementStructureHierarchy(part.managementStructureId, managementHierarchy, selectedManagementStructure);
+                            this.getManagementStructureHierarchy(part.managementStructureId, managementHierarchy, selectedManagementStructure);
                             managementHierarchy.reverse();
                             selectedManagementStructure.reverse();
 
@@ -318,11 +316,11 @@ export class EditPoComponent implements OnInit {
                                 this.getCondIdPart(this.purchaseOrderData.purchaseOderPart[i]);
                                 this.getSiteDetailsOnEdit(this.purchaseOrderData.purchaseOderPart[i]);
                             }
-                            console.log(this.purchaseOrderData.purchaseOderPart);
+                          //  console.log(this.purchaseOrderData.purchaseOderPart);
                         }
-                //     },
-                //     error => this.onDataLoadFailed(error)
-                // );
+                   },
+                     error => this.onDataLoadFailed(error)
+                );
             },
             error => {
                 this.alertService.showMessage(this.pageTitle, "Something went wrong while loading the Purchase Order detail", MessageSeverity.error);
@@ -1369,30 +1367,24 @@ export class EditPoComponent implements OnInit {
 
     updateStockLine() {
         let receiveParts: ReceiveParts[] = [];
-
         for (var part of this.purchaseOrderData.purchaseOderPart) {
             if (part.stockLine) {
-
                 var timeLife = [];
                 var stockLineToUpdate = part.stockLine;
                 var index = 1;
                 for (var stockLine of stockLineToUpdate) {
-
                     if (stockLine.conditionId == undefined || stockLine.conditionId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Condition in Part No. " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
                     }
-
                     if (stockLine.siteId == undefined || stockLine.siteId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Site in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
                     }
-
                     if (stockLine.purchaseOrderUnitCost == undefined || (stockLine.purchaseOrderUnitCost != undefined && stockLine.purchaseOrderUnitCost.toString() == '')) {
                         this.alertService.showMessage(this.pageTitle, "Please enter Unit Cost in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
                     }
-
                     for (var tl of part.timeLife) {
                         if (tl.stockLineDraftId == stockLine.stockLineDraftId) {
                             timeLife.push(tl);

@@ -247,8 +247,8 @@
                                 <th>Unit Cost</th>
                                 <th>Extended Cost</th>
                                 <th>WO</th>
-                                <th>SO</th>
                                 <th>Sub-WO</th>
+                                <th>SO</th>                                
                                 <th colspan="4" style="text-align: center;">Management Structure</th>
                                 <!-- <th colspan="7"></th> -->
                                 <th>Site</th>
@@ -264,10 +264,10 @@
                                 <tr class="table-parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
                                     <td colspan="2"><a matTooltip="Edit" matTooltipPosition="above" class="btn boxed-float-btn nobg edit"><i class="fa fa-edit" (click)="editPart(part)"></i></a></td>
                                     <td class="text-right">{{row_index + 1}}</td>
-                                    <td>{{part.itemMaster.partNumber}}</td>
+                                    <td>{{part.partNumber}}</td>
                                     <td>{{part.altEquiPartNumber}}</td>
-                                    <td>{{part.itemMaster.partDescription}}</td>
-                                    <td>{{part.itemMaster.manufacturer?.name}}</td>
+                                    <td>{{part.partDescription}}</td>
+                                    <td>{{part.manufacturer}}</td>
                                     <td>
                                         <select class="form-control"
                                                 [(ngModel)]="part.conditionId"
@@ -279,10 +279,10 @@
                                             <option *ngFor="let condition of ConditionList" [value]="condition.Key">{{condition.Value}}</option>
                                         </select>
                                     </td>
-                                    <td>{{part.uomText}}</td>
-                                    <td>{{part.itemMaster.pma ? "PMA," : '' + part.itemMaster.der ? "DER" : ''}}</td>
+                                    <td>{{part.unitOfMeasure}}</td>
+                                    <td>{{part.stockType}}</td>
                                     <td class="text-right">{{part.quantityOrdered}}</td>
-                                    <td class="text-right">{{part.DiscountPerUnit}}</td>
+                                    <td class="text-right">{{part.discountPerUnit}}</td>
                                     <td>
                                         <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum"
                                                (focusout)="calculatePartExtendedCost(part)"
@@ -295,13 +295,13 @@
 
                                     </td>
                                     <td>
-                                        <!-- <input type="text" class="form-control" value="Pending" [disabled]="true"> -->
+                                        {{part.workOrderNo}}
                                     </td>
                                     <td>
-                                        <!-- <input type="text" class="form-control" value="Pending" [disabled]="true"> -->
+                                        {{part.subWorkOrderNo}}
                                     </td>
                                     <td>
-                                        <!-- <input type="text" class="form-control" value="Pending" [disabled]="true"> -->
+                                       {{part.salesOrderNo}}
                                     </td>
                                     <td>
                                         <!-- <label style="width:90px;">Company:</label> -->
