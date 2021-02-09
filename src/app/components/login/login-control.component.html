@@ -2,7 +2,8 @@
     
     <label style="padding-right: 16px;width: auto;">Company Name:</label>
     <div class="form-group">
-        <select class="form-control alert alert-danger alert-danger-cstm" formControlName="masterCompanyId" required>
+        <select class="form-control alert alert-danger alert-danger-cstm"
+        style="background-color: #fff !important;padding: 5px !important;border-radius: 5px;" formControlName="masterCompanyId" required>
             <option *ngFor="let name of masterCompanyList" [ngValue]="name.masterCompanyId">
                 {{name.companyName}}
             </option>

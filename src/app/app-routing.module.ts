@@ -27,6 +27,7 @@ import { LicTypeComponent } from "./components/lic-type/lic-type.component";
 import { OwnerComponent } from "./components/owner/owner.component";
 import { PlatformComponent } from "./components/platform/platform.component";
 import { SupervisorComponent } from "./components/supervisor/supervisor.component";
+import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 import { NotFoundComponent } from "./components/not-found/not-found.component";
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth-guard.service';
