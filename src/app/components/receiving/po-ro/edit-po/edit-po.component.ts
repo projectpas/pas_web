@@ -98,8 +98,7 @@ export class EditPoComponent implements OnInit {
     vendorModuleId: number = 0;   
     customerModuleId: number = 0;   
     otherModuleId: number = 0; 
-    alertText: string = '';  
-    arrayPostatuslist: any[] = []; 
+    alertText: string = '';   
 
     /** edit-po ctor */
     constructor(public receivingService: ReceivingService,
@@ -134,29 +133,70 @@ export class EditPoComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getShippingVia();
+
+        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
+        this.receivingService.getAllRecevingEditID(this.receivingService.purchaseOrderId).subscribe(res => {
+            const result = res;
+            if(result && result.length > 0) {
+                result.forEach(x => 
+                    {
+                        if(x.label == "VENDOR"){
+                            this.arrayVendlsit.push(x.value);                           
+                        }
+                        else if(x.label == "SHIPPINGVIA"){
+                            this.arrayshipvialist.push(x.value);                             
+                        }
+                        
+                        // else if (x.label == "EMPLOYEE") {
+                        //     this.arrayEmplsit.push(x.value); 
+                        // }
+                        // else if (x.label == "CUSTOMER") {
+                        //     this.arrayCustlist.push(x.value);
+                        // }
+                        // else if (x.label == "COMPANY") {
+                        //     this.arrayLegalEntitylsit.push(x.value);
+                        // }
+                        // else if (x.label == "WONO") {
+                        //     this.arrayWOlist.push(x.value);
+                        // }
+                        // else if (x.label == "SOWONO") {
+                        //     this.arraysubWOlist.push(x.value);
+                        // }								
+                        // else if (x.label == "RONO") {
+                        //     this.arrayROlist.push(x.value);
+                        // }
+                        // else if (x.label == "SONO") {
+                        //     this.arraySOlist.push(x.value);
+                        // }
+                        // else if (x.label == "PRIORITY") {
+                        //     this.arrayPrioritylist.push(x.value);
+                        // }
+                        // else if (x.label == "CURRENCY") {
+                        //     this.arrayCurrencylist.push(x.value);
+                        // }
+                        // else if (x.label == "CONDITION") {
+                        //     this.arrayConditionlist.push(x.value);
+                        // }								
+                    });
+                this.getShippingVia();  
+                this.isSpinnerVisible = true;			
+                setTimeout(() => {
+                    this.isSpinnerVisible = true;                   
+                    this.isSpinnerVisible = false;							
+                }, 2200);
+            }
+        });
+
+    
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
-        this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
+        
         if (this.receivingService.purchaseOrderId == undefined && this.receivingService.purchaseOrderId == null) {
             this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
             return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
         }
-         this.getReceivingPOHeaderById(this.receivingService.purchaseOrderId);
-        // this.receivingService.getReceivingPOHeaderById(this.receivingService.purchaseOrderId).subscribe(
-        //     res => {
-        //         this.purchaseOrderData = res;
-        //         this.purchaseOrderId = res.purchaseOrderId;
-        //         this.purchaseOrderData.openDate = this.purchaseOrderData.openDate ? new Date(this.purchaseOrderData.openDate) : '';
-        //         this.purchaseOrderData.closedDate = this.purchaseOrderData.closedDate ? new Date(this.purchaseOrderData.closedDate) : '';
-        //         this.purchaseOrderData.dateApproved = this.purchaseOrderData.dateApproved ? new Date(this.purchaseOrderData.dateApproved) : '';
-        //         this.purchaseOrderData.needByDate = this.purchaseOrderData.needByDate ? new Date(this.purchaseOrderData.needByDate) : '';
-        //         this.getManagementStructureCodes(this.purchaseOrderData.managementStructureId);
-
-        //     },
-        //     error => { }
-        // );
-
+        
+        this.getReceivingPOHeaderById(this.receivingService.purchaseOrderId);       
         this.receivingService.getPurchaseOrderDataForEditById(this.receivingService.purchaseOrderId).subscribe(
             results => {
                 if (results[0] == null || results[0] == undefined) {
@@ -386,22 +426,11 @@ export class EditPoComponent implements OnInit {
             });
     }
 
-    // getLegalEntity() {
-    //     this.commonService.getLegalEntityList().subscribe(res => {
-    //         this.legalEntityList = res;
-    //     })
-    // }
-
-    getLegalEntity(strText = '') {
-        if (this.arrayLegalEntitylsit.length == 0) {
-            this.arrayLegalEntitylsit.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayLegalEntitylsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
-            this.legalEntityList = res;           
-        }, err => {
-            this.isSpinnerVisible = false;
-        });
-    } 
+    getLegalEntity() {
+        this.commonService.getLegalEntityList().subscribe(res => {
+            this.legalEntityList = res;
+        })
+    }
     
     loadModulesNamesForObtainOwnerTraceable() {
 		this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
@@ -503,29 +532,16 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    getCustomers(strText = '') {
+    getCustomers(): void {
 
-        // this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(
-        //     results => {
-        //         for (let customer of results) {
-        //             var dropdown = new DropDownData();
-        //             dropdown.Key = customer.value.toLocaleString();
-        //             dropdown.Value = customer.label;
-        //             this.CustomerList.push(dropdown);
-        //         }
-
-                if (this.arrayCustlist.length == 0) {
-                    this.arrayCustlist.push(0);
+        this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(
+            results => {
+                for (let customer of results) {
+                    var dropdown = new DropDownData();
+                    dropdown.Key = customer.value.toLocaleString();
+                    dropdown.Value = customer.label;
+                    this.CustomerList.push(dropdown);
                 }
-                this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {        
-                    // stockLine.filteredRecords = [];
-                    const data = response.map(x => {
-                        return {
-                            Key: x.value.toString(),
-                            Value: x.label
-                        }
-                    });
-                    this.CustomerList = data;    
 
                 for (let part of this.purchaseOrderData.purchaseOderPart) {
                     for (let SL of part.stockLine) {
@@ -545,27 +561,15 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    getVendors(filterVal = '') {
+    getVendors(): void {
         //stockLine.VendorList = [];
-        // this.commonService.smartDropDownList('Vendor', 'VendorId', 'VendorName').subscribe(vendors => {
-        //     for (let vendor of vendors) {
-        //         var dropdown = new DropDownData();
-        //         dropdown.Key = vendor.value.toLocaleString();
-        //         dropdown.Value = vendor.label;
-        //         this.VendorList.push(dropdown);
-        //     }
-
-        if (this.arrayVendlsit.length == 0) {
-            this.arrayVendlsit.push(0); }
-		this.vendorService.getVendorNameCodeListwithFilter(filterVal,20,this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {			            
-            //stockLine.filteredRecords = [];
-            const data = res.map(x => {
-                return {
-                    Key: x.vendorId,
-                    Value: x.vendorName
-                }
-            });
-            this.VendorList = data;
+        this.commonService.smartDropDownList('Vendor', 'VendorId', 'VendorName').subscribe(vendors => {
+            for (let vendor of vendors) {
+                var dropdown = new DropDownData();
+                dropdown.Key = vendor.value.toLocaleString();
+                dropdown.Value = vendor.label;
+                this.VendorList.push(dropdown);
+            }
 
             for (let part of this.purchaseOrderData.purchaseOderPart) {
                 for (let SL of part.stockLine) {
@@ -612,27 +616,14 @@ export class EditPoComponent implements OnInit {
         // );
     }
 
-    getCompanyList(strText = '') {
-        // this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
-        //     for (let company of companies) {
-        //         var dropdown = new DropDownData();
-        //         dropdown.Key = company.value.toLocaleString();
-        //         dropdown.Value = company.label;
-        //         this.CompanyList.push(dropdown);
-        //     }
-
-        if (this.arrayComplist.length == 0) {
-            this.arrayComplist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayComplist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-            //stockLine.filteredRecords = [];
-            const data = response.map(x => {
-                return {
-                    Key: x.value.toString(),
-                    Value: x.label
-                }
-            });
-            this.CompanyList = data;  
+    getCompanyList() {
+        this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
+            for (let company of companies) {
+                var dropdown = new DropDownData();
+                dropdown.Key = company.value.toLocaleString();
+                dropdown.Value = company.label;
+                this.CompanyList.push(dropdown);
+            }
 
             for (let part of this.purchaseOrderData.purchaseOderPart) {
                 for (let SL of part.stockLine) {
@@ -712,66 +703,35 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    // private getConditionList(): void {
-    //     this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(
-    //         results => {
-    //             for (let condition of results) {
-    //                 var dropdown = new DropDownData();
-    //                 dropdown.Key = condition.value.toLocaleString();
-    //                 dropdown.Value = condition.label;
-    //                 this.ConditionList.push(dropdown);
-    //             }
-    //         },
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
-
-    getConditionList() {
-        if (this.arrayConditionlist.length == 0) {
-            this.arrayConditionlist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 0, this.arrayConditionlist.join(), this.currentUserMasterCompanyId).subscribe(res => {         
-            for (let company of res) {
-                var dropdown = new DropDownData();
-                dropdown.Key = company.value.toLocaleString();
-                dropdown.Value = company.label
-                this.ConditionList.push(dropdown);
-              }           
+    private getConditionList(): void {
+        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(
+            results => {
+                for (let condition of results) {
+                    var dropdown = new DropDownData();
+                    dropdown.Key = condition.value.toLocaleString();
+                    dropdown.Value = condition.label;
+                    this.ConditionList.push(dropdown);
+                }
             },
-            err => {
-                this.isSpinnerVisible = false;
-            });
+            error => this.onDataLoadFailed(error)
+        );
     }
 
-    // private getStatus() {
-    //     this.poStatus = [];
-    //     this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description').subscribe(response => {
-	// 		this.poStatus = response;
-	// 		this.poStatus = this.poStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-	// 	});
-    //     // this.poStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
-    //     // this.poStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
-    //     // this.poStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
-    //     // this.poStatus.push(<DropDownData>{ Key: '4', Value: 'Closed' });
-
-    //     // this.poUserType = [];
-    //     // this.poUserType.push(<DropDownData>{ Key: '1', Value: 'Customer' });
-    //     // this.poUserType.push(<DropDownData>{ Key: '2', Value: 'Vendor' });
-    //     // this.poUserType.push(<DropDownData>{ Key: '3', Value: 'Company' });
-    // }
-
-    
     private getStatus() {
-        if (this.arrayPostatuslist.length == 0) {
-            this.arrayPostatuslist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('POStatus', 'POStatusId', 'Description', '',
-            true, 0, this.arrayPostatuslist.join(), this.currentUserMasterCompanyId)
-            .subscribe(res => {
-                this.poStatus = res;
-                this.poStatus = this.poStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));        
-                }
-            );
+        this.poStatus = [];
+        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description').subscribe(response => {
+			this.poStatus = response;
+			this.poStatus = this.poStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+		});
+        // this.poStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
+        // this.poStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
+        // this.poStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
+        // this.poStatus.push(<DropDownData>{ Key: '4', Value: 'Closed' });
+
+        // this.poUserType = [];
+        // this.poUserType.push(<DropDownData>{ Key: '1', Value: 'Customer' });
+        // this.poUserType.push(<DropDownData>{ Key: '2', Value: 'Vendor' });
+        // this.poUserType.push(<DropDownData>{ Key: '3', Value: 'Company' });
     }
 
     // private loadManagementdata() {
@@ -937,14 +897,8 @@ export class EditPoComponent implements OnInit {
     }
 
     private getAllSite(): void {
-        if (this.arraySitelist.length == 0) {
-            this.arraySitelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('Site','SiteId','Name','',true, 0,this.arraySitelist.join(),this.currentUserMasterCompanyId).subscribe(
-               // res => {
-               // this.sites = res;                
-           // });
-           //this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(
-             results => {
+        this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(
+            results => {
                 this.SiteList = results.map(x => {
                     return {
                         siteId: x.value,
@@ -1599,35 +1553,19 @@ export class EditPoComponent implements OnInit {
         })   
     }
 
-    // getManufacturers() {
-    //     this.ManufacturerList = [];
-    //     this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').subscribe(
-    //         results => {
-    //             for (let manufacturer of results) {
-    //                 var dropdown = new DropDownData();
-    //                 dropdown.Key = manufacturer.value.toLocaleString();
-    //                 dropdown.Value = manufacturer.label;
-    //                 this.ManufacturerList.push(dropdown);
-    //             }
-    //         },
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
-
-    getManufacturers(strText = '') {
-        if (this.arraymanufacturerlist.length == 0) {
-            this.arraymanufacturerlist.push(0);
-        }
-        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'ManufacturerId', 'Name', strText, true, 20, this.arraymanufacturerlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
-            for (let company of response) {
-                var dropdown = new DropDownData();
-                dropdown.Key = company.value.toLocaleString();
-                dropdown.Value = company.label
-                this.ManufacturerList.push(dropdown);
-            }            
-        }, err => {
-            this.isSpinnerVisible = false;
-        });
+    getManufacturers() {
+        this.ManufacturerList = [];
+        this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').subscribe(
+            results => {
+                for (let manufacturer of results) {
+                    var dropdown = new DropDownData();
+                    dropdown.Key = manufacturer.value.toLocaleString();
+                    dropdown.Value = manufacturer.label;
+                    this.ManufacturerList.push(dropdown);
+                }
+            },
+            error => this.onDataLoadFailed(error)
+        );
     }
 
     getManagementStructureCodes(id) {

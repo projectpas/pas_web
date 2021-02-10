@@ -102,6 +102,13 @@ export class ReceivingEndpointService extends EndpointFactory {
             });
     }
 
+    getAllRecevingEditID(purchaseOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/getAllRecevingEditID?poID=${purchaseOrderId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllRecevingEditID(purchaseOrderId));  
+        });
+      }
+
     getReceivingPODataForEditById<T>(receivingId: any): Observable<T> {
 
         let url = `${this.receivingPurchaseOrderForEditDataGet}/${receivingId}`;
