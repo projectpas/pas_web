@@ -1110,6 +1110,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.sourceEmpLast.lastName = res[0][0].lastName;
     }
     onSubmit2() {
+        console.log("On Submit date");
         this.isSpinnerVisible = true;
         this.enableSaveBtn = false;
         this.supervisorId;

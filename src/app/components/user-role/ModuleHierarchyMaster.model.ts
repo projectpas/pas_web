@@ -8,8 +8,12 @@
     level: number;
     hasChildren: boolean;
     visible: boolean;
+    isMenu:boolean;
+    moduleIcon:string;
+    routerLink:string;
     //children: ModuleHierarchyMaster[];
     rolePermission: RolePermission;
+    
 }
 
 export class UserRole {
@@ -23,13 +27,22 @@ export class RolePermission {
     id: number;
     userRoleId: number;
     moduleHierarchyMasterId: number;
+    reports: boolean;
+    permissionId:number;
+    isSelect:boolean;
     canAdd: boolean;
     canView: boolean;
     canUpdate: boolean;
     canDelete: boolean;
-    reports: boolean;
-    canUpload: boolean;
-    canDownload: boolean;
+    canAssign:boolean;
+    canApprove:boolean;
+    canUpload:boolean;
+    canDownload:boolean;
+    canReport:boolean;
+    canRun:boolean;
+    canReportView:boolean;
+    canReportDelete:boolean;
+    canPrint:boolean;
 }
 
 export class UserRoleMapper {
@@ -48,4 +61,10 @@ export class User {
     configuration: string;
     isEnabled: boolean;
     isLockedOut: boolean;
+}
+
+export class PermissionMaster {
+    permissionID: number;
+    permissionName: string;
+    parentID: number;
 }

@@ -4,7 +4,7 @@ import { AlertService, MessageSeverity } from "../../services/alert.service";
 import { OnInit, Component } from "@angular/core";
 import { fadeInOut } from "../../services/animations";
 import { UserRoleService } from "./user-role-service";
-import { ModuleHierarchyMaster, UserRole, RolePermission, User } from "./ModuleHierarchyMaster.model";
+import { ModuleHierarchyMaster, UserRole, RolePermission, User, PermissionMaster } from "./ModuleHierarchyMaster.model";
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
 
@@ -23,6 +23,7 @@ export class EditUserRolesComponent implements OnInit {
     public pages: ModuleHierarchyMaster[];
     public pagesToHide: ModuleHierarchyMaster[];
     public userRoles: UserRole[] = [];
+    public permissionMaster: PermissionMaster[];
 
     constructor(private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
 
@@ -31,6 +32,7 @@ export class EditUserRolesComponent implements OnInit {
     ngOnInit(): void {
         this.getAllModuleHierarchies();
         this.getAllUserRoles();
+        this.getAllPermission();
         this.currentUserRole = new UserRole();
         this.currentUserRole.rolePermissions = [];
         this.pages = [];
@@ -42,6 +44,13 @@ export class EditUserRolesComponent implements OnInit {
             this.moduleHierarchy = data[0];
             this.sortModules();
         });
+    }
+
+    getAllPermission() {
+        this.userRoleService.getAllPermission().subscribe(data => {
+            this.permissionMaster = data[0];
+            console.log(this.permissionMaster);
+        })
     }
 
     sortModules(): void {
@@ -92,7 +101,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     showChildModules(currentModule: ModuleHierarchyMaster, event): void {
-        if (!currentModule.isPage) {
+        if (currentModule.hasChildren) {
             var visible = false;
             var target = event.target.localName == 'td' ? event.target.children[0] : event.target;
             if (target.classList.contains('fa-caret-down')) {
@@ -117,6 +126,13 @@ export class EditUserRolesComponent implements OnInit {
                 this.loadAllChildModule(currentModule.id);
                 this.pagesToHide.forEach(function (module) {
                     module.visible = visible;
+                    var k=document.getElementsByClassName('cls'+currentModule.id);
+                    for (let index = 0; index < k.length; index++) {
+                        const element = k[index];
+                        element.classList.remove('fa-caret-right');
+                        element.classList.add('fa-caret-down');
+                        
+                    }
                 });
             }
         }
@@ -165,19 +181,64 @@ export class EditUserRolesComponent implements OnInit {
     }
     
     setPermissionByType(currentModule: ModuleHierarchyMaster, type: string, value: boolean) {
-        if (type == 'canView')
-            currentModule.rolePermission.canView = value;
-        if (type == 'canAdd')
-            currentModule.rolePermission.canAdd = value;
-        if (type == 'canUpdate')
-            currentModule.rolePermission.canUpdate = value;
-        if (type == 'canDelete')
-            currentModule.rolePermission.canDelete = value;
+        if (value == true) {
+            currentModule.rolePermission.permissionId = +type;
+        }
+        else {
+           // currentModule.rolePermission.permissionId = 0;
+        }
+        this.setCorrospondingValue(currentModule, value);
+    }
+
+    setCorrospondingValue(val, value) {
+        switch (val.rolePermission.permissionId) {
+            case 1:
+                val.rolePermission.canAdd = value;
+                break;
+            case 2:
+                val.rolePermission.canView = value;
+                break;
+            case 3:
+                val.rolePermission.canUpdate = value;
+                break;
+            case 4:
+                val.rolePermission.canDelete = value;
+                break;
+            case 5:
+                val.rolePermission.canAssign = value;
+                break;
+            case 6:
+                val.rolePermission.canApprove = value;
+                break;
+            case 7:
+                val.rolePermission.canUpload = value;
+                break;
+            case 8:
+                val.rolePermission.canDownload = value;
+                break;
+            case 9:
+                val.rolePermission.canReport = value;
+                break;
+            case 10:
+                val.rolePermission.canRun = value;
+                break;
+            case 11:
+                val.rolePermission.canReportView = value;
+                break;
+            case 12:
+                val.rolePermission.canReportDelete = value;
+                break;
+            case 13:
+                val.rolePermission.canPrint = value;
+                break;
+            default:
+                break;
+        }
     }
 
     uncheckAllParentModule(parentId, type: string): void {
         var parentModule = this.sortedHierarchy.filter(function (module) {
-            return (module.id == parentId && module.isPage == false);
+            return (module.id == parentId && module.hasChildren == true);
         })[0];
 
         this.setPermissionByType(parentModule, type, false);
@@ -192,7 +253,7 @@ export class EditUserRolesComponent implements OnInit {
         });
         for (let module of parentModules) {
             this.pagesToHide.push(module);
-            if (module.parentId != null && !module.isPage) {
+            if (module.parentId != null && module.hasChildren) {
                 this.loadAllChildModule(module.id);
             }
         }
@@ -207,32 +268,47 @@ export class EditUserRolesComponent implements OnInit {
                 this.uncheckAllParentModule(currentModule.parentId, type);
         }
 
-        if (!currentModule.isPage) {
+        if (currentModule.hasChildren) {
             this.setPermissionByType(currentModule, type, value);
             this.pages = [];
             this.hasPages(currentModule, type, value);
             for (let page of this.pages) {
-                this.setModuleHierarchyPermission(page);
+                this.setModuleHierarchyPermission(page,value);
+            }
+            if(value==true && (currentModule.parentId==null || currentModule.hasChildren)){
+                var currentRolePermission = Object.assign({}, currentModule.rolePermission);
+                currentRolePermission.moduleHierarchyMasterId = currentModule.id;
+                this.currentUserRole.rolePermissions.push(currentRolePermission);
+            }
+            else{
+                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.id);
+                if(currentModule.parentId!=null){
+                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.parentId);
+                }
             }
         }
         else {
             this.setPermissionByType(currentModule, type, value);
-            this.setModuleHierarchyPermission(currentModule);
+            this.setModuleHierarchyPermission(currentModule,value);
         }
         console.log(this.currentUserRole.rolePermissions);
     }
 
-    setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster): void {
+    setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,value:boolean=true): void {
 
         var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-            return permission.moduleHierarchyMasterId == currentModule.id;
+            return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionId == currentModule.rolePermission.permissionId;
         })[0];
 
         if (permission != undefined) {
             var currentRolePermission = Object.assign({}, currentModule.rolePermission);
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             var permissionIndex = this.currentUserRole.rolePermissions.indexOf(permission)
-            this.updatePermission(this.currentUserRole.rolePermissions[permissionIndex], currentModule.rolePermission);
+            if(value==false){
+                this.currentUserRole.rolePermissions[permissionIndex].permissionId=0;
+                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionId!=0);
+                }
+            //this.updatePermission(this.currentUserRole.rolePermissions[permissionIndex], currentModule.rolePermission);
         }
         else {
             var currentRolePermission = Object.assign({}, currentModule.rolePermission);
@@ -264,6 +340,54 @@ export class EditUserRolesComponent implements OnInit {
                 this.hasPages(module, type, checkedValue);
             }
         }
+    }
+
+    getChecked(module, permissionId) {
+        let valToReturn: Boolean;
+        switch (permissionId) {
+            case 1:
+                valToReturn = module.rolePermission.canAdd;
+                break;
+            case 2:
+                valToReturn = module.rolePermission.canView;
+                break;
+            case 3:
+                valToReturn = module.rolePermission.canUpdate;
+                break;
+            case 4:
+                valToReturn = module.rolePermission.canDelete;
+                break;
+            case 5:
+                valToReturn = module.rolePermission.canAssign;
+                break;
+            case 6:
+                valToReturn = module.rolePermission.canApprove;
+                break;
+            case 7:
+                valToReturn = module.rolePermission.canUpload;
+                break;
+            case 8:
+                valToReturn = module.rolePermission.canDownload;
+                break;
+            case 9:
+                valToReturn = module.rolePermission.canReport;
+                break;
+            case 10:
+                valToReturn = module.rolePermission.canRun;
+                break;
+            case 11:
+                valToReturn = module.rolePermission.canReportView;
+                break;
+            case 12:
+                valToReturn = module.rolePermission.canReportDelete;
+                break;
+            case 13:
+                valToReturn = module.rolePermission.canPrint;
+                break;
+            default:
+                break;
+        }
+        return valToReturn;
     }
 
     UpdateUserRole(): void {

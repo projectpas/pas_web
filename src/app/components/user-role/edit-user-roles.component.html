@@ -102,14 +102,17 @@
                     <table class="table table-bordered table-striped role-setup-table">
                         <thead>
                             <tr>
-                                <th>Modules</th>
+                                <!-- <th>Modules</th>
                                 <th>View</th>
                                 <th>Add</th>
                                 <th>Delete</th>
                                 <th>Update</th>
                                 <th>Reports</th>
                                 <th>Excell Upload</th>
-                                <th>Download</th>
+                                <th>Download</th> -->
+                                <th *ngFor="let module of permissionMaster;index as i">
+                                    {{module.permissionName}}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -118,9 +121,13 @@
                                     <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
                                         {{module.name}}
 
-                                        <i  *ngIf="!module.isPage"  class="fa fa-caret-right"></i>
+                                        <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
                                     </td>
-                                    <td>
+                                    <td *ngFor="let permission of permissionMaster; index as i">
+                                        <!-- <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="module.rolePermission.isSelect" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" /> -->
+                                        <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" />
+                                    </td>
+                                    <!-- <td>
                                         <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
                                     </td>
                                     <td>
@@ -140,7 +147,7 @@
                                     </td>
                                     <td>
                                         <input *ngIf="!module.isPage" type="checkbox" />
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </ng-container>
                         </tbody>

@@ -80,16 +80,24 @@
                 <div class="pheading">
                     <h4 class="page-heading">Add New Role</h4>
                     <!--<form id="" class="lgrey-bg div8 filters" name="" action="#" method="post" onsubmit="return false;">-->
-                        <div class="col-sm-3 emp-filter">
-                            <label>Role Name</label>
+                        <form [formGroup]="roleForm">
+                        <div class="form-group col-sm-3 emp-filter">
+                            <label style="text-align: left;">Role Name</label>
                             <br>
-                            <input type="text" [(ngModel)]="currentUserRole.name" class="form-control">
+                            <input type="text" formControlName="name" class="form-control" required>
+                        </div>
+                        <div *ngIf="name.invalid && (name.dirty || name.touched)"
+                                 class="alert alert-danger alert-danger-cstm">
+                            <div *ngIf="name.errors.required">
+                            <small> Role Name is required </small>
+                            </div>
                         </div>
                         <div class="col-sm-3 emp-filter">
-                            <label>Memo</label>
+                            <label style="width:100%;text-align: left;">Role Description</label>
                             <br>
-                            <input type="text" [(ngModel)]="currentUserRole.memo" class="form-control">
+                            <input type="text" formControlName="description" class="form-control">
                         </div>
+                    </form>
                     <!--</form>-->
                 </div>
                 <div class="clear"></div>
@@ -104,13 +112,16 @@
                         <thead>
                             <tr>
                                 <th>Modules</th>
-                                <th>View</th>
+                                <!-- <th>View</th>
                                 <th>Add</th>
                                 <th>Delete</th>
                                 <th>Update</th>
                                 <th>Reports</th>
                                 <th>Excell Upload</th>
-                                <th>Download</th>
+                                <th>Download</th> -->
+                                <th *ngFor="let module of permissionMaster;index as i">
+                                    {{module.permissionName}}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,21 +130,25 @@
                                     <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
                                         {{module.name}}
 
-                                        <i  *ngIf="!module.isPage"  class="fa fa-caret-down"></i>
+                                        <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
+                                    </td>
+                                    <td *ngFor="let permission of permissionMaster; index as i">
+                                        <!-- <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="module.rolePermission.isSelect" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" /> -->
+                                        <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" />
+                                    </td>
+                                    <!-- <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canView" (change)="permissionChecked($event,module,module.rolePermission.permissionId)"/>
                                     </td>
                                     <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
+                                        <input type="checkbox" [checked]="module.rolePermission.canAdd" (change)="permissionChecked($event,module,module.rolePermission.permissionId)"  />
                                     </td>
                                     <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
+                                        <input type="checkbox" [checked]="module.rolePermission.canDelete" (change)="permissionChecked($event,module,module.rolePermission.permissionId)"  />
                                     </td>
                                     <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
-                                    </td>
-                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canUpdate" (change)="permissionChecked($event,module,module.rolePermission.permissionId)"  />
+                                    </td> -->
+                                    <!-- <td>
                                         <input *ngIf="!module.isPage" type="checkbox" />
                                     </td>
                                     <td>
@@ -141,14 +156,14 @@
                                     </td>
                                     <td>
                                         <input *ngIf="!module.isPage" type="checkbox" />
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </ng-container>
                         </tbody>
                     </table>
                     <div class="clear"></div>
                     <div style="margin-top: 10px;"></div>
-                    <button class="btn btn-success pull-right" (click)="addUserRole()">Add Role Details</button>
+                    <button class="btn btn-success pull-right"  (click)="addUserRole()">Add Role Details</button>
                     <div class="clear"></div>
                     <br>
                     <div class="padding5">

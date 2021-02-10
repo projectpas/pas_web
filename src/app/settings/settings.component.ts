@@ -48,17 +48,17 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
-        this.fragmentSubscription = this.route.fragment.subscribe(anchor => {
-            switch (anchor) {
-                case 'preferences':
-                    console.log(this.preferencesPanel);
-                    this.preferencesPanel.open();
-                    break;
-                default:
-                    console.log(this.profilePanel);
-                    this.profilePanel.open();
-            }
-        });
+        // this.fragmentSubscription = this.route.fragment.subscribe(anchor => {
+        //     switch (anchor) {
+        //         case 'preferences':
+        //             console.log(this.preferencesPanel);
+        //             this.preferencesPanel.open();
+        //             break;
+        //         default:
+        //             console.log(this.profilePanel);
+        //             this.profilePanel.open();
+        //     }
+        // });
     }
 
     ngAfterViewInit() {
@@ -70,7 +70,7 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy() {
-        this.fragmentSubscription.unsubscribe();
+        //this.fragmentSubscription.unsubscribe();
     }
 
     public navigateToFragment(fragment: string) {

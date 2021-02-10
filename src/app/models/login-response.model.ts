@@ -37,5 +37,8 @@ export interface AccessToken {
     managementStructureId: number;
     masterCompanyId: number;
     legalEntityId: number;
-    isResetPassword:boolean;
+    isResetPassword:string;
+    roleName:string;
+    permissionName:string;
+    roleID:string;
 }

@@ -134,6 +134,7 @@ export class EmployeeService {
 
 
     newAddEmployee(employee: any) {
+        console.log(employee);
         return this.employeeEndpoint.getNewEmployeeEndpoint<any>(employee);
     }
 

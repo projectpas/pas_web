@@ -45,17 +45,19 @@ import { StocklineReferenceStorage } from './components/stockline/shared/stockli
 import { SalesOrderReferenceStorage } from './components/sales/shared/sales-order-reference-storage';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserRoleService } from './components/user-role/user-role-service';
+import { ModuleHierarchyMaster } from './components/user-role/ModuleHierarchyMaster.model';
 environment
 @Component({
   selector: 'quickapp-pro-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./styles.scss', './app.component.scss','./global-styles.scss'],
+  styleUrls: ['./styles.scss', './app.component.scss', './global-styles.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, AfterViewInit {
   public items: MenuItem[]; //BreadCrumb Implimentation
   megaMenuItems: MenuItem[];
-  @ViewChild('admin',{static:false}) adminExpander: MatExpansionPanel;
+  @ViewChild('admin', { static: false }) adminExpander: MatExpansionPanel;
   routeActive: string = 'active';
   private _mobileQueryListener: () => void;
   isAppLoaded: boolean;
@@ -73,11 +75,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   closeCmpny: boolean = true;
   step: number;
   managementStructure: any = {};
+  moduleHierarchy: ModuleHierarchyMaster[];
+  childMenu: MenuItem[] = [];
   setStep(index: number) {
     this.step = index;
   }
   isSticky: any;
-  @ViewChild('fixedButtons',{static:false}) el: ElementRef;
+  @ViewChild('fixedButtons', { static: false }) el: ElementRef;
   subscription: Subscription;
   //   @HostListener('window:scroll', [])
   //     onWindowScroll() {
@@ -120,7 +124,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private crmService: CrmService,
     private globals: Globals,
     private stocklineReferenceStorage: StocklineReferenceStorage,
-    private salesOrderReferenceStorage: SalesOrderReferenceStorage
+    private salesOrderReferenceStorage: SalesOrderReferenceStorage,
+    private userRoleService: UserRoleService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -146,7 +151,54 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() { }
+
+  dynamicMenu() {
+    this.megaMenuItems = [];
+    for (let module of this.moduleHierarchy) {
+      var menu: MenuItem = {};
+      menu.label = module.name;
+      menu.icon = module.moduleIcon;
+      menu.routerLink = module.routerLink;
+      menu.id = String(module.id);
+      menu.automationId = module.parentId;
+      this.megaMenuItems.push(menu);
+    }
+    // console.log(this.getDataByParentId(this.megaMenuItems,null));
+
+    //this.megaMenuItems= this.getDataByParentId(this.megaMenuItems,null);
+
+    var r = this.getDataByParentId(this.megaMenuItems, null);
+
+    this.megaMenuItems = r;
+  }
+
+
+  getDataByParentId(data, parent): MenuItem[] {
+    const result = data
+      .filter(d => d.automationId == parent);
+
+    if (!result && !result.length) {
+      return null;
+    }
+
+    return result.map(({ id, label, icon, routerLink, automationId }) =>
+      ({ id, label, icon, routerLink, automationId, items: automationId == null ? [this.getDataByParentId(data, id)] : this.getDataByParentId(data, id),
+      command: label=="Create Vendor"?(event?: any) => {
+        this.newVendorClick();
+      }:null })
+    );
+  }
+
   ngOnInit() {
+    debugger;
+    this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
+      console.log(data[0]);
+      this.moduleHierarchy = data[0];
+
+      this.dynamicMenu();
+    }
+    );
+
     this.megaMenuItems = [
       {
         label: 'Dashboard',
@@ -169,10 +221,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 {
                   label: 'Create Customer',
+
                   routerLink:
                     '/customersmodule/customerpages/app-customer-create',
                 },
               ],
+
             },
             {
               label: 'Invoice',
@@ -189,11 +243,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Invoice Batches', routerLink: '' },
                 {
                   label: 'Customer Statement Report', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
                   }
                 }
               ],
-            }, 
+            },
           ],
           [
             {
@@ -226,7 +280,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 {
                   label: 'Capes Report', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/Reports/report/Report%20Project1/Capabilities');
+                    this.navigateToURL(environment.reportUrl + '/Reports/report/Report%20Project1/Capabilities');
                   }
                 }
               ],
@@ -294,11 +348,11 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [{ label: 'CMM by PIN', routerLink: '/#' },
               {
                 label: 'Publication Tracking', command: (event?: any) => {
-                  this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPublication+Tracking&rs:Command=Render');
+                  this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPublication+Tracking&rs:Command=Render');
                 }
               }],
             },
-           
+
           ],
           [
             {
@@ -541,12 +595,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'PO Approval Rule',
                   command: () => this.clearStocklineAndSOStorageReference(),
                   routerLink: '/vendorsmodule/vendorpages/app-po-approval-rule',
-                  },
-                  {
-                      label: 'PO Setting',
-                      command: () => this.clearStocklineAndSOStorageReference(),
-                      routerLink: '/vendorsmodule/vendorpages/app-po-settings',
-                  },
+                },
+                {
+                  label: 'PO Setting',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-po-settings',
+                },
                 { label: 'Create Vendor RMA', routerLink: '/#' },
               ],
             },
@@ -558,18 +612,18 @@ export class AppComponent implements OnInit, AfterViewInit {
                   // routerLink:
                   //   '/workordersmodule/workorderspages/app-purchase-order-report',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order&rs:Command=Render');
                   },
-                  
+
                 },
                 {
                   label: 'Purchase order Dashboard', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order+Dashboard&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order+Dashboard&rs:Command=Render');
                   }
                 },
                 {
                   label: 'PO TO WO-SO', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
                   }
                 }
               ],
@@ -638,45 +692,45 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'SO Backlog', routerLink: '/#' },
                 {
                   label: 'SO On Time Perfomance', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+On+Time+Performance&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+On+Time+Performance&rs:Command=Render');
                   },
                 },
                 {
                   label: 'SO Quotes',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quotes&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quotes&rs:Command=Render');
                   },
                 },
                 {
                   label: 'SO Quote Conversion',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Conversion&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Conversion&rs:Command=Render');
                   },
                 }, {
                   label: 'SO Quote History',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+History&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+History&rs:Command=Render');
                   },
                 }, {
                   label: 'SO Billing',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Billing&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Billing&rs:Command=Render');
                   },
                 }, {
                   label: 'SO Gross Margin',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Gross+Margin&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Gross+Margin&rs:Command=Render');
                   },
                 }, {
                   label: 'Salesperson Report',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
                   },
                 },
               ],
@@ -729,67 +783,67 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'WO Backlog',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Backlog&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Backlog&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO On Time Performance',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+On+Time+Performance&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+On+Time+Performance&rs:Command=Render');
                   },
                 },
                 {
                   label: 'Work Order Tracking',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Tracking&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Tracking&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Quotes',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quotes&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quotes&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Quote Conversion',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+Conversion&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+Conversion&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Quote History',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+History&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+History&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Billing',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Gross Margin',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
                   },
-                 
+
                 },
                 {
                   label: 'Labor Tracking', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
                   }
                 },
                 {
                   label: 'Tech Productivity', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
                   }
                 }
               ],
@@ -858,12 +912,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'RO Approval Rule',
                   command: () => this.clearStocklineAndSOStorageReference(),
                   routerLink: '/vendorsmodule/vendorpages/app-ro-approval-rule',
-                },   
+                },
                 {
                   label: 'RO Settings',
                   command: () => this.clearStocklineAndSOStorageReference(),
                   routerLink: '/vendorsmodule/vendorpages/app-ro-settings',
-                }             
+                }
               ],
             },
             {
@@ -871,7 +925,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 {
                   label: 'Repair order by WO & SO', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
                   }
                 },
               ]
@@ -937,7 +991,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           //       }
           //     ],
           //   },
-           
+
           // ],
           [
             {
@@ -969,7 +1023,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // },
                 {
                   label: 'Stock Line', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
                   }
                 }
               ],
@@ -1034,15 +1088,15 @@ export class AppComponent implements OnInit, AfterViewInit {
               label: 'Reports & Forms',
               items: [
                 // { label: 'Capabilities List', routerLink: '/#' },
-              {
-                label: 'Capabilities List Report', command: (event?: any) => {
-                  this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
+                {
+                  label: 'Capabilities List Report', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
+                  }
                 }
-              }
-            
-            
-            
-            ],
+
+
+
+              ],
             },
           ],
         ],
@@ -1080,7 +1134,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 //   label: 'Disposal Sale',
                 //   routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
                 // },
-              
+
               ],
             },
             {
@@ -1088,9 +1142,9 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 { label: 'Process Depreciation', routerLink: '/#' },
                 { label: 'Asset Adjustment', routerLink: '/#' },
-               
+
                 { label: 'Asset Sale, Write Off, Write Down', routerLink: '/#' },
-             
+
                 { label: 'Depreciation Forecast', routerLink: '/#' },
               ],
             },
@@ -1103,12 +1157,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Disposal', routerLink: '/#' },
                 {
                   label: 'Tools List', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
                   }
                 },
                 { label: 'Calibration List ', routerLink: '/#' },
                 { label: 'Calibration Due Report', routerLink: '/#' }
-                
+
               ],
             },
             // {
@@ -1124,7 +1178,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             //   ],
             // },
           ],
-     
+
         ],
       },
       {
@@ -1229,7 +1283,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'Receiving Log',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
                   }
                 },
                 // {
@@ -1239,7 +1293,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // },
                 {
                   label: 'Receive customer work', command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
                   }
                 }
               ],
@@ -1597,7 +1651,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.managementStructure.departmentId = this.authService.currentManagementStructure.level4;
     }
 
-    this.isUserLoggedIn = this.authService.isLoggedIn;
+    debugger;
+    this.isUserLoggedIn = this.authService.isLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False");
 
     this.isAppLoaded = true;
     this.removePrebootScreen = true;
@@ -1618,7 +1673,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.authService.reLoginDelegate = () => this.showLoginDialog();
 
     this.authService.getLoginStatusEvent().subscribe((isLoggedIn) => {
-      this.isUserLoggedIn = isLoggedIn;
+      this.isUserLoggedIn = isLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False");
 
       if (this.isUserLoggedIn) {
         this.initNotificationsLoading();
@@ -1627,7 +1682,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       setTimeout(() => {
-        if (!this.isUserLoggedIn) {
+        if (!this.isUserLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False")) {
           this.alertService.showMessage(
             'Session Ended!',
             '',

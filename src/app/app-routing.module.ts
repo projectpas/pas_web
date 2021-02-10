@@ -33,6 +33,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { UserEditorComponent } from './admin/user-editor.component';
 import { UserListComponent } from './admin/user-list.component';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
+import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 //import { PoRoSetupComponent } from './components/receiving/po-ro/po-ro-setup/po-ro-setup.component';
 //import { PoSetupComponent } from './components/receiving/po-ro/po-setup/po-setup.component';
 //import { ReceivingPoComponent } from './components/receiving/po-ro/receiving-po/receiving-po.component';

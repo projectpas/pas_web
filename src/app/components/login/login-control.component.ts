@@ -139,8 +139,8 @@ console.log(error);
             user => {
               
                 const userLoginDetails = localStorage.getItem('current_user') === null || localStorage.getItem('current_user') == undefined ?    sessionStorage.getItem('current_user')  :  localStorage.getItem('current_user');
-                console.log(userLoginDetails);
-                if(this.authService.currentUser.isResetPassword==false){
+                console.log(userLoginDetails);console.log(this.authService.currentUser.isResetPassword);
+                if(this.authService.currentUser.isResetPassword=="False"){
                 this.router.navigateByUrl('/UpdatePassword');
                 }
                 //this.getEmployeeDetailsByEmployeeId(userLoginDetails);

@@ -22,7 +22,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _CountriesUrl: string = "/api/Employee/CountriesGet";
 	private readonly _EmployeeLeaveTypeUrl: string = "/api/Employee/EmployeeLeaveTypeGet";
 	private readonly _EmployeeTrainingTypeUrl: string = "/api/Employee/GetEmployeeTrainingType";
-	private readonly _actionsUrlNew: string =environment.baseUrl +  "/api/Employee/employeepost";
+	private readonly _actionsUrlNew: string =  "/api/Employee/employeepost";
 	private readonly _actionsUrlNewUpdate: string = "/api/Employee/employeelistgpost";
 
 
@@ -109,7 +109,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	get employeeGlobalSearchUrl() { return this.configurations.baseUrl + this._employeeGlobalSrchUrl; }
 
 	get deleteemployee() { return this.configurations.baseUrl + this._actionsUrlNew; }
-	get createnewemployee(){return this.configurations.baseUrl + this._actionsUrlNew;}
+	get createnewemployee(){return environment.baseUrl  + this._actionsUrlNew;}
 	get createnewemployeeCerti(){return this.configurations.baseUrl + this._certifiUrlNew;}
 	get createnewemployeetrining(){return this.configurations.baseUrl + this._trainingUrlNew;}
 	
@@ -552,7 +552,14 @@ export class EmployeeEndpoint extends EndpointFactory {
 	
 	getUpdateEmployeePasswordEndpoint<T>(password,employeeId): Observable<T> {
 		let url = this._employeeUpdatePasswordUrl;
-		return this.http.post<T>(url,{password,employeeId}, this.getRequestHeaders())
+		var data ={
+			"password":password,
+			"employeeId":employeeId
+		}
+		console.log(data);
+		console.log(password);
+		console.log(employeeId);
+		return this.http.post<T>(url,JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleError(error, () => this.getUpdateEmployeePasswordEndpoint(password,employeeId));
 			});

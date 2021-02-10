@@ -268,6 +268,7 @@ import { CommunicationService } from './shared/services/communication.service';
 import { TabViewModule } from 'primeng/tabview';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
 import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
+//import { AllViewComponent } from './shared/components/all-view/all-view.component';
 
 
 @NgModule({
@@ -328,7 +329,7 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
     StocklineViewComponent,
     StocklineHistoryComponent,
     RefreshAlert,    
-    AllViewComponent, UpdatepasswordComponent,
+     UpdatepasswordComponent,
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },

@@ -23,6 +23,7 @@ import { UserRole, ModuleHierarchyMaster, RolePermission } from '../components/u
 import { UserRoleService } from '../components/user-role/user-role-service';
 import { AccountService } from './account.service';
 import { CommonService } from './common.service';
+import { decode } from 'punycode';
 // import { AccountService } from "../services/account.service";
 
 @Injectable()
@@ -225,7 +226,9 @@ private defaultEmployeeDetails= new Subject<any>()
             console.log(user, "user++++")
         user.isEnabled = true;
         user.isResetPassword=decodedAccessToken.isResetPassword,
-
+        user.roleName=decodedAccessToken.roleName;
+        user.permissionName=decodedAccessToken.permissionName;
+        user.roleID=decodedAccessToken.roleID;
         this.saveUserDetails(user, permissions, accessToken, refreshToken, accessTokenExpiry, rememberMe);
         this.getUserRolePermissionByUserId(user.id);
         this.loadAllModulesNameToLocalStorage();
@@ -397,6 +400,12 @@ private defaultEmployeeDetails= new Subject<any>()
 
     get isLoggedIn(): boolean {
         return this.currentUser != null;
+    }
+
+    get userRole():string{
+        if(this.currentUser!=null){
+            return this.currentUser.roleName;
+        }
     }
 
     get rememberMe(): boolean {
