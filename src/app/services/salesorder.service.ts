@@ -393,8 +393,8 @@ export class SalesOrderService {
     partNumberObj.updatedOn = new Date().toDateString();
     partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
     partNumberObj.methodType =
-      selectedPart.method === "Stock Line" ? "S" : "I";
-
+      //selectedPart.method === "Stock Line" ? "S" : "I";
+      selectedPart.stockLineId != null ? "S" : "I";
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0; //selectedPart.salesPriceExtended;
     partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0; //selectedPart.markupExtended;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;

@@ -527,7 +527,6 @@ export class AssetAttributeTypeComponent implements OnInit {
             rowData.deprExpenseGLAccountId, rowData.adDepsGLAccountId, rowData.assetSale, rowData.assetWriteOff, rowData.assetWriteDown,
             rowData.selectedCompanyIds,
             rowData.createdBy, rowData.createdDate, rowData.updatedDate, rowData.updatedBy, rowData.isActive, rowData.isDelete);
-        debugger;
         return item;
     }
 
