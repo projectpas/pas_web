@@ -951,6 +951,7 @@ export class WorkOrderAddComponent implements OnInit {
                 return {
                     ...x,
                     masterPartId: editValueAssignByCondition('itemMasterId', x.masterPartId),
+                    itemMasterId: editValueAssignByCondition('itemMasterId', x.masterPartId),
                     workOrderStageId: editValueAssignByCondition('workOrderStageId', x.workOrderStageId),
                     mappingItemMasterId: editValueAssignByCondition('mappingItemMasterId', x.mappingItemMasterId),
                     technicianId: editValueAssignByCondition('employeeId', x.partTechnicianId),
