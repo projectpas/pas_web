@@ -584,8 +584,17 @@ valuechange2(){
         this.delNTAERow = rowData;
     }
 
-    restoreNTAERow(rowData) {
-        this.itemser.restoreNTAERow(rowData.itemMappingId, this.userName).subscribe(res => {
+    Restore(rowData){
+        this.delNTAERow = rowData;
+        $("#ntaeRestore").modal("show");
+    }
+    closeRestore() {
+        $("#ntaeRestore").modal("hide");
+    } 
+
+    restoreNTAERow() {
+        const {itemMappingId}=this.delNTAERow;
+        this.itemser.restoreNTAERow(itemMappingId, this.userName).subscribe(res => {
             this.alertService.showMessage(
                 'Success',
                 'Item Restore Successfully',

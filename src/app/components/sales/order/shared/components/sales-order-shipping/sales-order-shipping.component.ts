@@ -1,6 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
 import { AddressModel } from '../../../../../../models/address.model';
-import { SalesOrderBillingAndInvoicing } from '../../../../../../models/sales/salesOrderBillingAndInvoicing';
 import { SalesOrderShipping } from '../../../../../../models/sales/salesOrderShipping';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { fadeInOut } from '../../../../../../services/animations';
@@ -11,7 +10,6 @@ import { WorkOrderService } from '../../../../../../services/work-order/work-ord
 import { CustomerService } from '../../../../../../services/customer.service';
 import { editValueAssignByCondition } from '../../../../../../generic/autocomplete';
 import { AuthService } from '../../../../../../services/auth.service';
-// import { r } from '@angular/core/src/render3';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -19,10 +17,7 @@ import { AuthService } from '../../../../../../services/auth.service';
     styleUrls: ['./sales-order-shipping.component.scss'],
     animations: [fadeInOut]
 })
-/** WorkOrderShipping component*/
 export class SalesOrderShippingComponent {
-    /** WorkOrderShipping ctor */
-
     @Input() parts: any = [];
     @Input() salesOrderId;
     @Input() salesOrder: any;
@@ -37,11 +32,8 @@ export class SalesOrderShippingComponent {
     pageIndex: number = 0;
     first = 0;
     showPaginator: boolean = false;
-
     shippingForm: SalesOrderShipping = new SalesOrderShipping();
-
     @Input() customerId = 0;
-    // @Input() salesOrderGeneralInformation;
     @Input() salesOrderPartNumberId: any = 0;
     @Input() isView: boolean = false;
     @Input() managementStructureId: any;
@@ -76,7 +68,6 @@ export class SalesOrderShippingComponent {
     shipCustomerShippingOriginalData: any[];
     shipCustomerSiteList = [];
     siteList: any = [];
-
     allWeightUnitOfMeasureInfo: any = [];
     allSizeUnitOfMeasureInfo: any = [];
 
@@ -86,13 +77,9 @@ export class SalesOrderShippingComponent {
         public workorderService: WorkOrderService,
         public customerService: CustomerService,
         public authService: AuthService) {
-
     }
 
     initColumns() {
-
-        // { field: "", header: "Ready?", width: "80px" },
-        // { field: "", header: "Actions", width: "100px" }
         this.headers = [
             { field: "shipDate", header: "Ship Date", width: "100px" },
             { field: "partNumber", header: "PN", width: "100px" },
@@ -111,7 +98,6 @@ export class SalesOrderShippingComponent {
     }
 
     btnChange() {
-
         const isExportWeight = this.shippingForm.shipWeight ? (this.shippingForm.shipWeightUnit ? 1 : 0) : 1;
         const isEExportSize = this.shippingForm.shipSizeLength || this.shippingForm.shipSizeWidth || this.shippingForm.shipSizeHeight ? (this.shippingForm.shipSizeUnitOfMeasureId ? 1 : 0) : 1;
 
@@ -122,10 +108,9 @@ export class SalesOrderShippingComponent {
             this.updateBtnExp = true;
         }
     }
+
     refresh(parts) {
         this.initColumns();
-        let savedParts = [];
-        let partsForBilling = [];
         this.partsForBilling = [];
         this.parts = parts;
         if (this.parts && this.parts.length > 0) {
@@ -134,7 +119,6 @@ export class SalesOrderShippingComponent {
                     this.partsForBilling.push(part);
                 }
             });
-
         }
         // this.isSpinnerVisible = true;
         // this.salesOrderService.getSalesOrderShippingParts(this.salesOrderId).subscribe(result => {
@@ -158,6 +142,7 @@ export class SalesOrderShippingComponent {
         this.getShippingData();
         this.getCustomerNameList();
         this.getOriginSiteNames();
+
         if (this.customerDetails) {
             this.shippingHeader['soldToName'] = this.customerDetails['name'];
             this.shippingHeader['shipToName'] = this.customerDetails['name'];
@@ -167,27 +152,6 @@ export class SalesOrderShippingComponent {
             }
             //this.shippingHeader['originName'] = this.customerDetails['customerName'];
             this.shippingHeader['customerId'] = this.customerDetails['customerId'];
-        }
-    }
-
-    moduleName: any = '';
-    errorHandling(err) {
-        this.isSpinnerVisible = false;
-        if (err['error']['errors']) {
-            err['error']['errors'].forEach(x => {
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else {
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
         }
     }
 
@@ -215,8 +179,8 @@ export class SalesOrderShippingComponent {
             this.isSpinnerVisible = false;
         })
     }
-    loadData(event) {
 
+    loadData(event) {
     }
 
     convertDate(key, data) {
@@ -238,21 +202,22 @@ export class SalesOrderShippingComponent {
             }
         },
             err => {
-                this.errorHandling(err);
             }
         );
     }
+
     calculateExpiryDate() {
     }
+
     getCustomerNameList() {
         this.commonService.getCustomerNameandCode("", 1).subscribe(res => {
             this.customerNamesList = res;
             console.log("res,res", res)
         },
             err => {
-                this.errorHandling(err);
-            })
+            });
     }
+
     getShipVia() {
         this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
             .subscribe(
@@ -260,10 +225,9 @@ export class SalesOrderShippingComponent {
                     this.shipViaList = res;
                 },
                 err => {
-                    this.errorHandling(err);
-                }
-            )
+                });
     }
+
     getSiteName() {
         this.workorderService.getSiteByCustomerId(this.customerDetails['customerId'])
             .subscribe(
@@ -281,10 +245,9 @@ export class SalesOrderShippingComponent {
                     }
                 },
                 err => {
-                    this.errorHandling(err);
-                }
-            )
+                });
     }
+
     getCountriesList() {
         this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name')
             .subscribe(
@@ -292,10 +255,9 @@ export class SalesOrderShippingComponent {
                     this.countryList = res;
                 },
                 err => {
-                    this.errorHandling(err);
-                }
-            )
+                });
     }
+
     setShipToAddress() {
         this.shipCustomerSiteList.forEach(site => {
             if (site.customerShippingAddressId == this.shippingHeader.shipToSiteId) {
@@ -313,8 +275,6 @@ export class SalesOrderShippingComponent {
     }
 
     setOriginToAddress(value) {
-        console.log("orignsiteId", value)
-        console.log("sitenames", this.orignSiteNames);
         this.orignSiteNames.forEach(site => {
             if (site.originSiteId == value) {
                 // console.log("shipping heder",site)
@@ -332,6 +292,7 @@ export class SalesOrderShippingComponent {
             }
         });
     }
+
     clearShipToAddress() {
         this.shipCustomerSiteList = [];
         this.shippingHeader['shipToAddress1'] = "";
@@ -344,6 +305,7 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['shipToCountryName'] = "";
         this.shippingHeader['shipToCountryId'] = "";
     }
+
     setSoldToAddress() {
         this.siteList.forEach(site => {
             if (site.customerShippingAddressId == this.shippingHeader.soldToSiteId) {
@@ -358,6 +320,7 @@ export class SalesOrderShippingComponent {
             }
         });
     }
+
     assignDetails(value) {
         if (value == true) {
             this.shippingHeader.shipToCustomerId = this.customerDetails;
@@ -373,20 +336,19 @@ export class SalesOrderShippingComponent {
             this.shippingHeader['shipToSiteName'] = this.shippingHeader.soldToSiteName;
             this.shippingHeader['shipToCountryName'] = this.shippingHeader.soldToCountryName;
             this.shippingHeader['shipToCountryId'] = this.shippingHeader.soldToCountryId;
-
         }
     }
+
     filterCustomerName(event) {
         const value = event.query.toLowerCase()
         this.commonService.getCustomerNameandCode(value, 1).subscribe(res => {
             this.customerNamesList = res;
         },
             err => {
-                this.errorHandling(err);
-            })
+            });
     }
+
     async getSiteNamesByShipCustomerId(object) {
-        console.log("object", object);
         this.clearShipToAddress();
         const { customerId } = object;
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
@@ -400,11 +362,10 @@ export class SalesOrderShippingComponent {
                     }
                 }
             )
-        },
-            err => {
-                this.errorHandling(err);
-            })
+        }, err => {
+        });
     }
+
     clearAddress(type, value) {
         if (value === '' && type === 'SoldTo') {
             this.soldCustomerAddress = new AddressModel();
@@ -412,6 +373,7 @@ export class SalesOrderShippingComponent {
             this.shipCustomerAddress = new AddressModel();
         }
     }
+
     getShippingData() {
         this.isSpinnerVisible = true;
         this.salesOrderService.getSalesOrderShipping(this.salesOrderId, this.salesOrderPartNumberId)
@@ -426,23 +388,19 @@ export class SalesOrderShippingComponent {
                             this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
                             this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
                             this.shippingHeader['shipToCustomerId'] = { customerId: res.shipToCustomerId, customerName: res.shipToCustomer };
-
                         }
                     }
                 },
                 err => {
                     this.isSpinnerVisible = false;
-                    this.errorHandling(err);
-                }
-            )
+                });
     }
+
     async getEditSiteData(customerId) {
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
             this.shipCustomerSiteList = res[0];
-        },
-            err => {
-                this.errorHandling(err);
-            });
+        }, err => {
+        });
     }
 
     save() {
@@ -484,32 +442,11 @@ export class SalesOrderShippingComponent {
                         MessageSeverity.success
                     );
                     this.getShippingData();
-                },
-                err => {
+                }, err => {
                     this.isSpinnerVisible = false;
-                    this.errorHandling(err)
-                }
-            )
+                });
     }
 
-    handleError(err) {
-        if (err['error']['errors']) {
-            err['error']['errors'].forEach(x => {
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else {
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
     get userName(): string {
         return this.authService.currentUser
             ? this.authService.currentUser.userName

@@ -32,7 +32,7 @@
 						<span><b class="clr-red">SL#:</b> {{sourceStockLineSetup.stockLineNumber}}</span>
 					</div>
 					<div class="col-md-3">						
-						<span><b class="clr-red">Is Serialized:</b><input style="margin-left: 10px;" type="checkbox" name="isSerialized" [(ngModel)]="sourceStockLineSetup.isSerialized" disabled></span>
+						<span><b class="clr-red">Is Serialized:</b><input class="serialized-left" type="checkbox" name="isSerialized" [(ngModel)]="sourceStockLineSetup.isSerialized" disabled></span>
 					</div>
 				</div>
 				<div class="table-responsive mtop10" id="smovement">
@@ -69,10 +69,10 @@
 												</select>
 											</div>
 										</td>
-										<td rowspan="4" style="vertical-align: top;">
+										<td rowspan="4" class="vertical-top">
 											<textarea *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="MgmtStructureReason" required></textarea>
 										</td>
-										<td rowspan="4" style="vertical-align: top;">
+										<td rowspan="4" class="vertical-top">
 											<textarea *ngIf="companyAllow || businessAllow || 
 											divisionAllow || deptAllow" class="form-control"
 											 [(ngModel)]="item.adjustmentMemo"
@@ -146,10 +146,10 @@
 											</select>
 										</div>
 									</td>
-									<td rowspan="5" style="vertical-align: top;">
+									<td rowspan="5" class="vertical-top">
 										<textarea *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="siteAdjustmentReason" required></textarea>
 									</td>
-									<td rowspan="5" style="vertical-align: top;">
+									<td rowspan="5" class="vertical-top">
 										<textarea *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow"
 										 class="form-control" [(ngModel)]="item.adjustmentMemo"
 										  name="siteAdjustmentMemo"></textarea>
@@ -461,9 +461,9 @@
 							<table class="table table-bordered" *ngIf="sourceStockLineSetup.isTimeLife">
 								<thead>
 									<tr>
-										<th colspan="15" class="text-center" style="position: relative;">
-											<input type="checkbox" style="top: 6px !important; position: absolute;" name="isTimeLifeEnable" [(ngModel)]="timeLifeAllow" (change)="onCheckTimeLife(item)">
-											<strong style="margin-left: 20px;"> {{item.stocklineAdjustmentDataType}} (Hours Per Minute)</strong></th>
+										<th colspan="15" class="text-center stock-adjust">
+											<input type="checkbox stock-adjust-check"  name="isTimeLifeEnable" [(ngModel)]="timeLifeAllow" (change)="onCheckTimeLife(item)">
+											<strong class="stock-adjust-check-header"> {{item.stocklineAdjustmentDataType}} (Hours Per Minute)</strong></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -478,30 +478,30 @@
 									<tr>
 										<td>Remaining</td>
 										<td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel" mask="000:00" name="cyclesRemaining" [(ngModel)]="sourceTimeLife.cyclesRemaining" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel" mask="000:00" name="cyclesRemaining" [(ngModel)]="sourceTimeLife.cyclesRemaining" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="cyclesRemaining.errors">
                                                 <div *ngIf="cyclesRemaining.errors" [ngClass]="'error'">
                                                     <div *ngIf="cyclesRemaining.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
 										<td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 150px;" placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel" mask="000:00" name="timeRemaining" [(ngModel)]="sourceTimeLife.timeRemaining" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control width-150" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel" mask="000:00" name="timeRemaining" [(ngModel)]="sourceTimeLife.timeRemaining" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="timeRemaining.errors">
                                                 <div *ngIf="timeRemaining.errors" [ngClass]="'error'">
                                                     <div *ngIf="timeRemaining.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>        
 										<td></td>
-										<td rowspan="5" style="vertical-align: top;">
+										<td rowspan="5" class="vertical-top">
 											<textarea *ngIf="timeLifeAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="timeLifeReason" required></textarea>
 										</td>
-										<td rowspan="5" style="vertical-align: top;">
+										<td rowspan="5" class="vertical-top">
 											<textarea *ngIf="timeLifeAllow" 
 												class="form-control"
 											 [(ngModel)]="item.adjustmentMemo"
@@ -511,31 +511,31 @@
 									<tr>
 										<td>Since New</td>
 										<td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel" mask="000:00" name="cyclesSinceNew" [(ngModel)]="sourceTimeLife.cyclesSinceNew" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel" mask="000:00" name="cyclesSinceNew" [(ngModel)]="sourceTimeLife.cyclesSinceNew" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="cyclesSinceNew.errors">
                                                 <div *ngIf="cyclesSinceNew.errors" [ngClass]="'error'">
                                                     <div *ngIf="cyclesSinceNew.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>                  
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel" mask="000:00" name="timeSinceNew" [(ngModel)]="sourceTimeLife.timeSinceNew" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel" mask="000:00" name="timeSinceNew" [(ngModel)]="sourceTimeLife.timeSinceNew" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="timeSinceNew.errors">
                                                 <div *ngIf="timeSinceNew.errors" [ngClass]="'error'">
                                                     <div *ngIf="timeSinceNew.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>                  
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel" mask="000:00" name="lastSinceNew" [(ngModel)]="sourceTimeLife.lastSinceNew" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text"  placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel" mask="000:00" name="lastSinceNew" [(ngModel)]="sourceTimeLife.lastSinceNew" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="lastSinceNew.errors">
                                                 <div *ngIf="lastSinceNew.errors" [ngClass]="'error'">
                                                     <div *ngIf="lastSinceNew.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -544,31 +544,31 @@
 									<tr>
 										<td>Since Ovh</td>
 										<td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel" mask="000:00" name="cyclesSinceOVH" [(ngModel)]="sourceTimeLife.cyclesSinceOVH" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text"  placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel" mask="000:00" name="cyclesSinceOVH" [(ngModel)]="sourceTimeLife.cyclesSinceOVH" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="cyclesSinceOVH.errors">
                                                 <div *ngIf="cyclesSinceOVH.errors" [ngClass]="'error'">
                                                     <div *ngIf="cyclesSinceOVH.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>            
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel" mask="000:00" name="timeSinceOVH" [(ngModel)]="sourceTimeLife.timeSinceOVH" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel" mask="000:00" name="timeSinceOVH" [(ngModel)]="sourceTimeLife.timeSinceOVH" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="timeSinceOVH.errors">
                                                 <div *ngIf="timeSinceOVH.errors" [ngClass]="'error'">
                                                     <div *ngIf="timeSinceOVH.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>            
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel" mask="000:00" name="lastSinceOVH" [(ngModel)]="sourceTimeLife.lastSinceOVH" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel" mask="000:00" name="lastSinceOVH" [(ngModel)]="sourceTimeLife.lastSinceOVH" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="lastSinceOVH.errors">
                                                 <div *ngIf="lastSinceOVH.errors" [ngClass]="'error'">
                                                     <div *ngIf="lastSinceOVH.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -577,31 +577,31 @@
 									<tr>
 										<td>Since Insp</td>
 										<td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceInspection="ngModel" mask="000:00" name="cyclesSinceInspection" [(ngModel)]="sourceTimeLife.cyclesSinceInspection" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text"  placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceInspection="ngModel" mask="000:00" name="cyclesSinceInspection" [(ngModel)]="sourceTimeLife.cyclesSinceInspection" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="cyclesSinceInspection.errors">
                                                 <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
                                                     <div *ngIf="cyclesSinceInspection.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>            
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel" mask="000:00" name="timeSinceInspection" [(ngModel)]="sourceTimeLife.timeSinceInspection" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel" mask="000:00" name="timeSinceInspection" [(ngModel)]="sourceTimeLife.timeSinceInspection" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="timeSinceInspection.errors">
                                                 <div *ngIf="timeSinceInspection.errors" [ngClass]="'error'">
                                                     <div *ngIf="timeSinceInspection.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>            
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel" mask="000:00" name="lastSinceInspection" [(ngModel)]="sourceTimeLife.lastSinceInspection" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel" mask="000:00" name="lastSinceInspection" [(ngModel)]="sourceTimeLife.lastSinceInspection" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="lastSinceInspection.errors">
                                                 <div *ngIf="lastSinceInspection.errors" [ngClass]="'error'">
                                                     <div *ngIf="lastSinceInspection.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -610,21 +610,21 @@
 									<tr>
 										<td>Since Repair</td>
 										<td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel" mask="000:00" name="cyclesSinceRepair" [(ngModel)]="sourceTimeLife.cyclesSinceRepair" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel" mask="000:00" name="cyclesSinceRepair" [(ngModel)]="sourceTimeLife.cyclesSinceRepair" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="cyclesSinceRepair.errors">
                                                 <div *ngIf="cyclesSinceRepair.errors" [ngClass]="'error'">
                                                     <div *ngIf="cyclesSinceRepair.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>            
                                         <td class="clr2">
-                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel" mask="000:00" name="timeSinceRepair" [(ngModel)]="sourceTimeLife.timeSinceRepair" [disabled]="!timeLifeAllow"/>
+                                            <input class="form-control remaining-width" matInput type="text" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel" mask="000:00" name="timeSinceRepair" [(ngModel)]="sourceTimeLife.timeSinceRepair" [disabled]="!timeLifeAllow"/>
                                             <div *ngIf="timeSinceRepair.errors">
                                                 <div *ngIf="timeSinceRepair.errors" [ngClass]="'error'">
                                                     <div *ngIf="timeSinceRepair.errors.pattern">
-                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                        <span class="clr-red">Please enter valid time format.</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -659,7 +659,7 @@
 		  <h4 class="modal-title">Edit Memo</h4>
 		</div>
 		<div class="modal-body">
-		  <table class="table table-bordered table-fixed workflow-table-material">
+		  <!-- <table class="table table-bordered table-fixed workflow-table-material">
 			<thead>
 			  <th style="color: #fff;">Memo</th>
 			</thead>
@@ -676,19 +676,24 @@
 				</td>
 			  </tr>
 			</tbody>
-		  </table>
-		  <div style="float: right;">
+		  </table> -->
+		  <p-editor
+		  spellcheck="true"
+		   [(ngModel)]="memoPopupContent"
+		   [style]="{ height: '320px' }"
+		   name="memoPopupContent"
+		   required
+		 ></p-editor>
+		  <div class="editor-buttons">
 			<button
 			  type="button"
-			  class="btn btn-primary"
-			  style="padding: 6px 12px !important; margin-top: 10px;"
+			  class="btn btn-primary editor-buttons-margin"
 			  (click)="onClickPopupSave()">
 			  Save
 			</button>
 			<button
 			  type="button"
-			  class="btn btn-danger"
-			  style="padding: 6px 12px !important; margin-top: 10px;"
+			  class="btn btn-danger editor-buttons-margin"
 			  (click)="closeMemoModel()" >
 			  Close
 			</button>

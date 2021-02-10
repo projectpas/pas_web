@@ -98,7 +98,6 @@ export class OpenCloseArsubledgerComponent {
         
     }
     saveCalendar() {
-        debugger;
           if (this.finalCalendarArry && this.finalCalendarArry.length > 0) {
             for (let i = 0; i < this.finalCalendarArry.length; i++) {
                 if (this.finalCalendarArry[i].status == 3) {
