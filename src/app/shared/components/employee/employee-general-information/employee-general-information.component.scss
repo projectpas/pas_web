@@ -14,6 +14,21 @@ textarea {
 .inner-addon .ui-autocomplete-input {
     width: 100% !important;
 }
+.shift-margin{
+    margin-left:-5px !important;
+}
+.pay-type-label{
+    margin-bottom: 9px !important;
+}
+.pay-label-width{
+    max-width:60px !important;
+}
+.leave-type-padding{
+    padding: 16px !important;
+}
+.pay-align{
+    text-align: end !important; max-width: 116px !important;padding-right: 8px !important;
+}
 .po-head {
     font-weight: bold;
     font-size: 16px;

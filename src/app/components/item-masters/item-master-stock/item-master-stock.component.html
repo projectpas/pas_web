@@ -1636,10 +1636,10 @@
                               </div>
                             </div>
                         </div>
-                        <div class="row" class="margin-bottom-10">
+                        <div class="row" style="margin-bottom: 10px;">
                             <div class="col">
                             </div>
-                            <div class="col-md-4 margin-right-15">                              
+                            <div class="col-md-4" style="margin-right:15px">                              
                                 <div class="checkbox-cstm pull-right checkbox-align">
                                     <label class="checkbox-label-align">
                                       <input type="checkbox" [(ngModel)]="currentDeleteStatus" name="cparent" (click)="getPSListOnDeleteStatus($event.target.checked)" />
@@ -2060,16 +2060,17 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm">Aircraft <span class="clr-red">*</span></label>
-                                    <p-dropdown class="p-dropdown-100" name="selectedAircraftId" [options]="manufacturerData" filter="true" [(ngModel)]="selectedAircraftId" (onChange)="getAircraftModelByManfacturer($event)" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                    <p-dropdown class="p-dropdown-100" name="selectedAircraftId" [options]="manufacturerData" filter="true"
+                                     [(ngModel)]="selectedAircraftId" (onChange)="getAircraftModelByManfacturer($event)" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label class="popup-plusicon-cstm width-150">
+                                    <label class="popup-plusicon-cstm" style="width: 150px !important;">
                                         Model <span class="clr-red">*</span>
                                         <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown"  [disabled]="!selectedAircraftId" 
-                                        class="modal-check-align" (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
+                                        style="width: 20px !important; margin-left: 7px;" (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
                                     </label>
 
                                     <p-multiSelect *ngIf="!modelUnknown" [maxSelectedLabels]="2" [disabled]="!selectedAircraftId" class="imstock-pmselect" [options]="LoadValues" [(ngModel)]="selectedModelId" name="selectedModelId" (onChange)="getDashNumberByTypeandModel($event); checkCanAircraftAddable()" required></p-multiSelect>
@@ -2077,11 +2078,11 @@
                             </div>
                             <div class="col-md-2" *ngIf="!modelUnknown">
                                 <div class="form-group">
-                                    <label class="popup-plusicon-cstm width-190">
+                                    <label class="popup-plusicon-cstm" style="width: 190px !important;">
                                         DashNumber <span class="clr-red">*</span>
                                         
                                         <input type="checkbox" name="unknownDashNumber" [(ngModel)]="dashNumberUnknown"  [disabled]="selectedModelId.length == 0" 
-                                         class="modal-check-align" (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
+                                      style="width: 20px !important; margin-left: 7px;"  (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
                                     </label>
 
 
@@ -3439,10 +3440,10 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="popup-plusicon-cstm width-150">
+                                <label class="popup-plusicon-cstm" style="width: 150px !important;">
                                     Model  <span class="clr-red">*</span>
                                     <input type="checkbox" [checked]="editAirCraftData.isModelUnknown" name="unknownmodel" [(ngModel)]="editAirCraftData.isModelUnknown"
-                                     class="modal-check-align" (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
+                                    style="width: 20px !important; margin-left: 7px;" (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
                                 </label>
                                 <p-dropdown class="p-dropdown-100" *ngIf="!editAirCraftData.isModelUnknown" [options]="LoadModelsIds" filter="true" name="aircraftModelId" [(ngModel)]="editAirCraftData.aircraftModelId" (onChange)="getDashNumberByTypeandModelForEdit($event.originalEvent.target.textContent); checkCanAircraftEditable()" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
 
@@ -3450,10 +3451,10 @@
                         </div>
                         <div class="col-md-2" *ngIf="!editAirCraftData.isModelUnknown">
                             <div class="form-group">
-                                <label class="popup-plusicon-cstm width-190">
+                                <label class="popup-plusicon-cstm " style="width: 190px !important;">
                                     DashNumber <span class="clr-red">*</span>
                                     <input type="checkbox"  [checked]="editAirCraftData.isDashNumberUnknown" name="unknownDashNumber" [(ngModel)]="editAirCraftData.isDashNumberUnknown" [disabled]="!editAirCraftData.aircraftModelId || editAirCraftData.isModelUnknown"
-                                     class="modal-check-align" (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
+                                    style="width: 20px !important; margin-left: 7px;" (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
                                 </label>
 
                                 <p-dropdown class="p-dropdown-100" *ngIf="!editAirCraftData.isDashNumberUnknown" [options]="LoadDashnumberIds" [disabled]="!editAirCraftData.aircraftModelId || editAirCraftData.isModelUnknown"  filter="true" name="dashNumberId" [(ngModel)]="editAirCraftData.dashNumberId" (onChange)="updateAircraftDashNumber($event.originalEvent.target.textContent); checkCanAircraftEditable()" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
@@ -3612,7 +3613,7 @@
 					<table class="table table-bordered header-table-width"
                            *ngIf="ataChapterAuditHistory.length > 0; else noDatavailable">
                         <thead>
-                            <tr>
+                        <tr>
                                 <th>ATA Chapter Code</th>
                                 <th>ATA Chapter Name</th>
                                 <th>ATA Sub Chapter</th>

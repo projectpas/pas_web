@@ -291,10 +291,10 @@ table.table-bordered {
 // Management Structure
 
 .management-structure-card{
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 .management-structure-card-header{
-  padding: 10px 12px;
+  padding: 10px 12px !important;
 }
 .management-structure-header{
   margin-bottom: 0 !important; 
@@ -302,7 +302,7 @@ table.table-bordered {
 
 }
 .structure-card-body{
-padding: 12px 12px 4px;
+padding: 12px 12px 4px !important;
 }
 .m-t-5{
   margin-top:5px !important;
@@ -429,6 +429,9 @@ margin-top: 10px;
 }
 .m-t-60{
   margin-top:60px !important;
+}
+.m-t-15{
+  margin-top: 15px !important;
 }
 .m-r-5{
   margin-right:5px !important;
