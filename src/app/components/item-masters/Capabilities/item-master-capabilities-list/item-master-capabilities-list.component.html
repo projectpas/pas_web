@@ -377,7 +377,7 @@
                                 <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
                                 <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
                                 <td><p >{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
-                                <td style="text-align: center;"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
+                                <td class="text-center"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
                                 
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
@@ -390,7 +390,7 @@
                                 <td><p >{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
 
                                 <td >{{audit.updatedBy}}</td>
-                                <td style="text-align: center;"><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td class="text-center"><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                             </tr>
                         </tbody>
                     </table>

@@ -43,7 +43,7 @@
         <div>
             <div class="form-row col-row">
                 <div class="col-md-3">
-                    <div class="form-group" style="margin-left: 13px">
+                    <div class="form-group pn-div">
                         <label for="customerName" class="control-label">
                             PN <strong class="clr-red">*</strong>
                         </label>
@@ -75,7 +75,7 @@
                         <div>
                             <p-dropdown class="p-dropdown-100" [options]="allitemgroupobjInfo" filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
                         </div>
-                        <div class="inline-block display-flex spacing-label" style="margin-top: 5px;">
+                        <div class="inline-block display-flex spacing-label m-t-5">
                             <label class="control-label">Acquired?</label>
                             <div class="radio-value">
                                 <label class="radio-inline">
@@ -116,7 +116,7 @@
                             </label>
                         </div>
                         <p-dropdown class="p-dropdown-100" [options]="allUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
-                        <div class="checkbox-cstm" style="margin-top: 14px;">
+                        <div class="checkbox-cstm check-m-top" >
                             <label>
                                 <input type="checkbox" name="isHazardousMaterial"
                                        [(ngModel)]="sourceItemMaster.isHazardousMaterial">
@@ -168,7 +168,7 @@
     </p-footer>
 </p-dialog>
 
-<ng-template #contentEdits let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #contentEdits let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Item Group</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Item Group</h4>
@@ -314,7 +314,7 @@
 
 </ng-template>
 
-<ng-template #conEdit let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #conEdit let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Unit Of Mearsure</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Unit Of Mearsure</h4>

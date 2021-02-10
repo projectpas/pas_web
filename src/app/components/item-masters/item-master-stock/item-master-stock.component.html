@@ -7,13 +7,13 @@
         <div class="col-md-8">
             <div class="form-group">
                 <label class="radiobtn-label">Item Type:</label>
-                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                         <input type="radio" name="stock" class="form-control" [checked]="true" (click)="stock()">
                         <span class="checkmark"></span>Stock
                     </label>
                 </div>
-                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                         <input type="radio" name="stock" class="form-control" (click)="nonStock()">
                         <span class="checkmark"></span>Non-Stock
@@ -128,11 +128,11 @@
                 
                 </div>                
                   
-                <div style="margin: 0px 10px">
+                <div class="pn-header-margin">
                     <app-pn-header [partData]="sourceItemMaster" [ngClass]="{hideTab : currentTab === 'General'}"></app-pn-header>
                 </div>
                 
-                <div [ngClass]="{hideTab : currentTab !== 'General'}" style="margin-top: 5px;">
+                <div [ngClass]="{hideTab : currentTab !== 'General'}" class="m-t-5">
                     <div>
                         <div class="form-row col-row col-row1">
                             <div class="col-md-3">
@@ -159,7 +159,7 @@
                                            
                                         </p-autoComplete>
                                     </div>
-                                    <div *ngIf="disableSavepartNumber" style="color:red">Already Exists</div>
+                                    <div *ngIf="disableSavepartNumber" class="clr-red">Already Exists</div>
 
                                     <label class="control-label">
                                         PN Description <strong class="clr-red">*</strong>
@@ -200,8 +200,7 @@
                                         </p-autoComplete>
                                     </div>
                                     <!-- /REVISED PART-->
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                          <div>
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="oemPma"  (ngModelChange)="getmemo()" class="form-control" value="true" (change)="onCheckOem();" [(ngModel)]="sourceItemMaster.isOEM">
@@ -209,8 +208,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                          <div>
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="oemPma" class="form-control"  (ngModelChange)="getmemo()" value="false" (change)="onCheckPMA();" [(ngModel)]="sourceItemMaster.isOEM">
@@ -235,8 +233,7 @@
                                             </p-autoComplete>
                                         </div>
                                     </div>
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
                                             <label>
                                                 <input type="checkbox"
@@ -249,8 +246,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
                                             <label>
                                                 <input type="checkbox"
@@ -263,8 +259,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
                                             <label>
                                                 <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -308,8 +303,7 @@
                                         <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="AssetAcquisitionTypeList" filter="true" [(ngModel)]="sourceItemMaster.itemMasterAssetTypeId" name="itemMasterAssetTypeId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
                                     </div>
                                     <!--Expiration Date-->
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
                                             <label>
                                                 <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -326,7 +320,7 @@
                                    
                                     <div class="expdate-input"
                                          *ngIf="sourceItemMaster.isExpirationDateAvailable">
-                                         <label style="text-align: left; font-weight: lighter !important;">Lesser Of</label>
+                                         <label class="lesser-of-label">Lesser Of</label>
                                         <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                          (ngModelChange)="getmemo()" name="expirationDate"
                                          [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [minDate]="currentDate" 
@@ -336,8 +330,7 @@
                                         <div class="form-group col-sm-12">
                                             <label class="control-label control-alter1 col-sm-5">Rec'd date</label>
                                             <div class="col-sm-7">
-                                                <div class="form-group pull-left"
-                                                     style="margin-top: 3px;">
+                                                <div class="form-group pull-left div-margin">
                                                     <div class="checkbox-cstm">
                                                         <label>
                                                             <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -349,19 +342,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 2px;">
+                                                <div class="stock-2-margin">
                                                     <input *ngIf="sourceItemMaster.isReceivedDateAvailable"
                                                            class="form-control number exp-date-inputs w48" type="number" pKeyFilter="int"
                                                            name="daysReceived"  (ngModelChange)="getmemo()" maxlength="5" [(ngModel)]="sourceItemMaster.daysReceived" required>
-                                                    <span *ngIf="sourceItemMaster.isReceivedDateAvailable" style="margin-left: 8px;">Days</span>
+                                                    <span *ngIf="sourceItemMaster.isReceivedDateAvailable" class="margin-left-8" >Days</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label class="control-label control-alter col-sm-5">Mfg date</label>
                                             <div class="col-sm-7">
-                                                <div class="form-group pull-left"
-                                                     style="margin-top: 3px;">
+                                                <div class="form-group pull-left div-margin">
                                                     <div class="checkbox-cstm">
                                                         <label>
                                                             <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -373,19 +365,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 2px;">
+                                                <div class="stock-2-margin">
                                                     <input *ngIf="sourceItemMaster.isManufacturingDateAvailable"
                                                            class="form-control number exp-date-inputs w48" type="number" pKeyFilter="int"
                                                            name="manufacturingDays"  (ngModelChange)="getmemo()" maxlength="5" [(ngModel)]="sourceItemMaster.manufacturingDays" required>
-                                                    <span *ngIf="sourceItemMaster.isManufacturingDateAvailable" style="margin-left: 8px;">Days</span>
+                                                    <span *ngIf="sourceItemMaster.isManufacturingDateAvailable" class="margin-left-8">Days</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label class="control-label control-alter col-sm-5">Tag date</label>
                                             <div class="col-sm-7">
-                                                <div class="form-group pull-left"
-                                                     style="margin-top: 3px;">
+                                                <div class="form-group pull-left div-margin">
                                                     <div class="checkbox-cstm">
                                                         <label>
                                                             <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -397,19 +388,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 2px;">
+                                                <div class="stock-2-margin">
                                                     <input *ngIf="sourceItemMaster.isTagDateAvailable"  (ngModelChange)="getmemo()"
                                                            class="form-control number exp-date-inputs w48" type="number" pKeyFilter="int"
                                                            name="tagDays" maxlength="5" [(ngModel)]="sourceItemMaster.tagDays" required>
-                                                    <span *ngIf="sourceItemMaster.isTagDateAvailable" style="margin-left: 8px;">Days</span>
+                                                    <span *ngIf="sourceItemMaster.isTagDateAvailable" class="margin-left-8">Days</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label class="control-label control-alter col-sm-5">Open date</label>
                                             <div class="col-sm-7">
-                                                <div class="form-group pull-left"
-                                                     style="margin-top: 3px;">
+                                                <div class="form-group pull-left div-margin">
                                                     <div class="checkbox-cstm">
                                                         <label>
                                                             <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -421,19 +411,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 2px;">
+                                                <div class="stock-2-margin">
                                                     <input *ngIf="sourceItemMaster.isOpenDateAvailable"  (ngModelChange)="getmemo()"
                                                            class="form-control number exp-date-inputs w48" type="number" pKeyFilter="int"
                                                            name="openDays" maxlength="5" [(ngModel)]="sourceItemMaster.openDays" required>
-                                                    <span *ngIf="sourceItemMaster.isOpenDateAvailable" style="margin-left: 8px;">Days</span>
+                                                    <span *ngIf="sourceItemMaster.isOpenDateAvailable" class="margin-left-8">Days</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label class="control-label control-alter col-sm-5">Shipped date</label>
                                             <div class="col-sm-7">
-                                                <div class="form-group pull-left"
-                                                     style="margin-top: 3px;">
+                                                <div class="form-group pull-left div-margin">
                                                     <div class="checkbox-cstm">
                                                         <label>
                                                             <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -445,19 +434,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 2px;">
+                                                <div class="stock-2-margin">
                                                     <input *ngIf="sourceItemMaster.isShippedDateAvailable"  (ngModelChange)="getmemo()"
                                                            class="form-control number exp-date-inputs w48" type="number" pKeyFilter="int"
                                                            name="shippedDays" maxlength="5" [(ngModel)]="sourceItemMaster.shippedDays" required>
-                                                    <span *ngIf="sourceItemMaster.isShippedDateAvailable" style="margin-left: 8px;">Days</span>
+                                                    <span *ngIf="sourceItemMaster.isShippedDateAvailable" class="margin-left-8">Days</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label class="control-label control-alter col-sm-5">Other date</label>
                                             <div class="col-sm-7">
-                                                <div class="form-group pull-left"
-                                                     style="margin-top: 3px;">
+                                                <div class="form-group pull-left div-margin">
                                                     <div class="checkbox-cstm">
                                                         <label>
                                                             <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -469,11 +457,11 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 2px;">
+                                                <div class="stock-2-margin">
                                                     <input *ngIf="sourceItemMaster.isOtherDateAvailable"  (ngModelChange)="getmemo()"
                                                            class="form-control number exp-date-inputs w48" type="number" pKeyFilter="int"
                                                            name="otherDays" maxlength="5" [(ngModel)]="sourceItemMaster.otherDays" required>
-                                                    <span *ngIf="sourceItemMaster.isOtherDateAvailable" style="margin-left: 8px;">Days</span>
+                                                    <span *ngIf="sourceItemMaster.isOtherDateAvailable" class="margin-left-8">Days</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -507,8 +495,7 @@
                             <div class="col-md-9 general-info-columns-four">
                                 <div class="col-md-4" >
                                     <div class="form-group">
-                                        <div class="form-group"
-                                             style="margin-top: 10px;">
+                                        <div class="form-group m-t-10">
                                             <div class="checkbox-cstm">
                                                 <label>
                                                     <input type="checkbox"  (ngModelChange)="getmemo()"
@@ -531,8 +518,7 @@
                                         <div>
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allManufacturerInfo"  (ngModelChange)="getmemo()" filter="true" [(ngModel)]="sourceItemMaster.manufacturerId" name="manufacturerId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                         </div>
-                                        <div class="form-group"
-                                             style="margin-top: 10px;">
+                                        <div class="form-group m-t-10">
                                             <div class="checkbox-cstm">
                                                 <label>
                                                     <input type="checkbox"
@@ -545,7 +531,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
                                             <label class="control-label">
                                                 Purchase UOM <strong class="clr-red">*</strong>
                                             </label>
@@ -556,7 +542,7 @@
                                         </div>
                                         <!--/Purchase UOM-->
                                         <!--Stock UOM-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
                                             <label class="control-label">
                                                 Stock UOM
                                             </label>
@@ -566,7 +552,7 @@
                                         </div>
                                         <!--/Stock UOM-->
                                         <!--Consume UOM-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4" >
                                             <label class="control-label">
                                                 Consume UOM
                                             </label>
@@ -576,7 +562,7 @@
                                         </div>
                                         <!--/Consume UOM-->
                                         <!--Purchase Currency-->
-                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
                                             <label class="control-label">
                                                 Purchase Currency <strong class="clr-red">*</strong>
                                             </label>
@@ -587,7 +573,7 @@
                                         <!--/Purchase Currency-->
                                         <div class="clear"></div>
                                         <!--Purchase Currency--> 
-                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                        <div class="inline-block display-flex inline-adjust spacing-label m-t-4">
                                             <label class="control-label">
                                                 Sales Currency <strong class="clr-red">*</strong>
                                             </label>
@@ -646,7 +632,7 @@
                                             <input class="form-control input-value"  (ngModelChange)="getmemo()" type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==10) return false;" [ngModelOptions]="{standalone: true}"
                                             (keyup)=rqeventHandler($event)  [(ngModel)]="sourceItemMaster.reorderQuantiy">
                                         </div>
-                                        <div *ngIf="disableReorderQuantiy" style="color:red">Reorder Qty must be greater than Min Order Qty</div>
+                                        <div *ngIf="disableReorderQuantiy" class="clr-red">Reorder Qty must be greater than Min Order Qty</div>
                                         <!--/Min Order Qty-->
                                         <!--Priority-->
                                         <div class="inline-adjust inline-block display-flex">
@@ -759,8 +745,7 @@
                                     </div>
                                     <!-- /Bin-->
                                     <!--Hot item-->
-                                    <div class="form-group"
-                                         style="margin-top: 10px;">
+                                    <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
                                             <label>
                                                 <input type="checkbox"
@@ -782,7 +767,7 @@
                                             <div class="table-responsive">
                                                 <div class="tableFixHead">  
                                                     <table class="table table-bordered">
-                                                        <thead style="text-align:center;">
+                                                        <thead class="text-center">
                                                             <tr>
                                                                 <th>Overhaul</th>
                                                                 <th>Repair</th>
@@ -836,7 +821,7 @@
                                             <div class="table-responsive">
                                                 <div class="tableFixHead">  
                                                     <table class="table table-bordered">
-                                                        <thead style="text-align:center;">
+                                                        <thead class="text-center">
                                                             <tr>
                                                                 <th>Overhaul</th>
                                                                 <th>Repair</th>
@@ -889,9 +874,8 @@
                         </div>
 
                     </div>
-                    <div class="col-md-12 col-new">
-                        <div class="form-group"
-                                         style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
                                             <label>
                                                 <input type="checkbox"
@@ -920,7 +904,7 @@
 
                                             <div class="form-group">
                                                 <div> <!--*ngIf="sourceViewforDocumentList.length > 0"-->
-                                                    <h6 class="panel-title" style="padding-left: 10px; margin-top: 20px;">Attachment Details</h6>
+                                                    <h6 class="panel-title stock-attach">Attachment Details</h6>
                                                     <p-table #table4 class="rpo-table-cstm"
                                                              [columns]="selectedColumnsDoc"
                                                              [value]="sourceViewforDocumentList"
@@ -929,41 +913,39 @@
                                                              [rowsPerPageOptions]="[3, 6, 9, 15]">
                                                         <ng-template pTemplate="header" let-columns>
                                                             <tr>
-                                                                <th *ngFor="let col of columns" style="width: 100px;">
+                                                                <th *ngFor="let col of columns" class="table-column-width">
                                                                     {{ col.header }}
                                                                 </th>
-                                                                <th style="width: 100px;">Actions</th>
+                                                                <th class="table-actions-column">Actions</th>
                                                             </tr>
 
                                                         </ng-template>
                                                         <ng-template pTemplate="header" let-columns>
                                                             <tr>
-                                                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                                     [pSortableColumn]="col.field">
                                                                     {{ col.header }}
                                                                     <p-sortIcon [field]="col.field">
                                                                     </p-sortIcon>
                                                                 </th>
-                                                                <th>Actions</th>
+                                                                <th class="table-actions-column">Actions</th>
 
                                                             </tr>
                                                             <tr>
-                                                                <th style="width:120px" *ngFor="let col of columns" 
+                                                                <th class="table-column-width" *ngFor="let col of columns" 
                                                                 [ngSwitch]="col.field">
                                                                     <input type="text"
                                                                            (input)="table4.filter($event.target.value, col.field,'contains') "
                                                                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                                           style="width:100%;" pInputText>
-                                                                    <input type="date" class="hidePlaceHolder"
+                                                                          class="table-header-input-width" pInputText>
+                                                                    <input type="date" class="hidePlaceHolder table-header-input-width"
                                                                            *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                                           style="width:100%;"
                                                                            (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                                                    <input type="date" class="hidePlaceHolder"
+                                                                    <input type="date" class="hidePlaceHolder table-header-input-width"
                                                                            *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                                           style="width:100%;"
                                                                            (change)="dateFilterForTableNew($event.target.value, col.field )">
                                                                 </th>
-                                                                <th style="width:140px;position:sticky"></th>
+                                                                <th class="table-actions-column"></th>
 
                                                             </tr>
                                                         </ng-template>
@@ -975,7 +957,7 @@
                                                             <tr [pSelectableRow]="rowData">
                                                                 <ng-container *ngFor="let col of columns">
                                                                     <td *ngIf="col.field != 'fileName' && col.field !== 'docMemo'"
-                                                                        class="ui-resizable-column"
+                                                                        class="ui-resizable-column table-column-width"
                                                                         pReorderableRowHandle>
                                                                         {{
                       col.field == 'createdDate'
@@ -985,13 +967,13 @@
                         : rowData[col.field]
                                                                         }}
                                                                     </td>
-                                                                    <td style="width:auto"
+                                                                    <td 
                                                                     *ngIf="col.field == 'docMemo'"
-                                                                    class="ui-resizable-column"
+                                                                    class="ui-resizable-column table-column-width"
                                                                     pReorderableRowHandle>
                                                                         <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
                                                                     </td>
-                                                                    <td *ngIf="col.field == 'fileName'">
+                                                                    <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                                                         <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData)">
                                                                             {{ rowData[col.field] }}
                                                                         </a>
@@ -1006,7 +988,7 @@
                                                                     </td>
                                                                 </ng-container>
 
-                                                                <td style="width: 70px;">
+                                                                <td class="action-icons-cstm table-column-width">
                                                                     <span data-toggle="modal"  *ngIf="rowData.attachmentDetailId != 0"
                                                                           data-target="#addDocumentDetails">
                                                                         <a class="btn nobg"
@@ -1030,20 +1012,20 @@
                                                         </ng-template>
                                                         <ng-template pTemplate="emptymessage" let-columns *ngIf="sourceViewforDocumentList?.length == 0">
                                                             <tr>
-                                                                <td [attr.colspan]="10" class="no-records-cstm">
+                                                                <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
                                                                     No records found
                                                                 </td>
                                                             </tr>
                                                         </ng-template>
                                                         <ng-template pTemplate="summary" id="footer">
                                                             <label id="footer" class="footer">Total:</label>
-                                                            <input style="width: 5%;" [(ngModel)]="table4._totalRecords" name="no'of records" disabled
+                                                            <input class="footer-input-width" [(ngModel)]="table4._totalRecords" name="no'of records" disabled
                                                                    pInputText type="text" />
 
                                                             &nbsp;&nbsp;
                                                             <label id="footer" class="footer1">Pages Count:</label>
 
-                                                            <input style="width: 5%;" [ngModel]="getPageCount(table4._totalRecords, pageSize)"
+                                                            <input class="footer-input-width" [ngModel]="getPageCount(table4._totalRecords, pageSize)"
                                                                    name="page count" disabled pInputText type="text" />
                                                         </ng-template>
 
@@ -1064,9 +1046,9 @@
                 </div>
             </div>
             <div [ngClass]="{hideTab : currentTab !== 'AircraftInfo'}">
-                <div style="padding: 5px;">
+                <div class="stock-padding-5">
                     <!--class="card"-->
-                    <div class="card new-card" style="padding: 10px;">
+                    <div class="card new-card">
                         <div class="card-header header" >
                             <div class="row">
                               <div class="col">
@@ -1351,8 +1333,8 @@
                 </div> <!--class="card"-->
             </div>
             <div [ngClass]="{hideTab : currentTab !== 'Atachapter'}">
-                <div style="padding: 5px;">
-                    <div class="card new-card" style="padding: 10px;">
+                <div class="stock-padding-5">
+                    <div class="card new-card" >
                         <!-- <div class="col-md-12 " style="display: flex;">
                             <h4 class="po-head-sm">
                                 ATA Information
@@ -1488,7 +1470,7 @@
                                                             [(ngModel)]="selectedATASubChapter" [panelStyle]="{minWidth:'12em'}" class="pub-multi"></p-multiSelect>
                                             </div>
                                         </div>
-                                        <div class="col-md-1" style="margin-top: 20px;">
+                                        <div class="col-md-1 m-t-20">
                                             <div class="form-group">
                                                 <button type="button" class="btn btn-primary mtop20" (click)="searchATA()">
                                                     <i class="pi pi-search pi-search"></i>
@@ -1618,7 +1600,7 @@
                                        type="text" />
                             </ng-template>
                         </p-table>
-                        <div style="margin-top: 10px;">
+                        <div class="m-t-10">
                             <button class="btn btn-primary pull-right" (click)="movePurchaseInformation(); changeOfTab('Capes');" type="button">Next</button> &nbsp;
 
                             <button class="btn btn-primary pull-right" type="button" (click)="moveAircraftInformation(); changeOfTab('AircraftInfo');">Previous</button>
@@ -1627,7 +1609,7 @@
                 </div>
             </div>
             <div [ngClass]="{hideTab : currentTab !== 'Capes'}">
-                <div style="padding: 5px;">
+                <div class="stock-padding-5">
                     <app-item-master-capabilities-list [isEnableItemMaster]="isEnableItemMaster" [itemMasterId]="ItemMasterId" [selectedTab]="currentTab" [partData]="sourceItemMaster"></app-item-master-capabilities-list>
                     <div style="margin-top: 10px;margin-bottom: 10px;">
                         <button class="btn btn-primary pull-right" (click)="changeOfTab('PurchaseSales');saveCapesInfo();" type="button"> Next</button> &nbsp;
@@ -1637,8 +1619,8 @@
             </div>
             <div [ngClass]="{hideTab : currentTab !== 'PurchaseSales'}">
                 <!--New Changes in Purchase and Sales page-->
-                <div style="padding: 5px;">
-                    <div class="card new-card" style="padding: 10px;">
+                <div class="stock-padding-5">
+                    <div class="card new-card">
                         <div class="card-header header" >
                             <div class="row">
                               <div class="col">
@@ -1739,16 +1721,16 @@
                                             </td>
                                             <!-- FX Rate -->
                                             <td>
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
+                                                <input type="text" style="width: 100%" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
 
                                             </td>
                                             <!-- Vendor List Price -->
                                             <td>
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="field.PP_VendorListPrice"  name="PP_VendorListPrice{{i}}" (change)="getPercentValuePP(field); getPercentValueSPUsingPP(field)" />
+                                                <input type="text" style="width: 100%;" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="field.PP_VendorListPrice"  name="PP_VendorListPrice{{i}}" (change)="getPercentValuePP(field); getPercentValueSPUsingPP(field)" />
                                             </td>
                                             <!-- Last List Price Date -->
                                             <td>
-                                                <input type="date" style="width: 106px;" class="input-field-value" [disabled]="field.isEditable == false" [ngModelOptions]="{standalone: true}" [ngModel]="field.PP_LastListPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.PP_LastListPriceDate = $event">
+                                                <input type="date" style="width: 100%;" class="input-field-value" [disabled]="field.isEditable == false" [ngModelOptions]="{standalone: true}" [ngModel]="field.PP_LastListPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.PP_LastListPriceDate = $event">
                                             </td>
                                             <!-- Purchase Disc % -->
                                             <td>
@@ -1756,15 +1738,15 @@
                                             </td>
                                             <!-- Purchase Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 80px;" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
+                                                <input type="text" class="input-field-value text-right" style="width: 100%" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
                                             </td>
                                             <!-- Last Purchase Disc Date -->
                                             <td>
-                                                <input type="date" style="width: 106px;" class="input-field-value" [ngModel]="field.PP_LastPurchaseDiscDate | date:'yyyy-MM-dd'" [disabled]="field.isEditable == false" (ngModelChange)="field.PP_LastPurchaseDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" style="width: 100%;" class="input-field-value" [ngModel]="field.PP_LastPurchaseDiscDate | date:'yyyy-MM-dd'" [disabled]="field.isEditable == false" (ngModelChange)="field.PP_LastPurchaseDiscDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Purchase Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 80px;" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
+                                                <input type="text" class="input-field-value text-right" style="width: 100%;" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
                                             </td>
                                             <!-- Sale Price -->
                                             <td>
@@ -1783,11 +1765,11 @@
                                             <!-- FX Rate -->
                                             <td>
 
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
+                                                <input type="text" style="width:100%" class="input-field-value text-right" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
                                             </td>
                                             <!-- Flat Price Amount -->
                                             <td>
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" name="SP_FSP_FlatPriceAmount{{i}}" [(ngModel)]="field.SP_FSP_FlatPriceAmount" (change)="onChangeFlatPriceAmt(field)" />
+                                                <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" name="SP_FSP_FlatPriceAmount{{i}}" [(ngModel)]="field.SP_FSP_FlatPriceAmount" (change)="onChangeFlatPriceAmt(field)" />
                                             </td>
                                             <!-- Last Flat Price Date -->
                                             <td>
@@ -1799,15 +1781,16 @@
                                             </td>
                                             <!-- Mark Up Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 80px;" pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
+                                                <input type="text" class="input-field-value text-right"
+                                                 style="width: 100%;" pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
                                             </td>
                                             <!-- Last Mark Up Date -->
                                             <td>
-                                                <input type="date" style="width: 106px;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
+                                                <input type="date" style="width: 100%;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 80px" pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
+                                                <input type="text" class="input-field-value text-right" style="width: 100%" pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
                                             </td>
                                             <!-- Sale Disc % -->
                                             <td>
@@ -1815,15 +1798,15 @@
                                             </td>
                                             <!-- Sale Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" style="width: 80px;" name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
+                                                <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" style="width:100%;" name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
                                             </td>
                                             <!-- Last Sales Disc Date -->
                                             <td>
-                                                <input type="date" style="width: 106px;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" style="width: 100%;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Sale Price -->
                                             <td>
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" pInputText pKeyFilter="money" name="SP_CalSPByPP_UnitSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_UnitSalePrice" disabled />
+                                                <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money" name="SP_CalSPByPP_UnitSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_UnitSalePrice" disabled />
                                             </td>
                                             <!-- Action -->
                                             <td style="text-align:center;position: sticky !important;background: #eaeaea !important;" class="purSaleLastCol">
@@ -1849,7 +1832,7 @@
                                 </div>
 
                             </div>
-                            <div style="margin-top: 10px;">
+                            <div class="m-t-10">
                                 <button class="btn btn-primary pull-right" (click)="nextOrPreviousClick('Next')" type="button">Next</button> &nbsp;
                                 <button class="btn btn-primary pull-right" (click)="savePurchaseandSales()" [disabled]="!purchaseSales.valid && !purchaseSales.disabled" [disabled]="disablepurchaseSales" type="submit">Save </button> &nbsp;
 
@@ -1898,7 +1881,7 @@
                         </div>
                     </div>
                     <div *ngIf="currentNTAETab != ''">
-                        <div style="padding: 5px;">
+                        <div class="stock-padding-5">
                             <app-ntae-alternate [selectedTab]="currentNTAETab" (triggeNTAETab)="changeOfNTAETab('NHA')" [itemMasterId]="ItemMasterId" [partData]="sourceItemMaster"></app-ntae-alternate>                        
                         </div>
                     </div>
@@ -1913,7 +1896,7 @@
             <!-- NHA, TLA, Alternate, Equivalency CLOSE-->
             <!--Exchange and loans Tab  -->
             <div [ngClass]="{hideTab : currentTab !== 'Exchange'}">
-                <div style="padding: 5px;">
+                <div class="stock-padding-5">
                     <app-item-master-exch-loan #exchLoan
                                                (onTabChange)="changeOfTab($event)"
                                                [allCurrencyInfo]="allCurrencyInfo"
@@ -1922,8 +1905,8 @@
             </div>
             <!-- End of exchange and loans tab-->
             <div [ngClass]="{hideTab : currentTab !== 'ExportInfo'}">
-                <div style="padding: 5px;">
-                    <div class="card new-card" style="padding: 10px;">                       
+                <div class="stock-padding-5">
+                    <div class="card new-card">                       
                         <div class="card-header header" >
                             <div class="row">
                               <div class="col">
@@ -1936,7 +1919,7 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="eccn" class="control-label">
-                                            ECCN <span style="color: red;">*</span>
+                                            ECCN <span class="clr-red">*</span>
                                         </label>
 
                                         <input type="text" class="input-field-value" maxlength="5" required pInputText
@@ -1981,7 +1964,7 @@
                                                 <input type="number" class="input-field-value" pKeyFilter="num" pInputText maxlength="10" [(ngModel)]="exportInfo.exportWeight" name="exportWeight" id="exportWeight" title="Export Weight" (keyup)="btnChange()" />
                                             </div>
                                             <div class="col-md-5">
-                                                <label>UOM <span style="color: red;" *ngIf="exportInfo.exportWeight">*</span>
+                                                <label>UOM <span class="clr-red" *ngIf="exportInfo.exportWeight">*</span>
                                                 </label>
                                                 <p-dropdown class="p-dropdown-100" [options]="allWeightUnitOfMeasureInfo" filter="true" [(ngModel)]="exportInfo.exportWeightUnit" name="exportWeightUnit" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" [required]="exportInfo.exportWeight > 0" (onChange)="btnChange()"></p-dropdown>
                                             </div>
@@ -2005,7 +1988,7 @@
                                             </div>
                                             <div class="col-md-5">
                                                 <label class="control-label">
-                                                    UOM <span style="color: red;" *ngIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight">*</span>
+                                                    UOM <span class="clr-red" gIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight">*</span>
                                                 </label>
                                                 <p-dropdown class="p-dropdown-100" [options]="allSizeUnitOfMeasureInfo" filter="true" [(ngModel)]="exportInfo.exportSizeUnitOfMeasureId" name="exportSizeUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" [required]="exportInfo.exportSizeLength > 0 || exportInfo.exportSizeWidth > 0 || exportInfo.exportSizeHeight > 0" (onChange)="btnChange()"></p-dropdown>
                                             </div>
@@ -2041,7 +2024,7 @@
                             </div>
 
                             <!--<div class="col-sm-12 mt8">-->
-                            <div style="margin-top: 10px;">
+                            <div class="m-t-10">
 
                                 <button class="btn btn-primary pull-right" type="button" (click)="navigateToAddNewItemMaster(navigateToAddNewItemMasterPopupContent)">Add New</button>
                                 &nbsp;
@@ -2104,7 +2087,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 20px" [disabled]="!aircraftAddForm.valid || canAddAircraft == false"  (click)="mapAircraftInformation()">Save</button>
+                                <button type="button" class="btn btn-primary m-t-20" data-dismiss="modal"  [disabled]="!aircraftAddForm.valid || canAddAircraft == false"  (click)="mapAircraftInformation()">Save</button>
                                 
                             </div>
                         </div>
@@ -2153,11 +2136,11 @@
                     <div class="col-sm-12 font-padding" *ngIf="ataChapterEditMode == true">
                         <div class="col-sm-3">
                             ATA Chapter:
-                            <span style="color:red">{{  getAtaChapterName() }}</span>
+                            <span class="clr-red">{{  getAtaChapterName() }}</span>
                         </div>
                         <div class="col-sm-3">
                             ATA SubChapters:
-                            <span style="color:red">{{ getAtaChapterCodeName() }}</span>
+                            <span class="clr-red">{{ getAtaChapterCodeName() }}</span>
                         </div>                        
                     </div>
                 </div>
@@ -2232,13 +2215,13 @@
                     <div class="modal-body">
                         <div class="col-md-12 font-padding">
                             <div class="col-sm-2">
-                                PN: <span style="color:red">{{pnvalue}}</span>
+                                PN: <span class="clr-red">{{pnvalue}}</span>
                             </div>
                             <div class="col-sm-3">
-                                PN Description: <span style="color:red">{{pnDescription}}</span>
+                                PN Description: <span class="clr-red">{{pnDescription}}</span>
                             </div>
                             <div class="col-sm-3">
-                                Capability Types: <span style="color:red"></span>
+                                Capability Types: <span class="clr-red"></span>
                             </div>
                             <div class="col-sm-3">
                                 <p-multiSelect [options]="capabilityTypeList" [panelStyle]="{minWidth:'12em'}" [(ngModel)]="selectedCapabilityTypes"
@@ -2252,7 +2235,7 @@
                             <p-table [rows]="20" [columns]="capesColumns" [value]="capeBldList" [scrollable]="true" [responsive]="true" [style]="{width:'100%'}" [paginator]="true">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
-                                        <th *ngFor="let col of columns">
+                                        <th class="table-column-width" *ngFor="let col of columns">
                                             {{col.header}}
                                         </th>
 
@@ -2260,16 +2243,16 @@
                                 </ng-template>
                                 <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
                                     <tr>
-                                        <td>
+                                        <td class="table-column-width">
                                             <span style="font-weight:bold">{{rowData.capabilityType.label}}</span>
 
                                         </td>
-                                        <td>
+                                        <td class="table-column-width">
                                             <select>
                                                 <option value="0">Select</option>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td class="table-column-width">
                                             <select>
                                                 <option value="0">Select</option>
                                             </select>
@@ -2330,7 +2313,7 @@
 
 
 
-    <ng-template #ModalUnit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+    <ng-template #ModalUnit let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
         <div class="modal-header">
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                 <span aria-hidden="true">&times;</span>
@@ -2409,7 +2392,7 @@
         </div>
     </ng-template>
 </div>
-<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentEdit let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Item Classification</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Item Classification</h4>
@@ -2449,7 +2432,7 @@
                                         [suggestions]="localNameCollection" (completeMethod)="filterItemNames($event)" [size]="30" class="p-autoComplete-ctsm"
                                         [minLength]="1" [dropdown]="true" required>
                         </p-autoComplete>
-                        <div *ngIf="disableClassdescMsg" style="color:Red">Already Exist</div>
+                        <div *ngIf="disableClassdescMsg" class="clr-red">Already Exist</div>
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -2495,7 +2478,7 @@
 </ng-template>
 
 
-<ng-template #contentEdits let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentEdits let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Item Group</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Item Group</h4>
@@ -2569,7 +2552,7 @@
 
 
 
-<ng-template #contents let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contents let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Provision</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Provision</h4>
@@ -2635,7 +2618,7 @@
     </div>
 </ng-template>
 
-<ng-template #conEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #conEdit let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Purchase Unit Of Measure</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Purchase Unit Of Measure</h4>
@@ -2716,7 +2699,7 @@
     </div>
 </ng-template>
 
-<ng-template #conmodel let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #conmodel let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Stock Unit Of Measure</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Stock Unit Of Measure</h4>
@@ -2798,7 +2781,7 @@
 </ng-template>
 
 
-<ng-template #conEdited let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #conEdited let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Consume Unit Of Measure</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Consume Unit Of Measure</h4>
@@ -2879,7 +2862,7 @@
     </div>
 </ng-template>
 
-<ng-template #contextEdited let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contextEdited let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Sold Unit Of Mearsure</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Sold Unit Of Mearsure</h4>
@@ -2983,7 +2966,7 @@
     </p-footer>
 
 </p-dialog>
-<ng-template #contentModel let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentModel let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
 
     <div class="modal-content">
         <div class="modal-header">
@@ -3034,7 +3017,7 @@
     </div>
 </ng-template>
 
-<ng-template #models let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #models let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Waring</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Waning</h4>
@@ -3090,7 +3073,7 @@
 
 </ng-template>
 
-<ng-template #integrationcontentEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #integrationcontentEdit let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Integration</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Integration</h4>
@@ -3111,7 +3094,7 @@
                             <div class="ui-helper-clearfix">{{integrationName}}</div>
                         </ng-template>
                     </p-autoComplete>
-                    <div *ngIf="disableSave" style="color:red">Already Exists</div>
+                    <div *ngIf="disableSave" class="clr-red">Already Exists</div>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -3197,7 +3180,7 @@
     </div>
   </div>
 
-<ng-template #prioritycontentEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #prioritycontentEdit let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Priority</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Priority</h4>
@@ -3273,25 +3256,25 @@
                     <div class="col-sm-12">
                         <div class="form-group marginr50" style="display: inline-block;">
                             <p class="fs10">
-                                <label class="control-label" style="width: auto;">PN</label>
+                                <label class="control-label wauto">PN</label>
 
                             </p>
                         </div>
                         <div class="form-group marginr50" style="display: inline-block;">
                             <p class="fs10">
-                                <label class="control-label" style="width: auto;">Aircraft</label>
+                                <label class="control-label wauto">Aircraft</label>
 
                             </p>
                         </div>
                         <div class="form-group marginr50" style="display: inline-block;">
                             <p class="fs10">
-                                <label class="control-label" style="width: auto;">Model</label>
+                                <label class="control-label wauto">Model</label>
 
                             </p>
                         </div>
                         <div class="form-group marginr50" style="display: inline-block;">
                             <p class="fs10">
-                                <label class="control-label" style="width: auto;">Dash Number</label>
+                                <label class="control-label wauto">Dash Number</label>
 
                             </p>
                         </div>
@@ -3428,15 +3411,15 @@
                 <div class="col-sm-12 font-padding">
                     <div class="col-sm-3">
                         Aircraft:
-                        <span style="color:red">{{ editAirCraftData.aircraftType }}</span>
+                        <span class="clr-red">{{ editAirCraftData.aircraftType }}</span>
                     </div>
                     <div class="col-sm-3">
                         Model:
-                        <span style="color:red">{{ editAirCraftData.aircraftModel }}</span>
+                        <span class="clr-red">{{ editAirCraftData.aircraftModel }}</span>
                     </div>
                     <div class="col-sm-3">
                         Dash Number:
-                        <span style="color:red">{{ editAirCraftData.dashNumber }}</span>
+                        <span class="clr-red">{{ editAirCraftData.dashNumber }}</span>
                     </div>
                 </div>
             </div>
@@ -3476,8 +3459,8 @@
                         </div>                       
                         <div class="col-md-2">
                             <button type="button"
-                            class="btn btn-primary submit-btn"
-                            data-dismiss="modal"  style="margin-top: 20px;"
+                            class="btn btn-primary submit-btn m-t-20"
+                            data-dismiss="modal"
                             (click)="updateAircraft()"
                             [disabled]="!(editAirCraftForm.valid && canEditAircraft)"
                             >
@@ -3687,7 +3670,7 @@
                     </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <h4 style="color: #ff5663;">No History Found</h4>
+                            <h4 class="no-history-found-msg">No History Found</h4>
                         </div>
                     </ng-template>
                 </div>
@@ -3700,7 +3683,7 @@
         </div>
     </div>
 </div>
-<ng-template #navigateToAddNewItemMasterPopupContent let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #navigateToAddNewItemMasterPopupContent let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
 
     <div class="modal-header">
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -3820,7 +3803,7 @@
                                              *ngIf="schematicFilesListForView.length == 0">
                                     <tr>
                                         <td [attr.colspan]="2"
-                                            style="color: red; font-weight: bold; text-align: center">
+                                            class="no-records-msg no-records-cstm">
                                             No records found
                                         </td>
                                     </tr>
@@ -3833,16 +3816,16 @@
                 <div class="modal-footer">
                     <button type="button"
                             *ngIf="!isEditButton"
-                            class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
+                            class="btn btn-primary pull-right submit-btn text-center"
+                          
                             (click)="addDocumentInformation('#addDocumentDetails',documentInformation)"
                             [disabled]="!addDocumentForm.valid || disableDocSave">
                         Add
                     </button>
                     <button type="button"
                             *ngIf="isEditButton"
-                            class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
+                            class="btn btn-primary pull-right submit-btn text-center"
+                            
                             (click)="addDocumentInformation('#addDocumentDetails',documentInformation)"
                             [disabled]="!addDocumentForm.valid || disableDocSave">
                         Update
@@ -3862,8 +3845,7 @@
 
 <ng-template #contentAuditHist
              let-c="close"
-             let-d="dismiss"
-             style="width:auto"
+             let-d="dismiss" class="wauto"
              data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of  Documents</h4>
@@ -3949,8 +3931,7 @@
 
 <ng-template #contentPurchaseAndSalesHist
              let-c="close"
-             let-d="dismiss"
-             style="width:auto"
+             let-d="dismiss" class="wauto"
              data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Purchase and Sales</h4>
