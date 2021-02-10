@@ -174,13 +174,14 @@ export class ReceivingRoComponent implements OnInit {
     ngOnInit() {
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
         this.repairOrderService.getROViewById(this.repairOrderId).subscribe(res => {
-            this.repairOrderHeaderData = res;
+            this.repairOrderHeaderData = res;            
             var stockline = [];
             this.getVendors('',stockline);
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
-            this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';            
+            this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';                   
+            this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';
         });
 
         this.receivingService.getReceivingROPartById(this.repairOrderId , this.employeeId).subscribe(res => { 
@@ -1825,9 +1826,10 @@ export class ReceivingRoComponent implements OnInit {
         let partsToPost: any = this.extractAllAllStockLines();
         this.isSpinnerVisible = true;
         this.receivingService.receiveParts(partsToPost).subscribe(data => {
-            this.alertService.showMessage(this.pageTitle, 'Stockline drafted successfully.', MessageSeverity.success);
-            
+            this.isSpinnerVisible = false;
+            this.alertService.showMessage(this.pageTitle, 'Stockline drafted successfully.', MessageSeverity.success);            
             //this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${this.repairOrderId}`);
+
         },err=>{this.isSpinnerVisible = false;});
     }
 

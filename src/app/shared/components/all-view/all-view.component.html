@@ -589,9 +589,9 @@
           <app-po-view-draftlist *ngIf="purchaseOrderData" [purchaseOrderData]="purchaseOrderData"></app-po-view-draftlist>
         </p-tabPanel>
 
-       <!-- <p-tabPanel header="Receiving">
+       <p-tabPanel header="Receiving" *ngIf="this.isReceivingpo">
           <app-po-view-list *ngIf="purchaseOrderData" [purchaseOrderData]="purchaseOrderData"></app-po-view-list>
-       </p-tabPanel>         -->
+       </p-tabPanel>        
 
       </p-tabView>
 
@@ -659,7 +659,7 @@
                     <td>{{partList?.stockLineNumber}}</td>
                     <td>{{partList?.controlId}}</td>
                     <td>{{partList?.controlNumber}}</td>
-                    <td>{{partList?.po}}</td>
+                    <td>{{partList?.purchaseOrderNumber}}</td>
                     <td>{{partList?.workOrderNo}}</td>
                     <td>{{partList?.subWorkOrderNo}}</td>
                     <!-- <td>{{partList?.reapairOrderNo}}</td> -->
@@ -757,10 +757,10 @@
         <p-tabPanel header="Address">
           <div class="table-responsive default-bg clear">
             <div class="col-sm-4">
-              <h5 class="po-head">Ship To</h5>
-              <p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.shipToUserType ? roHeaderAdd.shipToUserType : '-'}}</span></p>
-              <p><span class="label"><b>{{roHeaderAdd.shipToUserType }} Name:  </b></span><span class="value">{{roHeaderAdd.shipToUser ? roHeaderAdd.shipToUser : '-'}}</span></p>
-              <p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.shipToSiteName ? roHeaderAdd.shipToSiteName : '-'}}</span></p>
+              <h5 class="po-head">Ship To</h5>              
+              <p><span class="label"><b>User Type <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipToUserType ? roHeaderAdd.shipToUserType : '-'}}</span></p>
+              <p><span class="label"><b>{{roHeaderAdd.shipToUserType }} Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipToUser ? roHeaderAdd.shipToUser : '-'}}</span></p>
+              <p><span class="label"><b>Site Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipToSiteName ? roHeaderAdd.shipToSiteName : '-'}}</span></p>
               <p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.shipToAddress1 ? roHeaderAdd.shipToAddress1 : '-'}}</span></p>
               <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</span></p>
               <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.shipToAddress3 ? poHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
@@ -768,13 +768,13 @@
               <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.shipToState ? roHeaderAdd.shipToState : '-'}}</span></p>
               <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.shipToPostalCode ? roHeaderAdd.shipToPostalCode : '-'}}</span></p>
               <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.shipToCountry ? roHeaderAdd.shipToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
                 <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.shipToMemo"></p>
 
               </span></p>
-              <p><span class="label"><b>Ship Via: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
+              <p><span class="label"><b>Ship Via <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
               <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{roHeaderAdd.shippingCost ? roHeaderAdd.shippingCost : '-'}}</span></p>
               <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{roHeaderAdd.handlingCost ? roHeaderAdd.handlingCost : '-'}}</span></p>
               <p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{roHeaderAdd.shippingAccountNo ? roHeaderAdd.shippingAccountNo : '-'}}</span></p>
@@ -783,9 +783,9 @@
             </div>
             <div class="col-sm-4">
               <h5 class="po-head">Bill To</h5>
-              <p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.billToUserType ? roHeaderAdd.billToUserType : '-'}}</span></p>
-              <p><span class="label"><b>{{roHeaderAdd.billToUserType }} Name: </b></span><span class="value">{{roHeaderAdd.billToUser ? roHeaderAdd.billToUser : '-'}}</span></p>
-              <p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.billToSiteName ? roHeaderAdd.billToSiteName : '-'}}</span></p>
+              <p><span class="label"><b>User Type <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.billToUserType ? roHeaderAdd.billToUserType : '-'}}</span></p>
+              <p><span class="label"><b>{{roHeaderAdd.billToUserType }} Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.billToUser ? roHeaderAdd.billToUser : '-'}}</span></p>
+              <p><span class="label"><b>Site Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.billToSiteName ? roHeaderAdd.billToSiteName : '-'}}</span></p>
               <p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.billToAddress1 ? roHeaderAdd.billToAddress1 : '-'}}</span></p>
               <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</span></p>
               <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.billToAddress3 ? poHeaderAdd.billToAddress3 : '-'}}</span></p> -->
@@ -793,7 +793,7 @@
               <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.billToState ? roHeaderAdd.billToState : '-'}}</span></p>
               <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.billToPostalCode ? roHeaderAdd.billToPostalCode : '-'}}</span></p>
               <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.billToCountry ? roHeaderAdd.billToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
                 <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>

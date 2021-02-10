@@ -2,6 +2,7 @@
 import { ReceivingService } from '../../../../services/receiving/receiving.service';
 import { PurchaseOrder, PurchaseOrderPart } from '../receivng-po/PurchaseOrder.model';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
+import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 
 @Component({
   selector: 'app-po-view-list',
@@ -17,13 +18,38 @@ export class POViewListComponent implements OnInit {
     currentTLIndex: number = 0;
     currentSERIndex: number = 0;
     pageTitle: string = 'View Purchase Order';
+    purchaseOrderPart: any = []; //PurchaseOrderPart[];
+    currentStockLineShowIndex: number = 0;
     constructor(private receivingService: ReceivingService,
         private alertService: AlertService) {
     }
     
-    ngOnInit() {
-        console.log(this.purchaseOrderData);
+    ngOnInit() {       
+        this.purchaseOrderData.purchaseOderPart.map(x => {
+            const data = {
+                     ...x,
+                     stockLine: this.getStockline(x),
+                     timeLife: x.timeLifeDraft
+                 }
+                 this.purchaseOrderPart.push(data);
+             });
     }
+
+    getStockline(data) {       
+        if(data.stockLineDraft){
+             data.stockLineDraft = data.stockLineDraft.map((x, index) => {               
+                 return {
+                     ...x,
+                     purchaseOrderUnitCost: x.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2) : '0.00',
+                     purchaseOrderExtendedCost: x.purchaseOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2) : '0.00',
+                     currentSLIndexDraft: index
+                 }
+             })
+             return data.stockLineDraft;
+         } else {
+             return [];
+         }
+     }
 
     moveStockLinePage(type: string, index: number, part: PurchaseOrderPart): void {
         var count = type == 'stockline' ? part.stockLine.length : part.timeLife.length;

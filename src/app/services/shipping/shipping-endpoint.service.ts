@@ -117,19 +117,31 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.shelfId = SL.shelfId;
                 stockLine.binId = SL.binId;
                 stockLine.isDeleted = SL.isDeleted;
+                stockLine.masterCompanyId = SL.masterCompanyId;
+                stockLine.createdDate = SL.createdDate;
+                stockLine.updatedDate = new Date();
+                stockLine.isActive = SL.isActive;                
 
                 stockLines.push(stockLine);
             });
+            
             let Obj = {
                 'purchaseOrderPartRecordId': part.purchaseOrderPartRecordId,
-                'managementStructureEntityId': part.managementStructureEntityId,
+                //'managementStructureEntityId': part.managementStructureEntityId,
+                'repairOrderPartRecordId' : 0,
+                'quantityRejected' : 0,
+                'itemMasterId':0,
+                'altEquiPartNumberId':0,
+                'mappingType':0,
+                'isSerialized':false,
+                'isSameDetailsForAllParts' : false,
                 'stockLines': stockLines,
                 'timeLife': part.timeLife,
             };
 
             listObj.push(Obj);
         }
-
+        
         return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateStockLine(receiveParts));

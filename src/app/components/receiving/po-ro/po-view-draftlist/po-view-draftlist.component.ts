@@ -25,7 +25,7 @@ export class POViewStockDraftListComponent implements OnInit {
         private alertService: AlertService) {
     }
     
-    ngOnInit() {               
+    ngOnInit() {                    
        this.purchaseOrderData.purchaseOderPart.map(x => {
        const data = {
                 ...x,
