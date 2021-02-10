@@ -210,12 +210,12 @@
                              type="text"
                              (input)="dt.filter($event.target.value, col.field, 'contains'); activeStatus($event.target.value)" />
                              
-                             <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                             <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                              name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+<input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
           (change)="dateFilterForTable($event.target.value,col.field)" />
-          <input type="date" style="width:100%" 
-           class="hidePlaceHolder" *ngIf="col.field == 'startDate'"
+          <input type="date"  
+           class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'startDate'"
               name="startDate"
           (change)="dateFilterForTable($event.target.value,col.field)" />
 					       
@@ -247,7 +247,7 @@
                       </ng-container>
                     <ng-container *ngIf="col.field =='shopEmployee'">
                         <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
-                               style="margin: 0px auto; display: block;" />
+                             class="shop-employee-checkbox" />
                     </ng-container>
                      
                   </td>
@@ -634,24 +634,24 @@
           </p>-->
                                       <div class="form-row">
                                           <div class="col-sm-12">
-                                            <div class="card" style="margin-top: 6px;">
-                                              <div class="card-header" style="padding: 0 10px;">
-                                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
+                                            <div class="card mgmt-card">
+                                              <div class="card-header mgmt-card-header">
+                                                <h5 class="mgmt-header-name">Management Structure <span class="text-danger">*</span></h5>
                                               </div>
-                                              <div class="card-body" style="padding: 8px 12px 6px;">
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                              <div class="card-body mgmt-card-body" >
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="companyName" 
                                                        [(ngModel)]="headerManagementStructureWithName.level1" disabled>
                                                 </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="BUName"
                                                        [(ngModel)]="headerManagementStructureWithName.level2" disabled>
                                                 </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="divisionName"
                                                        [(ngModel)]="headerManagementStructureWithName.level3" disabled>
                                                 </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="deptName"
                                                        [(ngModel)]="headerManagementStructureWithName.level4" disabled>
                                                 </div>
