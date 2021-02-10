@@ -286,7 +286,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.provisionList();
             this.getConditionsList();
         }
-        console.log("hello ngONint")
+        this.disableUpdateButton=true;
     }
 
     get userName(): string {
@@ -612,6 +612,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }
         this.disableEditor = true;
         $("#textarea-popup").modal("hide");
+        this.disableUpdateButton=false;
     }
 
     onCloseTextAreaInfo() {
@@ -1007,5 +1008,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }
         this.reCalculate();
         this.dismissModel();
+    }
+   disableUpdateButton:boolean=false;
+    getActive(){
+        this.disableUpdateButton=false;
     }
 } 

@@ -15277,7 +15277,7 @@ p-autocomplete .ui-autocomplete input.ui-inputtext {
 .rpo-table-cstm .ui-table .ui-table-tbody>tr>td,
 .wf-table-cstm .ui-table .ui-table-tbody>tr>td,
 .ptable-custom .ui-table .ui-table-tbody>tr>td {
-  padding: 5px 2px !important; //4px 2px
+  padding: 2px 2px !important; //4px 2px
 }
 
 .ptable-cus-pma .ui-table .ui-table-tbody>tr {
@@ -17137,4 +17137,11 @@ ng-multiselect-dropdown{
 }
 .w120_clas{
   min-width: 120px !important;
+}
+// below two calsses for work order material list
+.Materials_wo .adj_width1{
+  width: 150px !important;
+}
+.Materials_wo .adj_width2{
+  width: 190px !important;
 }
