@@ -172,7 +172,6 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     enableSave() {
-        debugger;
         if ((this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0)) {
             this.disableSave = false;
         } else {
@@ -592,6 +591,15 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 }
             }
             this.documentCollectionOriginal = this.documentCollection;
+            this.documentCollection = this.documentCollection.map(x => {
+                return {
+                    ...x,
+                    fileName: x.attachmentDetails.map(e => e.fileName).join(","),
+                    docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                }
+            });
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
@@ -610,6 +618,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
         documents._value = documents._value.map(x => {
             return {
                 ...x,
+                fileName: x.attachmentDetails.map(e => e.fileName).join(","),
                 docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',

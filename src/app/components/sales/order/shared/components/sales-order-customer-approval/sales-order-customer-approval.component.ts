@@ -562,7 +562,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.salesOrderService.sentForInternalApproval(payLoad)
       .subscribe(
         res => {
-          debugger;
           $('#quoteVersion').modal('hide');
           this.alertService.showMessage(
             "Success",

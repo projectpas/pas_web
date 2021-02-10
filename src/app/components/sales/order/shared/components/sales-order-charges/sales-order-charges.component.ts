@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
-declare var $ : any;
+declare var $: any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
@@ -34,7 +34,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     @Input() view: boolean = false;
     @Input() isQuote = false;
     @Input() isView: boolean = false;
-    markupList:any = [];
+    markupList: any = [];
     mainEditingIndex: any;
     subEditingIndex: any;
     overAllMarkup: any;
@@ -89,7 +89,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             this.costPlusType = this.salesOrderChargesList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.salesOrderChargesList[0].headerMarkupId);
         }
-        this.isView = this.isView ? this.isView :false;
+        this.isView = this.isView ? this.isView : false;
     }
 
     ngOnChanges() {
@@ -113,26 +113,48 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.arrayPercentList.push(0);
         // this.isView = isView;
         this.isSpinnerVisible = true;
-        forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId,this.deletedStatusInfo),
+        forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo),
             this.actionService.getCharges(),
             //this.vendorService.getVendorsForDropdown(),
-            this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join()),
+            //this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join()),
             //this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")
             this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
             this.chargesTypes = res[1];
-            let vendorList : any = res[2]; 
-            this.allVendors = vendorList.map(x => {
+            //let vendorList: any = res[2];
+            // this.allVendors = vendorList.map(x => {
+            //     return {
+            //         vendorId: x.vendorId,
+            //         vendorName: x.vendorName
+            //     }
+            // });
+            this.markupList = res[2];
+            this.setVendors();
+            this.vendorList('');
+        }, error => this.onDataLoadError(error));
+    }
+
+    private vendorList(value) {
+        this.arrayVendlsit = [];
+        if (this.isEdit == true) {
+            this.salesOrderChargesList.forEach(element => {
+                this.arrayVendlsit.push(element.vendorId);
+            });
+        }
+        this.arrayVendlsit.push(0);
+        this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join()).subscribe(res => {
+            this.allVendors = res.map(x => {
                 return {
                     vendorId: x.vendorId,
                     vendorName: x.vendorName
                 }
-            }); 
-            this.markupList = res[3];
-            this.setVendors();
-        }, error => this.onDataLoadError(error));
+            });
+            this.vendorCollection = this.allVendors;
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     refreshOnDataSaveOrEditORDelete(fromDelete = false) {
@@ -281,7 +303,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             //     temp = [...temp, ...x];
             // })
             this.salesOrderChargesList.forEach((x) => {
-                if(typeof x[Symbol.iterator] === 'function')
+                if (typeof x[Symbol.iterator] === 'function')
                     temp = [...temp, ...x];
                 else
                     temp = [...temp, x];
@@ -312,7 +334,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             if (typeof temp[index][Symbol.iterator] === 'function')
                 sendData = [...sendData, ...temp[index]];
             else
-                sendData = [...sendData, temp[index]];                
+                sendData = [...sendData, temp[index]];
         }
         sendData = sendData.map((f) => {
             return {
@@ -499,13 +521,18 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     }
 
     filterVendor(event) {
-        this.vendorCollection = this.allVendors;
-        const vendors = [
-            ...this.allVendors.filter(x => {
-                return x.vendorName.toLowerCase().includes(event.query.toLowerCase());
-            })
-        ];
-        this.vendorCollection = vendors;
+        // this.vendorCollection = this.allVendors;
+        // const vendors = [
+        //     ...this.allVendors.filter(x => {
+        //         return x.vendorName.toLowerCase().includes(event.query.toLowerCase());
+        //     })
+        // ];
+        // this.vendorCollection = vendors;
+        if (event && event.query != undefined) {
+            this.vendorList(event.query)
+        } else {
+            this.vendorList('');
+        }
     }
 
     setVendors() {
@@ -548,7 +575,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     openInterShipViaHistory(content, rowData) {
         if (rowData && rowData.salesOrderChargesId) {
             this.salesOrderService.getSOChargesHistory(rowData.salesOrderChargesId).subscribe(
-                results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content),error => {
+                results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), error => {
                     this.isSpinnerVisible = false;
                 });
         }
@@ -643,5 +670,5 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.isSaveChargesDesabled = false;
     }
 
-    formatStringToNumberGlobal($event) {}
+    formatStringToNumberGlobal($event) { }
 }

@@ -954,8 +954,7 @@ export class ReceivngPoComponent implements OnInit {
 
     }
 
-    onFilter(event, stockLine, type): void {
-        
+    onFilter(event, stockLine, type): void { 
         if (event.query !== undefined && event.query !== null) { 
             if (type == AppModuleEnum.Customer) {           
                 this.getCustomers(event.query,stockLine);            
@@ -968,7 +967,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
    
-    onObtainFromChange(event, stockLine) {      
+    onObtainFromChange(event, stockLine) {
         stockLine.obtainFrom = '';
         stockLine.obtainFromObject = {};
 
@@ -1438,8 +1437,6 @@ export class ReceivngPoComponent implements OnInit {
             for (let sl of part.stocklineListObj) {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
-                debugger;
-                //sl.tagType = sl.tagType.split(',');
                 if (sl.tagType && sl.tagType.length > 0) {
                     for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);

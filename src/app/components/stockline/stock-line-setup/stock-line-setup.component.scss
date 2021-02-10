@@ -11,8 +11,51 @@ input[type="text"], input[type="number"], select {
 textarea {
     border-radius: 5px !important;
 }
+.black-reason{
+    margin-top:-4px !important;
+}
+.black-reason-icon-align{
+    margin-top:-3px !important;
+}
+.blacklist-memo-div{
+    margin-top:-8px !important;
+}
+.memo-width{
+    width:100% !important;
+}
 .inner-addon .ui-autocomplete-input {
     width: 100% !important;
+}
+.font-bold{
+    font-weight: bold !important;
+}
+.stock-memo-margin{
+    margin-bottom:10px !important;
+}
+.doc-memo-width{
+    width:90% !important;
+}
+.doc-memo-pencil-align{
+    float: right !important;margin-top: -18px !important;
+}
+.memo-label{
+    margin-left:5px !important;
+}
+.check-box-div{
+    margin-left: 0 !important;
+     margin-bottom: -20px !important;
+      margin-top: 10px !important;
+       margin-right: 0px !important; 
+       text-align: right !important;
+}
+.check-box-label{
+width: 120px !important;
+}
+.check-box-span{
+    margin-top: 5px !important;
+}
+.stock-attachment-header{
+    padding-left: 10px !important; margin-top: 20px !important;
 }
 .po-head {
     font-weight: bold;
@@ -38,6 +81,9 @@ a.fa.fa-plus-circle {
 .child-add-icon {
     cursor: pointer;
     margin: 2px -12px;
+}
+.width-input{
+    width: 55% !important;
 }
 .child-add-icon a:before, .child-add-icon i:before{
     font-size: 16px;

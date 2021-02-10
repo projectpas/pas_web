@@ -25,33 +25,43 @@
             <div style="text-align: right; min-height: 30px; clear: both;">
                 <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
           [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-                <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                <button type="button" class="btn btn-primary new-table-button dwn_st" matTooltip="Download Data"
+                matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                label="Export All Data"  data-toggle="modal"
+                (click)="selectedOnly = false; targetData = dt;" 
+                data-target="#downloadConfirmation"></button>
+                <button type="button" class="btn btn-primary dwn_st" matTooltip="Download Selected Data"
+                matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+                (click)="dt.exportCSV({ selectionOnly: true })"></button>
+                <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm flt-rt">
                     <i class="fa fa-search"></i>
                     <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
                         (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
                         style="height: 28px !important;" />
                 </div>
-                <button type="button" class="btn btn-primary" matTooltip="Download Data" matTooltipPosition="above"
-                pButton icon="fa-download" iconPos="left" label="Export Data" (click)="dt.exportCSV()"
-                style="padding:5px 10px !important;"></button>
-                <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
-                matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
-                (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
-
-                <!-- <div class="excel-upload excel-upload-cstm">
-                <button type="button" class="btn btn-primary" matTooltip="Download Sample File"
-                    matTooltipPosition="above" (click)="sampleExcelDownload()" style="padding: 5px 10px !important;">
-                    Sample File Download
-                </button>
-
-                <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
-                    class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
-                <label for="upload">
-                    <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
-                    <i class="fa fa-upload"></i>
-                    </span>
-                </label>
-                </div> -->
+                <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header text-st">
+                                <button type="button" class="close flot-r" (click)="closeModal()">&times;</button>
+                                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                            </div>
+                            <div class="modal-body text-st" *ngIf="targetData">
+                                <strong>
+                                    <span>
+                                        You are attempting to export {{targetData.totalRecords}} of records. 
+                                    </span> 
+                                </strong>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+                                <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          
+          
             </div>
         </ng-template>
         <ng-template pTemplate="colgroup" let-columns>
@@ -61,7 +71,6 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
-
                 <th style="width:auto"
                     *ngFor="let col of columns"
                     pResizableColumn
@@ -77,7 +86,6 @@
                         dt.filter($event.target.value, col.field, 'contains')
                     " />
                 </th>
-                <!-- <th style="width: 150px;"></th> -->
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -94,6 +102,13 @@
                     </ng-container> 
                     </td>                    
                 </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td colspan="18" style="color: red; font-weight: bold; text-align: center">
+                    No records found
+                </td>
+            </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>

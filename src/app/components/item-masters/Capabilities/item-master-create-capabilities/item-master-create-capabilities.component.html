@@ -35,7 +35,7 @@
 			  </div>
 			  <div class="col-md-2">
 				<button
-				  style="margin-top: 20px;"
+				 class="m-t-20"
 				  type="button"
 				  class="btn btn-primary"			
 				  [disabled]="!addCapesForm.valid"	  
@@ -57,19 +57,19 @@
 				[paginator]="false">
 			  	<ng-template pTemplate="colgroup" let-columns>
 					<colgroup>
-						<col style="width: 120px;">
-						<col style="width: 150px;">
-						<col style="width: 150px;">
-						<col style="width: 150px;">
-						<col style="width: 150px;">
-						<col *ngFor="let col of columns"  [ngStyle]="{'width': col.width}">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col *ngFor="let col of columns"  class="table-column-width">
 					</colgroup>
 				</ng-template>
 			  <ng-template pTemplate="header" let-columns>
 				  <tr>
-					<th style="width: 120px;text-align: center; font-weight: lighter !important;" >Capability Type</th>
-					<th style="width: 600px;text-align: center; font-weight: lighter !important;" colspan="4">Managment Structure <span class="clr-red">*</span></th>
-					<th style="text-align: center; font-weight: lighter !important;" *ngFor="let col of columns" pResizableColumn>
+					<th class="table-column-width table-header-text" >Capability Type</th>
+					<th class="table-header-text mgmt-width" colspan="4">Managment Structure <span class="clr-red">*</span></th>
+					<th class="table-column-width table-header-text" *ngFor="let col of columns" pResizableColumn>
 					  {{ col.header }}
 					</th>
 				  </tr>
@@ -82,7 +82,7 @@
 				<ng-container> <!--*ngFor="let rowData of aircraftData; let row_no = index;"-->
 				  <tr>            
 					<td >{{ rowData.capailityTypeName }}</td>
-					<td style="width: 120px;">
+					<td class="table-column-width">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -96,7 +96,7 @@
 					  [required]="true">
 					</p-dropdown>
 					</td>
-					<td style="width: 120px;">
+					<td class="table-column-width">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -109,7 +109,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td style="width: 120px;">
+					<td class="table-column-width">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -122,7 +122,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td style="width: 120px;">
+					<td class="table-column-width">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -136,7 +136,7 @@
 					>
 				  </p-dropdown>
 					</td>
-					<td style="width: 110px;">
+					<td class="table-column-width">
 						<p-calendar
 							class="pcal-item-capes"
 							[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -146,7 +146,7 @@
 						  [showIcon]="true"
 						></p-calendar>
 					  </td>
-					<td style="width: 80px;text-align: center;">
+					<td class="table-column-width text-center">
 					  <p-checkbox
 					  	class="pcheckbox-cstm"
 						name="isverified{{row_no}}"
@@ -155,7 +155,7 @@
 						(onChange)="resetVerified(rowData, $event,row_no)"					
 					  ></p-checkbox>
 					</td>
-					<td style="width: 130px;">
+					<td class="table-column-width">
 					  <p-dropdown
 						class="p-dropdown-custom-sm"
 						[options]="employeeList"
@@ -168,7 +168,7 @@
 						filter="true" [resetFilterOnHide]="true"
 					  ></p-dropdown>
 					</td>
-					<td style="width: 110px;">
+					<td class="table-column-width">
 						<!-- [required]="rowData.isVerified==true" -->
 					  <p-calendar
 					  	class="pcal-item-capes"
@@ -181,7 +181,7 @@
 						[showIcon]="true"
 					  ></p-calendar>
 					</td>
-					   <td style="width: 130px;">
+					   <td class="table-column-width">
 						<div [innerHTML]="rowData.memo" class="form-control"
 						style="margin-left:10px" 
 						[matTooltip]="parsedText(rowData.memo)" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
@@ -201,16 +201,16 @@
 			<div class="pull-right" *ngIf="viewTable">
 			  <button
 			  type="button"
-			  class="btn btn-primary" [disabled]="!capesForm.valid"
-			  data-dismiss="modal" style="margin-top: 10px;"
+			  class="btn btn-primary m-t-10" [disabled]="!capesForm.valid"
+			  data-dismiss="modal" 
 			  (click)="saveCapability(); "
 			>
 			  Save
 			</button>
 			<button *ngIf="isEnableCapesList"
 			type="button"
-			class="btn btn-danger" 
-			data-dismiss="modal" style="margin-top: 10px;"
+			class="btn btn-danger m-t-10" 
+			data-dismiss="modal"
 			(click)="onCloseCapes();"
 		  >
 			Close

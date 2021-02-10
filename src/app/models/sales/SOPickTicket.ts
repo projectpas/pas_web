@@ -4,6 +4,7 @@ export class SOPickTicket {
     stockLineNumber:string;
     qty:number;
     qtyToShip:number;
+    //qtyPicked:number;
     partNumber: string;
     partDescription:string;
     soPickTicketNumber:string;

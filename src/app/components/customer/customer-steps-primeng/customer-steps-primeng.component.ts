@@ -9,6 +9,8 @@ import { MenuItem } from 'primeng/api';
 import { CreditTermsService } from '../../../services/Credit Terms.service';
 import { CommonService } from '../../../services/common.service';
 import { AuthService } from '../../../services/auth.service';
+declare var $: any;
+
 @Component({
 	selector: 'app-customer-create',
 	templateUrl: './customer-steps-primeng.component.html',
