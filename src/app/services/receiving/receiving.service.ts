@@ -68,9 +68,12 @@ export class ReceivingService {
     }
 
     getPurchaseOrderDataForEditById(receivingId: any) {
-
         return Observable.forkJoin(
             this.receivingEndpoing.getReceivingPODataForEditById<any>(receivingId));
+    }
+
+    getAllRecevingEditID(purchaseOrderId){   
+        return this.receivingEndpoing.getAllRecevingEditID(purchaseOrderId);            
     }
 
     getPurchaseOrderDataForViewById(receivingId: any) {
@@ -90,6 +93,7 @@ export class ReceivingService {
     getReceivingPOHeaderById(repairOrderId){
         return this.receivingEndpoing.getReceivingPOHeaderById(repairOrderId);
     }
+    
 
     getReceivingPOPartsForViewById(repairOrderId){
         return this.receivingEndpoing.getReceivingPOPartsForViewById(repairOrderId);

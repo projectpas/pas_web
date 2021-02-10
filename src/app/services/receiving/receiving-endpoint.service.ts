@@ -102,8 +102,14 @@ export class ReceivingEndpointService extends EndpointFactory {
             });
     }
 
-    getReceivingPODataForEditById<T>(receivingId: any): Observable<T> {
+    getAllRecevingEditID(purchaseOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/getAllRecevingEditID?poID=${purchaseOrderId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllRecevingEditID(purchaseOrderId));  
+        });
+      }
 
+    getReceivingPODataForEditById<T>(receivingId: any): Observable<T> {
         let url = `${this.receivingPurchaseOrderForEditDataGet}/${receivingId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
@@ -245,7 +251,9 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     CreateStockLine(purchaseOrderId: any) {
         let url = `${this.CreateStockLinesURL}/${purchaseOrderId}`;
-        return this.http.get<any>(url);
+        return this.http.get<any>(url).catch(error => {
+                return this.handleErrorCommon(error, () => this.CreateStockLine(purchaseOrderId));
+            });
     }
 
     CreateStockLineForRepairOrder(repairOrder: any) {

@@ -710,6 +710,8 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.shippingAccount = this.poDataHeader.shippingAccountNo;
             stockLine.conditionId = 0;
             stockLine.masterCompanyId = this.currentUserMasterCompanyId;
+            stockLine.createdBy = this.userName;
+            stockLine.updatedBy = this.userName;             
             stockLine.serialNumberNotProvided = false;
             stockLine.purchaseOrderUnitCost = 0;
             stockLine.purchaseOrderExtendedCost = part.unitCost;
@@ -1472,6 +1474,9 @@ export class ReceivngPoComponent implements OnInit {
                 cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
                 timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
                 purchaseOrderPartRecordId: purchaseOrderPartRecordId,
+                masterCompanyId : this.currentUserMasterCompanyId,
+                createdBy : this.userName,
+                updatedBy : this.userName
             }
         })
         return tmLife;
