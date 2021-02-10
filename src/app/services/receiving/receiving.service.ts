@@ -73,8 +73,8 @@ export class ReceivingService {
             this.receivingEndpoing.getReceivingPODataForEditById<any>(receivingId));
     }
 
-    getAllRecevingEditID(receivingId: any){   
-            this.receivingEndpoing.getAllRecevingEditID(receivingId);
+    getAllRecevingEditID(purchaseOrderId){   
+        return this.receivingEndpoing.getAllRecevingEditID(purchaseOrderId);            
     }
 
     getPurchaseOrderDataForViewById(receivingId: any) {
