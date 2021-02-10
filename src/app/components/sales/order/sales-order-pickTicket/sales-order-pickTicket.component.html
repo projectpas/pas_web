@@ -234,7 +234,30 @@
                     </tbody>
                 </table>
             </div>
-
+            <div class="col-sm-6">
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 second-block-label"><b>Picked By</b></label>
+                        <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.pickedByName}}</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 second-block-label"><b>Picked Date</b></label>
+                        <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 second-block-label"><b>Confirm By</b></label>
+                        <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.confirmedByName}}</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-4 second-block-label"><b>Confirm Date</b></label>
+                        <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}</label>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
