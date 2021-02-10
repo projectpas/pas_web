@@ -710,6 +710,8 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.shippingAccount = this.poDataHeader.shippingAccountNo;
             stockLine.conditionId = 0;
             stockLine.masterCompanyId = this.currentUserMasterCompanyId;
+            stockLine.createdBy = this.userName;
+            stockLine.updatedBy = this.userName;             
             stockLine.serialNumberNotProvided = false;
             stockLine.purchaseOrderUnitCost = 0;
             stockLine.purchaseOrderExtendedCost = part.unitCost;
@@ -952,8 +954,8 @@ export class ReceivngPoComponent implements OnInit {
 
     }
 
-    onFilter(event, stockLine, type): void { 
-        debugger;
+    onFilter(event, stockLine, type): void {
+        
         if (event.query !== undefined && event.query !== null) { 
             if (type == AppModuleEnum.Customer) {           
                 this.getCustomers(event.query,stockLine);            
@@ -966,8 +968,7 @@ export class ReceivngPoComponent implements OnInit {
     }
 
    
-    onObtainFromChange(event, stockLine) {
-        debugger;
+    onObtainFromChange(event, stockLine) {      
         stockLine.obtainFrom = '';
         stockLine.obtainFromObject = {};
 
@@ -1438,6 +1439,7 @@ export class ReceivngPoComponent implements OnInit {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
                 debugger;
+                //sl.tagType = sl.tagType.split(',');
                 if (sl.tagType && sl.tagType.length > 0) {
                     for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
@@ -1475,6 +1477,9 @@ export class ReceivngPoComponent implements OnInit {
                 cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
                 timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
                 purchaseOrderPartRecordId: purchaseOrderPartRecordId,
+                masterCompanyId : this.currentUserMasterCompanyId,
+                createdBy : this.userName,
+                updatedBy : this.userName
             }
         })
         return tmLife;

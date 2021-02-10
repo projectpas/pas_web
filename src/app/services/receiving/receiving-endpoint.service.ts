@@ -245,7 +245,9 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     CreateStockLine(purchaseOrderId: any) {
         let url = `${this.CreateStockLinesURL}/${purchaseOrderId}`;
-        return this.http.get<any>(url);
+        return this.http.get<any>(url).catch(error => {
+                return this.handleErrorCommon(error, () => this.CreateStockLine(purchaseOrderId));
+            });
     }
 
     CreateStockLineForRepairOrder(repairOrder: any) {

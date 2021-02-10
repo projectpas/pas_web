@@ -22,6 +22,7 @@ import { DBkeys } from '../../../../services/db-Keys';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
     selector: 'app-edit-po',
@@ -83,6 +84,21 @@ export class EditPoComponent implements OnInit {
     legalEntityList: any = [];
     isSpinnerVisible: boolean = true;
     moduleListDropdown: any = [];
+     arrayLegalEntitylsit: any[] = [];
+    arraySitelist: any[] = [];
+    arrayVendlsit:any[] = [];
+    arrayComplist: any[] = [];
+    arrayCustlist: any[] = [];
+    arraymanufacturerlist: any[] = [];
+    arrayConditionlist: any[] = [];
+    arrayglaccountlist: any[] = [];
+    arrayshipvialist: any[] = [];
+    arraytagtypelist: any[] = [];
+    companyModuleId: number = 0;   
+    vendorModuleId: number = 0;   
+    customerModuleId: number = 0;   
+    otherModuleId: number = 0; 
+    alertText: string = '';   
 
     /** edit-po ctor */
     constructor(public receivingService: ReceivingService,
@@ -103,15 +119,21 @@ export class EditPoComponent implements OnInit {
         private customerService: CustomerService,
         private localStorage: LocalStoreManager,
         private datePipe: DatePipe,
-        private purchaseOrderService: PurchaseOrderService
+        private purchaseOrderService: PurchaseOrderService,
+        private authService: AuthService,
     ) {
 
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
         this.currentDate = new Date();
+        // this.companyModuleId = AppModuleEnum.Company;                 
+        // this.vendorModuleId = AppModuleEnum.Vendor;
+        // this.customerModuleId = AppModuleEnum.Customer;
+        // this.otherModuleId = AppModuleEnum.Others; 
     }
 
     ngOnInit() {
+         this.getShippingVia();
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
         this.receivingService.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
@@ -305,7 +327,7 @@ export class EditPoComponent implements OnInit {
                         // this.loadManufacturerData();
                         this.getAllSite();
                         // this.getAllGLAccount();
-                        this.getShippingVia();
+                       
                         this.getCustomers();
                         this.getVendors();
                         this.getCompanyList();
@@ -333,6 +355,12 @@ export class EditPoComponent implements OnInit {
         ]
     }
 
+    
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
       getReceivingPOHeaderById(id) {       
         this.purchaseOrderService.getPOViewById(id).subscribe(
             res => {
@@ -345,6 +373,7 @@ export class EditPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
+                if(this.poDataHeader.shipViaId && this.poDataHeader.shipViaId > 0) {
                 var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId)
                 if(!shippingVia || shippingVia == undefined)
                 {
@@ -352,7 +381,7 @@ export class EditPoComponent implements OnInit {
                  shippingVia.Key = this.poDataHeader.shipViaId.toString();
                  shippingVia.Value = this.poDataHeader.shipVia.toString();
                  this.ShippingViaList.push(shippingVia);
-                }  
+                } }
             });
     }
 
@@ -1408,7 +1437,7 @@ export class EditPoComponent implements OnInit {
             this.shippingService.updateStockLine(receiveParts).subscribe(data => {
                 this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
                 //return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
-                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-po?purchaseOrderId=${this.purchaseOrderId}`);
+                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
             },
                 error => {
                     var message = '';
@@ -1467,16 +1496,20 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    private getShippingVia(): void {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(results => {
-            this.ShippingViaList = [];
-            for (let shippingVia of results) {
-                var dropdown = new DropDownData();
-                dropdown.Key = shippingVia.value.toLocaleString();
-                dropdown.Value = shippingVia.label;
-                this.ShippingViaList.push(dropdown);
-            }
-        });
+   getShippingVia(strText = '') {
+        if (this.arrayshipvialist.length == 0) {
+            this.arrayshipvialist.push(0);
+        }       
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
+            true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        const data= res.map(x => {
+                    return {
+                        Key:x.value,
+                        Value: x.label
+                    }
+                });
+        this.ShippingViaList = data;             
+        })   
     }
 
     getManufacturers() {
