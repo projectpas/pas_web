@@ -25,7 +25,7 @@
                         <div class="card" style="border-radius: 0px;" *ngIf="!hideWOHeader">
                             <div class="card-body new-card-body">
                                 <div class="col-sm-12 link-block">
-                                    <h4 class="pull-left" style="cursor:pointer;">
+                                    <h4 class="pull-left style_h4" >
                                         General Info
                                         <button *ngIf="isView" class="btn-sm header-button" style="margin-left:20px" (click)="toggleDisplayMode()">
                                             {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
@@ -38,11 +38,11 @@
                                     </h4>
                                     <!--(click)="toggleDisplayMode()"-->
                                   
-                                    <div class="clear"></div>
+                                    <!-- <div class="clear"></div> -->
                                 </div>
                                 <div class="less-details" [hidden]="isDetailedView">
                                     <div class="clear"></div>
-                                    <hr>
+                                    <hr class="hr_mrt">
                                     <div class="col-sm-3">
                                         <div class="form-group col-sm-12">
                                             <label class="control-label col-sm-4" style="padding-top: 5px;">
@@ -842,8 +842,6 @@
                                 Edit
                                 Existing WF
                             </a>
-                            <!-- <a *ngIf="workFlowWorkOrderId == 0 " class="dropdown-item" (click)="subTabWorkFlowChange('createworkFlow')">Create New
-                                        WF</a> -->
                             <div class="dropdown-divider"></div>
                         </div>
                     </li>

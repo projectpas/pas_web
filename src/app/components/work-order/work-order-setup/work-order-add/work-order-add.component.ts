@@ -360,7 +360,6 @@ export class WorkOrderAddComponent implements OnInit {
                 { label: 'Edit Work Order' },
             ];
         }
-        console.log("work order general info",this.workOrderGeneralInformation);
     }
     ngOnChanges(changes: SimpleChanges) {
         // this is for get mpn dropdown list api after save mpn grid in sub wo   
@@ -460,7 +459,6 @@ export class WorkOrderAddComponent implements OnInit {
 
     }
     modifyWorkorderdata() {
-        console.log("modify fata")
         if (!this.isEdit) { // create new WorkOrder
             this.isEditLabor = true;
             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
@@ -516,7 +514,6 @@ export class WorkOrderAddComponent implements OnInit {
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId);
                     this.getWorkFlowByPNandScope(null,x,'onload');
-                    console.log("fff")
                     return {
                         ...x,
                         partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
@@ -1104,7 +1101,7 @@ export class WorkOrderAddComponent implements OnInit {
         const { itemMasterId } = object;
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
         // currentRecord.masterPartId=object.itemMasterId;
-        currentRecord.workOrderScopeId=currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId :object.workOrderScopeId;
+        currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined) ? currentRecord.workOrderScopeId :object.workOderScopeId;
         this.getWorkFlowByPNandScope(null,currentRecord,'onload');
         currentRecord.description = object.partDescription
         currentRecord.isPMA = object.pma === null ? false : object.pma;
@@ -1134,7 +1131,7 @@ export class WorkOrderAddComponent implements OnInit {
         else {
             this.calculatePartTat(currentRecord);
         }
-    console.log("ciurrr",currentRecord)
+
     }
     onSelectedTechnician(object, currentRecord) {
         if (object.employeeId != undefined && object.employeeId > 0) {
@@ -1239,11 +1236,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
     getWorkFlowByPNandScope(value,workOrderPart,form) {
-        // debugger;
-        console.log("nullld",value)
-        // workOrderPart.workOrderScopeId=3;
-        console.log("cisssss",workOrderPart)
-        if(value !=null){
+        if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
         }
         workOrderPart.workOrderScopeId=workOrderPart.workOrderScopeId?workOrderPart.workOrderScopeId :3;
@@ -1269,7 +1262,6 @@ export class WorkOrderAddComponent implements OnInit {
                 } else {
                     workOrderPart.workflowId = 0;
                 }
-                console.log("workOrder",workOrderPart)
             },
                 err => {
                     this.handleError(err);
@@ -1279,7 +1271,6 @@ export class WorkOrderAddComponent implements OnInit {
         this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
     }
     getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
-        console.log("aasdasdasdasd",currentRecord)
         if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
             const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
             if (itemMasterId !== undefined && label !== undefined) {
