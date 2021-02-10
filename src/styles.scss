@@ -8178,7 +8178,8 @@ hr {
 
 #accordion .panel-title a {
   display: block;
-  padding: 10px;
+   padding: 10px;
+  // padding: 0.35rem 1.25rem 0.15rem 1.25rem;
 }
 
 .cdetails-top {
@@ -11004,7 +11005,7 @@ a.ui-button:active,
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-  opacity: 0.35;
+   opacity: 0.35;
   filter: Alpha(Opacity=35);
   /* support: IE8 */
   background-image: none;
@@ -12270,14 +12271,16 @@ h6 {
 }
 
 .mat-expansion-panel .mat-expansion-panel-header.mat-expanded {
-  background: #0d57b0 !important;
+  background: #337ab7 !important;
   color: #fff !important;
+  height:35px !important;
 }
 
 .mat-expansion-panel-header {
   font-size: 11px !important;
   font-family: sans-serif;
   font-weight: bold;
+  height:35px;
 }
 
 .mat-expanded .mat-expansion-panel-header-title {
@@ -12332,11 +12335,11 @@ mat-expansion-panel.mat-expansion-panel {
 }
 
 .mat-expansion-panel-content .mat-expansion-panel-body {
-  background: #636363 !important;
+  background: #fff !important;
 }
 
 .mat-expansion-panel-content .mat-expansion-panel-content .mat-expansion-panel-body {
-  background: #9c9c9c !important;
+  background: #fff !important;
 }
 
 .mat-expansion-panel-body a.active {
@@ -12345,7 +12348,8 @@ mat-expansion-panel.mat-expansion-panel {
 
 .mat-expansion-panel-content .mat-expansion-panel-content .mat-expansion-panel-body a.active {
   color: #0f478c !important;
-  background-color: #9c9c9c !important;
+  // background-color: #9c9c9c !important;
+background-color: #fff !important;
 }
 
 /* MODAL STYLES
@@ -15304,12 +15308,14 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .rro-table-cstm thead th:last-child,
+
 .lastcol-fix thead th:last-child {
   right: 0;
   z-index: 1;
   padding-left: 5px;
   position: sticky;
 }
+
 
 .rro-table-cstm tbody td:last-child,
 .lastcol-fix tbody td:last-child {
@@ -15337,6 +15343,7 @@ input[type='number']::-webkit-outer-spin-button {
   padding-left: 5px;
   position: sticky;
 }
+
 
 .rro-part-table-cstm tbody td:last-child,
 .lastcol-fix tbody td:last-child {

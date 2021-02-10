@@ -77,8 +77,20 @@
                         <li class="breadcrumb-item active" aria-current="page">Edit Role</li>
                     </ol>
                 </nav>
-                <div class="pheading">
-                    <h4 class="page-heading">Edit User Role</h4>
+                <div class="card new-card">
+                    <div class="card-header header">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="header-name">Edit User Role</h4>
+                            </div>
+                          
+                        </div>
+                
+                
+                    </div>
+                    <div class="card-body new-card-body">
+                
+                   
                     <!--<form id="" class="lgrey-bg div8 filters" name="" action="#" method="post" onsubmit="return false;">-->
                         <div class="col-sm-3 emp-filter">
                             <label>Edit User Role</label>
@@ -88,85 +100,84 @@
                                 <option *ngFor="let role of userRoles"  [value]="role.id">{{role.name}}</option>
                             </select>
                         </div>
-                        
-                    <!--</form>-->
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
-        <div class="x_panel">
-            <div class="tab-content">
-                <div id="" class="table-responsive default-bg clear">
-                    <table class="table table-bordered table-striped role-setup-table">
-                        <thead>
-                            <tr>
-                                <!-- <th>Modules</th>
-                                <th>View</th>
-                                <th>Add</th>
-                                <th>Delete</th>
-                                <th>Update</th>
-                                <th>Reports</th>
-                                <th>Excell Upload</th>
-                                <th>Download</th> -->
-                                <th *ngFor="let module of permissionMaster;index as i">
+                        <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
+                            <div class="x_panel">
+                                <div class="tab-content">
+                                    <div id="" class="table-responsive default-bg clear pas-table-cstm poro-table-cstm parts-list-table-align">
+                                        <div class="tableFixHead"> 
+                                        <table class="table table-bordered header-table-width table-striped role-setup-table">
+                                            <thead>
+                                                <tr>
+                                                    <th *ngFor="let module of permissionMaster;index as i">
                                     {{module.permissionName}}
                                 </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ng-container *ngFor="let module of sortedHierarchy;index as i">
-                                <tr class="level{{module.level}}" [hidden]="!module.visible">
-                                    <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
-                                        {{module.name}}
-
-                                        <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
-                                    </td>
-                                    <td *ngFor="let permission of permissionMaster; index as i">
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngFor="let module of sortedHierarchy;index as i">
+                                                    <tr class="level{{module.level}}" [hidden]="!module.visible">
+                                                        <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
+                                                            {{module.name}}
+                    
+                                                            <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
+                                                        </td>
+                                                        <td *ngFor="let permission of permissionMaster; index as i">
                                         <!-- <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="module.rolePermission.isSelect" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" /> -->
                                         <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" />
                                     </td>
-                                    <!-- <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
-                                    </td>
-                                    <td>
-                                        <input *ngIf="!module.isPage" type="checkbox" />
-                                    </td>
-                                    <td>
-                                        <input *ngIf="!module.isPage" type="checkbox" />
-                                    </td>
-                                    <td>
-                                        <input *ngIf="!module.isPage" type="checkbox" />
-                                    </td> -->
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                    </table>
-                    <div class="clear"></div>
-                    <div style="margin-top: 10px;"></div>
-                    <button class="btn btn-success pull-right" (click)="UpdateUserRole()">Save Changes</button>
-                    <div class="clear"></div>
-                    <br>
-                    <div class="padding5">
-                        <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
-                    </div>
+                                                        <td>
+                                                            <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
+                                                        </td>
+                                                        <td>
+                                                            <input *ngIf="!module.isPage" type="checkbox" />
+                                                        </td>
+                                                        <td>
+                                                            <input *ngIf="!module.isPage" type="checkbox" />
+                                                        </td>
+                                                        <td>
+                                                            <input *ngIf="!module.isPage" type="checkbox" />
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                       </div>
+                                    </div>
+                                </div>
+                              
+                            </div>
+                        </div>
+                        
+                    <!--</form>-->
                 </div>
+                </div>
+                
+                <div class="clear"></div>
+                <div class="clear"></div>
+<div style="margin-top: 10px;"></div>
+<button class="btn btn-primary pull-right" (click)="UpdateUserRole()">Save Changes</button>
+<div class="clear"></div>
             </div>
-            <div class="clear"></div>
-            <br>
-            <br>
-            <br>
-            <br>
         </div>
     </div>
+   
 </div>
+
+<br>
+<div class="padding5">
+    <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
+</div>
+<div class="clear"></div>
+<br>
+<br>
+<br>
+<br>
