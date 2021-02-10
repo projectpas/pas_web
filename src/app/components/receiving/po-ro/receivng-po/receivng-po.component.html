@@ -1,20 +1,20 @@
 ﻿<form id="" class="ro-grid-form createPO-form" name="">
     <div class="x_content" *ngIf="purchaseOrderData">
-        <div class="card new-card">
+       <div class="card new-card">
             <div class="card-header header">
                 <div class="row">
                     <div class="col">
                         <h4 class="header-name">
                             Receiving/Purchase Order
                             <button class="btn-sm header-button header-button-alignment"
-                                    (click)="receiving_po_header=!receiving_po_header" style="margin-left: 20px;">
-                                {{receiving_po_header ? 'Collapse' : 'Expand'}}
+                                    (click)="toggle_epo_header=!toggle_epo_header" style="margin-left: 20px;">
+                                {{toggle_epo_header ? 'Collapse' : 'Expand'}}
                             </button>
                         </h4>
                     </div>
                     <button type="button" class="btn-sm header-button pull-right"
                             [routerLink]="['/receivingmodule/receivingpages/app-purchase-order']">
-                        Receiving PO List
+                       Receiving PO List
                     </button>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         </div>
                     </div> -->
                     <div class="col-md-9">
-                        <div class="form-row">
+                        <div class="form-row" *ngIf="poDataHeader" >
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>PO Num <span class="clr-red">*</span></label>
@@ -63,25 +63,25 @@
                         </div>
                     </div>
                 </div>
-                <hr *ngIf="receiving_po_header" />
-                <div class="form-row" *ngIf="receiving_po_header" style="margin-top: 10px;">
+                <hr *ngIf="toggle_epo_header" />
+                <div class="form-row" *ngIf="toggle_epo_header" style="margin-top: 10px;">
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Open Date <span class="clr-red">*</span></label>
-                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="openDate"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true" appendTo="body" name="openDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Closed/Cancelled Date</label>
-                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="closedDate"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true" appendTo="body" name="closedDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Need By <span class="clr-red">*</span></label>
-                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body" name="needByDate"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true" appendTo="body" name="needByDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Priority <span class="clr-red">*</span></label>

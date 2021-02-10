@@ -17,6 +17,8 @@ import { GlAccount } from '../../../../models/GlAccount.model';
 import { ShippingService } from '../../../../services/shipping/shipping-service';
 import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { PurchaseOrderService } from '../../../../services/purchase-order.service';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-po',
@@ -68,6 +70,8 @@ export class ViewPoComponent implements OnInit {
     purchaseOrderHeaderData: any;
     headerManagementStructure: any = {};
     isSpinnerVisible: boolean = true;
+    poDataHeader: any;
+    modal: NgbModalRef;
 
     /** edit-ro ctor */
     constructor(public receivingService: ReceivingService,
@@ -84,7 +88,8 @@ export class ViewPoComponent implements OnInit {
         private glAccountService: GlAccountService,
         private shippingService: ShippingService,
         private _actRoute: ActivatedRoute,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private purchaseOrderService: PurchaseOrderService
     ) {
 
         this.localPoData = this.vendorService.selectedPoCollection;
@@ -94,22 +99,34 @@ export class ViewPoComponent implements OnInit {
 
     ngOnInit() {
         this.purchaseOrderId = this._actRoute.snapshot.queryParams['purchaseorderid'];
-        this.receivingService.getReceivingPOHeaderById(this.purchaseOrderId).subscribe(res => {
-            console.log(res);
-            this.purchaseOrderHeaderData = res;
-            this.purchaseOrderHeaderData.openDate = this.purchaseOrderHeaderData.openDate ? new Date(this.purchaseOrderHeaderData.openDate) : '';
-            this.purchaseOrderHeaderData.closedDate = this.purchaseOrderHeaderData.closedDate ? new Date(this.purchaseOrderHeaderData.closedDate) : '';
-            this.purchaseOrderHeaderData.dateApproved = this.purchaseOrderHeaderData.dateApproved ? new Date(this.purchaseOrderHeaderData.dateApproved) : '';
-            this.purchaseOrderHeaderData.needByDate = this.purchaseOrderHeaderData.needByDate ? new Date(this.purchaseOrderHeaderData.needByDate) : '';
-            this.getManagementStructureCodes(this.purchaseOrderHeaderData.managementStructureId);
-                
-        });
-
+         this.getReceivingPOHeaderById(this.purchaseOrderId);
         this.getStockDetailsOnLoad();
-
         this.localData = [
             { partNumber: 'PN123' }
         ]
+    }
+
+    getReceivingPOHeaderById(id) {       
+        this.purchaseOrderService.getPOViewById(id).subscribe(
+            res => {
+                this.poDataHeader = res;
+                //this.arrayVendlsit.push(res.vendorId);
+                // var stockline = [];
+                // this.getVendors('',stockline);
+                this.poDataHeader.purchaseOrderNumber = this.poDataHeader.purchaseOrderNumber;
+                this.poDataHeader.openDate = this.poDataHeader.openDate ? new Date(this.poDataHeader.openDate) : '';
+                this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
+                this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
+                this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
+                //var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId)
+                // if(!shippingVia || shippingVia == undefined)
+                // {
+                //  var shippingVia = new DropDownData(); 
+                //  shippingVia.Key = this.poDataHeader.shipViaId.toString();
+                //  shippingVia.Value = this.poDataHeader.shipVia.toString();
+                //  this.ShippingViaList.push(shippingVia);
+                // }  
+            });
     }
 
     getStockDetailsOnLoad() {
@@ -1014,6 +1031,16 @@ export class ViewPoComponent implements OnInit {
     //     });
     // }
 
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
     }
@@ -1115,13 +1142,12 @@ export class ViewPoComponent implements OnInit {
     //     );
     // }
 
-    CreatePurchaseOrderStockline() {
+    CreatePurchaseOrderStockline() {        
         this.receivingService.createStockLine(this.purchaseOrderId).subscribe(
             results => {
                 this.alertService.showMessage(this.pageTitle, "Stockline created successfully.", MessageSeverity.success);
                 return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
-            },
-            error => this.onDataLoadFailed(error)
+            }           
         );        
     }
 

@@ -667,7 +667,7 @@ export class StockLineDraft {
 	repairOrderPartRecordId : number = null;
 	isActive: boolean = false;
 	isDeleted: boolean = false;
-	workOrderExtendedCost : number = null;
+	workOrderExtendedCost : number = 0;
 	nHAItemMasterId : number = null;
 	tLAItemMasterId : number = null;
 	isParent : boolean = null;
@@ -684,8 +684,8 @@ export class StockLineDraft {
     businessUnitId: number = null;
     divisionId: number = null;
     departmentId: number = null;
-    createdDate: Date = null; 
-    updatedDate: Date = null;   
+    createdDate: Date = new Date(); 
+    updatedDate: Date = new Date();   
 
     //View Properties
 
@@ -731,6 +731,10 @@ export class StockLineDraft {
     parentbuId: number = 0;
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
+    level1: string = null; 
+    level2: string = null;
+    level3: string = null;
+    level4: string = null;
 
 }   
 
