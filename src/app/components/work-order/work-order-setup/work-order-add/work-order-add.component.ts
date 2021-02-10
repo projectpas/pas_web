@@ -1103,7 +1103,10 @@ export class WorkOrderAddComponent implements OnInit {
         const { itemMasterId } = object;
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
         // currentRecord.masterPartId=object.itemMasterId;
-        currentRecord.workOrderScopeId=currentRecord.workOrderScopeId ? currentRecord.workOrderScopeId :object.workOrderScopeId;
+        console.log("workddd",currentRecord.workOrderScopeId)
+        currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined) ? currentRecord.workOrderScopeId :object.workOderScopeId;
+        console.log("workddd",currentRecord.workOrderScopeId)
+        console.log("workddd11",object.workOderScopeId)
         this.getWorkFlowByPNandScope(null,currentRecord,'onload');
         currentRecord.description = object.partDescription
         currentRecord.isPMA = object.pma === null ? false : object.pma;
@@ -1242,7 +1245,7 @@ export class WorkOrderAddComponent implements OnInit {
         console.log("nullld",value)
         // workOrderPart.workOrderScopeId=3;
         console.log("cisssss",workOrderPart)
-        if(value !=null){
+        if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
         }
         workOrderPart.workOrderScopeId=workOrderPart.workOrderScopeId?workOrderPart.workOrderScopeId :3;
