@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { IMaterialMandatory } from "../Workflow/MaterialMandatory";
 import { ActionService } from "../Workflow/ActionService";
 import { ItemClassificationService } from "../services/item-classfication.service";
 import { UnitOfMeasureService } from "../services/unitofmeasure.service";
@@ -10,7 +9,7 @@ import { NgForm } from "@angular/forms";
 declare var $: any;
 import * as cloneDeep from 'lodash/cloneDeep';
 import { CommonService } from "../services/common.service";
-import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
+import {  formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
@@ -233,9 +232,23 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.isSubWorkOrder = this.isSubWorkOrder;
         if (this.isWorkOrder) {
+            
+            // if (this.workFlow.materialList && this.workFlow.materialList.length > 0) {
+            //     this.workFlow.materialList = this.workFlow.materialList.map(x => {
+            //         return {
+            //             ...x,
+            //             quantity: x.quantity ? formatNumberAsGlobalSettingsModule(x.quantity, 0) : '0',
+            //             unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+            //             extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
+            //         }
+            //     })
+            // }
             this.row = this.workFlow.materialList[0];
             if (this.isEdit) {
                 this.workFlow.materialList = [];
+                this.editData.quantity= this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
+                this.editData.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+                        this.editData.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
                 this.workFlow.materialList.push(this.editData);
                 this.reCalculate();
             } else {
@@ -273,6 +286,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.provisionList();
             this.getConditionsList();
         }
+        console.log("hello ngONint")
     }
 
     get userName(): string {
@@ -309,6 +323,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
+        debugger;
         if (this.workFlow) {
             this.getConditionsList();
             if (this.workFlow.materialList.length > 0) {

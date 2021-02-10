@@ -481,7 +481,7 @@
                                         <p-dropdown filter="true" placeholder="Select" name="scope{{i}}" #scope="ngModel"
                                         [options]="workScopesList" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                         [(ngModel)]="workOrderPartNumber.workOrderScopeId" [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                        (onChange)="getWorkFlowByPNandScope(workOrderPartNumber)" required appendTo="body">
+                                        (onChange)="getWorkFlowByPNandScope($event.value,workOrderPartNumber,'html')" required appendTo="body">
                             </p-dropdown>
                                     </td>
                                     <td>
@@ -701,12 +701,12 @@
                     </div>
                     <div class="footer_adjust" *ngIf="!hideWOHeader && !isView">
                         <button class="btn btn-primary pull-right" *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer"
-                            type="button" [disabled]="!workOrderForm.valid || checkworkscope()" (click)="saveWorkOrder()">
+                            type="button" [disabled]="!workOrderForm.valid || checkworkscope() || checkTechnician()" (click)="saveWorkOrder()">
                             Save
                         </button>
                         <!-- !workOrderForm.valid || -->
                         <button class="btn btn-primary pull-right" *ngIf="isEdit && !isRecCustomer" type="button"
-                            [disabled]=" disableSaveForPart || !workOrderForm.valid" (click)="saveWorkOrder()">
+                            [disabled]=" disableSaveForPart || !workOrderForm.valid || checkTechnician()" (click)="saveWorkOrder()">
                             Update 
                         </button>
                         <button *ngIf="showTabsGrid && !isView" class="btn btn-primary pull-right" (click)="createQuote()">

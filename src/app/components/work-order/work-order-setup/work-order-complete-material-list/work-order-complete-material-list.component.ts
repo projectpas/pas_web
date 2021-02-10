@@ -9,6 +9,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { unwrapResolvedMetadata } from '@angular/compiler';
 @Component({
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
@@ -180,6 +181,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
+      
+        rowData.materialMandatoriesId=rowData.mandatorySupplementalId;
         this.editData = { ...rowData };
     }
     currentRow: any = {};
