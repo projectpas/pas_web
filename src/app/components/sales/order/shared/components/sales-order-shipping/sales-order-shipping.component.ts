@@ -91,8 +91,7 @@ export class SalesOrderShippingComponent {
             { field: "promisedDate", header: "Promised Date ", width: "100px" },
             { field: "estimatedShipDate", header: "Est Shipped Date", width: "100px" },
             { field: "shippingRef", header: "Shipping  Ref", width: "100px" },
-            { field: "pickTicketRef", header: "Pick Ticket Ref", width: "150px" },
-            { field: "pickTicketRef", header: "Pick Ticket Ref", width: "150px" },
+            { field: "pickTicketRef", header: "Pick Ticket Ref", width: "150px" }
         ];
         this.selectedColumns = this.headers;
     }
