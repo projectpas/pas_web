@@ -264,4 +264,11 @@ export class ReceivingEndpointService extends EndpointFactory {
     deleteStockLineDraft(stockLineDraftId, quantity) {
         return this.http.put<any>(`${this.configurations.baseUrl}/api/receivingPart/deletestocklinedraft?stockLineDraftId=${stockLineDraftId}&quantity=${quantity}`, this.getRequestHeaders());
     }
+
+    getAllRecevingROEditID(repairOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getAllRecevingROEditID?roID=${repairOrderId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllRecevingROEditID(repairOrderId));  
+        });
+      }
 }

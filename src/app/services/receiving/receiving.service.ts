@@ -135,4 +135,8 @@ export class ReceivingService {
         return this.receivingEndpoing.CreateStockLineForRepairOrder(repairOrderId);
     }
 
+    getAllRecevingROEditID(repairOrderId){   
+        return this.receivingEndpoing.getAllRecevingROEditID(repairOrderId);            
+    }
+
 }
