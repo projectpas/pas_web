@@ -116,6 +116,7 @@ export class SalesOrderShippingComponent {
             this.parts.forEach(part => {
                 if (part.salesOrderPartId) {
                     this.partsForBilling.push(part);
+                    console.log("this.partsForBilling",this.partsForBilling);
                 }
             });
         }
@@ -138,9 +139,10 @@ export class SalesOrderShippingComponent {
         this.getShipVia();
         this.getCountriesList();
         this.getSiteName();
-        this.getShippingData();
+        //this.getShippingData();
         this.getCustomerNameList();
         this.getOriginSiteNames();
+        this.getUnitOfMeasure();
 
         if (this.customerDetails) {
             this.shippingHeader['soldToName'] = this.customerDetails['name'];
@@ -252,6 +254,16 @@ export class SalesOrderShippingComponent {
             .subscribe(
                 res => {
                     this.countryList = res;
+                },
+                err => {
+                });
+    }
+
+    getUnitOfMeasure() {
+        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName')
+            .subscribe(
+                (res) => {
+                    this.allWeightUnitOfMeasureInfo = res;
                 },
                 err => {
                 });

@@ -57,7 +57,8 @@
                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
                     <td class="table-column-width">
                         <input type="checkbox" [(ngModel)]="rowData.selected"
-                            [disabled]="!rowData.isApproved || rowData.isShipped" />
+                             />
+                             <!-- [disabled]="!rowData.isApproved || rowData.isShipped" -->
                     </td>
                     <td class="table-column-width" *ngFor="let col of columns">
                         <span *ngIf="col.field == 'totalSales'" class="float-right">
@@ -228,7 +229,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
-                                        <label class="sale-order-shipping-lable">Dimension</label>
+                                        <label class="sale-order-shipping-lable">Dimension (L, W, H)</label>
                                     </div>
                                     <div class="col-md-8">
                                         <span class="display-flex inline-block">
@@ -252,7 +253,7 @@
                                         </label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-dropdown [options]="allSizeUnitOfMeasureInfo" filter="true"
+                                        <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
                                             [(ngModel)]="shippingHeader.shipSizeUnitOfMeasureId"
                                             name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
                                             placeholder="Select" [showClear]="true"
@@ -445,7 +446,7 @@
                                             name="cparent" id="cparent"
                                             (click)="assignDetails($event.target.checked)" />
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        Is same for Ship To
+                                        Same as Bill To
                                     </label>
                                 </div>
                                 <h5 style="text-align: center; width: 110px; display: inline-block;">Ship To</h5>
