@@ -39,6 +39,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly generateSalesOrdePickTicket: string = environment.baseUrl + "/api/SalesOrder/generatepickticket";
   private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
   private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticketforprint";
+  private readonly getShippingDataListURL: string = environment.baseUrl + "/api/SalesOrder/getsalesordershippinglist";
 
   // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
@@ -451,7 +452,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getview(salesOrderId));
+        return this.handleErrorCommon(error, () => this.getPickTicketList(salesOrderId));
       });
   }
 
@@ -705,6 +706,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getPickTicketEdit(soPickTicketId,salesOrderId,salesOrderPartId));
+      });
+  }
+
+  getShippingDataList(salesOrderId: number): Observable<any> {
+    const URL = `${this.getShippingDataListURL}/${salesOrderId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getShippingDataList(salesOrderId));
       });
   }
   //end nitin
