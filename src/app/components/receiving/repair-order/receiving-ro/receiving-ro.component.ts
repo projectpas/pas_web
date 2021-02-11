@@ -1828,7 +1828,7 @@ export class ReceivingRoComponent implements OnInit {
         this.receivingService.receiveParts(partsToPost).subscribe(data => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Stockline drafted successfully.', MessageSeverity.success);            
-            //this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${this.repairOrderId}`);
+            this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${this.repairOrderId}`);
 
         },err=>{this.isSpinnerVisible = false;});
     }
