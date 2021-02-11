@@ -47,7 +47,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row" style="margin-bottom: 10px;">
+              <div class="row margin-bottom-10">
                 <div class="col">
                   <button
                     type="button"
@@ -87,7 +87,7 @@
         </ng-template>
 
         <ng-template pTemplate="caption" *ngIf="isEnableItemMasterView">
-              <div class="row" style="margin-bottom: 10px;">
+              <div class="row margin-bottom-10">
                 <div class="col">
                 </div>
                   <div class="col-md-4">
@@ -161,7 +161,7 @@
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                         <input type="checkbox" disabled [checked]="rowData[col.field] == true"
-                               style="margin: 0px auto; display: block;" />
+                               class="input-check" />
                     </ng-container>
                     <ng-container *ngIf="col.field =='verifiedDate'">
                         {{rowData[col.field] | date: 'MM/dd/yyyy'}}
@@ -170,7 +170,7 @@
                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'memo'">
-                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                        <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="rowData[col.field]"></p>
                     </ng-container>
                 </td>
                 <td class="action-icons-cstm table-column-width">
@@ -236,7 +236,7 @@
                 <button type="button" class="close" (click)="closeCapes()">&times;</button>
                 <h4 class="modal-title">Add Capes</h4>
             </div>
-            <div class="modal-body" style="min-height: 200px;">
+            <div class="modal-body show-capes-height">
                 <div *ngIf="showCapes">
                     <app-item-master-create-capabilities [itemMasterId]="itemMasterId" [isCapViewMode]="isCapViewMode"
                         [isEnableCapesList]="isEnableCapesList" (loadCapesList)="loadCapesList($event)"
@@ -294,31 +294,31 @@
                         <p>
                             <span class="label"><strong>Memo</strong> : </span>
                                 <span class="value">
-                                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="selectedItemMasterCapData.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="selectedItemMasterCapData.memo"></p>
                                 </span>
                         </p>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-row">
                             <div class="col-md-6">
-                                <div class="card" style="margin-top: 6px;">
-                                    <div class="card-header" style="padding: 0 10px;">
-                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="clr-red">*</span></h5>
+                                <div class="card mgmt-card">
+                                    <div class="card-header mgmt-card-header">
+                                        <h5 class="mgmt-header-name">Management Structure <span class="clr-red">*</span></h5>
                                     </div>
-                                    <div class="card-body" style="padding: 8px 12px 6px;">
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                    <div class="card-body mgmt-card-body">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level1"
                                                 [(ngModel)]="selectedItemMasterCapData.level1" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level2"
                                                 [(ngModel)]="selectedItemMasterCapData.level2" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level3"
                                                 [(ngModel)]="selectedItemMasterCapData.level3" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level4"
                                                 [(ngModel)]="selectedItemMasterCapData.level4" disabled>
                                         </div>
@@ -352,7 +352,7 @@
                                 <th>Caps Type <strong class="clr-red">*</strong></th>
                                 <th>PN<strong class="clr-red">*</strong></th>
                                 <th>PN Description<strong class="clr-red">*</strong></th>
-                                <th style="min-width:520px !important" colspan="4">Management Structure <strong class="clr-red">*</strong></th>
+                                <th class="mgmt-table-header" colspan="4">Management Structure <strong class="clr-red">*</strong></th>
                                 <th>Added Date</th>
                                 <th>Is Verified</th>
                                 <th>Verified By</th>
@@ -372,10 +372,10 @@
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'capabilityType', audit.capabilityType) ? 'black' : 'red' }">{{audit.capabilityType}}</td>
                                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partNo', audit.partNo) ? 'black' : 'red' }">{{audit.partNo}}</td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'pnDiscription', audit.pnDiscription) ? 'black' : 'red' }">{{audit.pnDiscription}}</td>
-                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level1', audit.level1) ? 'black' : 'red' }">{{audit.level1}}</td>
-                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
-                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
-                                <td style="width:130px" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level1', audit.level1) ? 'black' : 'red' }">{{audit.level1}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
                                 <td><p >{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
                                 <td class="text-center"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
                                 <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
@@ -455,7 +455,7 @@
 	</div>
 </div>
 <div id="editCap" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" style="min-width: 95% !important;">
+    <div class="modal-dialog capability-dialog-width">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
@@ -470,25 +470,25 @@
                                 <thead>
                                     <tr> 
                                         <th >Capability Type <span class="clr-red">*</span></th>
-                                        <th style="width: 600px;text-align: center;" colspan="4">Managment Structure
+                                        <th class="mgmt-width" colspan="4">Managment Structure
                                             <span class="clr-red">*</span></th>
                                         <th >Date Added</th>
                                         <th>Verified</th>
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
-                                        <th style="width: 200px;text-align: center;">Memo</th>
+                                        <th class="memo-header-width">Memo</th>
                                     </tr>
                                 </thead>
                                 <tbody style="overflow-y:scroll">
                                     <tr>
-                                        <td style="width: 130px;">                                            
+                                        <td class="table-column-width">                                            
                                             <p-dropdown placeholder="Select" class="p-dropdown-custom-sm"
                                                 [options]="capabalityTypeList" #capabilityTypeId="ngModel"
                                                 [(ngModel)]="selectedItemMasterCapData.capabilityTypeId"
                                                 (ngModelChange)="enableSave()" name="capabilityTypeId"
                                                 [required]="true" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryCompany" #mCompanyName="ngModel"
                                                 [options]="maincompanylist" class="p-dropdown-custom-sm" 
                                                 (onChange)="getBUList(selectedItemMasterCapData.companyId)" [showClear]="true"
@@ -496,7 +496,7 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryBU" #mBUName="ngModel"
                                                 [options]="businessUnitList" class="p-dropdown-custom-sm"
                                                 (onChange)="getDivisionlist(selectedItemMasterCapData.buId)"
@@ -504,7 +504,7 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryDivision" #mDivisionName="ngModel"
                                                 [options]="divisionlist" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentlist(selectedItemMasterCapData.divisionId)"
@@ -512,7 +512,7 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryDept" #mDepartmentName="ngModel"
                                                 [options]="departmentList" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentId(selectedItemMasterCapData.departmentId)"
@@ -520,7 +520,7 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 130px;">
+                                        <td class="table-column-width">
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" 
                                             yearRange="1900:2100"
@@ -530,13 +530,13 @@
                                                  (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-calendar>
                                         </td>
-                                        <td style="width: 130px;text-align: center;">
+                                        <td class="table-column-width text-center">
                                             <p-checkbox class="pcheckbox-cstm" name="isVerified" binary="false"
                                                 [(ngModel)]="selectedItemMasterCapData.isVerified"
                                                 (onChange)="resetVerified(selectedItemMasterCapData, $event)"
                                                 (ngModelChange)="enableSave()"></p-checkbox>
                                         </td>
-                                        <td style="width: 130px;">
+                                        <td class="table-column-width">
                                             <p-dropdown class="p-dropdown-custom-sm" [options]="employeeList"
                                                 placeholder="Select"                                                 
                                                 [disabled]="selectedItemMasterCapData.isVerified==true"                                     
@@ -545,7 +545,7 @@
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedById"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
-                                        <td style="width: 130px;">
+                                        <td class="table-column-width">
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedDate"
@@ -553,13 +553,12 @@
                                                  name="verifiedDate"
                                                 [showIcon]="true" (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-calendar>
                                         </td> 
-                                        <td style="width: 200px;">
-                                            <div [innerHTML]="selectedItemMasterCapData.memo"                                            
-                                             style="margin-left:10px; width: 90% !important;line-height:1.5 !important;" 
+                                        <td class="width-200">
+                                            <div [innerHTML]="selectedItemMasterCapData.memo"  
                                              [matTooltip]="parsedText(selectedItemMasterCapData.memo)" 
-                                             class="text_editor_box"></div>
-                                            <i class="fa fa-pencil pull-right" 
-                                            style="color: #337ab7;margin-top:-16px; margin-right: -2px;"
+                                             class="text_editor_box capes-memo-div"></div>
+                                            <i class="fa fa-pencil pull-right capes-memo-pencil" 
+                                           
                                             data-toggle="modal"
                                             matTooltip="Memo"
                                             data-target="#capes-memo"
@@ -568,7 +567,7 @@
                                             <!-- data-target="#capes-memo" -->
                                         </td>
                                     </tr>
-                                    <tr style="min-height: 10px;">
+                                    <tr class="min-height">
                                         <td colspan="10"></td>
                                     </tr>
                                 </tbody>

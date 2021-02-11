@@ -6,21 +6,21 @@
                   <div class="col-md-12 shadow-Box">
                       <div class="col-md-4" >
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto; ">Emp First Name: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="firstName"> {{firstName }} </span> </p>
+                              <label class="control-label labels-font-header wauto">Emp First Name: </label>
+                              <span class="span-header-red text-capital" *ngIf="firstName"> {{firstName }} </span> </p>
                       </div>
                       <div class="col-md-4">
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto; ">Emp Last Name: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="lastName"> {{lastName }} </span> </p>
+                              <label class="control-label labels-font-header wauto">Emp Last Name: </label>
+                              <span class="span-header-red text-capital" *ngIf="lastName"> {{lastName }} </span> </p>
                       </div>
                       <div  class="col-md-4">
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto; ">Emp Id: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="empId"> {{empcode}} </span></p>
+                              <label class="control-label labels-font-header wauto">Emp Id: </label>
+                              <span class="span-header-red text-capital" *ngIf="empId"> {{empcode}} </span></p>
                       </div>
                   </div>
-                  <form #empform="ngForm" class="form-horizontal add-custustomer" style="padding-bottom: 16px;">
+                  <form #empform="ngForm" class="form-horizontal add-custustomer mgmt-form-padding">
                       <div class="card new-card">
                           <!-- <div class="card-header"> -->
                               <div class="card-header header">
@@ -42,9 +42,9 @@
                                                       <div class="form-group col-sm-12 display-flex">
                                                           <label class="control-label col-sm-4">
                                                               Roles
-                                                              <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" [routerLink]="['/rolesmodule/rolespages/app-roles-setup']" target="_blank"></a></span>
+                                                              <span class="roles-span"><a class="fa fa-plus-circle fa-lg" [routerLink]="['/rolesmodule/rolespages/app-roles-setup']" target="_blank"></a></span>
                                                           </label>
-                                                          <div class="inner-addon col-12 display-flex" style="margin-left: 5px;">
+                                                          <div class="inner-addon col-12 display-flex roles-margin">
                                                               <!-- <select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceEmployee">
                                                                   <option *ngFor="let certificationtype of ['allCertification','jlkjsdf']" [ngValue]="certificationtype">{{certificationtype}}</option>
                                                               </select> -->
@@ -91,7 +91,7 @@
                                                                       </div>
                                                                   </span>
                                                               </div>
-                                                              <div class="col-sm-1" style="margin-top:7px;">
+                                                              <div class="col-sm-1 memo-popup-margin">
                                                                   <i class="fa fa-pencil"
                                                                      data-toggle="modal"
                                                                      data-target="#memo-popup"
@@ -180,7 +180,7 @@
       <h4 class="modal-title">Confirmation</h4>
     </div>
     <div class="modal-body">
-        <h6 style="text-align: left;">
+        <h6 class="text-left">
             Do you want to Save changes and Continue ?
           </h6>
     </div>

@@ -9,8 +9,33 @@
     color: red;
     font-weight: bold;
   }
+
   .shadow-Box {
     padding-bottom: 0px !important;
+}
+.check-label{
+  width: auto !important;margin-top: 3px !important;
+}
+.color-black{
+  color: black !important;
+}
+.buttons-margin{
+  margin-bottom: 20px !important;
+}
+.duration-align{
+  max-width: 49% !important;margin:0px !important;
+}
+.duration-label{
+  padding-left: 3px !important;
+}
+.duration-input{
+  padding-right: 8px !important;
+}
+.cost-input{
+  text-align: end !important;padding-right: 8px !important;
+}
+.training-form-padding{
+  padding-bottom: 16px !important;
 }
 label {
   text-align: left;

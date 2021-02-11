@@ -7,18 +7,18 @@
                   <div class="col-md-12 shadow-Box">
                       <div class="col-md-4" >
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto;">Emp First Name: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="firstName"> {{firstName }} </span> </p>
+                              <label class="control-label labels-font-header wauto" >Emp First Name: </label>
+                              <span class="span-header-red text-capital" *ngIf="firstName"> {{firstName }} </span> </p>
                       </div>
                       <div class="col-md-4">
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto;">Emp Last Name: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="lastName"> {{lastName }} </span> </p>
+                              <label class="control-label labels-font-header wauto">Emp Last Name: </label>
+                              <span class="span-header-red text-capital" *ngIf="lastName"> {{lastName }} </span> </p>
                       </div>
                       <div  class="col-md-4">
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto;">Emp Id: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="empId"> {{empcode}} </span></p>
+                              <label class="control-label labels-font-header wauto">Emp Id: </label>
+                              <span class="span-header-red text-capital" *ngIf="empId"> {{empcode}} </span></p>
                       </div>
                   </div>
                   <form #empform="ngForm" class="form-horizontal add-custustomer">
@@ -115,7 +115,7 @@
 </div>
 
 
-<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #contentEdit let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Certification Type</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Certification Type</h4>
@@ -196,7 +196,7 @@
       <h4 class="modal-title">Confirmation</h4>
     </div>
     <div class="modal-body">
-      <h6 style="text-align: left;">
+      <h6 class="confirmation-text-align">
         Do you want to Save changes and Continue ?
       </h6>
     </div>
