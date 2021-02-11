@@ -282,8 +282,9 @@
                                             <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
                                                 {{site.originName}}</option>
                                         </select> -->
-                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.originSiteName"
-                                            name="soldName" [disabled]="isView" required disabled />
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.originSiteName" name="originSiteName"
+                                            [disabled]="isView" required disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -340,7 +341,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
-                                            [(ngModel)]="shippingHeader.originCountryName" name="soldToCountryName2"
+                                            [(ngModel)]="shippingHeader.originCountryName" name="originCountryName"
                                             required disabled />
                                     </div>
                                 </div>
@@ -358,8 +359,18 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToName"
-                                            name="soldName" [disabled]="isView" required disabled />
+                                        <!-- <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToName"
+                                            name="soldName" [disabled]="isView" required disabled /> -->
+                                        <p-autoComplete field="userName"
+                                            [(ngModel)]="shippingHeader.soldToName" name="soldToName"
+                                            errorMessage="Records not found" [forceSelection]="true"
+                                            (onSelect)="getSiteNamesBySoldCustomerId($event)"
+                                            [suggestions]="customerNamesList"
+                                            (completeMethod)="filterCustomerName($event)"
+                                            (onKeyUp)="clearAddress('SoldTo', $event.target.value)" [size]="30"
+                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                            class="p-autoComplete-ctsm" [disabled]="isView">
+                                        </p-autoComplete>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -371,7 +382,7 @@
                                             [disabled]="isView" name="soldToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of siteList"
-                                                [value]="site.customerShippingAddressId">
+                                                [value]="site.customerDomensticShippingId">
                                                 {{site.siteName}}
                                             </option>
                                         </select>
@@ -458,7 +469,7 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-autoComplete field="customerName"
+                                        <p-autoComplete field="userName"
                                             [(ngModel)]="shippingHeader.shipToCustomerId" name="shipToName"
                                             errorMessage="Records not found" [forceSelection]="true"
                                             (onSelect)="getSiteNamesByShipCustomerId($event)"
@@ -479,7 +490,7 @@
                                             [disabled]="isView" name="shipToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of shipCustomerSiteList"
-                                                [value]="site.customerShippingAddressId">{{site.siteName}}</option>
+                                                [value]="site.customerDomensticShippingId">{{site.siteName}}</option>
                                         </select>
                                     </div>
                                 </div>
