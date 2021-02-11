@@ -970,7 +970,8 @@ export class WorkOrderAddComponent implements OnInit {
                     technicianId: editValueAssignByCondition('employeeId', x.partTechnicianId),
                     createdBy: this.userName,
                     updatedBy: this.userName,
-                    workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0
+                    workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
+                    cmmId:x.cmmId==0 ? null :x.cmmId
                 }
             })
         };
@@ -1611,7 +1612,7 @@ unitCost:x.unitCost?  x.unitCost: 0,
                 })
         }
     }
-    getTaskList() {
+    getTaskList() { 
         if (this.labor == undefined) {
             this.labor = new WorkOrderLabor()
         }
