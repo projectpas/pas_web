@@ -239,7 +239,8 @@ export class SalesOrderShippingComponent {
                             x => {
                                 if (x.isPrimary) {
                                     this.shippingHeader.soldToSiteId = x.customerShippingAddressId;
-                                    this.setSoldToAddress();
+                                    //this.setSoldToAddress();
+                                    this.setOriginAddress();
                                 }
                             }
                         )
@@ -328,6 +329,21 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader['soldToCountryId'] = site.countryId;
                 this.shippingHeader['soldToSiteName'] = site.siteName;
                 this.shippingHeader['soldToCountryName'] = site.countryName;
+            }
+        });
+    }
+
+    setOriginAddress() {
+        this.siteList.forEach(site => {
+            if (site.isPrimary) {
+                this.shippingHeader['originAddress1'] = site.address1;
+                this.shippingHeader['originAddress2'] = site.address2;
+                this.shippingHeader['originCity'] = site.city;
+                this.shippingHeader['originState'] = site.stateOrProvince;
+                this.shippingHeader['originZip'] = site.postalCode;
+                this.shippingHeader['originCountryId'] = site.countryId;
+                this.shippingHeader['originSiteName'] = site.siteName;
+                this.shippingHeader['originCountryName'] = site.countryName;
             }
         });
     }
