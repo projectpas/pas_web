@@ -144,12 +144,14 @@
                             <th style="min-width: 120px; position: sticky !important">Actions</th>
                         </tr>
                         <tr class="child-data splitship-child child-data-back"
-                            *ngFor="let ship of summaryPart.soshippingchildviewlist; let stockIndex = index">
+                            *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
                             <td></td>
-                            <td class="table-column-width">
-                                <input type="checkbox" [(ngModel)]="selected"
+                            <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
+                                <label>Shipped</label>
+                            </td>
+                            <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
+                                <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox" (change)="checked($event,poIndex);" [(ngModel)]="ship.selected"
                                 />
-                                <!-- [disabled]="!rowData.isApproved || rowData.isShipped" -->
                             </td>
                             <td>
                                 {{ ship.shipDate | date : "MM/dd/yyyy" }}
@@ -183,30 +185,14 @@
                             </td>
                             <!-- <td colspan="2"></td> -->
                             <td class="zui-sticky-col" style="width:107px !important">
-                                    <!-- <span>
-                                        <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(part);"><i
-                                          class="fa fa-print"></i></a>
-                                    </span>
                                     <span>
-                                        <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)" matTooltip="Confirm"
-                                          matTooltipPosition="above" style="font-weight: bold;"
-                                          [disabled]="part.isConfirmed">
-                                          <i class="fa fa-check"></i>
-                                        </button>
+                                        <button type="submit" class="btn submit-btn btn btn-primary"
+                                        (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping" matTooltipPosition="above" style="font-weight: bold;"><i class="fa fa-plus"></i></button>
+                                            <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
+                                            matTooltipPosition="above" style="font-weight: bold;">
+                                            <i class="fa fa-check"></i>
+                                          </button> -->
                                     </span>
-                                    <span>
-                                      <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                          (click)="viewStockSelectedRow(part)" matTooltip="View Stokline">
-                                          <i class="fa fa-eye"></i>
-                                      </a>
-                                    </span>
-                                    <span>
-                                         <button class="btn nobg" mat-icon-button (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
-                                           matTooltipPosition="above" style="font-weight: bold;"
-                                           [disabled]="part.isConfirmed">
-                                           <i class="fa fa-pencil"></i>
-                                         </button>
-                                    </span> -->
                               </td>
                           </tr>
                         </tbody>
