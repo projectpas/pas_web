@@ -152,6 +152,7 @@ export class PurchaseOrderPart {
     itarNumberExist: boolean;
     detailsNotProvided: boolean;
     stockLineCount: number;
+    draftedStockLineCount: number = 0;
 
     currentSLIndex: number;
     currentTLIndex: number;
