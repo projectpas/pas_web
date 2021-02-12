@@ -127,9 +127,10 @@
       </div>
     </div>
   </div>
-  <div class="table-responsive pas-table-cstm" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))"
+  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))"
     [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
-    <table class="table table-bordered  table-sorting mpn-list-table">
+    <div class="tableFixHead">
+    <table class="table table-bordered  lastcol-fix mpn-list-table">
       <thead>
         <tr *ngIf="isQuote" style="background-color: #fff;">
           <td colspan="4" class="table-header-col2" *ngIf="
@@ -255,7 +256,7 @@
           <th class="text-center" style="padding: 7px 53px !important;" *ngIf="!isQuote">
             Memo
           </th>
-          <th *ngIf="!isView">Action</th>
+          <th *ngIf="!isView">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -619,6 +620,7 @@
         </ng-container>
       </tbody>
     </table>
+    </div>
   </div>
   <!-- <ng-template #confirmation let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">

@@ -9,7 +9,9 @@
     </span>
   </div>
   <form #materialCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-material">
+    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
+    <div class="tableFixHead">
+    <table class="table table-bordered" style="height:auto;max-height:350px !important">
       <thead>
         <tr>
           <th *ngIf="!isWorkFlow">Task<span class="clr-red">*</span></th>
@@ -17,7 +19,7 @@
           <th style="min-width: 90px;">Description<span class="clr-red">*</span></th>
           <th>Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
-          <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision *</th>
+          <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
           <th>Qty<span class="clr-red">*</span></th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
@@ -26,7 +28,7 @@
           <th>Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Deferred</th>
           <th>Memo</th>
-          <th>Action</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -88,8 +90,8 @@
             </select>
           </td>
           <td>
-            <input type="text" pInputText pKeyFilter="pnum" (ngModelChange)="getActive()" class="form-control w100  qtyWidth text-right input_adjust"
-              value="{{ material.quantity }}" (keyup)="
+            <input type="text" pInputText pKeyFilter="pnum" (ngModelChange)="getActive()" class="form-control w100 text-right"
+             style="width:100% !important" value="{{ material.quantity }}" (keyup)="
                 calculateQtySummation();
                 calculateExtendedCost(material);
                 calculateExtendedPrice(material)
@@ -105,14 +107,14 @@
             {{material.stockType}}
           </td>
           <td>
-            <input type="text" (ngModelChange)="getActive()" class="form-control w100 text-right input_adjust qtyWidth" pInputText pKeyFilter="money"
+            <input type="text" (ngModelChange)="getActive()" class="form-control w100 text-right " pInputText pKeyFilter="money"
               value="{{ material.unitCost }}" (change)="calculateExtendedCost(material)" [(ngModel)]="material.unitCost"
-              name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
+             style="width:100% !important" name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right input_adjust qtyWidth" pInputText pKeyFilter="money"
+            <input type="text" class="form-control w100 text-right" pInputText pKeyFilter="money"
               [disabled]="true" value="{{ material.extendedCost }}" [(ngModel)]="material.extendedCost"
-              name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
+             style="width:100% !important" name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
           </td>
           <td style="width:30px;text-align: center;">
             <div class="custom-checkbox-box">
@@ -160,6 +162,8 @@
         </tr>
       </tfoot>
     </table>
+    </div>
+    </div>
   </form>
   <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
@@ -173,22 +177,22 @@
             name="textAreaInfo" required></p-editor>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disableEditor"
+          <button type="button" class="btn btn-primary" [disabled]="disableEditor"
             (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-          <button type="button" class="btn btn-danger editor-buttons-margin"
+          <button type="button" class="btn btn-danger"
             (click)="onCloseTextAreaInfo()">Close</button>
         </div>
       </div>
     </div>
   </div>
   <div *ngIf="isWorkOrder && !isEdit" style="float:right">
-    <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="saveMaterialsWorkOrder()"
-      style="padding: 6px 12px !important;margin-top: 10px;"
+    <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="saveMaterialsWorkOrder()"
+     
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
       Save
     </button>
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterialTab()"
-      style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+      >Close</button>
   </div>
 
   <div *ngIf="isQuote" style="float:right">

@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body new-card-body">
+        <div class="card-body header-body">
             <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="workOrderData" [first]="0" [rows]="pageSize"
                 [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
                 selectionMode="multiple" expandableRows="true" rowExpandMode="single" [lazy]="true"
@@ -25,12 +25,11 @@
                     <div class="row">
                         <div class="col">
                             <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
-                                [(ngModel)]="selectedColumns" [style]="{ minWidth: '200px' }" style="float:left"
+                                [(ngModel)]="selectedColumns" class="multiselect-field"
                                 (onChange)="columnsChanges()"></p-multiSelect>
                         </div>
                         <div class="col">
-                            <div style="width: auto !important; float: right;"
-                                class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            <div class="global-search-field inner-addon right-addon inline-block">
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50" class="form-control"
                                     (input)="globalSearch($event.target.value)" placeholder=" Filter" />
@@ -39,7 +38,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+                            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                                 data-toggle="modal"
                                 (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
@@ -47,7 +46,7 @@
                             <!-- <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
                                 iconPos="left" style="padding: 5px 12px !important;" label="Export Data"
                                 matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()"></button> -->
-                            <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
+                            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download"
                                 iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                                 matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
                         </div>
@@ -117,54 +116,54 @@
                 </ng-template>
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
-                        <col *ngFor="let col of columns" style="width:140px">
+                        <col *ngFor="let col of columns" class="table-column-width" />
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                            [pSortableColumn]="col.field" style="text-align:center;">
+                        <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                            [pSortableColumn]="col.field">
                             {{ col.header }}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th style="width:80px;position:sticky" *ngIf="selectedColumns.length > 0">
+                        <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
                             Actions
                         </th>
                     </tr>
                     <tr>
-                        <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                            <input *ngIf="col.field !== 'openDate'
+                        <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                            <input class="table-header-input-width" *ngIf="col.field !== 'openDate'
                     && col.field !== 'customerRequestDateType'
                     && col.field !== 'promisedDateType'
                     && col.field !== 'estimatedShipDateType'
                     && col.field !== 'createdDate'
                     && col.field !== 'updatedDate'
-                    && col.field !== 'estimatedCompletionDateType'" style="width:100%;" pInputText type="text"
+                    && col.field !== 'estimatedCompletionDateType'"  pInputText type="text"
                                 (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
-                            <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;"
+                            <input type="date" *ngIf="col.field == 'openDate'" name="openDate" class="table-header-input-width"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
                             <input type="date" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate"
-                                style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
                             <input type="date" *ngIf="col.field == 'promisedDateType'" name="promisedDate"
-                                style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
                             <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate"
-                                style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                            class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
                             <input type="date" *ngIf="col.field == 'estimatedCompletionDateType'"
-                                name="estimatedCompletionDate" style="width:100%;"
+                                name="estimatedCompletionDate" class="table-header-input-width"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
-                            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:100%;"
+                            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
-                            <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:100%;"
+                            <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" class="table-header-input-width"
                                 (change)="dt.filter($event.target.value, col.field, 'contains')">
                         </th>
-                        <th style="width:80px;position:sticky"></th>
+                        <th class="table-actions-column"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded"
                     let-columns="columns">
                     <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
                         (dblclick)="openViewOnDbl(rowData)">
-                        <td *ngFor="let col of columns" style="text-overflow: ellipsis; "
+                        <td class="table-column-width" *ngFor="let col of columns" style="text-overflow: ellipsis; "
                             [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
                             [matTooltipDisabled]="rowData['partNoType'] != 'Multiple' ||
                     rowData['workScopeType'] != 'Multiple' || rowData['priorityType'] != 'Multiple'||
@@ -173,7 +172,7 @@
                     " [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
                             {{convertDate(col.field , rowData)}}
                         </td>
-                        <td style="width:80px" *ngIf="selectedColumns.length > 0">
+                        <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
                             <div *ngIf="currentDeletedstatus == false">
                                 <span data-toggle="modal" data-target="#viewWorkOrder">
                                     <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
@@ -217,17 +216,17 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
-                        <td colspan="18" style="color: red; font-weight: bold; text-align: center">
+                        <td colspan="18" class="no-records-msg no-records-cstm">
                             No records found
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary" id="footer">
                     <label id="footer" class="footer">Total:</label>
-                    <input style="width: 5%;" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+                    <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
                     &nbsp;&nbsp;
                     <label id="footer" class="footer1">Pages Count:</label>
-                    <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
+                    <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
                         pInputText type="text" />
                 </ng-template>
             </p-table>
