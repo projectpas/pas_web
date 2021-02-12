@@ -1,6 +1,6 @@
 <div>
   <button data-target="#addNewEquipments" (click)="createNew()" data-toggle="modal" class="btn btn-primary btn-primary"
-    style="padding: 6px 12px !important;margin-left: 6px;" *ngIf="!isView">
+    *ngIf="!isView">
     Add Tools
   </button>
 </div>
@@ -35,7 +35,8 @@
 <div class="equipment-tab-content">
   <div class="x_panel">
     <div class="tab-content">
-      <div class="table-responsive" id="workflow-attributes-block">
+      <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+        <div class="tableFixHead">
         <table class="table table-bordered ">
           <thead>
             <tr>
@@ -164,12 +165,13 @@
           </tbody>
           <tbody *ngIf="workOrderAssetList.length == 0">
             <tr>
-              <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+              <td colspan="12" class="no-records-cstm no-records-msg">
                 No records found
               </td>
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
     <div class="clear"></div>
@@ -251,7 +253,9 @@
                     <input type="checkbox" name="contract2"  class="set_cds" disabled
                     [(ngModel)]="saveTearDownData.isPmaDerBulletins">
                   </h4> -->
-              <table class="asset_tablee"
+                  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+                  <div class="tableFixHead">
+              <table class="asset_tablee table table-bordered"
                 style="border: 1px solid #c8c8c8 !important; width: 100%;table-layout: fixed;">
                 <thead>
                   <tr>
@@ -298,13 +302,16 @@
                   </tr>
                 </tbody>
               </table>
+              </div>
+              </div>
             </div>
             <div id="step2" class="panel-collapse  collapse" *ngIf="showcheckInOutlist">
               <div class="panel-body m-lr-7">
                 <form #assetCheckForm="ngForm" style="background: #fff;" >
                   <!-- class="table-responsive" id="workflow-attributes-block" -->
-                  <div >
-                    <table class="table table-bordered table-border-modal1">
+                  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+                    <div class="tableFixHead">
+                      <table class="table table-bordered table-border-modal1">
                       <thead>
                         <tr>
                           <th *ngFor="let col of assetChekinCheckoutheaders" style="text-align:center">
@@ -392,17 +399,18 @@
                         <!-- </ng-container> -->
                       </tbody>
                     </table>
+                    </div>
                   </div>
 
                   <div class="text-right save-work-btn cust_ma">
                     <!-- ; getEquipmentData.emit() -->
                     <button class="btn btn-primary btn-primary" (click)="saveAssets(workOrderCheckInCheckOutList)"
-                      style="padding: 6px 12px !important;" data-dismiss="modal" [disabled]="!assetCheckForm.valid"
+                       data-dismiss="modal" [disabled]="!assetCheckForm.valid"
                       type="submit">
                       Save
                     </button>
                     <button type="button" class="btn btn-danger" (click)="releaseInventory()" data-dismiss="modal"
-                      style="padding: 6px 12px !important;">
+                     >
                       Close
                     </button>
                   </div>
@@ -468,8 +476,9 @@
         <h4 class="modal-title">Work Order Tools History</h4>
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+          <div class="tableFixHead">
+          <table class="table table-bordered" style="height:auto;max-height:350px !important;">
             <thead>
               <tr>
                 <th>	Tool Name</th>
@@ -611,6 +620,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
       <div class="modal-footer">

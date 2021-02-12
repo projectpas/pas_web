@@ -46,23 +46,23 @@
         (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th class="toggel_td"></th>
-                <th *ngFor="let col of columns" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }">
+                <th class="toggel_td table-column-width"></th>
+                <th class="table-column-width" *ngFor="let col of columns" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }">
                     {{col.header}} 
                 </th>
-                <th *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
+                <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
             <!-- [ngClass]="{'color_pick': rowData.isRoleUp==false }" -->
             <tr>
-                <td class="toggel_td">
+                <td class="toggel_td table-column-width">
                     <span *ngIf="rowData.partStatusId !=0">
                         <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-success"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="getRollupMaterialList(rowData,i)" ></i> 
                     </span>
                      <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false" class="fa fa-minus btn-danger"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="removeRollUpList(rowData,i)"></i>   
                 </td>
-                <td *ngFor="let col of columns">
+                <td class="table-column-width" *ngFor="let col of columns">
                     <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " class="m-0 p-0"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
                     <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" class="m-0 p-0 text-right"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
                     <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" class="m-0"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
@@ -74,7 +74,7 @@
                     class="form-control w60" [(ngModel)]="rowData.defered" style="pointer-events: none;margin-left: 43%;">
                     <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
                 </td>
-                <td class="materiallist-action" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+                <td class="materiallist-action action-icons-cstm table-column-width" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
                     <span data-target="#addNewMaterials" data-toggle="modal"><button class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
                     <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false" [disabled]="!(rowData.quantity > rowData.quantityIssued + rowData.quantityReserved + rowData.partQuantityAvailable)"  matTooltip="Create PO" matTooltipPosition="above" [ngClass]="{'btn_disabled': !(rowData.quantity > (rowData.quantityIssued + rowData.quantityReserved + rowData.partQuantityAvailable))}"><i class="fa fa-plus"></i></button></span>
                    
@@ -97,18 +97,18 @@
         </ng-template> 
         <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td colspan="48" class="align_centd">
+                <td colspan="48" class="align_centd no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
+            <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
                 type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;" [ngModel]="
+            <input class="footer-input-width" [ngModel]="
             getPageCount(materialTble._totalRecords, pageSize)
           " [disabled]="true" pInputText type="text" />
         </ng-template>
@@ -123,8 +123,8 @@
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 2">Issued Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 4">UnIssue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 5">UnReserve Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 4">Un Issue Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 5">Un Reserve Parts</h4>
                 <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter | formatTime}}</p>
             </div>
             <div class="form-row" style="margin-left: 15px;" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
@@ -140,8 +140,9 @@
             </div>
             <form #reserveData="ngForm">
                 <div class="modal-body" *ngIf="reservedList">
-                    <div class="table-responsive" id="workflow-attributes-block">
-                        <table class="table table-bordered table-border-modal">
+                    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                        <div class="tableFixHead">
+                        <table class="table table-bordered">
                             <thead> 
                                 <tr>
                                     <th class="text-center" colspan="1"></th>
@@ -476,21 +477,21 @@
                         </ng-container>
                             </tbody>
                         </table>
+                        </div>
                         <div style="float:right">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled "
-                        style="padding: 6px 12px !important;">
+                    <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
+                        [disabled]="!savebutonDisabled ">
                     <span *ngIf="statusId === 1">Reserve</span>
                     <span *ngIf="statusId === 2">Issue</span>
                     <span *ngIf="statusId === 3">Reserve & Issue</span>
-                    <span *ngIf="statusId === 4"> UnIssue</span>
-                    <span *ngIf="statusId === 5">UnReserve</span>
+                    <span *ngIf="statusId === 4"> Un Issue</span>
+                    <span *ngIf="statusId === 5">Un Reserve</span>
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()" style="height: 30px;">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()">Cancel</button>
                 </div>
             </form>
         </div>

@@ -113,11 +113,13 @@
       </div>
     </div>   
   </div>
-  <div class="table-responsive pas-table-cstm" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))" [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
-      <table class="table table-bordered  table-sorting mpn-list-table">
-        <thead>
-          <tr *ngIf="isQuote" style="background-color: #fff;">
-            <td colspan="4" class="table-header-col2" *ngIf="
+  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))"
+    [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
+    <div class="tableFixHead">
+    <table class="table table-bordered  lastcol-fix mpn-list-table">
+      <thead>
+        <tr *ngIf="isQuote" style="background-color: #fff;">
+          <td colspan="4" class="table-header-col2" *ngIf="
                 !laborForm.hoursorClockorScan || laborForm.hoursorClockorScan == 1
               ">
               &nbsp;
@@ -201,54 +203,55 @@
             <th class="text-center" *ngIf="
                 laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== 1
               ">
-              End Date and Time
+            End Date and Time
+          </th>
+          <th class="text-center">Hours</th>
+          <ng-container *ngIf="!isQuote">
+            <th class="text-center">Adjustments</th>
+            <th class="text-center">Adjusted Hours</th>
+          </ng-container>
+          <ng-container *ngIf="isQuote">
+            <th>
+              Direct Labor
             </th>
-            <th class="text-center">Hours</th>
-            <ng-container *ngIf="!isQuote">
-              <th class="text-center">Adjustments</th>
-              <th class="text-center">Adjusted Hours</th>
-            </ng-container>
-            <ng-container *ngIf="isQuote">
-              <th>
-                Direct Labor
-              </th>
-              <th>
-                Burden Rate %
-              </th>
-              <th>
-                Burden Rate Amount
-              </th>
-              <th>
-                Labor Cost/Hr
-              </th>
-              <th>
-                Total Direct Cost
-              </th>
-              <th>
-                Billing Method
-              </th>
-              <th>Markup %</th>
-              <th>
-                Billing Rate/hr
-              </th>
-              <th>
-                Billing Amount
-              </th>
-            </ng-container>
-            <th class="text-center" style="padding: 7px 53px !important;" *ngIf="!isQuote">
-              Memo
+            <th>
+              Burden Rate %
             </th>
-            <th *ngIf="!isView">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Receive -->
-          <ng-container *ngFor="let task of taskList; let taskIndex = index">
-            <!-- <ng-container *ngIf="isAllowedTask(task.taskId)"> -->
-            <tr *ngIf="getLenghtOfTask(laborForm.workOrderLaborList[0][task.description])">
-              <td class="capitalizer">
-                {{ task.description}}
-                <!-- <button class="btn-sm new-btn-primary" style="    height: 26px;
+            <th>
+              Burden Rate Amount
+            </th>
+            <th>
+              Labor Cost/Hr
+            </th>
+            <th>
+              Total Direct Cost
+            </th>
+            <th>
+              Billing Method
+            </th>
+            <th>Markup %</th>
+            <th>
+              Billing Rate/hr
+            </th>
+            <th>
+              Billing Amount
+            </th>
+          </ng-container>
+          <th class="text-center" style="padding: 7px 53px !important;" *ngIf="!isQuote">
+            Memo
+          </th>
+          <th *ngIf="!isView">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Receive -->
+        <ng-container *ngFor="let task of taskList; let taskIndex = index">
+          <!-- <ng-container *ngIf="isAllowedTask(task.taskId)"> -->
+          <tr *ngIf="getLenghtOfTask(laborForm.workOrderLaborList[0][task.description | lowercase])">
+            <td class="full-width">
+              {{ task.description }}
+
+              <button class="btn-sm new-btn-primary" style="    height: 26px;
                 padding: 0px;
                 font-size: 11px !important;" (click)="toggle_po_header=!toggle_po_header">
                   {{toggle_po_header ? 'Collapse' : 'Expand'}}
@@ -519,39 +522,55 @@
                   laborForm.hoursorClockorScan &&
                   laborForm.hoursorClockorScan !== 1
                 "></td>
-              <td *ngIf="!isQuote">
-                <!-- {{(laborForm.totalWorkHours)?laborForm.totalWorkHours.toFixed(2):0.00}} -->
-                <input type="number" class="form-control" [(ngModel)]="laborForm.totalWorkHours" disabled/>
-              </td>
-              <td *ngIf="isQuote" class="content-to-end">
-                {{laborForm.totalWorkHours}}
-              </td>
-              <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
-              <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
+            <td *ngIf="!isQuote">
+              <!-- {{(laborForm.totalWorkHours)?laborForm.totalWorkHours.toFixed(2):0.00}} -->
+              <input type="number" class="form-control" [(ngModel)]="laborForm.totalWorkHours" disabled />
+            </td>
+            <td *ngIf="isQuote" class="content-to-end">
+              {{laborForm.totalWorkHours}}
+            </td>
+            <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
+            <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
+            <td></td>
+            <ng-container *ngIf="isQuote">
               <td></td>
-              <ng-container *ngIf="isQuote">
-                <td></td>
-                <td class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </ng-container>
-              <ng-container *ngIf="laborForm.costPlusType != 3">
-                <td *ngIf="isQuote" class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('BillingAmount')) }}</b></td>
-              </ng-container>
-              <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount" [disabled]="isView" />
-                </td>
-              </ng-container>
-              <!-- <td></td> -->
-              <td *ngIf="!isView"></td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
+              <td class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </ng-container>
+            <ng-container *ngIf="laborForm.costPlusType != 3">
+              <td *ngIf="isQuote" class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('BillingAmount')) }}</b>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
+              <td>
+                <input type="number" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
+                  [disabled]="isView" />
+              </td>
+            </ng-container>
+            <!-- <td></td> -->
+            <td *ngIf="!isView"></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    </div>
   </div>
- 
+  <!-- <ng-template #confirmation let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete the existing records?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteConfirmation()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> -->
+
+
   <div id="confirmation" class="modal fade" role="dialog" data-backdrop="static">
       <div class="modal-dialog modal-sm">
   
