@@ -29,17 +29,17 @@
                 </div>
             </div>
         </div>
-        <p-table #dt [value]="partsForBilling" class="rpo-table-cstm lastcol-fix" [first]="0" [rows]="pageSize"
+        <!-- <p-table #dt [value]="partsForBilling" class="rpo-table-cstm lastcol-fix" [first]="0" [rows]="pageSize"
             [paginator]="showPaginator" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
             [columns]="selectedColumns" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"
-            [scrollable]="true" [style]="{ width: '100%' }">
+            [scrollable]="true" [style]="{ width: '100%' }"> -->
             <!-- <ng-template pTemplate="caption"> -->
             <!-- <div class="row">
                     <div class="col">
                     </div>
                 </div> -->
             <!-- </ng-template> -->
-            <ng-template pTemplate="colgroup" let-columns>
+            <!-- <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col *ngFor="let col of columns" class="table-column-width" />
                 </colgroup>
@@ -56,8 +56,8 @@
             <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
                     <td class="table-column-width">
-                        <input type="checkbox" [(ngModel)]="rowData.selected" />
-                        <!-- [disabled]="!rowData.isApproved || rowData.isShipped" -->
+                        <input type="checkbox" [(ngModel)]="rowData.selected"
+                        [disabled]="!rowData.isApproved || rowData.isShipped"/>
                     </td>
                     <td class="table-column-width" *ngFor="let col of columns">
                         <span *ngIf="col.field == 'totalSales'" class="float-right">
@@ -90,7 +90,142 @@
 
                 <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
             </ng-template>
-        </p-table>
+        </p-table> -->
+
+        <div [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+        style="min-height: 130px !important;">
+        <div class="tableFixHead">
+            <table class="table table-bordered" id="so-table">
+                <tr class="header-table-width" style="font-size: 10px">
+                    <th *ngFor="let summaryColumn of headers">
+                        <span>
+                            {{ summaryColumn.header }}
+                        </span>
+                    </th>
+                    <!-- <th colspan="26"></th> -->
+                    <!-- <th>Actions</th> -->
+                    <th colspan="8"></th>
+                </tr>
+                <ng-container *ngIf="shippingList.length > 0">
+                  <ng-container *ngFor="let summaryPart of shippingList;let rowIndex=index;">
+                      <tbody>
+                          <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                              <td *ngFor="let summaryColumn of headers"
+                                  style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                  <span>
+                                      {{summaryPart[summaryColumn.field]}}
+                                  </span>
+                              </td>
+                              <td colspan="8"></td>
+                              <!-- <td style="position:sticky; width:80px">
+                                  <span>
+                                      <button class="btn nobg" mat-icon-button (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
+                                              matTooltipPosition="above" style="font-weight: bold;"
+                                              [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
+                                              <i class="fa fa-plus"></i>
+                                      </button>
+                                  </span>
+                              </td> -->
+                          </tr>
+                          <tr class="child-header splitship-head child-header-back">
+                            <th style="background-color: #fff !important;"></th>
+                            <th>Ready?</th>
+                            <th>Ship Date</th>
+                            <th>Shipping Num </th>
+                            <th>Pick Ticket Ref</th>
+                            <th>PN</th>
+                            <th>PN Description</th>
+                            <th>Stk Line Num</th>
+                            <th>Serial Num</th>
+                            <th>Qty To Ship</th>
+                            <th>Customs Value</th>
+                            <th>Commodity Code</th>
+                            <!-- <th colspan="2"></th> -->
+                            <th style="min-width: 120px; position: sticky !important">Actions</th>
+                        </tr>
+                        <tr class="child-data splitship-child child-data-back"
+                            *ngFor="let ship of summaryPart.soshippingchildviewlist; let stockIndex = index">
+                            <td></td>
+                            <td class="table-column-width">
+                                <input type="checkbox" [(ngModel)]="selected"
+                                />
+                                <!-- [disabled]="!rowData.isApproved || rowData.isShipped" -->
+                            </td>
+                            <td>
+                                {{ ship.shipDate | date : "MM/dd/yyyy" }}
+                            </td>
+                            <td>
+                                {{ ship.soShippingNum }}
+                            </td>
+                            <td>
+                                {{ ship.soPickTicketNumber }}
+                            </td>
+                            <td>
+                                {{ ship.partNumber }}
+                            </td>
+                            <td>
+                              {{ ship.partDescription }}
+                            </td>
+                            <td>
+                              {{ ship.stockLineNumber }}
+                            </td>
+                            <td>
+                              {{ ship.serialNumber }}
+                            </td>
+                            <td>
+                              {{ ship.qtyToShip}}
+                            </td>
+                            <td>
+                              {{ ship.customsValue }}
+                            </td>
+                            <td>
+                              {{ ship.commodityCode }}
+                            </td>
+                            <!-- <td colspan="2"></td> -->
+                            <td class="zui-sticky-col" style="width:107px !important">
+                                    <!-- <span>
+                                        <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(part);"><i
+                                          class="fa fa-print"></i></a>
+                                    </span>
+                                    <span>
+                                        <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)" matTooltip="Confirm"
+                                          matTooltipPosition="above" style="font-weight: bold;"
+                                          [disabled]="part.isConfirmed">
+                                          <i class="fa fa-check"></i>
+                                        </button>
+                                    </span>
+                                    <span>
+                                      <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                          (click)="viewStockSelectedRow(part)" matTooltip="View Stokline">
+                                          <i class="fa fa-eye"></i>
+                                      </a>
+                                    </span>
+                                    <span>
+                                         <button class="btn nobg" mat-icon-button (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
+                                           matTooltipPosition="above" style="font-weight: bold;"
+                                           [disabled]="part.isConfirmed">
+                                           <i class="fa fa-pencil"></i>
+                                         </button>
+                                    </span> -->
+                              </td>
+                          </tr>
+                        </tbody>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="shippingList.length == 0">
+                    <tbody>
+                        <tr>
+                            <td colspan="48"
+                                style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                No records found
+                            </td>
+                        </tr>
+                    </tbody>
+                </ng-container>
+            </table>
+        </div>
+    </div>
+
         <!-- <div class="card-body"> -->
         <div *ngIf="partSelected">
             <form #shippingForm="ngForm">

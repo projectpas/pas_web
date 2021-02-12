@@ -80,18 +80,29 @@ export class SalesOrderShippingComponent {
     }
 
     initColumns() {
+        // this.headers = [
+        //     { field: "shipDate", header: "Ship Date", width: "100px" },
+        //     { field: "partNumber", header: "PN", width: "100px" },
+        //     { field: "partDescription", header: "PN Description", width: "100px" },
+        //     { field: "stockLineNumber", header: "Stk Line Num", width: "110px" },
+        //     { field: "serialNumber", header: "Ser Num", width: "90px" },
+        //     { field: "controlNumber", header: "Cntrl Num", width: "90px" },
+        //     { field: "idNumber", header: "Cntrl ID", width: "90px" },
+        //     { field: "promisedDate", header: "Promised Date ", width: "100px" },
+        //     { field: "estimatedShipDate", header: "Est Shipped Date", width: "100px" },
+        //     { field: "shippingRef", header: "Shipping  Ref", width: "100px" },
+        //     { field: "pickTicketRef", header: "Pick Ticket Ref", width: "150px" }
+        // ];
+        // this.selectedColumns = this.headers;
+
         this.headers = [
-            { field: "shipDate", header: "Ship Date", width: "100px" },
+            { field: "salesOrderNumber", header: "SO Num", width: "100px" },
             { field: "partNumber", header: "PN", width: "100px" },
             { field: "partDescription", header: "PN Description", width: "100px" },
-            { field: "stockLineNumber", header: "Stk Line Num", width: "110px" },
-            { field: "serialNumber", header: "Ser Num", width: "90px" },
-            { field: "controlNumber", header: "Cntrl Num", width: "90px" },
-            { field: "idNumber", header: "Cntrl ID", width: "90px" },
-            { field: "promisedDate", header: "Promised Date ", width: "100px" },
-            { field: "estimatedShipDate", header: "Est Shipped Date", width: "100px" },
-            { field: "shippingRef", header: "Shipping  Ref", width: "100px" },
-            { field: "pickTicketRef", header: "Pick Ticket Ref", width: "150px" }
+            { field: "qtyToShip", header: "Qty Picked", width: "110px" },
+            { field: "qtyShipped", header: "Qty Shipped", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;
     }
@@ -110,16 +121,17 @@ export class SalesOrderShippingComponent {
 
     refresh(parts) {
         this.initColumns();
-        this.partsForBilling = [];
-        this.parts = parts;
-        if (this.parts && this.parts.length > 0) {
-            this.parts.forEach(part => {
-                if (part.salesOrderPartId) {
-                    this.partsForBilling.push(part);
-                    console.log("this.partsForBilling", this.partsForBilling);
-                }
-            });
-        }
+        this.getShippingList();
+        // this.partsForBilling = [];
+        // this.parts = parts;
+        // if (this.parts && this.parts.length > 0) {
+        //     this.parts.forEach(part => {
+        //         if (part.salesOrderPartId) {
+        //             this.partsForBilling.push(part);
+        //             console.log("this.partsForBilling",this.partsForBilling);
+        //         }
+        //     });
+        // }
         // this.isSpinnerVisible = true;
         // this.salesOrderService.getSalesOrderShippingParts(this.salesOrderId).subscribe(result => {
         //     this.isSpinnerVisible = false;
@@ -131,11 +143,11 @@ export class SalesOrderShippingComponent {
         // }, error => {
         //     this.errorHandling(error);
         // })
-        this.totalRecords = this.partsForBilling.length;
+        //this.totalRecords = this.partsForBilling.length;
         // this.totalPages = Math.ceil(
         //     this.totalRecords / this.pageSize
         // );
-        this.showPaginator = this.totalRecords > 0;
+        //this.showPaginator = this.totalRecords > 0;
         this.getShipVia();
         this.getCountriesList();
         this.getSiteName();
@@ -533,5 +545,20 @@ export class SalesOrderShippingComponent {
         return this.authService.currentUser
             ? this.authService.currentUser.userName
             : "";
+    }
+
+    shippingList: any[] = [];
+    getShippingList() {
+        this.isSpinnerVisible = true;
+        this.salesOrderService
+          .getShippingDataList(this.salesOrderId)
+          .subscribe((response: any) => {
+            this.isSpinnerVisible = false;
+            this.shippingList = response[0];
+            console.log("this.shippingList ",this.shippingList);
+            this.showPaginator = this.totalRecords > 0;
+          }, error => {
+            this.isSpinnerVisible = false;
+          });
     }
 }
