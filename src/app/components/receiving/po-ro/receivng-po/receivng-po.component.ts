@@ -742,6 +742,8 @@ export class ReceivngPoComponent implements OnInit {
                 }
             }
             this.getStockLineSite(stockLine);
+            this.getSiteDetailsOnEdit(part, stockLine) 
+            
             part.stocklineListObj.push(stockLine);
         }        
     }

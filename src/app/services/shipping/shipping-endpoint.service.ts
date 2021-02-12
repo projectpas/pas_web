@@ -120,7 +120,9 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.masterCompanyId = SL.masterCompanyId;
                 stockLine.createdDate = SL.createdDate;
                 stockLine.updatedDate = new Date();
-                stockLine.isActive = SL.isActive;                
+                stockLine.isActive = SL.isActive;   
+                stockLine.createdBy = SL.createdBy;   
+                stockLine.updatedBy = SL.updatedBy;        
 
                 stockLines.push(stockLine);
             });
