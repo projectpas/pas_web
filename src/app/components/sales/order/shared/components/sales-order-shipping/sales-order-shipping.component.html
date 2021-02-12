@@ -16,15 +16,15 @@
                         name="salesOrderQuoteNumber" [disabled]="true" />
                 </div>
             </div>
-            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+            <!-- <div class="col-md-3" style="padding-left:25px; padding-top:5px">
                 <label></label>
                 <div class="form-group">
                     <button type="submit" class="btn submit-btn btn btn-primary">Sales Order</button>
                 </div>
-            </div>
-            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
-                <label></label>
-                <div class="form-group">
+            </div> -->
+            <div class="col-md-6" style="padding-left:25px; padding-top:5px">
+                <label style="width: 100%;"></label>
+                <div class="form-group" style="float: right; margin-right: 10px;">
                     <button type="submit" class="btn  submit-btn btn btn-primary">Create Shipping</button>
                 </div>
             </div>
@@ -329,7 +329,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
-                                        <label class="sale-order-shipping-lable">AWD/Tracking Num<span
+                                        <label class="sale-order-shipping-lable">AWB/Tracking Num<span
                                                 class="clr-red">*</span> </label>
                                     </div>
                                     <div class="col-md-8">
@@ -412,11 +412,14 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
+                                        <!-- <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
                                             (change)="setOriginToAddress(shippingHeader.originSiteId)" required>
                                             <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
                                                 {{site.originName}}</option>
-                                        </select>
+                                        </select> -->
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.originSiteName" name="originSiteName"
+                                            [disabled]="isView" required disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -473,7 +476,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
-                                            [(ngModel)]="shippingHeader.originCountryName" name="soldToCountryName2"
+                                            [(ngModel)]="shippingHeader.originCountryName" name="originCountryName"
                                             required disabled />
                                     </div>
                                 </div>
@@ -491,8 +494,18 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToName"
-                                            name="soldName" [disabled]="isView" required disabled />
+                                        <!-- <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToName"
+                                            name="soldName" [disabled]="isView" required disabled /> -->
+                                        <p-autoComplete field="userName"
+                                            [(ngModel)]="shippingHeader.soldToName" name="soldToName"
+                                            errorMessage="Records not found" [forceSelection]="true"
+                                            (onSelect)="getSiteNamesBySoldCustomerId($event)"
+                                            [suggestions]="customerNamesList"
+                                            (completeMethod)="filterCustomerName($event)"
+                                            (onKeyUp)="clearAddress('SoldTo', $event.target.value)" [size]="30"
+                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                            class="p-autoComplete-ctsm" [disabled]="isView">
+                                        </p-autoComplete>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -504,7 +517,7 @@
                                             [disabled]="isView" name="soldToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of siteList"
-                                                [value]="site.customerShippingAddressId">
+                                                [value]="site.customerDomensticShippingId">
                                                 {{site.siteName}}
                                             </option>
                                         </select>
@@ -591,7 +604,7 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-autoComplete field="customerName"
+                                        <p-autoComplete field="userName"
                                             [(ngModel)]="shippingHeader.shipToCustomerId" name="shipToName"
                                             errorMessage="Records not found" [forceSelection]="true"
                                             (onSelect)="getSiteNamesByShipCustomerId($event)"
@@ -612,7 +625,7 @@
                                             [disabled]="isView" name="shipToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of shipCustomerSiteList"
-                                                [value]="site.customerShippingAddressId">{{site.siteName}}</option>
+                                                [value]="site.customerDomensticShippingId">{{site.siteName}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -678,7 +691,7 @@
                         </div>
                     </div>
                 </div>
-                <div
+                <div class="form-row"
                     *ngIf="(shippingHeader.originCountryId && shippingHeader.shipToCountryId) && shippingHeader.originCountryId !=shippingHeader.shipToCountryId">
                     <h4 class="heading">Custom Info </h4>
                     <div class="form-row">
@@ -802,11 +815,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-row" style="padding-top: 5px;">
+                    <div class="col-md-12">
+                        <div class="card card-stock">
+                            <div class="card-body">
+                                <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
+                                    (click)="save()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
-        </div>
-        <div class="row">
-            <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
-                (click)="save()">Save</button>
         </div>
     </div>
 </div>
