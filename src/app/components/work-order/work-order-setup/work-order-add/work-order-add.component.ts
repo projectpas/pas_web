@@ -1622,7 +1622,7 @@ unitCost:x.unitCost?  x.unitCost: 0,
             this.taskList = res.map(x => {
                 return {
                     id: x.value,
-                    description: x.label,
+                    description: x.label.toLowerCase(),
                     taskId: x.value
                 }
             });
