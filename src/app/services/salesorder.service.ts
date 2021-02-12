@@ -595,5 +595,11 @@ export class SalesOrderService {
     );
   }
 
+  getShippingDataList(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getShippingDataList(salesOrderId)
+    );
+  }
+
   //ed --nitin
 }
