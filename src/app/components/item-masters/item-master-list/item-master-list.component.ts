@@ -1116,13 +1116,15 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		});
 	}
 	
-	RestoreItem(rowData){
-        this.rowDataToDeleteStock = rowData;
+	restoreStockItem(rowData){
+		this.rowDataToDeleteStock = rowData;
+		this.rowDataToDelete = rowData;
         $("#itemRestore").modal("show");
 	}
 	
 	restoreNonStockItem(rowData){
-        this.rowDataToDelete = rowData;
+		this.rowDataToDelete = rowData;
+		this.rowDataToDeleteStock = rowData;
         $("#nonStockRestore").modal("show");
 	}
 	closeItemRestore() {

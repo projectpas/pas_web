@@ -35,7 +35,7 @@
 			  </div>
 			  <div class="col-md-2">
 				<button
-				 class="m-t-20"
+				style="margin-top:20px !important"
 				  type="button"
 				  class="btn btn-primary"			
 				  [disabled]="!addCapesForm.valid"	  
@@ -68,7 +68,7 @@
 			  <ng-template pTemplate="header" let-columns>
 				  <tr>
 					<th class="table-column-width table-header-text" >Capability Type</th>
-					<th class="table-header-text mgmt-width" colspan="4">Managment Structure <span class="clr-red">*</span></th>
+					<th class="table-header-text" style="width:600px !important" colspan="4">Managment Structure <span class="clr-red">*</span></th>
 					<th class="table-column-width table-header-text" *ngFor="let col of columns" pResizableColumn>
 					  {{ col.header }}
 					</th>
@@ -82,7 +82,7 @@
 				<ng-container> <!--*ngFor="let rowData of aircraftData; let row_no = index;"-->
 				  <tr>            
 					<td >{{ rowData.capailityTypeName }}</td>
-					<td class="table-column-width">
+					<td style="width:150px">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -96,7 +96,7 @@
 					  [required]="true">
 					</p-dropdown>
 					</td>
-					<td class="table-column-width">
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -109,7 +109,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td class="table-column-width">
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -122,7 +122,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td class="table-column-width">
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -155,7 +155,7 @@
 						(onChange)="resetVerified(rowData, $event,row_no)"					
 					  ></p-checkbox>
 					</td>
-					<td class="table-column-width">
+					<td class="table-width-150">
 					  <p-dropdown
 						class="p-dropdown-custom-sm"
 						[options]="employeeList"
@@ -186,7 +186,7 @@
 						style="margin-left:10px" 
 						[matTooltip]="parsedText(rowData.memo)" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
 				   <i class="fa fa-pencil pull-right" 
-				   style="margin-top:-16px; margin-right:30px;color: #337ab7"
+				   style="margin-top:-16px; margin-right:9px;color: #337ab7"
 				  
 					  data-toggle="modal"
 					  data-target="#capes-memo" matTooltip="Memo"

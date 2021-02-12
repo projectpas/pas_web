@@ -1035,7 +1035,7 @@
                                         </div>
                                     </div>
                     </div>
-                    <div style="margin-top: 10px; clear: both; margin-bottom: 40px;">
+                    <div class="next-button-align">
                         <button type="button" *ngIf="isItemMasterCreateGeneralInfoEditMode" class="btn btn-primary submit-btn pull-right" (click)="nextOrPreviousClick('Next')">
                             Next
                         </button>
@@ -1157,7 +1157,7 @@
                                                 Advanced Search <i class="fa fa-caret-up"></i>
                                             </button>
                                         </div>
-                                        <div class="col-md-4" style="margin-right:15px" *ngIf="itemser">
+                                        <div class="col-md-4 margin-right-15" *ngIf="itemser">
                                                 <div class="checkbox-cstm pull-right checkbox-align">
                                                     <label class="checkbox-label-align">
                                                       <input type="checkbox" [(ngModel)]="itemser.airCraftDeletedStatus" name="aircraftDeletedList" (change)="getAircraftMappedDataByItemMasterId()" />
@@ -1244,7 +1244,7 @@
                                 
                                     <tr [pSelectableRow]="rowData"
                                     [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="onViewAircraftonDbl(rowData)">
-                                    <td style="text-align: left !important;" class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
+                                    <td class="text-left" class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
                                         <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                                             {{rowData[col.field]}}
                                         </ng-container>
@@ -1437,7 +1437,7 @@
                                         Advanced Search <i class="fa fa-caret-up"></i>
                                     </button>
                                 </div>
-                                <div class="col-md-4" *ngIf="itemser" style="margin-right:15px">
+                                <div class="col-md-4 margin-right-15" *ngIf="itemser">
                                     <div class="checkbox-cstm pull-right checkbox-align">
                                         <label class="checkbox-label-align">
                                           <input type="checkbox" [(ngModel)]="itemser.ataDeletedStatus" name="atachapDeletedList" (change)="getATAMappedDataByItemMasterId()" />
@@ -1516,7 +1516,7 @@
                             <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
                                 <tr [pSelectableRow]="rowData"
                                     [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="onViewATAonDbl(rowData)">
-                                    <td style="text-align: left !important;" class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
+                                    <td class="text-left" class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
                                         <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                                             {{rowData[col.field]}}
                                         </ng-container>
@@ -1611,7 +1611,7 @@
             <div [ngClass]="{hideTab : currentTab !== 'Capes'}">
                 <div class="stock-padding-5">
                     <app-item-master-capabilities-list [isEnableItemMaster]="isEnableItemMaster" [itemMasterId]="ItemMasterId" [selectedTab]="currentTab" [partData]="sourceItemMaster"></app-item-master-capabilities-list>
-                    <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <div class="capabilities-div-buttons">
                         <button class="btn btn-primary pull-right" (click)="changeOfTab('PurchaseSales');saveCapesInfo();" type="button"> Next</button> &nbsp;
                         <button class="btn btn-primary pull-right" type="button" (click)="changeOfTab('Atachapter');">Previous</button>
                     </div>
@@ -1721,16 +1721,17 @@
                                             </td>
                                             <!-- FX Rate -->
                                             <td>
-                                                <input type="text" style="width: 100%" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
+                                                <input type="text" 
+                                                 class="input-field-value text-right input-width-100-percent" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
 
                                             </td>
                                             <!-- Vendor List Price -->
                                             <td>
-                                                <input type="text" style="width: 100%;" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="field.PP_VendorListPrice"  name="PP_VendorListPrice{{i}}" (change)="getPercentValuePP(field); getPercentValueSPUsingPP(field)" />
+                                                <input type="text"  class="input-field-value text-right input-width-100-percent" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="field.PP_VendorListPrice"  name="PP_VendorListPrice{{i}}" (change)="getPercentValuePP(field); getPercentValueSPUsingPP(field)" />
                                             </td>
                                             <!-- Last List Price Date -->
                                             <td>
-                                                <input type="date" style="width: 100%;" class="input-field-value" [disabled]="field.isEditable == false" [ngModelOptions]="{standalone: true}" [ngModel]="field.PP_LastListPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.PP_LastListPriceDate = $event">
+                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false" [ngModelOptions]="{standalone: true}" [ngModel]="field.PP_LastListPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.PP_LastListPriceDate = $event">
                                             </td>
                                             <!-- Purchase Disc % -->
                                             <td>
@@ -1738,15 +1739,15 @@
                                             </td>
                                             <!-- Purchase Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 100%" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="num" maxlength="15" name="PP_PurchaseDiscAmount{{i}}" [(ngModel)]="field.PP_PurchaseDiscAmount" disabled />
                                             </td>
                                             <!-- Last Purchase Disc Date -->
                                             <td>
-                                                <input type="date" style="width: 100%;" class="input-field-value" [ngModel]="field.PP_LastPurchaseDiscDate | date:'yyyy-MM-dd'" [disabled]="field.isEditable == false" (ngModelChange)="field.PP_LastPurchaseDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" class="input-field-value input-width-100-percent" [ngModel]="field.PP_LastPurchaseDiscDate | date:'yyyy-MM-dd'" [disabled]="field.isEditable == false" (ngModelChange)="field.PP_LastPurchaseDiscDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Purchase Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 100%;" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
                                             </td>
                                             <!-- Sale Price -->
                                             <td>
@@ -1765,15 +1766,15 @@
                                             <!-- FX Rate -->
                                             <td>
 
-                                                <input type="text" style="width:100%" class="input-field-value text-right" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
                                             </td>
                                             <!-- Flat Price Amount -->
                                             <td>
-                                                <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" name="SP_FSP_FlatPriceAmount{{i}}" [(ngModel)]="field.SP_FSP_FlatPriceAmount" (change)="onChangeFlatPriceAmt(field)" />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" maxlength="15" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" name="SP_FSP_FlatPriceAmount{{i}}" [(ngModel)]="field.SP_FSP_FlatPriceAmount" (change)="onChangeFlatPriceAmt(field)" />
                                             </td>
                                             <!-- Last Flat Price Date -->
                                             <td>
-                                                <input type="date" style="width: 106px;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" [ngModel]="field.SP_FSP_LastFlatPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_FSP_LastFlatPriceDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" [ngModel]="field.SP_FSP_LastFlatPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_FSP_LastFlatPriceDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Mark % on List Price -->
                                             <td>
@@ -1781,16 +1782,16 @@
                                             </td>
                                             <!-- Mark Up Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right"
-                                                 style="width: 100%;" pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent"
+                                                 pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
                                             </td>
                                             <!-- Last Mark Up Date -->
                                             <td>
-                                                <input type="date" style="width: 100%;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
+                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" style="width: 100%" pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent"  pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
                                             </td>
                                             <!-- Sale Disc % -->
                                             <td>
@@ -1798,18 +1799,19 @@
                                             </td>
                                             <!-- Sale Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" style="width:100%;" name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
                                             </td>
                                             <!-- Last Sales Disc Date -->
                                             <td>
-                                                <input type="date" style="width: 100%;" class="input-field-value" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Sale Price -->
                                             <td>
-                                                <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money" name="SP_CalSPByPP_UnitSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_UnitSalePrice" disabled />
+                                                <input type="text" 
+                                                class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" name="SP_CalSPByPP_UnitSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_UnitSalePrice" disabled />
                                             </td>
                                             <!-- Action -->
-                                            <td style="text-align:center;position: sticky !important;background: #eaeaea !important;" class="purSaleLastCol">
+                                            <td  class="purSaleLastCol purchase-sales-action-column">
                                                 <ng-container class="action-icons-cstm table-column-width" *ngIf="!field.isDeleted">
                                                     <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editPandSales(i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                                     <span data-toggle="modal" data-target="#purchaseSaleDelete"><a class="btn nobg" (click)="deletePurchaseSaleRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
@@ -1887,7 +1889,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 10px;margin-bottom: 10px;">
+                <div class="capabilities-div-buttons">
                     <button class="btn btn-primary pull-right" (click)="moveToExchangeTab()" type="button">Next</button> &nbsp;
                     <button class="btn btn-primary pull-right" type="button" (click)="movePurchaseSales()">Previous</button>
                 </div>
@@ -2058,16 +2060,17 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="popup-plusicon-cstm">Aircraft <span class="clr-red">*</span></label>
-                                    <p-dropdown class="p-dropdown-100" name="selectedAircraftId" [options]="manufacturerData" filter="true" [(ngModel)]="selectedAircraftId" (onChange)="getAircraftModelByManfacturer($event)" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                    <p-dropdown class="p-dropdown-100" name="selectedAircraftId" [options]="manufacturerData" filter="true"
+                                     [(ngModel)]="selectedAircraftId" (onChange)="getAircraftModelByManfacturer($event)" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label class="popup-plusicon-cstm" style="width: 150px !important">
+                                    <label class="popup-plusicon-cstm" style="width: 150px !important;">
                                         Model <span class="clr-red">*</span>
-                                        <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown"  [disabled]="!selectedAircraftId"  style="width: 20px !important;
-                                    margin-left: 7px; " (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
+                                        <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown"  [disabled]="!selectedAircraftId" 
+                                        style="width: 20px !important; margin-left: 7px;" (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
                                     </label>
 
                                     <p-multiSelect *ngIf="!modelUnknown" [maxSelectedLabels]="2" [disabled]="!selectedAircraftId" class="imstock-pmselect" [options]="LoadValues" [(ngModel)]="selectedModelId" name="selectedModelId" (onChange)="getDashNumberByTypeandModel($event); checkCanAircraftAddable()" required></p-multiSelect>
@@ -2075,11 +2078,11 @@
                             </div>
                             <div class="col-md-2" *ngIf="!modelUnknown">
                                 <div class="form-group">
-                                    <label class="popup-plusicon-cstm" style="width: 190px !important">
+                                    <label class="popup-plusicon-cstm" style="width: 190px !important;">
                                         DashNumber <span class="clr-red">*</span>
                                         
-                                        <input type="checkbox" name="unknownDashNumber" [(ngModel)]="dashNumberUnknown"  [disabled]="selectedModelId.length == 0"  style="width: 20px !important;
-                                        margin-left: 7px; " (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
+                                        <input type="checkbox" name="unknownDashNumber" [(ngModel)]="dashNumberUnknown"  [disabled]="selectedModelId.length == 0" 
+                                      style="width: 20px !important; margin-left: 7px;"  (change)="resetAircraftModelsorDashNumbers(); checkCanAircraftAddable()"> Unknown
                                     </label>
 
 
@@ -2170,7 +2173,7 @@
 
                             <div class="col-md-3" *ngIf="ataChapterEditMode == false">
                                 <div class="form-group">
-                                    <label class="popup-plusicon-cstm" style="width: 170px !important;">ATA SubChapters 
+                                    <label class="popup-plusicon-cstm width-170">ATA SubChapters 
                                     </label>
                                     <p-multiSelect class="imstock-pmselect p-multi-aircraft-dash" [options]="atasubchapter" (change)="getATASubChapterByATAChapter()"
                                                    [(ngModel)]="selectedModels"
@@ -2179,17 +2182,17 @@
                             </div>
                             <div class="col-md-3" *ngIf="ataChapterEditMode == true">
                                 <div class="form-group">
-                                    <label class="popup-plusicon-cstm" style="width: 170px !important;">ATA SubChapter 
+                                    <label class="popup-plusicon-cstm width-170">ATA SubChapter 
                                     </label>
                                     <p-dropdown class="p-dropdown-100" [options]="atasubchapterforEdit" filter="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAtaInformation.ataSubChapterId" placeholder="Choose" [showClear]="true" (onChange)="updateBtnChange()"></p-dropdown>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
-                                <label class="popup-plusicon-cstm" style="width: 170px !important;"> 
+                                <label class="popup-plusicon-cstm width-170"> 
                                     </label>
-                                <button type="button" class="btn btn-primary" style="margin-top: 4px" *ngIf="ataChapterEditMode == true" (click)="updateATAMapping();" data-dismiss="modal" [disabled]="updateBtn" >Update</button>
-                                <button type="button" class="btn btn-primary" style="margin-top: 4px" *ngIf="ataChapterEditMode == false" (click)="addATAMapping();" data-dismiss="modal" [disabled]="!ataform.valid">Save</button>
+                                <button type="button" class="btn btn-primary m-t-4" *ngIf="ataChapterEditMode == true" (click)="updateATAMapping();" data-dismiss="modal" [disabled]="updateBtn" >Update</button>
+                                <button type="button" class="btn btn-primary m-t-4" *ngIf="ataChapterEditMode == false" (click)="addATAMapping();" data-dismiss="modal" [disabled]="!ataform.valid">Save</button>
                             </div>
                         </div>
                     </form>
@@ -2244,7 +2247,7 @@
                                 <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
                                     <tr>
                                         <td class="table-column-width">
-                                            <span style="font-weight:bold">{{rowData.capabilityType.label}}</span>
+                                            <span class="font-bold">{{rowData.capabilityType.label}}</span>
 
                                         </td>
                                         <td class="table-column-width">
@@ -2275,13 +2278,13 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <span style="font-weight:bold">{{rowData.aircraft.aircraft}}</span>
+                                            <span class="font-bold">{{rowData.aircraft.aircraft}}</span>
                                         </td>
                                         <td>
-                                            <span style="font-weight:bold">{{rowData.aircraft.aircraftModel}}</span>
+                                            <span class="font-bold">{{rowData.aircraft.aircraftModel}}</span>
                                         </td>
                                         <td>
-                                            <span style="font-weight:bold">{{rowData.aircraft.dashNumber}}</span>
+                                            <span class="font-bold">{{rowData.aircraft.dashNumber}}</span>
                                         </td>
                                         <td>
                                             <input type="text" name="description" />
@@ -2511,7 +2514,7 @@
                         </label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="description" class="form-control input-text-value" style="width: 100% !important;" required #description="ngModel"
+                        <input type="text" name="description" class="form-control input-text-value input-width-100-percent" required #description="ngModel"
                                [(ngModel)]="sourceAction.description" minlength="2">
                     </div>
                 </div>
@@ -2653,7 +2656,7 @@
                         <label for="shortName" class="control-label control-item">Short Name<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="shortName" style="width: 100% !important" class="form-control input-text-value" required #description="ngModel"
+                        <input type="text" name="shortName"  class="form-control input-text-value input-width-100-percent" required #description="ngModel"
                                [(ngModel)]="sourceUOM.shortName" minlength="2">
                     </div>
                 </div>
@@ -2662,7 +2665,7 @@
                         <label for="standard" class="control-label control-item">Standard<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="standard" style="width: 100% !important" class="form-control input-text-value" required #description="ngModel"
+                        <input type="text" name="standard" class="form-control input-text-value input-width-100-percent" required #description="ngModel"
                                [(ngModel)]="sourceUOM.standard" minlength="2">
                     </div>
                 </div>
@@ -2734,7 +2737,7 @@
                         <label for="shortName" class="control-label control-item">Short Name<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="shortName" style="width: 100% !important" class="form-control input-text-value" #shortName="ngModel"
+                        <input type="text" name="shortName" class="form-control input-text-value input-width-100-percent" #shortName="ngModel"
                                [(ngModel)]="sourceUOM.shortName" minlength="2" required>
                     </div>
                 </div>
@@ -2743,7 +2746,7 @@
                         <label for="standard" class="control-label control-item">Standard<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="standard" style="width: 100% !important" class="form-control input-text-value" #standard="ngModel"
+                        <input type="text" name="standard" class="form-control input-text-value input-width-100-percent" #standard="ngModel"
                                [(ngModel)]="sourceUOM.standard" minlength="2" required>
                     </div>
                 </div>
@@ -2816,7 +2819,7 @@
                         <label for="shortName" class="control-label control-item">Short Name<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="shortName" style="width: 100% !important" class="form-control input-text-value" #shortName="ngModel"
+                        <input type="text" name="shortName" class="form-control input-text-value input-width-100-percent" #shortName="ngModel"
                                [(ngModel)]="sourceUOM.shortName" minlength="2" required>
 
                     </div>
@@ -2826,7 +2829,7 @@
                         <label for="standard" class="control-label control-item">Standard<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" name="standard" style="width: 100% !important" class="form-control input-text-value" #standard="ngModel"
+                        <input type="text" name="standard" class="form-control input-text-value input-width-100-percent" #standard="ngModel"
                                [(ngModel)]="sourceUOM.standard" minlength="2" required>
                     </div>
                 </div>
@@ -3103,7 +3106,7 @@
                     <label for="Integration" class="control-label control-item">Integration</label>
                 </div>
                 <div class="col-sm-5">
-                    <input type="text" style="width: 100% !important;" name="description" class="form-control" #description="ngModel" [(ngModel)]="sourceAction.description" minlength="2" required>
+                    <input type="text" name="description" class="form-control input-width-100-percent" #description="ngModel" [(ngModel)]="sourceAction.description" minlength="2" required>
                     <div *ngIf="description.dirty && description.errors?.required && description.errors" class="invalid-form-error-message">
                         Integration required.
                     </div>
@@ -3254,25 +3257,25 @@
             <div class="modal-body">
                 <form method="post">
                     <div class="col-sm-12">
-                        <div class="form-group marginr50" style="display: inline-block;">
+                        <div class="form-group marginr50 display-inline">
                             <p class="fs10">
                                 <label class="control-label wauto">PN</label>
 
                             </p>
                         </div>
-                        <div class="form-group marginr50" style="display: inline-block;">
+                        <div class="form-group marginr50 display-inline">
                             <p class="fs10">
                                 <label class="control-label wauto">Aircraft</label>
 
                             </p>
                         </div>
-                        <div class="form-group marginr50" style="display: inline-block;">
+                        <div class="form-group marginr50 display-inline">
                             <p class="fs10">
                                 <label class="control-label wauto">Model</label>
 
                             </p>
                         </div>
-                        <div class="form-group marginr50" style="display: inline-block;">
+                        <div class="form-group marginr50 display-inline">
                             <p class="fs10">
                                 <label class="control-label wauto">Dash Number</label>
 
@@ -3437,10 +3440,10 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="popup-plusicon-cstm" style="width: 150px !important">
+                                <label class="popup-plusicon-cstm" style="width: 150px !important;">
                                     Model  <span class="clr-red">*</span>
-                                    <input type="checkbox" [checked]="editAirCraftData.isModelUnknown" name="unknownmodel" [(ngModel)]="editAirCraftData.isModelUnknown"  style="width: 20px !important;
-                         margin-left: 7px; " (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
+                                    <input type="checkbox" [checked]="editAirCraftData.isModelUnknown" name="unknownmodel" [(ngModel)]="editAirCraftData.isModelUnknown"
+                                    style="width: 20px !important; margin-left: 7px;" (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
                                 </label>
                                 <p-dropdown class="p-dropdown-100" *ngIf="!editAirCraftData.isModelUnknown" [options]="LoadModelsIds" filter="true" name="aircraftModelId" [(ngModel)]="editAirCraftData.aircraftModelId" (onChange)="getDashNumberByTypeandModelForEdit($event.originalEvent.target.textContent); checkCanAircraftEditable()" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
 
@@ -3448,10 +3451,10 @@
                         </div>
                         <div class="col-md-2" *ngIf="!editAirCraftData.isModelUnknown">
                             <div class="form-group">
-                                <label class="popup-plusicon-cstm" style="width: 190px !important">
+                                <label class="popup-plusicon-cstm " style="width: 190px !important;">
                                     DashNumber <span class="clr-red">*</span>
-                                    <input type="checkbox"  [checked]="editAirCraftData.isDashNumberUnknown" name="unknownDashNumber" [(ngModel)]="editAirCraftData.isDashNumberUnknown" [disabled]="!editAirCraftData.aircraftModelId || editAirCraftData.isModelUnknown" style="width: 20px !important;
-                            margin-left: 7px; " (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
+                                    <input type="checkbox"  [checked]="editAirCraftData.isDashNumberUnknown" name="unknownDashNumber" [(ngModel)]="editAirCraftData.isDashNumberUnknown" [disabled]="!editAirCraftData.aircraftModelId || editAirCraftData.isModelUnknown"
+                                    style="width: 20px !important; margin-left: 7px;" (change)="resetAircraftModelsorDashNumbersForEdit(); checkCanAircraftEditable()"> Unknown
                                 </label>
 
                                 <p-dropdown class="p-dropdown-100" *ngIf="!editAirCraftData.isDashNumberUnknown" [options]="LoadDashnumberIds" [disabled]="!editAirCraftData.aircraftModelId || editAirCraftData.isModelUnknown"  filter="true" name="dashNumberId" [(ngModel)]="editAirCraftData.dashNumberId" (onChange)="updateAircraftDashNumber($event.originalEvent.target.textContent); checkCanAircraftEditable()" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
@@ -3568,12 +3571,12 @@
                 }">
                                 <span *ngIf="audit.dashNumber != 'Unknown'">{{ audit.dashNumber }}</span>
                             </td>
-                            <td><p style="width: 120px; text-align: center;">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                            <td><p class="width-120 text-center">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
                             <td>{{ audit.createdBy }}</td>
-                            <td><p style="width: 120px; text-align: center;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                            <td><p class="width-120 text-center">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
                             <td>{{ audit.updatedBy }}</td>
                             
-                            <td style="background-color: #fff !important;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                            <td class="background-white"><p class="width-100"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                         </tr>
                     </table>
                     </div>
@@ -3610,7 +3613,7 @@
 					<table class="table table-bordered header-table-width"
                            *ngIf="ataChapterAuditHistory.length > 0; else noDatavailable">
                         <thead>
-                            <tr>
+                        <tr>
                                 <th>ATA Chapter Code</th>
                                 <th>ATA Chapter Name</th>
                                 <th>ATA Sub Chapter</th>
@@ -3663,7 +3666,7 @@
                                 <td>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</td>
                                 <td>{{ audit.updatedBy }}</td>
                                
-                                <td style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></td>
+                                <td class="background-white"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></td>
                             </tr>
                         </tbody>
                     </table>
@@ -3723,7 +3726,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Name <span class="clr-red">*</span></label>
-                                <input class="form-control text-field" style="width: 100% !important;"
+                                <input class="form-control text-field input-width-100-percent"
                                        type="text"
                                        name="name"
                                        (ngModelChange)="enableSave()"
@@ -3965,37 +3968,37 @@
                         <th colspan="1"></th>
                     </tr>
                     <tr>
-                        <th style="width: 100px;">Cond <span class="clr-red">*</span></th>
-                        <th style="width: 100px;">UOM <span class="clr-red">*</span></th>
-                        <th style="width: 100px;">Currency <span class="clr-red">*</span></th>
-                        <th style="width: 100px;">FX Rate <span class="clr-red">*</span></th>
-                        <th style="width: 100px;">Vendor List Price</th>
-                        <th style="width: 100px;">Last List Price Date</th>
-                        <th style="width: 100px;">Purchase Disc %</th>
-                        <th style="width: 100px;">Purchase Disc Amount</th>
-                        <th style="width: 100px;">Last Purchase Disc Date</th>
-                        <th style="width: 100px;">Unit Purchase Price</th>
-                        <th style="width: 100px;" class="bg4">Sale Price <span class="clr-red">*</span></th>
-                        <th style="width: 100px;" class="bg2">UOM <span class="clr-red">*</span></th>
-                        <th style="width: 100px;" class="bg2">Currency <span class="clr-red">*</span></th>
-                        <th style="width: 100px;" class="bg2">FX Rate <span class="clr-red">*</span></th>
-                        <th style="width: 100px;" class="bg2">Flat Price Amount</th>
-                        <th style="width: 100px;" class="bg2">Last Flat Price Date</th>
-                        <th style="width: 100px;" class="bg3">Mark % on List Price</th>
-                        <th style="width: 100px;" class="bg3">Mark Up Amount</th>
-                        <th style="width: 100px;" class="bg3">Last Mark Up Date</th>
-                        <th style="width: 100px;" class="bg3">Base Sale Price</th>
-                        <th style="width: 100px;" class="bg3">Sale Disc %</th>
-                        <th style="width: 100px;" class="bg3">Sale Disc Amount</th>
-                        <th style="width: 100px;" class="bg3">Last Sales Disc Date</th>
-                        <th style="width: 100px;" class="bg3">Unit Sale Price</th>                        
+                        <th class="table-column-width">Cond <span class="clr-red">*</span></th>
+                        <th class="table-column-width">UOM <span class="clr-red">*</span></th>
+                        <th class="table-column-width">Currency <span class="clr-red">*</span></th>
+                        <th class="table-column-width">FX Rate <span class="clr-red">*</span></th>
+                        <th class="table-column-width">Vendor List Price</th>
+                        <th class="table-column-width">Last List Price Date</th>
+                        <th class="table-column-width">Purchase Disc %</th>
+                        <th class="table-column-width">Purchase Disc Amount</th>
+                        <th class="table-column-width">Last Purchase Disc Date</th>
+                        <th class="table-column-width">Unit Purchase Price</th>
+                        <th class="table-column-width" class="bg4">Sale Price <span class="clr-red">*</span></th>
+                        <th class="table-column-width" class="bg2">UOM <span class="clr-red">*</span></th>
+                        <th class="table-column-width" class="bg2">Currency <span class="clr-red">*</span></th>
+                        <th class="table-column-width" class="bg2">FX Rate <span class="clr-red">*</span></th>
+                        <th class="table-column-width" class="bg2">Flat Price Amount</th>
+                        <th class="table-column-width" class="bg2">Last Flat Price Date</th>
+                        <th class="table-column-width" class="bg3">Mark % on List Price</th>
+                        <th class="table-column-width" class="bg3">Mark Up Amount</th>
+                        <th class="table-column-width" class="bg3">Last Mark Up Date</th>
+                        <th class="table-column-width" class="bg3">Base Sale Price</th>
+                        <th class="table-column-width" class="bg3">Sale Disc %</th>
+                        <th class="table-column-width" class="bg3">Sale Disc Amount</th>
+                        <th class="table-column-width" class="bg3">Last Sales Disc Date</th>
+                        <th class="table-column-width" class="bg3">Unit Sale Price</th>                        
                        
                         
-                        <th style="width: 120px;">Created Date</th>
-                        <th style="width: 100px;">Created By</th>
-                        <th style="width: 120px;">Updated Date</th>
-                        <th style="width: 100px;">Updated By</th>
-                        <th style="width: 100px;">Is Deleted</th>
+                        <th class="table-column-width">Created Date</th>
+                        <th class="table-column-width">Created By</th>
+                        <th class="table-column-width">Updated Date</th>
+                        <th class="table-column-width">Updated By</th>
+                        <th class="table-column-width">Is Deleted</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -4006,7 +4009,7 @@
                   ? 'black'
                   : 'red'
               }">
-                           <p style="width: 100px;"> {{ audit.conditionName }}</p>
+                           <p class="width-100"> {{ audit.conditionName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(
@@ -4017,49 +4020,49 @@
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;"> {{ audit.pP_UOMName }}</p>
+              <p class="width-100"> {{ audit.pP_UOMName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(i, 'pP_CurrencyName', audit.pP_CurrencyName)
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;">  {{ audit.pP_CurrencyName }}</p>
+              <p class="width-100">  {{ audit.pP_CurrencyName }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(i, 'pP_FXRatePerc', audit.pP_FXRatePerc)
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;">  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+              <p class="width-100">  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_VendorListPrice', audit.pP_VendorListPrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p class="width-100">    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_LastListPriceDate', audit.pP_LastListPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 120px;">    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-120">    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p class="width-100">     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscAmount', audit.pP_PurchaseDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p class="width-100">   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         
                         <td [ngStyle]="{width: '100px',
@@ -4067,121 +4070,121 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-100">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p class="width-100">  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'salePriceSelectName', audit.salePriceSelectName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.salePriceSelectName }}</p>
+                          <p class="width-100">  {{ audit.salePriceSelectName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_UOMName', audit.sP_FSP_UOMName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_UOMName }}</p>
+                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_UOMName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_CurrencyName', audit.sP_FSP_CurrencyName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_CurrencyName }}</p>
+                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_CurrencyName }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FXRatePerc', audit.sP_FSP_FXRatePerc)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FlatPriceAmount', audit.sP_FSP_FlatPriceAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p class="width-100">     {{ audit.salePriceSelectName == 'Calculated' ? '0.00' : audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_LastFlatPriceDate', audit.sP_FSP_LastFlatPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-100">      {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p class="width-100">       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpAmount', audit.sP_CalSPByPP_MarkUpAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p class="width-100">       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastMarkUpDate', audit.sP_CalSPByPP_LastMarkUpDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-100">       {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p class="width-100">      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscPercValue', audit.sP_CalSPByPP_SaleDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.salePriceSelectName == 'Flat' ? '0.00' : audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p class="width-100">      {{ audit.salePriceSelectName == 'Flat' ? '0.00' : audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscAmount', audit.sP_CalSPByPP_SaleDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p class="width-100">       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastSalesDiscDate', audit.sP_CalSPByPP_LastSalesDiscDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">   {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                          <p class="width-100">   {{ audit.salePriceSelectName == 'Flat' ? '' : audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p class="width-100">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                      
-                        <td><p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p class="width-120"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
                       
-                        <td><p style="width: 100px;"> {{ audit.createdBy }}</p></td>
-                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p style="width: 100px;"> {{ audit.updatedBy }}</p></td>
+                        <td><p class="width-100"> {{ audit.createdBy }}</p></td>
+                        <td><p class="width-120"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p class="width-100"> {{ audit.updatedBy }}</p></td>
 
-                        <td style="background-color: #fff !important;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        <td class="background-white"><p class="width-100"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>
             </table>

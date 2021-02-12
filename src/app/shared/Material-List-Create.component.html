@@ -9,7 +9,9 @@
     </span>
   </div>
   <form #materialCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-material">
+    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
+    <div class="tableFixHead">
+    <table class="table table-bordered" style="height:auto;max-height:350px !important">
       <thead>
         <tr>
           <th *ngIf="!isWorkFlow">Task<span class="clr-red">*</span></th>
@@ -17,7 +19,7 @@
           <th style="min-width: 90px;">Description<span class="clr-red">*</span></th>
           <th>Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
-          <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision *</th>
+          <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
           <th>Qty<span class="clr-red">*</span></th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
@@ -26,14 +28,14 @@
           <th>Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Deferred</th>
           <th>Memo</th>
-          <th>Action</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <select class="form-control custom-select wf-pub-id qtyWidth" [(ngModel)]="material.taskId"
+            <select class="form-control custom-select wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
               name="task_{{ i }}" required (change)="onTaskChange(material)">
               <option value="">Select </option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{
@@ -47,7 +49,7 @@
                 (onClear)="clearautoCompleteInput(material, 'partNumber' )"
                 (keyup)="getPartnumbers($event.target.value)" (completeMethod)="filterpartItems($event)" [size]="30"
                 [(ngModel)]="material.partNumber" [minLength]="1" [dropdown]="true" class="workflow-measurement-select"
-                name="partnum_{{ i }}" required>
+                name="partnum_{{ i }}" required (ngModelChange)="getActive()">
                 <ng-template let-partName pTemplate="part">
                   <div class="ui-helper-clearfix">{{ partName }}</div>
                 </ng-template>
@@ -64,22 +66,22 @@
             {{ material.partDescription }}
           </td>
           <td>
-            <p-dropdown placeholder="--Select--" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
+            <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
               (onChange)="getPNDetails(material)" class="p-dropdown-custom-md" [(ngModel)]="material.conditionCodeId"
               required>
             </p-dropdown>
           </td>
           <td>
-            <select class="form-control wf-pub-id full-width qtyWidth" [(ngModel)]="material.materialMandatoriesId"
+            <select class="form-control wf-pub-id full-width qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.materialMandatoriesId"
               (change)="onSelectMaterialManditory(material)" style="margin:auto;" name="mandi_{{ i }}">
               <option value="0">--select--</option>
               <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.materialMandatoriesId }}">
                 {{mandatory.materialMandatoriesName}}
-              </option>
+              </option> 
             </select>
           </td>
           <td *ngIf="isQuote==true || isWorkOrder==true">
-            <select class="form-control wf-pub-id qtyWidth" [(ngModel)]="material.provisionId" name="provision_{{ i }}"
+            <select class="form-control wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.provisionId" name="provision_{{ i }}"
               (change)="getProvisionDetails($event,material,i)" required>
               <option value="">--Select--</option>
               <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
@@ -88,8 +90,8 @@
             </select>
           </td>
           <td>
-            <input type="text" pInputText pKeyFilter="pnum" class="form-control w100  qtyWidth text-right input_adjust"
-              value="{{ material.quantity }}" (keyup)="
+            <input type="text" pInputText pKeyFilter="pnum" (ngModelChange)="getActive()" class="form-control w100 text-right"
+             style="width:100% !important" value="{{ material.quantity }}" (keyup)="
                 calculateQtySummation();
                 calculateExtendedCost(material);
                 calculateExtendedPrice(material)
@@ -105,18 +107,18 @@
             {{material.stockType}}
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right input_adjust qtyWidth" pInputText pKeyFilter="money"
+            <input type="text" (ngModelChange)="getActive()" class="form-control w100 text-right " pInputText pKeyFilter="money"
               value="{{ material.unitCost }}" (change)="calculateExtendedCost(material)" [(ngModel)]="material.unitCost"
-              name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
+             style="width:100% !important" name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right input_adjust qtyWidth" pInputText pKeyFilter="money"
+            <input type="text" class="form-control w100 text-right" pInputText pKeyFilter="money"
               [disabled]="true" value="{{ material.extendedCost }}" [(ngModel)]="material.extendedCost"
-              name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
+             style="width:100% !important" name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
           </td>
           <td style="width:30px;text-align: center;">
             <div class="custom-checkbox-box">
-              <input class="filled-in" id="PMS" type="checkbox" value="{{ material.isDeferred }}"
+              <input class="filled-in" id="PMS" (ngModelChange)="getActive()" type="checkbox" value="{{ material.isDeferred }}"
                 [(ngModel)]="material.isDeferred" name="isDef_{{ i }}" />
 
             </div>
@@ -130,7 +132,7 @@
             </div>
           </td>
           <td>
-            <button class="btn btn-danger nobg" (click)="openDelete(content,material,i,materialCreateForm)">
+            <button class="btn btn-danger nobg" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -160,6 +162,8 @@
         </tr>
       </tfoot>
     </table>
+    </div>
+    </div>
   </form>
   <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
@@ -173,22 +177,22 @@
             name="textAreaInfo" required></p-editor>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disableEditor"
+          <button type="button" class="btn btn-primary" [disabled]="disableEditor"
             (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-          <button type="button" class="btn btn-danger editor-buttons-margin"
+          <button type="button" class="btn btn-danger"
             (click)="onCloseTextAreaInfo()">Close</button>
         </div>
       </div>
     </div>
   </div>
   <div *ngIf="isWorkOrder && !isEdit" style="float:right">
-    <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="saveMaterialsWorkOrder()"
-      style="padding: 6px 12px !important;margin-top: 10px;"
+    <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="saveMaterialsWorkOrder()"
+     
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
       Save
     </button>
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterialTab()"
-      style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+      >Close</button>
   </div>
 
   <div *ngIf="isQuote" style="float:right">
@@ -202,7 +206,7 @@
   <div *ngIf="isWorkOrder && isEdit" style="float:right">
     <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateMaterialsWorkOrder()"
       style="padding: 6px 12px !important;margin-top: 10px;"
-      [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
+      [disabled]="!materialCreateForm.valid || checkQuantityAvailability() || disableUpdateButton">
       Update
     </button>
     <button type="button" class="btn btn-danger" data-dismiss="modal"

@@ -210,12 +210,12 @@
                              type="text"
                              (input)="dt.filter($event.target.value, col.field, 'contains'); activeStatus($event.target.value)" />
                              
-                             <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                             <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                              name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+<input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
           (change)="dateFilterForTable($event.target.value,col.field)" />
-          <input type="date" style="width:100%" 
-           class="hidePlaceHolder" *ngIf="col.field == 'startDate'"
+          <input type="date"  
+           class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'startDate'"
               name="startDate"
           (change)="dateFilterForTable($event.target.value,col.field)" />
 					       
@@ -247,7 +247,7 @@
                       </ng-container>
                     <ng-container *ngIf="col.field =='shopEmployee'">
                         <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
-                               style="margin: 0px auto; display: block;" />
+                             class="shop-employee-checkbox" />
                     </ng-container>
                      
                   </td>
@@ -634,24 +634,24 @@
           </p>-->
                                       <div class="form-row">
                                           <div class="col-sm-12">
-                                            <div class="card" style="margin-top: 6px;">
-                                              <div class="card-header" style="padding: 0 10px;">
-                                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
+                                            <div class="card mgmt-card">
+                                              <div class="card-header mgmt-card-header">
+                                                <h5 class="mgmt-header-name">Management Structure <span class="text-danger">*</span></h5>
                                               </div>
-                                              <div class="card-body" style="padding: 8px 12px 6px;">
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                              <div class="card-body mgmt-card-body" >
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="companyName" 
                                                        [(ngModel)]="headerManagementStructureWithName.level1" disabled>
                                                 </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="BUName"
                                                        [(ngModel)]="headerManagementStructureWithName.level2" disabled>
                                                 </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="divisionName"
                                                        [(ngModel)]="headerManagementStructureWithName.level3" disabled>
                                                 </div>
-                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                <div class="form-group margin-bottom-4">
                                                   <input class="form-control" type="text" name="deptName"
                                                        [(ngModel)]="headerManagementStructureWithName.level4" disabled>
                                                 </div>
@@ -1105,13 +1105,13 @@
 
                                        <ng-template pTemplate="colgroup" let-columns>
                                             <colgroup>
-                                                <col *ngFor="let col of columns"
-                                                     style="width: 130px;" />
+                                                <col *ngFor="let col of columns" class="table-column-width" />
                                             </colgroup>
                                         </ng-template>
                                         <ng-template pTemplate="header" let-columns>
                                             <tr>
                                                 <th *ngFor="let col of columns"
+                                                class="table-column-width"
                                                     pResizableColumn
                                                     pReorderableColumn
                                                     [pSortableColumn]="col.field">
@@ -1128,8 +1128,9 @@
                                             </tr>
                                             <tr>
                                                 <th *ngFor="let col of columns"
+                                                class="table-column-width"
                                                     [ngSwitch]="col.field">
-                                                    <input type="text"
+                                                    <input type="text" class="table-header-input-width"
                                                            (input)="
                                           table3.filter(
                                             $event.target.value,
@@ -1145,8 +1146,8 @@
                                         "
                                                            pInputText />
                                                     <input type="date"
-                                                           style="width:100%"
-                                                           class="hidePlaceHolder"
+                                                          
+                                                           class="hidePlaceHolder table-header-input-width"
                                                            *ngIf="col.field == 'createdDate'"
                                                            name="createdDate"
                                                            (change)="
@@ -1157,8 +1158,7 @@
                                         " />
                                                     <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
                                                     <input type="date"
-                                                           style="width:100%"
-                                                           class="hidePlaceHolder"
+                                                           class="hidePlaceHolder table-header-input-width"
                                                            *ngIf="col.field == 'updatedDate'"
                                                            name="updatedDate"
                                                            (change)="
@@ -1181,7 +1181,7 @@
                                                 0
                                                 "
                                                 >
-                                                <td *ngFor="let col of columns">
+                                                <td *ngFor="let col of columns" class="table-column-width">
                                                     <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
                                                     <!-- <ng-container > -->
                                                     <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
@@ -1237,11 +1237,7 @@
                                   ">
                                             <tr>
                                                 <td [attr.colspan]="10"
-                                                    style="
-                                        color: red;
-                                        font-weight: bold;
-                                        text-align: center;
-                                      ">
+                                                    class="no-records-cstm no-records-msg">
                                                     No records found
                                                 </td>
                                             </tr>
@@ -1249,14 +1245,14 @@
                                         &nbsp;&nbsp;
                                         <ng-template pTemplate="summary" id="footer">
                                             <label id="footer" class="footer">Total:</label>
-                                            <input style="width: 5%;"
+                                            <input class="footer-input-width"
                                                    [(ngModel)]="count._totalRecords"
                                                    [disabled]="true"
                                                    pInputText
                                                    type="text" />
                                             &nbsp;&nbsp;
                                             <label id="footer" class="footer1">Pages Count:</label>
-                                            <input style="width: 5%;"
+                                            <input class="footer-input-width"
                                                    [(ngModel)]="count._totalRecords"
                                                    [disabled]="true"
                                                    pInputText
@@ -1651,7 +1647,7 @@
                 >
                   {{ audit.payType }}
                 </td>
-                <td style="text-align: center;"
+                <td class="text-center"
                   [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
                       ? 'black'
@@ -1698,14 +1694,14 @@
         >
           {{ audit.updatedBy }}
         </td>
-          <td style="text-align: center;"
+          <td class="text-center"
           [ngStyle]="{
             color: getColorCodeForHistory(i, 'isDeleted', audit.isDeleted)
               ? 'black'
               : 'red'
           }"
         >
-        <input type="checkbox" style="color: green !important;" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
+        <input type="checkbox" class="color-green" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
         
         </td>
 
@@ -1719,9 +1715,9 @@
             <div class="text-center">
               <img
                 src="../../../../assets/images/binoculars.png"
-                style="height: 100px; width: 100px;"
+               class="no-history-found-image"
               />
-              <h4 style="color: #ff5663;">No History Found</h4>
+              <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
         </div>

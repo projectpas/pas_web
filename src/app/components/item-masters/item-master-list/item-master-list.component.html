@@ -237,9 +237,9 @@
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
                            <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                          <span >
-                              <a class="btn nobg btn-users-cstm" 
-                              (click)="restore(restorePopupId,rowData);"
+                           <span >
+                              <a class="btn nobg btn-users-cstm"                               
+                              (click)="restoreStockItem(rowData)"
                                matTooltip="Restore Record" 
                                 matTooltipPosition="above">
                                 <i class="fa fa-undo" aria-hidden="true"></i></a> </span>
@@ -402,8 +402,7 @@
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                         <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                         <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                        <span *ngIf="currentDeletedstatus" data-toggle="modal" data-target="#itemRestore"><a class="btn nobg btn-users-cstm" 
-                                            (click)="restoreItem(rowData)"
+                                        <span *ngIf="currentDeletedstatus" data-toggle="modal" (click)="restoreStockItem(rowData)" data-target="#itemRestore"><a class="btn nobg btn-users-cstm" 
                                              matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
                                 </td>

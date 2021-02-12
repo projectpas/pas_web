@@ -30,7 +30,7 @@
                             </span>
                         </th>
                         <th colspan="26"></th>
-                        <th *ngIf="isViewMode == false" style="position: sticky !important; min-width: 100px">Actions
+                        <th *ngIf="isViewMode == false" style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
                     </tr>
                     <ng-container *ngIf="summaryParts.length > 0">
@@ -100,6 +100,26 @@
                                                 (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
                                                 matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <!-- (click)="initiateCreateWOROPO(part, 'PO')" matTooltip="Create PO" -->
+                                            <a class="btn nobg btn-pluspo-cstm" (click)="createPO(summaryPart)"
+                                                matTooltip="Create PO" matTooltipPosition="above">
+                                                <i class="fa fa-plus"> </i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-plusro-cstm" (click)="createRO(summaryPart)"
+                                                matTooltip="Create RO" matTooltipPosition="above">
+                                                <i class="fa fa-plus" style="color: #259e08;"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-plusro-cstm"
+                                                (click)="initiateCreateWOROPO(summaryPart, 'WO')" matTooltip="Create WO"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-plus" style="color: #24089e;"></i>
                                             </a>
                                         </span>
                                     </td>
@@ -376,26 +396,6 @@
                                                 class="btn nobg" (click)="openPartDelete(deleteContent,part)"
                                                 matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
-                                            </a>
-                                        </span>
-                                        <span>
-                                            <!-- (click)="initiateCreateWOROPO(part, 'PO')" matTooltip="Create PO" -->
-                                            <a class="btn nobg btn-pluspo-cstm" (click)="createPO(part)"
-                                                matTooltip="Create PO" matTooltipPosition="above">
-                                                <i class="fa fa-plus"> </i>
-                                            </a>
-                                        </span>
-                                        <span>
-                                            <a class="btn nobg btn-plusro-cstm" (click)="createRO(part)"
-                                                matTooltip="Create RO" matTooltipPosition="above">
-                                                <i class="fa fa-plus" style="color: #259e08;"></i>
-                                            </a>
-                                        </span>
-                                        <span>
-                                            <a class="btn nobg btn-plusro-cstm"
-                                                (click)="initiateCreateWOROPO(part, 'WO')" matTooltip="Create WO"
-                                                matTooltipPosition="above">
-                                                <i class="fa fa-plus" style="color: #24089e;"></i>
                                             </a>
                                         </span>
                                     </td>

@@ -875,17 +875,17 @@ export class SalesOrderPartNumberComponent {
   }
 
   createPO(rowData) {
-    localStorage.setItem("itemMasterId", rowData.itemMasterId);
+    localStorage.setItem("itemMasterId", rowData.partId);
     localStorage.setItem("partNumber", rowData.partNumber);
-    localStorage.setItem("salesOrderId", rowData.salesOrderId);
+    localStorage.setItem("salesOrderId", this.salesOrderId);
     //const { vendorId } = rowData;
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);
   }
 
   createRO(rowData) {
-    localStorage.setItem("itemMasterId", rowData.itemMasterId);
+    localStorage.setItem("itemMasterId", rowData.partId);
     localStorage.setItem("partNumber", rowData.partNumber);
-    localStorage.setItem("salesOrderId", rowData.salesOrderId);
+    localStorage.setItem("salesOrderId", this.salesOrderId);
     //const { vendorId } = rowData;
     this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
   }
