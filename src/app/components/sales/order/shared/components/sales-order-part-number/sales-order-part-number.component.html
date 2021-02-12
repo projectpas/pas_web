@@ -16,8 +16,10 @@
             style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="so-table">
-                    <tr class="header-table-width" style="font-size: 10px">
-                        <th *ngFor="let summaryColumn of summaryColumns">
+                    <!-- <tr class="header-table-width" style="font-size: 10px"> -->
+                    <tr style="font-size: 10px">
+                        <th *ngFor="let summaryColumn of summaryColumns"
+                            [ngStyle]="{'min-width': summaryColumn.width}">
                             <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                  || summaryColumn.field == 'customerRef'
                                  || summaryColumn.field == 'quantityRequested'">
@@ -29,20 +31,24 @@
                                 {{ summaryColumn.header }}
                             </span>
                         </th>
-                        <th colspan="26"></th>
-                        <th *ngIf="isViewMode == false" style="position: sticky !important; min-width: 145px !important;">Actions
+                        <th colspan="27"></th>
+                        <th *ngIf="isViewMode == false"
+                            style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
                     </tr>
                     <ng-container *ngIf="summaryParts.length > 0">
                         <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                                    <td *ngFor="let summaryColumn of summaryColumns"
+                                    <td *ngFor="let summaryColumn of summaryColumns; let i = index"
                                         style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                        <span *ngIf="summaryColumn.field == 'count'">
+                                            Item {{ rowIndex + 1 }}
+                                        </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
-                                        <span *ngIf="summaryColumn.field != 'hidePart'
+                                        <span *ngIf="summaryColumn.field != 'count'
                                                     && summaryColumn.field != 'quantityRequested'
                                                     && summaryColumn.field != 'quantityToBeQuoted'
                                                     && summaryColumn.field != 'quantityAlreadyQuoted'
@@ -77,7 +83,7 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="26" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="27" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
                                         <span>
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
@@ -128,47 +134,47 @@
                                     <th style="background-color: #fff !important;"></th>
                                     <th>PN</th>
                                     <th>PN Description </th>
-                                    <th>Stk Line Num</th>
-                                    <th>Ser Num</th>
+                                    <th colspan="2">Stk Line Num</th>
+                                    <th colspan="2">Ser Num</th>
                                     <th>Cond<span class="clr-red">*</span></th>
                                     <th>Stk Type</th>
                                     <th>Alt/Equiv</th>
-                                    <th>Qty On Back Order</th>
-                                    <th>Cust Reqest Date<span class="clr-red">*</span></th>
-                                    <th>Cust Promised Date<span class="clr-red">*</span></th>
-                                    <th>Est. Ship Date<span class="clr-red">*</span></th>
+                                    <th>Qty Back Ord</th>
+                                    <th>Cust Req Date<span class="clr-red">*</span></th>
+                                    <th>Cust PRMSD Date<span class="clr-red">*</span></th>
+                                    <th>Est Ship Date<span class="clr-red">*</span></th>
                                     <th>Priority<span class="clr-red">*</span></th>
                                     <th>Status </th>
-                                    <th>Quote Num</th>
-                                    <th>Quote Ver</th>
-                                    <th>Quote Date</th>
+                                    <th>Qte Num</th>
+                                    <th>Qte Ver</th>
+                                    <th>Qte Date</th>
                                     <th>Qty Ord<span class="clr-red">*</span></th>
-                                    <th>Qty Reserved<span class="clr-red">*</span></th>
+                                    <th>Qty Resvd<span class="clr-red">*</span></th>
                                     <th>Qty to Ship</th>
                                     <th>Qty Invoiced</th>
                                     <th>Invoice Num</th>
                                     <th style="min-width: 100px;">Invoice Date </th>
-                                    <th style="min-width: 100px;">Qty Previously Shipped</th>
+                                    <th style="min-width: 84px;">Qty Prev Shpd</th>
                                     <th style="min-width: 100px;">Last Ship Date </th>
-                                    <th style="min-width: 90px;">Shipping Ref</th>
+                                    <th style="min-width: 90px;">Ship Ref</th>
                                     <th style="min-width: 60px;">Qty Avail </th>
                                     <th style="min-width: 80px;">Qty On Hand</th>
                                     <th style="min-width: 60px;">Unit Cost </th>
-                                    <th style="min-width: 70px;">MarkUp % </th>
-                                    <th style="min-width: 103px;">MarkUp Amt/Unit </th>
+                                    <th style="min-width: 70px;">Markup % </th>
+                                    <th style="min-width: 103px;">Markup Amt/Unit </th>
                                     <th style="min-width: 100px;">Gross Price/Unit </th>
                                     <th style="min-width: 50px;">Disc. % </th>
                                     <th style="min-width: 90px;">Disc. Amt/Unit </th>
-                                    <th style="min-width: 75px;">MarkUp Amt </th>
+                                    <th style="min-width: 75px;">Markup Amt </th>
                                     <th style="min-width: 100px;">Gross Sales Amt </th>
                                     <th style="min-width: 60px;">Disc. Amt </th>
                                     <th style="min-width: 85px;">Net Sale Amt</th>
                                     <th style="min-width: 150px;">Tax Type </th>
                                     <th style="min-width: 55px;">Tax Amt</th>
                                     <th>Total</th>
-                                    <th style="min-width: 85px;">Extended Cost</th>
-                                    <th style="min-width: 95px;">Product Margin</th>
-                                    <th style="min-width: 100px;">Product Margin %</th>
+                                    <th style="min-width: 85px;">Ext Cost</th>
+                                    <th style="min-width: 95px;">Prod Margin</th>
+                                    <th style="min-width: 100px;">Prod Margin %</th>
                                     <th style="min-width: 90px;">Cntrl Num</th>
                                     <th style="min-width: 100px;">Cntrl ID Num</th>
                                     <th style="width:120px">Notes</th>
@@ -185,10 +191,10 @@
                                     <td>
                                         {{ part.description }}
                                     </td>
-                                    <td>
+                                    <td colspan="2">
                                         {{ part.stockLineNumber }}
                                     </td>
-                                    <td>
+                                    <td colspan="2">
                                         {{ part.serialNumber }}
                                     </td>
                                     <td>
