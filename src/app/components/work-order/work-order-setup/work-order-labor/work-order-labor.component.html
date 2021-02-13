@@ -461,13 +461,13 @@
                 <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
     
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header text_sen">
                             <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
                             <h4 class="modal-title">Edit Memo</h4>
                         </div>
                         <div class="modal-body">
                          
-                            <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}"
+                            <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" class="text_sen"
                             (ngModelChange)="editorgetmemo($event)" name="textA_{{i}}" required>
                         </p-editor>
                             <div class="editor-buttons">
