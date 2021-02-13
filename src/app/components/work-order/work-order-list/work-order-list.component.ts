@@ -22,6 +22,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from "@angular/common";
 import { SingleScreenAuditDetails } from 'src/app/models/single-screen-audit-details.model';
 import { MenuItem } from 'primeng/api';
+
 @Component({
     selector: 'app-work-order-list',
     templateUrl: './work-order-list.component.html',
@@ -29,6 +30,7 @@ import { MenuItem } from 'primeng/api';
     encapsulation: ViewEncapsulation.None,
     animations: [fadeInOut]
 })
+
 /** WorkOrderList component*/
 export class WorkOrderListComponent implements OnInit {
     /** WorkOrderList ctor */
@@ -50,7 +52,6 @@ export class WorkOrderListComponent implements OnInit {
     @Input() isWorkOrderMainView = false;
     @Input() workOrderId: any;
     @Output() closeView = new EventEmitter();
-
     @ViewChild('dt', { static: false })
     private table: Table;
     lazyLoadEventData: any;
@@ -76,9 +77,6 @@ export class WorkOrderListComponent implements OnInit {
         { field: "updatedBy", header: "UpdatedBy", width: "130px" }
     ]
     selectedColumns = this.headers;
-    // pageIndex: number = 0;
-    // totalRecords: any;
-    // totalPages: number;
     workOrderPartListData: any;
     workOrderPartListDataKeys: string[];
     viewWorkOrderHeader: any;
@@ -91,7 +89,6 @@ export class WorkOrderListComponent implements OnInit {
     workOrderLaborList: Object;
     mpnPartNumbersList: any;
     quoteDetailsId: any;
-    // workOrderId: any;
     workFlowId: any;
     showTableGrid: boolean = false;
     showMPN: boolean = false;
@@ -114,7 +111,6 @@ export class WorkOrderListComponent implements OnInit {
     filterText: any = '';
     filteredText: any = '';
     private onDestroy$: Subject<void> = new Subject<void>();
-
     isSpinnerVisible: boolean = false;
     rowDataToDelete: any = {};
     currentDeletedstatus: boolean = false;
@@ -258,7 +254,6 @@ export class WorkOrderListComponent implements OnInit {
             )
     }
 
-
     getWorkOrderDefaultSetting() {
         this.commonService.workOrderDefaultSettings(1, 1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res && res[0]) {
@@ -310,7 +305,6 @@ export class WorkOrderListComponent implements OnInit {
             return data['stage']
         } else if (key === 'estimatedCompletionDateType' && data[key]) {
             return this.convertmultipleDates(data['estimatedCompletionDate']);
-            // return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM-DD-YYYY') : data['estimatedCompletionDate'];
         } else if (key === 'workOrderStatusType') {
             return data['workOrderStatus']
         }
@@ -473,24 +467,6 @@ export class WorkOrderListComponent implements OnInit {
         this.getAllWorkOrderList(this.lazyLoadEventData);
     }
 
-    // globalSearchOld(value?) {
-    //     if (!this.isGlobalFilter) {
-    //         this.pageIndex = 0;
-    //     }
-    //     this.isSpinnerVisible = true;
-    //     this.isGlobalFilter = true;
-    //     this.workOrderService.getWorkOrderGlobalSearch(value, this.pageIndex, this.pageSize).subscribe(res => {
-    //         this.workOrderData = res;
-    //         this.isSpinnerVisible = false;
-    //         if (res.length > 0) {
-    //             this.totalRecords = res[0].totalRecords;
-    //             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-    //         }
-    //     },err => {
-    //             this.isSpinnerVisible = false;
-    //         })
-    // }
-
     openViewOnDbl(rowData) {
         this.view(rowData);
         $('#viewWorkOrder').modal('show');
@@ -578,7 +554,6 @@ export class WorkOrderListComponent implements OnInit {
                 creditTerm: data.creditTerm,
                 workScope: "0",
                 managementStructureId: data.managementStructureId
-
             }
         },
             err => {
@@ -602,7 +577,6 @@ export class WorkOrderListComponent implements OnInit {
                             this.billing['materialCost'] = res['materialFlatBillingAmount'];
                             this.billing['laborOverHeadCost'] = res['laborFlatBillingAmount'];
                             this.billing['miscChargesCost'] = res['chargesFlatBillingAmount'] + res['freightFlatBillingAmount'];
-
                         },
                         err => {
                             this.isSpinnerVisible = false;
@@ -904,19 +878,6 @@ export class WorkOrderListComponent implements OnInit {
             })
     }
 
-    // delete(rowData) {
-    //     this.isSpinnerVisible = false;
-    //     this.workOrderService.deleteActionforWorkOrder(rowData.workOrderId).subscribe(res => {
-    //         this.getAllWorkOrderList(this.lazyLoadEventData);
-    //         this.isSpinnerVisible = false;
-    //         this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
-
-    //     },
-    //         err => {
-    //             this.isSpinnerVisible = false;
-    //         })
-    // }
-
     getWorkOrderPartListByWorkOrderId(rowData) {
         const { workOrderId } = rowData;
         this.isSpinnerVisible = true;
@@ -1061,7 +1022,6 @@ export class WorkOrderListComponent implements OnInit {
     }
 
     exportCSV(dt) {
-        // this.isSpinnerVisible = true;
         let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "workOrderStatus": this.currentStatus }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
@@ -1085,13 +1045,9 @@ export class WorkOrderListComponent implements OnInit {
                 dt.exportCSV();
                 dt.value = this.workOrderData;
                 this.modal.close();
-                // this.isSpinnerVisible = false;
             }, err => {
-                // this.isSpinnerVisible = false;
             });
-
     }
-
 
     delete(rowData) {
         this.rowDataToDelete = rowData;
