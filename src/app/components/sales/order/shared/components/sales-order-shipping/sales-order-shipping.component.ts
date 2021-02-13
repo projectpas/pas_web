@@ -169,14 +169,14 @@ export class SalesOrderShippingComponent {
     }
 
     onSelectPartNumber(rowData) {
-        if (rowData.salesOrderPartId != 0) {
-            if (rowData.selected) {
+        // if (rowData.salesOrderPartId != 0) {
+        //     if (rowData.selected) {
                 this.partSelected = true;
-            } else {
-                this.partSelected = false;
-            }
-            this.getShippingForSelectedPart(rowData.salesOrderPartId);
-        }
+            // } else {
+            //     this.partSelected = false;
+            // }
+            // this.getShippingForSelectedPart(rowData.salesOrderPartId);
+       //}
     }
 
     getShippingForSelectedPart(partNumber) {
@@ -561,4 +561,11 @@ export class SalesOrderShippingComponent {
             this.isSpinnerVisible = false;
           });
     }
+
+    checked(event,poindex){
+        console.log(event.target.checked);
+        console.log(poindex);
+        this.shippingList[0].soshippingchildviewlist[0].selected = true;
+    }
+
 }
