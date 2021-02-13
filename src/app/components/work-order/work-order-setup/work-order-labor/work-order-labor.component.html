@@ -558,39 +558,55 @@
                   laborForm.hoursorClockorScan &&
                   laborForm.hoursorClockorScan !== 1
                 "></td>
-              <td *ngIf="!isQuote">
-                <!-- {{(laborForm.totalWorkHours)?laborForm.totalWorkHours.toFixed(2):0.00}} -->
-                <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled/>
-              </td>
-              <td *ngIf="isQuote" class="content-to-end">
-                {{laborForm.totalWorkHours}}
-              </td>
-              <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
-              <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
+            <td *ngIf="!isQuote">
+              <!-- {{(laborForm.totalWorkHours)?laborForm.totalWorkHours.toFixed(2):0.00}} -->
+              <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled />
+            </td>
+            <td *ngIf="isQuote" class="content-to-end">
+              {{laborForm.totalWorkHours}}
+            </td>
+            <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
+            <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
+            <td></td>
+            <ng-container *ngIf="isQuote">
               <td></td>
-              <ng-container *ngIf="isQuote">
-                <td></td>
-                <td class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </ng-container>
-              <ng-container *ngIf="laborForm.costPlusType != 3">
-                <td *ngIf="isQuote" class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('BillingAmount')) }}</b></td>
-              </ng-container>
-              <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount" [disabled]="isView" />
-                </td>
-              </ng-container>
-              <!-- <td></td> -->
-              <td *ngIf="!isView"></td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
+              <td class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </ng-container>
+            <ng-container *ngIf="laborForm.costPlusType != 3">
+              <td *ngIf="isQuote" class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('BillingAmount')) }}</b>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
+              <td>
+                <input type="number" class="form-control" [(ngModel)]="laborForm.laborFlatBillingAmount"
+                  [disabled]="isView" />
+              </td>
+            </ng-container>
+            <!-- <td></td> -->
+            <td *ngIf="!isView"></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    </div>
   </div>
- 
+  <!-- <ng-template #confirmation let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete the existing records?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteConfirmation()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> -->
+
+
   <div id="confirmation" class="modal fade" role="dialog" data-backdrop="static">
       <div class="modal-dialog modal-sm">
   
