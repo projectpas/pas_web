@@ -105,7 +105,7 @@
               <td *ngIf="field.field == 'internalMemo'" style="min-width: 100px;">
                 <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['internalMemo']"></p>
                 <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionInternalStatus(approver)">
-                  <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
+                  <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
                     matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddTextAreaInfo('internalMemo',i)"></i>
                 </div>
               </td>
