@@ -37,7 +37,7 @@
               </div>
               <div class="form-group" *ngIf="!isQuote">
                 <label for="dataentered">Data Entered By </label>
-                <p-autoComplete class="p-autoComplete-ctsm" field="label" name="dataEnteredBy" [dropdown]="true"
+                <p-autoComplete class="p-autoComplete-ctsm" field="label" disabled name="dataEnteredBy" [dropdown]="true"
                   errorMessage="Records not found" [forceSelection]="true" [suggestions]="dataEnteredByList"
                   (completeMethod)="filterDataEnteredBy($event)" [size]="30" [minLength]="1"
                   [(ngModel)]="laborForm.dataEnteredBy" [disabled]="isView">
@@ -256,7 +256,7 @@
                 font-size: 11px !important;" (click)="toggle_po_header=!toggle_po_header">
                   {{toggle_po_header ? 'Collapse' : 'Expand'}}
               </button> -->
-                <i class="float-right float-right fa fa-plus-circle fa-lg"
+                <i class="float-right float-right fa fa-plus-circle fa-lg labor_ico"
                   (click)="addNewTask(task.description)" *ngIf="!isView"></i>
               </td>
               <td></td>
@@ -292,7 +292,7 @@
                 let rec of laborForm.workOrderLaborList[0][
                   task.description];let i = index">
               <!-- && !rec['isDeleted'] &&   (taskIndexToggle[task.description] || i == 0)-->
-              <tr *ngIf="rec  && !rec['isDeleted']">
+              <tr *ngIf="rec  && !rec['isDeleted'] ">
                 <td *ngIf="i < 1" class="capitalizer">
                   {{ task.description}}
                   <!-- <i (click)="taskIndexToggle[task.description]=!taskIndexToggle[task.description]" [ngClass]="(!taskIndexToggle[task.description])?'fa fa-lg fa-angle-down font-size-20':'fa fa-lg fa-angle-up font-size-20'"></i> -->
@@ -325,7 +325,7 @@
                     [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required [disabled]="isView || laborForm.isTaskCompletedByOne" appendTo="body">
                   </p-autoComplete>
                 </td>
-                <td>
+                <td> 
                   <p-dropdown placeholder="Select Billing Type" [options]="billableList" class="p-dropdown-custom-md"
                   [(ngModel)]="rec.billableId" [disabled]="isView"></p-dropdown>
                 </td>
@@ -336,9 +336,10 @@
                   " style="text-align: center;">
                   <button class="btn btn-primary start-btn" (click)="startandStop(rec);calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="
                       (rec.startDate && rec.endDate) !== null || isView
-                    " *ngIf="!rec.startDate || !rec.endDate">
+                    " >
                     {{(!rec.startDate)?'Start':'Stop'}}
                   </button>
+                  <!-- *ngIf="!rec.startDate || !rec.endDate" -->
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
@@ -438,13 +439,48 @@
                   </td>
                 </ng-container>
                 <td *ngIf="!isQuote">
-                  <input type="text" class="form-control" [(ngModel)]="rec.memo" [disabled]="isView"/>
+                  <!-- <input type="text" class="form-control" [(ngModel)]="rec.memo" [disabled]="isView"/> -->
+                  <div class="align_adh">
+                    <div [innerHTML]="rec.memo"
+                        matTooltipPosition="above"
+                        [matTooltip]="parsedText(rec.memo)"
+                        class="text_editor_box" style="width: 100% !important;"></div>
+                    <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                        data-target="#textarea-popup" matTooltip="Memo"
+                        matTooltipPosition="above"
+                        (click)="onAddTextAreaInfo(rec.memo,task.description,i)"></i>
+                </div>
+               
                 </td>
                 <td *ngIf="!isView" class="text-center">
                     <span><button type="button" class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
                       (click)="showDeleteLabourPopup(task.description, i)"><i class="fa fa-trash"></i></button> </span>
                 </td>
               </tr>
+              <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+    
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                            <h4 class="modal-title">Edit Memo</h4>
+                        </div>
+                        <div class="modal-body">
+                         
+                            <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}"
+                            (ngModelChange)="editorgetmemo($event)" name="textA_{{i}}" required>
+                        </p-editor>
+                            <div class="editor-buttons">
+                                <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
+                                    (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </div>
             </ng-container>
 
             <!-- //this is for total for each task
@@ -524,7 +560,7 @@
                 "></td>
             <td *ngIf="!isQuote">
               <!-- {{(laborForm.totalWorkHours)?laborForm.totalWorkHours.toFixed(2):0.00}} -->
-              <input type="number" class="form-control" [(ngModel)]="laborForm.totalWorkHours" disabled />
+              <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled />
             </td>
             <td *ngIf="isQuote" class="content-to-end">
               {{laborForm.totalWorkHours}}

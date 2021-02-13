@@ -2110,16 +2110,18 @@ unitCost:x.unitCost?  x.unitCost: 0,
                     this.workOrderLaborList = {
                         ...this.data,
                         workFlowWorkOrderId: getObjectById('value', this.data.workFlowWorkOrderId, this.workOrderWorkFlowOriginalData),
-                        employeeId: getObjectById('value', this.data.employeeId, this.employeesOriginalData),
-                        dataEnteredBy: getObjectById('value', this.data.employeeId, this.employeesOriginalData),
+                        employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
+                        dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
+                        // employeeId: getObjectById('value', this.data.employeeId, this.employeesOriginalData),
+                        // dataEnteredBy: getObjectById('value', this.data.employeeId, this.employeesOriginalData),
                     };
                     this.labor.hoursorClockorScan = res.hoursorClockorScan + 1;
                     this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
                     this.labor.totalWorkHours = res.totalWorkHours;
                     this.labor.expertiseId = res.expertiseId;
                     this.labor['labourMemo'] = res.labourMemo;
-                    this.labor.employeeId = getObjectById('value', this.data.employeeId, this.employeesOriginalData);
-                    this.labor.dataEnteredBy = getObjectById('value', this.data.employeeId, this.employeesOriginalData);
+                    // this.labor.employeeId = getObjectById('value', this.data.employeeId, this.employeesOriginalData);
+                    // this.labor.dataEnteredBy = getObjectById('value', this.data.employeeId, this.employeesOriginalData);
                     this.labor['workOrderHoursType'] = res['workOrderHoursType'];
                     if (this.isSubWorkOrder == true) {
                         this.labor['subWorkOrderLaborHeaderId'] = res['subWorkOrderLaborHeaderId'];
@@ -2141,7 +2143,8 @@ unitCost:x.unitCost?  x.unitCost: 0,
                                     taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
                                     taskData['workOrderLaborId'] = labList['workOrderLaborId'];
                                     taskData['expertiseId'] = labList['expertiseId'];
-                                    taskData['employeeId'] = getObjectById('value', labList['employeeId'], this.employeesOriginalData);
+                                    taskData['employeeId']={value:labList['employeeId'],label:labList['employeeName']};
+                                    // taskData['employeeId'] = getObjectById('value', labList['employeeId'], this.employeesOriginalData);
                                     taskData['billableId'] = labList['billableId'];
                                     taskData['startDate'] = labList['startDate'] ? new Date(labList['startDate']) : null;
                                     taskData['endDate'] = labList['endDate'] ? new Date(labList['endDate']) : null;

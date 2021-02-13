@@ -122,3 +122,13 @@ table thead tr th {
 .capitalizer{
   text-transform: capitalize;
 }
+.selected-item{
+  text-transform: initial !important;
+}
+.with_75{
+  width: 75px !important;
+}
+.vetigo_c label{
+  position: relative;
+  top: 3px;
+}
