@@ -109,7 +109,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         value: this.authService.currentUser.employeeId
       };
     }
-       console.log("labor list", this.laborForm);
     this.getAllExpertiseType();
     this.id = this.savedWorkOrderData.workOrderId;
     if (this.isView || this.isEdit) {
@@ -130,7 +129,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.selectedPartNumber && this.selectedPartNumber.managementStructureId && !this.basicLabourDetail) {
       this.getBasicLabourData(this.selectedPartNumber.managementStructureId);
     }
-    console.log("labor form",this.laborForm)
   }
 
   ngOnChanges() {
@@ -214,7 +212,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       this.laborForm.costPlusType = this.laborForm['markupFixedPrice'];
       this.overAllMarkup = Number(this.laborForm['headerMarkupId']);
     }
-    console.log("labor form changes",this.laborForm)
   }
   assignHoursToToalWorkOrder() {
     if (this.laborForm.isTaskCompletedByOne) {
@@ -620,7 +617,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
             })
         }
       })
-      console.log("finalk",this.laborForm.workOrderLaborList[0])
     }
     })
   }
@@ -1266,7 +1262,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.disableSaveForEdit=false;
         if (memo) {
             this.textAreaInfo = memo;
-            this.laborForm.workOrderLaborList[this.currentIndex].memo = memo;
+            this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = memo;
         }
         $("#textarea-popup").modal("hide");
     }
