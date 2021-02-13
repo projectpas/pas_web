@@ -36,6 +36,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() frombilling: any = false;
   @Input() hideHeader: boolean = false;
   totalHours: number;
+  disableSaveForEdit:boolean=false; 
   workOrderWorkFlowList: any;
   employeeList: any;
   dataEnteredByList: any;
@@ -72,7 +73,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       textField: 'description',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 1,
+      itemsShowLimit: 2,
       allowSearchFilter: false
     };
     if (this.taskList) {
@@ -82,19 +83,22 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     this.laborForm.costPlusType = 'Mark Up';
     if (this.workOrderLaborList) {
+ 
       this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
-      this.laborForm.dataEnteredBy = (this.workOrderLaborList['dataEnteredBy']) ? this.workOrderLaborList['dataEnteredBy'] : this.laborForm.dataEnteredBy;
-      this.laborForm.employeeId = (this.workOrderLaborList['employeeId']) ? this.workOrderLaborList['employeeId'] : this.laborForm.employeeId;
+      // this.laborForm.dataEnteredBy = (this.workOrderLaborList['dataEnteredBy']) ? this.workOrderLaborList['dataEnteredBy'] : this.laborForm.dataEnteredBy;
+      // this.laborForm.employeeId={value:this.laborForm.employeeId,label:this.laborForm.employeeName}
+      this.laborForm.employeeId =this.workOrderLaborList.employeeId;
+      // this.laborForm.employeeId = (this.workOrderLaborList['employeeId']) ? this.workOrderLaborList['employeeId'] : this.laborForm.employeeId;
       this.laborForm.isTaskCompletedByOne = this.workOrderLaborList['isTaskCompletedByOne'];
       this.laborForm.expertiseId = (this.workOrderLaborList['expertiseId']) ? this.workOrderLaborList['expertiseId'] : this.laborForm.expertiseId;
-      if (!this.laborForm['dataEnteredBy']) {
-        this.laborForm.dataEnteredBy = {
-          employeeId: this.authService.currentEmployee.employeeId,
-          label: this.authService.currentEmployee.label,
-          name: this.authService.currentEmployee.name,
-          value: this.authService.currentEmployee.value
-        };
-      }
+      // if (!this.laborForm['dataEnteredBy']) {
+        // this.laborForm.dataEnteredBy = {
+        //   employeeId: this.authService.currentEmployee.employeeId,
+        //   label: this.authService.currentEmployee.label,
+        //   name: this.authService.currentEmployee.name,
+        //   value: this.authService.currentEmployee.value
+        // };
+      // }
     }
     else {
       this.laborForm.workFloworSpecificTaskorWorkOrder = 'specificTasks';
@@ -105,6 +109,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         value: this.authService.currentUser.employeeId
       };
     }
+       console.log("labor list", this.laborForm);
     this.getAllExpertiseType();
     this.id = this.savedWorkOrderData.workOrderId;
     if (this.isView || this.isEdit) {
@@ -130,7 +135,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.allEmployees = this.employeesOriginalData;
-    this.laborForm.employeeId = getObjectById('value', this.laborForm.employeeId, this.employeesOriginalData);
+    // this.laborForm.employeeId = getObjectById('value', this.laborForm.employeeId, this.employeesOriginalData);
     this.laborForm.dataEnteredBy = getObjectById('value', this.laborForm.dataEnteredBy, this.employeesOriginalData);
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } });
@@ -175,7 +180,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.employeeList = this.employeesOriginalData;
         this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
         this.laborForm.dataEnteredBy = (this.workOrderLaborList['dataEnteredBy']) ? this.workOrderLaborList['dataEnteredBy'] : this.laborForm.dataEnteredBy;
-        this.laborForm.employeeId = (this.workOrderLaborList['employeeId']) ? this.workOrderLaborList['employeeId'] : this.laborForm.employeeId;
+        // this.laborForm.employeeId = (this.workOrderLaborList['employeeId']) ? this.workOrderLaborList['employeeId'] : this.laborForm.employeeId;
+        this.laborForm.employeeId =this.workOrderLaborList.employeeId;
         this.laborForm.isTaskCompletedByOne = this.workOrderLaborList['isTaskCompletedByOne'];
         this.laborForm.expertiseId = (this.workOrderLaborList['expertiseId']) ? this.workOrderLaborList['expertiseId'] : this.laborForm.expertiseId;
         if (!this.laborForm['dataEnteredBy']) {
@@ -317,7 +323,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           for (let list in lList) {
             lList[list].forEach(
               x => {
-                if (x['hours'] && !x['IsDeleted']) {
+                if (x['hours'] && !x['isDeleted']) {
                   this.laborForm['totalWorkHours'] += x['hours'];
                 }
               }
@@ -445,7 +451,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }
     else if (taskList) {
       for (let task of taskList) {
-        if (!task.IsDeleted) {
+        if (!task.isDeleted) {
           return false;
         }
       }
@@ -560,8 +566,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   }
 
   addNewTask(taskName) {
-    debugger;
-    console.log("task name",taskName)
     let taskData = new AllTasks();
     taskData.expertiseId = Number(this.laborForm.expertiseId);
     taskData.employeeId = this.laborForm.employeeId;
@@ -595,10 +599,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
 
     }
     this.laborForm.workOrderLaborList[0][taskName].unshift(taskData);
-    console.log("taskName",taskName)
-  
-    console.log("labbbbbb",this.laborForm.workOrderLaborList[0])
-    debugger;
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
     if(this.laborForm.workOrderLaborList[0][task] && this.laborForm.workOrderLaborList[0][task].length !=0){
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
@@ -682,7 +682,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
               "CreatedDate": new Date().toDateString(),
               "UpdatedDate": new Date().toDateString(),
               "IsActive": true,
-              "IsDeleted": false
+              "isDeleted": false
             }
             WorkOrderQuoteTask.push(data)
             task.masterCompany.masterCompanyId
@@ -703,7 +703,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
               "CreatedDate": new Date().toDateString(),
               "UpdatedDate": new Date().toDateString(),
               "IsActive": true,
-              "IsDeleted": false
+              "isDeleted": false
             }
             WorkOrderQuoteTask.push(data)
           }
@@ -859,7 +859,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     $('#deleteRowConfirmation').modal('show');
   }
   deleteLabor(taskName, index) {
-    this.laborForm.workOrderLaborList[0][taskName][index].IsDeleted = true;
+    this.laborForm.workOrderLaborList[0][taskName][index].isDeleted = true;
     let temp = this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
     this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
@@ -1005,7 +1005,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   getTotalCost(taskList) {
     let total = 0;
     for (let labor of taskList) {
-      if (labor.totalCost && !labor.IsDeleted) {
+      if (labor.totalCost && !labor.isDeleted) {
         total += Number(labor.totalCost.toString().split(',').join(''));
       }
     }
@@ -1023,7 +1023,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   getTotalBillingAmount(taskList) {
     let total = 0;
     for (let labor of taskList) {
-      if (labor.billingAmount && !labor.IsDeleted) {
+      if (labor.billingAmount && !labor.isDeleted) {
         total += Number(labor.billingAmount.toString().split(',').join(''));
       }
     }
@@ -1086,7 +1086,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           taskData.totalHours = 0;
         }
         taskData.hours = Number(`${taskData.totalHours}.${taskData.totalMinutes}`)
-        if (taskData.hours && !taskData.IsDeleted)
+        if (taskData.hours && !taskData.isDeleted)
           task.totalWorkHours += Number(taskData.hours);
       }
       task.totalWorkHours = task.totalWorkHours.toFixed(2);
@@ -1097,7 +1097,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     task.totalAdjustments = 0;
     if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
       for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.adjustments && !taskData.IsDeleted)
+        if (taskData.adjustments && !taskData.isDeleted)
           task.totalAdjustments += Number(taskData.adjustments);
       }
     }
@@ -1107,7 +1107,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     task.totalAdjustedHours = 0;
     if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
       for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.adjustedHours && !taskData.IsDeleted)
+        if (taskData.adjustedHours && !taskData.isDeleted)
           task.totalAdjustedHours += Number(taskData.adjustedHours);
       }
     }
@@ -1116,7 +1116,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     task.totalWorkHours = 0;
     if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
       for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.hours && !taskData.IsDeleted)
+        if (taskData.hours && !taskData.isDeleted)
           taskData.hours = 0;
       }
     }
@@ -1146,13 +1146,13 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
               if (data.totalCostPerHour) cpTotal += Number(data.totalCostPerHour);
             }
             case "Cost": {
-              if (data.totalCost && !data.IsDeleted) costTotal += Number(data.totalCost.toString().split(',').join(''));
+              if (data.totalCost && !data.isDeleted) costTotal += Number(data.totalCost.toString().split(',').join(''));
             }
             case "BillingRate": {
               if (data.billingRate) bRTotal += Number(data.billingRate);
             }
             default: {
-              if (data.billingAmount && !data.IsDeleted) bATotal += Number(data.billingAmount.toString().split(',').join(''));
+              if (data.billingAmount && !data.isDeleted) bATotal += Number(data.billingAmount.toString().split(',').join(''));
             }
           }
         }
@@ -1197,7 +1197,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     for (let task in this.laborForm.workOrderLaborList[0]) {
       this.laborForm.workOrderLaborList[0][task].forEach(
         data => {
-          if (!data.IsDeleted && this.isQuote) {
+          if (!data.isDeleted && this.isQuote) {
             if (!data.hours || !data.directLaborOHCost) {
               result = true;
             }
@@ -1235,9 +1235,42 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }
   }
   assignLabourEmployee(id) {
-    debugger;
     if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workOrder') {
       this.laborForm.workOrderLaborList[0]['all task'][0]['employeeId'] = id;
     }
   }
+  parsedText(text) {
+    
+    if(text){
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+    }
+      }
+      currentIndex:any;
+      currentTaks:any;
+      onAddTextAreaInfo(material,taskName,index) {
+        this.currentIndex=index;
+        this.currentTaks=taskName;
+        this.textAreaInfo = material;
+        this.disableEditor=true;
+    }
+    textAreaInfo: any;
+    disableEditor:any=true;
+    editorgetmemo(ev){
+        this.disableEditor=false;
+                    }
+    onSaveTextAreaInfo(memo) {
+        this.disableSaveForEdit=false;
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.laborForm.workOrderLaborList[this.currentIndex].memo = memo;
+        }
+        $("#textarea-popup").modal("hide");
+    }
+    onCloseTextAreaInfo() {
+        $("#textarea-popup").modal("hide");
+    }
 }

@@ -11,12 +11,14 @@ export class WorkOrderLabor {
   totalWorkHours: any;
   costPlusType: any;
   laborFlatBillingAmount: any;
+  employeeName:any;
   constructor() {
     this.workOrderLaborHeaderId = null;
     this.workFlowWorkOrderId = null;
     this.dataEnteredBy = null;
     this.expertiseId = null;
     this.employeeId = null;
+    this.employeeId ="";
     this.isTaskCompletedByOne = false;
     this.workFloworSpecificTaskorWorkOrder = 'specificTasks';
     this.hoursorClockorScan = 1;
@@ -29,7 +31,7 @@ export class AllTasks {
   workOrderLaborHeaderId: number;
   workOrderLaborId: number;
   expertiseId: number;
-  employeeId: number;
+  employeeId: any;
   billableId: number;
   startDate: Date;
   startDateandTimeIsEdit: boolean;
