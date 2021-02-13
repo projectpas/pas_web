@@ -67,9 +67,12 @@ export class SalesOrderShippingComponent {
     countryList: any = [];
     shipCustomerShippingOriginalData: any[];
     shipCustomerSiteList = [];
+    soldCustomerSiteList = [];
     siteList: any = [];
     allWeightUnitOfMeasureInfo: any = [];
     allSizeUnitOfMeasureInfo: any = [];
+    currSOPickTicketId: number;
+    currQtyToShip: number;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -122,36 +125,9 @@ export class SalesOrderShippingComponent {
     refresh(parts) {
         this.initColumns();
         this.getShippingList();
-        // this.partsForBilling = [];
-        // this.parts = parts;
-        // if (this.parts && this.parts.length > 0) {
-        //     this.parts.forEach(part => {
-        //         if (part.salesOrderPartId) {
-        //             this.partsForBilling.push(part);
-        //             console.log("this.partsForBilling",this.partsForBilling);
-        //         }
-        //     });
-        // }
-        // this.isSpinnerVisible = true;
-        // this.salesOrderService.getSalesOrderShippingParts(this.salesOrderId).subscribe(result => {
-        //     this.isSpinnerVisible = false;
-        //     if (result && result.length > 0) {
-        //         this.partsForBilling = result;
-        //     } else {
-        //         this.partsForBilling = [];
-        //     }
-        // }, error => {
-        //     this.errorHandling(error);
-        // })
-        //this.totalRecords = this.partsForBilling.length;
-        // this.totalPages = Math.ceil(
-        //     this.totalRecords / this.pageSize
-        // );
-        //this.showPaginator = this.totalRecords > 0;
         this.getShipVia();
         this.getCountriesList();
         this.getSiteName();
-        //this.getShippingData();
         this.getCustomerNameList();
         this.getOriginSiteNames();
         this.getUnitOfMeasure();
@@ -163,7 +139,6 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader.shipToCustomerId = this.customerDetails;
                 this.getSiteNamesByShipCustomerId(this.customerDetails['name']);
             }
-            //this.shippingHeader['originName'] = this.customerDetails['customerName'];
             this.shippingHeader['customerId'] = this.customerDetails['customerId'];
         }
     }
@@ -171,12 +146,14 @@ export class SalesOrderShippingComponent {
     onSelectPartNumber(rowData) {
         // if (rowData.salesOrderPartId != 0) {
         //     if (rowData.selected) {
-                this.partSelected = true;
-            // } else {
-            //     this.partSelected = false;
-            // }
-            // this.getShippingForSelectedPart(rowData.salesOrderPartId);
-       //}
+        this.currSOPickTicketId = rowData.soPickTicketId;
+        this.currQtyToShip = rowData.qtyToShip;
+        this.partSelected = true;
+        // } else {
+        //     this.partSelected = false;
+        // }
+        // this.getShippingForSelectedPart(rowData.salesOrderPartId);
+        //}
     }
 
     getShippingForSelectedPart(partNumber) {
@@ -190,10 +167,7 @@ export class SalesOrderShippingComponent {
             }
         }, error => {
             this.isSpinnerVisible = false;
-        })
-    }
-
-    loadData(event) {
+        });
     }
 
     convertDate(key, data) {
@@ -205,18 +179,13 @@ export class SalesOrderShippingComponent {
     }
 
     getOriginSiteNames() {
-        // managementStructureId
         this.orignSiteNames = [];
         this.commonService.getSitesbymanagementstructrue(this.managementStructureId).subscribe(res => {
             if (res && res.length > 0) {
-
                 this.orignSiteNames = res;
-                console.log("this.orignnames", this.orignSiteNames[0])
             }
-        },
-            err => {
-            }
-        );
+        }, err => {
+        });
     }
 
     calculateExpiryDate() {
@@ -225,64 +194,50 @@ export class SalesOrderShippingComponent {
     getCustomerNameList() {
         let userShipingIdList = [];
         userShipingIdList.push(0);
-        //this.commonService.getCustomerNameandCode("", 1).subscribe(res => {
         this.commonService.autoSuggestionSmartuserDropDownList(1, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
-            console.log("res,res", res)
-        },
-            err => {
-            });
+        }, err => {
+        });
     }
 
     getShipVia() {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
-            .subscribe(
-                (res) => {
-                    this.shipViaList = res;
-                },
-                err => {
-                });
+        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe((res) => {
+            this.shipViaList = res;
+        }, err => {
+        });
     }
 
     getSiteName(customerId = 0) {
         this.workorderService.getSiteByCustomerId(customerId == 0 ? this.customerDetails['customerId'] : customerId)
-            .subscribe(
-                res => {
-                    this.siteList = res;
-                    if (!this.shippingHeader.soldToSiteId) {
-                        this.siteList.forEach(
-                            x => {
-                                if (x.isPrimary) {
-                                    this.shippingHeader.soldToSiteId = x.customerShippingAddressId;
-                                    this.setSoldToAddress();
-                                    if (customerId == 0) this.setOriginAddress();
-                                }
+            .subscribe(res => {
+                this.siteList = res;
+                if (!this.shippingHeader.soldToSiteId) {
+                    this.siteList.forEach(
+                        x => {
+                            if (x.isPrimary) {
+                                this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
+                                //this.setSoldToAddress();
+                                if (customerId == 0) this.setOriginAddress();
                             }
-                        )
-                    }
-                },
-                err => {
-                });
+                        }
+                    )
+                }
+            }, err => {
+            });
     }
 
     getCountriesList() {
-        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name')
-            .subscribe(
-                res => {
-                    this.countryList = res;
-                },
-                err => {
-                });
+        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+            this.countryList = res;
+        }, err => {
+        });
     }
 
     getUnitOfMeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName')
-            .subscribe(
-                (res) => {
-                    this.allWeightUnitOfMeasureInfo = res;
-                },
-                err => {
-                });
+        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName').subscribe((res) => {
+            this.allWeightUnitOfMeasureInfo = res;
+        }, err => {
+        });
     }
 
     setShipToAddress() {
@@ -302,7 +257,7 @@ export class SalesOrderShippingComponent {
     }
 
     setSoldToAddresses() {
-        this.shipCustomerSiteList.forEach(site => {
+        this.soldCustomerSiteList.forEach(site => {
             if (site.customerDomensticShippingId == Number(this.shippingHeader.soldToSiteId)) {
                 this.shippingHeader['soldToAddress1'] = site.address1;
                 this.shippingHeader['soldToAddress2'] = site.address2;
@@ -313,25 +268,6 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader['soldToSiteName'] = site.siteName;
                 this.shippingHeader['soldToCountryName'] = site.countryName;
                 this.shippingHeader['soldToCountryId'] = site.countryId;
-            }
-        });
-    }
-
-    setOriginToAddress(value) {
-        this.orignSiteNames.forEach(site => {
-            if (site.originSiteId == value) {
-                // console.log("shipping heder",site)
-                this.shippingHeader['originName'] = site.originName;
-                this.shippingHeader['originAddress1'] = site.originAddress1;
-                this.shippingHeader['originAddress2'] = site.originAddress2;
-                this.shippingHeader['originCity'] = site.originCity;
-                this.shippingHeader['originState'] = site.originState;
-                this.shippingHeader['originZip'] = site.originZip;
-                // this.shippingHeader['shipToCountryId'] = site.countryId;
-                // this.shippingHeader['shipToSiteName'] = site.siteName;
-                this.shippingHeader['originCountryName'] = site.originCountryName;
-                this.shippingHeader['originCountryId'] = site.originCountryId;
-                console.log("shipping heder", this.shippingHeader)
             }
         });
     }
@@ -350,7 +286,7 @@ export class SalesOrderShippingComponent {
     }
 
     clearSoldToAddress() {
-        this.shipCustomerSiteList = [];
+        this.soldCustomerSiteList = [];
         this.shippingHeader['soldToAddress1'] = "";
         this.shippingHeader['soldToAddress2'] = "";
         this.shippingHeader['soldToCity'] = "";
@@ -386,7 +322,7 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader['originState'] = site.stateOrProvince;
                 this.shippingHeader['originZip'] = site.postalCode;
                 this.shippingHeader['originCountryId'] = site.countryId;
-                this.shippingHeader['originSiteName'] = site.siteName;
+                this.shippingHeader['originName'] = site.siteName;
                 this.shippingHeader['originCountryName'] = site.countryName;
             }
         });
@@ -394,9 +330,10 @@ export class SalesOrderShippingComponent {
 
     assignDetails(value) {
         if (value == true) {
-            this.shippingHeader.shipToCustomerId = this.customerDetails;
+            //this.shippingHeader.shipToCustomerId = this.customerDetails;
+            this.shippingHeader.shipToCustomerId = this.shippingHeader.soldToName;
             //this.getSiteNamesByShipCustomerId(this.customerDetails);
-            //this.getSiteNamesBySoldCustomerId(this.shippingHeader.soldToName);
+            this.getSiteNamesByShipCustomerId(this.shippingHeader.soldToName);
             this.shippingHeader['shipToSiteId'] = this.shippingHeader.soldToSiteId;
             // this.shippingHeader.shipToSiteId=this.
             this.shippingHeader['shipToAddress1'] = this.shippingHeader.soldToAddress1;
@@ -415,17 +352,15 @@ export class SalesOrderShippingComponent {
         const value = event.query.toLowerCase();
         let userShipingIdList = [];
         userShipingIdList.push(0);
-        //this.commonService.getCustomerNameandCode(value, 1).subscribe(res => {
         this.commonService.autoSuggestionSmartuserDropDownList(1, value, true, 20, userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
-        },
-            err => {
-            });
+        }, err => {
+        });
     }
 
     async getSiteNamesByShipCustomerId(object) {
         this.clearShipToAddress();
-        const { customerId } = object;
+        let customerId = object.userID;
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
             this.shipCustomerShippingOriginalData = res[0];
             this.shipCustomerSiteList = res[0];
@@ -433,7 +368,7 @@ export class SalesOrderShippingComponent {
                 x => {
                     if (x.isPrimary) {
                         this.shippingHeader.shipToSiteId = x.customerDomensticShippingId;
-                        //this.setShipToAddress();
+                        this.setShipToAddress();
                     }
                 }
             )
@@ -444,14 +379,14 @@ export class SalesOrderShippingComponent {
     async getSiteNamesBySoldCustomerId(object) {
         this.clearSoldToAddress();
         let customerId = object.userID;
-        this.getSiteName(customerId);
+        //this.getSiteName(customerId);
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+            this.soldCustomerSiteList = res[0];
             this.shipCustomerShippingOriginalData = res[0];
-            this.shipCustomerSiteList = res[0];
             this.shipCustomerShippingOriginalData.forEach(
                 x => {
                     if (x.isPrimary) {
-                        this.shippingHeader.soldToSiteId = x.customerShippingAddressId;
+                        this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
                         this.setSoldToAddresses();
                     }
                 }
@@ -466,28 +401,6 @@ export class SalesOrderShippingComponent {
         } else if (value === '' && type === 'ShipTo') {
             this.shipCustomerAddress = new AddressModel();
         }
-    }
-
-    getShippingData() {
-        this.isSpinnerVisible = true;
-        this.salesOrderService.getSalesOrderShipping(this.salesOrderId, this.salesOrderPartNumberId)
-            .subscribe(
-                (res: any) => {
-                    this.isSpinnerVisible = false;
-                    if (res) {
-                        if (!res['response']) {
-                            this.getEditSiteData(res.shipToCustomerId);
-                            console.log('this.shipCustomerSiteList', this.shipCustomerSiteList);
-                            this.shippingHeader = res;
-                            this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
-                            this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
-                            this.shippingHeader['shipToCustomerId'] = { userID: res.shipToCustomerId, userName: res.shipToCustomer };
-                        }
-                    }
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                });
     }
 
     async getEditSiteData(customerId) {
@@ -511,61 +424,99 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['trackingNum'] = 23;
         this.shippingHeader['houseAirwayBill'] = 349;
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('userID', this.shippingHeader['shipToCustomerId']);
+        this.shippingHeader['soldToName'] = this.shippingHeader.soldToName.userName;
+        this.shippingHeader['sOPickTicketId'] = this.currSOPickTicketId;
+        this.shippingHeader['qtyShipped'] = this.currQtyToShip;
         this.isSpinnerVisible = true;
         this.salesOrderService.createShipping(this.shippingHeader)
             .subscribe(
                 (res: any) => {
                     this.isSpinnerVisible = false;
+                    //this.getEditSiteData(res.shipToCustomerId);
                     // this.shippingHeader = res;
-                    // this.shippingHeader['shipToCustomerId'] = { customerId: res.shipToCustomerId, customerName: res.shipToCustomer };
-                    this.getEditSiteData(res.shipToCustomerId);
-                    this.shippingHeader = res;
-                    this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
-                    this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
-                    this.shippingHeader['shipToCustomerId'] = { userID: res.shipToCustomerId, userName: res.shipToCustomer };
-                    this.customerNamesList.forEach(
-                        x => {
-                            if (x.userID == res['shipToCustomerId']) {
-                                this.shippingHeader['shipToCustomerId'] = x;
-                            }
-                        }
-                    )
+                    // this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
+                    // this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
+                    // this.shippingHeader['shipToCustomerId'] = { userID: res.shipToCustomerId, userName: res.shipToCustomer };
+                    // this.customerNamesList.forEach(
+                    //     x => {
+                    //         if (x.userID == res['shipToCustomerId']) {
+                    //             this.shippingHeader['shipToCustomerId'] = x;
+                    //         }
+                    //     }
+                    // )
                     this.alertService.showMessage(
                         'Sales Order',
                         'Sales Order Shipping created Succesfully',
                         MessageSeverity.success
                     );
-                    this.getShippingData();
+                    this.partSelected = false;
+                    this.getShippingList();
                 }, err => {
                     this.isSpinnerVisible = false;
                 });
     }
 
     get userName(): string {
-        return this.authService.currentUser
-            ? this.authService.currentUser.userName
-            : "";
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
     shippingList: any[] = [];
+
     getShippingList() {
         this.isSpinnerVisible = true;
         this.salesOrderService
-          .getShippingDataList(this.salesOrderId)
-          .subscribe((response: any) => {
-            this.isSpinnerVisible = false;
-            this.shippingList = response[0];
-            console.log("this.shippingList ",this.shippingList);
-            this.showPaginator = this.totalRecords > 0;
-          }, error => {
-            this.isSpinnerVisible = false;
-          });
+            .getShippingDataList(this.salesOrderId)
+            .subscribe((response: any) => {
+                this.isSpinnerVisible = false;
+                this.shippingList = response[0];
+                //this.showPaginator = this.totalRecords > 0;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
-    checked(event,poindex){
-        console.log(event.target.checked);
-        console.log(poindex);
+    checked(event, poindex) {
         this.shippingList[0].soshippingchildviewlist[0].selected = true;
     }
 
+    // setOriginToAddress(value) {
+    //     this.orignSiteNames.forEach(site => {
+    //         if (site.originSiteId == value) {
+    //             this.shippingHeader['originName'] = site.originName;
+    //             this.shippingHeader['originAddress1'] = site.originAddress1;
+    //             this.shippingHeader['originAddress2'] = site.originAddress2;
+    //             this.shippingHeader['originCity'] = site.originCity;
+    //             this.shippingHeader['originState'] = site.originState;
+    //             this.shippingHeader['originZip'] = site.originZip;
+    //             // this.shippingHeader['shipToCountryId'] = site.countryId;
+    //             // this.shippingHeader['shipToSiteName'] = site.siteName;
+    //             this.shippingHeader['originCountryName'] = site.originCountryName;
+    //             this.shippingHeader['originCountryId'] = site.originCountryId;
+    //         }
+    //     });
+    // }
+
+    // getShippingData() {
+    //     this.isSpinnerVisible = true;
+    //     this.salesOrderService.getSalesOrderShipping(this.salesOrderId, this.salesOrderPartNumberId)
+    //         .subscribe(
+    //             (res: any) => {
+    //                 this.isSpinnerVisible = false;
+    //                 if (res) {
+    //                     if (!res['response']) {
+    //                         this.getEditSiteData(res.shipToCustomerId);
+    //                         this.shippingHeader = res;
+    //                         this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
+    //                         this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
+    //                         this.shippingHeader['shipToCustomerId'] = { userID: res.shipToCustomerId, userName: res.shipToCustomer };
+    //                     }
+    //                 }
+    //             },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //             });
+    // }
+
+    // loadData(event) {
+    // }
 }
