@@ -38,7 +38,7 @@
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
-                                        <span *ngIf="summaryColumn.field != 'hidePart'
+                                        <span *ngIf="summaryColumn.field != 'count'
                                             && summaryColumn.field != 'quantityRequested'
                                             && summaryColumn.field != 'quantityToBeQuoted'
                                             && summaryColumn.field != 'quantityAlreadyQuoted'
