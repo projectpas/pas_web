@@ -7,12 +7,14 @@ import { getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGl
 import { AuthService } from '../../../../services/auth.service';
 declare var $: any;
 import { AlertService } from '../../../../services/alert.service';
+
 @Component({
   selector: 'app-work-order-labor',
   templateUrl: './work-order-labor.component.html',
   styleUrls: ['./work-order-labor.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
+
 /** WorkOrderMainComponent component*/
 export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() savedWorkOrderData;
@@ -62,9 +64,11 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   deletingLabourObj: any;
   taskIndexToggle: any;
   labourHeader: any;
+
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,
     private commonService: CommonService) { }
+    
   ngOnInit() {
     this.allEmployees = this.employeesOriginalData;
     this.dropdownSettings = {
