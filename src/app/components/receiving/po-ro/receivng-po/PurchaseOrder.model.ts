@@ -46,12 +46,12 @@ export class PurchaseOrder {
     isActive: boolean;
     managementStructureId: number;
     openDate: string;
-    
+
     dateApproved: string;
 
     purchaseOderPart: PurchaseOrderPart[];
     vendor: Vendor;
-    stockLine: StockLine[];    
+    stockLine: StockLine[];
 }
 
 export class PartStockLineMapper {
@@ -94,8 +94,8 @@ export class PurchaseOrderPart {
     memo: string;
     poPartSplitUserTypeId: number;
     poPartSplitUserId: number;
-    poPartSplitUser:string;
-    poPartSplitUserTypeName:string;
+    poPartSplitUser: string;
+    poPartSplitUserTypeName: string;
     poPartSplitAddress1: string;
     poPartSplitAddress2: string;
     poPartSplitAddress3: string;
@@ -177,9 +177,9 @@ export class PurchaseOrderPart {
     companyId: number = 0;
     businessUnitId: number = 0;
     divisionId: number = 0;
-    departmentId: number =0;
+    departmentId: number = 0;
 
-    maincompanylist: [];    
+    maincompanylist: [];
     parentBulist: [];
     parentDivisionlist: [];
     parentDepartmentlist: [];
@@ -199,7 +199,7 @@ export class PurchaseOrderPart {
     stockLineDraft: StockLine[];
     timeLifeDraft: TimeLife[];
 
-    
+
 }
 
 export class TimeLife {
@@ -230,32 +230,32 @@ export class TimeLife {
     stockLineId: number;
 }
 
-export class TimeLifeDraft {   
+export class TimeLifeDraft {
 
     timeLifeDraftCyclesId: number = 0;
-	cyclesRemaining : string=null;
-	cyclesSinceNew : string=null;
-	cyclesSinceOVH  : string=null;
-	cyclesSinceInspection : string=null;
-	cyclesSinceRepair : string=null;
-	timeRemaining : string=null;
-	timeSinceNew : string=null;
-	timeSinceOVH : string=null;
-	timeSinceInspection : string=null;
-	timeSinceRepair : string=null;
-	lastSinceNew : string=null;
-	lastSinceOVH : string=null;
-	lastSinceInspection : string=null;
-	masterCompanyId: number= 0;
-	isActive: boolean;
-	StockLineDraftId  : number= 0;
-	detailsNotProvided: boolean = false;
-	purchaseOrderId: number = null;
-	purchaseOrderPartRecordId: number = null;
-	RepairOrderId : number = null;
-	RepairOrderPartRecordId : number = null;	
-    
-    
+    cyclesRemaining: string = null;
+    cyclesSinceNew: string = null;
+    cyclesSinceOVH: string = null;
+    cyclesSinceInspection: string = null;
+    cyclesSinceRepair: string = null;
+    timeRemaining: string = null;
+    timeSinceNew: string = null;
+    timeSinceOVH: string = null;
+    timeSinceInspection: string = null;
+    timeSinceRepair: string = null;
+    lastSinceNew: string = null;
+    lastSinceOVH: string = null;
+    lastSinceInspection: string = null;
+    masterCompanyId: number = 0;
+    isActive: boolean;
+    StockLineDraftId: number = 0;
+    detailsNotProvided: boolean = false;
+    purchaseOrderId: number = null;
+    purchaseOrderPartRecordId: number = null;
+    RepairOrderId: number = null;
+    RepairOrderPartRecordId: number = null;
+
+
     cyclesRemainingHrs: number;
     cyclesRemainingMin: number;
     cyclesSinceNewHrs: number;
@@ -283,7 +283,7 @@ export class TimeLifeDraft {
     lastSinceOVHHrs: number;
     lastSinceOVHMin: number;
     lastSinceInspectionHrs: number;
-    lastSinceInspectionMin: number;    
+    lastSinceInspectionMin: number;
     stockLineId: number;
 
     // timeLifeDraftCyclesId: number;
@@ -566,7 +566,7 @@ export class StockLine {
 //     traceableToObject: DropDownData;
 //     createdBy: string;
 //     updatedBy: string;
-    
+
 //     maincompanylist: [];
 //     parentCompanyId: number = 0;
 //     parentBulist: [];
@@ -580,113 +580,113 @@ export class StockLine {
 export class StockLineDraft {
     stockLineDraftId: number = 0;
     partNumber: string = null;
-    stockLineNumber: string =  null;
+    stockLineNumber: string = null;
     stocklineMatchKey: string = null;
     controlNumber: string = null;
     itemMasterId: number = null;
     quantity: number = 0;
-	blackListed : boolean = false;          
-    blackListedReason :  string = null;	
-	incident:boolean = false;  
-	incidentReason : string = null;	
-	accident :boolean = false;
-	accidentReason : string = null;	
-	quantityOnOrder : number = null;
-	quantityAvailable : number = null;
-	quantityOnHand : number = null;
-	quantityIssued : number = null;
-	quantityTurnIn : number = null;
-	quantityReserved : number = null;
-	workOrderMaterialsId  : number = null;
-	workOrderId : number = null;
-	conditionId: number = null;
-	serialNumber: string = null;
-	shelfLife: boolean = null;
-	shelfLifeExpirationDate: Date = null;
-	warehouseId: number = null;
-	locationId: number = null;   
-	obtainFrom: number = null;
-	owner: number = null;
-	traceableTo: number = null;
-	manufacturerId: number = null;
-	manufacturer: string = null;
+    blackListed: boolean = false;
+    blackListedReason: string = null;
+    incident: boolean = false;
+    incidentReason: string = null;
+    accident: boolean = false;
+    accidentReason: string = null;
+    quantityOnOrder: number = null;
+    quantityAvailable: number = null;
+    quantityOnHand: number = null;
+    quantityIssued: number = null;
+    quantityTurnIn: number = null;
+    quantityReserved: number = null;
+    workOrderMaterialsId: number = null;
+    workOrderId: number = null;
+    conditionId: number = null;
+    serialNumber: string = null;
+    shelfLife: boolean = null;
+    shelfLifeExpirationDate: Date = null;
+    warehouseId: number = null;
+    locationId: number = null;
+    obtainFrom: number = null;
+    owner: number = null;
+    traceableTo: number = null;
+    manufacturerId: number = null;
+    manufacturer: string = null;
     manufacturerLotNumber: string = null;
-    manufacturingDate: Date = null;	
-	manufacturingBatchNumber: string = null;
-	partCertificationNumber: string = null;
-	certifiedBy: string = null;
-	certifiedDate: Date = null;
-	tagDate: Date = null;
-	tagType: any = null;
-	certifiedDueDate: Date = null;
-	calibrationMemo: string = null;	
-	orderDate: Date = null;
-	purchaseOrderId: number = null;
-	purchaseOrderUnitCost: number = null;
-	inventoryUnitCost: number = null;
-	repairOrderId: number = 0;
+    manufacturingDate: Date = null;
+    manufacturingBatchNumber: string = null;
+    partCertificationNumber: string = null;
+    certifiedBy: string = null;
+    certifiedDate: Date = null;
+    tagDate: Date = null;
+    tagType: any = null;
+    certifiedDueDate: Date = null;
+    calibrationMemo: string = null;
+    orderDate: Date = null;
+    purchaseOrderId: number = null;
+    purchaseOrderUnitCost: number = null;
+    inventoryUnitCost: number = null;
+    repairOrderId: number = 0;
     repairOrderUnitCost: number = null;
-	repairOrderExtendedCost: number = null;
-	receivedDate: Date = null;
-	receiverNumber: string = null;
-	reconciliationNumber: string = null;
-	unitSalesPrice: number = null;
-	coreUnitCost: number = null;
-	gLAccountId: number = null;
-	assetId: number = null;
-	isHazardousMaterial: boolean = null;
-	isPMA: boolean = null;
+    repairOrderExtendedCost: number = null;
+    receivedDate: Date = null;
+    receiverNumber: string = null;
+    reconciliationNumber: string = null;
+    unitSalesPrice: number = null;
+    coreUnitCost: number = null;
+    gLAccountId: number = null;
+    assetId: number = null;
+    isHazardousMaterial: boolean = null;
+    isPMA: boolean = null;
     isDER: boolean = null;
-	oEM: boolean = null;
-	memo: string = null;
-    managementStructureEntityId: number = null;	
-	legalEntityId: number = null;
-	masterCompanyId: number = null;
-	isSerialized: boolean = null;
-	shelfId: number = null;
-	binId: number = null; 
-	siteId: number = null;
-	obtainFromType: number = null;
-	ownerType: number = null;
-	traceableToType: number = null;
-	unitCostAdjustmentReasonTypeId: number= null;
-	unitSalePriceAdjustmentReasonTypeId: number = null;   
+    oEM: boolean = null;
+    memo: string = null;
+    managementStructureEntityId: number = null;
+    legalEntityId: number = null;
+    masterCompanyId: number = null;
+    isSerialized: boolean = null;
+    shelfId: number = null;
+    binId: number = null;
+    siteId: number = null;
+    obtainFromType: number = null;
+    ownerType: number = null;
+    traceableToType: number = null;
+    unitCostAdjustmentReasonTypeId: number = null;
+    unitSalePriceAdjustmentReasonTypeId: number = null;
     idNumber: string = null;
     quantityToReceive: number = 0;
-	expirationDate: Date = null;
-	manufacturingTrace: string = null;
-	purchaseOrderExtendedCost: number = 0; 
-	aircraftTailNumber: string = null;
-	shippingViaId: number = null;
-	engineSerialNumber: string = null;
-	quantityRejected: number = 0;
-	purchaseOrderPartRecordId: number = null;
-	shippingAccount: string = null;
-	shippingReference: string = null;
-	timeLifeCyclesId: number = null;
-	timeLifeDetailsNotProvided: boolean = false;
-	repairOrderPartRecordId : number = null;
-	isActive: boolean = false;
-	isDeleted: boolean = false;
-	workOrderExtendedCost : number = 0;
-	nHAItemMasterId : number = null;
-	tLAItemMasterId : number = null;
-	isParent : boolean = null;
-	parentId : number = null;
-	isSameDetailsForAllParts : boolean = null;     
-    
-    managementStructureId: number = null;    
+    expirationDate: Date = null;
+    manufacturingTrace: string = null;
+    purchaseOrderExtendedCost: number = 0;
+    aircraftTailNumber: string = null;
+    shippingViaId: number = null;
+    engineSerialNumber: string = null;
+    quantityRejected: number = 0;
+    purchaseOrderPartRecordId: number = null;
+    shippingAccount: string = null;
+    shippingReference: string = null;
+    timeLifeCyclesId: number = null;
+    timeLifeDetailsNotProvided: boolean = false;
+    repairOrderPartRecordId: number = null;
+    isActive: boolean = false;
+    isDeleted: boolean = false;
+    workOrderExtendedCost: number = 0;
+    nHAItemMasterId: number = null;
+    tLAItemMasterId: number = null;
+    isParent: boolean = null;
+    parentId: number = null;
+    isSameDetailsForAllParts: boolean = null;
+
+    managementStructureId: number = null;
     site: string = null;
     shelf: string = null;
-    bin: string = null;    
+    bin: string = null;
     timeLife: boolean = null;
     timeLifeId: number = null;
     companyId: number = null;
     businessUnitId: number = null;
     divisionId: number = null;
     departmentId: number = null;
-    createdDate: Date = new Date(); 
-    updatedDate: Date = new Date();   
+    createdDate: Date = new Date();
+    updatedDate: Date = new Date();
 
     //View Properties
 
@@ -720,10 +720,10 @@ export class StockLineDraft {
     glAccountText: string = null;
     obtainFromObject: DropDownData = null;
     ownerObject: DropDownData = null;
-    traceableToObject: DropDownData= null;
+    traceableToObject: DropDownData = null;
     createdBy: string = null;
     updatedBy: string = null;
-    
+
     maincompanylist: [];
     parentCompanyId: number = 0;
     parentBulist: [];
@@ -732,21 +732,40 @@ export class StockLineDraft {
     parentbuId: number = 0;
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
-    level1: string = null; 
+    level1: string = null;
     level2: string = null;
     level3: string = null;
     level4: string = null;
-
-}   
+    Condition: string = null;
+    Warehouse: string = null;
+    Location: string = null;
+    ObtainFromName: string = null;
+    OwnerName: string = null;
+    TraceableToName: string = null;
+    GLAccount: string = null;
+    AssetName: string = null;
+    LegalEntityName: string = null;
+    ShelfName: string = null;
+    BinName: string = null;
+    SiteName: string = null;
+    ObtainFromTypeName: string = null;
+    OwnerTypeName: string = null;
+    TraceableToTypeName: string = null;
+    UnitCostAdjustmentReasonType: string = null;
+    UnitSalePriceAdjustmentReasonType: string = null;
+    ShippingVia: string = null;
+    WorkOrder: string = null;
+    WorkOrderMaterialsName: string = null;
+}
 
 export class ReceiveParts {
     itemMasterId: boolean;
     isSerialized: boolean;
-    isSameDetailsForAllParts: boolean;    
+    isSameDetailsForAllParts: boolean;
     purchaseOrderPartRecordId: number;
-    repairOrderPartRecordId : number=0;
-    altEquiPartNumberId: number=0;
-    mappingType : number=0;
+    repairOrderPartRecordId: number = 0;
+    altEquiPartNumberId: number = 0;
+    mappingType: number = 0;
     stockLines: StockLineDraft[];
     timeLife: TimeLifeDraft[];
     quantityRejected: number;
