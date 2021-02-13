@@ -178,7 +178,8 @@ export class SalesOrderCreateComponent implements OnInit {
   soStatusList: any = [];
   soTypeList: any = [];
   addressType: any = 'SO';
-  showAddresstab:boolean  = false;
+  showAddresstab: boolean = false;
+
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -198,6 +199,7 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger;
     this.loadSOStatus();
     this.loadSOType();
 
@@ -677,7 +679,7 @@ export class SalesOrderCreateComponent implements OnInit {
     if (this.salesOrderObj && this.salesOrderObj.salesOrderQuoteId && this.salesOrderObj.salesOrderQuoteId) {
       this.controlSettings.showViewQuote = true;
     }
-    
+
     let partList: any[] = this.salesOrderView.parts;
     for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
@@ -1224,7 +1226,7 @@ export class SalesOrderCreateComponent implements OnInit {
       case SalesOrderActionType.CloseSalesOrder:
         this.isEmailTabEnabled = false;
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
+          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId, this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1234,7 +1236,7 @@ export class SalesOrderCreateComponent implements OnInit {
       case SalesOrderActionType.CancelSalesOrder:
         this.isEmailTabEnabled = false;
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
+          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId, this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1631,6 +1633,6 @@ export class SalesOrderCreateComponent implements OnInit {
     });
   }
 
-  getChargesList() {}
-  getFreightList() {}
+  getChargesList() { }
+  getFreightList() { }
 }
