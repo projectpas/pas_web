@@ -41,32 +41,31 @@
 
                     </div>
                     <div class="col" style="text-align: end;">
-                        <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm"
-                            style="float: right;">
+                        <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50" class="form-control"
                                 (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                                style="height: 28px !important;" />
+                                 />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+                        <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                             matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                             data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
-                            data-target="#textdownloadConfirmation" style="padding:5px 10px !important;"></button>
-                        <button type="button" class="btn btn-primary new-table-button"
+                            data-target="#textdownloadConfirmation"></button>
+                        <button type="button" class="btn btn-primary exports-button"
                             matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download"
                             iconPos="left" label="Export Selected Data" (click)="dt.exportCSV({ selectionOnly: true })"
-                            style="padding:5px 10px !important;"></button>
+                           ></button>
                     </div>
                     <div class="col">
                         <div class="">
                             <div class="col" style="width: 395px; float: right; padding-top: 3px;">
                                 <div class="form-group" style="float: right;">
-                                    <div class="checkbox-cstm pull-left" style="margin-left: 0;">
-                                        <label style="width: auto !important;margin-top: 3px;">
+                                    <div class="checkbox-cstm pull-left checkbox-align">
+                                        <label class="checkbox-label-align">
                                             <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55"
                                                 id="cparent55" (click)="getDeleteListByStatus($event.target.checked)" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -385,11 +384,11 @@
                 [(ngModel)]="memoPopupContent" [style]="{ height: '320px' }"
                 name="memoPopupContent"></p-editor>
                 <div class="editor-buttons">
-                    <button type="button" class="btn btn-primary editor-buttons-margin" (click)="onClickPopupSave()"
+                    <button type="button" class="btn btn-primary " (click)="onClickPopupSave()"
                         [disabled]="disableSaveMemo">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger editor-buttons-margin"
+                    <button type="button" class="btn btn-danger"
                         (click)="closeMemoModel()">
                         Close
                     </button>
@@ -545,8 +544,9 @@
                         </p>
                     </div>
                 </div> -->
-                <div class="table-responsive history_hg">
-                    <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                    <div class="tableFixHead">
+                    <table class="table table-bordered header-table-width">
                         <thead>
                             <tr>
                                 <th>Mobile</th>
@@ -588,6 +588,8 @@
                         </tbody>
 
                     </table>
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">

@@ -238,8 +238,9 @@
                         </p>
                     </div>
                 </div> -->
-                <div class="table-responsive history_hg">
-                    <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                   <div class="tableFixHead">
+                    <table class="table table-bordered header-table-width">
                         <thead>
                             <tr>
                                 <th>Email Type</th>
@@ -298,6 +299,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -422,7 +424,7 @@
                                     <input class="form-control"  type="email" name="cc"  [pattern]="emailPattern" #ccEmail="ngModel" [(ngModel)]="cc" multiple="true">
                                     <div *ngIf="ccEmail.errors" [ngClass]="'error'">  
                                         <div *ngIf="ccEmail.errors.pattern">
-                                            <span style="color:red">Email  not valid</span>
+                                            <span class="clr-red">Email  not valid</span>
                                         </div>
                                     </div>
                                 </div>

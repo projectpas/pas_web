@@ -46,8 +46,9 @@
         (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th class="toggel_td table-column-width"></th>
-                <th class="table-column-width" *ngFor="let col of columns" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }">
+                <th class="table-column-width"></th>
+                <!-- [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" -->
+                <th class="table-column-width" *ngFor="let col of columns" >
                     {{col.header}} 
                 </th>
                 <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
@@ -56,7 +57,7 @@
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
             <!-- [ngClass]="{'color_pick': rowData.isRoleUp==false }" -->
             <tr>
-                <td class="toggel_td table-column-width">
+                <td class="table-column-width">
                     <span *ngIf="rowData.partStatusId !=0">
                         <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-success"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="getRollupMaterialList(rowData,i)" ></i> 
                     </span>
@@ -74,7 +75,7 @@
                     class="form-control w60" [(ngModel)]="rowData.defered" style="pointer-events: none;margin-left: 43%;">
                     <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
                 </td>
-                <td class="materiallist-action action-icons-cstm table-column-width" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+                <td class="action-icons-cstm table-column-width" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
                     <span data-target="#addNewMaterials" data-toggle="modal"><button class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
                     <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false" [disabled]="!(rowData.quantity > rowData.quantityIssued + rowData.quantityReserved + rowData.partQuantityAvailable)"  matTooltip="Create PO" matTooltipPosition="above" [ngClass]="{'btn_disabled': !(rowData.quantity > (rowData.quantityIssued + rowData.quantityReserved + rowData.partQuantityAvailable))}"><i class="fa fa-plus"></i></button></span>
                    
@@ -97,7 +98,7 @@
         </ng-template> 
         <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td colspan="48" class="align_centd no-records-cstm no-records-msg">
+                <td colspan="48" class="no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>

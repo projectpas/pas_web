@@ -36,13 +36,15 @@
                                         General Info
                                         <button *ngIf="isView" class="btn-sm header-button" style="margin-left:20px" (click)="toggleDisplayMode()">
                                             {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
+
+                                        </h4>
                                         <!-- <span [hidden]="isDetailedView" class="more-details-btn">
                                             (More <i class="fa fa-caret-down"></i>)
                                         </span>
                                         <span [hidden]="!isDetailedView" class="less-details-btn">
                                             (Less <i class="fa fa-caret-up"></i>)
                                         </span> -->
-                                    </h4>
+                                   
                                     <!--(click)="toggleDisplayMode()"-->
                                   
                                     <!-- <div class="clear"></div> -->
@@ -413,16 +415,16 @@
                             id="mpn-list-table">
                             <thead>
                                 <tr class="header-table-width">
-                                    <th rowspan="2">MPN *</th>
-                                    <th rowspan="2">MPN Description *</th>
+                                    <th rowspan="2">MPN <span class="clr-red">*</span></th>
+                                    <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                     <th rowspan="2">Revised MPN</th>
                                     <th rowspan="2">Item Group</th>
                                     <th rowspan="2">Qty</th>
-                                    <th rowspan="2">Work Scope *</th>
+                                    <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
                                     <th rowspan="2">Customer Ref</th>
                                     <th rowspan="2" colspan="4">Management Structure </th>
                                     <th rowspan="2">NTE</th>
-                                    <th rowspan="2">Cond *</th>
+                                    <th rowspan="2">Cond <span class="clr-red">*</span></th>
                                     <th rowspan="2" *ngIf="workOrderGeneralInformation.workOrderTypeId==1">Contract</th>
                                     <th rowspan="2" *ngIf="workOrderGeneralInformation.workOrderTypeId==1"
                                         style="min-width: 80px;">Contract No</th>
@@ -430,14 +432,14 @@
                                     <th rowspan="2">Serial Num </th>
                                     <th rowspan="2">CMM/Pub Ref</th>
                                     <th rowspan="2">Workflow ID </th>
-                                    <th rowspan="2">Stage *</th>
-                                    <th rowspan="2">Status *</th>
-                                    <th rowspan="2">Priority *</th>
+                                    <th rowspan="2">Stage <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Status <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Priority <span class="clr-red">*</span></th>
                                     <th rowspan="2">Customer Received Date</th>
-                                    <th rowspan="2">Customer Request Date *</th>
-                                    <th rowspan="2">Promised Date *</th>
-                                    <th rowspan="2">Est. Comp Date *</th>
-                                    <th rowspan="2">Est. Ship Date *</th>
+                                    <th rowspan="2">Customer Request Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
                                     <th colspan="2">Restrictions</th>
                                     <th rowspan="2">Tech Name</th>
                                     <th rowspan="2">Tech Station</th>

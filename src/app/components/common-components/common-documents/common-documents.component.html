@@ -53,8 +53,8 @@
             <div class="">
               <div class="col" style="width: 395px; float: right; padding-top: 3px;">
                 <div class="form-group" style="float: right;">
-                  <div class="checkbox-cstm pull-left" style="margin-left: 0;">
-                    <label style="width: auto !important;margin-top: 3px;">
+                  <div class="checkbox-cstm pull-left checkbox-align">
+                    <label class="checkbox-label-align">
                       <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
                         (click)="getDeleteListByStatus($event.target.checked)" />
                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -672,8 +672,9 @@
                         </p>
                     </div>
                 </div> -->
-        <div class="table-responsive history_hg">
-          <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                  <div class="tableFixHead">
+          <table class="table table-bordered header-table-width">
             <thead>
               <tr>
                 <th>Name <span class="clr-red">*</span></th>
@@ -727,6 +728,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
