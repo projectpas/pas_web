@@ -2,21 +2,28 @@
     <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isView"></p-breadcrumb>
     <div class="right_col" role="main">
         <form #workOrderForm="ngForm">
-            <div class="col-md-12">
+            <div class="x_content">
                 <div class="card new-card" *ngIf="!isSubWorkOrder">
-                    <div class="x_content">
-                        <div class="header " *ngIf="!isSubWorkOrder && !isView">
-                              <div class="pull-left">
+                  
+                        <div class="card-header header " *ngIf="!isSubWorkOrder && !isView">
+                            <div class="row">
+                                <div class="col">
                                   <h4  class="header-name">
-                                      {{ isEdit ? 'Edit' : 'Create' }} Work Order</h4>
-                              </div>
-                              <button class="btn-sm header-button" style="margin-left:20px" (click)="toggleDisplayMode()">
+                                      {{ isEdit ? 'Edit' : 'Create' }} Work Order
+                             
+                              <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
                                 {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
+                            </h4>
+                            </div>
+                            <div>
                                 <button type="button"
                                   class="btn-sm header-button pull-right"
                                   [routerLink]="['/workordersmodule/workorderspages/app-work-order-list']">
                                   Work Order List  </button>
+                                  
+                                </div>
                            </div>
+                        </div>
                         <!-- <div class="pheading" *ngIf="!hideWOHeader">
                             <h4 *ngIf="!isSubWorkOrder && !isView" class="page-heading">Create Work Order </h4>
                             <h4 *ngIf="isSubWorkOrder && !isView" class="page-heading">Create Sub Work Order </h4>
@@ -398,11 +405,14 @@
                     </div>
                     <div>
                     </div>
-                    <div class="table-responsive add-wo-grid" *ngIf="!hideWOHeader">
-                      <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+                    <div class="card new-card">
+                        <div class="card-body">
+                    <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="!hideWOHeader">
+                        <div class="tableFixHead">
+                        <table class="table table-bordered mpn-list-table"
                             id="mpn-list-table">
                             <thead>
-                                <tr>
+                                <tr class="header-table-width">
                                     <th rowspan="2">MPN *</th>
                                     <th rowspan="2">MPN Description *</th>
                                     <th rowspan="2">Revised MPN</th>
@@ -465,16 +475,16 @@
                                     </td>
                                     <td> 
                                         <input type="text" class="form-control w100" name="revisedPartNo{{i}}"
-                                               #description="ngModel" [(ngModel)]="workOrderPartNumber.revisedPartNo"
+                                               #description="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.revisedPartNo"
                                                disabled>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w100" name="itemGroup{{i}}"
-                                               #description="ngModel" [(ngModel)]="workOrderPartNumber.itemGroup"
+                                               #description="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.itemGroup"
                                                disabled>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w100 text_right qty_width" name="quantity{{i}}"
+                                        <input type="number" style="width:100% !important" class="form-control w100 text_right qty_width" name="quantity{{i}}"
                                                [(ngModel)]="workOrderPartNumber.quantity" disabled>
                                     </td>
                                     <td>
@@ -520,7 +530,7 @@
                                                [matTooltip]="parsedText(workOrderPartNumber.level4)" > -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w50"
+                                        <input type="text" class="form-control w50" style="width:100% !important"
                                                [(ngModel)]="workOrderPartNumber.nte" name="nte{{i}}" #nte="ngModel"
                                               >
                                     </td>
@@ -540,25 +550,25 @@
             disabled> -->
                                     </td>
                                     <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1" class="text_center" >
-                                        <input type="checkbox" name="contract {{i}}" #contract="ngModel"  (ngModelChange)="getValid()" 
+                                        <input type="checkbox" style="width:100% !important" name="contract {{i}}" #contract="ngModel"  (ngModelChange)="getValid()" 
                                                class="form-control w60" [(ngModel)]="workOrderPartNumber.isMPNContract" disabled>
                                         <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> Contract -->
                                     </td>
                                     <td>
                                         <!-- {{workOrderPartNumber.contractNo}} -->
-                                        <input type="text" name="contract1{{i}}" class="form-control w100"
+                                        <input type="text" style="width:100% !important" name="contract1{{i}}" class="form-control w100"
                                                [(ngModel)]="workOrderPartNumber.contractNo"  (ngModelChange)="getValid()"
                                                [required]="workOrderPartNumber.isMPNContract"
                                                [disabled]="!workOrderPartNumber.isMPNContract">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w100" name="stockLineNumber{{i}}"
-                                               #serialNumber="ngModel" [(ngModel)]="workOrderPartNumber.stockLineNumber"
+                                               #serialNumber="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.stockLineNumber"
                                                disabled>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w100" name="serialNumber{{i}}"
-                                               #serialNumber="ngModel" [(ngModel)]="workOrderPartNumber.serialNumber"
+                                               #serialNumber="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.serialNumber"
                                                disabled>
                                     </td>
                                     <td>
@@ -698,6 +708,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     <div class="footer_adjust" *ngIf="!hideWOHeader && !isView">
                         <button class="btn btn-primary pull-right" *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer"
@@ -712,6 +723,8 @@
                         <button *ngIf="showTabsGrid && !isView" class="btn btn-primary pull-right" (click)="createQuote()">
                             {{(workOrderQuoteId)?'Edit Quote':'Create Quote'}}
                         </button>
+                    </div>
+                    </div>
                     </div>
 
                     <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
@@ -733,7 +746,7 @@
                             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
                         </div>
                     </ng-template>
-                </div>
+            
             </div>
         </form>
         <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
