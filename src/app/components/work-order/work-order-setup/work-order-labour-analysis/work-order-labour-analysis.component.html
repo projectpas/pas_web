@@ -1,9 +1,17 @@
-<div class="col-md-12" style="margin-bottom: 15px;">
+<!-- <div class="col-md-12" style="margin-bottom: 15px;">
     <h4 class="po-head-sm">
         Labour Analysis Overview
     </h4>
-</div>
-<div>    
+</div> -->
+<div class="card new-card">
+    <div class="card-header header" >
+      <div class="row">
+        <div class="col">
+          <h4 class="header-name"> Labour Analysis Overview</h4>
+        </div>
+      </div>
+    </div>
+    <div class="card-body header-body">    
     <p-table #dt
     class="p-table-cstm wo-ptable-padd ptable-f10"
     [value]="data"
@@ -22,23 +30,36 @@
     [scrollable]="true" scrollHeight="450px">
 
         <ng-template pTemplate="caption">
-            <div style="text-align: right; min-height: 30px; clear: both;">
+            <div class="row">
+                <div class="col">
                 <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
-          [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-                <button type="button" class="btn btn-primary new-table-button dwn_st" matTooltip="Download Data"
+          [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected" 
+          class="multiselect-field" defaultLabel="Choose Columns"></p-multiSelect>
+          </div>
+          <div class="col" style="text-align: end;">
+          <div					
+          class="global-search-field inner-addon right-addon inline-block"
+          >
+              <i class="fa fa-search"></i>
+              <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
+                  (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
+                   />
+          </div>
+          </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary exports-button dwn_st" matTooltip="Download Data"
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                 label="Export All Data"  data-toggle="modal"
                 (click)="selectedOnly = false; targetData = dt;" 
                 data-target="#downloadConfirmation"></button>
-                <button type="button" class="btn btn-primary dwn_st" matTooltip="Download Selected Data"
+                <button type="button" class="btn btn-primary exports-button dwn_st" matTooltip="Download Selected Data"
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                 (click)="dt.exportCSV({ selectionOnly: true })"></button>
-                <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm flt-rt">
-                    <i class="fa fa-search"></i>
-                    <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
-                        (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                        style="height: 28px !important;" />
-                </div>
+               </div>
+               </div>
+               
                 <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
@@ -62,16 +83,16 @@
                 </div>
           
           
-            </div>
+            
         </ng-template>
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
-                <col *ngFor="let col of columns" style="width:105px">
+                <col *ngFor="let col of columns" class="table-column-width" />
             </colgroup>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th style="width:auto"
+                <th class="table-column-width"
                     *ngFor="let col of columns"
                     pResizableColumn
                     pReorderableColumn
@@ -81,8 +102,8 @@
                 </th>
             </tr>
             <tr>
-                <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input style="width:100%;" pInputText type="text" (input)="
+                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input class="table-header-input-width" pInputText type="text" (input)="
                         dt.filter($event.target.value, col.field, 'contains')
                     " />
                 </th>
@@ -90,7 +111,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
-                    <td style="width:auto"
+                    <td class="table-column-width"
                     *ngFor="let col of columns"
                     class="ui-resizable-column"
                     pReorderableRowHandle>
@@ -105,21 +126,21 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td colspan="18" style="color: red; font-weight: bold; text-align: center">
+                <td colspan="18" class="no-records-msg no-records-cstm">
                     No records found
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;"
+            <input class="footer-input-width"
                     [(ngModel)]="dt._totalRecords"
                     [disabled]="true"
                     pInputText
                     type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;"
+            <input class="footer-input-width"
                     [ngModel]="getPageCount(dt._totalRecords, pageSize)"
                     [disabled]="true"
                     pInputText

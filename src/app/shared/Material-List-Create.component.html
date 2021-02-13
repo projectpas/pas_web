@@ -9,7 +9,7 @@
     </span>
   </div>
   <form #materialCreateForm="ngForm">
-    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
+    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
     <div class="tableFixHead">
     <table class="table table-bordered" style="height:auto;max-height:350px !important">
       <thead>
@@ -48,7 +48,7 @@
               <p-autoComplete (onSelect)="onPartSelect($event, material,i)" [suggestions]="partCollection"
                 (onClear)="clearautoCompleteInput(material, 'partNumber' )"
                 (keyup)="getPartnumbers($event.target.value)" (completeMethod)="filterpartItems($event)" [size]="30"
-                [(ngModel)]="material.partNumber" [minLength]="1" [dropdown]="true" class="workflow-measurement-select"
+                appendTo='body' [baseZIndex]="9999"  [(ngModel)]="material.partNumber" [minLength]="1" [dropdown]="true" class="workflow-measurement-select"
                 name="partnum_{{ i }}" required (ngModelChange)="getActive()">
                 <ng-template let-partName pTemplate="part">
                   <div class="ui-helper-clearfix">{{ partName }}</div>
@@ -67,7 +67,7 @@
           </td>
           <td>
             <p-dropdown placeholder="--Select--" (ngModelChange)="getActive()" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
-              (onChange)="getPNDetails(material)" class="p-dropdown-custom-md" [(ngModel)]="material.conditionCodeId"
+              (onChange)="getPNDetails(material)" class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.conditionCodeId"
               required>
             </p-dropdown>
           </td>
@@ -196,21 +196,18 @@
   </div>
 
   <div *ngIf="isQuote" style="float:right">
-    <button class="btn btn-primary btn-primary" (click)="saveMaterialsWorkOrder()"
-      style="padding: 6px 12px !important;margin-top: 10px;"
+    <button class="btn btn-primary" (click)="saveMaterialsWorkOrder()"
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
       Add
     </button>
   </div>
 
   <div *ngIf="isWorkOrder && isEdit" style="float:right">
-    <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateMaterialsWorkOrder()"
-      style="padding: 6px 12px !important;margin-top: 10px;"
+    <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="updateMaterialsWorkOrder()"
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability() || disableUpdateButton">
       Update
     </button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal"
-      style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
   </div>
 </div>
 

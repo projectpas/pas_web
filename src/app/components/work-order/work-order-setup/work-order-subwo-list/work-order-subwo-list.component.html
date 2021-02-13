@@ -20,12 +20,12 @@
     >
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
-          <col *ngFor="let col of columns" style="width:102px">
+          <col *ngFor="let col of columns" class="table-column-width">
       </colgroup>
     </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th style="width:auto"
+          <th class="table-column-width"
               *ngFor="let col of columns"
               pResizableColumn
               pReorderableColumn
@@ -33,20 +33,20 @@
               {{ col.header }}
               <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th style="width:80px;position:sticky" *ngIf="!isView">
+          <th class="table-actions-column" *ngIf="!isView">
             Actions
           </th>
         </tr>
         <tr>
-          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
             <input  pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
           </th>
-          <th *ngIf="!isView"></th>
+          <th class="table-column-width" *ngIf="!isView"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
-          <td *ngFor="let col of columns">
+          <td class="table-column-width" *ngFor="let col of columns">
             {{
               col.field == 'openDate'
                 ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -55,7 +55,7 @@
                 : rowData[col.field]
             }}
           </td>
-          <td style="width:80px;position:sticky" *ngIf="subWorkOrderData && !isView">
+          <td class="action-icons-cstm table-column-width" *ngIf="subWorkOrderData && !isView">
             <!-- <p-inputSwitch
               [(ngModel)]="rowData['isActive']"
               name="isActive{{ rowIndex }}"
@@ -116,17 +116,17 @@
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns *ngIf="subWorkOrderData.length == 0">
         <tr>
-          <td colspan="9" style="color: red; font-weight: bold; text-align: center">
+          <td colspan="9" class="no-records-cstm no-records-msg">
             No records found
           </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="summary" id="footer">
         <label id="footer">Total:</label>
-        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+        <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
         &nbsp;&nbsp;
         <label id="footer">Pages Count:</label>    
-        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText type="text" />
+        <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText type="text" />
       </ng-template>
     </p-table>
   </div>
@@ -252,8 +252,9 @@
                         <div class="equipment-tab-content"  >
                             <div class="x_panel" *ngIf="workOrderMaterialList">
                                 <div class="tab-content">
-                                    <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                        <table class="table table-bordered ">
+                                    <div class="table-responsive table-overflow pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                      <div class="tableFixHead">
+                                      <table class="table table-bordered ">
                                             <thead>
                                                 <tr>
         
@@ -330,6 +331,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="clear"></div>
@@ -351,8 +353,9 @@
                                     <div class="equipment-tab-content" >
                                         <div class="x_panel" *ngIf="workOrderLaborList">
                                             <div class="tab-content">
-                                                <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                                    <table class="table table-bordered ">
+                                                <div class="table-responsive table-overflow pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                  <div class="tableFixHead"> 
+                                                  <table class="table table-bordered ">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center">Expertise</th>
@@ -368,6 +371,7 @@
                                                             </tr> 
                                                         </tbody>
                                                     </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="clear"></div>
@@ -544,8 +548,9 @@
                                                   <div class="equipment-tab-content" *ngIf="selectedOtherSubTask === 'charges'" >
                                                     <div class="x_panel" *ngIf="workOrderChargesList">
                                                         <div class="tab-content">
-                                                            <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                                                <table class="table table-bordered ">
+                                                            <div class="table-responsive table-overflow pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                              <div class="tableFixHead"> 
+                                                              <table class="table table-bordered ">
                                                                     <thead>
                                                                         <tr>
                                                                             <th class="text-center">Charge Type </th>
@@ -572,6 +577,7 @@
                                                                         </tr> 
                                                                     </tbody>
                                                                 </table>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="clear"></div>
@@ -591,8 +597,9 @@
                                                   <div class="equipment-tab-content" >
                                                       <div class="x_panel" *ngIf="workOrderExclusionsList">
                                                           <div class="tab-content">
-                                                              <div class="table-responsive table-overflow" id="workflow-attributes-block">
-                                                                  <table class="table table-bordered ">
+                                                              <div class="table-responsive table-overflow pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                                <div class="tableFixHead"> 
+                                                                <table class="table table-bordered ">
                                                                       <thead>
                                                                           <tr>
                                                                               <th class="text-center">EPN</th>
@@ -616,6 +623,7 @@
                                                                           </tr> 
                                                                       </tbody>
                                                                   </table>
+                                                                  </div>
                                                               </div>
                                                           </div>
                                                           <div class="clear"></div>

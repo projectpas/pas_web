@@ -1,9 +1,17 @@
-﻿<div class="col-md-12" style="margin-bottom: 15px;">
+﻿<!-- <div class="col-md-12" style="margin-bottom: 15px;">
   <h4 class="po-head-sm">
       WO Analysis Overview
   </h4>
-</div>
-<div>    
+</div> -->
+<div class="card new-card">
+    <div class="card-header header" >
+      <div class="row">
+        <div class="col">
+          <h4 class="header-name"> WO Analysis Overview</h4>
+        </div>
+      </div>
+    </div>
+    <div class="card-body header-body">  
   <p-table #woAnalysis
   class="p-table-cstm wo-ptable-padd ptable-f10"
   [value]="data"
@@ -22,21 +30,32 @@
   [scrollable]="true" scrollHeight="450px">
 
       <ng-template pTemplate="caption">
-          <div style="text-align: right; min-height: 30px; clear: both;">
+        <div class="row">
+            <div class="col">
               <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
-        [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-              <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+        [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected" 
+        class="multiselect-field"
+        defaultLabel="Choose Columns"></p-multiSelect>
+    </div>
+    <div class="col" style="text-align: end;">
+        <div					
+        class="global-search-field inner-addon right-addon inline-block"
+        >
                   <i class="fa fa-search"></i>
                   <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
                       (input)="woAnalysis.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                      style="height: 28px !important;" />
+                     />
               </div>
-              <button type="button" class="btn btn-primary" matTooltip="Download Data" matTooltipPosition="above"
+            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+              <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
               pButton icon="fa-download" iconPos="left" label="Export Data" (click)="woAnalysis.exportCSV()"
-              style="padding:5px 10px !important;"></button>
-              <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
+              ></button>
+              <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
-              (click)="woAnalysis.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
+              (click)="woAnalysis.exportCSV({ selectionOnly: true })"></button>
 
               <!-- <div class="excel-upload excel-upload-cstm">
               <button type="button" class="btn btn-primary" matTooltip="Download Sample File"
@@ -52,17 +71,19 @@
                   </span>
               </label>
               </div> -->
+              </div>
           </div>
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
           <colgroup>
-              <col *ngFor="let col of columns" [ngStyle]="col.field == 'otherCostRevenuePercentage' ? {'width': '118px'} : {'width': '105px'}">
+              <col *ngFor="let col of columns" class="table-column-width" />
+              <!-- [ngStyle]="col.field == 'otherCostRevenuePercentage' ? {'width': '118px'} : {'width': '105px'}" -->
           </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
           <tr>
 
-              <th style="width:auto"
+              <th class="table-column-width"
                   *ngFor="let col of columns"
                   pResizableColumn
                   pReorderableColumn
@@ -72,8 +93,8 @@
               </th>
           </tr>
           <tr>
-              <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-                  <input style="width:100%;" pInputText type="text" (input)="
+              <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                  <input class="table-header-input-width" pInputText type="text" (input)="
                   woAnalysis.filter($event.target.value, col.field, 'contains')
                   " />
               </th>
@@ -81,7 +102,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
               <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
-                  <td style="width:auto"
+                  <td class="table-column-width"
                   *ngFor="let col of columns"
                   class="ui-resizable-column"
                   pReorderableRowHandle>
@@ -94,20 +115,28 @@
                   </td>
               </tr>
       </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td colspan="19" class="no-records-msg no-records-cstm">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
       <ng-template pTemplate="summary" id="footer">
           <label id="footer" class="footer">Total:</label>
-          <input style="width: 5%;"
+          <input class="footer-input-width"
                   [(ngModel)]="woAnalysis._totalRecords"
                   [disabled]="true"
                   pInputText
                   type="text" />
           &nbsp;&nbsp;
           <label id="footer" class="footer1">Pages Count:</label>
-          <input style="width: 5%;"
+          <input class="footer-input-width"
                   [ngModel]="getPageCount(woAnalysis._totalRecords, pageSize)"
                   [disabled]="true"
                   pInputText
                   type="text" />
       </ng-template>
   </p-table>
+</div>
 </div>
