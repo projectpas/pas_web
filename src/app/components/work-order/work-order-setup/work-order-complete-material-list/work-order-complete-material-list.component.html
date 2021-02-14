@@ -87,12 +87,12 @@
                         <i class="fa fa-pencil grn_clr" style="color:green" ></i>
                     </button>
                 </span>
- <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
+                <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
                     <button type="button" class="btn nobg btn-pluspo-cstm"  disabled >
-                    <i class="fa fa-plus" style="color: #b7b7b7;" ></i>
-                </button>
-            </span>
-  <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': rowData.quantityIssued==0}" [disabled]="rowData.quantityIssued==0" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        <i class="fa fa-plus" style="color: #b7b7b7;" ></i>
+                     </button>
+                </span>
+                <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': rowData.quantityIssued==0}" [disabled]="rowData.quantityIssued==0" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                 </td>
             </tr>
         </ng-template> 
