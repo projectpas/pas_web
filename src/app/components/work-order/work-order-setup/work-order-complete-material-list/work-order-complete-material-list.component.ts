@@ -200,7 +200,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
       
         rowData.materialMandatoriesId=rowData.mandatorySupplementalId;
-        this.editData = { ...rowData };
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom };
     }
     
     openDelete(content, row) {
