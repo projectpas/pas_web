@@ -184,10 +184,10 @@
           <tr>
             <th class="text-center padding-td" style="min-width: 120px;">Tasks</th>
             <th class="text-center" style="min-width: 150px;">Expertise</th>
-            <th class="text-center" style="padding: 8px 64px !important;" *ngIf="!isQuote">
+            <th class="text-center" style="padding: 8px 64px !important;z-index: 2;" *ngIf="!isQuote">
               Employee
             </th>
-            <th class="text-center">Billable /NonBillable</th>
+            <th class="text-center" style="z-index: 2;">Billable /NonBillable</th>
             <th class="text-center" *ngIf="
                 laborForm.hoursorClockorScan &&
                 laborForm.hoursorClockorScan !== 1 &&
@@ -195,12 +195,12 @@
               ">
               Start/Stop
             </th>
-            <th class="text-center" style="width: 100px;" *ngIf="
+            <th class="text-center" style="width: 100px;z-index: 2;" *ngIf="
                 laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== 1
               ">
               Start Date and Time
             </th>
-            <th class="text-center" *ngIf="
+            <th class="text-center" style="z-index: 2;" *ngIf="
                 laborForm.hoursorClockorScan && laborForm.hoursorClockorScan !== 1
               ">
             End Date and Time
@@ -237,7 +237,7 @@
               Billing Amount
             </th>
           </ng-container>
-          <th class="text-center" style="padding: 7px 53px !important;" *ngIf="!isQuote">
+          <th class="text-center" style="padding: 7px 53px !important;z-index:2" *ngIf="!isQuote">
             Memo
           </th>
           <th *ngIf="!isView">Actions</th>
@@ -251,11 +251,9 @@
             <td class="full-width">
               {{ task.description }}
 
-              <button class="btn-sm new-btn-primary" style="    height: 26px;
-                padding: 0px;
-                font-size: 11px !important;" (click)="toggle_po_header=!toggle_po_header">
+              <!-- <button class="btn-sm header-button"  (click)="toggle_po_header=!toggle_po_header">
                   {{toggle_po_header ? 'Collapse' : 'Expand'}}
-              </button> -->
+              </button>  -->
                 <i class="float-right float-right fa fa-plus-circle fa-lg labor_ico"
                   (click)="addNewTask(task.description)" *ngIf="!isView"></i>
               </td>

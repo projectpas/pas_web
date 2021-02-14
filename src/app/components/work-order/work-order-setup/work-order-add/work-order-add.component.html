@@ -33,18 +33,16 @@
                             <div class="card-body new-card-body">
                                 <div class="col-sm-12 link-block">
                                     <h4 class="pull-left style_h4" >
-                                        General Info
+                                        <!-- General Info -->
                                         <button *ngIf="isView" class="btn-sm header-button" style="margin-left:20px" (click)="toggleDisplayMode()">
                                             {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
-
-                                        </h4>
                                         <!-- <span [hidden]="isDetailedView" class="more-details-btn">
                                             (More <i class="fa fa-caret-down"></i>)
                                         </span>
                                         <span [hidden]="!isDetailedView" class="less-details-btn">
                                             (Less <i class="fa fa-caret-up"></i>)
                                         </span> -->
-                                   
+                                    </h4>
                                     <!--(click)="toggleDisplayMode()"-->
                                   
                                     <!-- <div class="clear"></div> -->
@@ -778,7 +776,7 @@
             </div>
         </div>
     </div>
-    <div class="card " *ngIf="showTabsGrid" >
+    <div class="card mn-t7" *ngIf="showTabsGrid" >
         <div *ngIf="showTabsMPNGrid">
             <div class="card-header" *ngIf="!workOrderGeneralInformation.isSinglePN">
                 Multiple MPN
