@@ -33,13 +33,13 @@
             [paginator]="showPaginator" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
             [columns]="selectedColumns" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"
             [scrollable]="true" [style]="{ width: '100%' }"> -->
-            <!-- <ng-template pTemplate="caption"> -->
-            <!-- <div class="row">
+        <!-- <ng-template pTemplate="caption"> -->
+        <!-- <div class="row">
                     <div class="col">
                     </div>
                 </div> -->
-            <!-- </ng-template> -->
-            <!-- <ng-template pTemplate="colgroup" let-columns>
+        <!-- </ng-template> -->
+        <!-- <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col *ngFor="let col of columns" class="table-column-width" />
                 </colgroup>
@@ -93,31 +93,33 @@
         </p-table> -->
 
         <div [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
-        style="min-height: 130px !important;">
-        <div class="tableFixHead">
-            <table class="table table-bordered" id="so-table">
-                <tr class="header-table-width" style="font-size: 10px">
-                    <th *ngFor="let summaryColumn of headers">
-                        <span>
-                            {{ summaryColumn.header }}
-                        </span>
-                    </th>
-                    <!-- <th colspan="26"></th> -->
-                    <!-- <th>Actions</th> -->
-                    <th colspan="8"></th>
-                </tr>
-                <ng-container *ngIf="shippingList.length > 0">
-                  <ng-container *ngFor="let summaryPart of shippingList;let rowIndex=index;">
-                      <tbody>
-                          <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                              <td *ngFor="let summaryColumn of headers"
-                                  style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                                  <span>
-                                      {{summaryPart[summaryColumn.field]}}
-                                  </span>
-                              </td>
-                              <td colspan="8"></td>
-                              <!-- <td style="position:sticky; width:80px">
+            style="min-height: 130px !important;">
+            <div class="tableFixHead">
+                <table class="table table-bordered" id="so-table">
+                    <tr class="header-table-width" style="font-size: 10px">
+                        <th *ngFor="let summaryColumn of headers">
+                            <span>
+                                {{ summaryColumn.header }}
+                            </span>
+                        </th>
+                        <!-- <th colspan="26"></th> -->
+                        <!-- <th>Actions</th> -->
+                        <th colspan="5"></th>
+                        <th></th>
+                    </tr>
+                    <ng-container *ngIf="shippingList.length > 0">
+                        <ng-container *ngFor="let summaryPart of shippingList; let rowIndex = index;">
+                            <tbody>
+                                <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                                    <td *ngFor="let summaryColumn of headers"
+                                        style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                        <span>
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                    </td>
+                                    <td colspan="5"></td>
+                                    <td></td>
+                                    <!-- <td style="position:sticky; width:80px">
                                   <span>
                                       <button class="btn nobg" mat-icon-button (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
                                               matTooltipPosition="above" style="font-weight: bold;"
@@ -126,92 +128,93 @@
                                       </button>
                                   </span>
                               </td> -->
-                          </tr>
-                          <tr class="child-header splitship-head child-header-back">
-                            <th style="background-color: #fff !important;"></th>
-                            <th>Ready?</th>
-                            <th>Ship Date</th>
-                            <th>Shipping Num </th>
-                            <th>Pick Ticket Ref</th>
-                            <th>PN</th>
-                            <th>PN Description</th>
-                            <th>Stk Line Num</th>
-                            <th>Serial Num</th>
-                            <th>Qty To Ship</th>
-                            <th>Customs Value</th>
-                            <th>Commodity Code</th>
-                            <!-- <th colspan="2"></th> -->
-                            <th style="min-width: 120px; position: sticky !important">Actions</th>
-                        </tr>
-                        <tr class="child-data splitship-child child-data-back"
-                            *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
-                            <td></td>
-                            <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
-                                <label>Shipped</label>
-                            </td>
-                            <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
-                                <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox" (change)="checked($event,poIndex);" [(ngModel)]="ship.selected"
-                                />
-                            </td>
-                            <td>
-                                {{ ship.shipDate | date : "MM/dd/yyyy" }}
-                            </td>
-                            <td>
-                                {{ ship.soShippingNum }}
-                            </td>
-                            <td>
-                                {{ ship.soPickTicketNumber }}
-                            </td>
-                            <td>
-                                {{ ship.partNumber }}
-                            </td>
-                            <td>
-                              {{ ship.partDescription }}
-                            </td>
-                            <td>
-                              {{ ship.stockLineNumber }}
-                            </td>
-                            <td>
-                              {{ ship.serialNumber }}
-                            </td>
-                            <td>
-                              {{ ship.qtyToShip}}
-                            </td>
-                            <td>
-                              {{ ship.customsValue }}
-                            </td>
-                            <td>
-                              {{ ship.commodityCode }}
-                            </td>
-                            <!-- <td colspan="2"></td> -->
-                            <td class="zui-sticky-col" style="width:107px !important">
-                                    <span>
-                                        <button type="submit" class="btn submit-btn btn btn-primary"
-                                        (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping" matTooltipPosition="above" style="font-weight: bold;"><i class="fa fa-plus"></i></button>
+                                </tr>
+                                <tr class="child-header splitship-head child-header-back">
+                                    <th style="background-color: #fff !important;"></th>
+                                    <th>Ready?</th>
+                                    <th>Ship Date</th>
+                                    <th>Shipping Num </th>
+                                    <th>Pick Ticket Ref</th>
+                                    <th>PN</th>
+                                    <th>PN Description</th>
+                                    <th style="min-width: 120px;">Stk Line Num</th>
+                                    <th style="min-width: 120px;">Serial Num</th>
+                                    <th style="min-width: 70px;">Qty To Ship</th>
+                                    <th style="min-width: 100px;">Customs Value</th>
+                                    <th style="min-width: 120px;">Commodity Code</th>
+                                    <!-- <th colspan="2"></th> -->
+                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                </tr>
+                                <tr class="child-data splitship-child child-data-back"
+                                    *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
+                                    <td></td>
+                                    <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
+                                        <label style="color: #0F9D58">Shipped</label>
+                                    </td>
+                                    <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
+                                        <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox"
+                                            (change)="checked($event,poIndex);" [(ngModel)]="ship.selected" />
+                                    </td>
+                                    <td>
+                                        {{ ship.shipDate | date : "MM/dd/yyyy" }}
+                                    </td>
+                                    <td>
+                                        {{ ship.soShippingNum }}
+                                    </td>
+                                    <td>
+                                        {{ ship.soPickTicketNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.partNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.partDescription }}
+                                    </td>
+                                    <td>
+                                        {{ ship.stockLineNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.serialNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.qtyToShip}}
+                                    </td>
+                                    <td>
+                                        {{ ship.customsValue }}
+                                    </td>
+                                    <td>
+                                        {{ ship.commodityCode }}
+                                    </td>
+                                    <!-- <td colspan="2"></td> -->
+                                    <td class="zui-sticky-col" style="width:107px !important">
+                                        <span>
+                                            <button *ngIf="ship.qtyShipped == 0" type="submit" class="btn submit-btn btn btn-primary"
+                                                (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping"
+                                                matTooltipPosition="above" style="font-weight: bold;"><i
+                                                    class="fa fa-plus"></i></button>
                                             <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
                                             matTooltipPosition="above" style="font-weight: bold;">
                                             <i class="fa fa-check"></i>
                                           </button> -->
-                                    </span>
-                              </td>
-                          </tr>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="shippingList.length == 0">
+                        <tbody>
+                            <tr>
+                                <td colspan="48"
+                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    No records found
+                                </td>
+                            </tr>
                         </tbody>
                     </ng-container>
-                </ng-container>
-                <ng-container *ngIf="shippingList.length == 0">
-                    <tbody>
-                        <tr>
-                            <td colspan="48"
-                                style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
-                                No records found
-                            </td>
-                        </tr>
-                    </tbody>
-                </ng-container>
-            </table>
+                </table>
+            </div>
         </div>
-    </div>
-
         <!-- <div class="card-body"> -->
         <div *ngIf="partSelected">
             <form #shippingForm="ngForm">
@@ -403,9 +406,8 @@
                                             <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
                                                 {{site.originName}}</option>
                                         </select> -->
-                                        <input class="form-control" type="text"
-                                            [(ngModel)]="shippingHeader.originSiteName" name="originSiteName"
-                                            [disabled]="isView" required disabled />
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.originName"
+                                            name="originName" [disabled]="isView" required disabled />
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -482,9 +484,8 @@
                                     <div class="col-md-8">
                                         <!-- <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToName"
                                             name="soldName" [disabled]="isView" required disabled /> -->
-                                        <p-autoComplete field="userName"
-                                            [(ngModel)]="shippingHeader.soldToName" name="soldToName"
-                                            errorMessage="Records not found" [forceSelection]="true"
+                                        <p-autoComplete field="userName" [(ngModel)]="shippingHeader.soldToName"
+                                            name="soldToName" errorMessage="Records not found" [forceSelection]="true"
                                             (onSelect)="getSiteNamesBySoldCustomerId($event)"
                                             [suggestions]="customerNamesList"
                                             (completeMethod)="filterCustomerName($event)"
@@ -502,7 +503,7 @@
                                         <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
                                             [disabled]="isView" name="soldToSite" required>
                                             <option value="">Select</option>
-                                            <option *ngFor="let site of siteList"
+                                            <option *ngFor="let site of soldCustomerSiteList"
                                                 [value]="site.customerDomensticShippingId">
                                                 {{site.siteName}}
                                             </option>
@@ -590,9 +591,8 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <p-autoComplete field="userName"
-                                            [(ngModel)]="shippingHeader.shipToCustomerId" name="shipToName"
-                                            errorMessage="Records not found" [forceSelection]="true"
+                                        <p-autoComplete field="userName" [(ngModel)]="shippingHeader.shipToCustomerId"
+                                            name="shipToName" errorMessage="Records not found" [forceSelection]="true"
                                             (onSelect)="getSiteNamesByShipCustomerId($event)"
                                             [suggestions]="customerNamesList"
                                             (completeMethod)="filterCustomerName($event)"
