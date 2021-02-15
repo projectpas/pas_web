@@ -1613,8 +1613,7 @@ console.log(this.repairOrderData)
         if (receiveParts.length > 0) {
             this.receivingService.updateStockLine(receiveParts).subscribe(data => {
                 this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
-                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
-                //return this.route.navigate(['/receivingmodule/receivingpages/app-view-po']);
+                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);                
             },
                 error => {
                     var message = '';
