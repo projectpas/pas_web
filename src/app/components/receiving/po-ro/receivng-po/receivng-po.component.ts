@@ -378,7 +378,8 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId)
+                var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId);
+                this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00'; 
                 if(!shippingVia || shippingVia == undefined)
                 {
                  var shippingVia = new DropDownData(); 
