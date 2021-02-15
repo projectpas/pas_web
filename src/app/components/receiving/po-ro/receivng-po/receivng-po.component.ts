@@ -825,6 +825,9 @@ export class ReceivngPoComponent implements OnInit {
 		 }		
     }
 
+
+    
+
     getStockLineSite(stockLine: StockLineDraft): void {
         stockLine.SiteList = [];
         stockLine.siteId = 0;

@@ -255,7 +255,7 @@
                                 <th>Location</th>
                                 <th>Shelf</th>
                                 <th>Bin</th>
-                                <th colspan="50"></th>
+                                <th colspan="37"></th>
                                 <th >Action</th>
                             </tr>
                         </thead>
@@ -455,7 +455,7 @@
                                             <option *ngFor="let bin of part.BinList" [value]="bin.Key">{{bin.Value}}</option>
                                         </select>
                                     </td>
-                                    <th colspan="50"></th>
+                                    <td colspan="37"></td>
                                     <td ><a matTooltip="Edit" matTooltipPosition="above" class="btn boxed-float-btn nobg edit"><i class="fa fa-edit" (click)="editPart(part)"></i></a></td>
                                 </tr>
 
@@ -510,8 +510,8 @@
                                         <th>Time Life</th>
                                         <th colspan="5">Cycles</th>
                                         <th colspan="5">Time</th>
-                                        <th colspan="5">Last</th>
-                                        <th colspan="2"></th>
+                                        <th colspan="5">Last</th>                                        
+                                        <th colspan="3"></th>
                                     </tr>
                                     <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
                                         <tr *ngIf="!SL.isDeleted">                                           
@@ -570,7 +570,7 @@
                                                 #selects="ngModel"
                                                 [disabled]="!SL.isEnabled"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="getStockLineBUList(SL.parentCompanyId, SL);" required>
+                                                (change)="selectedLegalEntitySL(SL.parentCompanyId, SL);" required>
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let company of SL.maincompanylist"
                                                             [value]="company.value">
@@ -594,7 +594,7 @@
                                                 [(ngModel)]="SL.parentbuId"
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="selectedBusinessUnit(SL.parentbuId, SL)">
+                                                (change)="selectedBusinessUnitSL(SL.parentbuId, SL)">
                                             <option value="0">Select</option>
                                             <option [value]="businessUnit.value" *ngFor="let businessUnit of SL.parentBulist">
                                                 {{businessUnit.label}}
@@ -617,7 +617,7 @@
                                                 [(ngModel)]="SL.parentDivisionId"
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="selectedDivision(SL.parentDivisionId, SL)">
+                                                (change)="selectedDivisionSL(SL.parentDivisionId, SL)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let division of SL.parentDivisionlist"
                                                     [value]="division.value">
@@ -641,7 +641,7 @@
                                                 [(ngModel)]="SL.parentDeptId"
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="selectedDepartment(SL.parentDeptId, SL)">
+                                                (change)="selectedDepartmentSL(SL.parentDeptId, SL)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let department of SL.parentDepartmentlist"
                                                     [value]="department.value">
@@ -918,7 +918,8 @@
                                                             appendTo="body"  
                                                             name="manufacturingDate{{stockline_row_index}}" id="manufacturingDate{{stockline_row_index}}" 
                                                             [(ngModel)]="SL.manufacturingDate"
-                                                            [disabled]="!SL.isEnabled"></p-calendar>            
+                                                            [disabled]="!SL.isEnabled"></p-calendar> 
+                                                                       
 
                                             </td>
                                             <td>
@@ -936,19 +937,27 @@
                                                        [maxLength]="200">
                                             </td>
                                             <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                                <p-calendar  class="calendar-grid" 
+                                                            [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100"
                                                             [maxDate]="currentDate"
                                                             [disabled]="!SL.isEnabled"
+                                                            appendTo="body"  
                                                             [showIcon]="true"
-                                                            [ngModelOptions]="{standalone: true}"
-                                                            [(ngModel)]="SL.certifiedDate"></p-calendar>
+                                                            name="certifiedDate{{stockline_row_index}}" id="certifiedDate{{stockline_row_index}}"                                                             
+                                                            [(ngModel)]="SL.certifiedDate"></p-calendar>     
+                                                                                                                        
                                             </td>
-                                            <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                            <td>                                               
+
+                                                <p-calendar  class="calendar-grid" 
+                                                            [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100"
                                                             [maxDate]="currentDate"
                                                             [disabled]="!SL.isEnabled"
+                                                            appendTo="body"  
                                                             [showIcon]="true"
-                                                            [ngModelOptions]="{standalone: true}"
+                                                            name="certifiedDueDate{{stockline_row_index}}" id="certifiedDueDate{{stockline_row_index}}"                                                            
                                                             [(ngModel)]="SL.certifiedDueDate"></p-calendar>
                                             </td>
                                             <td>
@@ -958,19 +967,23 @@
                                                        [disabled]="!SL.isEnabled"
                                                        [maxLength]="200">
                                             </td>
-                                            <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                            <td> <p-calendar  class="calendar-grid" 
+                                                            [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100" [showIcon]="true"                                                            
                                                             [maxDate]="currentDate"
-                                                            [disabled]="!SL.isEnabled"
-                                                            [showIcon]="true"
-                                                            [ngModelOptions]="{standalone: true}"
-                                                            [(ngModel)]="SL.tagDate"></p-calendar>
+                                                            appendTo="body"  
+                                                            name="tagDate{{stockline_row_index}}" id="tagDate{{stockline_row_index}}" 
+                                                            [(ngModel)]="SL.tagDate"
+                                                            [disabled]="!SL.isEnabled"></p-calendar>           
                                             </td>
                                             <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                                <p-calendar  class="calendar-grid" 
+                                                           [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100"        
                                                             [showIcon]="true"
                                                             [disabled]="!SL.isEnabled"
-                                                            [ngModelOptions]="{standalone: true}"
+                                                            appendTo="body"  
+                                                            name="expirationDate{{stockline_row_index}}" id="expirationDate{{stockline_row_index}}"                                                            
                                                             [(ngModel)]="SL.expirationDate"></p-calendar>
                                             </td>
                                             <td>
@@ -1093,6 +1106,7 @@
                                                         <div class="col-md-5"><input class="form-control time-remaining-input" placeholder="MM" [disabled]="!SL.isEnabled" type="number" pInputText pKeyFilter="hex" [(ngModel)]="part.timeLife[stockline_row_index].lastSinceOVHMin" (change)="onChangeTimeLifeMin('lastSinceOVHMin', stockline_row_index)"></div>
                                                     </div>
                                                 </td>
+                                                
 
                                                 <td class="time-remaining-td">
                                                     <div class="form-row">
@@ -1100,7 +1114,8 @@
                                                         <div class="col-md-1"><span class="time-remaining-span"> : </span></div>
                                                         <div class="col-md-5"><input class="form-control time-remaining-input" placeholder="MM" [disabled]="!SL.isEnabled" type="number" pInputText pKeyFilter="hex" [(ngModel)]="part.timeLife[stockline_row_index].lastSinceInspectionMin" (change)="onChangeTimeLifeMin('lastSinceInspectionMin', stockline_row_index)"></div>
                                                     </div>
-                                                </td>                                                
+                                                </td>   
+                                                <td colspan="2"></td>                                             
                                                 <td ><a href="javascript:void(0);" class="btn boxed-float-btn nobg edit" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
                                                     <a class="btn nobg btn-delete-cstm"
                                                        (click)="deleteStockLine(SL)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
