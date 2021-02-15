@@ -165,7 +165,7 @@ export class EditRoComponent implements OnInit {
                         results => {
                             if (results[0] == null || results[0] == undefined) {
                                 this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
-                                return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
+                                return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
                             } 
                             if (results[0]) { 
                                 this.repairOrderData = results[0].map(x => {
@@ -331,7 +331,7 @@ export class EditRoComponent implements OnInit {
                             this.getVendors();
                             this.getCompanyList();
                             this.isSpinnerVisible = false;
-
+console.log(this.repairOrderData)
                             if (this.repairOrderData) {
                                 for (let i = 0; i < this.repairOrderData.length; i++) {
                                     this.getCondIdPart(this.repairOrderData[i]);
@@ -1573,31 +1573,30 @@ export class EditRoComponent implements OnInit {
     updateStockLine() {
         //let receiveParts: ReceiveParts[] = [];
         let receiveParts: any[] = [];
-
         for (var part of this.repairOrderData) {
             if (part.stockLine) {
-
                 var timeLife = [];
                 var stockLineToUpdate = part.stockLine;
-
+                var index = 1;
                 for (var stockLine of stockLineToUpdate) {
-
-
                     if (stockLine.conditionId == undefined || stockLine.conditionId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Condition in Part No. " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
                     }
-
                     if (stockLine.siteId == undefined || stockLine.siteId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Site in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
                     }
-
+                    if (stockLine.repairOrderUnitCost == undefined || (stockLine.repairOrderUnitCost != undefined && stockLine.repairOrderUnitCost.toString() == '')) {
+                        this.alertService.showMessage(this.pageTitle, "Please enter Unit Cost in Part No. " + part.itemMaster.partNumber + " of stockline " + stockLine.stockLineNumber, MessageSeverity.error);
+                        return;
+                    }
                     for (var tl of part.timeLife) {
                         if (tl.stockLineDraftId == stockLine.stockLineDraftId) {
                             timeLife.push(tl);
                         }
                     }
+                    index += 1;
                 }
 
                 if (stockLineToUpdate.length > 0) {
