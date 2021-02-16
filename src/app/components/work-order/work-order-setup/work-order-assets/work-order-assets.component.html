@@ -24,7 +24,7 @@
         <div *ngIf="isEdit && editData && addNewEquipment">
           <grd-equipment [isEdit]="isEdit" [editData]="editData" [moduleName]="moduleName"
             [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
-            (updateEquipmentListForWO)="updateEquipmentList($event)"></grd-equipment>
+            (updateEquipmentListForWO)="updateEquipmentList($event)"></grd-equipment> 
         </div>
 
       </div>
@@ -273,7 +273,7 @@
                     <td style="width:36px;">
                       <span>
                         <a class="collapsed ac_cs" data-toggle="collapse" href="#step2">
-                          <i class="fa fa-plus btn btn-success btn-cstm btn-xs" matTooltip="Show Asset Inventory list"
+                          <i class="fa fa-plus btn btn-success btn-cstm1 btn-xs1" matTooltip="Show Asset Inventory list"
                             matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="openGrid()"></i>
                         </a>
                       </span>

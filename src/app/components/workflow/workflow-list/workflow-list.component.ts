@@ -578,7 +578,7 @@ export class WorkflowListComponent implements OnInit {
         var tasks = [];
 
         var taskIds = [];
-        if (this.sourceWorkFlow.charges && this.sourceWorkFlow.charges.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.charges && this.sourceWorkFlow.charges.length > 0) {
   
             for (var item of this.sourceWorkFlow.charges) {
                 if (taskIds.indexOf(item.taskId) == -1) {

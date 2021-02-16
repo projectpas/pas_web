@@ -47,6 +47,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
+        console.log("asset reecorddd",this.editData)
         if (this.isWorkOrder) {
             this.workFlow = this.workFlowObject;
             this.row = this.workFlow.equipments[0];
@@ -54,7 +55,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 this.workFlow.equipments = [];
                 const data = {
                     ...this.editData,
-                    assetRecordId: this.editData.assetId,
+                    assetRecordId: this.editData.assetRecordId,
                     description: this.editData.assetDescription,
                     assetTypeId: this.editData.assetTypeId,
                     name: this.editData.assetName,
