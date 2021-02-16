@@ -401,13 +401,13 @@
                                         <label>Name <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <!-- <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
+                                        <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
                                             (change)="setOriginToAddress(shippingHeader.originSiteId)" required>
                                             <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
                                                 {{site.originName}}</option>
-                                        </select> -->
-                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.originName"
-                                            name="originName" [disabled]="isView" required disabled />
+                                        </select>
+                                        <!-- <input class="form-control" type="text" [(ngModel)]="shippingHeader.originName"
+                                            name="originName" [disabled]="isView" required disabled /> -->
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">
@@ -691,7 +691,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryType']"
-                                                name="entryType" [disabled]="isView" required />
+                                                name="entryType" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -701,7 +701,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryNumber']"
-                                                name="entryNumber" [disabled]="isView" required />
+                                                name="entryNumber" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -727,7 +727,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['epu']" name="epu"
-                                                [disabled]="isView" required />
+                                                [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -737,7 +737,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['ucr']" name="ucr"
-                                                [disabled]="isView" required />
+                                                [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -773,7 +773,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['customsValue']"
-                                                name="customsValue" [disabled]="isView" required />
+                                                name="customsValue" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -783,7 +783,7 @@
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['netMass']"
-                                                name="netMass" [disabled]="isView" required />
+                                                name="netMass" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">

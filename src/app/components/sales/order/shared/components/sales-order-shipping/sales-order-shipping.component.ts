@@ -8,8 +8,10 @@ import * as moment from 'moment';
 import { CommonService } from '../../../../../../services/common.service';
 import { WorkOrderService } from '../../../../../../services/work-order/work-order.service';
 import { CustomerService } from '../../../../../../services/customer.service';
-import { editValueAssignByCondition } from '../../../../../../generic/autocomplete';
+import { editValueAssignByCondition, getValueFromObjectByKey, getObjectByValue, formatNumberAsGlobalSettingsModule } from '../../../../../../generic/autocomplete';
 import { AuthService } from '../../../../../../services/auth.service';
+import { AddressTypeEnum } from '../../../../../../shared/components/address-component/Address-type-enum';
+import { AppModuleEnum } from '../../../../../../enum/appmodule.enum';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -66,6 +68,7 @@ export class SalesOrderShippingComponent {
     shipViaList: any = [];
     countryList: any = [];
     shipCustomerShippingOriginalData: any[];
+    soldCustomerShippingOriginalData: any[];
     shipCustomerSiteList = [];
     soldCustomerSiteList = [];
     siteList: any = [];
@@ -131,6 +134,7 @@ export class SalesOrderShippingComponent {
         this.getCustomerNameList();
         this.getOriginSiteNames();
         this.getUnitOfMeasure();
+        this.getAddressById(this.salesOrderId);
 
         if (this.customerDetails) {
             this.shippingHeader['soldToName'] = this.customerDetails['name'];
@@ -217,7 +221,7 @@ export class SalesOrderShippingComponent {
                             if (x.isPrimary) {
                                 this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
                                 //this.setSoldToAddress();
-                                if (customerId == 0) this.setOriginAddress();
+                                //if (customerId == 0) this.setOriginAddress();
                             }
                         }
                     )
@@ -381,9 +385,9 @@ export class SalesOrderShippingComponent {
         let customerId = object.userID;
         //this.getSiteName(customerId);
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
-            this.soldCustomerSiteList = res[0];
-            this.shipCustomerShippingOriginalData = res[0];
-            this.shipCustomerShippingOriginalData.forEach(
+            this.soldCustomerShippingOriginalData = res[0];
+            this.soldCustomerSiteList = res[0]; 
+            this.soldCustomerShippingOriginalData.forEach(
                 x => {
                     if (x.isPrimary) {
                         this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
@@ -391,6 +395,28 @@ export class SalesOrderShippingComponent {
                     }
                 }
             )
+        }, err => {
+        });
+    }
+
+    async setSiteNamesByShipCustomerId(object, siteId) {
+        this.clearShipToAddress();
+        let customerId = object.userID;
+        await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+            this.shipCustomerShippingOriginalData = res[0];
+            this.shipCustomerSiteList = res[0];
+            this.shippingHeader.shipToSiteId = siteId;
+        }, err => {
+        });
+    }
+
+    async setSiteNamesBySoldCustomerId(object, siteId) {
+        this.clearSoldToAddress();
+        let customerId = object.userID;
+        await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+            this.soldCustomerSiteList = res[0];
+            this.soldCustomerShippingOriginalData = res[0];
+            this.shippingHeader.soldToSiteId = siteId;
         }, err => {
         });
     }
@@ -479,22 +505,133 @@ export class SalesOrderShippingComponent {
         this.shippingList[0].soshippingchildviewlist[0].selected = true;
     }
 
-    // setOriginToAddress(value) {
-    //     this.orignSiteNames.forEach(site => {
-    //         if (site.originSiteId == value) {
-    //             this.shippingHeader['originName'] = site.originName;
-    //             this.shippingHeader['originAddress1'] = site.originAddress1;
-    //             this.shippingHeader['originAddress2'] = site.originAddress2;
-    //             this.shippingHeader['originCity'] = site.originCity;
-    //             this.shippingHeader['originState'] = site.originState;
-    //             this.shippingHeader['originZip'] = site.originZip;
-    //             // this.shippingHeader['shipToCountryId'] = site.countryId;
-    //             // this.shippingHeader['shipToSiteName'] = site.siteName;
-    //             this.shippingHeader['originCountryName'] = site.originCountryName;
-    //             this.shippingHeader['originCountryId'] = site.originCountryId;
-    //         }
-    //     });
-    // }
+    setOriginToAddress(value) {
+        this.orignSiteNames.forEach(site => {
+            if (site.originSiteId == value) {
+                this.shippingHeader['originName'] = site.originName;
+                this.shippingHeader['originAddress1'] = site.originAddress1;
+                this.shippingHeader['originAddress2'] = site.originAddress2;
+                this.shippingHeader['originCity'] = site.originCity;
+                this.shippingHeader['originState'] = site.originState;
+                this.shippingHeader['originZip'] = site.originZip;
+                // this.shippingHeader['shipToCountryId'] = site.countryId;
+                // this.shippingHeader['shipToSiteName'] = site.siteName;
+                this.shippingHeader['originCountryName'] = site.originCountryName;
+                this.shippingHeader['originCountryId'] = site.originCountryId;
+            }
+        });
+    }
+
+    sourceSOApproval: any = {};
+    shipToAddress: any = {};
+    billToAddress: any = {};
+
+    getAddressById(salesOrderId) {
+        this.isSpinnerVisible = true;
+        this.commonService.getAddressById(salesOrderId, AddressTypeEnum.SalesOrder, AppModuleEnum.SalesOrder).subscribe(res => {
+            this.sourceSOApproval = {
+                shipToPOAddressId: res[0].ShipToPOAddressId,
+                shipToUserTypeId: res[0].ShipToUserType,
+                shipToSiteId: res[0].ShipToSiteId,
+                shipToSiteName: res[0].ShipToSiteName,
+                shipToUserId: res[0].ShipToUserId,
+                shipAddIsPoOnly: res[0].ShipAddIsPoOnly,
+                shipToContactId: res[0].ShipToContactId,
+                shipToContact: res[0].ShipToContact,
+                shipToMemo: res[0].ShipToMemo,
+                shipToAddressId: res[0].ShipToAddressId,
+                shipToAddress1: res[0].ShipToAddress1,
+                shipToAddress2: res[0].ShipToAddress2,
+                shipToCity: res[0].ShipToCity,
+                shipToStateOrProvince: res[0].ShipToState,
+                shipToPostalCode: res[0].ShipToPostalCode,
+                shipToCountryId: res[0].ShipToCountryId ? getObjectByValue('value', res[0].ShipToCountryId, this.countryList) : 0,
+                shipToCountry: res[0].ShipToCountryName,
+                soShipViaId: res[0].POShipViaId,
+                billToPOAddressId: res[0].BillToPOAddressId,
+                billToUserTypeId: res[0].BillToUserType,
+                billToUserId: res[0].BillToUserId,
+                billToSiteId: res[0].BillToSiteId,
+                billToSiteName: res[0].BillToSiteName,
+                billAddIsPoOnly: res[0].BillAddIsPoOnly,
+                billToContactId: res[0].BillToContactId,
+                billToContactName: res[0].BillToContactName,
+                billToMemo: res[0].BillToMemo,
+                billToAddressId: res[0].BillToAddressId,
+                billToAddress1: res[0].BillToAddress1,
+                billToAddress2: res[0].BillToAddress2,
+                billToCity: res[0].BillToCity,
+                billToStateOrProvince: res[0].BillToState,
+                billToPostalCode: res[0].BillToPostalCode,
+                billToCountryId: res[0].BillToCountryId ? getObjectByValue('value', res[0].BillToCountryId, this.countryList) : 0,
+                billToCountry: res[0].BillToCountryName,
+                shippingViaId: res[0].ShippingViaId,
+                shipViaId: res[0].ShipViaId,
+                shipVia: res[0].ShipVia,
+                shippingCost: formatNumberAsGlobalSettingsModule(res[0].ShippingCost, 2),
+                handlingCost: formatNumberAsGlobalSettingsModule(res[0].HandlingCost, 2),
+                shippingAccountNo: res[0].ShippingAccountNo
+            };
+
+            this.shipToAddress = {
+                contact: this.sourceSOApproval.shipToContact,
+                contactId: this.sourceSOApproval.shipToContactId,
+                userId: this.sourceSOApproval.shipToUserId,
+                siteId: this.sourceSOApproval.shipToSiteId,
+                address1: this.sourceSOApproval.shipToAddress1,
+                address2: this.sourceSOApproval.shipToAddress2,
+                city: this.sourceSOApproval.shipToCity,
+                stateOrProvince: this.sourceSOApproval.shipToStateOrProvince,
+                country: this.sourceSOApproval.shipToCountry,
+                countryId: getValueFromObjectByKey('value', this.sourceSOApproval.shipToCountryId),
+                postalCode: this.sourceSOApproval.shipToPostalCode,
+            }
+
+            this.billToAddress = {
+                contact: this.sourceSOApproval.billToContact,
+                contactId: this.sourceSOApproval.billToContactId,
+                userId: this.sourceSOApproval.billToUserId,
+                siteId: this.sourceSOApproval.billToSiteId,
+                address1: this.sourceSOApproval.billToAddress1,
+                address2: this.sourceSOApproval.billToAddress2,
+                city: this.sourceSOApproval.billToCity,
+                stateOrProvince: this.sourceSOApproval.billToStateOrProvince,
+                country: this.sourceSOApproval.billToCountry,
+                countryId: getValueFromObjectByKey('value', this.sourceSOApproval.billToCountryId),
+                postalCode: this.sourceSOApproval.billToPostalCode,
+            }
+
+            this.bindShippingInformation();
+        });
+    }
+
+    bindShippingInformation() {
+        if (this.billToAddress !== undefined) {
+            let customer = getObjectByValue('userID', this.billToAddress.userId, this.customerNamesList);
+            this.shippingHeader.soldToName = customer;
+            this.setSiteNamesBySoldCustomerId(customer, this.billToAddress.siteId);
+            //this.shippingHeader.soldToSiteId = this.billToAddress.siteId;
+            this.shippingHeader.soldToAddress1 = this.billToAddress.address1;
+            this.shippingHeader.soldToAddress2 = this.billToAddress.address2;
+            this.shippingHeader.soldToCity = this.billToAddress.city;
+            this.shippingHeader.soldToState = this.billToAddress.stateOrProvince;
+            this.shippingHeader.soldToCountryName = this.billToAddress.country;
+            this.shippingHeader.soldToZip = this.billToAddress.postalCode;
+        }
+
+        if (this.shipToAddress !== undefined) {
+            let customer = getObjectByValue('userID', this.shipToAddress.userId, this.customerNamesList);
+            this.shippingHeader.shipToCustomerId = customer;
+            //this.shippingHeader.shipToSiteId = this.shipToAddress.siteId;
+            this.setSiteNamesByShipCustomerId(customer, this.shipToAddress.siteId);
+            this.shippingHeader.shipToAddress1 = this.shipToAddress.address1;
+            this.shippingHeader.shipToAddress2 = this.shipToAddress.address2;
+            this.shippingHeader.shipToCity = this.shipToAddress.city;
+            this.shippingHeader.shipToState = this.shipToAddress.stateOrProvince;
+            this.shippingHeader.shipToCountryName = this.shipToAddress.country;
+            this.shippingHeader.shipToZip = this.shipToAddress.postalCode;
+        }
+    }
 
     // getShippingData() {
     //     this.isSpinnerVisible = true;
