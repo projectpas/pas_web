@@ -1,9 +1,6 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { ActionService } from "../Workflow/ActionService";
 import { IEquipmentAssetType } from "../Workflow/EquipmentAssetType";
-import { VendorService } from "../services/vendor.service";
-import { AssetService } from "../services/asset/Assetservice";
 import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
@@ -42,12 +39,11 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     isSpinnerVisible = false;
     modal: NgbModalRef;
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
-        private actionService: ActionService, private vendorService: VendorService, private modalService: NgbModal,
-        private assetService: AssetService, private alertService: AlertService) {
+         private modalService: NgbModal,
+        private alertService: AlertService) {
     }
 
     ngOnInit(): void {
-        console.log("asset reecorddd",this.editData)
         if (this.isWorkOrder) {
             this.workFlow = this.workFlowObject;
             this.row = this.workFlow.equipments[0];
