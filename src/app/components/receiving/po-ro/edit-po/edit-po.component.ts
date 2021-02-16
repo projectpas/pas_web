@@ -173,8 +173,9 @@ export class EditPoComponent implements OnInit {
                 setTimeout(() => {
                     this.isSpinnerVisible = true;
                     this.getReceivingPOHeaderById(this.receivingService.purchaseOrderId);          
-                    this.receivingService.getPurchaseOrderDataForEditById(this.receivingService.purchaseOrderId).subscribe(
-                        results => {                          
+                    this.receivingService.getPurchaseOrderDataForEditById(this.receivingService.purchaseOrderId,this.employeeId).subscribe(
+                        results => {  
+                            debugger;                        
                             if (results[0] == null || results[0] == undefined) {
                                 this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
                                 return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
@@ -266,7 +267,11 @@ export class EditPoComponent implements OnInit {
 
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-        }
+    }
+
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
 
     
     getManagementStructureForPart(partList,response) {
@@ -463,7 +468,8 @@ export class EditPoComponent implements OnInit {
 			part.managementStructureId = part.parentDeptId;	
             if (part.stockLine) {
 				for (let j = 0; j < part.stockLine.length; j++) {
-					part.stockLine[j].parentDeptId = part.parentDeptId;					
+					part.stockLine[j].parentDeptId = part.parentDeptId;		
+                    part.stockLine[j].managementStructureEntityId = part.parentDeptId;				
 				}
 			}		
 		}
@@ -471,7 +477,7 @@ export class EditPoComponent implements OnInit {
 			part.managementStructureId = part.parentDivisionId;
             if (part.stockLine) {
 				for (let j = 0; j < part.stockLine.length; j++) {
-					part.stockLine[j].managementStructureId = part.parentDivisionId;					
+					part.stockLine[j].managementStructureEntityId = part.parentDivisionId;					
 				}
 			}	
 		 }		
@@ -767,6 +773,7 @@ export class EditPoComponent implements OnInit {
                         }
                     });
                     this.CustomerList = data;    
+                   // stockLine.filteredRecords = this.CustomerList;    
 
                 for (let part of this.purchaseOrderData.purchaseOderPart) {
                     for (let SL of part.stockLine) {
@@ -1549,14 +1556,35 @@ export class EditPoComponent implements OnInit {
 
     onObtainSelect(stockLine: StockLine): void {
         stockLine.obtainFrom = stockLine.obtainFromObject.Key;
+        if (stockLine.ownerType == AppModuleEnum.Customer) {           
+            this.arrayCustlist.push(stockLine.obtainFromObject.Key);          
+         } else if (stockLine.ownerType == AppModuleEnum.Vendor) {
+             this.arrayVendlsit.push(stockLine.obtainFromObject.Key);          
+         } else if (stockLine.ownerType == AppModuleEnum.Company) {
+             this.arrayComplist.push(stockLine.obtainFromObject.Key);       
+         }
     }
 
     onOwnerSelect(stockLine: StockLine): void {
         stockLine.owner = stockLine.ownerObject.Key;
+        if (stockLine.ownerType == AppModuleEnum.Customer) {           
+            this.arrayCustlist.push(stockLine.ownerObject.Key);          
+         } else if (stockLine.ownerType == AppModuleEnum.Vendor) {
+             this.arrayVendlsit.push(stockLine.ownerObject.Key);          
+         } else if (stockLine.ownerType == AppModuleEnum.Company) {
+             this.arrayComplist.push(stockLine.ownerObject.Key);       
+         }
     }
 
     onTraceableToSelect(stockLine: StockLine): void {
         stockLine.traceableTo = stockLine.traceableToObject.Key;
+        if (stockLine.ownerType == AppModuleEnum.Customer) {           
+            this.arrayCustlist.push(stockLine.traceableToObject.Key);          
+         } else if (stockLine.ownerType == AppModuleEnum.Vendor) {
+             this.arrayVendlsit.push(stockLine.traceableToObject.Key);          
+         } else if (stockLine.ownerType == AppModuleEnum.Company) {
+             this.arrayComplist.push(stockLine.traceableToObject.Key);       
+         }
     }
 
     //remove once add dynamic content
@@ -1592,9 +1620,14 @@ export class EditPoComponent implements OnInit {
         for (var part of this.purchaseOrderData.purchaseOderPart) {
             if (part.stockLine) {
                 var timeLife = [];
+
                 var stockLineToUpdate = part.stockLine;
                 var index = 1;
                 for (var stockLine of stockLineToUpdate) {
+                    
+                    stockLine.updatedBy = this.userName;
+                    stockLine.masterCompanyId = this.currentUserMasterCompanyId;
+
                     if (stockLine.conditionId == undefined || stockLine.conditionId == 0) {
                         this.alertService.showMessage(this.pageTitle, "Please select Condition in Part No. " + part.itemMaster.partNumber + " at stockline " + stockLine.stockLineNumber, MessageSeverity.error);
                         return;
@@ -1663,7 +1696,10 @@ export class EditPoComponent implements OnInit {
                 cyclesSinceRepair: ((x.cyclesSinceRepairHrs ? x.cyclesSinceRepairHrs : '00') + ':' + (x.cyclesSinceRepairMin ? x.cyclesSinceRepairMin : '00')),
                 timeSinceRepair: ((x.timeSinceRepairHrs ? x.timeSinceRepairHrs : '00') + ':' + (x.timeSinceRepairMin ? x.timeSinceRepairMin : '00')),
                 purchaseOrderPartRecordId: purchaseOrderPartRecordId,
-                isActive: true
+                isActive: true,
+                createdBy: this.userName,
+                updatedBy:this.userName,
+                masterCompanyId:this.currentUserMasterCompanyId,
             }
         })
         return tmLife;

@@ -666,10 +666,11 @@
 
                                                             <p-autoComplete *ngIf="SL.ownerType == customerModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
 
@@ -677,10 +678,11 @@
 
                                                             <p-autoComplete *ngIf="SL.ownerType == vendorModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
 
@@ -688,10 +690,11 @@
 
                                                             <p-autoComplete *ngIf="SL.ownerType == companyModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
                                                             </p-autoComplete>
@@ -717,10 +720,7 @@
                                                         (change)="onObtainFromChange($event, SL)">
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">{{item.moduleName}}</option>
-                                                    <!-- <option value="1">Customer</option>
-                                                    <option value="2">Vendor</option>
-                                                    <option value="3">Company</option>
-                                                    <option value="4">Other</option> -->
+                                                   
                                                 </select>
                                             </td>
                                             <td>
@@ -730,7 +730,8 @@
 
                                                             <p-autoComplete *ngIf="SL.obtainFromType == customerModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
+                                                                            appendTo="body" 
                                                                             [disabled]="!SL.isEnabled"
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
@@ -741,8 +742,9 @@
 
                                                             <p-autoComplete *ngIf="SL.obtainFromType == vendorModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -752,8 +754,9 @@
 
                                                             <p-autoComplete *ngIf="SL.obtainFromType == companyModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -789,8 +792,9 @@
 
                                                             <p-autoComplete *ngIf="SL.traceableToType == customerModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -800,8 +804,9 @@
 
                                                             <p-autoComplete *ngIf="SL.traceableToType == vendorModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -811,8 +816,9 @@
 
                                                             <p-autoComplete *ngIf="SL.traceableToType == companyModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
