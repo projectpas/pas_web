@@ -58,6 +58,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     pageSize: number = 10;
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
+    isSpinnerVisibleReserve:boolean=false;
     cols = [
         { field: 'taskName', header: 'Task' },
         { field: 'line', header: 'Line Num' },
@@ -535,64 +536,71 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.isShowEqPN = false;
         this.isShowAlternatePN = false;
        if (this.workFlowWorkOrderId) {
+           this.isSpinnerVisibleReserve=true;
            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
+               if(res && res.length !=0){
                 this.reservedList = res.map(x => {
-                 x.masterCompanyId = this.authService.currentUser.masterCompanyId
-                    this.setdefaultValues(x);
-                    if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
-                        this.savebutonDisabled = true;
-                        if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
-                            this.isShowAlternatePN = true;
-                            x.isParentSelected = true;
-                            x.showAlternateParts = true;
-                        } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
-                            this.isShowEqPN = true;
-                            x.isParentSelected = true;
-                            x.showEqParts = true;
-                        } else {
-                            x.isParentSelected = false;
-                            x.showAlternateParts = false;
-                            x.showEqParts = false;
-                        }
-                    } else if (this.statusId == 1 || this.statusId == 3) {
-                        x.isParentSelected = false;
-                        x.showAlternateParts = false;
-                        x.showEqParts = false;
-                    }
-                    return {
-                        ...x,
-                        reservedDate: new Date(),
-                        issuedDate: new Date(),
-                        reservedById: this.authService.currentEmployee,
-                        issuedById: this.authService.currentEmployee,
-                        woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
-                            this.setdefaultValuesForChild(y);
-                            return {
-                                ...y,
-                                reservedDate: new Date(),
-                                issuedDate: new Date(),
-                                reservedById: this.authService.currentEmployee,
-                                issuedById: this.authService.currentEmployee,
-                                masterCompanyId: this.authService.currentUser.masterCompanyId,
-                            }
-                        }),
-                        woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
-                            this.setdefaultValuesForChild(y);
-                            return {
-                                ...y,
-                                reservedDate: new Date(),
-                                issuedDate: new Date(),
-                                reservedById: this.authService.currentEmployee,
-                                issuedById: this.authService.currentEmployee,
-                                masterCompanyId: this.authService.currentUser.masterCompanyId,
-                            }
-                        })
-                    }
-
-                });
+                    x.masterCompanyId = this.authService.currentUser.masterCompanyId
+                       this.setdefaultValues(x);
+                       if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
+                           this.savebutonDisabled = true;
+                           if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
+                               this.isShowAlternatePN = true;
+                               x.isParentSelected = true;
+                               x.showAlternateParts = true;
+                           } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
+                               this.isShowEqPN = true;
+                               x.isParentSelected = true;
+                               x.showEqParts = true;
+                           } else {
+                               x.isParentSelected = false;
+                               x.showAlternateParts = false;
+                               x.showEqParts = false;
+                           }
+                       } else if (this.statusId == 1 || this.statusId == 3) {
+                           x.isParentSelected = false;
+                           x.showAlternateParts = false;
+                           x.showEqParts = false;
+                       }
+                       return {
+                           ...x,
+                           reservedDate: new Date(),
+                           issuedDate: new Date(),
+                           reservedById: this.authService.currentEmployee,
+                           issuedById: this.authService.currentEmployee,
+                           woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
+                               this.setdefaultValuesForChild(y);
+                               return {
+                                   ...y,
+                                   reservedDate: new Date(),
+                                   issuedDate: new Date(),
+                                   reservedById: this.authService.currentEmployee,
+                                   issuedById: this.authService.currentEmployee,
+                                   masterCompanyId: this.authService.currentUser.masterCompanyId,
+                               }
+                           }),
+                           woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
+                               this.setdefaultValuesForChild(y);
+                               return {
+                                   ...y,
+                                   reservedDate: new Date(),
+                                   issuedDate: new Date(),
+                                   reservedById: this.authService.currentEmployee,
+                                   issuedById: this.authService.currentEmployee,
+                                   masterCompanyId: this.authService.currentUser.masterCompanyId,
+                               }
+                           })
+                       }
+   
+                   });
+               }else{
+                this.reservedList = [] 
+               }
+                this.isSpinnerVisibleReserve=false;
             },
                 err => {
                     this.reservedList = []
+                    this.isSpinnerVisibleReserve=false;
                 })
         }
     }
