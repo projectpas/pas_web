@@ -66,7 +66,7 @@
                     </label>
                   </div>
 
-                  <div class="pull-left radio-buttons-align">
+                  <div class="pull-left radio-buttons-align" style="margin-left:55px !important">
                     <label class="radio-cstm wauto">
                       <input type="radio" name="vendorStatus" class="form-control" value="Active"
                         (click)="getVenListByStatus('Active')" checked [(ngModel)]="currentstatus" />
@@ -771,23 +771,19 @@
                                   allCustomerFinanceDocumentsList.length == 0
                                 ">
                                     <tr>
-                                      <td [attr.colspan]="6" style="
-                                      color: red;
-                                      font-weight: bold;
-                                      text-align: center;
-                                    ">
+                                      <td [attr.colspan]="6" class="no-records-cstm no-records-msg">
                                         No records found
                                       </td>
                                     </tr>
                                   </ng-template>
                                   <ng-template pTemplate="summary" id="footer">
                                     <label id="footer" class="footer">Total:</label>
-                                    <input style="width: 5%;" [(ngModel)]="taxexeptTable._totalRecords"
+                                    <input class="footer-input-width" [(ngModel)]="taxexeptTable._totalRecords"
                                       [disabled]="true" pInputText type="text" />
                                     &nbsp;&nbsp;
                                     <label id="footer" class="footer1">Pages Count:</label>
 
-                                    <input style="width: 5%;" [ngModel]="
+                                    <input class="footer-input-width" [ngModel]="
                                     getPageCount(
                                       taxexeptTable._totalRecords,
                                       pageSize
@@ -892,7 +888,7 @@
                             <div class="row">
                               <div class="col">
                                 <div class="checkbox-cstm pull-right" style="margin-right: 20px;">
-                                  <label style="width: auto !important; margin-top: 3px;">
+                                  <label class="checkbox-label-align">
                                     <input type="checkbox" [(ngModel)]="currentPnMappingDeletedstatus" name="cparent"
                                       id="cparent" (click)="getPnMappingDeleteListByStatus()" />
                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -906,7 +902,7 @@
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <!-- <th>Sl.No</th> -->
-                              <th style="padding: 8px 5px !important;" *ngFor="let col of columns"
+                              <th style="padding: 8px 5px !important;" class="table-column-width" *ngFor="let col of columns"
                                 [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -914,7 +910,7 @@
                             </tr>
                             <tr>
                               <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                <input style="width: 100%;" pInputText type="text" (input)="
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     pnTable.filter(
                                       $event.target.value,
                                       col.field,
@@ -927,30 +923,26 @@
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr>
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
-                              <td *ngFor="let col of columns">
+                              <td class="table-column-width" *ngFor="let col of columns">
                                 {{ rowData[col.field] }}
                               </td>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="pnMappingList.length == 0">
                             <tr>
-                              <td [attr.colspan]="4" style="
-                                  color: red;
-                                  font-weight: bold;
-                                  text-align: center;
-                                ">
+                              <td [attr.colspan]="4" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="pnTable._totalRecords" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="pnTable._totalRecords" [disabled]="true" pInputText
                               type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
 
-                            <input style="width: 5%;" [ngModel]="
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(
                                   pnTable._totalRecords,
                                   pnMappingPageSize
@@ -980,16 +972,16 @@
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <!-- <th>ID</th> -->
-                              <th style="padding: 8px 5px !important;" *ngFor="let col of columns"
+                              <th style="padding: 8px 5px !important;"  class="table-column-width" *ngFor="let col of columns"
                                 [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
-                              <th>Actions</th>
+                              <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
                               <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                <input style="width: 100%;" pInputText type="text" (input)="
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     aircraftTable.filter(
                                       $event.target.value,
                                       col.field,
@@ -997,13 +989,13 @@
                                     )
                                   " />
                               </th>
-                              <th>&nbsp;</th>
+                              <th class="table-actions-column">&nbsp;</th>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr>
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
-                              <td *ngFor="let col of columns">
+                              <td class="table-column-width" *ngFor="let col of columns">
                                 <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
                                   {{
                                   rowData[col.field] }}
@@ -1017,7 +1009,7 @@
                                     }}</span>
                                 </span>
                               </td>
-                              <td style="text-align: center;">
+                              <td class="table-actions-column">
                                 <span data-toggle="modal" data-target="#airCraftView">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
@@ -1028,23 +1020,19 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="aircraftList.length == 0">
                             <tr>
-                              <td [attr.colspan]="3" style="
-                                  color: red;
-                                  font-weight: bold;
-                                  text-align: center;
-                                ">
+                              <td [attr.colspan]="3" class="no-records-msg no-records-cstm">
                                 No records found
                               </td>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="aircraftTable._totalRecords" [disabled]="true"
+                            <input class="footer-input-width" [(ngModel)]="aircraftTable._totalRecords" [disabled]="true"
                               pInputText type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
 
-                            <input style="width: 5%;" [ngModel]="
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(
                                   aircraftTable._totalRecords,
                                   aircraftPageSize
@@ -1074,16 +1062,16 @@
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <!-- <th>ID</th> -->
-                              <th style="padding: 8px 5px !important;" *ngFor="let col of columns"
+                              <th style="padding: 8px 5px !important;" class="table-column-width" *ngFor="let col of columns"
                                 [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
-                              <th>Actions</th>
+                              <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
                               <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                <input style="width: 100%;" pInputText type="text" (input)="
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     ataTable.filter(
                                       $event.target.value,
                                       col.field,
@@ -1091,16 +1079,16 @@
                                     )
                                   " />
                               </th>
-                              <th>&nbsp;</th>
+                              <th class="table-actions-column">&nbsp;</th>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr>
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
-                              <td *ngFor="let col of columns">
+                              <td class="table-column-width" *ngFor="let col of columns">
                                 {{ rowData[col.field] }}
                               </td>
-                              <td style="text-align: center;">
+                              <td class="table-actions-column">
                                 <span data-toggle="modal" data-target="#ataView">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openAtaView(rowData, ataView)" matTooltip="View"
@@ -1111,23 +1099,19 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="ataList.length == 0">
                             <tr>
-                              <td [attr.colspan]="2" style="
-                                  color: red;
-                                  font-weight: bold;
-                                  text-align: center;
-                                ">
+                              <td [attr.colspan]="2" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="ataTable._totalRecords" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="ataTable._totalRecords" [disabled]="true" pInputText
                               type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
 
-                            <input style="width: 5%;" [ngModel]="
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(
                                   ataTable._totalRecords,
                                   ataPageSize
@@ -1153,8 +1137,9 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered">
+                      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                        <div class="tableFixHead">  
+                        <table class="table table-bordered header-table-width">
                           <thead>
                             <tr>
                               <th>Tag Type</th>
@@ -1251,6 +1236,7 @@
                             </tr>
                           </tbody>
                         </table>
+                        </div>
                       </div>
                     </div>
                     <div class="modal-footer">
