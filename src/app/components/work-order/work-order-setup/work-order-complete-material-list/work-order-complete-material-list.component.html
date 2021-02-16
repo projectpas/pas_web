@@ -119,6 +119,13 @@
     <div class="modal-dialog modal-xlg">
         <!-- Modal content-->
         <div class="modal-content">
+            <div class="preloader" *ngIf="isSpinnerVisibleReserve">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div></div><div></div> <div></div><div></div><div></div> <div></div><div></div><div></div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="closeMaterial()">&times;</button>
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
