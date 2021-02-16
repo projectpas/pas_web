@@ -174,8 +174,7 @@ export class EditPoComponent implements OnInit {
                     this.isSpinnerVisible = true;
                     this.getReceivingPOHeaderById(this.receivingService.purchaseOrderId);          
                     this.receivingService.getPurchaseOrderDataForEditById(this.receivingService.purchaseOrderId,this.employeeId).subscribe(
-                        results => {  
-                            debugger;                        
+                        results => {                                                     
                             if (results[0] == null || results[0] == undefined) {
                                 this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
                                 return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
@@ -234,22 +233,23 @@ export class EditPoComponent implements OnInit {
                                         this.getAllSite();    
                                         this.getCustomers();
                                         this.getVendors();
-                                        this.getCompanyList();
-                                        this.isSpinnerVisible = false;                
+                                        this.getCompanyList();                                                   
                                         if(this.purchaseOrderData.purchaseOderPart) {
                                             for(let i=0; i < this.purchaseOrderData.purchaseOderPart.length; i++) {
                                                 this.getCondIdPart(this.purchaseOrderData.purchaseOderPart[i]);
                                                 this.getSiteDetailsOnEdit(this.purchaseOrderData.purchaseOderPart[i]);
                                             }                                       
                                         }
+                                        this.isSpinnerVisible = false;
                                 
                         },
                         error => {
+                            this.isSpinnerVisible = false;
                             this.alertService.showMessage(this.pageTitle, "Something went wrong while loading the Purchase Order detail", MessageSeverity.error);
                             return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
                         }
                     ); 
-                    this.isSpinnerVisible = false;							
+                   							
                 }, 2200);
             }
             else{
@@ -1626,6 +1626,7 @@ export class EditPoComponent implements OnInit {
                 for (var stockLine of stockLineToUpdate) {
                     
                     stockLine.updatedBy = this.userName;
+                    stockLine.purchaseOrderId  = this.receivingService.purchaseOrderId;
                     stockLine.masterCompanyId = this.currentUserMasterCompanyId;
 
                     if (stockLine.conditionId == undefined || stockLine.conditionId == 0) {
@@ -1700,6 +1701,7 @@ export class EditPoComponent implements OnInit {
                 createdBy: this.userName,
                 updatedBy:this.userName,
                 masterCompanyId:this.currentUserMasterCompanyId,
+                purchaseOrderId: this.receivingService.purchaseOrderId,
             }
         })
         return tmLife;

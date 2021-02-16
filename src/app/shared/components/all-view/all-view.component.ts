@@ -163,10 +163,8 @@ export class AllViewComponent implements OnInit {
       this.getApproversListById(OrderId);
       this.getApprovalProcessListById(OrderId);            
       this.tabindex = 0;   
-  
-      if(isReceivingpo == true)
-      this.viewPurchaseOrder(OrderId);
-    } else if (this.OrderTypes == 'Repair Order') {
+      }  
+    else if (this.OrderTypes == 'Repair Order') {
       this.getROViewById(OrderId);
       this.getROPartsViewById(OrderId);
       this.getRoApproversListById(OrderId);
@@ -210,6 +208,17 @@ export class AllViewComponent implements OnInit {
       //this.showComunicationtab = true;
     }
 
+    if (event.index == 7 && this.isReceivingpo == true) {
+      //this.isSpinnerVisible = true;
+      if(!this.purchaseOrderData){
+        this.viewPurchaseOrder( this.id );}
+    }
+    if (event.index == 8 && this.isReceivingpo == true) {
+      //this.isSpinnerVisible = true;
+      if(!this.purchaseOrderData){
+      this.viewPurchaseOrder( this.id );}
+    }
+
   }
 
 
@@ -248,6 +257,7 @@ export class AllViewComponent implements OnInit {
   }
 
   viewPurchaseOrder(purchaseOrderId: number): void {
+    this.isSpinnerVisible = true;
     this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
       results => {
         this.purchaseOrderData = results[0];
@@ -302,9 +312,10 @@ export class AllViewComponent implements OnInit {
         this.purchaseOrderData.dateRequested = new Date(); //new Date(this.purchaseOrderData.dateRequested);
         this.purchaseOrderData.dateApprovied = new Date(this.purchaseOrderData.dateApprovied);
         this.purchaseOrderData.needByDate = new Date(); //new Date(this.purchaseOrderData.needByDate);
-
+        this.isSpinnerVisible = false;
       },
       error => {
+        this.isSpinnerVisible = false;
         //this.alertService.showMessage(this.pageTitle, "Something went wrong while loading the Purchase Order detail", MessageSeverity.error);
         //return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
       }
