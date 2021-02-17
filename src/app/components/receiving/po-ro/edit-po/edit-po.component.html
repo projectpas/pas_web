@@ -14,7 +14,7 @@
                     </div>
                     <button type="button" class="btn-sm header-button pull-right"
                             [routerLink]="['/receivingmodule/receivingpages/app-purchase-order']">
-                        Reviewing PO Receipt
+                            Receiving PO Receipt
                     </button>
                 </div>
             </div>
@@ -261,7 +261,7 @@
                         </thead>
                         <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderData.purchaseOderPart != undefined">
                             <ng-container *ngFor="let part of purchaseOrderData.purchaseOderPart;let row_index=index">
-                                <tr class="table-parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
+                                <tr class="table-parent-data greenbackground" *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
                                   
                                     <td class="text-right">{{row_index + 1}}</td>
                                     <td>{{part.partNumber}}</td>
@@ -463,6 +463,7 @@
                                     <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
                                         <!--part.stockLine != null-->                                      
                                         <!--<th>Stock Line</th>-->
+                                        <th></th>
                                         <th>PN</th>
                                         <th>PN Description</th>
                                         <th>Ctrl Id</th>
@@ -510,11 +511,12 @@
                                         <th>Time Life</th>
                                         <th colspan="5">Cycles</th>
                                         <th colspan="5">Time</th>
-                                        <th colspan="5">Last</th>                                        
-                                        <th colspan="3"></th>
+                                        <th colspan="4">Last</th>                                        
+                                        <th colspan="1"></th>
                                     </tr>
                                     <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
-                                        <tr *ngIf="!SL.isDeleted">                                           
+                                        <tr *ngIf="!SL.isDeleted">  
+                                            <td></td>                                         
                                             <!--<td>{{SL.stockLineNumber}}</td>-->
                                             <td>{{part.itemMaster.partNumber}}</td>
                                             <td>{{part.itemMaster.partDescription}}</td>
@@ -666,10 +668,11 @@
 
                                                             <p-autoComplete *ngIf="SL.ownerType == customerModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
 
@@ -677,10 +680,11 @@
 
                                                             <p-autoComplete *ngIf="SL.ownerType == vendorModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
 
@@ -688,10 +692,11 @@
 
                                                             <p-autoComplete *ngIf="SL.ownerType == companyModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
                                                             </p-autoComplete>
@@ -717,10 +722,7 @@
                                                         (change)="onObtainFromChange($event, SL)">
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">{{item.moduleName}}</option>
-                                                    <!-- <option value="1">Customer</option>
-                                                    <option value="2">Vendor</option>
-                                                    <option value="3">Company</option>
-                                                    <option value="4">Other</option> -->
+                                                   
                                                 </select>
                                             </td>
                                             <td>
@@ -730,7 +732,8 @@
 
                                                             <p-autoComplete *ngIf="SL.obtainFromType == customerModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
+                                                                            appendTo="body" 
                                                                             [disabled]="!SL.isEnabled"
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
@@ -741,8 +744,9 @@
 
                                                             <p-autoComplete *ngIf="SL.obtainFromType == vendorModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -752,8 +756,9 @@
 
                                                             <p-autoComplete *ngIf="SL.obtainFromType == companyModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -789,8 +794,9 @@
 
                                                             <p-autoComplete *ngIf="SL.traceableToType == customerModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -800,8 +806,9 @@
 
                                                             <p-autoComplete *ngIf="SL.traceableToType == vendorModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -811,8 +818,9 @@
 
                                                             <p-autoComplete *ngIf="SL.traceableToType == companyModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -1007,12 +1015,14 @@
                                             <td>
                                                 <input type="text" class="form-control" disabled value="unknown field" />
                                             </td> -->
-                                            <td>{{SL.glAccountText}}</td>
+                                            <td>{{SL.glAccountText}}                                                
+                                            </td>
                                             <td>
                                                 <input type="checkbox" disabled [checked]="part.timeLife[stockline_row_index].stockLineDraftId > 0" /> <!--part.itemMaster.isTimeLife != false-->
+                                               
                                             </td>
-                                            <td colspan="13" *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)">
-                                            </td>
+                                            <td colspan="14" *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)">
+                                            </td>                                            
                                             <ng-container *ngIf="part.timeLife[stockline_row_index].stockLineDraftId > 0">
                                                 <!--part.itemMaster.isTimeLife == true-->
                                                 <td class="time-remaining-td">
@@ -1114,13 +1124,14 @@
                                                         <div class="col-md-1"><span class="time-remaining-span"> : </span></div>
                                                         <div class="col-md-5"><input class="form-control time-remaining-input" placeholder="MM" [disabled]="!SL.isEnabled" type="number" pInputText pKeyFilter="hex" [(ngModel)]="part.timeLife[stockline_row_index].lastSinceInspectionMin" (change)="onChangeTimeLifeMin('lastSinceInspectionMin', stockline_row_index)"></div>
                                                     </div>
-                                                </td>   
-                                                <td colspan="2"></td>                                             
+                                                </td>  
+                                                <td></td>                                                 
+                                            </ng-container>
+                                                                                     
                                                 <td ><a href="javascript:void(0);" class="btn boxed-float-btn nobg edit" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
                                                     <a class="btn nobg btn-delete-cstm"
                                                        (click)="deleteStockLine(SL)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                                 </td>
-                                            </ng-container>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
