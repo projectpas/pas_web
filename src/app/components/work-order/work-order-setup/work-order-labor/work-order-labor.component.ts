@@ -519,19 +519,45 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       ? this.authService.currentUser.masterCompanyId
       : null;
   }
-  getAllExpertiseType() {
-    this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
-      this.expertiseTypeList = res.map(x => {
-        return {
-          label: x.expertiseType,
-          value: x.employeeExpertiseId
-        }
+  // getAllExpertiseType() {
+  //   this.commonService.autoCompleteDropdownsExpertiseTypes(this.currentUserMasterCompanyId).subscribe(res => {
+  //     this.expertiseTypeList = res.map(x => {
+  //       return {
+  //         label: x.expertiseType,
+  //         value: x.employeeExpertiseId
+  //       }
+  //     });
+  //   },
+  //     err => {
+  //     })
+  // }
+  setEditArray:any=[];
+  getAllExpertiseType(value?) {
+    this.setEditArray = [];
+    if (this.isEdit == true) {
+      this.workOrderLaborList.forEach(element => {
+        
       });
-    },
-      err => {
-      })
-  }
-
+        // this.setEditArray.push(this.workOrderGeneralInformation.employeeId ? this.workOrderGeneralInformation.employeeId.value : 0);
+    }
+    if (this.setEditArray.length == 0) {
+        this.setEditArray.push(0);
+    }
+    const strText = value ? value : '';
+    this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        if (res && res.length != 0) {
+          this.expertiseTypeList = res;
+          // .map(x => {
+          //   return {
+          //     label: x.expertiseType,
+          //     value: x.employeeExpertiseId
+          //   }
+          // });
+        }else{
+          this.expertiseTypeList =[];
+        }
+    })
+}
   getExpertiseEmployeeByExpertiseId(value, index, object) {
     if (!this.isQuote) {
       object.employeeId = null;
@@ -850,8 +876,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       return false;
     }
   }
-
-  showDeleteLabourPopup(taskName, index) {
+  currentRecord:any={};
+  showDeleteLabourPopup(taskName, res, index) {
+    this.currentRecord=res;
     this.deletingLabourObj = {
       taskName: taskName,
       index: index
