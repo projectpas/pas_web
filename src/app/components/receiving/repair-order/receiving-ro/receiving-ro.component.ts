@@ -747,7 +747,7 @@ export class ReceivingRoComponent implements OnInit {
                 //siteId: this.getSiteDetailsOnEdit(part, x),
                 // certifiedBy: 0,
                 //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
-                shippingAccount: part.shippingAccountInfo,
+                //shippingAccount: part.shippingAccountInfo,
                 repairOrderUnitCost: formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2),
                 repairOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2)
             }

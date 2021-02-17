@@ -345,7 +345,8 @@ export class EditRoComponent implements OnInit {
         part.parentDepartmentlist = [];
         part.parentbuId = 0;
         part.parentDivisionId = 0;
-        part.parentDeptId = 0;   
+        part.parentDeptId = 0;  
+        
         if (part.stockLine) {
             for (let j = 0; j < part.stockLine.length; j++) {
                 part.stockLine[j].parentCompanyId = part.parentCompanyId;
@@ -354,7 +355,7 @@ export class EditRoComponent implements OnInit {
                 part.stockLine[j].parentDepartmentlist = [];
                 part.stockLine[j].parentbuId = 0;
                 part.stockLine[j].parentDivisionId = 0;
-                part.stockLine[j].parentDeptId = 0;
+                part.stockLine[j].parentDeptId = 0;               
             }
         }
         if (part.parentCompanyId != 0 && part.parentCompanyId != null
@@ -853,47 +854,7 @@ export class EditRoComponent implements OnInit {
                 this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
             }
         );
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    }   
 
     onFilter(event, stockLine, type): void {
         if (event.query !== undefined && event.query !== null) {
@@ -1684,7 +1645,7 @@ export class EditRoComponent implements OnInit {
             this.receivingService.updateStockLine(receiveParts).subscribe(data => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
-                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
+                //this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
             },
             errr =>
             {
