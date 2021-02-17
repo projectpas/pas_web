@@ -124,7 +124,7 @@
        
          
             <mat-select style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" 
-            formControlName="roles" multiple [attr.disabled]="!isEditMode || !canAssignRoles">
+            formControlName="roles" [(value)]="user.roleName" multiple [attr.disabled]="!isEditMode || !canAssignRoles">
                 <mat-option *ngFor="let role of assignableRoles" [value]="role.name" >
                     <span matTooltip="{{role.description}}">{{role.name}}</span>
                 </mat-option>

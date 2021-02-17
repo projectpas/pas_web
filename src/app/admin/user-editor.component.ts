@@ -17,6 +17,7 @@ import { UserEdit } from '../models/user-edit.model';
 import { Role } from '../models/role.model';
 import { Permission } from '../models/permission.model';
 import { EqualValidator } from '../shared/validators/equal.validator';
+import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
 
 @Component({
     selector: 'user-editor',
@@ -34,7 +35,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     private onUserSaved = new Subject<User>();
 
     @Input() user: User = new User();
-    @Input() roles: Role[] = [];
+    @Input() roles: UserRole[] = [];
     @Input() isEditMode: boolean = false;
 
     userProfileForm: FormGroup;
@@ -80,7 +81,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         return this.accountService.currentUser ? this.user.id == this.accountService.currentUser.id : false;
     }
 
-    get assignableRoles(): Role[] {
+    get assignableRoles(): UserRole[] {
         return this.roles;
     }
 
@@ -107,7 +108,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             this.user.isEnabled = true;
         }
 
-        this.setRoles();
+        //this.setRoles();
 
         this.resetForm();
     }
@@ -116,10 +117,11 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         this.passwordWatcher.unsubscribe();
     }
 
-    public setUser(user?: User, roles?: Role[]) {
+    public setUser(user?: User, roles?: UserRole[]) {
         this.user = user;
         if (roles) {
             this.roles = [...roles];
+            this.roles.map(i=>i.name==this.user.roleName);
         }
 
         this.ngOnChanges();
@@ -182,15 +184,15 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         });
     }
 
-    private setRoles() {
-        if (this.user.roles) {
-            for (let role of this.user.roles) {
-                if (!this.roles.some(r => r.name == role)) {
-                    this.roles.unshift(new Role(role));
-                }
-            }
-        }
-    }
+    // private setRoles() {
+    //     if (this.user.roles) {
+    //         for (let role of this.user.roles) {
+    //             if (!this.roles.some(r => r.name == role)) {
+    //                 this.roles.unshift(new Role(role));
+    //             }
+    //         }
+    //     }
+    // }
 
     public beginEdit() {
         this.isEditMode = true;
@@ -256,7 +258,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             legalEntityId: this.user.legalEntityId,
             isResetPassword:this.user.isResetPassword,
             roleName:"",
-            permissionName:"",
+            permissionName:[],
             roleID:"",
         };
     }

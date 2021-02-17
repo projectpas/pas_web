@@ -8,7 +8,7 @@
         <h4 class="new-card-heading">Vendor List</h4>
       </div>
       <div>
-        <button
+        <button *ngIf="isAdd"
           type="button"
           class="btn-sm new-btn-primary"
           (click)="navigateTogeneralInfo()"
@@ -248,7 +248,7 @@
                 ></a>
               </span>
               <span *ngIf="!isCreatePO && !isCreateRO"
-                ><a
+                ><a *ngIf="isEdit"
                   class="btn nobg btn-edit-cstm"
                   (click)="openEdit(rowData)"
                   matTooltip="Edit"
@@ -275,7 +275,7 @@
                 ></a>
               </span> -->
               <span *ngIf="!isCreatePO && !isCreateRO"
-                ><a
+                ><a *ngIf="isDelete"
                   class="btn nobg btn-delete-cstm"
                   (click)="openDelete(content1, rowData);"
                   matTooltip="Delete"

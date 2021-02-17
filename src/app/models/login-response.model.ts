@@ -39,6 +39,6 @@ export interface AccessToken {
     legalEntityId: number;
     isResetPassword:string;
     roleName:string;
-    permissionName:string;
+    permissionName:string[];
     roleID:string;
 }

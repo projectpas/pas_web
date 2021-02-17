@@ -99,6 +99,11 @@ export class EndpointFactory {
     }
 
     handleError(error, continuation: () => Observable<any>) {
+        if(error.status==404){
+            error.error="Not Authorize User";
+            this.showErrorMessage(error, "Unauthorize Error");
+            return Observable.throw(error);
+        }
         if (error.status == 401) {
             if (this.isRefreshingLogin) {
                 return this.pauseTask(continuation);

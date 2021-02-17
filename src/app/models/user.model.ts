@@ -48,6 +48,6 @@ export class User
     public legalEntityId: number;
     public isResetPassword:string;
     public roleName:string;
-    public permissionName:string;
+    public permissionName:string[];
     public roleID:string;
 }

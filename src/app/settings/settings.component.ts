@@ -20,6 +20,8 @@ import { AlertService, DialogType, MessageSeverity } from '../services/alert.ser
 import { fadeInOut } from '../services/animations';
 import { Utilities } from '../services/utilities';
 import { AuthService } from '../services/auth.service';
+import { UserRoleService } from '../components/user-role/user-role-service';
+import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
 
 
 @Component({
@@ -44,7 +46,8 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
         private route: ActivatedRoute,
         private translationService: AppTranslationService,
         private accountService: AccountService,
-        private authService:AuthService
+        private authService:AuthService,
+        private userService:UserRoleService
     ) { }
 
     ngOnInit() {
@@ -83,20 +86,28 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertService.startLoadingMessage();
         //var userId=this.authService.currentUser.userName;
         if (this.canViewRoles) {
-            this.accountService.getUserAndRoles().subscribe(
-                results => this.onCurrentUserDataLoadSuccessful(results[0], results[1]),
-                error => this.onCurrentUserDataLoadFailed(error)
-            );
+            this.userService.getAllUserRole().subscribe(roles=>{
+                
+                this.accountService.getUserAndRoles().subscribe(
+                    results => this.onCurrentUserDataLoadSuccessful(results[0], roles[0]),
+                    error => this.onCurrentUserDataLoadFailed(error)
+                );
+            });
+            
         }
         else {
-            this.accountService.getUser().subscribe(
-                user => this.onCurrentUserDataLoadSuccessful(user, user.roles.map(r => new Role(r))),
-                error => this.onCurrentUserDataLoadFailed(error)
-            );
+            // this.accountService.getUser().subscribe(
+            //     user => {
+            //         let role=user.roleName;
+            //         this.onCurrentUserDataLoadSuccessful(user, user.roleName.map(r => new Role(r)))
+            //     },
+            //     error => {
+            //         this.onCurrentUserDataLoadFailed(error)
+            //     });
         }
     }
 
-    private onCurrentUserDataLoadSuccessful(user: User, roles: Role[]) {
+    private onCurrentUserDataLoadSuccessful(user: User, roles: UserRole[]) {
         this.alertService.stopLoadingMessage();
         this.userProfile.setUser(user, roles);
     }

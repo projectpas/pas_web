@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(private authService: AuthService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        debugger;
+        
         let url: string = state.url;
         return this.checkLogin(url);
     }
@@ -31,6 +31,11 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     checkLogin(url: string): boolean {
 
         if (this.authService.isLoggedIn) {
+
+            if(this.authService.currentUser && this.authService.currentUser.roleName==null){
+                this.router.navigate(['/unauthorized-access']);
+                return false;
+            }
             return true;
         }
 

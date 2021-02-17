@@ -27,7 +27,6 @@ import { LicTypeComponent } from "./components/lic-type/lic-type.component";
 import { OwnerComponent } from "./components/owner/owner.component";
 import { PlatformComponent } from "./components/platform/platform.component";
 import { SupervisorComponent } from "./components/supervisor/supervisor.component";
-import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 import { NotFoundComponent } from "./components/not-found/not-found.component";
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth-guard.service';
@@ -64,7 +63,7 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
             { path: "singlepages", loadChildren: './singlepages/singlepages.module#SinglePgesModule' },
             { path: "customersmodule", loadChildren: './customerpages/customerpages.module#CustomerPagesModule' },
             { path: "accountmodule", loadChildren: './accounting-pages/accountingpages.module#AccountingPagesModule' },
-            { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
+            //{ path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
             { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule', canLoad: [AuthGuard] },
             { path: "employeesmodule", loadChildren: './employeepages/employeepages.module#EmployeepagesModule' },
             { path: "itemmastersmodule", loadChildren: './itemmasterpages/itemmasterpages.module#ItemmasterpagesModule' },

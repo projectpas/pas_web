@@ -24,6 +24,7 @@ import { UserRoleService } from '../components/user-role/user-role-service';
 import { AccountService } from './account.service';
 import { CommonService } from './common.service';
 import { decode } from 'punycode';
+import { BehaviorSubject } from 'rxjs';
 // import { AccountService } from "../services/account.service";
 
 @Injectable()
@@ -41,6 +42,9 @@ export class AuthService {
     private previousIsLoggedInCheck = false;
 
     private _loginStatus = new Subject<boolean>();
+
+    public ModuleInfo: BehaviorSubject<Array<ModuleHierarchyMaster>> = new BehaviorSubject([]);
+
 private defaultEmployeeDetails= new Subject<any>()
     constructor(private router: Router, private configurations: ConfigurationService, private endpointFactory: EndpointFactory, private localStorage: LocalStoreManager,private userRoleService:UserRoleService ,private commonService:CommonService) {
         this.initializeLoginStatus();
@@ -51,6 +55,13 @@ private defaultEmployeeDetails= new Subject<any>()
             this.reevaluateLoginStatus();
         });
     }
+
+    public SetMenuInfo(newValue: ModuleHierarchyMaster[]): void {
+        this.ModuleInfo.next(Object.assign([], newValue));
+      }
+    //  public  removeMenuInfo() {
+    //     this.ModuleInfo.next([]);
+    //   }
 
     gotoPage(page: string, preserveParams = true) {
 
@@ -411,4 +422,42 @@ private defaultEmployeeDetails= new Subject<any>()
     get rememberMe(): boolean {
         return this.localStorage.getDataObject<boolean>(DBkeys.REMEMBER_ME) == true;
     }
+
+    public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string):Promise<Boolean> {
+        debugger;
+        let Menus:ModuleHierarchyMaster[] = MenuInfo.getValue();
+        linkToCheck = linkToCheck.toLocaleLowerCase();
+        let isAllowed:Boolean = false;
+        if(Menus.length == 0){
+          let roleID =this.currentUser.roleID;
+          Menus= await this.getRolestypes(roleID);
+        }
+        Menus.forEach(el => {
+          if(el.routerLink && el.routerLink.toLocaleLowerCase().indexOf(linkToCheck) != -1)
+          {
+            isAllowed = true;
+          }
+        });
+        return isAllowed;
+      }
+
+      public async getRolestypes(roleID:string): Promise<Array<ModuleHierarchyMaster>> {
+        return new Promise((resolve) => {
+            this.userRoleService.getUserMenuByRoleId(roleID).subscribe(data=>{
+                resolve(data[0]);
+            })
+        });
+      }
+
+      public checkPermission(permissionName:string):boolean{
+        let isAllowed:boolean = false;
+        if(this.currentUser && this.currentUser.permissionName!=null){
+            let getData=this.currentUser.permissionName.filter(function(value){
+                    return value==permissionName;
+            });
+            isAllowed=getData.length>0;
+        }
+        
+        return isAllowed;
+      }
 }

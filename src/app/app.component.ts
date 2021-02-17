@@ -182,22 +182,25 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     return result.map(({ id, label, icon, routerLink, automationId }) =>
-      ({ id, label, icon, routerLink, automationId, items: automationId == null ? [this.getDataByParentId(data, id)] : this.getDataByParentId(data, id),
-      command: label=="Create Vendor"?(event?: any) => {
-        this.newVendorClick();
-      }:null })
+      ({
+        id, label, icon, routerLink, automationId, items: automationId == null ? [this.getDataByParentId(data, id)] : this.getDataByParentId(data, id),
+        command: label == "Create Vendor" ? (event?: any) => {
+          this.newVendorClick();
+        } : null
+      })
     );
   }
 
   ngOnInit() {
     debugger;
-    this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
-      console.log(data[0]);
-      this.moduleHierarchy = data[0];
+    // console.log(this.authService.currentUser.roleID);
+    // this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
+    //   console.log(data[0]);
+    //   this.moduleHierarchy = data[0];
 
-      this.dynamicMenu();
-    }
-    );
+    //   this.dynamicMenu();
+    // }
+    // );
 
     this.megaMenuItems = [
       {
@@ -1679,6 +1682,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.initNotificationsLoading();
       } else {
         this.unsubscribeNotifications();
+      }
+
+      if (this.authService.currentUser != null) {
+        this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
+          console.log(data[0]);
+          this.moduleHierarchy = data[0];
+          this.authService.SetMenuInfo(data[0]);
+          this.dynamicMenu();
+        }
+        );
       }
 
       setTimeout(() => {
