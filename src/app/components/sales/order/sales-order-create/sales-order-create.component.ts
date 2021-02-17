@@ -199,7 +199,6 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
     this.loadSOStatus();
     this.loadSOType();
 

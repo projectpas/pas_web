@@ -95,6 +95,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getstocklineforPickTicketUrl: string = environment.baseUrl + "/api/salesorder/searchstocklinefrompickticketpop"
   private readonly confirmpickticketUrl = environment.baseUrl + "/api/salesorder/confirmpt";
   private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/salesorder/getpickticketedit"
+  private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   //**End  savesarvice end point creation implementation --nitin
 
 
@@ -715,6 +716,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getShippingDataList(salesOrderId));
+      });
+  }
+
+  getShippingEdit(salesOrderShippingId: number): Observable<any> {
+    const URL = `${this.getShippingforEdit}?salesOrderShippingId=${salesOrderShippingId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getShippingEdit(salesOrderShippingId));
       });
   }
   //end nitin

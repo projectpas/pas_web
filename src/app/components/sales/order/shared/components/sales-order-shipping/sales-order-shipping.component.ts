@@ -414,13 +414,14 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['salesOrderId'] = this.salesOrderId;
         this.shippingHeader['salesOrderPartId'] = this.salesOrderPartNumberId;
         this.shippingHeader['masterCompanyId'] = this.salesOrder['masterCompanyId'];
-        this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = this.salesOrder['masterCompanyId'];
+        //this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = this.salesOrder['masterCompanyId'];
+        //this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = 1;
         this.shippingHeader['createdBy'] = this.userName;
         this.shippingHeader['updatedBy'] = this.userName;
         this.shippingHeader['createdDate'] = new Date().toDateString();
         this.shippingHeader['updatedDate'] = new Date().toDateString();
-        this.shippingHeader['salesOrderCustomsInfo']['createdDate'] = new Date().toDateString();
-        this.shippingHeader['salesOrderCustomsInfo']['updatedDate'] = new Date().toDateString();
+        //this.shippingHeader['salesOrderCustomsInfo']['createdDate'] = new Date().toDateString();
+        //this.shippingHeader['salesOrderCustomsInfo']['updatedDate'] = new Date().toDateString();
         this.shippingHeader['trackingNum'] = 23;
         this.shippingHeader['houseAirwayBill'] = 349;
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('userID', this.shippingHeader['shipToCustomerId']);
@@ -519,4 +520,22 @@ export class SalesOrderShippingComponent {
 
     // loadData(event) {
     // }
+
+    shippingEdit(rowData,pickticketieminterface){
+        const salesOrderShippingId = rowData.salesOrderShippingId;
+        this.partSelected = true;
+        //this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
+        this.salesOrderService
+          .getShippingEdit(salesOrderShippingId)
+          .subscribe((response: any) => {
+            this.isSpinnerVisible = false;
+            this.shippingHeader = response[0];
+            // this.shippingHeader.shipToCustomerId = this.shippingHeader.soldToName;
+            // this.getSiteNamesByShipCustomerId(this.shippingHeader.soldToName);
+            // this.shippingHeader['soldToSiteId'] = this.shippingHeader.soldToSiteId;
+            // console.log("this.shippingHeader",this.shippingHeader);
+          }, error => {
+            this.isSpinnerVisible = false;
+          });
+      }
 }
