@@ -64,7 +64,7 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
             { path: "customersmodule", loadChildren: './customerpages/customerpages.module#CustomerPagesModule' },
             { path: "accountmodule", loadChildren: './accounting-pages/accountingpages.module#AccountingPagesModule' },
             //{ path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
-            { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule', canLoad: [AuthGuard] },
+            { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
             { path: "employeesmodule", loadChildren: './employeepages/employeepages.module#EmployeepagesModule' },
             { path: "itemmastersmodule", loadChildren: './itemmasterpages/itemmasterpages.module#ItemmasterpagesModule' },
             { path: "stocklinemodule", loadChildren: './stocklinepages/stocklinepages.module#StocklinePagesModule' },

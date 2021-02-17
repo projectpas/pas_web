@@ -1028,12 +1028,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Item Aging', routerLink: '/#' },
                 { label: 'Slow Moving Stock', routerLink: '/#' },
                 { label: 'Hot List', routerLink: '/#' },
-                // {
-                //   label: 'Stock Line Report',
-                //   routerLink:
-                //     '/stocklinemodule/stocklinepages/app-stock-line-report-view',
-                //     http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render
-                // },
                 {
                   label: 'Stock Line', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');

@@ -4,7 +4,7 @@
 // ===============================
 
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, NavigationExtras, CanLoad, Route } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, NavigationExtras, CanLoad, Route, ActivatedRoute } from '@angular/router';
 import { AuthService } from './auth.service';
 import { UserRoleService } from '../components/user-role/user-role-service';
 import { AlertService, MessageSeverity } from './alert.service';
@@ -12,14 +12,22 @@ import { AlertService, MessageSeverity } from './alert.service';
 
 @Injectable()
 export class RolesGuardService implements CanActivate, CanActivateChild, CanLoad {
-    constructor(private alertService: AlertService, private authService: AuthService, private router: Router, private userRoleService: UserRoleService) {
+    constructor(private alertService: AlertService,private arouter: ActivatedRoute, private authService: AuthService, private router: Router, private userRoleService: UserRoleService) {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        
+        debugger;
         var moduleName = route.data["name"];
         var isTab = route.data["isTab"];
         var hasAccess = this.authService.checkUserAccessByModuleName(moduleName);
+
+        this.arouter.params.subscribe(async val => {
+            var checksec = await this.authService.CheckSecurity(this.authService.ModuleInfo, state.url);
+            if (!checksec) {
+                this.router.navigate(['/unauthorized-access']);
+                return false;
+            }
+          });
 
         if (hasAccess)
         {

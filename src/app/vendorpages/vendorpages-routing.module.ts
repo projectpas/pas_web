@@ -47,7 +47,7 @@ const vendorPagesRoutes: Routes = [
 		path: 'vendorpages',
 		component: VendorpagesComponent,
 		children: [
-			{ path: "app-vendors-list", component: VendorsListComponent, data: { name: ['app-vendors-list'], title: "Vendor's List" } },
+			{ path: "app-vendors-list", component: VendorsListComponent, data: { name: ['app-vendors-list'], title: "Vendor's List" } ,canActivate:[RolesGuardService]},
 			{ path: "app-vendor-general-information", component: VendorGeneralInformationComponent, data: { isTab: true, name: ['app-vendor-general-information'], title: "Vendor's General Information" } },
 			{ path: "app-vendor-general-information/:id", component: VendorGeneralInformationComponent, data: { isTab: true, name: ['app-vendor-general-information'], title: "Vendor's General Information" } },
 			{ path: "app-vendor-contacts/:id", component: VendorContactsComponent, data: { isTab: true, name: ['app-vendor-contacts'], title: "Vendor's Contact" } },

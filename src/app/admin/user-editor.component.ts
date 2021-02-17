@@ -119,6 +119,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
 
     public setUser(user?: User, roles?: UserRole[]) {
         this.user = user;
+        
         if (roles) {
             this.roles = [...roles];
             this.roles.map(i=>i.name==this.user.roleName);
