@@ -113,7 +113,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         value: this.authService.currentUser.employeeId
       };
     }
-    this.getAllExpertiseType();
+   
     this.id = this.savedWorkOrderData.workOrderId;
     if (this.isView || this.isEdit) {
       for (let task of this.taskList) {
@@ -133,6 +133,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.selectedPartNumber && this.selectedPartNumber.managementStructureId && !this.basicLabourDetail) {
       this.getBasicLabourData(this.selectedPartNumber.managementStructureId);
     }
+    this.getAllExpertiseType();
   }
 
   ngOnChanges() {
@@ -534,6 +535,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   setEditArray:any=[];
   getAllExpertiseType(value?) {
     this.setEditArray = [];
+
     if (this.isEdit == true) {
       this.workOrderLaborList.forEach(element => {
         
