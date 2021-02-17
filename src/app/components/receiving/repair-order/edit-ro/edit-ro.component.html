@@ -405,7 +405,8 @@
 
                                     <ng-container>
                                         <tr class="child-header splitship-head child-header-back"
-                                            *ngIf="part.stockLine.length > 0">                                                                                       
+                                            *ngIf="part.stockLine.length > 0"> 
+                                            <th></th>                                                                                      
                                             <th>PN</th>
                                             <th>PN Description</th>
                                             <th>Ctrl Id</th>
@@ -503,7 +504,7 @@
                                                             [value]="company.value">
                                                             {{company.label}}
                                                         </option>
-                                                    </select>
+                                                    </select>                                                    
                                                 </td>
                                                 <td>                                                   
                                                     <select class="form-control" 
