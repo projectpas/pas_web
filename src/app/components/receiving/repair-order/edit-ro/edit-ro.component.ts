@@ -173,7 +173,7 @@ export class EditRoComponent implements OnInit {
                 setTimeout(() => {
                     this.isSpinnerVisible = true;
                     this.getReceivingROHeaderById(this.repairOrderId);
-                    this.receivingService.getReceivingROPartsForEditById(this.repairOrderId).subscribe(
+                    this.receivingService.getReceivingROPartsForEditById(this.repairOrderId,this.employeeId).subscribe(
                         results => {
                             if (results[0] == null || results[0] == undefined) {
                                 this.alertService.showMessage(this.pageTitle, "No purchase order is selected to edit.", MessageSeverity.error);
@@ -230,8 +230,7 @@ export class EditRoComponent implements OnInit {
                             this.getCustomers();
                             this.getVendors();
                             this.getCompanyList();
-                            this.isSpinnerVisible = false;
-                            console.log(this.repairOrderData)
+                            this.isSpinnerVisible = false;                            
                             if (this.repairOrderData) {
                                 for (let i = 0; i < this.repairOrderData.length; i++) {
                                     this.getCondIdPart(this.repairOrderData[i]);
@@ -1837,8 +1836,7 @@ export class EditRoComponent implements OnInit {
                 dropdown.Key = company.value.toLocaleString();
                 dropdown.Value = company.label
                 this.ManufacturerList.push(dropdown);
-            }
-            console.log(this.ManufacturerList)
+            }            
         }, err => {
             this.isSpinnerVisible = false;
         });
