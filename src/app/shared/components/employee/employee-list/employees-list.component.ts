@@ -179,6 +179,15 @@ export class EmployeesListComponent implements OnInit {
         this.onDestroy$.next();
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+    get loginEmployeeId() {
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+    }
+
     allEmployeesList: any[];
     dataSource: MatTableDataSource<any>;
     selectedColumn: any[];
@@ -534,6 +543,8 @@ export class EmployeesListComponent implements OnInit {
         //this.empService.getAllEmployeeList(data).subscribe(res => {
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
+        data.filters.loginEmployeeId = this.loginEmployeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;         
         const Data = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.empService.getAllEmployeeList(Data).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.data = res[0]['results'];
@@ -550,9 +561,7 @@ export class EmployeesListComponent implements OnInit {
             }
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;            
         });
     }
 
@@ -560,29 +569,28 @@ export class EmployeesListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.exportData = [];
         const isdelete = this.currentDeletedstatus ? true : false;
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
-        this.empService.downloadAllEmployeeList(PagingData).subscribe(
-
-            results => {
-                const vList = results['results'].map(x => {
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "loginEmployeeId": this.loginEmployeeId, "masterCompanyId": this.currentUserMasterCompanyId,"status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
+        });
+        this.empService.getAllEmployeeList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {         
+                dt._value = res[0]['results'].map(x => {
                     return {
                         ...x,
                         startDate: x.startDate ? this.datePipe.transform(x.startDate, 'MMM-dd-yyyy') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
-                });
-                this.loadingIndicator = false;
-                dt._value = vList;
+                });                
                 dt.exportCSV();
-                dt.value = this.data;
-                this.isSpinnerVisible = false;
+                dt.value = this.data;               
+                this.isSpinnerVisible = false;                
             }, err => {
-                this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;               
             });
     }
+
     errorMessageHandler(log) {
         var msg = '';
         if (typeof log.error == 'string') {
@@ -1064,21 +1072,25 @@ export class EmployeesListComponent implements OnInit {
 
     }
     dateObject: any = {}
-    dateFilterForTable(date, field) {
-        this.dateObject = {}
+    dateFilterForTable(date, field) { 
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');
+        this.dateObject = {}  
         date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            } else if (field == 'startDate') {
-                this.dateObject = { 'startDate': date }
-            }
+            if(dateyear > minyear){
+                if (field == 'createdDate') {
+                    this.dateObject = { 'createdDate': date }
+                } else if (field == 'updatedDate') {
+                    this.dateObject = { 'updatedDate': date }
+                } else if (field == 'startDate') {
+                    this.dateObject = { 'startDate': date }
+                }
 
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData);
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+                this.getList(PagingData);
+            }
         } else {
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {

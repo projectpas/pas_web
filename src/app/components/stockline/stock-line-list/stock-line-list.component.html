@@ -1,20 +1,20 @@
 ﻿﻿<div class="card new-card">
-  <div class="card-header bg-primary new-card-header">
+  <div class="card-header header">
 		<div class="row">
 		  <div class="col">
-			<h4 class="new-card-heading">Stock Line List</h4>
+			<h4 class="header-name">Stock Line List</h4>
 		  </div>
 		  <div>
 			<button
 			type="button"
-			class="btn-sm new-btn-primary"
+			class="btn-sm header-button"
 			[routerLink]="['/stocklinemodule/stocklinepages/app-stock-line-setup']">
 			Add New Stock Line
 			</button>
 		  </div>
 		</div>
   </div>
-  <div class="card-body new-card-body">
+  <div class="card-body header-body">
     <p-table #dt 
             class="rpo-table-cstm rro-table-cstm" 
             [value]="data" 
@@ -41,16 +41,12 @@
                   [options]="headers"
                   optionLabel="header"
                   [(ngModel)]="selectedGridColumns"
-                  [style]="{ minWidth: '200px' }"
-                  style="float: left;"
+                 class="multiselect-field"
                   (onChange)="columnsChanges()"
                   ></p-multiSelect>
                 </div>
                 <div class="col">
-                  <div
-                  style="width: auto !important; float: right;"
-                  class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                  >
+                  <div class="global-search-field inner-addon right-addon inline-block">
                   <i class="fa fa-search"></i>
                   <input
                     type="text"
@@ -66,7 +62,7 @@
                 <div class="row">
                   <div class="col">
                     <button type="button"
-                                    class="btn btn-primary new-table-button"
+                                    class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
                                     matTooltipPosition="above"
                                     pButton
@@ -78,7 +74,7 @@
                                      data-target="#downloadConfirmation">
                             </button> 
                             <button type="button"
-                                    class="btn btn-primary new-table-button"
+                                    class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
                                     matTooltipPosition="above"
                                     pButton
@@ -91,23 +87,22 @@
                   <div class="col">
                     <div class="">
                     <div
-                      class="col"
-                      style="float: right; padding: 3px 0 0; width: 250px;"
+                      class="col stockline-radios"
                     >
                       <div class="form-group">
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                        <div class="pull-left radio-buttons-align">
                           <label class="radio-cstm wauto">
                               <input type="radio" name="stockType" class="form-control" value="stock" (click)="geStocklineByStock('stock')" [(ngModel)]="currentStock">
                               <span class="checkmark"></span>Stock
                           </label>
                       </div>
-                      <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                      <div class="pull-left radio-buttons-align">
                           <label class="radio-cstm wauto">
                               <input type="radio" name="stockType" class="form-control" value="nonstock" (click)="geStocklineByStock('nonstock')" [(ngModel)]="currentStock">
                               <span class="checkmark"></span>Non-Stock
                           </label>
                       </div>
-                      <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                      <div class="pull-left radio-buttons-align">
                         <label class="radio-cstm wauto">
                             <input type="radio" name="stockType" class="form-control" value="all" (click)="geStocklineByStock('all')" [(ngModel)]="currentStock">
                             <span class="checkmark"></span>All
@@ -121,46 +116,54 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" style="width:130px">
+                    <col *ngFor="let col of columns" class="table-column-width">
                 </colgroup>
             </ng-template>
 
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <ng-container *ngFor="let col of columns">
-                        <th class="text-center"
+                        <th class="table-column-width"
                             *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='divName' && col.field!='deptName'"
                             pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="text-center" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn
+                        <th class="table-column-width" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn
                             pReorderableColumn [pSortableColumn]="col.field">
                             Management Structure
                         </th>
                     </ng-container>
-                    <th style="width:150px;position:sticky" *ngIf="selectedGridColumns.length > 0">
+                    <th class="table-actions-column" *ngIf="selectedGridColumns.length > 0">
                         Actions
                     </th>
                 </tr>
                 <tr>
-                    <th style="width:150px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" style="width:100%;" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input [type]="(col.field == 'quantityOnHand' || col.field == 'quantityAvailable')?'number':'text'" *ngIf="col.field !== 'receivedDate' && col.field !== 'expirationDate' && col.field !== 'tagDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" 
+                        class="table-header-input-width" pInputText [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains')" >
-                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate' || col.field == 'expirationDate' || col.field == 'tagDate'"
-                            name="receivedDate" style="width:100%;" [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
+                        <!-- <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate' || col.field == 'expirationDate' || col.field == 'tagDate'"
+                            name="receivedDate" class="table-header-input-width" [ngModel]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
                             (input)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
-                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                         -->
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'receivedDate'"
+                            name="receivedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'expirationDate'"
+                            name="expirationDate"  (change)="dateFilterForTable($event.target.value, col.field)" />                        
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'tagDate'"
+                            name="tagDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                             name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
+                        <input type="date"   class="hidePlaceHolder table-header-input-width"  *ngIf="col.field == 'updatedDate'"
                             name="updatedDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
                     </th>
-                    <th style="width:150px;position:sticky"></th>
+                    <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(rowData)">
-                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>    
+                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>    
                         {{
                                           col.field == 'receivedDate'
                                             ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -175,7 +178,7 @@
                                             : rowData[col.field]
                         }}
                     </td>
-                    <td style="width:150px" *ngIf="selectedGridColumns.length > 0">
+                    <td class="action-icons-cstm table-column-width" *ngIf="selectedGridColumns.length > 0">
                         <span data-toggle="modal"><a class="btn nobg btn-view-cstm" (click)="openView(rowData)"
                                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                         <span><a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit"
@@ -194,7 +197,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="data.length == 0">
                 <tr>
-                  <td colspan="25" style="color: red; font-weight: bold; text-align: center">
+                  <td colspan="25" class="no-records-msg no-records-cstm">
                     No records found
                   </td>
                 </tr>
@@ -202,10 +205,10 @@
 
             <ng-template pTemplate="summary" id="footer">
                 <label id="footer" class="footer">Total:</label>
-                <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" />
                 &nbsp;&nbsp;
                 <label id="footer" class="footer1">Pages Count:</label>
-                <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
             </ng-template>
         </p-table>
   </div>
@@ -219,7 +222,8 @@
 			</div>
 			<div class="modal-body" *ngIf="targetData">
 				<strong>
-					<span *ngIf="selectedOnly">
+					<!-- <span *ngIf="selectedOnly"> -->
+          <span> 
 						You are attempting to export {{targetData.totalRecords}} of records. 
 					</span> 
 				</strong>
@@ -241,10 +245,11 @@
         <button type="button" class="close" data-dismiss="modal">
           &times;
         </button>
-        <h4 class="modal-title">History of Stockline</h4>
+        <h4 class="modal-title">History of Stockline Adjustment</h4>
       </div>
       <div class="modal-body">
         <div class="table-responsive stockline-audit">
+          <div class="tableFixHead">
           <table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
                 <tr>
@@ -268,14 +273,14 @@
                 </tr>
               <tr>
                 <th>Is Customer Stock</th>
-                <th>PN</th>
+                <th>PN <span class="clr-red">*</span></th>
                 <th>PN Description</th>
                 <th>Revised PN</th>
                 <th>OEM</th>
                 <th>PMA</th>
                 <th>DER</th>
                 <th>Item Group</th>
-                <th>Cond</th>
+                <th>Cond <span class="clr-red">*</span></th>
                 <th>Is Serialized</th>
                 <th>Serial Num</th>
                 <th>Stockline Num</th>
@@ -292,7 +297,7 @@
                 <th>NHA</th>
                 <th>TLA</th>
                 <th>Aircraft Tail Num</th>
-                <th>Manufacturer</th>
+                <th>Manufacturer <span class="clr-red">*</span></th>
                 <th>Mfg. Lot Num</th>
                 <th>Mfg. Batch Num</th>
                 <th>Mfg. Date</th>
@@ -304,8 +309,8 @@
                 <th>PO Num</th>
                 <th>RO Num</th>
                 <th>Requestor</th>
-                <th>Received Date</th>
-                <th>Receiver Num</th>
+                <th>Received Date <span class="clr-red">*</span></th>
+                <th>Receiver Num <span class="clr-red">*</span></th>
                 <th>Reconciliation Num</th>
                 <th>WO Num</th>
                 <th>Obtain From Type</th>
@@ -316,7 +321,7 @@
                 <th>Traceable To</th>
                 <th>ECCN</th>
                 <th>ITAR</th>
-                <th>Qty On Hand</th>
+                <th>Qty On Hand <span class="clr-red">*</span></th>
                 <th>Qty Reserved</th>
                 <th>Qty Issued</th>
                 <th>Qty Avail</th>
@@ -325,7 +330,7 @@
                 <th>Unit Sale Price</th>
                 <th>Core Cost/Unit</th>
                 <th>GL Account</th>
-                <th>Site</th>
+                <th>Site <span class="clr-red">*</span></th>
                 <th>Warehouse</th>
                 <th>Location</th>
                 <th>Shelf</th>
@@ -490,6 +495,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
               <h4 style="color: #ff5663;">No History Found</h4>
@@ -515,11 +521,12 @@
         <button type="button" class="close"  (click)="dismissStockAdjAudit()">
           &times;
         </button>
-        <h4 class="modal-title">History of Stockline Adjustment History</h4>
+        <h4 class="modal-title">History of Stockline Adjustment</h4>
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered header-table-width" *ngIf="adjAuditHistoryList.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Adjustment Data Type</th>
@@ -552,9 +559,10 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
-              <h4 style="color: #ff5663;">No History Found</h4>
+              <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
         </div>
@@ -579,8 +587,9 @@
         <h4 class="modal-title">History of Stockline Adjustment Data Type</h4>
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered" *ngIf="adjAuditHistoryData.length > 0; else noDatavailable">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered header-table-width" *ngIf="adjAuditHistoryData.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Adjustment Data Type</th>
@@ -606,9 +615,10 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
-              <h4 style="color: #ff5663;">No History Found</h4>
+              <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
         </div>

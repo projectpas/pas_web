@@ -31,7 +31,7 @@
                     SO List
                 </button> -->
             </div>
-            <div class="card-body" *ngIf="!toggle_po_header">
+            <div class="card-body" *ngIf="!toggle_po_header" style="padding-top: 5px; padding-bottom: 0px;">
                 <div class="form-row body-alignment">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -574,7 +574,7 @@
                                 <app-sales-order-customer-approval *ngIf="isEdit" [customer-id]="customerId"
                                     [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
                                     [customerContactList]="customerContactList"
-                                    (on-part-approved-event)="onPartsApprovedEvent($event)">
+                                    (on-part-approved-event)="onPartsApprovedEvent()">
                                 </app-sales-order-customer-approval>
                             </p-tabPanel>
                             <p-tabPanel header="Address">
@@ -600,6 +600,9 @@
                                     (updateChargesListForSO)="updateSalesOrderChargesList($event)"
                                     (refreshData)="getChargesList()" [isView]="false" [isQuote]="false">
                                 </app-sales-order-charges>
+                            </p-tabPanel>
+                            <p-tabPanel header="Pick Ticket">
+                                <app-sales-order-pick-tickets></app-sales-order-pick-tickets>
                             </p-tabPanel>
                             <p-tabPanel header="Shipping">
                                 <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="id"

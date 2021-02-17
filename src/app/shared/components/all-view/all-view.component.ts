@@ -18,6 +18,9 @@ import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from '
 import { MenuItem } from 'primeng/api';
 import { ReceivingService } from '../../../services/receiving/receiving.service';
 import { RepairOrderService } from '../../../services/repair-order.service';
+import { PurchaseOrder, PurchaseOrderPart, StockLine, StockLineDraft, DropDownData, TimeLife, ReceiveParts, TimeLifeDraft } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
+import { ManagementStructure } from '../../../components/receiving/po-ro/receivng-po/managementstructure.model';
+
 
 @Component({
   selector: 'app-all-view',
@@ -50,7 +53,7 @@ export class AllViewComponent implements OnInit {
   isPoViewMode: boolean = false;
   capvendorId: number;
   selectedPurchaseOrderId: any;
-  selectedRepairOrderId : any;
+  selectedRepairOrderId: any;
   moduleName: any = "PurchaseOrder";
   romoduleName: any = "RepairOrder";
 
@@ -60,6 +63,7 @@ export class AllViewComponent implements OnInit {
   @Input() OrderType: any;
   @Input() PovendorId: any;
   @Input() vendorId: number;
+  @Input() isReceivingpo: boolean;
   roTotalCost: number;
 
   addressType: any = 'PO';
@@ -68,6 +72,7 @@ export class AllViewComponent implements OnInit {
 
   //showPartListtab: boolean = false;
   showVendorCaptab: boolean = false;
+  purchaseOrderData: PurchaseOrder;
 
   approvalProcessHeader = [
     {
@@ -124,6 +129,8 @@ export class AllViewComponent implements OnInit {
       field: 'extCost'
     }
   ];
+  poApproverStatusList: any;
+  roApproverStatusList: any;
 
   constructor(private commonService: CommonService,
     private activeModal: NgbActiveModal,
@@ -132,33 +139,42 @@ export class AllViewComponent implements OnInit {
     private purchaseOrderService: PurchaseOrderService,
     private vendorCapesService: VendorCapabilitiesService,
     private repairOrderService: RepairOrderService,
+    private receivingService: ReceivingService,
+    private authService: AuthService,
+    private route: Router,
   ) { }
 
   ngOnInit() {
     this.selectedPurchaseOrderId = this.OrderId;
-    this.selectedRepairOrderId = this.OrderId;    
+    this.selectedRepairOrderId = this.OrderId;
     let OrderId = this.OrderId;
     this.OrderTypes = this.OrderType;
     this.id = this.OrderId;
-    let PovendorId = this.vendorId;     
+    let PovendorId = this.vendorId;
     this.vendorIdByParams = this.PovendorId;
+    let isReceivingpo = this.isReceivingpo;
     this.isPoViewMode = true;
     this.vendorId = this.PovendorId;
-    this.capvendorId = this.PovendorId;    
+    this.capvendorId = this.PovendorId;
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;
       this.getPOViewById(OrderId);
       this.getPOPartsViewById(OrderId);
       this.getApproversListById(OrderId);
-      this.getApprovalProcessListById(OrderId);
-      this.tabindex = 0;
-    } else if (this.OrderTypes == 'Repair Order') {
+      this.getApprovalProcessListById(OrderId);            
+      this.tabindex = 0;   
+      }  
+    else if (this.OrderTypes == 'Repair Order') {
       this.getROViewById(OrderId);
       this.getROPartsViewById(OrderId);
       this.getRoApproversListById(OrderId);
       this.getRoApprovalProcessListById(OrderId);
       this.tabindex = 0;
     }
+  }
+
+  get employeeId() {
+    return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
   }
 
   onChangeTabView(event) {
@@ -190,6 +206,17 @@ export class AllViewComponent implements OnInit {
     }
     if (event.index == 6) {
       //this.showComunicationtab = true;
+    }
+
+    if (event.index == 7 && this.isReceivingpo == true) {
+      //this.isSpinnerVisible = true;
+      if(!this.purchaseOrderData){
+        this.viewPurchaseOrder( this.id );}
+    }
+    if (event.index == 8 && this.isReceivingpo == true) {
+      //this.isSpinnerVisible = true;
+      if(!this.purchaseOrderData){
+      this.viewPurchaseOrder( this.id );}
     }
 
   }
@@ -229,8 +256,74 @@ export class AllViewComponent implements OnInit {
     });
   }
 
+  viewPurchaseOrder(purchaseOrderId: number): void {
+    this.isSpinnerVisible = true;
+    this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
+      results => {
+        this.purchaseOrderData = results[0];
+        this.purchaseOrderData.openDate = new Date(results[0].openDate).toLocaleDateString();
+        this.purchaseOrderData.needByDate = new Date(results[0].needByDate);
+        this.purchaseOrderData.dateApproved = new Date(results[0].dateApproved).toLocaleDateString();
+        var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
+
+        for (let parent of allParentParts) {
+          parent.currentSLIndex = 0;
+          parent.currentTLIndex = 0;
+          parent.currentSERIndex = 0;
+          parent.isDisabledTLboxes = false;
+          parent.quantityRejected = 0;
+          var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == parent.purchaseOrderPartRecordId);
+          if (splitParts.length > 0) {
+            parent.hasChildren = true;
+            parent.quantityOrdered = 0;
+            for (let childPart of splitParts) {
+              parent.stockLineCount += childPart.stockLineCount;
+              parent.quantityRejected += childPart.quantityRejected != null ? childPart.quantityRejected : 0;
+              childPart.managementStructureId = parent.managementStructureId;
+              childPart.managementStructureName = parent.managementStructureName;
+              parent.quantityOrdered += childPart.quantityOrdered;
+            }
+          }
+          else {
+            parent.hasChildren = false;
+          }
+        }
+
+        for (let part of this.purchaseOrderData.purchaseOderPart) {
+          part.toggleIcon = false;
+          part.currentSLIndex = 0;
+          part.currentTLIndex = 0;
+          part.currentSERIndex = 0;
+          part.currentSLIndexDraft = 0;
+          part.currentTLIndexDraft = 0;
+          part.currentSERIndexDraft = 0;
+          part.visible = false;
+          part.showStockLineGrid = false;
+          part.showStockLineGridDraft = false;
+          part.isEnabled = false;
+          part.conditionId = 0;
+
+          if (part.stockLine != null) {
+            for (var SL of part.stockLine) {
+              SL.isEnabled = false;
+            }
+          }
+        }
+        this.purchaseOrderData.dateRequested = new Date(); //new Date(this.purchaseOrderData.dateRequested);
+        this.purchaseOrderData.dateApprovied = new Date(this.purchaseOrderData.dateApprovied);
+        this.purchaseOrderData.needByDate = new Date(); //new Date(this.purchaseOrderData.needByDate);
+        this.isSpinnerVisible = false;
+      },
+      error => {
+        this.isSpinnerVisible = false;
+        //this.alertService.showMessage(this.pageTitle, "Something went wrong while loading the Purchase Order detail", MessageSeverity.error);
+        //return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
+      }
+    );
+  }
+
   getROViewById(roId) {
-    this.repairOrderService.getROViewById(roId).subscribe(res => {
+    this.repairOrderService.getROViewById(roId).subscribe(res => {     
       this.roHeaderAdd = {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
@@ -241,7 +334,7 @@ export class AllViewComponent implements OnInit {
 
   getROPartsViewById(roId) {
     this.roPartsList = [];
-    this.repairOrderService.getROPartsViewById(roId).subscribe(res => {
+    this.repairOrderService.getROPartsViewById(roId).subscribe(res => {      
       if (res) {
         res.map(x => {
           const partList = {
@@ -255,15 +348,15 @@ export class AllViewComponent implements OnInit {
             repairOrderSplitParts: this.getRepairOrderSplit(x)
           }
           //this.getManagementStructureCodesParent(partList);
-          this.roPartsList.push(partList);          
+          this.roPartsList.push(partList);
         });
       }
     }, err => { });
   }
 
-  getRepairOrderSplit(partList) {
-    if (partList.repairOrderSplitParts) {
-      return partList.repairOrderSplitParts.map(y => {
+  getRepairOrderSplit(partList) {    
+    if (partList.roPartSplits) {
+      return partList.roPartSplits.map(y => {
         const splitpart = {
           ...y,
         }
@@ -272,7 +365,7 @@ export class AllViewComponent implements OnInit {
       })
     }
   }
-  
+
   getPurchaseOrderSplit(partList) {
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
@@ -297,7 +390,7 @@ export class AllViewComponent implements OnInit {
           this.getApproversByTask(poId)
         }
       }, err => {
-        this.isSpinnerVisible = false;        
+        this.isSpinnerVisible = false;
       });
     }
     else {
@@ -440,7 +533,7 @@ export class AllViewComponent implements OnInit {
   dismissModel() {
     this.activeModal.close();
   }
- 
+
   formatePrice(value) {
     if (value) {
       return formatNumberAsGlobalSettingsModule(value, 2);
@@ -448,4 +541,7 @@ export class AllViewComponent implements OnInit {
     return '0.00';
   }
 
+  getStatusvalue(status, val) { }
+
+  onStatusChange(approver) { }
 }

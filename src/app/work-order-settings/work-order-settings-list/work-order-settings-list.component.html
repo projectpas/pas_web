@@ -1,47 +1,26 @@
-﻿
+﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 <div>
-
     <div class="page-content">
-
         <div class="right_col" role="main">
             <div class="x_content">
                 <div class="card">
-                    <!-- <div class="card-header">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                                <li class="breadcrumb-item active" aria-current="page">Work Order Settngs</li>
-                                <li class="breadcrumb-item" aria-current="page">Work Order Settngs List</li>
-                            </ol>
-                    </nav>
-                    </div> -->
-                    <!-- <div class="card-body">
-                        <div class="inline-block display-flex">
-                            <h4 class="po-head" style="padding: 0px 10px;">List of Work Order settings </h4>
-                            <a (click)="AddPage()" matTooltipPosition="above"
-                             matTooltip="Create New Workflow" class="plusicon-cstm ">
-                                <i class="fa fa-plus-circle fa-lg"></i>
-                            </a>
-                        </div> -->
                         <div class="card new-card">
-                            <div class="card-header bg-primary new-card-header">
+                            <div class="header">
                                 <div class="row">
                                   <div class="col">
-                                    <h4 class="new-card-heading">List of Work Order Settings</h4>
+                                    <h4 class="header-name">List of Work Order Settings</h4>
                                   </div>
                                   <div>
                                     <button
                                        type="button"
-                                       class="btn-sm new-btn-primary"
+                                       class="btn-sm header-button"
                                        (click)="AddPage()">
                                        Create New Settings
                                     </button>
                                  </div>
-                            
                                 </div>
                             </div>
                             <div class="card-body new-card-body">
-                        
-                       
                                 <p-table #dt 
                                 [value]="workflowList" 
                                 class="rpo-table-cstm rro-table-cstm ptable-f10"
@@ -55,13 +34,11 @@
                                 [metaKeySelection]="true"
                                 [scrollable]="true" 
                                 scrollHeight="450px" 
-                                
                                 [(selection)]="selectedGridColumn" 
                                 [resizableColumns]="true" 
                                 [reorderableColumns]="true">
                                     <ng-template pTemplate="caption">
-                                        <!-- <div style="text-align: right; min-height: 30px;"> -->
-                                            <div class="row">
+                                        <div class="row">
                                                 <div class="col">
                                             <p-multiSelect [options]="gridColumns" [(ngModel)]="selectedGridColumns" optionLabel="header"
                                                            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
@@ -76,11 +53,7 @@
                                             </div>
                                             </div>
                                             </div>
-                                            <!--<button type="button" class="btn btn-primary" pButton icon="fa-download" iconPos="left" label="Export Data" matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()" style="padding: 5px 12px !important;"></button>
-                    <button type="button" class="btn btn-primary" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 12px !important;"></button>-->
-
-                                        <!-- </div> -->
-                                    </ng-template>
+                                     </ng-template>
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
                                             <col *ngFor="let col of columns" style="width:130px">
@@ -92,14 +65,13 @@
                                                 {{col.header}}
                                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                                             </th>
-                                            <th style="width:200px;position:sticky">Actions</th>
-                                            <!--<th></th>-->
+                                            <th class="table-actions-column">Actions</th>
                                         </tr>
                                         <tr>
                                             <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
                                                 <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
                                             </th>
-                                            <th style="width:200px;position:sticky"></th>
+                                            <th class="table-actions-column"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -108,7 +80,7 @@
                                                 {{rowData[col.field]}}
                                             </td>
 
-                                            <td class="action-icons-cstm" style="width:200px">
+                                            <td class="table-actions-column">
                                                 <div>
                                                     <span data-toggle="modal"><a class="btn nobg"
                                                         (click)="edit(rowData)" matTooltip="Edit"
@@ -116,47 +88,19 @@
                                                           class="fa fa-pencil"></i></a>
                                                     </span>
 
-                                                    <!-- <button class="btn-edit"
-                                                            mat-icon-button
-                                                            (click)="edit(rowData)"
-                                                            matTooltip="Edit"
-                                                            data-dismiss="modal">
-                                                        <mat-icon>edit</mat-icon>
-                                                    </button> -->
-
-                                                    <span data-toggle="modal" data-target="#history"><a class="btn nobg"
+                                                  <span data-toggle="modal" data-target="#history"><a class="btn nobg"
                                                         (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i
                                                           class="fa fa-history"></i></a></span>
-                                                    <!-- <button class="btn-history" mat-icon-button
-                                                         matTooltip="History" data-toggle="tooltip"
-                                                          matTooltipPosition="above" data-target="#history" 
-                                                          data-toggle="modal"
-                                                           (click)="getAuditHistoryById(rowData)">
-                                                        <mat-icon color="green">history</mat-icon>
-                                                    </button> -->
-                                                </div>
-                                                <!--<span data-toggle="modal" data-target="#history">
-                            <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History" (click)="getAuditHistoryById(rowData)" tooltipPosition="bottom" title="" class="btn btn-success nobg" data-original-title="History">
-                                <i class="fa fa-history"></i>
-                            </a>
-                        </span>-->
+                                                  </div>
                                             </td>
                                         </tr>
                                     </ng-template>
                                 </p-table>
-                          
                         </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
-
-    
-
-    
-
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="history" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -172,48 +116,29 @@
                                 <th>WorkOrderType</th>
                                 <th>Prefix</th>
                                 <th>Sufix</th>
-                                <!-- <th>Default Scope</th> -->
                                 <th>Default Priority</th>
                                 <th>Start code</th>
-                                <!-- <th>RecivingListDefaultRB</th> -->
                                 <th>Default Condition</th>
-                                <!-- <th>Default Site</th> -->
-                                <!-- <th>Default Wearhouse</th> -->
-                                <!-- <th>Default Location</th> -->
-                                <!-- <th>Default Shelf</th> -->
-
                                 <th>Default Stage Code</th>
                                 <th>Default Status</th>
-                                <!-- <th>WOListDefaultRB</th> -->
-                                <th>Teardown Types</th>
+                               <th>Teardown Types</th>
                                 <th>Last Updated By</th>
                                 <th>Last Updated Time</th>
                             </tr>
                         </thead>
                         <tbody class="audithistory-cstm">
-                            <!--*ngIf="auditHistory.length> 0"-->
-                            <tr *ngFor="let audit of auditHistory; let i = index;">
-                                <!-- auditHistory[i>0 ? i-1 : i] -->
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'workOrderType', audit.workOrderType)  ? 'black' : 'red'  }">{{audit.workOrderType}}</td>
+                           <tr *ngFor="let audit of auditHistory; let i = index;">
+                               <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'workOrderType', audit.workOrderType)  ? 'black' : 'red'  }">{{audit.workOrderType}}</td>
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'prefix', audit.prefix)  ? 'black' : 'red'  }">{{audit.prefix}}</td>
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'sufix', audit.sufix)  ? 'black' : 'red'  }">{{audit.sufix}}</td>
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultScope', audit.defaultScope)  ? 'black' : 'red'  }">{{audit.defaultScope}}</td> -->
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultPriority', audit.defaultPriority)  ? 'black' : 'red'  }">{{audit.defaultPriority}}</td>
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'startCode', audit.startCode)  ? 'black' : 'red'  }">{{audit.startCode}}</td>
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'recivingListDefaultRB', audit.recivingListDefaultRB)  ? 'black' : 'red'  }">{{audit.recivingListDefaultRB}}</td> -->
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultConditon', audit.defaultConditon)  ? 'black' : 'red'  }">{{audit.defaultConditon}}</td>
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultSite', audit.defaultSite)  ? 'black' : 'red'  }">{{audit.defaultSite}}</td> -->
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultWarehouse', audit.defaultWarehouse)  ? 'black' : 'red'  }">{{audit.defaultWarehouse}}</td> -->
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultLocation', audit.defaultLocation)  ? 'black' : 'red'  }">{{audit.defaultLocation}}</td> -->
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultShelf', audit.defaultShelf)  ? 'black' : 'red'  }">{{audit.defaultShelf}}</td> -->
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultStageCode', audit.defaultStageCode)  ? 'black' : 'red'  }">{{audit.defaultStageCode}}</td>
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'defaultStatus', audit.defaultStatus)  ? 'black' : 'red'  }">{{audit.defaultStatus}}</td>
-                                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'woListDefaultRB', audit.woListDefaultRB)  ? 'black' : 'red'  }">{{audit.woListDefaultRB}}</td> -->
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'tearDownTypes', audit.tearDownTypes)  ? 'black' : 'red'  }">{{audit.tearDownTypes}}</td>
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">{{audit.updatedBy}}</td>
-
-                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
-
+                               <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -224,7 +149,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 

@@ -15,7 +15,7 @@ declare var $: any;
 import { ChargesCreateComponent } from "../shared/Charges-Create.component";
 import { Percent } from "../models/Percent.model";
 import { AuthService } from "../services/auth.service";
-import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { MenuItem } from 'primeng/api';
 
@@ -348,62 +348,80 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     }
 
     berDetermination(value,from): any {
-        
         if(from=='html'){
-            this.sourceWorkFlow.fixedAmount=value  
+            this.sourceWorkFlow.fixedAmount=value;
+        setTimeout(() => {
+            this.validateCOstflow()
+        }, 1000);
+        }else{
+            this.validateCOstflow()
         }
-
-        if (this.sourceWorkFlow.fixedAmount) {
-            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
-        }
-        // check on is percentOfNew enable
-        if (this.sourceWorkFlow.percentOfNew1) {
-            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
-        }
-        // check on is .percentOfReplacement enable
-        if (this.sourceWorkFlow.percentOfReplacement) {
-            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
-        }
-
-        // 1 and 2 check box 
-        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew) {
-            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
-        }
-
-        // 2 and 3  check box 
-        if (this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
-            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
-        }
-        // 1 and 3  check box 
-        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
-            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
-        }
-
-        //1 and 2 and 3 check box
-        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
-            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
-        }
-        //1 and 2 and 3 check box all uncheck 
-        if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
-            this.sourceWorkFlow.berThresholdAmount = 0.00;
-        }
-
-        this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
-        if (this.sourceWorkFlow.berThresholdAmount > 0) {
-            this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
-        }
-        this.calculateTotalWorkFlowCost(false)
     }
 
+     onChangeberThresholdAmount() {
+	 	this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.berThresholdAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2) : '0.00';
+     }
+    
+validateCOstflow(){
+    if (this.sourceWorkFlow.fixedAmount) {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
+        this.onChangeberThresholdAmount();
+   }
+    // check on is percentOfNew enable
+    if (this.sourceWorkFlow.percentOfNew1) {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
+        this.onChangeberThresholdAmount();
+    }
+    // check on is .percentOfReplacement enable
+    if (this.sourceWorkFlow.percentOfReplacement) {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
+        this.onChangeberThresholdAmount();
+    }
+
+    // 1 and 2 check box 
+    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew) {
+        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
+        this.onChangeberThresholdAmount();
+    }
+
+    // 2 and 3  check box 
+    if (this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
+        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+        this.onChangeberThresholdAmount();
+    }
+    // 1 and 3  check box 
+    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
+        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
+        this.onChangeberThresholdAmount();
+    }
+
+    //1 and 2 and 3 check box
+    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
+        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+        this.onChangeberThresholdAmount();
+    }
+    //1 and 2 and 3 check box all uncheck 
+    if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
+        this.sourceWorkFlow.berThresholdAmount = 0.00;
+        //this.onChangeberThresholdAmount();
+    }
+
+    this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
+    if (this.sourceWorkFlow.berThresholdAmount > 0) {
+        this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
+    }
+    this.calculateTotalWorkFlowCost(false)
+}
+masterItemMasterId:any;
     loadWorkFlow() {
         if (this._workflowService.enableUpdateMode == true && !this.UpdateMode) {
             let workFlowId: any = this._workflowService.currentWorkFlowId;
@@ -416,6 +434,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                         partName: workFlow[0].partNumber
                     }
                 }
+                this.masterItemMasterId=workFlow[0].itemMasterId,
                 this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : -1;
                 this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : -1;
                 this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : -1;
@@ -914,25 +933,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setCalculatedBERThreshold(workflow: any) {
-        this.sourceWorkFlow.isFixedAmount = workflow.isFixedAmount;
-        this.sourceWorkFlow.isPercentageofNew = workflow.isPercentageofNew;
-        this.sourceWorkFlow.isPercentageOfReplacement = workflow.isPercentageOfReplacement;
-        this.sourceWorkFlow.fixedAmount = workflow.fixedAmount;
-        this.sourceWorkFlow.costOfNew = workflow.costOfNew;
-        this.sourceWorkFlow.percentageOfNew = workflow.percentageOfNew;
-        this.sourceWorkFlow.costOfReplacement = workflow.costOfReplacement;
-        this.sourceWorkFlow.percentageOfReplacement = workflow.percentageOfReplacement;
-    }
-
-    private resetBERThreshold() {
-        this.isFixed = false;
-        this.ispercent = false;
-        this.percentreplcae = false;
-        this.sourceWorkFlow.isFixedAmount = false;
-        this.sourceWorkFlow.isPercentageofNew = false;
-        this.sourceWorkFlow.isPercentageOfReplacement = false;
-    }
 
     isFixedcheck(event) {
 
@@ -1273,24 +1273,23 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
     calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
         if (this.sourceWorkFlow.berThresholdAmount == undefined || this.sourceWorkFlow.berThresholdAmount == 0) {
             this.sourceWorkFlow.berThresholdAmount = 0;
+            this.onChangeberThresholdAmount();
         }
         this.MaterialCost = 0;
         this.TotalCharges = 0;
         this.TotalExpertiseCost = 0;
-
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             for (let wf of this.workFlowList) {
-                this.MaterialCost += wf.totalMaterialCostValue != undefined ? parseFloat(wf.totalMaterialCostValue.toString().replace(/\,/g, '')) : 0;
-                this.TotalCharges += wf.extendedCostSummation != undefined ? parseFloat(wf.extendedCostSummation.toString().replace(/\,/g, '')) : 0;
-                this.TotalExpertiseCost += wf.totalExpertiseCost != undefined ? parseFloat(wf.totalExpertiseCost.toString().replace(/\,/g, '')) : 0;
+                this.MaterialCost += (wf.totalMaterialCostValue != undefined && wf.totalMaterialCostValue != "") ? parseFloat(wf.totalMaterialCostValue.toString().replace(/\,/g, '')) : 0;
+                this.TotalCharges += (wf.extendedCostSummation != undefined && wf.extendedCostSummation != "") ? parseFloat(wf.extendedCostSummation.toString().replace(/\,/g, '')) : 0;
+                this.TotalExpertiseCost += (wf.totalExpertiseCost != undefined && wf.totalExpertiseCost != "") ? parseFloat(wf.totalExpertiseCost.toString().replace(/\,/g, '')) : 0;
             }
         }
-
+        // laborOverheadCost
         this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : '0.00';
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
-      
         const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
@@ -2233,6 +2232,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 this.isUpdateAfterCreate = true;
                 this._workflowService.enableUpdateMode = true;
                 this._workflowService.currentWorkFlowId = result.workflowId;
+                this.disableUpdateButton=true;
                 this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this._workflowService.currentWorkFlowId}`);
             }, error => {
                 this.isSpinnerVisible = false;
@@ -2284,6 +2284,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
                 this.sourceWorkFlow.workflowId = result.workflowId;
                 this.UpdateMode = true;
+                this.disableUpdateButton=true;
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -2322,6 +2323,11 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                       
                     }
                 }
+            });
+        }
+        if (souceData.equipments && souceData.equipments.length != 0) {
+            souceData.equipments.forEach(element => {
+                element.partNumber=element.partNumber.name
             });
         }
         delete    souceData.customerName
@@ -2414,11 +2420,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
                             equipment.createdBy = this.userName;
                             equipment.createdDate = new Date();
+                            equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
+								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
                         } else {
                             equipment.workflowEquipmentListId = equipment.workflowEquipmentListId > 0 ? equipment.workflowEquipmentListId : 0;
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
                             equipment.updatedBy = this.userName;
                             equipment.updatedDate = new Date();
+                            equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
+								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
                         }
                         this.sourceWorkFlow.equipments.push(equipment);
                     }

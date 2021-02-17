@@ -21,17 +21,19 @@
           </p>
         </div>
       </div>
-      <div class="card" style="padding: 10px;">
-        <div class="card-header bg-primary new-card-header" >
+      <div class="card new-card">
+        <div class="card-header header" >
           <div class="row">
             <div class="col">
-              <h4 class="new-card-heading"> Sales Information</h4>
+              <h4 class="header-name"> Sales Information</h4>
             </div>
           </div>
         </div>
         <div class="clear"></div>
-        <hr />
+        <!-- <hr /> -->
+        <div class="card-body header-body body-padding">
         <form #salesPersonForm="ngForm" class="form-horizontal">
+         
           <div class="col-md-12">
             <div class="form-row">
               <div class="col-md-3">
@@ -98,6 +100,7 @@
               </div>
             </div>
           </div>
+          
           <div class="margin-top: 10px">
             <button (click)="nextClick('Next')" type="button" class="btn btn-primary pull-right submit-btn">
               Next
@@ -111,6 +114,7 @@
             </button>
           </div>
         </form>
+      </div>
       </div>
     </div>
   </div>

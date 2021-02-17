@@ -63,50 +63,50 @@ export class AssetEndpoint extends EndpointFactory {
     getAllAssetList<T>(): Observable<T> {
            return this.http.get<T>(this._allAssetlistUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllAssetList());
+                return this.handleErrorCommon(error, () => this.getAllAssetList());
             });
     }
     getIntangibleList<T>(): Observable<T> {
         return this.http.get<T>(this.allAssetIntangibleListURL, this.getRequestHeaders())
          .catch(error => {
-             return this.handleError(error, () => this.getIntangibleList());
+             return this.handleErrorCommon(error, () => this.getIntangibleList());
          });
  }
     getNewAsset<T>(userObject: any): Observable<T> {
             return this.http.post<T>(this._addAssetUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewAsset(userObject));
+                return this.handleErrorCommon(error, () => this.getNewAsset(userObject));
             });
     }
     addAssetIntangible<T>(userObject: any): Observable<T> {
          return this.http.post<T>(this._addAssetIntangibleUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addAssetIntangible(userObject));
+                return this.handleErrorCommon(error, () => this.addAssetIntangible(userObject));
             });
     }
     addAssetMaintance<T>(userObject: any): Observable<T> {
               return this.http.post<T>(this._addAssetMaintenanceUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addAssetMaintance(userObject));
+                return this.handleErrorCommon(error, () => this.addAssetMaintance(userObject));
             });
     }
     addAssetCalibration<T>(userObject: any): Observable<T> {
             return this.http.post<T>(this._addAssetCalibrationUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addAssetCalibration(userObject));
+                return this.handleErrorCommon(error, () => this.addAssetCalibration(userObject));
             });
     }
     updateAssetCalibration<T>(userObject: any): Observable<T> {
         return this.http.put<T>(this._updateAssetCalibrationUrl, JSON.stringify(userObject), this.getRequestHeaders())
         .catch(error => {
-            return this.handleError(error, () => this.updateAssetCalibration(userObject));
+            return this.handleErrorCommon(error, () => this.updateAssetCalibration(userObject));
         });
 }
     
     updateAssetMaintance<T>(userObject: any): Observable<T> {
              return this.http.put<T>(this._updateAssetMaintenanceUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAssetMaintance(userObject));
+                return this.handleErrorCommon(error, () => this.updateAssetMaintance(userObject));
             });
     }
     
@@ -115,12 +115,12 @@ export class AssetEndpoint extends EndpointFactory {
         if(userObject.isTangible==true){
         return this.http.post<T>(this._addAssetUrlNewInventory, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewAssetInventory(userObject));
+                return this.handleErrorCommon(error, () => this.getNewAssetInventory(userObject));
             });
         }else{
             return this.http.post<T>(this._addAssetUrlNewInventoryIntangible, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewAssetInventory(userObject));
+                return this.handleErrorCommon(error, () => this.getNewAssetInventory(userObject));
             });
 
         }
@@ -132,24 +132,24 @@ export class AssetEndpoint extends EndpointFactory {
     }
     getDocumentList(assetReordId, IsMaintenance) {
         return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getAssetDocumentDetail/${assetReordId}/${IsMaintenance}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getDocumentList(assetReordId, IsMaintenance));
+            return this.handleErrorCommon(error, () => this.getDocumentList(assetReordId, IsMaintenance));
         });
     }
 
     getDocumentList_1(assetReordId, IsWarranty) {
         return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getAssetDocumentDetail_1/${assetReordId}/${IsWarranty}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getDocumentList_1(assetReordId, IsWarranty));
+            return this.handleErrorCommon(error, () => this.getDocumentList_1(assetReordId, IsWarranty));
         });
     }
 
     GetUploadDocumentsList(attachmentId, assetReordId, moduleId) {
         return this.http.get<any>(`${this._getInventoryDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${assetReordId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.GetUploadDocumentsList(attachmentId, assetReordId, moduleId));
+            return this.handleErrorCommon(error, () => this.GetUploadDocumentsList(attachmentId, assetReordId, moduleId));
         });
     }
     deleteDocumentByCustomerAttachementId(assetAttachementId, updatedBy) {
         return this.http.delete(`${this.baseUrl}/api/common/attachmentDelete/${assetAttachementId}?updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.deleteDocumentByCustomerAttachementId(assetAttachementId, updatedBy));
+            return this.handleErrorCommon(error, () => this.deleteDocumentByCustomerAttachementId(assetAttachementId, updatedBy));
         });
     }
 
@@ -157,7 +157,7 @@ export class AssetEndpoint extends EndpointFactory {
         let url = `${this._getAssetUrl}/${assetId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getByAssetIdDataEndpoint(assetId));
+                return this.handleErrorCommon(error, () => this.getByAssetIdDataEndpoint(assetId));
             });
     }
 
@@ -165,7 +165,7 @@ export class AssetEndpoint extends EndpointFactory {
         let url = `${this._getAssetByIDUrl}/${assetId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getByAssetIdByIDDataEndpoint(assetId));
+                return this.handleErrorCommon(error, () => this.getByAssetIdByIDDataEndpoint(assetId));
             });
     }
 
@@ -173,7 +173,7 @@ export class AssetEndpoint extends EndpointFactory {
         let url = `${this._getAssetByInventoryIDUrl}/${assetId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getByAssetIdByInventoryIDDataEndpoint(assetId));
+                return this.handleErrorCommon(error, () => this.getByAssetIdByInventoryIDDataEndpoint(assetId));
             });
     }
 
@@ -181,7 +181,7 @@ export class AssetEndpoint extends EndpointFactory {
         let url = `${this._getByInventoryIDUrl}/${assetinventoryId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getByInventoryIDDataEndpoint(assetinventoryId));
+                return this.handleErrorCommon(error, () => this.getByInventoryIDDataEndpoint(assetinventoryId));
             });
     }
 
@@ -189,7 +189,7 @@ export class AssetEndpoint extends EndpointFactory {
         let url = `${this._getAssetcapesUrl}/${assetcapesId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetCapesAuditById(assetcapesId));
+                return this.handleErrorCommon(error, () => this.getAssetCapesAuditById(assetcapesId));
             });
     }
 
@@ -201,21 +201,21 @@ export class AssetEndpoint extends EndpointFactory {
     getAssetList<T>(): Observable<T> {
         return this.http.get<T>(this._assetlistUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetList());
+                return this.handleErrorCommon(error, () => this.getAssetList());
             });
     }
     getAssetNewList<T>(data): Observable<T> {
 
         return this.http.post<T>(this._assetlistNewUrl,JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetNewList(data));
+                return this.handleErrorCommon(error, () => this.getAssetNewList(data));
             });
     }
     getAssetListGlobalFilter<T>(data): Observable<T> {
 
         return this.http.post<T>(this.assetListGlobalSrhurl,JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetListGlobalFilter(data));
+                return this.handleErrorCommon(error, () => this.getAssetListGlobalFilter(data));
             });
     }
 
@@ -223,14 +223,14 @@ export class AssetEndpoint extends EndpointFactory {
     // getpublicationListEndpointNew<T>(data): Observable<T> {
     //     return this.http.post(this.getPublicationsListUrl, JSON.stringify(data), this.getRequestHeaders())
     //       .catch(error => {
-    //         return this.handleError(error, () => this.getpublicationListEndpointNew(data));
+    //         return this.handleErrorCommon(error, () => this.getpublicationListEndpointNew(data));
     //       });
     //   }
     getAssetInventoryList<T>(data: any): Observable<T> {
 
         return this.http.post<T>(this._assetInventorylistUrl, JSON.stringify(data),this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetInventoryList(data));
+                return this.handleErrorCommon(error, () => this.getAssetInventoryList(data));
             });
     }
 
@@ -239,7 +239,7 @@ export class AssetEndpoint extends EndpointFactory {
 
         return this.http.put<T>(this._updateAssetUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAsset(roleObject, assetRecordId));
+                return this.handleErrorCommon(error, () => this.updateAsset(roleObject, assetRecordId));
             });
     }
     updateAssetIntangible<T>(roleObject: any, assetRecordId: number): Observable<T> {
@@ -247,7 +247,7 @@ export class AssetEndpoint extends EndpointFactory {
 
         return this.http.put<T>(this._updateAssetIntangibleUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAssetIntangible(roleObject, assetRecordId));
+                return this.handleErrorCommon(error, () => this.updateAssetIntangible(roleObject, assetRecordId));
             });
     }
     
@@ -256,12 +256,12 @@ export class AssetEndpoint extends EndpointFactory {
 if(roleObject.isTangible==true){
     return this.http.put<T>(this._updateAssetInventoryUrl, JSON.stringify(roleObject), this.getRequestHeaders())
     .catch(error => {
-        return this.handleError(error, () => this.updateAssetInventory(roleObject, assetRecordId));
+        return this.handleErrorCommon(error, () => this.updateAssetInventory(roleObject, assetRecordId));
     });
 }else{
     return this.http.put<T>(this._updateAssetInventoryUrlIntangible, JSON.stringify(roleObject), this.getRequestHeaders())
     .catch(error => {
-        return this.handleError(error, () => this.updateAssetInventory(roleObject, assetRecordId));
+        return this.handleErrorCommon(error, () => this.updateAssetInventory(roleObject, assetRecordId));
     });
 }
  
@@ -271,7 +271,7 @@ if(roleObject.isTangible==true){
         let endpointUrl = `${this._updateAssetListingUrl}/${assetRecordId}/${status}/${username}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAssetListing(assetRecordId, status,username));
+                return this.handleErrorCommon(error, () => this.updateAssetListing(assetRecordId, status,username));
             });
     }
 
@@ -281,7 +281,7 @@ if(roleObject.isTangible==true){
         let endpointUrl = `${this._updateAssetInventoryListingUrl}/${assetInventoryId}/${status}/${username}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAssetInventoryListing(assetInventoryId, status,username));
+                return this.handleErrorCommon(error, () => this.updateAssetInventoryListing(assetInventoryId, status,username));
             });
     }
 
@@ -290,7 +290,7 @@ if(roleObject.isTangible==true){
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeAssetById(assetRecordId));
+                return this.handleErrorCommon(error, () => this.removeAssetById(assetRecordId));
             });
     }
 
@@ -299,7 +299,7 @@ if(roleObject.isTangible==true){
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeAssetInventory(assetRecordId));
+                return this.handleErrorCommon(error, () => this.removeAssetInventory(assetRecordId));
             });
     }
 
@@ -309,7 +309,7 @@ if(roleObject.isTangible==true){
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeAssetCapesById(assetCapesById));
+                return this.handleErrorCommon(error, () => this.removeAssetCapesById(assetCapesById));
             });
     }
 
@@ -319,7 +319,7 @@ if(roleObject.isTangible==true){
         return this.http
             .get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.GetAssetCapesRecordCheck(assetrecordid, searchUrl));
+                return this.handleErrorCommon(error, () => this.GetAssetCapesRecordCheck(assetrecordid, searchUrl));
             });
     }
 
@@ -328,12 +328,12 @@ if(roleObject.isTangible==true){
 if(type=='add'){
         return this.http.post<T>(this.capesPost, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.saveAssetCapesInfo(data,type));
+                return this.handleErrorCommon(error, () => this.saveAssetCapesInfo(data,type));
             });
     }else{
         return this.http.put<T>(this._updatecapesByNewUrl, JSON.stringify(data), this.getRequestHeaders())
         .catch(error => {
-            return this.handleError(error, () => this.saveAssetCapesInfo(data,type));
+            return this.handleErrorCommon(error, () => this.saveAssetCapesInfo(data,type));
         });
     }
 }
@@ -341,7 +341,7 @@ if(type=='add'){
     addNewAssetCapesInfo<T>(data: any): Observable<T> {
         return this.http.post<T>(this.addassetcapes, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addNewAssetCapesInfo(data));
+                return this.handleErrorCommon(error, () => this.addNewAssetCapesInfo(data));
             });
     }
 
@@ -349,7 +349,7 @@ if(type=='add'){
         let endpointUrl = `${this._customerList}/${id}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetCapesAll(data, id));
+                return this.handleErrorCommon(error, () => this.getAssetCapesAll(data, id));
             });
     }
 
@@ -359,7 +359,7 @@ if(type=='add'){
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCapabilityTypeListEndpoint(assetRecordId));
+                return this.handleErrorCommon(error, () => this.getCapabilityTypeListEndpoint(assetRecordId));
             });
     }
 
@@ -368,7 +368,7 @@ if(type=='add'){
         let url = `${this._getCapabilityUrl}/${assetRecordId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCapabilityDataEndpoint(assetRecordId));
+                return this.handleErrorCommon(error, () => this.getCapabilityDataEndpoint(assetRecordId));
             });
     }
 
@@ -376,13 +376,13 @@ if(type=='add'){
         let url = `${this._getAssetCapabilityUrl}/${assetCapesId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetCapabilityDataEndpoint(assetCapesId));
+                return this.handleErrorCommon(error, () => this.getAssetCapabilityDataEndpoint(assetCapesId));
             });
     }
 
-    getAssetsById(assetRecordId) {
+    getAssetsById(assetRecordId) { 
         return this.http.get<any>(`${this.baseUrl}/api/workOrder/workorderassetview?assetRecordId=${assetRecordId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAssetsById(assetRecordId));
+            return this.handleErrorCommon(error, () => this.getAssetsById(assetRecordId));
         });
     }
 
@@ -390,7 +390,7 @@ if(type=='add'){
         let url = `${this._updatecapesUrl}/${roleObject.assetCapesId}/${roleObject.isActive}/${username}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateCapes(roleObject, assetCapesId,username));
+                return this.handleErrorCommon(error, () => this.updateCapes(roleObject, assetCapesId,username));
             });
     }
 
@@ -398,18 +398,18 @@ if(type=='add'){
 
         return this.http.get<T>(this._assetwarrantystatusListurl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetWarrantyStatus());
+                return this.handleErrorCommon(error, () => this.getAssetWarrantyStatus());
             });
     }
 
     getAssetDataForInventoryById(id) {
         return this.http.get<any>(`${this.baseUrl}/api/AssetModule/GetAssetDataforInventory/${id}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAssetDataForInventoryById(id));
+            return this.handleErrorCommon(error, () => this.getAssetDataForInventoryById(id));
         });
     }
     getAuditDataByInventoryId(id) {
         return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getauditdatabyinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAuditDataByInventoryId(id));
+            return this.handleErrorCommon(error, () => this.getAuditDataByInventoryId(id));
         });
     }
 
@@ -420,21 +420,21 @@ if(type=='add'){
 
     //    return this.http.get<T>(endpointUrl, this.getRequestHeaders())
     //        .catch(error => {
-    //            return this.handleError(error, () => this.getAudit(assetRecordId));
+    //            return this.handleErrorCommon(error, () => this.getAudit(assetRecordId));
     //        });
     //}
 
     //asset inventory adjustment
     getAdjustmentByAssetInventoryId(id) {
         return this.http.post<any>(`${this.baseUrl}/api/AssetModule/getadjustmentbyassetinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAdjustmentByAssetInventoryId(id));
+            return this.handleErrorCommon(error, () => this.getAdjustmentByAssetInventoryId(id));
         });
     }    
     assetAdjustmentPost<T>(data: any): Observable<T> {
         let url = `${this.baseUrl}/api/AssetModule/adjustmentpost`;
         return this.http.post<T>(url, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.assetAdjustmentPost(data));
+                return this.handleErrorCommon(error, () => this.assetAdjustmentPost(data));
             });
     }
 
@@ -442,21 +442,21 @@ if(type=='add'){
         let url = `${this.baseUrl}/api/AssetModule/ExportassetList`;
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.downloadAllAssetList(data));
+                return this.handleErrorCommon(error, () => this.downloadAllAssetList(data));
             });
     }
     downloadAllAssetInventoryList<T>(data): Observable<T> {
         let url = `${this.baseUrl}/api/AssetModule/ExportAssetinventorylist`;
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.downloadAllAssetInventoryList(data));
+                return this.handleErrorCommon(error, () => this.downloadAllAssetInventoryList(data));
             });
     }
     downloadAllAssetCapsList<T>(data,assetRecordId): Observable<T> {
         let url = `${this.baseUrl}/api/AssetModule/ExportCapesList//${assetRecordId}`;
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.downloadAllAssetCapsList(data,assetRecordId));
+                return this.handleErrorCommon(error, () => this.downloadAllAssetCapsList(data,assetRecordId));
             });
     }
-}
+} 

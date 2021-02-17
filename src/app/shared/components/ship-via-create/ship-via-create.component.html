@@ -33,7 +33,7 @@
         </div>
                     <i class="fa fa-pencil btn nobg pull-right"  style="margin-top:-25px;margin-right:-29px" 
                     data-toggle="modal"
-                    data-target="#ship-via-memo" matTooltip="Memo"
+                    data-target="#ship-via-add-memo" matTooltip="Memo"
                     matTooltipPosition="above"
                     (click)="onAddShipMemo()"></i>
             </div>  
@@ -45,7 +45,7 @@
   <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipVia(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
   <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeModel()">Close</button>
 </div>
-<div class="modal fade" id="ship-via-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="ship-via-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

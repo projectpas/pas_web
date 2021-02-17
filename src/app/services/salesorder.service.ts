@@ -36,6 +36,7 @@ import { MarginSummary } from "../models/sales/MarginSummaryForSalesorder";
 import { SalesOrderShipping } from "../models/sales/salesOrderShipping";
 import { SalesOrderBillingAndInvoicing } from "../models/sales/salesOrderBillingAndInvoicing";
 import { formatStringToNumber } from "../generic/autocomplete";
+import { SOPickTicket } from "../models/sales/SOPickTicket";
 
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
@@ -193,6 +194,13 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getReservestockpartlists(salesOrderId, itemMasterId)
     );
   }
+
+  getReservestockpartlistsBySOId(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getReservestockpartlistsBySOId(salesOrderId)
+    );
+  }
+
   getIssuedParts(salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getIssuedParts(salesOrderId)
@@ -228,6 +236,11 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getunreservedstockpartslist(salesOrderId, itemMasterId)
     );
   }
+  getunreservedstockpartslistBySOId(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getunreservedstockpartslistBySOId(salesOrderId)
+    );
+  }
   getholdstocklinereservedparts(salesOrderId: number, salesOrderPartId: number, stockLineId: number, quantityRequested: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getholdstocklinereservedparts(salesOrderId, salesOrderPartId, stockLineId, quantityRequested)
@@ -252,6 +265,18 @@ export class SalesOrderService {
   getPickTicket(salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPickTicket(salesOrderId)
+    );
+  }
+
+  generatePickTicket(salesOrderId: number, salesOrderPartId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.generatePickTicket(salesOrderId, salesOrderPartId)
+    );
+  }
+
+  getPickTicketList(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPickTicketList(salesOrderId)
     );
   }
   getCustomerApprovalList(salesOrderId: number): Observable<ISalesOrderCustomerApproval[][]> {
@@ -368,8 +393,8 @@ export class SalesOrderService {
     partNumberObj.updatedOn = new Date().toDateString();
     partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
     partNumberObj.methodType =
-      selectedPart.method === "Stock Line" ? "S" : "I";
-
+      //selectedPart.method === "Stock Line" ? "S" : "I";
+      selectedPart.stockLineId != null ? "S" : "I";
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0; //selectedPart.salesPriceExtended;
     partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0; //selectedPart.markupExtended;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
@@ -520,6 +545,60 @@ export class SalesOrderService {
 
   approverslistbyTaskId(taskId, id) {
     return this.salesOrderEndPointSevice.approverslistbyTaskId(taskId, id);
+  }
+
+  deleteMultiplePart(salesOrderPartIds: any) {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.deleteMultiplePart(salesOrderPartIds)
+    );
+  }
+
+  GetSalesOrderPartsViewById(salesOrderId) {
+    return this.salesOrderEndPointSevice.getSalesOrderPartsViewById(salesOrderId)
+  }
+
+  updatePickTicket(data) {
+    return this.salesOrderEndPointSevice.updatePickTicket(data);
+  }
+
+  getpickticketHistory(pickticketid) {
+    return this.salesOrderEndPointSevice.getpickticketHistory(pickticketid)
+  }
+
+  getStockLineforPickTicket(itemMasterId: number, conditionId: number,salesOrderId :number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getStockLineforPickTicket(itemMasterId, conditionId,salesOrderId)
+    );
+  }
+
+  savepickticketiteminterface(parts: SOPickTicket): Observable<SOPickTicket[]> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.savepickticketiteminterface(parts)
+    );
+  }
+
+  confirmPickTicket(pickticketId: number,confirmById:string): Observable<boolean[]> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.confirmPickTicket(pickticketId,confirmById)
+    );
+  }
+
+  getPickTicketPrint(salesOrderId: number,soPickTicketId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPickTicketPrint(salesOrderId,soPickTicketId)
+    );
+  }
+
+  getPickTicketEdit(soPickTicketId: number,salesOrderId: number,salesOrderPartId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPickTicketEdit(soPickTicketId,salesOrderId,salesOrderPartId)
+    );
+  }
+
+  getShippingDataList(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getShippingDataList(salesOrderId)
+    );
   }
 
   //ed --nitin

@@ -165,6 +165,7 @@ export class StockLineListComponent implements OnInit {
         { field: 'manufacturer', header: 'Manufacturer' },
         { field: 'revisedPN', header: 'Revised PN' },
         { field: 'itemGroup', header: 'Item Group' },
+        { field: 'unitOfMeasure', header: 'UOM' },
         { field: 'quantityOnHand', header: 'Qty On Hand' },
         { field: 'quantityAvailable', header: 'Qty Avail' },
         { field: 'serialNumber', header: 'Serial Num' },
@@ -220,6 +221,16 @@ export class StockLineListComponent implements OnInit {
         $("#downloadConfirmation").modal("hide");
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
+    get employeeId() {
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+    }
+
     getFormatedDate(date) {
         if(date){
             let actualDate = new Date(date);
@@ -242,6 +253,8 @@ export class StockLineListComponent implements OnInit {
 
     getList(data) {
         this.isSpinnerVisible = true;
+        data.filters.employeeId = this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         this.workFlowtService.getStockLineListing(data).subscribe(res => {           
             this.data = res['results'].map(x => {
 				return {
@@ -262,8 +275,9 @@ export class StockLineListComponent implements OnInit {
             }
             this.isSpinnerVisible = false;
         }, err => {
-            const errorLog = err;
-            this.saveFailedHelper(errorLog)
+            this.isSpinnerVisible = false;
+            //const errorLog = err;
+            //this.saveFailedHelper(errorLog)
             })
     }
 
@@ -349,8 +363,13 @@ export class StockLineListComponent implements OnInit {
     exportCSV(dt) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
-        this.workFlowtService.downloadAllStockLineList(PagingData).subscribe(
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": {"employeeId": this.employeeId, "masterCompanyId": this.currentUserMasterCompanyId, "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
+        });
+        //this.workFlowtService.downloadAllStockLineList(PagingData).subscribe(
+          this.workFlowtService.getStockLineListing(PagingData).subscribe(    
             results => {
                 this.loadingIndicator = false;
                 results['results'].forEach(x => {
@@ -365,8 +384,8 @@ export class StockLineListComponent implements OnInit {
                 dt.value = this.data;
                 this.isSpinnerVisible = false;
             }, err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+                this.isSpinnerVisible = false;
+                //this.saveFailedHelper(errorLog);
             }
         );
     } 
@@ -567,17 +586,27 @@ export class StockLineListComponent implements OnInit {
     }
 
     dateFilterForTable(date, field) {
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');
         this.dateObject={}
-                date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-            if(field=='createdDate'){
-                this.dateObject={'createdDate':date}
-            }else if(field=='updatedDate'){
-                this.dateObject={'updatedDate':date}
+            if (dateyear > minyear) {
+                if(field=='createdDate'){
+                    this.dateObject={'createdDate':date}
+                }else if(field=='updatedDate'){
+                    this.dateObject={'updatedDate':date}
+                }else if(field=='receivedDate'){
+                    this.dateObject={'receivedDate':date}
+                }else if(field=='expirationDate'){
+                    this.dateObject={'expirationDate':date}
+                }else if(field=='tagDate'){
+                    this.dateObject={'tagDate':date}
+                }
+                this.lazyLoadFilterData.filters = { ...this.lazyLoadFilterData.filters ,...this.dateObject};
+                const PagingData = { ...this.lazyLoadFilterData, filters: listSearchFilterObjectCreation(this.lazyLoadFilterData.filters) }
+                this.getList(PagingData); 
             }
-            this.lazyLoadFilterData.filters = { ...this.lazyLoadFilterData.filters ,...this.dateObject};
-            const PagingData = { ...this.lazyLoadFilterData, filters: listSearchFilterObjectCreation(this.lazyLoadFilterData.filters) }
-            this.getList(PagingData); 
         }else{
             this.lazyLoadFilterData.filters = { ...this.lazyLoadFilterData.filters,...this.dateObject};
             if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.createdDate){
@@ -585,6 +614,15 @@ export class StockLineListComponent implements OnInit {
             }
             if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.updatedDate){
                 delete this.lazyLoadFilterData.filters.updatedDate;
+            }
+            if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.receivedDate){
+                delete this.lazyLoadFilterData.filters.receivedDate;
+            }
+            if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.expirationDate){
+                delete this.lazyLoadFilterData.filters.expirationDate;
+            }
+            if(this.lazyLoadFilterData.filters && this.lazyLoadFilterData.filters.tagDate){
+                delete this.lazyLoadFilterData.filters.tagDate;
             }
             this.lazyLoadFilterData.filters = { ...this.lazyLoadFilterData.filters,...this.dateObject};
                 const PagingData = { ...this.lazyLoadFilterData, filters: listSearchFilterObjectCreation(this.lazyLoadFilterData.filters) }

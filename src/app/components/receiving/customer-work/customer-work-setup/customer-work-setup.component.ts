@@ -112,17 +112,17 @@ export class CustomerWorkSetupComponent implements OnInit {
     disableSaveadd: boolean = true;
     disabledMemo: boolean = false;
     memoPopupContent: any;
-
+    arrayEmplsit:any[] = [];
+    certifiedEmployeeList: any = [];
+    workorderSettings:any;
     constructor(private commonService: CommonService,
         private datePipe: DatePipe,
         private _actRoute: ActivatedRoute,
         private receivingCustomerWorkService: ReceivingCustomerWorkService,
         private authService: AuthService,
         private router: Router,		private modalService: NgbModal,
-        private alertService: AlertService,
-        
-        private stocklineService: StocklineService) {
-            
+        private alertService: AlertService,        
+        private stocklineService: StocklineService) {            
         this.receivingForm.receivingNumber = 'Creating';
         this.receivingForm.conditionId = 0;
         this.receivingForm.siteId = 0;
@@ -146,6 +146,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.loadPartNumData('');
         this.loadCompanyData();
         this.getCustomerWarningsList();
+        this.getAllEmployeesByManagmentStructureID();
         if (this.receivingCustomerWorkId) {
             this.isEditMode = true;
             this.disableUpdateButton = true;
@@ -156,6 +157,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 { label: 'Receiving Customer Work' }
             ];
         } else {
+            this.getWorkOrderDefaultSetting();
             this.getEmployeeData();
             this.loadTagTypes('');
             this.loadEmployeeData('');
@@ -180,6 +182,12 @@ export class CustomerWorkSetupComponent implements OnInit {
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
+
+    get currentUserManagementStructureId(): number {
+        return this.authService.currentUser
+          ? this.authService.currentUser.managementStructureId
+          : null;
+      }
 
     filterPartNumbers(event) {
         if (event.query !== undefined && event.query !== null) {
@@ -323,6 +331,19 @@ export class CustomerWorkSetupComponent implements OnInit {
         })
     }
 
+    async getAllEmployeesByManagmentStructureID() {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.arrayEmplsit.push(0,this.authService.currentEmployee.value);
+            this.arrayEmplsit.push(this.receivingForm.certifieEemployeeId ? this.receivingForm.certifieEemployeeId.value : 0);
+        } else {
+            this.arrayEmplsit.push(0,this.authService.currentEmployee.value);
+        }
+        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
+            this.certifiedEmployeeList = res;            
+        })
+	}
+
     getActive() {
         this.disableUpdateButton = false;
     }
@@ -384,6 +405,7 @@ export class CustomerWorkSetupComponent implements OnInit {
                 tagDate: res.tagDate ? new Date(res.tagDate) : '',
                 mfgDate: res.mfgDate ? new Date(res.mfgDate) : '',
                 expDate: res.expDate ? new Date(res.expDate) : '',
+                certifiedDate: res.certifiedDate ? new Date(res.certifiedDate) : '',
                 receivedDate: res.receivedDate ? new Date(res.receivedDate) : '',
                 timeLifeDate: res.timeLifeDate ? new Date(res.timeLifeDate) : '',
                 custReqDate: res.custReqDate ? new Date(res.custReqDate) : '',
@@ -890,12 +912,12 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.receivingForm.tagType = "";
         }
-        console.log("receiving form",this.receivingForm)
         const receivingForm = {
             ...this.receivingForm,
             customerId: getValueFromObjectByKey('customerId', this.receivingForm.customerId),
             customerContactId: getValueFromObjectByKey('customerContactId', this.receivingForm.customerContactId),
             mfgDate: this.receivingForm.mfgDate ? this.datePipe.transform(this.receivingForm.mfgDate, "MM/dd/yyyy") : '',
+            certifiedDate: this.receivingForm.certifiedDate ? this.datePipe.transform(this.receivingForm.certifiedDate, "MM/dd/yyyy") : '',
             receivedDate: this.receivingForm.receivedDate ? this.datePipe.transform(this.receivingForm.receivedDate, "MM/dd/yyyy") : '',
             expDate: this.receivingForm.expDate ? this.datePipe.transform(this.receivingForm.expDate, "MM/dd/yyyy") : '',
             tagDate: this.receivingForm.tagDate ? this.datePipe.transform(this.receivingForm.tagDate, "MM/dd/yyyy") : '',
@@ -916,7 +938,6 @@ export class CustomerWorkSetupComponent implements OnInit {
             timeLife: { ...this.sourceTimeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() }
 
         }
-        console.log("receiving form receivingForm",receivingForm)
         const { customerCode, customerPhone, partDescription, manufacturer, revisePartId, ...receivingInfo } = receivingForm;
         this.isSpinnerVisible = true;
         if (!this.isEditMode) {
@@ -1282,4 +1303,23 @@ export class CustomerWorkSetupComponent implements OnInit {
     changeOfStatus(status){
         this.disableUpdateButton=false;
     }
+
+    getWorkOrderDefaultSetting() {
+        const mcId= this.authService.currentUser
+        ? this.authService.currentUser.masterCompanyId
+        : null;
+          this.commonService.workOrderDefaultSettings(mcId, 1).subscribe(res => {
+         
+            this.receivingForm.siteId=res[0].defaultSiteId;
+            this.receivingForm.warehouseId=res[0].defaultWearhouseId;
+            this.receivingForm.locationId=res[0].defaultLocationId;
+            this.receivingForm.shelfId=res[0].defaultShelfId;
+            this.receivingForm.binId=res[0].defaultBinId;
+            this.loadSiteData('fromOnload');
+            this.siteValueChange(this.receivingForm.siteId)
+            this.wareHouseValueChange( this.receivingForm.warehouseId)
+            this.locationValueChange(this.receivingForm.locationId)
+            this.shelfValueChange(this.receivingForm.shelfId)
+          })
+      }
 }

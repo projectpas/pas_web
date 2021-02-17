@@ -199,6 +199,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     localgroup: any[] = [];
     allProvisonInfo: any = [];
     activeTab: number = 0;
+    rowDataToDelete: any = {};
     itemQuantity = [];
     isEditMode: boolean = false;
     disableSaveForEdit:boolean=true;
@@ -485,10 +486,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
         { field: 'fileSize', header: 'File Size' },
-        { field: 'createdBy', header: 'Created By' },
-        { field: 'updatedBy', header: 'Updated By' },
         { field: 'createdDate', header: 'Created Date' },
+      
+        { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
+      
+        { field: 'updatedBy', header: 'Updated By' },
 
     ];
 
@@ -1162,6 +1165,28 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
           }, error => this.saveFailedHelper(error));
     }
 
+    Restore(rowData){
+        this.rowDataToDelete = rowData;
+        $("#aircraftRestore").modal("show");
+    }
+    deleteataRow(rowData) {
+        this.rowDataToDelete = rowData;
+    }
+    deleteAircraftRow(rowData){
+        this.rowDataToDelete = rowData;
+    }
+
+    RestoreATA(rowData){
+        this.rowDataToDelete = rowData;
+        $("#ataRestore").modal("show");
+    }
+    
+    closeRestore() {
+        $("#aircraftRestore").modal("hide");
+    } 
+    closeATARestore() {
+        $("#ataRestore").modal("hide");
+    } 
     restorePurchaseSaleRowRecord(value) {
         if(value == 'Yes') {
             this.commonService.updatedeletedrecords('ItemMasterPurchaseSale', 'ItemMasterPurchaseSaleId',this.restorePSRecordRow.itemMasterPurchaseSaleId).subscribe(res => {
@@ -3558,8 +3583,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
 
-    onDeleteAircraft(data) {
-        this.itemser.deleteItemMasterAir(data.itemMasterAircraftMappingId).subscribe(res => {
+    onDeleteAircraft() {
+        const {itemMasterAircraftMappingId}=this.rowDataToDelete;
+        this.itemser.deleteItemMasterAir(itemMasterAircraftMappingId).subscribe(res => {
             this.getAircraftMappedDataByItemMasterId();
             this.alertService.showMessage(
                 'Success',
@@ -3569,8 +3595,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         })
     }
 
-    restoreAircraftRow(data) {
-        this.itemser.restoreAircraftRow(data.itemMasterAircraftMappingId).subscribe(res => {
+    restoreAircraftRow() {
+        const {itemMasterAircraftMappingId}=this.rowDataToDelete;
+        this.itemser.restoreAircraftRow(itemMasterAircraftMappingId).subscribe(res => {
             this.getAircraftMappedDataByItemMasterId();
             this.alertService.showMessage(
                 'Success',
@@ -3770,8 +3797,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             })
         }
     }
-    deleteATAMapped(data) {
-        this.itemser.deleteItemMasterATA(data.itemMasterATAMappingId).subscribe(res => {
+    deleteATAMapped() {
+        const {itemMasterATAMappingId}=this.rowDataToDelete;
+        this.itemser.deleteItemMasterATA(itemMasterATAMappingId).subscribe(res => {
             this.getATAMappedDataByItemMasterId();
             this.alertService.showMessage(
                 'Success',
@@ -3781,8 +3809,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         })
     }
 
-    restoreATAMapped(data) {
-        this.itemser.restoreATAMapped(data.itemMasterATAMappingId).subscribe(res => {
+    restoreATAMapped() {
+        const {itemMasterATAMappingId}=this.rowDataToDelete;
+        this.itemser.restoreATAMapped(itemMasterATAMappingId).subscribe(res => {
             this.getATAMappedDataByItemMasterId();
             this.alertService.showMessage(
                 'Success',

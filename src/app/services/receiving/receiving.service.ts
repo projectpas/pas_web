@@ -62,15 +62,18 @@ export class ReceivingService {
             this.receivingEndpoing.getItemMasterDataById<any[]>(itemid));
     }
 
-    getPurchaseOrderDataById(receivingId: any) {
+    getPurchaseOrderDataById(receivingId: any,employeeId = 0) {
         return Observable.forkJoin(
-            this.receivingEndpoing.getReceivingPODataById<PurchaseOrder>(receivingId));
+            this.receivingEndpoing.getReceivingPODataById<PurchaseOrder>(receivingId,employeeId));
     }
 
-    getPurchaseOrderDataForEditById(receivingId: any) {
-
+    getPurchaseOrderDataForEditById(receivingId: any,employeeId = 0) {
         return Observable.forkJoin(
-            this.receivingEndpoing.getReceivingPODataForEditById<any>(receivingId));
+            this.receivingEndpoing.getReceivingPODataForEditById<any>(receivingId,employeeId));
+    }
+
+    getAllRecevingEditID(purchaseOrderId){   
+        return this.receivingEndpoing.getAllRecevingEditID(purchaseOrderId);            
     }
 
     getPurchaseOrderDataForViewById(receivingId: any) {
@@ -90,6 +93,7 @@ export class ReceivingService {
     getReceivingPOHeaderById(repairOrderId){
         return this.receivingEndpoing.getReceivingPOHeaderById(repairOrderId);
     }
+    
 
     getReceivingPOPartsForViewById(repairOrderId){
         return this.receivingEndpoing.getReceivingPOPartsForViewById(repairOrderId);
@@ -99,8 +103,8 @@ export class ReceivingService {
         return this.receivingEndpoing.getReceivingROHeaderById(repairOrderId);
     }
 
-    getReceivingROPartById(repairOrderId){
-        return this.receivingEndpoing.getReceivingROPartById(repairOrderId);
+    getReceivingROPartById(repairOrderId ,employeeId = 0){
+        return this.receivingEndpoing.getReceivingROPartById(repairOrderId,employeeId);
     }
 
     receiveParts(receiveParts: ReceiveParts[]) {
@@ -129,6 +133,10 @@ export class ReceivingService {
 
     CreateStockLineForRepairOrder(repairOrderId: number) {
         return this.receivingEndpoing.CreateStockLineForRepairOrder(repairOrderId);
+    }
+
+    getAllRecevingROEditID(repairOrderId){   
+        return this.receivingEndpoing.getAllRecevingROEditID(repairOrderId);            
     }
 
 }

@@ -81,7 +81,10 @@ import { PoApprovalRuleComponent } from "../components/vendor/purchase-orders/po
 import { PoSettingsComponent } from "../components/vendor/purchase-orders/po-settings/po-settings.component";
 import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 import { CommonCommunicationModule } from "../components/common-components/common-communication/common-communiation.module";
-
+import { POViewStockDraftListComponent } from "../components/receiving/po-ro/po-view-draftlist/po-view-draftlist.component";
+import { POViewListComponent } from "../components/receiving/po-ro/po-view-list/po-view-list.component";
+import { ROViewStockDraftListComponent } from "../components/receiving/repair-order/ro-view-draftlist/ro-view-draftlist.component";
+import { ROViewListComponent } from "../components/receiving/repair-order/ro-view-list/ro-view-list.component";					
 
 
 @NgModule({
@@ -154,7 +157,9 @@ import { CommonCommunicationModule } from "../components/common-components/commo
 		//CommonDocumentsComponent,
 		//AllApprovalRuleComponent,
 		PoSettingsComponent,
-		AllViewComponent
+		AllViewComponent,
+		POViewStockDraftListComponent,
+		POViewListComponent
 	],
 	providers: [
 		VendorClassificationComponent,

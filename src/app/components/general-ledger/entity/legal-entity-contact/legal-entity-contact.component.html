@@ -1,4 +1,4 @@
-﻿<div class="right_col" role="main">
+﻿<div role="main">
     <div>
         <div class="x_content">
             <div *ngIf="isViewMode == false">
@@ -19,17 +19,17 @@
             </div>
             <div class="card new-card" >
                 <div>
-                    <div class="card-header bg-primary new-card-header">
+                    <div class="card-header header">
                         <div class="row">
                             <div class="col">
-                              <h4 class="new-card-heading"> Contacts</h4>
+                              <h4 class="header-name"> Contacts</h4>
                             </div>
                             <div>
                             <a *ngIf="isViewMode == false"
                                data-toggle="modal"                               
                                data-target="#addContactDetails">
                                 <button type="button"
-                                class="btn-sm new-btn-primary" 
+                                class="btn-sm header-button" 
                                 matTooltip="Add Contact"
                                 matTooltipPosition="above"
                                 (click)="onAddContactInfo()">
@@ -40,9 +40,9 @@
                         </div>
                     </div>
                     <div class="clear"></div>
-                    <hr />
+                    <!-- <hr /> -->
                 </div>
-                <div class="card-body new-card-body"> 
+                <div class="card-body header-body"> 
                 <p-table #dt
                          class="rpo-table-cstm rro-table-cstm tab-table-cstm"
                          [value]="entityContacts"
@@ -69,26 +69,27 @@
                                            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
                                         </div>
                                         <div class="col">
-                                          <div
-                                            style="width: auto !important; float: right;"
-                                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                          >
+                                            <div class="global-search-field inner-addon right-addon inline-block">
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50" 
                                 class="form-control" (input)="globalSearch($event.target.value)"
-                                   placeholder="Filter" style="height: 28px !important;">
+                                   placeholder="Filter"
+                                   >
                             </div> 
                             <!-- (input)="dt.filterGlobal($event.target.value, 'contains')" -->
                         </div>
                       </div>
                       <div class="row">
                         <div class="col">
-                            <button type="button" *ngIf="isViewMode==false " class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left" label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above" (click)="openTag(export)"  style="padding: 5px 10px !important;"></button>
-                            <button type="button" *ngIf="isViewMode==false " class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                            <button type="button" *ngIf="isViewMode==false "
+                             class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above" (click)="openTag(export)"  style="padding: 5px 10px !important;"></button>
+                            <button type="button" *ngIf="isViewMode==false " 
+                            class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
+                             (click)="dt.exportCSV({selectionOnly:true})" ></button>
                             <div class="excel-upload  excel-upload-cstm" *ngIf="isViewMode==false ">
-                                <button name="download" id="download" type="button" class="btn btn-primary"
+                                <button name="download" id="download" type="button" class="btn btn-primary exports-button"
                                         matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForContact()"
-                                        style="padding: 5px 10px !important;">
+                                        >
                                     Sample File Download
                                 </button>
 
@@ -131,21 +132,20 @@
                               >
                                 <div class="form-group" style="float: right;min-width: 335px;"> 
                                     <div
-                                    class="pull-left"
-                                    style="margin-top: 4px; margin-right: 15px;"
+                                    class="pull-left radio-buttons-align"
                                   >
                                   <label class="radio-cstm wauto">
                                     <input type="radio" name="EmpStatus012g" class="form-control" value="Active" (click)="billingStatusForContact('Active')" [(ngModel)]="currentstatusForCotnact">
                                     <span class="checkmark"></span>Active
                                 </label>
                             </div>
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm wauto">
                                     <input type="radio" name="EmpStatus012g" class="form-control" value="InActive" (click)="billingStatusForContact('InActive')" [(ngModel)]="currentstatusForCotnact">
                                     <span class="checkmark"></span>In-Active
                                 </label>
                             </div>
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm wauto">
                                     <input type="radio" name="EmpStatus012g" class="form-control" value="ALL" (click)="billingStatusForContact('ALL')" [(ngModel)]="currentstatusForCotnact">
                                     <span class="checkmark"></span>All
@@ -171,7 +171,7 @@
 
                     <ng-template pTemplate="colgroup" let-columns>
                         <colgroup>
-                            <col *ngFor="let col of columns" style="width:130px"
+                            <col *ngFor="let col of columns" class="table-column-width"
                                  [ngClass]="{ update_withFlag: col.field == 'isDefaultContact' }" />
                         </colgroup>
                     </ng-template>
@@ -179,33 +179,33 @@
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <!--<th style="width: 40px;">Flag</th>-->
-                            <th style="width: 40px;">Flag</th>
-                            <th style="min-width: 120px;" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.field == 'isDefaultContact'">
+                            <th class="table-column-width">Flag</th>
+                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.field == 'isDefaultContact'">
                                 {{col.header}}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                             </th>
-                            <th style="width:140px;position:sticky" *ngIf="selectedColumns.length > 0">
+                            <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
                                 Actions
                             </th>
                         </tr>
                         <tr>
-                            <th style="width: 40px;"></th>
-                            <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field" [hidden]="col.field == 'isDefaultContact'">
+                            <th class="table-column-width"></th>
+                            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field" [hidden]="col.field == 'isDefaultContact'">
                    
-     <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+     <input class="table-header-input-width" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
        
-     <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+     <input type="date"   class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
      name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+<input type="date" class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
 (change)="dateFilterForTable($event.target.value,col.field)" />
                             </th>
-                            <th style="width:140px;position:sticky"></th>
+                            <th class="table-actions-column"></th>
                         </tr>
 
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                         <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewSelectedRowdbl(viewdbl,rowData)" >
-                            <td style="width: 40px;">
+                            <td class="table-column-width">
                                 <span class="flag" style="width: 40px;">
                                     <i *ngIf="rowData.isDefaultContact == true" [ngStyle]="{'color': rowData.isDefaultContact == true ? 'green' : 'none'}"
                                        class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true" style="width: 40px;"></i>
@@ -213,7 +213,7 @@
 
                             </td>
 
-                            <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle [hidden]="col.field == 'isDefaultContact'">
+                            <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle [hidden]="col.field == 'isDefaultContact'">
                                 {{
 col.field == 'createdDate'?
                                 (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?
@@ -221,7 +221,7 @@ col.field == 'createdDate'?
                                 }}
                             </td>
  
-                            <td style="width:140px" *ngIf="selectedColumns.length > 0 ">
+                            <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 ">
                                 <div *ngIf="currentDeletedstatusCOntact==false">
                                 <p-inputSwitch *ngIf="isViewMode==false "[(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                 matTooltipPosition="above"  (onChange)="handleChange(rowData)" [disabled]="rowData.isDefaultContact"></p-inputSwitch> 
@@ -346,16 +346,16 @@ col.field == 'createdDate'?
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns *ngIf="entityContacts.length == 0">
                         <tr>
-                            <td colspan="16" style="color: red; font-weight: bold; text-align: center">
+                            <td colspan="16" class="no-records-cstm no-records-msg">
                                 No records found
                             </td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="summary" id="footer">
                         <label id="footer" class="footer">Total:</label>
-                        <input style="width: 5%;" name="noOfRecords" [(ngModel)]="dt._totalRecords" type="text" disabled /> &nbsp;&nbsp;
+                        <input class="footer-input-width" name="noOfRecords" [(ngModel)]="dt._totalRecords" type="text" disabled /> &nbsp;&nbsp;
                         <label id="footer" class="footer1">Pages Count:</label>
-                        <input style="width: 5%;" name="pagescount" [ngModel]="getPageCount(dt._totalRecords, pageSize)" type="text" disabled />
+                        <input class="footer-input-width" name="pagescount" [ngModel]="getPageCount(dt._totalRecords, pageSize)" type="text" disabled />
                     </ng-template>
                 </p-table>
                 </div>

@@ -24,6 +24,7 @@ declare var $: any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';
+import { MenuItem } from 'primeng/api';
 // import { truncate } from 'fs';
 
 @Component({
@@ -33,10 +34,8 @@ import { CommonService } from '../../services/common.service';
     animations: [fadeInOut],
     providers: [DatePipe]
 })
-/** Actions component*/
 export class PublicationComponent implements OnInit, AfterViewInit {
-    //added by supriya
-    allCustomerFinanceDocumentsListColumns: any[] = [
+    allCustomerFinanceDocumentsLicurrentDeletedstatuscurrentDeletedstatusstColumns: any[] = [
         { field: 'tagTypeName', header: 'Tag Type' },
 
         { field: 'docName', header: 'Name' },
@@ -51,12 +50,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'UpdatedBy' },
         { field: 'download', header: 'Actions' },
-        // { field: 'delete', header: 'Delete' },
     ];
     allCustomerFinanceDocumentsList: any = [];
 
     sourceViewforDocumentAudit: any = [];
-    //
     pageSize: number = 10;
     pageIndex: number = 0;
     totalRecords: number = 0;
@@ -87,7 +84,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     displayedColumns = ['PublicationId', 'PartNumber', 'description'];
-    //, 'Sequence', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'
     dataSource: MatTableDataSource<Publication>;
     allpublicationInfo: any = [];
     allComapnies: MasterCompany[] = [];
@@ -101,10 +97,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     id: number;
     errorMessage: any;
     modal: NgbModalRef;
-    /** Actions ctor */
     cols: any[];
     auditCols: any[];
     selectedRow: any;
+    publicationRecordId: any;
     selectedColumns: any[];
     publicationName: string;
     filteredBrands: any[];
@@ -113,14 +109,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private isDeleteMode: boolean = false;
     public isActive: boolean = false;
     viewCheck: boolean = true;
-    // totalRecords: any=0;
     generalInfo: any;
-    // pageIndex: number = 0;
     pnMappingList = [];
     aircraftList: any = [];
     ataList = [];
     formData = new FormData()
-    // totalPages: number;
     publicationIdInput: string = "";
     descriptionInput: string = "";
     publicationTypeInput: string = "";
@@ -129,6 +122,12 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     locationInput: string = "";
     lazyLoadEventDataInput: any;
     inputValue: any;
+
+    viewAircraftData: any = {};
+    viewAtaData: any = {};
+
+    breadcrumbs: MenuItem[];
+    home: any;
     headersforPNMapping = [
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
@@ -144,7 +143,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         { field: 'aircraft', header: 'Aircraft' },
         { field: 'model', header: 'Model' },
         { field: 'dashNumber', header: 'Dash Numbers' },
-        //{ field: 'memo', header: 'Memo' }
     ];
     atacols = [
         { field: 'partNumber', header: 'PN Number' },
@@ -156,7 +154,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     ];
     headersforAttachment = [
         { field: 'tagTypeName', header: 'Tag Type' }
-        //{ field: 'link', header: 'Action' },
     ];
 
 
@@ -195,8 +192,13 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     advanceSearchReq: any = {};
     status: string = 'active';
     documentsContent: any;
-    moduleName: any = 'Publications';
+    moduleName: any = 'Publication';
 
+    currentDeletedstatus: boolean = false;
+    currentPnMappingDeletedstatus: boolean = false;
+    currentstatus: string = 'Active';
+    public allWorkFlows: Publication[] = [];
+    restorerecord: any = {};
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private configurations: ConfigurationService,
         private authService: AuthService, private datePipe: DatePipe, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public publicationService: PublicationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public employeeService: EmployeeService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Dashnumservice: DashNumberService, private ataMainSer: AtaMainService, private commonService: CommonService,
@@ -207,8 +209,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     }
     ngOnInit(): void {
-        this.employeedata();
-
+        this.breadcrumbs = [
+            { label: 'Publications' },
+            { label: 'Publications List' },
+        ];
         this.cols = [
             { field: 'partNos', header: 'PN' },
             { field: 'pnDescription', header: 'PN Description' },
@@ -223,6 +227,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
+            { field: 'createdDate', header: 'Created Date' },
+            { field: 'createdBy', header: 'CreatedBy' },
+            { field: 'updatedDate', header: 'Updated Date' },
+            { field: 'updatedBy', header: 'UpdatedBy' },
         ];
 
         this.auditCols = [
@@ -233,9 +241,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'description', header: 'Pub Description' },
             { field: 'publicationType', header: 'Pub Type' },
             { field: 'publishedBy', header: 'Published By' },
-            // { field: 'revisionDate', header: 'Revision Date' },
-            // { field: 'nextReviewDate', header: 'Next Review Date' },
-            { field: 'expirationDate', header: 'Expiration Date' },
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
@@ -243,8 +248,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-publication';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
         this.selectedColumns = this.cols;
-        this.getAllAircraftManufacturer();
-        this.getAllATAChapter();
 
 
     }
@@ -259,7 +262,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
-    public allWorkFlows: Publication[] = [];
 
     private loadData(data) {
         this.isSpinnerVisible = true;
@@ -277,14 +279,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
             });
 
     }
 
     changeOfDocumentStatus(status) {
-        // this.disableSave = false;
     }
 
     errorMessageHandler(log) {
@@ -314,14 +313,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.isSpinnerVisible = true;
         this.loadData(PagingData);
     }
-    // geListByStatus(status) {
-    //     this.status = status;
-    //     // this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
-    //     const PagingData = { ...this.lazyLoadEventDataInput, filters:{status: status} }
-    //     this.loadData(PagingData);
-    // }
-    currentDeletedstatus: boolean = false;
-    currentstatus: string = 'Active';
     getDeleteListByStatus(value) {
         this.currentDeletedstatus = true;
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
@@ -344,13 +335,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             this.loadData(PagingData);
         }
     }
-    restorerecord: any = {};
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
         }, () => {
-            // console.log('Backdrop click')
         })
     }
     restoreRecord() {
@@ -389,8 +378,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
 
     private loadMasterCompanies() {
-        this.alertService.startLoadingMessage();
-        // this.loadingIndicator = true;
         this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => {
@@ -412,59 +399,28 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     private refresh() {
-        // Causes the filter to refresh there by updating with recently added data.
         this.applyFilter(this.dataSource.filter);
     }
 
     private onDataLoadSuccessful(allWorkFlows) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+
         this.dataSource.data = allWorkFlows;
         this.allpublicationInfo = allWorkFlows.map(x => {
             return {
                 ...x,
-                //employee: getValueFromArrayOfObjectById('firstName', 'employeeId', x.employee, this.allEmployeeinfo),
             }
         });
 
     }
 
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
         this.allComapnies = allComapnies;
 
     }
 
     private onDataLoadFailed(error: any) {
-        // alert(error);
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
 
     }
-
-    // open(content) {
-
-    //     this.isEditMode = false;
-    //     this.isDeleteMode = false;
-
-    //     this.isSaving = true;
-    //     this.loadMasterCompanies();
-    //     this.disableSave = false;
-    //     this.sourceAction = new Publication();
-    //     this.sourceAction.isActive = true;
-    //     this.publicationName = "";
-    //     this.modal = this.modalService.open(content, { size: 'sm' });
-    //     this.modal.result.then(() => {
-
-
-
-    //         console.log('When user closes');
-    //     }, () => { console.log('Backdrop click') })
-    // }
-
 
     openDelete(content, row) {
         this.selectedRowforDelete = row;
@@ -473,9 +429,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.sourceAction = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-            // console.log('When user closes');
         }, () => {
-            //  console.log('Backdrop click')
         })
     }
 
@@ -498,60 +452,25 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     openView(row) {
         this.closeAllCollapse();
-        // $('#view').modal('show');
         this.generalInfo = true;
         $('#step1').collapse('show');
-
-        // console.log(row)
-        //this.generalInfo = row;
-        // this.sourceAction = row;
-        // this.publication_Name = row.publicationId;
-        // this.description = row.description;
-        // this.partNumber = row.partNumber;
-        // this.model = row.model;
-        // this.ataMain = row.ataMain;
-        // this.ataSubChapter = row.ataSubChapter;
-        // this.ataPositionZone = row.ataPositionZone;
-        // this.platform = row.platform;
-        // this.memo = row.memo;
-        // this.createdBy = row.createdBy;
-        // this.updatedBy = row.updatedBy;
-        // this.createdDate = row.createdDate;
-        // this.updatedDate = row.updatedDate;
         this.isActive = row.isActive;
         this.isSpinnerVisible = true;
         this.loadMasterCompanies();
         this.getFilesByPublicationId(row.publicationRecordId);
+        this.publicationRecordId = row.publicationRecordId;
         this.toGetDocumentsList(row.publicationRecordId);
-        // this.modal = this.modalService.open(content, { size: 'lg' });
-        // this.modal.result.then(() => {
-        //     console.log('When user closes');
-        // }, () => { console.log('Backdrop click') })
-
-        this.isSpinnerVisible = true;
-        //get general info
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.generalInfo = res[0];
-
-            // this.attachmentList = res[0].attachmentDetails.map(x => {
-            //     return {
-            //         ...x,
-            //         fileName: x.fileName,
-            //         //link: x.link
-            //     }
-            // })
-            // console.log(this.attachmentList);
         }, error => {
             this.isSpinnerVisible = false;
         })
 
-        //get PN Mapping info
         this.isSpinnerVisible = true;
 
         this.publicationService.getPublicationPNMapping(row.publicationRecordId)
             .subscribe(res => {
-                // console.log(res);
                 this.isSpinnerVisible = false;
 
                 this.pnMappingList = res.map(x => {
@@ -559,14 +478,14 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         ...x,
                         partNumber: x.partNumber,
                         partDescription: x.partDescription,
-                        itemClassification: x.itemClassification
+                        itemClassification: x.itemClassification,
+                        manufacturer: x.manufacturerName
                     };
                 }, error => {
                     this.isSpinnerVisible = false;
                 });
             });
 
-        //get aircraft info
         this.isSpinnerVisible = true;
 
         this.publicationService
@@ -580,15 +499,22 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         aircraft: x.aircraftType,
                         model: x.aircraftModel,
                         dashNumber: x.dashNumber,
-                        //memo: x.memo
                     };
-                }, error => {
-                    this.isSpinnerVisible = false;
-
                 });
+                if (this.aircraftList && this.aircraftList.length > 0) {
+                    this.aircraftList.forEach((airCraft, index) => {
+                        if (this.aircraftList[index].dashNumber.toLowerCase() == 'unknown') {
+                            this.aircraftList[index].dashNumber = '';
+                        }
+                        if (this.aircraftList[index].model.toLowerCase() == 'unknown') {
+                            this.aircraftList[index].model = '';
+                        }
+                    });
+                }
+            }, error => {
+                this.isSpinnerVisible = false;
             });
 
-        // get ata chapter info
         this.isSpinnerVisible = true;
         this.publicationService
             .getAtaMappedByPublicationId(row.publicationRecordId)
@@ -600,11 +526,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         ...x,
                         ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
                         ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
-                        // ataChapter: x.ataChapterName,
-                        // ataSubChapter: x.ataSubChapterDescription,
-                        // ataChapterCode: x.ataChapterCode,
-                        // ataSubChapterId: x.ataSubChapterId,
-                        // ataChapterId: x.ataChapterId
                     };
                 });
             }, error => {
@@ -620,7 +541,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
 
     closeDeleteModal() {
-        // $("#downloadPublication").modal("hide");
         $("#downloadConfirmation").modal("hide");
     }
 
@@ -632,6 +552,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 nextReviewDate: x.nextReviewDate ? this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a') : '',
                 expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a') : '',
                 verifiedDate: x.verifiedDate ? this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
@@ -641,31 +563,13 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     openDocumentsList(content, rowData) {
         this.selectedRow = rowData;
+        this.publicationRecordId = rowData.publicationRecordId;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
-    // openHelpText(content) {
-    //     this.modal = this.modalService.open(content, { size: 'sm' });
-    //     this.modal.result.then(() => {
-    //         console.log('When user closes');
-    //     }, () => { console.log('Backdrop click') })
-    // }
     openEdit(row) {
         this.isSpinnerVisible = true;
         const { publicationRecordId } = row;
-        this.router.navigateByUrl(`/singlepages/singlepages/app-create-publication/edit/${publicationRecordId}`);
-        // // this.router.navigateByUrl(`/singlepages/singlepages/app-publication/app-create-publication/edit/${publicationRecordId}`);
-        // this.disableSave = false;
-        // this.isEditMode = true;
-        // this.isSaving = true;
-        // this.loadMasterCompanies();
-        // this.sourceAction = row;
-        // console.log(this.sourceAction);
-        // this.publicationName = this.sourceAction.publicationId;
-        // this.loadMasterCompanies();        
-        // this.modal = this.modalService.open(content, { size: 'sm' });
-        // this.modal.result.then(() => {
-        //     console.log('When user closes');
-        // }, () => { console.log('Backdrop click') })
+        this.router.navigateByUrl(`/singlepages/singlepages/app-publication/edit/${publicationRecordId}`);
     }
 
 
@@ -720,8 +624,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
 
         }
-
-        //this.loadData();
     }
 
     handleChange(rowData, e) {
@@ -749,7 +651,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     this.saveFailedHelper(error)
                     this.isSpinnerVisible = false;
                 });
-            //alert(e);
         }
         else {
             this.isSpinnerVisible = true;
@@ -775,7 +676,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     this.saveFailedHelper(error)
                     this.isSpinnerVisible = false;
                 });
-            //alert(e);
         }
 
     }
@@ -787,8 +687,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private saveFailedHelper(error: any) {
         this.isSpinnerVisible = false;
         this.isSaving = false;
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
 
@@ -802,29 +700,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private employeedata() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-
-        this.employeeService.getEmployeeList().subscribe(
-            results => {
-                // console.log(results),
-                this.onempDataLoadSuccessful(results[0])
-            },
-            error => this.onDataLoadFailed(error)
-        );
-    }
-
-    private onempDataLoadSuccessful(getEmployeeCerficationList: any[]) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        //this.dataSource.data = getEmployeeCerficationList;
-        this.allEmployeeinfo = getEmployeeCerficationList;
-    }
 
     publicationPagination(event: { first: any; rows: number }) {
-        // console.log(event);
         const pageIndex = parseInt(event.first) / event.rows;
         this.pageIndex = pageIndex;
         this.pagesize = event.rows; //10
@@ -832,31 +709,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.loadData(event);
     }
 
-    // get All AircraftManufacturer
-    getAllAircraftManufacturer() {
-        this.isSpinnerVisible = true;
-        this.aircraftManufacturerService
-            .getAll()
-            .subscribe(aircraftManufacturer => {
-                this.isSpinnerVisible = false;
-                this.showModelAircraftModel = false;
-                const responseData = aircraftManufacturer[0];
-                responseData.map(x => {
-                    this.airCraftTypesList.push({
-                        value: x.aircraftTypeId,
-                        label: x.description
-                    });
-                });
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
-
-    // get AircraftModels By manufacturer Type
     async getAircraftModelByManfacturerType() {
-        // construct url from array
-        //await this.searchByFieldUrlCreateforAircraftInformation();
-        // reset the dropdowns
         this.selectedAircraftModel = null
         this.selectedDashNumbers = null
         this.aircraftModelList = [
@@ -865,7 +718,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.dashNumberList = [
             { label: 'Select Dash Number', value: null }
         ];
-        // checks where select is empty or not and calls the service
         if (this.selectAircraftManfacturer !== '') {
 
             this.isSpinnerVisible = true;
@@ -885,20 +737,14 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     this.isSpinnerVisible = false;
                 });
         } else {
-            //this.getAllAircraftModels();
-            //this.getAllDashNumbers();
         }
     }
 
     async getDashNumberByManfacturerandModel() {
-        // construct url from array
-        //await this.searchByFieldUrlCreateforAircraftInformation();
-        // reset dropdown
         this.selectedDashNumbers = null
         this.dashNumberList = [
             { label: 'Select DashNumber', value: null }
         ];
-        // checks where multi select is empty or not and calls the service
 
         if (this.selectAircraftManfacturer !== '' && this.selectedAircraftModel !== '') {
             this.isSpinnerVisible = true;
@@ -918,24 +764,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 this.isSpinnerVisible = false;
             });
         }
-    }
-
-    // get ata chapter for dropdown
-    getAllATAChapter() {
-        this.isSpinnerVisible = true;
-        this.ataMainSer.getAtaMainList().subscribe(Atachapter => {
-            this.isSpinnerVisible = false;
-            const response = Atachapter[0];
-            response.map(x => {
-                this.ataChapterList.push({
-                    value: x.ataChapterId,
-                    label: x.ataChapterCode + '-' + x.ataChapterName
-                });
-            });
-        }, error => {
-
-            this.isSpinnerVisible = false;
-        });
     }
 
     getSubChapterByATAChapter() {
@@ -958,18 +786,15 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 });
 
         } else {
-            //this.getAllSubChapters();
         }
     }
 
     onSearchAircraftInfoAtaChapter() {
-        // console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
         this.selectedATAchapter = this.selectedATAchapter ? this.selectedATAchapter : 0;
         this.selectedATASubChapter = this.selectedATASubChapter ? this.selectedATASubChapter : 0;
         this.selectAircraftManfacturer = this.selectAircraftManfacturer ? this.selectAircraftManfacturer : 0;
         this.selectedAircraftModel = this.selectedAircraftModel ? this.selectedAircraftModel : 0;
         this.selectedDashNumbers = this.selectedDashNumbers ? this.selectedDashNumbers : 0;
-        // console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
         if (this.selectAircraftManfacturer !== undefined || this.selectedATAchapter !== undefined) {
             const requestParams = {
 
@@ -991,15 +816,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
             this.isSpinnerVisible = true;
             this.publicationService.getpublicationslistadvancesearch(requestParams).subscribe(results => {
-                // console.log(results);
                 this.isSpinnerVisible = false;
                 this.onDataLoadSuccessful(results[0]['results']);
                 this.totalRecords = results[0]['totalRecordsCount']
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
-                // if (this.allpublicationInfo.length > 0) {
-                //     this.totalRecords = this.allpublicationInfo.totalRecords;
-                //     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-                // }
+
 
             }, error => {
                 this.isSpinnerVisible = false;
@@ -1011,7 +832,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     onReset() {
-        //this.loadData(this.lazyLoadEventDataInput);
         this.selectAircraftManfacturer = null;
         this.selectedAircraftModel = null;
         this.selectedDashNumbers = null;
@@ -1021,23 +841,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.inputValue = '';
         this.lazyLoadEventDataInput.filters = {};
         this.loadData(this.lazyLoadEventDataInput);
-        // this.publicationService.getWorkFlows(this.lazyLoadEventDataInput).subscribe(
-        //     results => {
-        //         console.log(results);
-        //         this.onDataLoadSuccessful(results[0]);
-        //         this.totalRecords = results[0][0]['totalRecords'];
-        //         this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
-        //     },
-        //     error => this.onDataLoadFailed(error)
-        // );
-        // this.publicationService.getWorkFlows(this.pageIndex, this.pagesize).subscribe(
-        //     results => {
-        //         this.onDataLoadSuccessful(results[0]['paginationList']);
-        //         console.log(results[0]['totalRecordsCount']);
-        //         this.totalRecords = results[0]['totalRecordsCount'];
-        //     },
-        //     error => this.onDataLoadFailed(error)
-        // );        
+
     }
 
     downloadFileUpload(rowData) {
@@ -1045,12 +849,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
         window.location.assign(url);
 
-        // window.location.pathname = 'file:///C:/DevFiles/UplodFiles/Publication/162.png';
-        // window.location.
-
-        //const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=itemGroup&fileName=itemGroup.xlsx`;
-
-        //window.location.assign(url);
     }
 
     sampleExcelDownload() {
@@ -1078,8 +876,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         }
     }
     openHistoryDoc(rowData) {
-        //const { customerShippingAddressId } = rowData.customerShippingAddressId;
-        //const { customerShippingId } = rowData.customerShippingId;
 
         this.isSpinnerVisible = true;
         this.commonService.GetAttachmentPublicationAudit(rowData.attachmentDetailId).subscribe(
@@ -1108,7 +904,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.isSpinnerVisible = true;
         this.publicationService.getFilesBypublicationNew(publicationRecordId).subscribe(res => {
             this.isSpinnerVisible = false;
-            //this.customerService.GetCustomerFinanceDocumentsList(customerId, moduleId).subscribe(res => {
             this.allCustomerFinanceDocumentsList = res;
         }, error => {
             this.isSpinnerVisible = false;
@@ -1121,7 +916,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             this.isSpinnerVisible = false;
             this.auditHistory = res;
         }, error => {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = false;
         })
     }
     getColorCodeForHistory(i, field, value) {
@@ -1154,9 +949,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             results => {
 
                 this.isSpinnerVisible = false;
-                //this.onDataLoadSuccessful(results[0]['paginationList']);
                 this.onDataLoadSuccessful(results[0]);
-                //console.log(results[0]['totalRecordsCount']);
                 this.totalRecords = results[0][0]['totalRecords'];
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
             },
@@ -1191,4 +984,45 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         });
     }
 
+
+    getPnMappingDeleteListByStatus() {
+        this.isSpinnerVisible = true;
+        this.publicationService
+            .getPublicationPNMapping(this.publicationRecordId, !this.currentPnMappingDeletedstatus)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.pnMappingList = res.map(x => {
+                    return {
+                        ...x,
+                        partNumber: x.partNumber,
+                        partDescription: x.partDescription,
+                        itemClassification: x.itemClassification,
+                        manufacturer: x.manufacturerName
+                    };
+                });
+            }, error => {
+
+                this.isSpinnerVisible = true;
+            });
+
+    }
+    closeModal() {
+        this.viewAircraftData = {};
+        if (this.modal) {
+            this.modal.close()
+        }
+    }
+
+    openAircraftView(rowData, content) {
+        this.viewAircraftData = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm' });
+        this.modal.result.then(() => {
+        }, () => { })
+    }
+    openAtaView(rowData, content) {
+        this.viewAtaData = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm' });
+        this.modal.result.then(() => {
+        }, () => { })
+    }
 }

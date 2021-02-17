@@ -263,10 +263,12 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			{ field: 'description', header: 'Description' },
 			{ field: 'cageCode', header: 'CageCode' },
 			{ field: 'doingLegalAs', header: 'DoingLegalAs' },
+			{ field: 'createdDate', header: 'createdDate' },
 			{ field: 'createdBy', header: 'Created By' },
-			{ field: 'updatedBy', header: 'Updated By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
-			{ field: 'createdDate', header: 'createdDate' }
+			{ field: 'updatedBy', header: 'Updated By' },
+			
+			
 		];
 
 		this.selectedColumns = this.cols;
@@ -310,11 +312,12 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			{ field: 'code', header: 'Code' },
 			{ field: 'name', header: 'Name' },
 			{ field: 'description', header: 'Description' },
-			{ field: 'legalEntityName', header: 'LegalEntity' },			
+			{ field: 'legalEntityName', header: 'Legal Entity' },
+			{ field: 'createdDate', header: 'Created Date' },			
 			{ field: 'createdBy', header: 'Created By' },
-			{ field: 'createdDate', header: 'createdDate' },
+			{ field: 'updatedDate', header: 'Updated Date' },
 			{ field: 'updatedBy', header: 'Updated By' },
-			{ field: 'updatedDate', header: 'Updated Date' }
+			
 			
 			//{ field: 'legalEntityId', header: 'ID' },
 			

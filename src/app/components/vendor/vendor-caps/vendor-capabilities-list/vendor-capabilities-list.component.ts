@@ -484,6 +484,8 @@ export class VendorCapabilitiesListComponent implements OnInit {
     }
 
     gotoCreateRO(rowData) {
+        localStorage.setItem("itemMasterId",rowData.itemMasterId);
+        localStorage.setItem("partNumber",rowData.partNumber);  
         const { vendorId } = rowData;
         this._route.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/${vendorId}`);
     }

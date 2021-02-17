@@ -135,10 +135,23 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .rro-table-cstm th {
-  width: 110px !important;
+  width: 110px ;
   padding: 5px 5px !important;
   //padding: 8px 5px !important;
 }
 .ex-gray{
   background: #b7b7b7;
+}
+.align_centd{
+  color: red !important;
+  font-weight: bold;
+  // text-align: start !important;
+  padding-left: 11% !important;
+}
+.toggel_td{
+  width: 40px !important;
+  text-align: center;
+}
+.Materials_wo tr ,td {
+  padding: 0px 2px !important;
 }

@@ -21,7 +21,7 @@ import { DatePipe } from '@angular/common';
 	templateUrl: './vendor-documents.component.html',
 	styleUrls: ['./vendor-documents.component.scss'],
     providers: [DatePipe]
-})
+}) 
 export class VendorDocumentsComponent implements OnInit {
 	@Output() tab = new EventEmitter<any>();
 	@ViewChild('fileUpload',{static:false}) fileUpload: any;
@@ -79,6 +79,10 @@ export class VendorDocumentsComponent implements OnInit {
 	isSpinnerVisible: boolean = false;
 	restorerecord: any = {};
 	vendorCodeandName: any;
+	moduleName:any="Vendor";
+	referenceId:any;
+	savedGeneralInformationData: any;
+	editGeneralInformationData: any;
 
 	constructor(public vendorService: VendorService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService,
 		private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, public customerService: CustomerService, private datePipe: DatePipe) {
@@ -106,7 +110,7 @@ export class VendorDocumentsComponent implements OnInit {
 			else { this.getVendorCodeandNameByVendorId(); }
 	}
 
-	ngOnInit() {
+	ngOnInit() { 
 		if (this.vendorService.listCollection !== undefined && this.vendorService.listCollection !== null) {
 			this.vendorService.isEditMode = true;
 			this.isViewMode = false;
@@ -533,5 +537,9 @@ export class VendorDocumentsComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			}, error => this.saveFailedHelper(error));
 		this.modal.close();
+	}
+
+	changeOfTab(event) {
+
 	}
 }

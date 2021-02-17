@@ -6,18 +6,18 @@
           <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
             <div class="col-md-4">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+                <label class="control-label labels-font-header wauto">Vendor Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                    {{ vendorCodeandName?.vendorName }}
                 </span>
               </p>
             </div>
             <div class="col-md-4">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+                <label class="control-label labels-font-header wauto">Vendor Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                  {{ vendorCodeandName?.vendorCode }}
                 </span>
               </p>
@@ -51,17 +51,15 @@
                                           (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
                                         pButton icon="fa-download" iconPos="left" label="Export Data"  -->
                               <div class="excel-upload  excel-upload-cstm">
-                                <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
+                                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                                 data-toggle="modal" 
-                                (click)="exportCSV()"
-                                 style="padding:5px 10px !important; width: 115px !important;">
+                                (click)="exportCSV()">
                                           Export Data
                                   </button>
 
-                            <button type="button" class="btn btn-primary new-table-button"
+                            <button type="button" class="btn btn-primary exports-button"
                                     matTooltip="Download Sample File" matTooltipPosition="above"
-                                    (click)="sampleExcelDownload()"
-                                    style="padding: 5px 10px !important;">
+                                    (click)="sampleExcelDownload()">
                                 Sample File Download
                             </button>
                               <input type="file" name="upload[]" id="upload"
@@ -102,11 +100,11 @@
                                 <th></th>
                             </tr>
                             <tr>
-                                <th style="line-height: 20px; width: 200px;">PN *</th>
-                                <th style="width: 250px;">PN Decription *</th>
-                                <th style="width: 250px;">Manufacturer *</th>
-                                <th class="bg2" style="width: 200px;">Capability Type *</th>
-                                <th class="bg2" style="width: 250px;">Capability Desc. </th>
+                                <th style="line-height: 20px; width: 200px;">PN <span class="clr-red">*</span></th>
+                                <th style="width: 250px;">PN Decription <span class="clr-red">*</span></th>
+                                <th style="width: 250px;">Manufacturer <span class="clr-red">*</span></th>
+                                <th class="bg2" style="width: 200px;">Capability Type <span class="clr-red">*</span></th>
+                                <th class="bg2" style="width: 250px;">Capability Desc  <span class="clr-red">*</span></th>
                                 <th class="bg3" style="width: 85px;">Vendor Ranking </th>
                                 <!-- <th class="bg3">PMA</th>
                                 <th class="bg3">DER</th> -->                                
@@ -166,11 +164,11 @@
                                   <table class="table table-bordered table-striped">
                                     <tr >
                                       <td style="width: 95%;"> 
-                                          <div [innerHTML]="field.memo"  [matTooltip]="parsedText(field.memo)" matTooltipPosition="above" class="form-control" style="width: 102%; text-align: left; min-width: 100px;" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
+                                          <div [innerHTML]="field.memo"  [matTooltip]="parsedText(field.memo)" matTooltipPosition="above" class="form-control" style="width: 102%; text-align: left; min-width: 100px;line-height:1.5;" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
                                       </td>
                                       <td *ngIf="field.isEditable" style="width: 5%" >
                                         <!-- <div *ngIf="field.isEditable"> -->
-                                          <i class="fa fa-pencil fa-lg pull-right" style="font-size:12px !important" data-toggle="modal" data-target="#capes-memo" matTooltip="Memo" matTooltipPosition="above" 
+                                          <i class="fa fa-pencil fa-lg pull-right capes-memo"  data-toggle="modal" data-target="#capes-memo" matTooltip="Memo" matTooltipPosition="above" 
                                           (click)="onAddTextAreaInfo('memo',i, field); isAdd = true;"> </i>
                                         <!-- </div>                                       -->
                                       </td>
@@ -200,7 +198,7 @@
                               </td>
                             </tr>
                             <tr style="height: 25px;" *ngIf="fieldArray.length == 0 ">
-                              <td colspan="10" style="color: red; font-weight: bold; text-align: center">
+                              <td colspan="10" class="no-records-cstm no-records-msg text-upper">
                                 No records found
                               </td>
                             </tr>
@@ -228,7 +226,7 @@
       <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
     </div>
     <div class="modal-body">
-      <table class="table table-bordered table-fixed workflow-table-material">
+      <!-- <table class="table table-bordered table-fixed workflow-table-material">
       <thead>
         <th style="color: #fff;">{{textAreaLabel}}</th>
       </thead>
@@ -241,12 +239,14 @@
         </td>
         </tr>
       </tbody>
-      </table>
-      <div style="float:right">
-      <button type="button" class="btn btn-primary"						 
-        style="padding: 6px 12px !important;margin-top: 10px;"
+      </table> -->
+      <p-editor [(ngModel)]="textAreaInfo" 
+          [style]="{'height':'320px'}" name="textAreaInfo" 
+          required></p-editor>
+      <div class="editor-buttons">
+      <button type="button" class="btn btn-primary editor-buttons-margin"	
          (click)="onSaveTextAreaInfo()">Save</button>
-      <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;" (click)="closeMemoModel()"
+      <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()"
         >Close</button>
       </div>
     </div>
@@ -344,11 +344,11 @@
                     <th colspan="5"></th>
                 </tr>
                 <tr>
-                    <th style="line-height: 20px; width: 150px;">PN *</th>
-                    <th style="width: 150px;">PN Decription *</th>
-                    <th style="width: 150px;">Manufacturer *</th>
-                    <th style="width: 150px;" class="bg2">Capability Type *</th>
-                    <th style="width: 150px;" class="bg2">Capability Desc.</th>
+                    <th style="line-height: 20px; width: 150px;">PN <span class="clr-red">*</span></th>
+                    <th style="width: 150px;">PN Decription <span class="clr-red">*</span></th>
+                    <th style="width: 150px;">Manufacturer <span class="clr-red">*</span></th>
+                    <th style="width: 150px;" class="bg2">Capability Type <span class="clr-red">*</span></th>
+                    <th style="width: 150px;" class="bg2">Capability Desc <span class="clr-red">*</span></th>
                     <th style="width: 90px;" class="bg3">Vendor Ranking </th>
                     <!-- <th class="bg3">PMA</th>
                     <th class="bg3">DER</th> -->                    

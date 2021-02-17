@@ -1,13 +1,13 @@
 ﻿<div class="card new-card">
-    <div class="card-header bg-primary new-card-header" *ngIf="!isEnableItemMasterView">
+    <div class="card-header header" *ngIf="!isEnableItemMasterView">
 		<div class="row">
 		  <div class="col">
-			<h4 class="new-card-heading">Capabilities Info</h4>
+			<h4 class="header-name">Capabilities List</h4>
 		  </div>
 		  <div>
 			<button
 			type="button" (click)="onAddCapes()"
-			class="btn-sm new-btn-primary" data-toggle="modal" data-target="#capes1">
+			class="btn-sm header-button" data-toggle="modal" data-target="#capes1">
 			Add New Capability
 			</button>
 		  </div>
@@ -18,7 +18,7 @@
         [rows]="itemMasterCapesPageSize" [metaKeySelection]="true" [paginator]="true" [pageLinks]="3"
         [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" selectionMode="multiple"
         [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
-        scrollHeight="450px">
+        scrollHeight="450px" (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="caption" *ngIf="!isEnableItemMasterView">
             <div class="row">
                 <div class="col">
@@ -27,15 +27,13 @@
                     [options]="cols"
                     optionLabel="header"
                     [(ngModel)]="selectedColumns"
-                    [style]="{ minWidth: '200px' }"
-                    style="float: left;"
+                    class="multiselect-field"
                     (onChange)="columnsChanges()"
                   ></p-multiSelect>
                 </div>
                 <div class="col">
-                  <div
-                    style="width: auto !important; float: right;"
-                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                    <div					
+                    class="global-search-field inner-addon right-addon inline-block"
                   >
                     <i class="fa fa-search"></i>
                     <input
@@ -49,11 +47,11 @@
                   </div>
                 </div>
               </div>
-              <div class="row" style="margin-bottom: 10px;">
+              <div class="row margin-bottom-10">
                 <div class="col">
                   <button
                     type="button"
-                    class="btn btn-primary new-table-button"
+                    class="btn btn-primary exports-button"
                     matTooltip="Download Data"
                     matTooltipPosition="above"
                     pButton
@@ -66,7 +64,7 @@
                   ></button>
                   <button
                     type="button"
-                    class="btn btn-primary new-table-button"
+                    class="btn btn-primary exports-button"
                     matTooltip="Download Selected Data"
                     matTooltipPosition="above"
                     pButton
@@ -77,8 +75,8 @@
                 </button>
                 </div>
                   <div class="col-md-4">
-                    <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                        <label style="width: 120px !important;">
+                    <div class="checkbox-cstm pull-right checkbox-align">
+                        <label class="checkbox-label-align">
                           <input type="checkbox" [(ngModel)]="currentDeleteStatus" name="cparent" (click)="getCapesListOnDeleteStatus($event.target.checked)" />
                           <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                         Show Deleted List 
@@ -89,12 +87,12 @@
         </ng-template>
 
         <ng-template pTemplate="caption" *ngIf="isEnableItemMasterView">
-              <div class="row" style="margin-bottom: 10px;">
+              <div class="row margin-bottom-10">
                 <div class="col">
                 </div>
                   <div class="col-md-4">
-                    <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                        <label style="width: 120px !important;">
+                    <div class="checkbox-cstm pull-right checkbox-align">
+                        <label class="checkbox-label-align">
                           <input type="checkbox" [(ngModel)]="currentDeleteStatus" name="cparent" (click)="getCapesListOnDeleteStatus($event.target.checked)" />
                           <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                         Show Deleted List 
@@ -106,69 +104,76 @@
 
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
-                <col *ngFor="let col of columns" style="width:130px">
+                <col *ngFor="let col of columns" class="table-column-width">
             </colgroup>
         </ng-template>
 
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <ng-container *ngFor="let col of columns">
-                    <th class="text-center"
+                    <th class="table-column-width"
                         *ngIf="col.field!='level1' && col.field!='level2' && col.field!='level3' && col.field!='level4'"
                         pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="text-center" *ngIf="col.field=='level1'" colspan="4" pResizableColumn pReorderableColumn
+                    <th class="table-column-width" *ngIf="col.field=='level1'" colspan="4" pResizableColumn pReorderableColumn
                         [pSortableColumn]="col.field">
                         Management Structure
                     </th>
                 </ng-container>
-                <th style="width: 120px; position:sticky">Actions</th>
+                <th class="table-actions-column">Actions</th>
             </tr>
             <tr>
-                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <ng-container *ngIf="col.field!='isVerified'">
-                        <input style="width:100%;" pInputText type="text"
+                        <input class="table-header-input-width" pInputText type="text"
+                        *ngIf="col.field != 'addedDate' && col.field != 'verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'"
                             (input)="capabilityListTable.filter($event.target.value, col.field, 'contains')">
-                    </ng-container>
+                            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'addedDate'"
+                            name="addedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'verifiedDate'"
+                            name="verifiedDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                            name="createdDate" (change)="capabilityListTable.filter($event.target.value, col.field)" />
+                          <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                            name="updatedDate" (change)="capabilityListTable.filter($event.target.value,col.field)" />
+                        </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                     </ng-container>
                 </th>
-                <th style="width: 120px; position:sticky"></th>
+                <th class="table-actions-column"></th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" pReorderableRowHandle>
 
-                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                    
-                    <ng-container *ngIf="col.field!='isVerified' && col.field !='memo' && col.field!='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
+                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                    
+                    <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                        : rowData[col.field] && col.field == 'verifiedDate'
+                                        : rowData[col.field] && col.field == 'addedDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field]
                                     }}
                     </ng-container>
-                    <ng-container *ngIf="col.field =='verifiedDate'">
-                        {{ rowData['isVerified'] == true ? (rowData[col.field] | date: 'MM/dd/yyyy') : '' }}
-                                        
-                    </ng-container>                    
                     <ng-container *ngIf="col.field =='isVerified'">
                         <input type="checkbox" disabled [checked]="rowData[col.field] == true"
-                            style="margin: 0px auto; display: block;" />
+                               class="input-check" />
+                    </ng-container>
+                    <ng-container *ngIf="col.field =='verifiedDate'">
+                        {{rowData[col.field] | date: 'MM/dd/yyyy'}}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'memo'">
-                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                        <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="rowData[col.field]"></p>
                     </ng-container>
                 </td>
-                <td style="width:120px">
+                <td class="action-icons-cstm table-column-width">
                     <ng-container *ngIf="!rowData.isDeleted">
                     <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewCap" (click)="onViewCapes(rowData)"
                          matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
@@ -190,7 +195,10 @@
                     <ng-container *ngIf="rowData.isDeleted">
                                 <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewCap" (click)="onViewCapes(rowData)"
                                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                               <span *ngIf="!isEnableItemMasterView" data-toggle="modal" ><a class="btn nobg" (click)="restoreCapabilityRow(rowData.itemMasterCapesId);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                <span *ngIf="!isEnableItemMasterView"><a class="btn nobg btn-users-cstm"
+                                    (click)="restore(restoreCapabilityContent, rowData)"
+                                     matTooltip="Restore Record"
+                                      matTooltipPosition="above"><i class="fa fa-undo"></i></a> </span>
                                <span><a class="btn nobg" data-toggle="modal" data-target="#viewHistory" matTooltip="History" matTooltipPosition="above"
                                 (click)="getAuditHistory(rowData)"><i class="fa fa-history"></i></a></span>
                     </ng-container>
@@ -200,18 +208,19 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="allItemMasterCapsList?.length == 0">
             <tr>
-                <td [attr.colspan]="11" class="no-records-cstm">
+                <td [attr.colspan]="18" class="no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>
         </ng-template>
+
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+            <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                 [(ngModel)]="capabilityListTable._totalRecords" [disabled]="true" pInputText type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+            <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                 [ngModel]="getPageCount(capabilityListTable._totalRecords, itemMasterCapesPageSize)" [disabled]="true"
                 pInputText type="text" />
         </ng-template>
@@ -221,13 +230,13 @@
 
 
 <div id="capes1" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeCapes()">&times;</button>
                 <h4 class="modal-title">Add Capes</h4>
             </div>
-            <div class="modal-body" style="min-height: 200px;">
+            <div class="modal-body show-capes-height">
                 <div *ngIf="showCapes">
                     <app-item-master-create-capabilities [itemMasterId]="itemMasterId" [isCapViewMode]="isCapViewMode"
                         [isEnableCapesList]="isEnableCapesList" (loadCapesList)="loadCapesList($event)"
@@ -245,19 +254,19 @@
                 <h4 class="modal-title">Details of Capability Type: <strong>{{ selectedItemMasterCapData.capabilityType }}</strong> for PN: <strong>{{selectedItemMasterCapData.partNo}}</strong></h4>
             </div>
             <div class="modal-body">
-                <app-pn-header [partData]="partData"></app-pn-header>
+                <!-- <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header> -->
                 <div class="form-row mt-2">
                     <div class="col-sm-4">
                         <p>
-                            <span class="label"><strong>PN</strong>: </span><span
+                            <span class="label"><strong>PN </strong>: </span><span
                                 class="value">{{ selectedItemMasterCapData.partNo }}</span>
                         </p>
                         <p>
-                            <span class="label"><strong>PN Description</strong> : </span><span
+                            <span class="label"><strong>PN Description </strong> : </span><span
                                 class="value">{{ selectedItemMasterCapData.pnDiscription }}</span>
                         </p>
                         <p>
-                            <span class="label"><strong>Cap Type</strong> : </span><span
+                            <span class="label"><strong>Cap Type <span class="clr-red">*</span></strong> : </span><span
                                 class="value">{{ selectedItemMasterCapData.capabilityType }}</span>
                         </p>                    
                         <p>
@@ -285,31 +294,31 @@
                         <p>
                             <span class="label"><strong>Memo</strong> : </span>
                                 <span class="value">
-                                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="selectedItemMasterCapData.memo"></p>
+                                    <p class="m-0 p-0 p_textEditor memo-align-left" [innerHTML]="selectedItemMasterCapData.memo"></p>
                                 </span>
                         </p>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-row">
                             <div class="col-md-6">
-                                <div class="card" style="margin-top: 6px;">
-                                    <div class="card-header" style="padding: 0 10px;">
-                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
+                                <div class="card mgmt-card">
+                                    <div class="card-header mgmt-card-header">
+                                        <h5 class="mgmt-header-name">Management Structure <span class="clr-red">*</span></h5>
                                     </div>
-                                    <div class="card-body" style="padding: 8px 12px 6px;">
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                    <div class="card-body mgmt-card-body">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level1"
                                                 [(ngModel)]="selectedItemMasterCapData.level1" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level2"
                                                 [(ngModel)]="selectedItemMasterCapData.level2" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level3"
                                                 [(ngModel)]="selectedItemMasterCapData.level3" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="level4"
                                                 [(ngModel)]="selectedItemMasterCapData.level4" disabled>
                                         </div>
@@ -334,53 +343,62 @@
                 <h4 class="modal-title">History of Capability</h4>
             </div>
             <div class="modal-body">
-                <app-pn-header [partData]="partData"></app-pn-header>
-                <div class="table-responsive pandsHistoryTable mt-2">
-                    <table style="overflow-y: scroll;" class="table table-bordered" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
+                <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
-                                <th style="width: 100px;" >Caps Type</th>
-                                <th style="width: 100px;">PN</th>
-                                <th style="width: 100px;">PN Description</th>
-                                <th style="width: 400px;" colspan="4">Management Structure</th>
-                                <th style="width: 100px;">Is Verified</th>
-                                <th style="width: 100px;">Verified By</th>
-                                <th style="width: 100px;">Verified Date</th>
-                                <th style="width: 100px;">Memo</th>
-                                <th style="width: 100px;">Created By</th>
-                                <th style="width: 100px;">Created Date</th>
-                                <th style="width: 100px;">Updated By</th>
-                                <th style="width: 100px;">Updated Date</th>
-                                <th style="width: 100px;">Is Deleted</th>
+                                <th>Caps Type <strong class="clr-red">*</strong></th>
+                                <th>PN<strong class="clr-red">*</strong></th>
+                                <th>PN Description<strong class="clr-red">*</strong></th>
+                                <th class="mgmt-table-header" colspan="4">Management Structure <strong class="clr-red">*</strong></th>
+                                <th>Added Date</th>
+                                <th>Is Verified</th>
+                                <th>Verified By</th>
+                                <th>Verified Date</th>
+                                <th>Memo</th>
+                               
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <th>Is Deleted</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="capabilityauditHisory.length> 0">
                             <tr *ngFor="let audit of capabilityauditHisory; let i = index;">
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'capabilityType', audit.capabilityType) ? 'black' : 'red' }">{{audit.capabilityType}}</td>
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'capabilityType', audit.capabilityType) ? 'black' : 'red' }">{{audit.capabilityType}}</td>
                                 <td [ngStyle]="{color: getColorCodeForHistory(i, 'partNo', audit.partNo) ? 'black' : 'red' }">{{audit.partNo}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'pnDiscription', audit.pnDiscription) ? 'black' : 'red' }">{{audit.pnDiscription}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level1', audit.level1) ? 'black' : 'red' }">{{audit.level1}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'isVerified', audit.isVerified) ? 'black' : 'red' }">{{audit.isVerified == true? 'Yes': 'No'}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
-                                <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'pnDiscription', audit.pnDiscription) ? 'black' : 'red' }">{{audit.pnDiscription}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level1', audit.level1) ? 'black' : 'red' }">{{audit.level1}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
+                                <td class="table-column-width" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
+                                <td><p >{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+                                <td class="text-center"><p > <input type="checkbox" name="isVerified" [(ngModel)]="audit.isVerified" disabled></p></td>
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
+                                
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
+                                <td  [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red' }">
                                     <p [innerHTML]="audit.memo"></p>
                                 </td>
-                                <td style="width: 100px;">{{audit.createdBy}}</td>
-                                <td><p style="width: 100px;">{{audit.createdDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
-                                <td style="width: 100px;">{{audit.updatedBy}}</td>
-                                <td><p style="width: 100px;">{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
-                                <td style="width: 100px;" style="background-color: #fff !important;"><p style="width: 70px; "> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td><p >{{audit.createdDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+
+                                <td >{{audit.createdBy}}</td>
+                                <td><p >{{audit.updatedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
+
+                                <td >{{audit.updatedBy}}</td>
+                                <td class="text-center"><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
 
                     </ng-template>
@@ -392,33 +410,22 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="capes-memo" style="z-index: 15000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
+          <h4 class="modal-title">Edit Memo</h4>
         </div>
         <div class="modal-body">
-          <table class="table table-bordered table-fixed workflow-table-material">
-            <thead>
-              <th style="color: #fff;">{{textAreaLabel}}</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
-                  [style]="{'height':'320px'}" name="textAreaInfo" 
-                  required></p-editor>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="float:right">
-            <button type="button" class="btn btn-primary"
-             data-dismiss="modal"
-              style="padding: 6px 12px !important;margin-top: 10px;" (click)="onSaveTextAreaInfo()">Save</button>
-            <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" (ngModelChange)="enableSave()"
+          [style]="{'height':'320px'}" name="textAreaInfo" 
+          required></p-editor>
+          <div class="editor-buttons">
+            <button type="button" (ngModelChange)="enableSaveMemo()" class="btn btn-primary editor-buttons-margin"
+             data-dismiss="modal" (click)="onSaveTextAreaInfo()"  [disabled]="disableSaveMemo">Save</button>
+            <button type="button"  class="btn btn-danger editor-buttons-margin"
               data-dismiss="modal">Close</button>
           </div>
         </div>
@@ -448,7 +455,7 @@
 	</div>
 </div>
 <div id="editCap" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" style="min-width: 1400px !important;">
+    <div class="modal-dialog capability-dialog-width">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
@@ -456,64 +463,64 @@
             </div>
             <form #capesForm="ngForm">
                 <div class="modal-body">
-                    <app-pn-header [partData]="partData"></app-pn-header>
-                    <div class="default-bg clear mt-2" > 
-                        <div style="overflow-y: scroll; "> 
-                            <table>
+                    <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
+                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                        <div class="tableFixHead">  
+                        <table class="table table-bordered header-table-width" >
                                 <thead>
                                     <tr> 
-                                        <th style="width: 130px;text-align: center;">Capability Type</th>
-                                        <th style="width: 600px;text-align: center;" colspan="4">Managment Structure
+                                        <th >Capability Type <span class="clr-red">*</span></th>
+                                        <th class="mgmt-width" colspan="4">Managment Structure
                                             <span class="clr-red">*</span></th>
-                                        <th style="width: 130px;text-align: center;">Date Added</th>
-                                        <th style="width: 130px;text-align: center;">Verified</th>
-                                        <th style="width: 130px;text-align: center;">Verified By</th>
-                                        <th style="width: 130px;text-align: center;">Verified Date</th>
-                                        <th style="width: 200px;text-align: center;">Memo</th>
+                                        <th >Date Added</th>
+                                        <th>Verified</th>
+                                        <th>Verified By</th>
+                                        <th>Verified Date</th>
+                                        <th class="memo-header-width">Memo</th>
                                     </tr>
                                 </thead>
                                 <tbody style="overflow-y:scroll">
                                     <tr>
-                                        <td style="width: 130px;">                                            
+                                        <td class="table-column-width">                                            
                                             <p-dropdown placeholder="Select" class="p-dropdown-custom-sm"
                                                 [options]="capabalityTypeList" #capabilityTypeId="ngModel"
                                                 [(ngModel)]="selectedItemMasterCapData.capabilityTypeId"
                                                 (ngModelChange)="enableSave()" name="capabilityTypeId"
                                                 [required]="true" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryCompany" #mCompanyName="ngModel"
-                                                [options]="maincompanylist" class="p-dropdown-custom-sm"
-                                                (onChange)="getBUList(selectedItemMasterCapData.companyId)"
+                                                [options]="maincompanylist" class="p-dropdown-custom-sm" 
+                                                (onChange)="getBUList(selectedItemMasterCapData.companyId)" [showClear]="true"
                                                 [(ngModel)]="selectedItemMasterCapData.companyId" [required]="true"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryBU" #mBUName="ngModel"
                                                 [options]="businessUnitList" class="p-dropdown-custom-sm"
                                                 (onChange)="getDivisionlist(selectedItemMasterCapData.buId)"
-                                                [(ngModel)]="selectedItemMasterCapData.buId"
+                                                [(ngModel)]="selectedItemMasterCapData.buId" [showClear]="true"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryDivision" #mDivisionName="ngModel"
-                                                [options]="divisionlist" class="p-dropdown-custom-sm"
+                                                [options]="divisionlist" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentlist(selectedItemMasterCapData.divisionId)"
                                                 [(ngModel)]="selectedItemMasterCapData.divisionId"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 150px;">
+                                        <td class="table-width-150">
                                             <p-dropdown placeholder="Select" name="primaryDept" #mDepartmentName="ngModel"
-                                                [options]="departmentList" class="p-dropdown-custom-sm"
+                                                [options]="departmentList" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentId(selectedItemMasterCapData.departmentId)"
                                                 [(ngModel)]="selectedItemMasterCapData.departmentId"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
-                                        <td style="width: 130px;">
+                                        <td class="table-column-width">
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" 
                                             yearRange="1900:2100"
@@ -523,43 +530,44 @@
                                                  (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-calendar>
                                         </td>
-                                        <td style="width: 130px;text-align: center;">
+                                        <td class="table-column-width text-center">
                                             <p-checkbox class="pcheckbox-cstm" name="isVerified" binary="false"
                                                 [(ngModel)]="selectedItemMasterCapData.isVerified"
                                                 (onChange)="resetVerified(selectedItemMasterCapData, $event)"
                                                 (ngModelChange)="enableSave()"></p-checkbox>
                                         </td>
-                                        <td style="width: 130px;">
+                                        <td class="table-column-width">
                                             <p-dropdown class="p-dropdown-custom-sm" [options]="employeeList"
                                                 placeholder="Select"                                                 
-                                                [disabled]="!selectedItemMasterCapData.isVerified"                                                
+                                                [disabled]="selectedItemMasterCapData.isVerified==true"                                     
                                                 [required]="selectedItemMasterCapData.isVerified"
-                                                required="{{selectedItemMasterCapData.isVerified}}" name="verifiedById"
+                                                name="verifiedById"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedById"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
-                                        <td style="width: 130px;">
+                                        <td class="table-column-width">
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedDate"
-                                                [disabled]="!selectedItemMasterCapData.isVerified"
-                                                [required]="selectedItemMasterCapData.isVerified" name="verifiedDate"
+                                                [disabled]="selectedItemMasterCapData.isVerified==true"
+                                                 name="verifiedDate"
                                                 [showIcon]="true" (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-calendar>
                                         </td> 
-                                        <td style="width: 200px;">
-                                            <div [innerHTML]="selectedItemMasterCapData.memo"                                            
-                                             style="margin-left:10px; width: 97% !important;" 
+                                        <td class="width-200">
+                                            <div [innerHTML]="selectedItemMasterCapData.memo"  
                                              [matTooltip]="parsedText(selectedItemMasterCapData.memo)" 
-                                             class="text_editor_box"></div>
-                                            <i class="fa fa-pencil pull-right" 
-                                            style="color: #337ab7;margin-top:-16px; margin-right: -13px;"
+                                             class="text_editor_box capes-memo-div"></div>
+                                            <i class="fa fa-pencil pull-right capes-memo-pencil" 
+                                           
                                             data-toggle="modal"
-                                            data-target="#capes-memo" matTooltip="Memo"
+                                            matTooltip="Memo"
+                                            data-target="#capes-memo"
                                             matTooltipPosition="above"
-                                            (click)="onAddTextAreaInfo('memo')"></i>
+                                            (click)="onAddTextAreaInfo('memo', capes-memo)"></i>
+                                            <!-- data-target="#capes-memo" -->
                                         </td>
                                     </tr>
-                                    <tr style="min-height: 10px;">
+                                    <tr class="min-height">
                                         <td colspan="10"></td>
                                     </tr>
                                 </tbody>
@@ -579,6 +587,7 @@
             </form>
         </div>
     </div>
+    
 </div>
 
 <ng-template #deleteCapabilityContent let-c="close" let-d="dismiss" data-backdrop="static">
@@ -597,6 +606,26 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-primary"
             (click)="deleteCapability(selectedForDeleteContent, selectedForDeleteCapabilityId, '')">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+
+<ng-template #restoreCapabilityContent let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>Capability Type:
+            <span class="new-label">{{selectedCapabilityType}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+            (click)="restoreCapability()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>

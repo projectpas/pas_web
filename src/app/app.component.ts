@@ -337,7 +337,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               icon: 'fa fa-fw fa-newspaper-o',
               items: [
                 {
-                  label: 'List of Publications',
+                  label: 'Publications List',
                   routerLink: '/singlepages/singlepages/app-publication',
                 },
                 {
@@ -702,7 +702,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'SO Quotes',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quotes&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Report&rs:Command=Render');
                   },
                 },
                 {
@@ -736,6 +736,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
                   },
                 },
+                {
+                  label: 'SO Turn Around Time (TAT)', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+-+Turn+Around+Time+(TAT)&rs:Command=Render');
+                  }
+                }
               ],
             },
           ],
@@ -847,6 +852,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'Tech Productivity', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
+                  }
+                },
+                {
+                  label: 'Turn Around Time (TAT)', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+-Turn+Around+Time+(TAT)&rs:Command=Render');
                   }
                 }
               ],
@@ -1654,7 +1664,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.managementStructure.departmentId = this.authService.currentManagementStructure.level4;
     }
 
-    debugger;
+    
     this.isUserLoggedIn = this.authService.isLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False");
 
     this.isAppLoaded = true;

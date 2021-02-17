@@ -548,7 +548,7 @@
                                     </td>
                                     <td class="mgmt-td-align">
                                         <!-- <label style="width:90px;">BU:</label> -->
-                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList,row_index)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                             <option value="0">Select</option>
                                             <option *ngFor="let businessUnit of partList.parentBulist" value="{{businessUnit.value}}">{{businessUnit.label}}</option>
                                         </select>
@@ -835,7 +835,7 @@
                 </div>
                 </div>
                 <div>
-                    <button class="btn btn-primary pull-right" (click)="saveRepairOrderPartsList()" [disabled]="!enablePartSaveBtn">{{isEditModePart ? 'Update' : 'Save'}}</button>
+                    <button class="btn btn-primary pull-right" (click)="saveRepairOrderPartsList(roQty)" [disabled]="!enablePartSaveBtn">{{isEditModePart ? 'Update' : 'Save'}}</button>
                 </div>
             </form>
         </p-tabPanel>
@@ -843,7 +843,7 @@
           <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="id">
           </app-address-component>
         </p-tabPanel>
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel *ngIf="rosettingModel.IsEnforceApproval" header="Internal Approvers">
             <div class="approver-tab-cstm">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
                     <div class="tableFixHead">
@@ -888,7 +888,7 @@
             </div>
         </p-tabPanel>
         <!-- <p-tabPanel [hidden]="!rosettingModel.IsEnforceApproval" class="pas-tabpanel-po" header="Approver Process"> -->
-        <p-tabPanel class="pas-tabpanel-po" header="Approver Process">
+        <p-tabPanel *ngIf="rosettingModel.IsEnforceApproval" class="pas-tabpanel-po" header="Approver Process">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead"> 
                 <table class="table table-bordered header-table-width">
@@ -2218,7 +2218,7 @@
     </div>
 </div>
 
-<p-dialog header="Alert" [(visible)]="displayWarningModal" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+<!-- <p-dialog header="Alert" [(visible)]="displayWarningModal" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
           [width]="350" [minWidth]="200" [responsive]="true"
           [minY]="1050" [baseZIndex]="1100000">
 
@@ -2228,7 +2228,28 @@
     <button type="button" pButton icon="pi pi-check" (click)="displayWarningModal=false;dismissModel()" label="Yes"></button>
     &nbsp;&nbsp;
     <button type="button" pButton icon="pi pi-times" (click)="displayWarningModal=false" label="No"></button>
-</p-dialog>
+</p-dialog> -->
+
+<ng-template class="modal fade" #roQty let-c="close" let-d="dismiss" data-backdrop="static">    
+    <div class="modal-content"> 
+        <div class="modal-header">		
+            <h4 class="modal-title">Alert</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel(false)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">              
+             <h5 [ngStyle]="{'color':'red'}">               
+                <div [innerHTML]="alertText"></div>
+             </h5>
+        </div>
+        <div class="modal-footer">
+            <button type="button" *ngIf="!displayWarningModal" class="btn btn-primary" (click)="dismissModel(false);">close</button>
+            <button type="button" *ngIf="displayWarningModal" class="btn btn-primary" (click)="dismissModel(true);">Yes</button>
+            <button type="button" *ngIf="displayWarningModal" class="btn btn-danger" (click)="dismissModel(false)">No</button>				
+        </div>
+    </div>    
+</ng-template>
 
 <!-- <div class="modal fade" id="ship-via-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">

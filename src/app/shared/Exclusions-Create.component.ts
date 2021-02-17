@@ -52,6 +52,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     deleteRowRecord:any={};
     deletedRowIndex:any;
     disabledMemo: boolean = false;
+    @Input() masterItemMasterId:any;
     constructor(private actionService: ActionService,
         private workOrderQuoteService: WorkOrderQuoteService,
         private itemClassService: ItemClassificationService,
@@ -80,6 +81,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                 this.workFlow.exclusions.map((x, index) => {
                     this.getPartConditions(x, index),
                         this.getPNDetails(x);
+                      
                 })
             }
         } else {
@@ -105,10 +107,13 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.reCalculate();
         }
         if(this.workFlow.exclusions && this.workFlow.exclusions.length !=0){
-        this.workFlow.exclusions.map((x, index) => {
-                this.workFlow.exclusions[index].partName=x;
-                this.workFlow.exclusions[index].conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
-        })
+    //     this.workFlow.exclusions.map((x, index) => {
+    //         x.partNameRef=x.partNumber;
+    //             x.partName={partNumber:x.partNumber,itemMasterId:x.itemMasterId};
+    //             x.conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
+    //             x.unitCost = x.unitCost ?   formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00';
+    //                     x.extendedCost =  x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2):'0.00';
+    //     }) 
     }
         this.getConditionsList();
     }
@@ -121,6 +126,17 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.workFlow.exclusions = [];
             this.addRow();
         }
+        this.masterItemMasterId=this.masterItemMasterId;
+
+        if(this.workFlow.exclusions && this.workFlow.exclusions.length !=0){
+        this.workFlow.exclusions.map((x, index) => {
+            x.partNameRef=x.partNumber;
+                x.partName={partNumber:x.partNumber,itemMasterId:x.itemMasterId};
+                x.conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
+                x.unitCost = x.unitCost ?   formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00';
+                        x.extendedCost =  x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2):'0.00';
+        }) 
+    }
     }
 
     get userName(): string {
@@ -164,9 +180,10 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
         if (this.UpdateMode) {
-            exclusionsIds = this.workFlow.exclusions.reduce((acc, x) => {
-                return exclusionsIds.push(acc.itemMasterId);
-            }, 0)
+            exclusionsIds.push(0)
+            exclusionsIds = this.workFlow.exclusions.forEach(acc => {
+               exclusionsIds.push(acc.itemMasterId);
+            })
         } 
         this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, exclusionsIds)
             .subscribe(res => {
@@ -182,9 +199,10 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                         partName: x.label,
                         conditionId:x.conditionId
                     }
+                // }
                 });
-                this.partCollection.forEach(element => {
-                    if(element.partId==this.workFlow.itemMasterId){
+                this.partCollection.forEach(element => { 
+                    if(element.itemMasterId==this.masterItemMasterId){
                        this.partCollection.splice(element, 1); 
                     }
                    });
@@ -193,7 +211,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
             });
     }
-
+    // masterItemMasterId:any;
     addRow(): void {
         var newRow = Object.assign({}, this.row);
         newRow.workflowExclusionId = "0";
@@ -285,6 +303,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     calculateExtendedCost(exclusion): void {
         exclusion.unitCost = exclusion.unitCost ?   formatNumberAsGlobalSettingsModule(exclusion.unitCost, 2) : '0.00';
         exclusion.quantity = exclusion.quantity ? formatNumberAsGlobalSettingsModule(exclusion.quantity, 0) : '0';
+
         var value: any = parseFloat(exclusion.quantity) * parseFloat(exclusion.unitCost.toString().replace(/\,/g, ''));
         if (value > 0) {
             exclusion.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);
@@ -298,6 +317,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     getPNDetails(part) {
         part.conditionId=part.conditionId?part.conditionId :1;
         part.conditionCodeId=part.conditionId;
+        // part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
         if (part && part.partNumber && part.conditionId) {
                         this.isSpinnerVisible = true;
                         this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionId)
@@ -320,7 +340,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
 
             this.reCalculate();
         }
-      
+        
     }
 
     getDynamicVariableData(variable, index) {
@@ -460,6 +480,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.workFlow.exclusions.splice(this.deletedRowIndex, 1);
         }
         else {
+            this.workFlow.exclusions[this.deletedRowIndex].isDeleted = true;
             this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();

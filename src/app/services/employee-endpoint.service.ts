@@ -477,7 +477,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	getAllEmployeeList(data) {
 		return this.http.post(this.employeeListUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getAllEmployeeList(data));
+				return this.handleErrorCommon(error, () => this.getAllEmployeeList(data));
 			});
 	}
 	// employee global search

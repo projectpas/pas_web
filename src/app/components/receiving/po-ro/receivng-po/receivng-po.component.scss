@@ -104,12 +104,36 @@ input[type="text"], input[type="number"], select, textarea {
 .more-info {
     background-color: #e8e8e8;
 }
-.time-remaining table td {
+.min-width-40
+{
+    min-width: 40px !important;
+    text-align: center !important;
+}
+.min-width-60
+{
+    min-width: 60px !important;
+    text-align: center !important;
+}
+
+.time-remaining table td { 
     padding: 4px;
+}
+.min-width-80
+{
+    min-width: 80px !important;
+    text-align: center !important;
+}
+.min-width-150
+{
+    min-width: 150px !important;
+    text-align: center !important;
 }
 @media (min-width: 768px) {
     .col-md-3 {
         max-width: 22%;
         margin-right: 15px;
     }
+}
+.mgmt-structure-td-width{
+    min-width: 450px!important;
 }

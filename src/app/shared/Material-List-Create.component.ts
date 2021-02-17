@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { IMaterialMandatory } from "../Workflow/MaterialMandatory";
 import { ActionService } from "../Workflow/ActionService";
 import { ItemClassificationService } from "../services/item-classfication.service";
 import { UnitOfMeasureService } from "../services/unitofmeasure.service";
@@ -10,7 +9,7 @@ import { NgForm } from "@angular/forms";
 declare var $: any;
 import * as cloneDeep from 'lodash/cloneDeep';
 import { CommonService } from "../services/common.service";
-import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
+import {  formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
@@ -41,7 +40,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Input() editData;
     @Input() isQuote = false;
     @Input() taskList: any = [];
-    @Input() workFlow:any={};
+    @Input() workFlow: any = {};
     @Input() markupList;
     @Input() UpdateMode: boolean;
     @Input() isWorkFlow: boolean = false;
@@ -57,7 +56,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
 
     materialCondition: any = [];
-    materialMandatory: any=[];
+    materialMandatory: any = [];
     materialUOM: any[] = [];
     row: any;
     sourceWorkFlow: any = {};
@@ -212,6 +211,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     memoIndex;
     moduleName: any = '';
     modal: NgbModalRef;
+    itemMasterRowData: any = {};
+    showItemmasterView: any = false;
+    deleteRowRecord: any = {};
+    deletedRowIndex: any;
+    currentForm: any;
+    disableEditor: any = true;
+
     constructor(private actionService: ActionService,
         private commonService: CommonService,
         private authService: AuthService,
@@ -226,9 +232,23 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.isSubWorkOrder = this.isSubWorkOrder;
         if (this.isWorkOrder) {
+            
+            // if (this.workFlow.materialList && this.workFlow.materialList.length > 0) {
+            //     this.workFlow.materialList = this.workFlow.materialList.map(x => {
+            //         return {
+            //             ...x,
+            //             quantity: x.quantity ? formatNumberAsGlobalSettingsModule(x.quantity, 0) : '0',
+            //             unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+            //             extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
+            //         }
+            //     })
+            // }
             this.row = this.workFlow.materialList[0];
             if (this.isEdit) {
                 this.workFlow.materialList = [];
+                this.editData.quantity= this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
+                this.editData.unitCost= this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
+                        this.editData.extendedCost= this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
                 this.workFlow.materialList.push(this.editData);
                 this.reCalculate();
             } else {
@@ -246,9 +266,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
             this.workFlow.materialList.map((x, index) => {
-                // if (x['mandatoryOrSupplemental'] == this.workFlow.materialList[index].mandatoryOrSupplemental) {
-                //     this.workFlow.materialList[index]['mandatorySupplementalId'] = x['mandatorySupplementalId'];
-                // }
                 this.getPNDetails(x);
             })
         }
@@ -269,6 +286,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.provisionList();
             this.getConditionsList();
         }
+        this.disableUpdateButton=true;
     }
 
     get userName(): string {
@@ -279,32 +297,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
 
-    // getMaterailMandatoriesOld() {
-    //     let mandatorySupplementalIds = [];
-    //     if (!this.isWorkOrder || !this.isQuote) {
-    //         mandatorySupplementalIds = this.workFlow.materialList.reduce((acc, x) => {
-    //             return mandatorySupplementalIds.push(acc.mandatorySupplementalId);
-    //         }, 0)
-    //     }
-    //     this.isSpinnerVisible = true;
-    //     this.commonService.smartDropDownList('MaterialMandatories', 'Id', 'Name')
-    //         .subscribe(
-    //             mandatory => {
-    //                 this.isSpinnerVisible = false;
-    //                 this.materialMandatory = mandatory.map(x => {
-    //                     return {
-    //                         id: x.value,
-    //                         name: x.label
-    //                     }
-    //                 });
-    //                 this.defaultMaterialMandatory = 'Mandatory';
-    //                 if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
-    //                     this.workFlow.materialList[0].mandatorySupplementalId = 1;
-    //                 }
-    //             }, error => {
-    //                 this.isSpinnerVisible = false;
-    //             });
-    // }
 
     getMaterailMandatories() {
         let materialMandatoriesIds = [];
@@ -324,7 +316,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                         materialMandatoriesName: x.label
                     }
                 });
-             
+
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -381,10 +373,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getConditionsList() {
         this.isSpinnerVisible = true;
         let conditionIds = [];
+        conditionIds.push(0)
         if (this.UpdateMode) {
-            conditionIds = this.workFlow.materialList.reduce((acc, x) => {
-                return conditionIds.push(acc.conditionCodeId);
-            }, 0)
+            this.workFlow.materialList.forEach(acc => {
+                conditionIds.push(acc.conditionCodeId);
+            })
         }
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, conditionIds)
             .subscribe(res => {
@@ -402,8 +395,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
         })
     }
-
-    reCalculate() { 
+    reCalculate() {
         this.calculateExtendedCostSummation();
         this.calculateQtySummation();
         this.calculatePriceSummation();
@@ -441,6 +433,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 }
             }
         }
+        this.getPartnumbers(event.query);
     }
 
     onPartSelect(event, material, index) {
@@ -474,16 +467,18 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.itemClassification = this.itemclaColl[i][0].itemClassification;
                     material.unitOfMeasure = this.itemclaColl[i][0].unitOfMeasure;
                     material.unitOfMeasureId = this.itemclaColl[i][0].unitOfMeasureId;
-                    material.unitCost = this.itemclaColl[i][0].unitCost;
+                    // material.unitCost = this.itemclaColl[i][0].unitCost;
+                    material.conditionCodeId = this.itemclaColl[i][0].conditionId;
+                    material.conditionCodeId = material.conditionCodeId ? material.conditionCodeId : this.conditionList[0].value;
                 }
-            }; 
+            };
             this.materialMandatory.forEach(element => {
-                if(element.materialMandatoriesName=='Mandatory'){
-                    material.materialMandatoriesId=element.materialMandatoriesId;
-                    material.MaterialMandatoriesName=element.materialMandatoriesName;
+                if (element.materialMandatoriesName == 'Mandatory') {
+                    material.materialMandatoriesId = element.materialMandatoriesId;
+                    material.MaterialMandatoriesName = element.materialMandatoriesName;
                 }
             });
-            material.conditionCodeId = this.conditionList[0].value;
+
             this.getPNDetails(material);
         }
     }
@@ -539,20 +534,19 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             exclusionsIds = this.workFlow.materialList.reduce((acc, x) => {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
-        } 
-        // this.commonService.getPartnumList(value).subscribe(res => {
-            this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds?exclusionsIds :0)
+        }
+        this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0)
             .subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.allPartnumbersInfo = res;
-            this.allPartnumbersInfo.forEach(element => {
-                if(element.value==this.workFlow.itemMasterId){
-                   this.partCollection.splice(element, 1); 
-                }
-               });
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
+                this.isSpinnerVisible = false;
+                this.allPartnumbersInfo = res;
+                this.allPartnumbersInfo.forEach(element => {
+                    if (element.value == this.workFlow.itemMasterId) {
+                        this.partCollection.splice(element, 1);
+                    }
+                });
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     async getPartConditions(part, index) {
@@ -605,7 +599,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     onAddTextAreaInfo(material, index) {
-        this.disableEditor=true;
+        this.disableEditor = true;
         this.memoIndex = index;
         this.textAreaInfo = material.memo;
     }
@@ -615,12 +609,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.textAreaInfo = memo;
             this.workFlow.materialList[this.memoIndex].memo = this.textAreaInfo;
         }
-        this.disableEditor=true;
+        this.disableEditor = true;
         $("#textarea-popup").modal("hide");
+        this.disableUpdateButton=false;
     }
 
     onCloseTextAreaInfo() {
-        this.disableEditor=true;
+        this.disableEditor = true;
         $("#textarea-popup").modal("hide");
     }
 
@@ -651,10 +646,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         newRow.quantity = "";
         newRow.unitCost = "0.00";
         newRow.unitOfMeasureId = this.defaultUOMId;
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
         newRow.extendedPrice = '';
         newRow.updatedBy = this.userName;
         newRow.createdBy = this.userName;
+        newRow.createdDate = new Date();
         newRow.masterCompanyId = this.currentUserMasterCompanyId;
 
         if (this.materialMandatory) {
@@ -673,9 +669,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.workFlow.materialList.push(newRow);
     }
 
-
-
-
     calculateExtendedCost(material): void {
         material.unitCost = material.unitCost ? formatNumberAsGlobalSettingsModule(material.unitCost, 2) : '';
         material.quantity = material.quantity ? material.quantity.toString().replace(/\,/g, '') : 0;
@@ -690,18 +683,25 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     // sum of extended cost
     calculateExtendedCostSummation() {
-        this.workFlow.materialExtendedCostSummation = this.workFlow.materialList.reduce((acc, x) => {
-            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
-        }, 0);
 
-        this.workFlow.totalMaterialCostValue = this.workFlow.materialExtendedCostSummation ? formatNumberAsGlobalSettingsModule(this.workFlow.materialExtendedCostSummation, 2) : null;
-        this.workFlow.materialExtendedCostSummation = this.workFlow.totalMaterialCostValue
+        var total = 0;
+
+        this.workFlow.materialList.map((element, i) => {
+            if (element.isDeleted == false) {
+                total = total + parseFloat(element.extendedCost == undefined || element.extendedCost === '' ? 0 : element.extendedCost.toString().replace(/\,/g, ''))
+
+            }
+        });
+        this.workFlow.totalMaterialCostValue = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+        this.workFlow.materialExtendedCostSummation = this.workFlow.totalMaterialCostValue;
     }
 
     calculateExtendedPrice(material): void {
+
         material.price = material.price ? formatNumberAsGlobalSettingsModule(material.price, 2) : '';
         if (material.quantity != "" && material.price != "") {
             material.extendedPrice = formatNumberAsGlobalSettingsModule((material.quantity * parseFloat(material.price.toString().replace(/\,/g, ''))), 2);
+
         }
         else {
             material.extendedPrice = "";
@@ -711,6 +711,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     // sum of extended cost
     calculateExtendedPriceSummation() {
+
         this.workFlow.materialExtendedPriceSummation = this.workFlow.materialList.reduce((acc, x) => {
             return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g, ''))
         }, 0);
@@ -730,7 +731,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     validateQuantity(event, material): void {
-
         if (!material.quantity) {
             material.quantity = '0';
         }
@@ -848,14 +848,16 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
                         this.isSpinnerVisible = false;
                         if (partDetail) {
-                            part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["pP_UnitPurchasePrice"], 2);
+                            const unitCost = parseFloat(part.unitCost.toString().replace(/\,/g, ''));
+                            // part.unitCost = part.unitCost !=0 ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
+                            part.unitCost = unitCost != 0 ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["unitCost"], 2);
                             part.billingRate = partDetail["sP_FSP_FlatPriceAmount"];
                             part.markupPercentageId = partDetail["sP_CalSPByPP_MarkUpPercOnListPrice"];
                             part.stockType = part.stockType ? part.stockType : partDetail["stockType"];
                             part.price = part.price ? formatNumberAsGlobalSettingsModule(part.price, 2) : formatNumberAsGlobalSettingsModule(partDetail["salePrice"], 2);
                             this.calculateExtendedCost(part);
-                            this.calculateExtendedPrice(part);
-                        } 
+                            // this.calculateExtendedPrice(part);
+                        }
                     }, error => {
                         this.isSpinnerVisible = false;
                     });
@@ -866,15 +868,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return this[variable + index];
     }
 
-    itemMasterRowData: any = {};
-    showItemmasterView: any = false;
-    openView(row) { 
-        console.log("row",row);
+    openView(row) {
         this.itemMasterRowData = row;
         this.showItemmasterView = true;
         this.itemMasterId = row.itemMasterId;
         $('#itemMasterView').modal('show');
     }
+
     getntlafieds(ntaeData) {
         for (let i = 0; i < ntaeData.length; i++) {
             this.filterManufacturerData.push({
@@ -979,20 +979,18 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getAircraftAuditHistory(rowData) { }
     onViewAircraftonDbl(rowData) { }
 
-    disableEditor: any = true;
     editorgetmemo(ev) {
         this.disableEditor = false;
     }
+
     dismissModel() {
         this.modal.close();
     }
-    deleteRowRecord:any={};
-    deletedRowIndex:any;
-    currentForm:any;
-    openDelete(content, row,index,form: NgForm) {
-        this.currentForm=form;
-        this.deletedRowIndex=index;
-      this.deleteRowRecord = row;
+
+    openDelete(content, row, index, form: NgForm) {
+        this.currentForm = form;
+        this.deletedRowIndex = index;
+        this.deleteRowRecord = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -1002,12 +1000,16 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             let temp = cloneDeep(this.workFlow.materialList);
             this.currentForm.resetForm();
             this.workFlow.materialList = cloneDeep(temp);
+
         }
         else {
-            this.workFlow.materialList[this.deletedRowIndex].isDelete = true;
+            this.workFlow.materialList[this.deletedRowIndex].isDeleted = true;
         }
         this.reCalculate();
         this.dismissModel();
     }
-
+   disableUpdateButton:boolean=false;
+    getActive(){
+        this.disableUpdateButton=false;
+    }
 } 

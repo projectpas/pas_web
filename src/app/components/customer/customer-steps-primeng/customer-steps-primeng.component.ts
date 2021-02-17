@@ -8,12 +8,17 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { MenuItem } from 'primeng/api';
 import { CreditTermsService } from '../../../services/Credit Terms.service';
 import { CommonService } from '../../../services/common.service';
+import { AuthService } from '../../../services/auth.service';
+declare var $: any;
+
 @Component({
 	selector: 'app-customer-create',
 	templateUrl: './customer-steps-primeng.component.html',
 	styleUrls: ['./customer-steps-primeng.component.scss']
 })
 export class CustomerStepsPrimengComponent {
+	moduleName:any="Customer";
+	referenceId:any;
 	activeMenuItem: number = 1;
 	currentTab: string = 'General';
 	savedGeneralInformationData: any;
@@ -44,7 +49,8 @@ export class CustomerStepsPrimengComponent {
 		private route: Router,
 		location: Location,
 		private commonservice: CommonService,
-		public creditTermService: CreditTermsService
+		public creditTermService: CreditTermsService,
+		private authService: AuthService,
 	) {
 	}
 	ngOnInit() {
@@ -111,6 +117,8 @@ export class CustomerStepsPrimengComponent {
 			this.currentTab = 'Warnings';
 			this.activeMenuItem = 9;
 		} else if (value === 'Documents') {
+			this.referenceId=this.customerId; 
+			this.referenceId=this.referenceId? this.referenceId :this.editGeneralInformationData.customerId;
 			this.currentTab = 'Documents';
 			this.activeMenuItem = 10;
 		}
@@ -163,9 +171,13 @@ export class CustomerStepsPrimengComponent {
 		}
 	}	 
 
-
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
 	async getJobTitles() {
-		await this.commonservice.getJobTitles().subscribe(res => {
+		await this.commonservice.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
 			this.jobTitles = res;
 		})
 	}

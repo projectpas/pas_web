@@ -1,10 +1,10 @@
-﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 // declare var $ : any;
-declare var $ : any;
+declare var $: any;
 import * as moment from 'moment';
 import { AuthService } from '../../../services/auth.service';
 import { CustomerService } from '../../../services/customer.service';
@@ -12,14 +12,17 @@ import { CommonService } from '../../../services/common.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { Subject } from 'rxjs/Subject';
+import { DatePipe } from '@angular/common';
+import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByValue, getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectByKey } from '../../../generic/autocomplete';
 
 @Component({
     selector: 'app-common-documents',
     templateUrl: './common-documents.component.html',
     styleUrls: ['./common-documents.component.scss'],
+    providers: [DatePipe]
 })
 /** common component*/
-export class CommonDocumentsComponent implements OnInit {
+export class CommonDocumentsComponent implements OnInit, OnDestroy {
     disableSave: boolean = true;
     moduleId: any;
     targetData: any;
@@ -28,11 +31,11 @@ export class CommonDocumentsComponent implements OnInit {
     @Input() moduleName;
     @Input() referenceId;
     @Input() editMode;
-    @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+    @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
     @Input() offLineUpload: any = false;
     @Input() generalInformtionData;
     @Output() tab = new EventEmitter<any>();
-    @Output()parentTrigger=new EventEmitter<any>();
+    @Output() parentTrigger = new EventEmitter<any>();
     @Input() uploadDocsToser: Subject<boolean>;
     documentInformation = {
         documentTypeId: 0,
@@ -42,7 +45,7 @@ export class CommonDocumentsComponent implements OnInit {
         attachmentDetailId: 0,
         attachmentId: 0,
     }
-    @ViewChild('documents',{static:false}) Table;
+    @ViewChild('documents', { static: false }) Table;
     customerDocumentsData: any = [];
     commondocumentsDestructuredData = [];
     commondocumentsDestructuredDataOriginal: any[];
@@ -89,9 +92,11 @@ export class CommonDocumentsComponent implements OnInit {
     memoPopupValue: any;
     isPopup: boolean = false;
     enableUpdate: boolean = false;
-    hideUpoladThing:boolean=false;
+    hideUpoladThing: boolean = false;
+    DocumentTypebutton: boolean = false;
+
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
-        private dialog: MatDialog, private configurations: ConfigurationService) {
+        private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
 
     ngOnInit() {
@@ -102,39 +107,43 @@ export class CommonDocumentsComponent implements OnInit {
             this.generalName = this.generalInformtionData.name;
         }
 
- if(this.uploadDocsToser !=undefined){
-    this.id = this.referenceId;
-                this.uploadDocsToser.subscribe(v => { 
-                 
-                    this.hideUpoladThing=true;
-              setTimeout(() => {
-                this.onUploadDocumentListToServer();
-              }, 1500);
-                 });
-                }
+        if (this.uploadDocsToser != undefined || this.uploadDocsToser != null) {
+            this.id = this.referenceId;
+            this.uploadDocsToser.subscribe(v => {
+                this.hideUpoladThing = true;
+                setTimeout(() => {
+                    console.log("event")
+                    this.onUploadDocumentListToServer();
+                }, 1500);
+            });
+        }
     }
 
     generalCode: any;
     generalName: any;
 
+    ngOnDestroy() {
+        // console.log("chhcc")
+        // if (this.uploadDocsToser) this.uploadDocsToser.unsubscribe();
+    }
+
     ngOnChanges(changes: SimpleChanges) {
-      
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
-                    
-                    this.generalCode = this.generalInformtionData.companyCode;
-                    this.generalName = this.generalInformtionData.name;
+
+                    this.generalCode = this.generalInformtionData ? this.generalInformtionData.companyCode : '';
+                    this.generalName = this.generalInformtionData ? this.generalInformtionData.name : '';
                     this.isViewMode = this.isViewMode ? this.isViewMode : false;
                 }
             }
-        
-         
+
+
             if (property == 'uploadDocsToser') {
-                this.hideUpoladThing=true;
-        //   setTimeout(() => {
-        //     this.onUploadDocumentListToServer();
-        //   }, 1200);
+                this.hideUpoladThing = true;
+                //   setTimeout(() => {
+                //     this.onUploadDocumentListToServer();
+                //   }, 1200);
             }
         }
         this.id = this.referenceId;
@@ -142,29 +151,24 @@ export class CommonDocumentsComponent implements OnInit {
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
     }
+
     attachmoduleList: any = [];
-    arrayCustlist:any=[];
+    arrayCustlist: any = [];
     getModuleList(): void {
-    //     this.arrayCustlist.push(0);
-    
-    // const mcId= this.authService.currentUser
-    // ? this.authService.currentUser.masterCompanyId
-    // : null;
-    // const strText='';
+        //     this.arrayCustlist.push(0);
+
+        // const mcId= this.authService.currentUser
+        // ? this.authService.currentUser.masterCompanyId
+        // : null;
+        // const strText='';
         this.commonService.smartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name').subscribe(res => {
             // this.commonService.autoSuggestionSmartDropDownList('AttachmentModule', 'AttachmentModuleId', 'Name', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
             this.attachmoduleList = res;
-        //   setTimeout(() => {
+            //   setTimeout(() => {
             this.getList();
             this.getDocumentTypeList();
-        //   }, 5000);
-        }
-        // ,
-        //     err => {
-        //         const errorLog = err;
-        //         this.errorMessageHandler(errorLog);
-        //     }
-        );
+            //   }, 5000);
+        });
     }
 
     enableSave() {
@@ -175,6 +179,13 @@ export class CommonDocumentsComponent implements OnInit {
         }
         if (this.isEditButton == true) {
             this.disableSave = false;
+        }
+        if (this.isEditButton == false) {
+            if ((this.selectedFileAttachment && this.selectedFileAttachment.length > 0)) {  //&& this.documentInformation.documentTypeId > 0
+                this.disableSave = false;
+            } else {
+                this.disableSave = true;
+            }
         }
     }
 
@@ -208,7 +219,7 @@ export class CommonDocumentsComponent implements OnInit {
     docviewdblclick(data) {
         this.sourceViewforDocument = data;
         this.openDocument(data);
-        $('#docView').modal('show');
+        $('#commondocView').modal('show');
     }
 
     openEdit(rowdata) {
@@ -316,13 +327,13 @@ export class CommonDocumentsComponent implements OnInit {
     onClickPopupSave() {
         this.documentInformation.docMemo = this.memoPopupContent;
         this.memoPopupContent = '';
-        $('#memo-popup-Doc').modal("hide");
+        $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
-        this.disableSave = false;
+        //this.disableSave = false;
     }
 
     closeMemoModel() {
-        $('#memo-popup-Doc').modal("hide");
+        $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
     }
 
@@ -453,7 +464,7 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     dismissModelHistory() {
-        $('#contentAuditHist').modal("hide");
+        $('#commoncontentAuditHist').modal("hide");
     }
 
     updateCollection: any = [];
@@ -464,7 +475,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.moduleId = element.value;
             }
         });
-        
+        if (this.moduleName == 'VendorCertified' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+            this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
+        }
         const vdata = {
             referenceId: this.referenceId,
             masterCompanyId: this.currentUserMasterCompanyId,
@@ -485,11 +498,15 @@ export class CommonDocumentsComponent implements OnInit {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
+                    if (this.moduleName == 'VendorCertified' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+                        localStorage.removeItem('commonId');
+                        this.uploadDocsToser.unsubscribe()
+                    }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
-                    if(this.uploadDocsToser){
+                    if (this.uploadDocsToser) {
                         this.uploadDocsToser.unsubscribe();
-                        this.hideUpoladThing=false;
+                        this.hideUpoladThing = false;
                     }
                     this.getList();
                     this.isEnableUpdateButton = true;
@@ -503,24 +520,26 @@ export class CommonDocumentsComponent implements OnInit {
                 this.updateCollection = this.documentCollection;
                 this.formData.append('attachmentdetais', JSON.stringify(docList));
                 this.commonService.uploadDocumentsCommonEndpoint(this.formData, this.updateCollection).subscribe(() => {
-                    this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+                    if (this.moduleName != 'VendorCertified' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile') {
+                        this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+                    }
                     this.formData = new FormData();
                     this.isEditButton = false;
                     this.commondocumentsList = [];
                     this.isEnableUpdateButton = true;
-                    if(this.uploadDocsToser){
+                    if (this.uploadDocsToser) {
                         this.uploadDocsToser.unsubscribe();
-                        this.hideUpoladThing=false;
+                        this.hideUpoladThing = false;
                     }
                     this.getList();
                 }, err => {
                     this.formData = new FormData();
                 });
             }
-
         }
     }
-    documentCollectionOriginal:any=[];
+
+    documentCollectionOriginal: any = [];
     getList() {
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
@@ -528,12 +547,12 @@ export class CommonDocumentsComponent implements OnInit {
                 this.moduleId = element.value;
             }
         });
-        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus).subscribe(res => {
 
+        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus).subscribe(res => {
             this.commondocumentsDestructuredData = [];
             this.documentCollection = [];
             this.commondocumentsDestructuredData = res;
-             if (this.sourceViewforDocumentList.length > 0) {
+            if (this.sourceViewforDocumentList.length > 0) {
                 this.sourceViewforDocumentList.forEach(item => {
                     item["isFileFromServer"] = true;
                 })
@@ -572,6 +591,15 @@ export class CommonDocumentsComponent implements OnInit {
                 }
             }
             this.documentCollectionOriginal = this.documentCollection;
+            this.documentCollection = this.documentCollection.map(x => {
+                return {
+                    ...x,
+                    fileName: x.attachmentDetails.map(e => e.fileName).join(","),
+                    docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                }
+            });
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
@@ -583,10 +611,20 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     viewModelDismiss() {
-        $('#docView').modal("hide");
+        $('#commondocView').modal("hide");
     }
 
-    exportCSV(data) {
+    exportCSV(documents) {
+        documents._value = documents._value.map(x => {
+            return {
+                ...x,
+                fileName: x.attachmentDetails.map(e => e.fileName).join(","),
+                docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+            }
+        });
+        documents.exportCSV();
     }
 
     fileUpload(event) {
@@ -642,8 +680,12 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     newDocumentDetails: any = {};
-    
+
     saveDocumentInformation() {
+        if (this.documentInformation.documentTypeId == 0) {
+            this.alertService.showMessage("Error", `Please select document type.`, MessageSeverity.error);
+            return false;
+        }
         this.newDocumentDetails = {};
         this.documentInformation;
         if (this.selectedFileAttachment != [] && !this.isEditButton) {
@@ -706,8 +748,8 @@ export class CommonDocumentsComponent implements OnInit {
         this.commondocumentsList = [...this.documentCollection];
         this.index = 0;
         this.disableSave == false;
-     
-        $('#addDocumentDetails').modal("hide");
+
+        $('#commonaddDocumentDetails').modal("hide");
         if (this.fileUploadInput) {
             this.fileUploadInput.clear()
         }
@@ -722,32 +764,197 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     isEnableUpdateButton: any = true;
-    
-    backClick() {
-        this.tab.emit('Shipping'); 
 
-      
+    backClick() {
+        this.tab.emit('Shipping');
     }
+
     //offline upload time enable update button for parent component 
-    triggerUpdatebutton(){
-this.parentTrigger.emit(true)
+    triggerUpdatebutton() {
+        this.parentTrigger.emit(true)
     }
+
     commondocumentsList: any = []
 
-    documentType:any=[];
+    documentType: any = [];
     getDocumentTypeList() {
-        // this.commonService.getDocumentType().subscribe(res => {
-        //   this.documentType = res;
-        //   console.log("res",res);
-        // },err => {
-        //   this.isSpinnerVisible = false;	
-        // });
+        this.commonService.getDocumentType().subscribe(res => {
+            this.documentType = res;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+        // this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name')
+        //     .subscribe(
+        //         (res)=>{
+        //             this.documentType = res;
+        //         }
+        //     )
+    }
 
-        this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name')
-            .subscribe(
-                (res)=>{
-                    this.documentType = res;
+    lstfilterDocumentType = [];
+    filterDocumentType(event) {
+        this.lstfilterDocumentType = this.documentType;
+        if (event.query !== undefined && event.query !== null) {
+            const shippingSite = [...this.documentType.filter(x => {
+                return x.name.toLowerCase().includes(event.query.toLowerCase())
+            })]
+            this.lstfilterDocumentType = shippingSite;
+        }
+    }
+
+    lstfilterDocumentTypeRevNum = [];
+    filterDocumentTypeRevnum(event) {
+        this.lstfilterDocumentTypeRevNum = this.documentType;
+        if (event.query !== undefined && event.query !== null) {
+            const revnum = [...this.documentType.filter(x => {
+                return x.revNum.toString().indexOf(event.query === 0)
+            })]
+            this.lstfilterDocumentTypeRevNum = revnum;
+        }
+    }
+    new = {
+        documentTypeId: 0,
+        name: "",
+        description: "",
+        masterCompanyId: this.currentUserMasterCompanyId,
+        isActive: true,
+        memo: "",
+        revNum: 0
+    }
+    addNew = { ...this.new };
+
+    saveDocumenttype() {
+        const data = {
+            ...this.addNew,
+            IsActive: true,
+            CreatedBy: this.userName,
+            UpdatedBy: this.userName,
+        }
+        const documentTypeData = {
+            ...data,
+            name: editValueAssignByCondition('name', data.name),
+        }
+
+        if (this.addNew.documentTypeId == 0) {
+            this.commonService.SaveDocumentType(documentTypeData).subscribe(response => {
+                this.alertService.showMessage(
+                    'Success',
+                    `Saved Document Type Sucessfully`,
+                    MessageSeverity.success
+                );
+                this.getDocumentTypeList()
+                setTimeout(() => {
+                    this.getSelectedDocumentType(response.documentTypeId);
+                }, 1000);
+            }, err => {
+                this.isSpinnerVisible = false;
+            })
+        } else {
+            this.commonService.SaveDocumentType(documentTypeData).subscribe(response => {
+                this.alertService.showMessage(
+                    'Success',
+                    `Updated Document Type Sucessfully`,
+                    MessageSeverity.success
+                );
+            }, err => {
+                this.isSpinnerVisible = false;
+            })
+        }
+        $('#createDocumentType').modal('hide');
+    }
+
+    onClickDocumentType(value, data?) {
+        this.resetDocumentTypeForm();
+        if (value === 'Add') {
+            this.isDocumenttypeAlreadyExists = false;
+            this.isDocumentrevnumAlreadyExists = false;
+        }
+        if (value === 'Edit') {
+            if (this.documentType && this.documentType.length != 0) {
+                for (let i = 0; i < this.documentType.length; i++) {
+                    if (this.documentType[i].documentTypeId == this.documentInformation.documentTypeId) {
+                        // this.addressFormForShipping.isPrimary = this.shipToAddressList[i].isPrimary;								
+                        this.addNew.documentTypeId = this.documentType[i].documentTypeId;
+                        // this.editSiteName = this.shipToAddressList[i].siteName;
+                        this.addNew.name = getObjectByValue('name', this.documentType[i].name, this.documentType);
+                        this.addNew.description = this.documentType[i].description;
+                        this.addNew.revNum = getObjectByValue('revNum', this.documentType[i].revNum, this.documentType);
+                        return;
+                    }
                 }
-            )
-      }
+            }
+        }
+    }
+
+    isDocumenttypeAlreadyExists: boolean = false;
+    checkDocumentTypeExist(value) {
+        this.isDocumenttypeAlreadyExists = false;
+        this.DocumentTypebutton = true;
+        if (value != undefined && value != null) {
+            if (this.documentType && this.documentType.length != 0) {
+                for (let i = 0; i < this.documentType.length; i++) {
+                    if ((this.addNew.name == this.documentType[i].name
+                        || value.toLowerCase() == this.documentType[i].name.toLowerCase())
+                        && this.addNew.name != '') {
+                        this.isDocumenttypeAlreadyExists = true;
+                        this.DocumentTypebutton = false;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    isDocumentrevnumAlreadyExists: boolean = false;
+    checkDocumentRevnumExist(value) {
+        this.isDocumentrevnumAlreadyExists = false;
+        this.DocumentTypebutton = true;
+        if (value != undefined && value != null) {
+            if (this.documentType && this.documentType.length != 0) {
+                for (let i = 0; i < this.documentType.length; i++) {
+                    if ((this.addNew.revNum == this.documentType[i].revNum
+                        || value == this.documentType[i].revNum)
+                        //&&  this.addNew.revNum !=  ''
+                    ) {
+                        this.isDocumentrevnumAlreadyExists = true;
+                        this.DocumentTypebutton = false;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    resetDocumentTypeForm() {
+        this.addNew = { ...this.new };
+        //this.isEditModeShipVia = false;
+    }
+
+    getSelectedDocumentType(documentTypeId) {
+        if (this.documentType && this.documentType.length != 0) {
+            for (let i = 0; i < this.documentType.length; i++) {
+                if (this.documentType[i].documentTypeId == documentTypeId) {
+                    this.documentInformation.documentTypeId = this.documentType[i].documentTypeId;
+                    return;
+                }
+            }
+        }
+    }
+
+    tempAddDocumentTypeMemo: any = {};
+    onAddDocumentTypeMemo() {
+        this.tempAddDocumentTypeMemo = this.addNew.memo;
+    }
+
+    onSaveTextAreaInfo() {
+        this.addNew.memo = this.tempAddDocumentTypeMemo;
+        this.DocumentTypebutton = true;
+        $('#documenttype-add-memo').modal('hide');
+    }
+
+    closeMemoModelpopup() {
+        $('#documenttype-add-memo').modal('hide');
+    }
+
+    resetAddressShipViaForm() { }
 }

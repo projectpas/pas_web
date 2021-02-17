@@ -18,7 +18,7 @@ import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView"
 import { AuthService } from "../../../../../../services/auth.service";
 import { CommonService } from "../../../../../../services/common.service";
 import { ISalesOrderPart } from "../../../../../../models/sales/ISalesOrderPart";
-declare var $ : any;
+declare var $: any;
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 @Component({
   selector: "app-sales-order-part-number",
@@ -46,12 +46,12 @@ export class SalesOrderPartNumberComponent {
   selectedSummaryRow: SummaryPart;
   isStockLineViewMode = false;
   selectedSummaryRowIndex = null;
-  @ViewChild("addPart",{static:false}) addPart: ElementRef;
+  @ViewChild("addPart", { static: false }) addPart: ElementRef;
   @Input() salesOrderId: any;
   @Input() defaultSettingPriority;
-  @ViewChild("popupContentforPartAction",{static:false}) popupContentforPartAction: ElementRef;
-  @ViewChild("salesMargin",{static:false}) salesMargin: ElementRef;
-  @ViewChild("salesReserve",{static:false}) salesReserve: ElementRef;
+  //@ViewChild("popupContentforPartAction",{static:false}) popupContentforPartAction: ElementRef;
+  @ViewChild("salesMargin", { static: false }) salesMargin: ElementRef;
+  @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
   @Input() customer: any;
   @Input() totalFreights = 0;
   @Input() totalCharges = 0;
@@ -66,7 +66,7 @@ export class SalesOrderPartNumberComponent {
   isEdit: boolean = false;
   selectedPartActionType: any;
   @Input() salesOrderView: ISalesOrderView;
-  @ViewChild("updatePNDetailsModal",{static:false})
+  @ViewChild("updatePNDetailsModal", { static: false })
   public updatePNDetailsModal: ElementRef;
   modal: NgbModalRef;
   @Output() myEvent = new EventEmitter();
@@ -93,7 +93,6 @@ export class SalesOrderPartNumberComponent {
     this.part = new PartDetail();
   }
 
-
   ngOnInit() {
     this.getDefaultCurrency();
     this.salesQuoteService.getSearchPartObject().subscribe(data => {
@@ -109,7 +108,6 @@ export class SalesOrderPartNumberComponent {
     this.filterParts();
     if ((this.salesOrderView == null || this.salesOrderView == undefined)) {
       this.isPNView = false;
-
     }
 
     this.columns = [];
@@ -145,26 +143,26 @@ export class SalesOrderPartNumberComponent {
       { header: "Cond", width: "70px" },
       { header: "Stk Type", width: "100px" },
       { header: "Alt/Equiv", width: "100px" },
-      { header: "Customer Ref", width: "150px" },
-      { header: "Qty On Back Orde", width: "100px" },
-      { header: "Cust Request Date", width: "130px" },
+      { header: "Cust Ref", width: "150px" },
+      { header: "Qty Back Ord", width: "100px" },
+      { header: "Cust Req Date", width: "130px" },
       { header: "Cust Promised Date", width: "130px" },
-      { header: "Est.Ship Date", width: "130px" },
+      { header: "Est Ship Date", width: "130px" },
       { header: "Priority", width: "100px" },
       { header: "Status", width: "80px" },
-      { header: "Quote Num", width: "100px" },
-      { header: "Quote Ver", width: "100px" },
-      { header: "Quote Date", width: "100px" },
+      { header: "Qte Num", width: "100px" },
+      { header: "Qte Ver", width: "100px" },
+      { header: "Qte Date", width: "100px" },
       // { header: "UOM", width: "70px" },
       { header: "Qty Ord", width: "90px" },
-      { header: "Qty Reserved", width: "90px" },
+      { header: "Qty Resvd", width: "90px" },
       { header: "Qty to Ship", width: "90px" },
       { header: "Qty Invoiced", width: "90px" },
       { header: "Invoice Num", width: "90px" },
       { header: "Invoice Date", width: "110px" },
-      { header: "Qty Previously Shipped", width: "110px" },
+      { header: "Qty Prev Shpd", width: "110px" },
       { header: "Last Ship Date", width: "110px" },
-      { header: "Shipping Ref", width: "110px" },
+      { header: "Ship Ref", width: "110px" },
       { header: "Qty Avail", width: "110px" },
       { header: "Qty On Hand", width: "110px" },
       // { header: "Curr", width: "70px" },
@@ -175,7 +173,7 @@ export class SalesOrderPartNumberComponent {
       { header: "Gross Price/Unit", width: "110px" },
       { header: "Disc. %", width: "60px" },
       { header: "Disc. Amt/Unit", width: "110px" },
-      { header: "MarkUp Amt", width: "100px" },
+      { header: "Markup Amt", width: "100px" },
       { header: "Gross Sales Amt", width: "110px" },
       { header: "Disc. Amt", width: "90px" },
       { header: "Net Sales Amt", width: "100px" },
@@ -184,41 +182,41 @@ export class SalesOrderPartNumberComponent {
       { header: "Tax Type", width: "90px" },
       { header: "Tax Amt", width: "90px" },
       { header: "Total", width: "90px" },
-      { header: "Extended Cost", width: "100px" },
-      { header: "Product Margin", width: "100px" },
-      { header: "Product Margin (%)", width: "120px" },
+      { header: "Ext Cost", width: "100px" },
+      { header: "Prod Margin", width: "100px" },
+      { header: "Prod Margin (%)", width: "120px" },
       { header: "Cntrl Num", width: "80px" },
       { header: "Cntrl ID Num", width: "90px" },
-      { header: "Notes", width: "120px" },
-
+      { header: "Notes", width: "120px" }
     ];
+
     if (!this.isViewMode) {
       this.columns.push({ header: "Notes", width: "120px" });
     }
-    this.summaryColumns = [
 
-      { field: 'hidePart', header: '', width: '30px', textalign: 'center' },
-      { field: 'partNumber', header: 'PN' },
-      { field: 'partDescription', header: 'PN Description' },
-      { field: 'pmaStatus', header: 'Stk Type' },
-      { field: 'conditionDescription', header: 'Cond' },
-      { field: 'quantityRequested', header: 'Qty Req' },
-      { field: 'quantityToBeQuoted', header: 'Qty To Quote' },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Quoted' },
-      { field: 'currencyDescription', header: 'Curr' },
-      { field: 'fixRate', header: 'FX Rate' },
-      { field: 'uom', header: 'UOM' },
-      { field: 'customerRef', header: 'Cust Ref' },
-      { field: 'grossSalePrice', header: 'Gross Sale Amt' },
-      { field: 'salesDiscountExtended', header: 'Disc Amt' },
-      { field: 'netSalesPriceExtended', header: 'Net Sale Amt' },
-      { field: 'misc', header: 'Misc' },
-      { field: 'freight', header: 'Freight' },
-      { field: 'taxAmount', header: 'Tax Amt' },
-      { field: 'totalSales', header: 'Total' },
-      { field: 'unitCostExtended', header: 'Extended Cost' },
-      { field: 'marginAmountExtended', header: 'Prod Margin' },
-      { field: 'marginPercentageExtended', header: 'Prod Margin%' },
+    this.summaryColumns = [
+      { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
+      { field: 'partNumber', header: 'PN', width: "140px" },
+      { field: 'partDescription', header: 'PN Description', width: "200px" },
+      { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
+      { field: 'conditionDescription', header: 'Cond', width: "70px" },
+      { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
+      { field: 'quantityToBeQuoted', header: 'Qty to Qte', width: "70px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qte', width: "75px" },
+      { field: 'currencyDescription', header: 'Curr', width: "80px" },
+      { field: 'fixRate', header: 'FX Rate', width: "80px" },
+      { field: 'uom', header: 'UOM', width: "58px" },
+      { field: 'customerRef', header: 'Cust Ref', width: "120px" },
+      { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "120px" },
+      { field: 'salesDiscountExtended', header: 'Disc Amt', width: "120px" },
+      { field: 'netSalesPriceExtended', header: 'Net Sale Amt', width: "84px" },
+      { field: 'misc', header: 'Misc', width: "70px" },
+      { field: 'freight', header: 'Freight', width: "80px" },
+      { field: 'taxAmount', header: 'Tax Amt', width: "80px" },
+      { field: 'totalSales', header: 'Total', width: "95px" },
+      { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
+      { field: 'marginAmountExtended', header: 'Prod Margin', width: "80px" },
+      { field: 'marginPercentageExtended', header: 'Prod Margin%', width: "90px" }
     ]
   }
 
@@ -240,6 +238,20 @@ export class SalesOrderPartNumberComponent {
   onCloseReserve(event) {
     this.show = false;
     this.salesReserveModal.close();
+    this.refreshParts();
+  }
+
+  refreshParts() {
+    this.salesOrderService.GetSalesOrderPartsViewById(this.salesOrderId).subscribe(res => {
+      for (let i = 0; i < this.summaryParts.length; i++) {
+        for (let j = 0; j < res.parts.length; j++) {
+          if (this.summaryParts[i].childParts[0].salesOrderPartId == res.parts[j].salesOrderPartId) {
+            this.summaryParts[i].childParts[0].qtyAvailable = res.parts[j].qtyAvailable;
+            this.summaryParts[i].childParts[0].qtyReserved = res.parts[j].qtyReserved;
+          }
+        }
+      }
+    })
   }
 
   onCloseMargin(event) {
@@ -280,16 +292,20 @@ export class SalesOrderPartNumberComponent {
     }
     this.openPartNumber(true);
   }
+
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
+
   partsAction(type) {
     this.selectedPartActionType = type;
-    let contentPart = this.popupContentforPartAction;
-    this.partActionModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
+    let contentPart = this.salesReserve; //this.popupContentforPartAction;
+    //this.partActionModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
+    this.salesReserveModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
   }
+
   onPartRowSelect(event) {
     this.selectedPartDataForAction = event.data;
   }
@@ -360,6 +376,7 @@ export class SalesOrderPartNumberComponent {
           this.part.salesQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
           this.part.quoteVesrion = this.salesQuote.versionNumber;
           this.part.customerRef = this.salesQuote.customerReferenceName;
+          this.part.serialNumber = this.selectedPart.serialNumber;
           this.part.uom = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
@@ -412,7 +429,6 @@ export class SalesOrderPartNumberComponent {
     }
   }
   openSalesMarginSave(event) {
-    console.log(event);
     // if(!this.checkForDuplicates(event)){
     this.salesQuoteService.getSearchPartObject().subscribe(data => {
       this.query = data;
@@ -444,8 +460,6 @@ export class SalesOrderPartNumberComponent {
     this.salesMarginModal.close();
     this.filterParts();
     this.canSaveParts = false;
-    console.log(this.query);
-    console.log(this.selectedParts);
     // }
   }
 
@@ -470,6 +484,7 @@ export class SalesOrderPartNumberComponent {
     this.part = part;
     this.deletePartModal = this.modalService.open(contentPartDelete, { size: "sm", backdrop: 'static', keyboard: false });
   }
+
   deletePart(): void {
     if (this.part.salesOrderPartId) {
       this.salesOrderService.deletePart(this.part.salesOrderPartId).subscribe(response => {
@@ -480,7 +495,6 @@ export class SalesOrderPartNumberComponent {
           `Part removed successfully.`,
           MessageSeverity.success
         );
-
       });
     } else {
       this.removePartNamber(this.part);
@@ -491,7 +505,6 @@ export class SalesOrderPartNumberComponent {
         MessageSeverity.success
       );
     }
-
   }
 
   checkForDuplicates(selectedPart) {
@@ -499,6 +512,7 @@ export class SalesOrderPartNumberComponent {
     let selectedStockLineNumber = selectedPart.stockLineNumber;
     let selectedConditionId = selectedPart.conditionId;
     let selectedPmaStatus = selectedPart.pmaStatus;
+
     for (let i = 0; i < this.selectedParts.length; i++) {
       let partNumber = this.selectedParts[i].partNumber;
       let stockLineNumber = this.selectedParts[i].stockLineNumber;
@@ -515,11 +529,13 @@ export class SalesOrderPartNumberComponent {
       return false;
     }
   }
+
   removePartNamber(selectedPart) {
     let selectedPartNamber = selectedPart.partNumber;
     let selectedStockLineNumber = selectedPart.stockLineNumber;
     let selectedConditionId = selectedPart.conditionId;
     let selectedPmaStatus = selectedPart.pmaStatus;
+
     for (let i = 0; i < this.selectedParts.length; i++) {
       let partNumber = this.selectedParts[i].partNumber;
       let stockLineNumber = this.selectedParts[i].stockLineNumber;
@@ -537,7 +553,6 @@ export class SalesOrderPartNumberComponent {
     }
     this.filterParts();
     this.checkUpdateOrsaveButton();
-    console.log(this.selectedParts);
   }
 
   initiateCreateWOROPO(part, type) {
@@ -556,7 +571,6 @@ export class SalesOrderPartNumberComponent {
         if (type == "PO") {
           this.router.navigateByUrl('vendorsmodule/vendorpages/app-create-po');
         }
-
       }
     });
   }
@@ -564,13 +578,13 @@ export class SalesOrderPartNumberComponent {
   ngOnDestroy() {
     this.salesOrderService.salesOrderReference = this.salesOrderReferenceData;
   }
+
   isEditDisabled(quote: ISalesQuote, part: any): boolean {
     if (part.createdBy && part.createdBy == this.userName) {
       return ((quote.isApproved || part.isApproved) && part.methodType != "S")
     } else {
       return true;
     }
-
   }
 
   isDeleteDisabled(quote: ISalesQuote, part: any) {
@@ -582,9 +596,7 @@ export class SalesOrderPartNumberComponent {
   }
 
   openConfirmationModal() {
-
     this.modal = this.modalService.open(this.updatePNDetailsModal, { size: "sm", backdrop: 'static', keyboard: false });
-
   }
 
   closeConfirmationModal() {
@@ -592,6 +604,7 @@ export class SalesOrderPartNumberComponent {
       this.modal.close();
     }
   }
+
   get userName(): string {
     return this.authService.currentUser
       ? this.authService.currentUser.userName
@@ -599,17 +612,15 @@ export class SalesOrderPartNumberComponent {
   }
 
   onPaging(event) {
-
   }
 
   approve() {
     let partList: any = [];
     this.salesOrderView.parts = [];
-
     this.salesOrderView.salesOrder.salesOrderQuoteId = this.salesQuote.salesOrderQuoteId;
-
     let invalidParts = false;
     let invalidDate = false;
+
     for (let i = 0; i < this.selectedParts.length; i++) {
       let selectedPart = this.selectedParts[i];
       var errmessage = '';
@@ -670,7 +681,6 @@ export class SalesOrderPartNumberComponent {
       });
     }
     this.closeConfirmationModal();
-
   }
 
   onDataLoadFailed(error) {
@@ -689,7 +699,6 @@ export class SalesOrderPartNumberComponent {
   onAddTextAreaInfo(material, stockIndex, index) {
     this.notesIndex = stockIndex;
     this.notesSummaryIndex = index;
-    console.log("memolist", material, index);
     this.textAreaInfo = material.notes;
   }
   textAreaInfo: any;
@@ -707,7 +716,6 @@ export class SalesOrderPartNumberComponent {
   onCloseTextAreaInfo() {
     $("#textarea-popupNotes").modal("hide");
   }
-
 
   filterParts() {
     this.summaryParts = [];
@@ -769,7 +777,6 @@ export class SalesOrderPartNumberComponent {
     return Number(num1) + Number(num2);
   }
 
-
   getUniqueParts(myArr, prop1, prop2, prop3) {
     let uniqueParts = JSON.parse(JSON.stringify(myArr));
     // let uniquePartsFiltered = [];
@@ -783,6 +790,7 @@ export class SalesOrderPartNumberComponent {
     }, []);
     return uniqueParts;
   }
+
   combineParts(parts) {
     this.selectedParts = [];
     parts.forEach(part => {
@@ -792,7 +800,6 @@ export class SalesOrderPartNumberComponent {
         } else {
           this.selectedParts = [...part.childParts];
         }
-
       }
     })
   }
@@ -816,4 +823,70 @@ export class SalesOrderPartNumberComponent {
     // }
   }
 
+  deletedata: number[] = [];
+  deleteAllPartModal: NgbModalRef;
+
+  openmultiplepartDelete(summarypart, index, deletepartcontent) {
+    this.selectedSummaryRow = summarypart;
+    this.deletedata = [];
+    for (let i = 0; i < summarypart.childParts.length; i++) {
+      if (this.selectedSummaryRow.childParts[i].salesOrderPartId) {
+        this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderPartId);
+      }
+    }
+    for (let i = 0; i < summarypart.childParts.length; i++) {
+      this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderPartId);
+    }
+    this.deleteAllPartModal = this.modalService.open(deletepartcontent, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+
+  deleteMultiplePart(): void {
+    if (this.deletedata.length > 0) {
+      let data = { "salesOrderPartIds": this.deletedata }
+      this.salesOrderService.deleteMultiplePart(data).subscribe(response => {
+        for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
+          this.removePartNamber(this.selectedSummaryRow.childParts[i]);
+        }
+        this.deleteAllPartModal.close();
+        this.alertService.showMessage(
+          "Success",
+          `Part removed successfully.`,
+          MessageSeverity.success
+        );
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
+    } else {
+      for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
+        this.removePartNamber(this.selectedSummaryRow.childParts[i]);
+      }
+      //this.removePartNamber(this.part);
+      this.deleteAllPartModal.close();
+      this.alertService.showMessage(
+        "Success",
+        `Part removed successfully.`,
+        MessageSeverity.success
+      );
+    }
+  }
+
+  onCloseParMultipletDelete() {
+    this.deleteAllPartModal.close();
+  }
+
+  createPO(rowData) {
+    localStorage.setItem("itemMasterId", rowData.partId);
+    localStorage.setItem("partNumber", rowData.partNumber);
+    localStorage.setItem("salesOrderId", this.salesOrderId);
+    //const { vendorId } = rowData;
+    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);
+  }
+
+  createRO(rowData) {
+    localStorage.setItem("itemMasterId", rowData.partId);
+    localStorage.setItem("partNumber", rowData.partNumber);
+    localStorage.setItem("salesOrderId", this.salesOrderId);
+    //const { vendorId } = rowData;
+    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
+  }
 }

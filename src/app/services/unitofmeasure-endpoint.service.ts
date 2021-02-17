@@ -31,20 +31,20 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUnitOfMeasureEndpoint());
+                return this.handleErrorCommon(error, () => this.getUnitOfMeasureEndpoint());
             });
     }
     getAllUnitOfMeasureEndpoint<T>(): Observable<T> {
         return this.http.get<T>(this._actionUrlAll, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllUnitOfMeasureEndpoint());
+                return this.handleErrorCommon(error, () => this.getAllUnitOfMeasureEndpoint());
             });
     }
     getNewUnitOfMeasureEndpoint<T>(userObject: any): Observable<T> {
 
         return this.http.post<T>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewUnitOfMeasureEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewUnitOfMeasureEndpoint(userObject));
             });
     }
 
@@ -53,7 +53,7 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getHistoryUnitOfMeasureEndpoint(unitofmeasureId));
+                return this.handleErrorCommon(error, () => this.getHistoryUnitOfMeasureEndpoint(unitofmeasureId));
             });
     }
 
@@ -62,7 +62,7 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditUnitOfMeasureEndpoint(unitofmeasureId));
+                return this.handleErrorCommon(error, () => this.getEditUnitOfMeasureEndpoint(unitofmeasureId));
             });
     }
 
@@ -71,7 +71,7 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateUnitOfMeasureEndpoint(roleObject, unitofmeasureId));
+                return this.handleErrorCommon(error, () => this.getUpdateUnitOfMeasureEndpoint(roleObject, unitofmeasureId));
             });
     }
 
@@ -80,7 +80,7 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeleteUnitOfMeasureEndpoint(unitofmeasureId));
+                return this.handleErrorCommon(error, () => this.getDeleteUnitOfMeasureEndpoint(unitofmeasureId));
             });
     }
 
@@ -89,7 +89,7 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endPointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUnitOfWorkAuditDetails(Id));
+                return this.handleErrorCommon(error, () => this.getUnitOfWorkAuditDetails(Id));
             });
     }
 
@@ -98,7 +98,7 @@ export class UnitOfMeasureEndpoint extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUnitOfMeasurePages(paginationOption));
+                return this.handleErrorCommon(error, () => this.getUnitOfMeasurePages(paginationOption));
             });
     }
 

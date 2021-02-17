@@ -47,6 +47,10 @@ select:disabled{
 p-radioButton label{
   width: unset;
 }
+.p-radiobutton-label-horizontal .ui-radiobutton-label {
+  width: unset !important;
+  margin-right: 10px;
+}
 
 .emp-labour-cstm p-autocomplete .ui-autocomplete {
   width: calc(100% - 17px) !important;
@@ -110,4 +114,24 @@ p-radioButton label{
 table thead tr th {
   text-align: center;
   min-width: 0px;
+}
+.labor_ico{
+  margin-top: 2px;
+    font-size: 18px !important;
+}
+.capitalizer{
+  text-transform: capitalize;
+}
+.selected-item{
+  text-transform: initial !important;
+}
+.with_75{
+  width: 75px !important;
+}
+.vetigo_c label{
+  position: relative;
+  top: 3px;
+}
+.text_sen{
+  text-align: start;
 }

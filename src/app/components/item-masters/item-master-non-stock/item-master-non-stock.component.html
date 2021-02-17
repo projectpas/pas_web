@@ -3,13 +3,13 @@
         <div class="col-md-8">
             <div class="form-group">
                 <label class="radiobtn-label">Item Type:</label>
-                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                         <input type="radio" name="stock" class="form-control" (click)="stock()">
                         <span class="checkmark"></span>Stock
                     </label>
                 </div>
-                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                         <input type="radio" name="stock" class="form-control" [checked]="true" (click)="nonStock()">
                         <span class="checkmark"></span>Non-Stock
@@ -19,15 +19,15 @@
         </div>
     </div>
     <div class="card new-card">
-        <div class="card-header bg-primary">
+        <div class="card-header header">
           <div class="row">
             <div class="col">
-              <h4 class="new-card-heading">Item Master Setup (Non-Stock)</h4>
+              <h4 class="header-name">Item Master Setup (Non-Stock)</h4>
             </div>
             <div>
               <button
                 type="button"
-                class="btn-sm new-btn-primary"
+                class="btn-sm header-button"
                 [routerLink]="['/itemmastersmodule/itemmasterpages/app-item-master-list']">
                 Item Master List
               </button>
@@ -36,14 +36,14 @@
         </div>
     <div class="clear"></div>
     <br>
-    <div class="pheading">
+    <!-- <div class="pheading">
         <h4 class="page-heading clr-green">Item Master Setup (Non-Stock)</h4>
-    </div>
+    </div> -->
     <form #nonStockForm="ngForm" class="form-horizontal add-custustomer">
         <div>
             <div class="form-row col-row">
                 <div class="col-md-3">
-                    <div class="form-group" style="margin-left: 13px">
+                    <div class="form-group pn-div">
                         <label for="customerName" class="control-label">
                             PN <strong class="clr-red">*</strong>
                         </label>
@@ -52,7 +52,7 @@
                                 <div class="ui-helper-clearfix">{{partName}}</div>
                             </ng-template>
                         </p-autoComplete>
-                        <div *ngIf="disableSavePartName" style="color:red">Already Exist</div>
+                        <div *ngIf="disableSavePartName" class="clr-red">Already Exist</div>
                         <label class="control-label">PN Description <strong class="clr-red">*</strong></label>
                         <p-autoComplete (onKeyUp)=descriptionHandler($event) (onSelect)="partdescriptionId($event)" [suggestions]="descriptionCollection" name="partdescription" (completeMethod)="filterdescription($event)" [(ngModel)]="sourceItemMaster.partdescription" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPNDesc()" required>
                             <ng-template let-partDescription pTemplate="item">
@@ -75,7 +75,7 @@
                         <div>
                             <p-dropdown class="p-dropdown-100" [options]="allitemgroupobjInfo" filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
                         </div>
-                        <div class="inline-block display-flex spacing-label" style="margin-top: 5px;">
+                        <div class="inline-block display-flex spacing-label m-t-5">
                             <label class="control-label">Acquired?</label>
                             <div class="radio-value">
                                 <label class="radio-inline">
@@ -116,7 +116,7 @@
                             </label>
                         </div>
                         <p-dropdown class="p-dropdown-100" [options]="allUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
-                        <div class="checkbox-cstm" style="margin-top: 14px;">
+                        <div class="checkbox-cstm check-m-top" >
                             <label>
                                 <input type="checkbox" name="isHazardousMaterial"
                                        [(ngModel)]="sourceItemMaster.isHazardousMaterial">
@@ -135,7 +135,9 @@
                         <label class="control-label">List Price </label>
                         <input class="form-control text-right" type="text" name="listPrice" pKeyFilter="money" [(ngModel)]="sourceItemMaster.listPrice" (change)="onChangeListPrice()">
                         <label class="control-label">Price Date </label>
-                        <p-calendar [showIcon]="true" name="priceDate" [(ngModel)]="sourceItemMaster.priceDate"></p-calendar>
+                        <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                         name="priceDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                         [(ngModel)]="sourceItemMaster.priceDate"></p-calendar>
                     </div>
                 </div>
             </div>
@@ -166,7 +168,7 @@
     </p-footer>
 </p-dialog>
 
-<ng-template #contentEdits let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #contentEdits let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Item Group</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Item Group</h4>
@@ -227,7 +229,7 @@
     </div>
 </ng-template>
 
-<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #contentEdit let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Item Classification</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Item Classification</h4>
@@ -260,7 +262,7 @@
                         </ng-template>
 
                     </p-autoComplete>
-                    <div *ngIf="disableClassdesc" style="color:Red">Already Exist</div>
+                    <div *ngIf="disableClassdesc" class="clr-red">Already Exist</div>
                 </div>
             </div>
             <div class="form-group">
@@ -273,7 +275,7 @@
                         </ng-template>
 
                     </p-autoComplete>
-                    <div *ngIf="disabletypeSave" style="color:Red">Already Exist</div>
+                    <div *ngIf="disabletypeSave" class="clr-red">Already Exist</div>
                     <div class="clear"></div>
                 </div>
             </div>
@@ -312,7 +314,7 @@
 
 </ng-template>
 
-<ng-template #conEdit let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #conEdit let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Unit Of Mearsure</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Unit Of Mearsure</h4>
@@ -397,7 +399,7 @@
     </div>
 
 </ng-template>
-<ng-template #modeledt let-c="close" let-d="dismiss" style="width:auto">
+<ng-template #modeledt let-c="close" let-d="dismiss" class="wauto">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Manufacturer</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Manufacturer</h4>

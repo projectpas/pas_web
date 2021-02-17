@@ -1,130 +1,139 @@
 ﻿<div class="x_panel">
     <div class="x_content">
-        <div class="card" *ngIf="purchaseOrderHeaderData">
-            <div class="card-header">
-                <nav class="pull-left" aria-label="breadcrumb">
-                    <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                        <li class="breadcrumb-item active" aria-current="page">Receiving</li>
-                        <!-- <li class="breadcrumb-item " aria-current="page">PO-RO</li> -->
-                        <li class="breadcrumb-item " aria-current="page">Receiving PO Grid</li>
-                    </ol>
-                </nav>
-                <button class="btn btn-primary" (click)="toggle_epo_header=!toggle_epo_header">
-                    {{toggle_epo_header ? 'Collapse' : 'Expand'}}
-                </button>
+        <div class="x_content" *ngIf="purchaseOrderData">
+         <div class="card new-card">
+            <div class="card-header header">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="header-name">
+                            Receiving/Purchase Order
+                            <button class="btn-sm header-button header-button-alignment"
+                                    (click)="toggle_epo_header=!toggle_epo_header" style="margin-left: 20px;">
+                                {{toggle_epo_header ? 'Collapse' : 'Expand'}}
+                            </button>
+                        </h4>
+                    </div>
+                    <button type="button" class="btn-sm header-button pull-right"
+                            [routerLink]="['/receivingmodule/receivingpages/app-purchase-order']">
+                       Receiving PO List
+                    </button>
+                </div>
             </div>
             <div class="card-body">
-                <h4 class="po-head">Receiving - PO Grid (Single PO)</h4>
-                <form id="" class="ro-grid-form" name="">
-                    <div class="form-row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
-                                <div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of poStatus">
-                                        <label class="radio-cstm radio-cstm-d wauto">
-                                            <input type="radio" [checked]="status.value == purchaseOrderHeaderData.statusId" name="poStatus" class="form-control" value="{{status.value}}" disabled>
-                                            <span class="checkmark"></span>
-                                            {{status.label}}
-                                        </label>
-                                    </div>
+                <div class="form-row">
+                    <!-- <div class="col-md-8 ro-status-radios">
+                        <div class="form-group">
+                            <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
+                            <div>
+                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;"
+                                     *ngFor="let status of poStatus">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" [checked]="status.value == purchaseOrderData.statusId"
+                                               name="postatus" class="form-control" value="{{status.value}}" disabled
+                                               required>
+                                        <span class="checkmark"></span>
+                                        {{status.label}}
+                                    </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-9">
-                        <div class="form-row">
+                    </div> -->
+                    <div class="col-md-9">
+                        <div class="form-row" *ngIf="poDataHeader" >
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>RO Num</label>
-                                    <input class="form-control" type="text" name="purchaseOrderNumber" [(ngModel)]="purchaseOrderHeaderData.purchaseOrderNumber" disabled >
-                                </div>                        
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Vendor Name</label>
-                                    <input class="form-control" type="text" name="vendorName" [(ngModel)]="purchaseOrderHeaderData.vendorName" disabled>
+                                    <label>PO Num <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="purchaseOrderNumber"
+                                           [(ngModel)]="poDataHeader.purchaseOrderNumber" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Requisitioner</label>
-                                    <input class="form-control" type="text" name="requestedBy" [(ngModel)]="purchaseOrderHeaderData.requestedBy" disabled>
+                                    <label>Vendor Name <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="vendorName"
+                                           [(ngModel)]="poDataHeader.vendorName" disabled required>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Approver</label>
-                                    <input class="form-control" type="text" name="approver" [(ngModel)]="purchaseOrderHeaderData.approver" disabled>
+                                    <label>Requisitioner <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="requestedBy"
+                                           [(ngModel)]="poDataHeader.requisitioner" disabled required>
                                 </div>
-                            </div> -->
-                        </div> 
-                     </div>
+                            </div>
+                        </div>
                     </div>
-                    <hr *ngIf="toggle_epo_header"/>
-               
-                    <div class="form-row" *ngIf="toggle_epo_header">
-                        <div class="col-md-9">
+                </div>
+                <hr *ngIf="toggle_epo_header" />
+                <div class="form-row" *ngIf="toggle_epo_header" style="margin-top: 10px;">
+                    <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Open Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="openDate" [(ngModel)]="purchaseOrderHeaderData.openDate" [disabled]="true"></p-calendar>
+                                    <label>Open Date <span class="clr-red">*</span></label>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true" appendTo="body" name="openDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.openDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Closed/Cancelled Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="closedDate" [(ngModel)]="purchaseOrderHeaderData.closedDate" [disabled]="true"></p-calendar>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true" appendTo="body" name="closedDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.closedDate" [disabled]="true"></p-calendar>
                                 </div>
                                 <div class="form-group">
-                                    <label>Need By</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="needByDate" [(ngModel)]="purchaseOrderHeaderData.needByDate" [disabled]="true"></p-calendar>  
+                                    <label>Need By <span class="clr-red">*</span></label>
+                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true" appendTo="body" name="needByDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="poDataHeader.needByDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
-                                    <label>Priority</label>
-                                    <input class="form-control" type="text" name="priority" [(ngModel)]="purchaseOrderHeaderData.priority" disabled>
-                                </div>                            
-                            </div>                       
-                            <div class="col-md-4">                                
+                                    <label>Priority <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="priority"
+                                           [(ngModel)]="poDataHeader.priority" disabled required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Vendor Code</label>
-                                    <input class="form-control" type="text" name="vendorCode" [(ngModel)]="purchaseOrderHeaderData.vendorCode" disabled>
+                                    <label>Vendor Code <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="vendorCode"
+                                           [(ngModel)]="poDataHeader.vendorCode" disabled required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Vendor Contact</label>
-                                    <input class="form-control" type="text" name="vendorContact" [(ngModel)]="purchaseOrderHeaderData.vendorContact" disabled>
+                                    <label>Vendor Contact <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="vendorContact"
+                                           [(ngModel)]="poDataHeader.vendorContact" disabled required>
                                 </div>
                                 <div class="form-group">
                                     <label>Contact Phone</label>
-                                    <input class="form-control" type="text" name="contactPhone" [(ngModel)]="purchaseOrderHeaderData.vendorPhone" disabled>
+                                    <input class="form-control" type="text" name="contactPhone"
+                                           [(ngModel)]="poDataHeader.workPhone" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label>Credit Limit &amp; Terms</label>
                                     <div class="form-row">
                                         <div class="col-sm-5">
-                                            <input class="form-control" type="text" name="creditLimit" [(ngModel)]="purchaseOrderHeaderData.creditLimit" disabled>
+                                            <input class="form-control" type="text" placeholder="limit"
+                                                   name="creditLimit" [(ngModel)]="poDataHeader.creditLimit" disabled>
                                         </div>
                                         <div class="col-sm-7">
-                                            <input class="form-control" type="text" name="creditTerms" [(ngModel)]="purchaseOrderHeaderData.terms" disabled>
+                                            <input class="form-control" type="text" name="creditTerms"
+                                                   [(ngModel)]="poDataHeader.creditTerm" disabled>
                                         </div>
                                     </div>
                                 </div>
-            
                             </div>
-                            <div class="col-md-4">                                                                
-                                <!-- <div class="form-group">
-                                    <label>Approved Date</label>
-                                    <p-calendar class="pas-clder" [showIcon]="true" name="approvedDate" [(ngModel)]="purchaseOrderHeaderData.dateApproved" [disabled]="true"></p-calendar>
-                                </div> -->
-                                <div class="form-group memo-popup-cstm" style="margin-top: 12px;">
-                                        <label>Memo</label>
-                                        <span   matTooltipPosition="above" matTooltip="{{purchaseOrderHeaderData.memo}}">
-                                            <input type="text" name="memo" pInputText class="form-control" value="{{purchaseOrderHeaderData.memo}}" disabled /></span>
-                                        <i class="fa fa-info-circle fa-lg"   matTooltipPosition="above" matTooltip="{{purchaseOrderHeaderData.memo}}"></i>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="status"
+                                           [(ngModel)]="poDataHeader.status" disabled required>
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox-cstm" style="margin-top: 15px;">
                                         <label>
-                                            <input type="checkbox" name="resale" class="form-control" [(ngModel)]="purchaseOrderHeaderData.resale" disabled>
-                                            <span class="cr" style="opacity: 0.6;"><i class="cr-icon pi pi-check"></i></span>
+                                            <input type="checkbox" name="resale" class="form-control"
+                                                   [(ngModel)]="poDataHeader.resale" disabled>
+                                            <span class="cr" style="opacity: 0.6;">
+                                                <i class="cr-icon pi pi-check"></i>
+                                            </span>
                                             Resale
                                         </label>
                                     </div>
@@ -132,54 +141,88 @@
                                 <div class="form-group">
                                     <div class="checkbox-cstm" style="margin-top: 10px;">
                                         <label>
-                                            <input type="checkbox" name="deferredReceiver" [(ngModel)]="purchaseOrderHeaderData.deferredReceiver" disabled>
-                                            <span class="cr" style="opacity: 0.6;"><i class="cr-icon pi pi-check"></i></span>
+                                            <input type="checkbox" name="deferredReceiver"
+                                                   [(ngModel)]="poDataHeader.deferredReceiver" disabled>
+                                            <span class="cr" style="opacity: 0.6;">
+                                                <i class="cr-icon pi pi-check"></i>
+                                            </span>
                                             Deferred Receiver
                                         </label>
                                     </div>
-                                </div>                        
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-12" style="max-width: 100%;">
-                                <div class="form-group">
-                                    <label>Notes</label>
-                                    <textarea name="ponotes" class="form-control head-notes" rows="2" 
-                                    [(ngModel)]="purchaseOrderHeaderData.notes" disabled></textarea>
+
+                            <div class="col-md-4">
+                                <div class="form-group memo-popup-cstm">
+                                    <label>
+                                        Notes
+                                        <span class="editor-span">
+                                            <a class="btn nobg"                                                
+                                               matTooltipPosition="above" matTooltip="Notes">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
+                                    </label>
+                                    <span>
+                                        <div [innerHTML]="poDataHeader.notes"
+                                             [matTooltip]="parsedText(poDataHeader.notes)" matTooltipPosition="above"
+                                             class="form-control text-editor-field"
+                                             class="text_editor_box text-editor-width">
+                                        </div>
+
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group memo-popup-cstm">
+                                    <label>
+                                        Memo
+                                        <span class="editor-span">
+                                            <a class="btn nobg" 
+                                               matTooltipPosition="above" matTooltip="Add Memo"
+                                               disabled="true" ><i class="fa fa-pencil"></i></a>
+                                        </span>
+                                    </label>
+                                    <span>
+                                        <div [innerHTML]="poDataHeader.poMemo"
+                                             [matTooltip]="parsedText(poDataHeader.poMemo)" matTooltipPosition="above"
+                                             class="form-control " class="text_editor_box text-editor-field"
+                                             disabled="true"></div>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                     </div>
-                            <div class="col-md-3">
-                                <div class="card" style="margin-top: 20px;">
-                                    <div class="card-header" style="padding: 10px 12px;">
-                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure</h5>
-                                    </div>
-                                    <div class="card-body" style="padding: 4px 12px 6px;">
-                                        <div class="form-group" style="margin-bottom: 2px;">
-                                            <!-- <label>Company</label> -->
-                                            <input class="form-control" type="text" name="companyName" [(ngModel)]="headerManagementStructure.level1" disabled>
-                                        </div>
-                                        <div class="form-group" style="margin-bottom: 2px;">
-                                            <!-- <label>BU</label> -->
-                                            <input class="form-control" type="text" name="BUName" [(ngModel)]="headerManagementStructure.level2" disabled>
-                                        </div>
-                                        <div class="form-group" style="margin-bottom: 2px;">
-                                            <!-- <label>Division</label> -->
-                                            <input class="form-control" type="text" name="divisionName" [(ngModel)]="headerManagementStructure.level3" disabled>
-                                        </div>
-                                        <div class="form-group" style="margin-bottom: 2px;">
-                                            <!-- <label>Dept</label> -->
-                                            <input class="form-control" type="text" name="deptName" [(ngModel)]="headerManagementStructure.level4" disabled>
-                                        </div>
-                                    </div>
-                                </div>                                            
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card management-structure-card">
+                            <div class="card-header management-structure-card-header">
+                                <h5 class="management-structure-header">Management Structure <span class="clr-red">*</span></h5>
+                            </div>
+                            <div class="card-body structure-card-body">
+                                <div class="form-group" style="margin-bottom: 2px; margin-top: 5px;">
+                                    <input class="form-control" type="text" name="companyName"
+                                           [(ngModel)]="poDataHeader.level1" disabled required>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 2px; margin-top: 7px;">
+                                    <input class="form-control" type="text" name="BUName"
+                                           [(ngModel)]="poDataHeader.level2" disabled>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 2px; margin-top: 7px;">
+                                    <input class="form-control" type="text" name="divisionName"
+                                           [(ngModel)]="poDataHeader.level3" disabled>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 2px; margin-top: 7px;">
+                                    <input class="form-control" type="text" name="deptName"
+                                           [(ngModel)]="poDataHeader.level4" disabled>
+                                </div>
                             </div>
                         </div>
-                   
-                </form>
+                    </div>
+                </div>
             </div>
         </div>
+        
+    </div>
 
         <div class="table-responsive pas-table-cstm ero-table-cstm">
             <table class="table table-bordered " id="po-table">
@@ -209,7 +252,7 @@
                             <td>{{part.itemMaster.partNumber}}</td>
                             <td>{{part.altEquiPartNumber}}</td>
                             <td>{{part.itemMaster.partDescription}}</td>
-                            <td>{{part.itemMaster.manufacturer?.name}}</td>
+                            <td>{{part.manufacturer}}</td>
                             <!-- <td>{{part.conditionText}}</td>
                             <td>{{part.uomText}}</td> -->
                             <td>{{part.itemMaster.isPma ? "PMA," : '' + part.itemMaster.isDer ? "DER" : ''}}</td>
@@ -217,9 +260,9 @@
                             <td class="text-right">{{part.discountPerUnit}}</td>
                             <td class="text-right">{{part.unitCost}}</td>
                             <td class="text-right">{{part.extendedCost}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{part.workOrderNo}}</td>
+                            <td>{{part.subWorkOrderNo}}</td>
+                            <td>{{part.salesOrderNo}}</td>
                             <td style="min-width: 130px;">
                                 <!-- <label style="width:90px;">Company:</label> -->
                                 {{part.companyText}}
@@ -238,7 +281,7 @@
                                 <!-- <label style="width:90px;">Dept:</label> -->
                                 {{part.departmentText}}
                             </td>
-                            <th colspan="43"></th>
+                            <td colspan="43"></td>
                         </tr>
 
                         <ng-container>
@@ -308,9 +351,9 @@
                                     <td>{{SL.receiverNumber}}</td>
                                     <td class="text-right">{{SL.purchaseOrderUnitCost}}</td>
                                     <td class="text-right">{{SL.purchaseOrderExtendedCost}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{part.workOrderNo}}</td>
+                                    <td>{{part.subWorkOrderNo}}</td>
+                                    <td>{{part.salesOrderNo}}</td>
                                     <td style="min-width: 120px;">
                                         <!-- <label style="width:90px;">Company:</label> -->
                                         {{SL.companyText}}
@@ -343,13 +386,13 @@
                                             {{part.stockLine[stockline_row_index].binText}}
                                     </td>
                                     <!-- <td>{{SL.ownerType == 3 ? 'Vendor' : SL.ownerType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                    <td>{{SL.ownerType == 1 ? 'Customer' : SL.ownerType == 2 ? 'Vendor' : SL.ownerType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.ownerTypeName }}</td>
                                     <td>{{SL.ownerText}}</td>
                                     <!-- <td>{{SL.obtainFromType == 3 ? 'Vendor' : SL.obtainFromType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                    <td>{{SL.obtainFromType == 1 ? 'Customer' : SL.obtainFromType == 2 ? 'Vendor' : SL.obtainFromType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.obtainFromTypeName}}</td>
                                     <td>{{SL.obtainFromText}}</td>
                                     <!-- <td>{{SL.traceableToType == 3 ? 'Vendor' : SL.traceableToType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                    <td>{{SL.traceableToType == 1 ? 'Customer' : SL.traceableToType == 2 ? 'Vendor' : SL.traceableToType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.traceableToTypeName }}</td>
                                     <td>{{SL.traceableToText}}</td>
                                     <td>{{SL.manufacturingTrace}}</td>
                                     <td>{{SL.manufacturerText}}</td> <!--manufacturerName-->
@@ -404,23 +447,23 @@
                                     <td>
                                         <input type="checkbox" disabled [checked]="part.itemMaster.isTimeLife != false" />
                                     </td>
-                                    <td colspan="13" *ngIf="part.timeLife[stockline_row_index] == undefined "> </td>
-                                    <ng-container *ngIf="part.timeLife[stockline_row_index] != undefined">
-                                        <td style="min-width: 106px;">Remaining {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
-                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
-                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
-                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
-                                        <td style="min-width: 106px;">Since Repair {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
+                                    <td colspan="13"  *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)"> </td>
+                                    <ng-container  *ngIf="part.timeLife[stockline_row_index].stockLineDraftId > 0">
+                                        <td style="min-width: 120px;">Remaining {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
+                                        <td style="min-width: 120px;">Since New {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since Repair {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
     
-                                        <td style="min-width: 106px;">Remaining {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
-                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
-                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
-                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
-                                        <td style="min-width: 106px;">Since Repair {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
+                                        <td style="min-width: 120px;">Remaining {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
+                                        <td style="min-width: 120px;">Since New {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since Repair {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
     
-                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
-                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
-                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since New {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
                                     </ng-container>                                
                                 </tr>
                             </ng-container>

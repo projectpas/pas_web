@@ -41,30 +41,29 @@
     </div>
 </div> 
 <div>
-    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10 " id="custome_material" [columns]="cols" #materialTble
+    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10 Materials_wo" id="custome_material" [columns]="cols" #materialTble
         [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100]"
         (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th></th>
-                <th *ngFor="let col of columns">
+                <th class="table-column-width"></th>
+                <!-- [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" -->
+                <th class="table-column-width" *ngFor="let col of columns" >
                     {{col.header}} 
                 </th>
-                <th *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
+                <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
-            <tr [ngClass]="{'color_pick': rowData.isRoleUp==false }">
-                <td style="text-align: center;">
+            <!-- [ngClass]="{'color_pick': rowData.isRoleUp==false }" -->
+            <tr>
+                <td class="table-column-width">
                     <span *ngIf="rowData.partStatusId !=0">
-                        <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-success btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="getRollupMaterialList(rowData,i)" ></i> 
+                        <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-success"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="getRollupMaterialList(rowData,i)" ></i> 
                     </span>
-                    <!-- <span *ngIf="rowData.partStatusId ==0">
-                        <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="fa fa-plus btn btn-default btn-cstm btn-xs ex-gray"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 3px 8px !important;"></i>
-                    </span> -->
-                    <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false" class="fa fa-minus btn-danger btn-cstm btn-xs"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="removeRollUpList(rowData,i)"></i>   
+                     <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false" class="fa fa-minus btn-danger"  matTooltip="Show stock line details" matTooltipPosition="above" style="padding: 7px 8px !important;" (click)="removeRollUpList(rowData,i)"></i>   
                 </td>
-                <td *ngFor="let col of columns">
+                <td class="table-column-width" *ngFor="let col of columns">
                     <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " class="m-0 p-0"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
                     <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" class="m-0 p-0 text-right"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
                     <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" class="m-0"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
@@ -74,44 +73,43 @@
                     <p *ngIf="col.field =='altEquiv'">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
                     <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='defered'"
                     class="form-control w60" [(ngModel)]="rowData.defered" style="pointer-events: none;margin-left: 43%;">
-                    <!-- {{ (pageIndex - 1) * pageSize + i + 1 }} -->
                     <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
                 </td>
-                <td class="materiallist-action" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
+                <td class="action-icons-cstm table-column-width" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">
                     <span data-target="#addNewMaterials" data-toggle="modal"><button class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></button></span>
                     <span><button type="button" class="btn nobg btn-pluspo-cstm" (click)="createNewPoWorkOrder(rowData)" *ngIf="rowData.isRoleUp==false" [disabled]="!(rowData.quantity > rowData.quantityIssued + rowData.quantityReserved + rowData.partQuantityAvailable)"  matTooltip="Create PO" matTooltipPosition="above" [ngClass]="{'btn_disabled': !(rowData.quantity > (rowData.quantityIssued + rowData.quantityReserved + rowData.partQuantityAvailable))}"><i class="fa fa-plus"></i></button></span>
                    
                     <span *ngIf="!isSubWorkOrder && rowData.provision=='Sub Work Order'">
                         <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId == 0" (click)="subWoClick(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above" [disabled]="!(rowData.partStatusId ==2 || rowData.partStatusId ==3)" >
                         <i class="fa fa-plus grn_clr" style="color:green"  [ngClass]="{'btn_disabled':!(rowData.partStatusId ==2 || rowData.partStatusId ==3)}"></i>
-                        <!-- && ( rowData.partStatusId !=0 || rowData.partStatusId !=null) -->
                     </button>
                     <button type="button" class="btn nobg btn-pluspo-cstm" *ngIf="rowData.subWorkOrderId != 0" (click)="editSubWo(rowData)" [matTooltip]="rowData.subWorkOrderId ==0 ? 'Create Sub Work Order' : 'Edit Sub Work Order'" matTooltipPosition="above">
                         <i class="fa fa-pencil grn_clr" style="color:green" ></i>
                     </button>
                 </span>
-
-
                 <span *ngIf="!isSubWorkOrder && rowData.provision !='Sub Work Order'">
                     <button type="button" class="btn nobg btn-pluspo-cstm"  disabled >
-                    <i class="fa fa-plus" style="color: #b7b7b7;" ></i>
-                </button>
-            </span>
-
-
-
-                    <!-- <span><button type="button" class="btn nobg btn-pluspo-cstm"  *ngIf="rowData.provision=='Sub Work Order'" matTooltip="Add to Sub Work Order" matTooltipPosition="above" [disabled]="rowData.provision!='Sub Work Order'"><i class="fa fa-plus" style="color:green"></i></button></span> -->
-                    <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': rowData.quantityIssued==0}" [disabled]="rowData.quantityIssued==0" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                        <i class="fa fa-plus" style="color: #b7b7b7;" ></i>
+                     </button>
+                </span>
+                <span><button type="button" class="btn nobg btn-delete-cstm" *ngIf="rowData.isRoleUp==false;" (click)="openDelete(content,rowData)"  [ngClass]="{'btn_disabled': rowData.quantityIssued==0}" [disabled]="rowData.quantityIssued==0" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                </td>
+            </tr>
+        </ng-template> 
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td colspan="48" class="no-records-cstm no-records-msg">
+                    No records found
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
+            <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
                 type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;" [ngModel]="
+            <input class="footer-input-width" [ngModel]="
             getPageCount(materialTble._totalRecords, pageSize)
           " [disabled]="true" pInputText type="text" />
         </ng-template>
@@ -121,14 +119,20 @@
     <div class="modal-dialog modal-xlg">
         <!-- Modal content-->
         <div class="modal-content">
+            <div class="preloader" *ngIf="isSpinnerVisibleReserve">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div></div><div></div> <div></div><div></div><div></div> <div></div><div></div><div></div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="closeMaterial()">&times;</button>
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 2">Issued Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 4">UnIssue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 5">UnReserve Parts</h4>
-                <!-- <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in  {{counter.min}} <span>m</span> : {{counter.sec}} <span>s</span></p> -->
+                <h4 class="modal-title" *ngIf="statusId === 4">Un Issue Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 5">Un Reserve Parts</h4>
                 <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter | formatTime}}</p>
             </div>
             <div class="form-row" style="margin-left: 15px;" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
@@ -144,8 +148,9 @@
             </div>
             <form #reserveData="ngForm">
                 <div class="modal-body" *ngIf="reservedList">
-                    <div class="table-responsive" id="workflow-attributes-block">
-                        <table class="table table-bordered table-border-modal">
+                    <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                        <div class="tableFixHead">
+                        <table class="table table-bordered">
                             <thead> 
                                 <tr>
                                     <th class="text-center" colspan="1"></th>
@@ -153,8 +158,6 @@
                                     <th *ngIf=" isShowEqPN" class="text-center" colspan="1"> </th>
                                     <th colspan="11" class="text-center"> Materials</th>
                                     <th colspan="2" class="text-center"> Stock</th>
-                                    <!-- <th class="text-center" colspan="3" *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></th>
-                                    *ngIf=" (statusId == 1 || statusId == 3)" -->
                                     <th class="text-center" colspan="4" ></th>
                                 </tr>
                                 <tr>
@@ -270,7 +273,6 @@
                                             #reservedDate="ngModel" [required]="x.isParentSelected" [maxDate]="minDateValue"
                                             [(ngModel)]="x.reservedDate" [maxDate]="minDateValue" disabled>
                                         </p-calendar>
-                                        <!-- [disabled]="!x.isParentSelected" -->
                                     </td>
                                     <td *ngIf="statusId != 1 &&  statusId != 5 ">
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="issuedDate{{i}}"
@@ -279,12 +281,7 @@
                                         </p-calendar>
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId  != 3 && statusId != 4">
-                                        <!-- <p-dropdown [options]="employeesOriginalData" name="reservedBy{{i}}"
-                                            #reservedBy="ngModel" placeholder="Select "
-                                            class="p-dropdown-custom-md-Header-table" [(ngModel)]="x.reservedById"
-                                            [required]="x.isParentSelected" [disabled]="!x.isParentSelected">
-                                        </p-dropdown> -->
-                                        <p-autoComplete field="name"
+                                       <p-autoComplete field="name"
                                         [(ngModel)]="x.reservedById" 
                                         name="reservedBy{{i}}" #reservedBy="ngModel"
                                         errorMessage="Records not found" [forceSelection]="true"
@@ -296,12 +293,7 @@
                                     </p-autoComplete>
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
-                                        <!-- <p-dropdown [options]="employeesOriginalData" name="issuedBy{{i}}"
-                                            #issuedBy="ngModel" placeholder="Select "
-                                            class="p-dropdown-custom-md-Header-table" [(ngModel)]="x.issuedById"
-                                             [required]="x.isParentSelected" [disabled]="!x.isParentSelected">
-                                        </p-dropdown> -->
-                                        <p-autoComplete field="name"
+                                       <p-autoComplete field="name"
                                         [(ngModel)]="x.issuedById"
                                         name="issuedBy{{i}}" #issuedBy="ngModel"
                                         errorMessage="Records not found" [forceSelection]="true"
@@ -320,16 +312,12 @@
                                         <input type="checkbox" [(ngModel)]="b.isChildSelected"
                                             name="isChildSelected{{y}}" (change)="selectedParts(b,$event)">
                                     </td>
-                                    <!-- <td  > -->
-                                        <!-- *ngIf="isShowAlternatePN" -->
-                                    <!-- </td> -->
                                     <td  *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3)">
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
                                     </td>
                                     <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
                                         <span>Alternative</span>
-                                        <!-- <span>Equivalent</span> -->
                                     </td>
                                     <td>{{b.altPartNumber}}</td>
                                     <td>{{b.altPartDescription}}</td>
@@ -342,10 +330,7 @@
                                         {{b.quantity}}
                                     </td>
                                     <td class="tex_end"> {{b.quantityAlreadyReserved}}</td> 
-                                    <!-- <td *ngIf="(statusId !== 1 && statusId !== 5)">
-                                        {{b.quantityReserved}}
-                                    </td> -->
-                                    <td class="tex_end">
+                                   <td class="tex_end">
                                         {{b.qtyToBeReserved}}   
                                     </td>
                                     <td *ngIf="(statusId === 1 || statusId === 5)">
@@ -362,28 +347,21 @@
                                             [disabled]="!b.isChildSelected">
                                     </td>
                                     <td class="tex_end">{{b.quantityAlreadyIssued}}</td>
-                                    <!-- <td *ngIf="(statusId !== 2 && statusId !== 3 && statusId !== 4)">
-                                        {{b.quantityIssued}}
-                                    </td> -->
                                     <td class="tex_end">{{b.qtyToBeIssued}}</td>
                                     <td class="tex_end">
                                         {{b.quantityOnHand}}
-                                        <!-- <input type="number" name="alterHand{{i}}" [(ngModel)]="b.quantityOnHand"> -->
-                                    </td>
+                                   </td>
                                     <td class="tex_end">
                                         {{b.quantityAvailable}}
-                                        <!-- <input type="number" name="alterAvailable{{i}}" [(ngModel)]="b.quantityAvailable"> -->
                                     </td>
                                     <td class="tex_end">
                                         {{b.quantityOnOrder}}
-                                        <!-- <input type="number" name="alterOrder{{i}}" [(ngModel)]="b.quantityOnOrder"> -->
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId != 3 && statusId != 4">
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="reservedDateAlt{{y}}"
                                             #reservedDateAlt="ngModel" [required]="b.isChildSelected" disabled
                                             [(ngModel)]="b.reservedDate"></p-calendar>
-                                            <!-- [disabled]="!b.isChildSelected" -->
-                                    </td>
+                                     </td>
                                     <td *ngIf="statusId != 1 &&  statusId != 5 ">
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="issuedDateAlt{{y}}"
                                             #issuedDateAlt="ngModel" [(ngModel)]="b.issuedDate" disabled
@@ -392,12 +370,6 @@
 
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId  != 3 && statusId != 4">
-                                        <!-- <p-dropdown [options]="employeesOriginalData" name="reservedByAlt{{y}}"
-                                            #reservedByAlt="ngModel" placeholder="Select " [disabled]="!b.isChildSelected"
-                                            class="p-dropdown-custom-md-Header-table" [(ngModel)]="b.reservedById"
-                                            [required]="b.isChildSelected">
-                                        </p-dropdown> -->
-
                                         <p-autoComplete field="name"
                                        [(ngModel)]="b.reservedById"
                                        name="reservedByAlt{{y}}" #reservedByAlt="ngModel"
@@ -412,11 +384,6 @@
 
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
-                                        <!-- <p-dropdown [options]="employeesOriginalData" name="issuedByAlt{{y}}"
-                                            #issuedByAlt="ngModel" placeholder="Select " [disabled]="!b.isChildSelected"
-                                            class="p-dropdown-custom-md-Header-table" [(ngModel)]="b.issuedById"
-                                            required [required]="b.isChildSelected">
-                                        </p-dropdown> -->
                                         <p-autoComplete field="name"
                                         [(ngModel)]="b.issuedById"
                                         name="issuedByAlt{{y}}" #issuedByAlt="ngModel"
@@ -441,23 +408,9 @@
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
                                     </td>
-
-                                    <!-- <td *ngIf="isShowAlternatePN" style="text-align: center;">
-                                        <input type="checkbox" name="showAlternateParts{{i}}" 
-                                             (ngModelChange)="showAlternateParts($event , x.woReservedIssuedAltParts)"
-                                             [(ngModel)]="x.showAlternateParts" >
+ <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
+                                        <span>Equivalent</span>
                                      </td>
-                                     <td *ngIf="isShowEqPN" style="text-align: center;">
-                                         <input type="checkbox" name="showEqParts{{i}}"
-                                             (ngModelChange)="showEquantParts($event , x.woReservedIssuedEquParts)" 
-                                             [(ngModel)]="x.showEqParts">
-                                     </td> -->
-                                     <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
-                                         <!-- <span>Alternative</span> -->
-                                         <span>Equivalent</span>
-                                     </td>
-
-
                                     <td>{{c.equPartNumber}}</td>
                                     <td>{{c.equPartDescription}}</td>
                                     <td>{{c.parentPartNo}}</td>
@@ -496,22 +449,14 @@
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="reservedDateEq{{i}}"
                                             #reservedDateEq="ngModel" [required]="c.isChildSelected" [maxDate]="minDateValue" disabled
                                             [(ngModel)]="c.reservedDate"></p-calendar>
-                                            <!-- [disabled]="!c.isChildSelected" -->
                                     </td>
                                     <td *ngIf="statusId != 1 &&  statusId != 5 ">
-                                        <!-- [disabled]="!c.isChildSelected" -->
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="issuedDateEq{{z}}"
+                                       <p-calendar [showIcon]="true" class="calender-cstm" name="issuedDateEq{{z}}"
                                             #issuedDateEq="ngModel" [(ngModel)]="c.issuedDate" [maxDate]="minDateValue" disabled
                                             [required]="c.isChildSelected"  >
                                         </p-calendar>
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId  != 3 && statusId != 4">
-                                        <!-- <p-dropdown [options]="employeesOriginalData" name="reservedByEq{{z}}"
-                                            #reservedByEq="ngModel" placeholder="Select " 
-                                            class="p-dropdown-custom-md-Header-table" [(ngModel)]="c.reservedById"
-                                            [required]="c.isChildSelected"  [disabled]="!c.isChildSelected">
-                                        </p-dropdown> -->
-
                                         <p-autoComplete field="name"
                                         [(ngModel)]="c.reservedById"
                                         name="reservedByEq{{z}}" #reservedByEq="ngModel"
@@ -524,13 +469,7 @@
                                      </p-autoComplete>
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
-                                        <!-- <p-dropdown [options]="employeesOriginalData" name="issuedByEq{{z}}"
-                                            #issuedByEq="ngModel" placeholder="Select "
-                                            class="p-dropdown-custom-md-Header-table" [(ngModel)]="c.issuedById"
-                                            required [required]="c.isChildSelected"  [disabled]="!c.isChildSelected">
-                                        </p-dropdown> -->
-
-                                        <p-autoComplete field="name"
+                                      <p-autoComplete field="name"
                                         [(ngModel)]="c.issuedById"
                                         name="issuedByEq{{z}}" #issuedByEq="ngModel"
                                          errorMessage="Records not found" [forceSelection]="true"
@@ -546,25 +485,21 @@
                         </ng-container>
                             </tbody>
                         </table>
+                        </div>
                         <div style="float:right">
                         </div>
                     </div>
                 </div>
-                <!-- !((checkedParts.length>0) && -->
-                <!-- !(checkedParts.length>0) && -->
-                <!-- !reserveData.valid  && -->
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled "
-                        style="padding: 6px 12px !important;">
+                    <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
+                        [disabled]="!savebutonDisabled ">
                     <span *ngIf="statusId === 1">Reserve</span>
                     <span *ngIf="statusId === 2">Issue</span>
                     <span *ngIf="statusId === 3">Reserve & Issue</span>
-                    <span *ngIf="statusId === 4"> UnIssue</span>
-                    <span *ngIf="statusId === 5">UnReserve</span>
-                    
+                    <span *ngIf="statusId === 4"> Un Issue</span>
+                    <span *ngIf="statusId === 5">Un Reserve</span>
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()" style="height: 30px;">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()">Cancel</button>
                 </div>
             </form>
         </div>
@@ -586,7 +521,6 @@
       <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="actionTimerReset()">Yes</button>
     </div>
   </ng-template>
-
   <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
     <div class="modal-header">
       <button
@@ -616,7 +550,6 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
   </ng-template>
   <div id="existingSubWo" class="modal fade" role="dialog" data-backdrop="static" >
     <div class="modal-dialog modal-xl">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -625,8 +558,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
             <div class="modal-body" *ngIf="subWoRecord && subWoRecord.workOrderMaterialsId !=0 && viewSubWolist==true">
                 <app-sub-work-orderlist [workOrderId]="workOrderId" [mpnId]="mpnId" [forSubWorkOrder]="true" [workOrderMaterialsId]="subWoRecord.workOrderMaterialsId" >
                 </app-sub-work-orderlist>
-                <!-- [requiredQty]="subWoRecord.workOrderMaterialsId" -->
-            </div>
+           </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel2()" style="height: 30px;">Close</button>
             </div>
@@ -639,27 +571,19 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
-  
-        
-        </button>
-      
-    </div>
-<!--   
+   </button>
+    </div> 
     <div class="modal-body">
         <strong>
-            Task Name:
-            <span class="new-label">{{currentRow.taskName}}</span>
+            PN:
+            <span class="new-label">{{currentRow.partNumber}}</span>
         </strong>
-    </div> -->
-  
+    </div>  
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
-  
-  
   </ng-template>
-
   <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">

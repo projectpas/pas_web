@@ -20,21 +20,25 @@ export class POViewStockDraftListComponent implements OnInit {
     pageTitle: string = 'View Purchase Order';
     purchaseOrderPart: any = []; //PurchaseOrderPart[];
     currentStockLineShowIndex: number = 0;
+    isSpinnerVisible: boolean = false;
     
     constructor(private receivingService: ReceivingService,
         private alertService: AlertService) {
     }
     
-    ngOnInit() {
-        console.log(this.purchaseOrderData);
+    ngOnInit() {  
+                   
+       this.isSpinnerVisible = true; 
        this.purchaseOrderData.purchaseOderPart.map(x => {
-        const data = {
+       const data = {
                 ...x,
                 stockLine: this.getStockline(x),
                 timeLife: x.timeLifeDraft
             }
             this.purchaseOrderPart.push(data);
+            this.isSpinnerVisible = false; 
         });
+        //this.isSpinnerVisible = false;    
         // this.purchaseOrderPart = data;
         // console.log(this.purchaseOrderPart);
         // this.purchaseOrderPart[0].stockLine.map((x, index) => {
@@ -46,16 +50,56 @@ export class POViewStockDraftListComponent implements OnInit {
         // console.log(this.purchaseOrderPart);
     }
 
-    getStockline(data) {
-        data.stockLineDraft = data.stockLineDraft.map((x, index) => {
+    getStockline(data) {       
+       if(data.stockLineDraft){
+            data.stockLineDraft = data.stockLineDraft.map((x, index) => {               
+                return {
+                    ...x,
+                    purchaseOrderUnitCost: x.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2) : '0.00',
+                    purchaseOrderExtendedCost: x.purchaseOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2) : '0.00',
+                    currentSLIndexDraft: index
+                }
+            })
+            return data.stockLineDraft;
+        } else {
+            return [];
+        }
+    }
+
+     getTimeLifeDetails(timeLife) {
+        timeLife = timeLife.map(x => {
             return {
-                ...x,
-                purchaseOrderUnitCost: x.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2) : '0.00',
-                purchaseOrderExtendedCost: x.purchaseOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2) : '0.00',
-                currentSLIndexDraft: index
+                stockLineDraftId: x.stockLineDraftId,
+                timeLifeDraftCyclesId: x.timeLifeDraftCyclesId,
+                cyclesRemainingHrs: x.cyclesRemaining ? x.cyclesRemaining.split(':')[0] : null,
+                cyclesRemainingMin: x.cyclesRemaining ? x.cyclesRemaining.split(':')[1] : null,
+                cyclesSinceInspectionHrs: x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[0] : null,
+                cyclesSinceInspectionMin: x.cyclesSinceInspection ? x.cyclesSinceInspection.split(':')[1] : null,
+                cyclesSinceNewHrs: x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[0] : null,
+                cyclesSinceNewMin: x.cyclesSinceNew ? x.cyclesSinceNew.split(':')[1] : null,
+                cyclesSinceOVHHrs: x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[0] : null,
+                cyclesSinceOVHMin: x.cyclesSinceOVH ? x.cyclesSinceOVH.split(':')[1] : null,
+                cyclesSinceRepairHrs: x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[0] : null,
+                cyclesSinceRepairMin: x.cyclesSinceRepair ? x.cyclesSinceRepair.split(':')[1] : null,                
+                timeRemainingHrs: x.timeRemaining ? x.timeRemaining.split(':')[0] : null,
+                timeRemainingMin: x.timeRemaining ? x.timeRemaining.split(':')[1] : null,
+                timeSinceInspectionHrs: x.timeSinceInspection ? x.timeSinceInspection.split(':')[0] : null,
+                timeSinceInspectionMin: x.timeSinceInspection ? x.timeSinceInspection.split(':')[1] : null,
+                timeSinceNewHrs: x.timeSinceNew ? x.timeSinceNew.split(':')[0] : null,
+                timeSinceNewMin: x.timeSinceNew ? x.timeSinceNew.split(':')[1] : null,
+                timeSinceOVHHrs: x.timeSinceOVH ? x.timeSinceOVH.split(':')[0] : null,
+                timeSinceOVHMin: x.timeSinceOVH ? x.timeSinceOVH.split(':')[1] : null,
+                timeSinceRepairHrs: x.timeSinceRepair ? x.timeSinceRepair.split(':')[0] : null,
+                timeSinceRepairMin: x.timeSinceRepair ? x.timeSinceRepair.split(':')[1] : null,
+                lastSinceInspectionHrs: x.lastSinceInspection ? x.lastSinceInspection.split(':')[0] : null,
+                lastSinceInspectionMin: x.lastSinceInspection ? x.lastSinceInspection.split(':')[1] : null,
+                lastSinceNewHrs: x.lastSinceNew ? x.lastSinceNew.split(':')[0] : null,
+                lastSinceNewMin: x.lastSinceNew ? x.lastSinceNew.split(':')[1] : null,
+                lastSinceOVHHrs: x.lastSinceOVH ? x.lastSinceOVH.split(':')[0] : null,
+                lastSinceOVHMin: x.lastSinceOVH ? x.lastSinceOVH.split(':')[1] : null,
             }
         })
-        return data.stockLineDraft;
+        return timeLife;
     }
 
     moveStockLinePage(type: string, index: number, part: PurchaseOrderPart, stockline): void {

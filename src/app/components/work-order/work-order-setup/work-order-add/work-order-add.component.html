@@ -1,44 +1,29 @@
 ﻿<div [@fadeInOut] class="page-content work_order_cont">
+    <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isView"></p-breadcrumb>
     <div class="right_col" role="main">
         <form #workOrderForm="ngForm">
-            <div class="col-md-12">
+            <div class="x_content">
                 <div class="card new-card" *ngIf="!isSubWorkOrder">
-                    <div class="x_content">
-                        <!-- <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item" aria-current="page">Work Order</li>
-                                <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">Create Work Order</li>
-                                <li *ngIf="isSubWorkOrder" class="breadcrumb-item active" aria-current="page">
-                                    Sub
-                                    WOrkOrder
-                                </li>
-                            </ol>
-                        </nav> -->
-                        <div class="card-header bg-primary" *ngIf="!isSubWorkOrder && !isView">
-                            
-                              <div class="pull-left">
-                                  <h4  class="new-card-heading">
-                                      {{ isEdit ? 'Edit' : 'Create' }} Work Order</h4>
-
-                                      <!-- <h4  class="new-card-heading">
-                                        {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>    -->
-                              </div>
-
-                              <button class="btn-sm new-btn-primary" style="margin-left:20px" (click)="toggleDisplayMode()">
-                                {{isDetailedView ? 'Collapse' : 'Expand'}}
-                            </button>
-
-                                <button
-                                  type="button"
-                                  class="btn-sm new-btn-primary pull-right"
-                                  [routerLink]="['/workordersmodule/workorderspages/app-work-order-list']"
-                                >
-                                  Work Order List
-                                </button>
-                              
-                            
-                          </div>
-
+                  
+                        <div class="card-header header " *ngIf="!isSubWorkOrder && !isView">
+                            <div class="row">
+                                <div class="col">
+                                  <h4  class="header-name">
+                                      {{ isEdit ? 'Edit' : 'Create' }} Work Order
+                             
+                              <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
+                                {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
+                            </h4>
+                            </div>
+                            <div>
+                                <button type="button"
+                                  class="btn-sm header-button pull-right"
+                                  [routerLink]="['/workordersmodule/workorderspages/app-work-order-list']">
+                                  Work Order List  </button>
+                                  
+                                </div>
+                           </div>
+                        </div>
                         <!-- <div class="pheading" *ngIf="!hideWOHeader">
                             <h4 *ngIf="!isSubWorkOrder && !isView" class="page-heading">Create Work Order </h4>
                             <h4 *ngIf="isSubWorkOrder && !isView" class="page-heading">Create Sub Work Order </h4>
@@ -47,8 +32,10 @@
                         <div class="card" style="border-radius: 0px;" *ngIf="!hideWOHeader">
                             <div class="card-body new-card-body">
                                 <div class="col-sm-12 link-block">
-                                    <h4 class="pull-left" style="cursor:pointer;">
-                                        General Info
+                                    <h4 class="pull-left style_h4" >
+                                        <!-- General Info -->
+                                        <button *ngIf="isView" class="btn-sm header-button" style="margin-left:20px" (click)="toggleDisplayMode()">
+                                            {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
                                         <!-- <span [hidden]="isDetailedView" class="more-details-btn">
                                             (More <i class="fa fa-caret-down"></i>)
                                         </span>
@@ -58,11 +45,11 @@
                                     </h4>
                                     <!--(click)="toggleDisplayMode()"-->
                                   
-                                    <div class="clear"></div>
+                                    <!-- <div class="clear"></div> -->
                                 </div>
                                 <div class="less-details" [hidden]="isDetailedView">
                                     <div class="clear"></div>
-                                    <hr>
+                                    <hr class="hr_mrt">
                                     <div class="col-sm-3">
                                         <div class="form-group col-sm-12">
                                             <label class="control-label col-sm-4" style="padding-top: 5px;">
@@ -202,7 +189,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="customername">
+                                                        <label for="customername"> 
                                                             Customer Name
                                                             <span class="clr-red">*</span>
                                                             <span
@@ -262,13 +249,31 @@
                                                             [(ngModel)]="workOrderGeneralInformation.customerPhoneNo" />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 max_alf">
+                                                <!-- <div class="col-md-12 max_alf">
                                                     <label for="notes">
                                                         Notes
                                                     </label>
                                                     <textarea class="form-control text-area-cstm m-0" (ngModelChange)="getmemo($event)" rows="2" cols="50"
                                                         [(ngModel)]="workOrderGeneralInformation.notes" name="notes"
                                                         [disabled]="isView"></textarea>
+                                                </div> -->
+                                                <div class="col-md-12">
+                                                    <div class="form-group memo-popup-cstm">
+                                                        <label>
+                                                            Notes <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
+                                                                matTooltipPosition="above" matTooltip="Notes"
+                                                                (click)="onAddDescription(1)"></i>
+                                                        </label>
+                                                        <span>
+                                                            <div class="form-group memo-popup-cstm mat_emo">
+                                                                <div [innerHTML]="workOrderGeneralInformation.notes"
+                                                                    [matTooltip]="parsedText(workOrderGeneralInformation.notes)"
+                                                                    matTooltipPosition="above"
+                                                                    class="form-control text_editor_box memo_cehck1">
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -331,7 +336,7 @@
                                                 <label for="employee">
                                                     Employee
                                                 </label>
-                                                <p-autoComplete field="name"
+                                                <!-- <p-autoComplete field="name"
                                                     [(ngModel)]="workOrderGeneralInformation.woEmployee"
                                                     name="employees" #employees="ngModel" (ngModelChange)="getmemo($event)"
                                                     errorMessage="Records not found" [forceSelection]="true"
@@ -340,16 +345,36 @@
                                                     (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
                                                     [size]="30" [minLength]="1" [dropdown]="true"
                                                     class="p-autoComplete-ctsm" [disabled]="isView">
-                                                </p-autoComplete>
+                                                </p-autoComplete> -->
+                                                <input type="text" class="form-control wo-input"
+                                                            name="woEmployee" #woEmployee="ngModel"
+                                                            [(ngModel)]="workOrderGeneralInformation.woEmployee"
+                                                            required [readonly]="true">
                                             </div> 
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="memo">Memo</label>
                                                 <textarea class="form-control" rows="4" cols="50"
                                                     style="height: 190px !important;" (ngModelChange)="getmemo($event)"
                                                     [(ngModel)]="workOrderGeneralInformation.memo" name="memo"
                                                     [disabled]="isView"></textarea>
+                                            </div> -->
+                                            <div class="form-group memo-popup-cstm">
+                                                <label>
+                                                    Memo <i *ngIf="!isView" class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                                        matTooltipPosition="above" matTooltip="Notes"
+                                                        (click)="onAddDescription(2)"></i>
+                                                </label>
+                                                <span>
+                                                    <div class="form-group memo-popup-cstm mat_emo">
+                                                        <div [innerHTML]="workOrderGeneralInformation.memo"  matTooltipPosition="above"
+                                                            [matTooltip]="parsedText(workOrderGeneralInformation.memo)" 
+                                                           
+                                                            class="form-control text_editor_box memo_cehck1 adjust_he">
+                                                        </div>
+                                                    </div>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -368,6 +393,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div *ngIf="!workOrderGeneralInformation.isSinglePN && workOrderId">
                         <app-common-wo-summarization [workOrderId]="workOrderId"  [savedWorkOrderData]="savedWorkOrderData" [mpnPartNumbersList]="mpnPartNumbersList" [employeesOriginalData]="employeesOriginalData" [taskList]="taskList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [customerContactList]="customerContactList" [defaultTab]="defaultTab" (resetSelectedTab)="resetSelectedTab()"></app-common-wo-summarization>
                     </div>
@@ -379,21 +405,24 @@
                     </div>
                     <div>
                     </div>
-                    <div class="table-responsive add-wo-grid" *ngIf="!hideWOHeader">
-                      <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+                    <div class="card new-card">
+                        <div class="card-body">
+                    <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="!hideWOHeader">
+                        <div class="tableFixHead">
+                        <table class="table table-bordered mpn-list-table"
                             id="mpn-list-table">
                             <thead>
-                                <tr>
-                                    <th rowspan="2">MPN *</th>
-                                    <th rowspan="2">MPN Description *</th>
+                                <tr class="header-table-width">
+                                    <th rowspan="2">MPN <span class="clr-red">*</span></th>
+                                    <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                     <th rowspan="2">Revised MPN</th>
                                     <th rowspan="2">Item Group</th>
                                     <th rowspan="2">Qty</th>
-                                    <th rowspan="2">Work Scope *</th>
+                                    <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
                                     <th rowspan="2">Customer Ref</th>
                                     <th rowspan="2" colspan="4">Management Structure </th>
                                     <th rowspan="2">NTE</th>
-                                    <th rowspan="2">Cond *</th>
+                                    <th rowspan="2">Cond <span class="clr-red">*</span></th>
                                     <th rowspan="2" *ngIf="workOrderGeneralInformation.workOrderTypeId==1">Contract</th>
                                     <th rowspan="2" *ngIf="workOrderGeneralInformation.workOrderTypeId==1"
                                         style="min-width: 80px;">Contract No</th>
@@ -401,14 +430,14 @@
                                     <th rowspan="2">Serial Num </th>
                                     <th rowspan="2">CMM/Pub Ref</th>
                                     <th rowspan="2">Workflow ID </th>
-                                    <th rowspan="2">Stage *</th>
-                                    <th rowspan="2">Status *</th>
-                                    <th rowspan="2">Priority *</th>
+                                    <th rowspan="2">Stage <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Status <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Priority <span class="clr-red">*</span></th>
                                     <th rowspan="2">Customer Received Date</th>
-                                    <th rowspan="2">Customer Request Date *</th>
-                                    <th rowspan="2">Promised Date *</th>
-                                    <th rowspan="2">Est. Comp Date *</th>
-                                    <th rowspan="2">Est. Ship Date *</th>
+                                    <th rowspan="2">Customer Request Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
                                     <th colspan="2">Restrictions</th>
                                     <th rowspan="2">Tech Name</th>
                                     <th rowspan="2">Tech Station</th>
@@ -431,7 +460,7 @@
                                         <p-autoComplete field="partNumber"
                                                         [(ngModel)]="workOrderPartNumber.masterPartId" name="mpn{{i}}" 
                                                         #mpn="ngModel" errorMessage="Records not found" [forceSelection]="true"
-                                                        [dropdown]="true" [suggestions]="partNumberList"
+                                                        [dropdown]="true" [suggestions]="partNumberList" (ngModelChange)="getValid()"
                                                         (onSelect)="onSelectedPartNumber($event, workOrderPartNumber, i); getWorkFlowByPNandScope(workOrderPartNumber); getStockLineByItemMasterIdOnChangePN(workOrderPartNumber,i);"
                                                         (completeMethod)="filterPartNumber($event)" emptyMessage="No Records Found"
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'masterPartId' )"
@@ -446,53 +475,67 @@
                                     </td>
                                     <td> 
                                         <input type="text" class="form-control w100" name="revisedPartNo{{i}}"
-                                               #description="ngModel" [(ngModel)]="workOrderPartNumber.revisedPartNo"
+                                               #description="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.revisedPartNo"
                                                disabled>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w100" name="itemGroup{{i}}"
-                                               #description="ngModel" [(ngModel)]="workOrderPartNumber.itemGroup"
+                                               #description="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.itemGroup"
                                                disabled>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w100 text_right" name="quantity{{i}}"
+                                        <input type="number" style="width:100% !important" class="form-control w100 text_right qty_width" name="quantity{{i}}"
                                                [(ngModel)]="workOrderPartNumber.quantity" disabled>
                                     </td>
                                     <td>
-                                        <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel"
-                                        [options]="workScopesList" class="p-dropdown-custom-md p-dropdown-mh120"
+                                        <p-dropdown filter="true" placeholder="Select" name="scope{{i}}" #scope="ngModel"
+                                        [options]="workScopesList" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                         [(ngModel)]="workOrderPartNumber.workOrderScopeId" [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                        (onChange)="getWorkFlowByPNandScope(workOrderPartNumber)" required appendTo="body">
+                                        (onChange)="getWorkFlowByPNandScope($event.value,workOrderPartNumber,'html')" required appendTo="body">
                             </p-dropdown>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="customerReference{{i}}"
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level1)">{{workOrderPartNumber.customerReference}}</p>
+                                        <!-- <input type="text" class="form-control w100" name="customerReference{{i}}"
                                                #customerReference="ngModel"
-                                               [(ngModel)]="workOrderPartNumber.customerReference" disabled>
+                                               [(ngModel)]="workOrderPartNumber.customerReference" disabled> -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="companyName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level1" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level1)">{{workOrderPartNumber.level1}}</p>
+                                        <!-- <input type="text" class="form-control w100 managemnt_Wdt" name="companyName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level1" disabled  matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level1)"> -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="buName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level2" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level2)">{{workOrderPartNumber.level2}}</p>
+                                        <!-- <input type="text" class="form-control w100 managemnt_Wdt" name="buName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level2" disabled matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level2)" > -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="divisionName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level3" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level3)">{{workOrderPartNumber.level3}}</p>
+                                        <!-- <input type="text" class="form-control w100 managemnt_Wdt" name="divisionName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level3" disabled matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level3)" > -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w100" name="deptName{{i}}"
-                                               [(ngModel)]="workOrderPartNumber.level4" disabled>
+                                        <p class="managemnt_Wdt" matTooltipPosition="above"
+                                        [matTooltip]="parsedText(workOrderPartNumber.level4)">{{workOrderPartNumber.level4}}</p>
+                                        <!-- <input type="text" class="form-control w100" name="deptName{{i}}"
+                                               [(ngModel)]="workOrderPartNumber.level4" disabled matTooltipPosition="above"
+                                               [matTooltip]="parsedText(workOrderPartNumber.level4)" > -->
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control w50"
+                                        <input type="text" class="form-control w50" style="width:100% !important"
                                                [(ngModel)]="workOrderPartNumber.nte" name="nte{{i}}" #nte="ngModel"
-                                               disabled>
+                                              >
                                     </td>
                                     <td>
-                                        <p-dropdown placeholder="Select" [options]="conditionList"
+                                        <p-dropdown filter="true" placeholder="Select" [options]="conditionList"  (ngModelChange)="getValid()"
                                                     name="condition{{i}}" #condition="ngModel" (onChange)="selectedCondition($event.value,workOrderPartNumber,i)"
                                                     class="p-dropdown-custom-md" [(ngModel)]="workOrderPartNumber.conditionId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
@@ -506,51 +549,51 @@
             #serialNumber="ngModel" [(ngModel)]="workOrderPartNumber.condition"
             disabled> -->
                                     </td>
-                                    <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1" style="text-align:center;">
-                                        <input type="checkbox" name="contract {{i}}" #contract="ngModel"
+                                    <td *ngIf="this.workOrderGeneralInformation.workOrderTypeId==1" class="text_center" >
+                                        <input type="checkbox" style="width:100% !important" name="contract {{i}}" #contract="ngModel"  (ngModelChange)="getValid()" 
                                                class="form-control w60" [(ngModel)]="workOrderPartNumber.isMPNContract" disabled>
                                         <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> Contract -->
                                     </td>
                                     <td>
                                         <!-- {{workOrderPartNumber.contractNo}} -->
-                                        <input type="text" name="contract1{{i}}" class="form-control w100"
-                                               [(ngModel)]="workOrderPartNumber.contractNo"
+                                        <input type="text" style="width:100% !important" name="contract1{{i}}" class="form-control w100"
+                                               [(ngModel)]="workOrderPartNumber.contractNo"  (ngModelChange)="getValid()"
                                                [required]="workOrderPartNumber.isMPNContract"
                                                [disabled]="!workOrderPartNumber.isMPNContract">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w100" name="stockLineNumber{{i}}"
-                                               #serialNumber="ngModel" [(ngModel)]="workOrderPartNumber.stockLineNumber"
+                                               #serialNumber="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.stockLineNumber"
                                                disabled>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control w100" name="serialNumber{{i}}"
-                                               #serialNumber="ngModel" [(ngModel)]="workOrderPartNumber.serialNumber"
+                                               #serialNumber="ngModel" style="width:100% !important" [(ngModel)]="workOrderPartNumber.serialNumber"
                                                disabled>
                                     </td>
                                     <td>
-                                        <p-dropdown class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"
+                                        <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"
                                                     [options]="cmmList" class="p-dropdown-custom-md p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.cmmId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
                                         <span class="inline-block">
-                                            <p-dropdown [options]="workFlowList" name="workFlow{{i}}"
-                                                        #workFlow="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"
+                                            <p-dropdown filter="true" [options]="workFlowList" name="workFlow{{i}}"
+                                                        #workFlow="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                         [(ngModel)]="workOrderPartNumber.workflowId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                             </p-dropdown>
                                         </span>
                                     </td>
                                     <td>
-                                        <p-dropdown [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel"
+                                        <p-dropdown filter="true" [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel"  (ngModelChange)="getValid()"
                                                     placeholder="Select" class="p-dropdown-custom-md p-dropdown-mh120"
                                                     (onChange)="selectedStage($event.value,workOrderPartNumber,i)"
                                                     [(ngModel)]="workOrderPartNumber.workOrderStageId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
-                                        <p-dropdown [options]="workOrderStatusList" placeholder="Select"
+                                        <p-dropdown filter="true" [options]="workOrderStatusList" placeholder="Select"
                                                     name="status{{i}}" #status="ngModel"
                                                     class="p-dropdown-custom-md custome_pd-totext p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.workOrderStatusId" disabled required appendTo="body">
@@ -558,27 +601,27 @@
                                         <!-- <span>{{workOrderPartNumber.workOrderStatus}}</span> -->
                                     </td>
                                     <td>
-                                        <p-dropdown [options]="priorityList" placeholder="Select" name="priority{{i}}"
-                                                    #priority="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"
+                                        <p-dropdown filter="true" [options]="priorityList" placeholder="Select" name="priority{{i}}"
+                                                    #priority="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.workOrderPriorityId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
                                         <p-calendar [showIcon]="true" name="receivedDate{{i}}" class="calender-cstm"
-                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  (ngModelChange)="getValid()"
                                                     #receivedDate="ngModel" [(ngModel)]="workOrderPartNumber.receivedDate"
-                                                    disabled appendTo="body">
+                                                    disabled appendTo="body"> 
                                         </p-calendar>
                                     </td>
                                     <td>
                                         <p-calendar [showIcon]="true" name="customerRequestDate{{i}}"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    class="calender-cstm" #customerRequestDate="ngModel"
+                                                    class="calender-cstm" #customerRequestDate="ngModel"  (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.customerRequestDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
                                     <td>
                                         <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm"
-                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  (ngModelChange)="getValid()"
                                                     #promisedDate="ngModel" [(ngModel)]="workOrderPartNumber.promisedDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
@@ -586,33 +629,33 @@
                                         <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}"
                                                     class="calender-cstm" #estimatedCompletionDate="ngModel"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    [minDate]="workOrderPartNumber.receivedDate"
+                                                    [minDate]="workOrderPartNumber.promisedDate"   [maxDate]="workOrderPartNumber.estimatedShipDate" (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     </td>
                                     <td>
                                         <p-calendar [showIcon]="true" class="calender-cstm"
-                                                    name="estimatedShipDate{{i}}"
+                                                    name="estimatedShipDate{{i}}"  (ngModelChange)="getValid()"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="workOrderPartNumber.estimatedShipDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" #estimatedShipDate="ngModel"
                                                     required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td class="text_center">
                                         <!-- [disabled]="isView" -->
                                         <input type="checkbox" class="form-control w60" name="isPMA{{i}}"
                                                #isPMA="ngModel" [(ngModel)]="workOrderPartNumber.isPMA" disabled>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td class="text_center">
                                         <input type="checkbox" class="form-control w60" name="isDER{{i}}"
                                                #isDER="ngModel" [(ngModel)]="workOrderPartNumber.isDER" disabled>
 
                                     </td>
                                     <td>
                                         <p-autoComplete field="name" [(ngModel)]="workOrderPartNumber.partTechnicianId"
-                                                        name="technician{{i}}" #technician="ngModel"
+                                                        name="technician{{i}}" #technician="ngModel"  (ngModelChange)="getValid()"
                                                         errorMessage="Records not found" [forceSelection]="true" [dropdown]="true"
-                                                        [suggestions]="technicianList"
+                                                        [suggestions]="technicianList" required
                                                         (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                                                         (completeMethod)="filterTechnician($event)"
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'partTechnicianId' )"
@@ -623,17 +666,17 @@
                                         </p-autoComplete>
                                     </td>
                                     <td>
-                                        <p-dropdown placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel"
+                                        <p-dropdown filter="true" placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel"  (ngModelChange)="getValid()"
                                                     [options]="techStationList" class="p-dropdown-custom-md p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.techStationId"[disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
-                                    <td style="display:none">
-                                        <p-dropdown placeholder="Select" name="tearDown{{i}}" #tearDown="ngModel"
+                                    <!-- <td style="display:none">
+                                        <p-dropdown placeholder="Select" name="tearDown{{i}}" #tearDown="ngModel"  (ngModelChange)="getValid()"
                                                     [options]="tearDownReportList" class="p-dropdown-custom-md"
                                                     [(ngModel)]="workOrderPartNumber.tearDownReport"[disabled]="isView || quotestatusofCurrentPart =='Approved'">
                                         </p-dropdown>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <!-- {{workOrderPartNumber.tatDaysCurrent}} -->
                                         <input type="number" class="form-control w50" name="tatDaysCurrent{{i}}"
@@ -665,19 +708,23 @@
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     <div class="footer_adjust" *ngIf="!hideWOHeader && !isView">
                         <button class="btn btn-primary pull-right" *ngIf="(!showTabsGrid && !isEdit) || isRecCustomer"
-                            type="button" [disabled]="!workOrderForm.valid || checkworkscope()" (click)="saveWorkOrder()">
+                            type="button" [disabled]="!workOrderForm.valid || checkworkscope() || checkTechnician()" (click)="saveWorkOrder()">
                             Save
                         </button>
+                        <!-- !workOrderForm.valid || -->
                         <button class="btn btn-primary pull-right" *ngIf="isEdit && !isRecCustomer" type="button"
-                            [disabled]="!workOrderForm.valid" (click)="saveWorkOrder()">
-                            Update
+                            [disabled]=" disableSaveForPart || !workOrderForm.valid || checkTechnician()" (click)="saveWorkOrder()">
+                            Update 
                         </button>
                         <button *ngIf="showTabsGrid && !isView" class="btn btn-primary pull-right" (click)="createQuote()">
                             {{(workOrderQuoteId)?'Edit Quote':'Create Quote'}}
                         </button>
+                    </div>
+                    </div>
                     </div>
 
                     <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
@@ -699,11 +746,37 @@
                             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
                         </div>
                     </ng-template>
-                </div>
+            
             </div>
         </form>
+        <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-sm" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit {{type==1 ? 'Notes' : 'Memo'}}</h4>
+                    </div> 
+                    <div class="modal-body">
+                        <p-editor [(ngModel)]="tempMemo" (ngModelChange)="memoValidate()" [style]="{'height':'320px'}" name="tempMemo"
+                        required>
+                    </p-editor>
+                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" 
+                            [disabled]="disableForMemo"
+                                (click)="onSaveDescription()">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card" *ngIf="showTabsGrid" style="margin-top: 7px;">
+    <div class="card mn-t7" *ngIf="showTabsGrid" >
         <div *ngIf="showTabsMPNGrid">
             <div class="card-header" *ngIf="!workOrderGeneralInformation.isSinglePN">
                 Multiple MPN
@@ -711,7 +784,7 @@
             <div class="card-body">
                 <div class="col-md-12" [hidden]="workOrderGeneralInformation.isSinglePN && !showTabsGrid">
                     <div class="col-md-2">
-                        <label class="control-label col-sm-3" style=" margin-right: 4px;margin-top: 6px;">MPN
+                        <label class="control-label col-sm-3 label_adjf">MPN
                         </label>
                         <div class="col-sm-7">
                             <p-dropdown [options]="mpnPartNumbersList" name="partNumber" #partNumber="ngModel"
@@ -753,7 +826,7 @@
         </div>
         <div class="card-body" *ngIf="showGridMenu" style="padding: 0px;">
             <div class="col-md-2" *ngIf="isSubWorkOrder==true">
-  <label class="control-label col-sm-3" style=" margin-right: 4px;margin-top: 6px;">MPN
+  <label class="control-label col-sm-3 label_adjf" >MPN
   </label>
   <div class="col-sm-7">
       <p-dropdown [options]="mpnDropdownList"  name="subWOPartNoId" #subWOPartNoId="ngModel"
@@ -762,7 +835,7 @@
       </p-dropdown>
   </div>
 </div>
-            <div class="card col-md-12" style="background: #ffffff; margin-top: 0px;">
+            <div class="card col-md-12 div_bsck" >
                 <!--#f1f1f1-->
                 <ul class="nav nav-pills nav-pills-cstm back_filsd" id="pills-tab" role="tablist"
                     style="margin-top: 2px;" *ngIf="!hideWOHeader">
@@ -773,7 +846,8 @@
                             (click)="gridTabChange('workOrderMain');  ">WorkOrder Main</a>
                     </li>
                     <li class="nav-item dropdown" *ngIf="workFlowId !==0">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        <p-splitButton [label]="showWorkflowLabel" [model]="wflowitems"></p-splitButton>
+                        <!-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false"
                             [ngClass]="{active : gridActiveTab === 'workFlow' ||  subTabWorkFlow === 'editworkFlow' || subTabWorkFlow === 'createworkFlow' || subTabWorkFlow === 'viewworkFlow'  }">Workflow</a>
                         <div class="dropdown-menu">
@@ -782,10 +856,8 @@
                                 Edit
                                 Existing WF
                             </a>
-                            <!-- <a *ngIf="workFlowWorkOrderId == 0 " class="dropdown-item" (click)="subTabWorkFlowChange('createworkFlow')">Create New
-                                        WF</a> -->
                             <div class="dropdown-divider"></div>
-                        </div>
+                        </div> -->
                     </li>
                     <li class="nav-item">
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'materialList'}"
@@ -854,7 +926,11 @@
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === ' '}"
                             (click)="gridTabChange('subWO')">Sub-WO</a> 
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
+                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'communication'}"
+                        (click)="gridTabChange('communication')">Communication</a> 
+                    </li>
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false" [ngClass]="{active : gridActiveTab === 'communication'}"
                             (click)="gridTabChange('communication')">Communication</a>
@@ -863,9 +939,8 @@
                             <a class="dropdown-item" (click)="selectedCommunicationTab='email'">Email</a>
                             <a class="dropdown-item" (click)="selectedCommunicationTab='phone'">Phone</a>
                             <a class="dropdown-item" (click)="selectedCommunicationTab='text'">Text</a>
-                            <!-- <a class="dropdown-item">Chat</a> -->
                         </div>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" id="pills-contact-tab" role="tab"
                             [ngClass]="{active : gridActiveTab === 'documents'}"
@@ -981,8 +1056,8 @@
             <div *ngIf="billing && quoteMaterialList && (gridActiveTab == 'billorInvoice') && !isSubWorkOrder"
                 [ngClass]="{hidedata : gridActiveTab !== 'billorInvoice'}">
                 <!-- workOrderMaterialList -->
-                <app-work-order-billing [billingorInvoiceForm]="billing" [legalEntityList]="legalEntityList"
-                    [currencyList]="currencyList" [savedWorkOrderData]="savedWorkOrderData" 
+                <app-work-order-billing [billingorInvoiceForm]="billing" 
+                    [savedWorkOrderData]="savedWorkOrderData" 
                     [employeesOriginalData]="employeesOriginalData" [isEditBilling]="isEditBilling" [isbillingNotCreated]="isbillingNotCreated"
                     (saveWOBilling)="saveWorkOrderBilling($event)" (updateWOBilling)="saveWorkOrderBilling($event)"
                     [workOrderQuoteId]="workOrderQuoteId" [quoteExclusionList]="quoteExclusionList" [workFlowWorkOrderId]="workFlowWorkOrderId"
@@ -1016,8 +1091,8 @@
 
             </div>
 
-            <div [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
-                <div *ngIf="(selectedCommunicationTab == 'memo')">
+            <div *ngIf="(gridActiveTab == 'communication')" [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
+                <!-- <div *ngIf="(selectedCommunicationTab == 'memo')">
                     <app-memo [workOrderId]="workOrderId" [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" [selectedPartNumber]="selectedPartNumber" [customerContactList]="customerContactList" [isView]="isView || isViewForApprovedPart"></app-memo>
                 </div>
                 <div *ngIf="(selectedCommunicationTab == 'email')">
@@ -1028,13 +1103,18 @@
                 </div>
                 <div *ngIf="(selectedCommunicationTab == 'phone')">
                     <app-phone [workOrderId]="workOrderId" [savedWorkOrderData]="savedWorkOrderData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails" [selectedPartNumber]="selectedPartNumber" [customerContactList]="customerContactList" [isView]="isView || isViewForApprovedPart"></app-phone>
-                </div>
+                </div> -->
+                <app-communication [isViewMode]="false"   [idForContact]="workOrderGeneralInformation.customerId.customerId" [type]="1" 
+                [moduleName]="moduleNamee"  [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"></app-communication>
             </div>
             <div *ngIf="documents && (gridActiveTab == 'documents')"
                 [ngClass]="{hidedata: gridActiveTab !== 'documents'}">
-                <app-work-order-documents [documentForm]="documents" [workFlowWorkOrderId]="workFlowWorkOrderId" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
+                <!-- <app-work-order-documents [documentForm]="documents" [workFlowWorkOrderId]="workFlowWorkOrderId" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [savedWorkOrderData]="savedWorkOrderData" [documentsDestructuredData]="documentsDestructuredData" [isView]="isView || isViewForApprovedPart">
-                </app-work-order-documents>
+                </app-work-order-documents> -->
+                <div>
+                    <app-common-documents   [moduleName]="moduleNamee" [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
+                  </div> 
             </div>
 
 
@@ -1129,19 +1209,3 @@
         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     </div>
 </div>
-<!-- <div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-        <div class="lds-roller">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-</div> -->
-
-<!-- *ngIf="!isSpinnerVisible" -->

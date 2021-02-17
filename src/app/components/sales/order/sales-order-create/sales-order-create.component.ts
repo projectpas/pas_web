@@ -51,6 +51,7 @@ import { SalesOrderPartNumberComponent } from "../shared/components/sales-order-
 import { SalesOrderBillingComponent } from "../shared/components/sales-order-billing/sales-order-billing.component";
 import { SalesOrderAnalysisComponent } from "../sales-order-analysis/sales-order-analysis.component";
 import { SalesOrderShippingComponent } from "../shared/components/sales-order-shipping/sales-order-shipping.component";
+import { SalesOrderPickTicketsComponent } from "../sales-order-pick-tickets/sales-order-pick-tickets.component";
 
 @Component({
   selector: "app-sales-order-create",
@@ -135,6 +136,7 @@ export class SalesOrderCreateComponent implements OnInit {
   @ViewChild(SalesOrderBillingComponent, { static: false }) public salesOrderBillingComponent: SalesOrderBillingComponent;
   @ViewChild(SalesOrderShippingComponent, { static: false }) public salesOrderShippingComponent: SalesOrderShippingComponent;
   @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
+  @ViewChild(SalesOrderPickTicketsComponent, { static: false }) public salesOrderPickTicketsComponent: SalesOrderPickTicketsComponent;
   employeesList: any = [];
   customerWarning: any = {};
   status: IStatus[] = [];
@@ -176,7 +178,8 @@ export class SalesOrderCreateComponent implements OnInit {
   soStatusList: any = [];
   soTypeList: any = [];
   addressType: any = 'SO';
-  showAddresstab:boolean  = false;
+  showAddresstab: boolean = false;
+
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -675,7 +678,7 @@ export class SalesOrderCreateComponent implements OnInit {
     if (this.salesOrderObj && this.salesOrderObj.salesOrderQuoteId && this.salesOrderObj.salesOrderQuoteId) {
       this.controlSettings.showViewQuote = true;
     }
-    
+
     let partList: any[] = this.salesOrderView.parts;
     for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
@@ -1220,8 +1223,9 @@ export class SalesOrderCreateComponent implements OnInit {
         }
         break;
       case SalesOrderActionType.CloseSalesOrder:
+        this.isEmailTabEnabled = false;
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
+          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId, this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1229,8 +1233,9 @@ export class SalesOrderCreateComponent implements OnInit {
         }
         break;
       case SalesOrderActionType.CancelSalesOrder:
+        this.isEmailTabEnabled = false;
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
+          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId, this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1318,12 +1323,15 @@ export class SalesOrderCreateComponent implements OnInit {
       }
     }
     if (event.index == 6) {
-      this.salesOrderShippingComponent.refresh(this.selectedParts);
+      this.salesOrderPickTicketsComponent.refresh(this.id);
     }
     if (event.index == 7) {
+      this.salesOrderShippingComponent.refresh(this.selectedParts);
+    }
+    if (event.index == 8) {
       this.salesOrderBillingComponent.refresh(this.selectedParts);
     }
-    if (event.index == 9) {
+    if (event.index == 10) {
       this.salesOrderAnalysisComponent.refresh(this.id);
     }
   }
@@ -1400,6 +1408,7 @@ export class SalesOrderCreateComponent implements OnInit {
 
   enableHeaderSave() {
     this.enableHeaderSaveBtn = true;
+    this.enableUpdateButton = false;
   }
 
   checkValidOnChange(condition, value) {
@@ -1494,30 +1503,26 @@ export class SalesOrderCreateComponent implements OnInit {
     }
 
     this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
-    let currentEmployeeId = this.salesQuote.employeeId;
-    if (this.salesQuote.employeeId) {
-      let employeeObject: any = this.salesQuote.employeeId;
-      if (employeeObject.employeeId) {
-        currentEmployeeId = employeeObject.employeeId;
-        this.arrayEmplsit.push(employeeObject.employeeId);
-      }
-    } else {
-      currentEmployeeId = this.employeeId;
-    }
+    //let currentEmployeeId = this.salesQuote.employeeId;
+    // if (this.salesQuote.employeeId) {
+    //   let employeeObject: any = this.salesQuote.employeeId;
+    //   if (employeeObject.employeeId) {
+    //     currentEmployeeId = employeeObject.employeeId;
+    //     this.arrayEmplsit.push(employeeObject.employeeId);
+    //   }
+    // } else {
+    //   currentEmployeeId = this.employeeId;
+    // }
 
     this.isSpinnerVisible = true;
     this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
-      // this.salesQuote.employeeName = getObjectById(
-      //   "value",
-      //   this.employeeId ? this.employeeId : this.salesQuote.employeeId,
-      //   this.allEmployeeList
-      // );
-      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', currentEmployeeId, res);
+      this.employeesList = res;
+      this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
       if (!this.isEdit) {
-        this.getEmployeerOnLoad(currentEmployeeId);
+        this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
       }
     }, err => {
       this.isSpinnerVisible = false;
@@ -1568,6 +1573,8 @@ export class SalesOrderCreateComponent implements OnInit {
     } else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
     }
+
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   getDepartmentlist(divisionId) {
@@ -1586,6 +1593,8 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesQuote.managementStructureId = this.salesQuote.buId;
       this.salesQuote.divisionId = 0;
     }
+
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   getDepartmentId(departmentId) {
@@ -1597,6 +1606,8 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesQuote.managementStructureId = this.salesQuote.divisionId;
       this.salesQuote.departmentId = 0;
     }
+
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   loadSOStatus() {
@@ -1621,6 +1632,6 @@ export class SalesOrderCreateComponent implements OnInit {
     });
   }
 
-  getChargesList() {}
-  getFreightList() {}
+  getChargesList() { }
+  getFreightList() { }
 }

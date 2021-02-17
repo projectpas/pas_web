@@ -6,10 +6,7 @@
                     <h4 class="new-card-heading">{{isEditMode ? 'Edit' : 'Create'}} Sales Order Settings</h4>
                 </div>
                 <div>
-
-                    <button type="button" class="btn-sm new-btn-primary" [routerLink]="[
-                '/salesordersettingsmodule/salesordersettings/app-sales-order-settings-list'
-                ]">
+                    <button type="button" class="btn-sm new-btn-primary" [routerLink]="['/salesordersettingsmodule/salesordersettings/app-sales-order-settings-list']">
                         Sales Order Settings List
                     </button>
                 </div>
@@ -27,8 +24,6 @@
                                     [options]="salesOrderViewList" placeholder="Select SO List View"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.soListViewId">
                                 </p-dropdown>
-
-
                             </div>
                         </div>
                         <div class="col-md-3 work_order_teardown">
@@ -88,23 +83,22 @@
                             <div class="form-group">
                                 <label>Priority <span class="clr-red">*</span></label>
                                 <p-dropdown name="company12" #company12="ngModel" required
-                                    [options]="salesOrderPriorityList" placeholder="Select SO List Priority"
+                                    [options]="salesOrderPriorityList" placeholder="Select SO Priority"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.defaultPriorityId">
                                 </p-dropdown>
                             </div>
                         </div>
                         <div class="col-md-3 work_order_teardown">
                             <div class="form-group">
-                                <label>SOQ Status <span class="clr-red">*</span></label>
+                                <label>SO Status <span class="clr-red">*</span></label>
                                 <p-dropdown name="company1" #company1="ngModel" required
-                                    [options]="salesOrderStatusList" placeholder="Select SO List Status"
+                                    [options]="salesOrderStatusList" placeholder="Select SO Status"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.defaultStatusId">
                                 </p-dropdown>
                             </div>
                         </div>
                         <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
                             <div class="form-group">
-
                                 <p-checkbox name="isApprovalRule" binary="true"
                                     [(ngModel)]="receivingForm.isApprovalRule">
                                 </p-checkbox>
@@ -113,17 +107,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
                 <div class="form-row pull-right m-t-10">
                     <button type="submit" class="btn btn-primary" (click)="saveOrUpdateSOSetting()"
                         [disabled]="!soQuoteSettingsForm.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
                 </div>
             </form>
         </div>
-
     </div>
     <ng-template #errorMessagePop let-c="close" let-d="dismiss">
         <div class="modal-header">
@@ -134,7 +124,6 @@
             <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
         </div>
         <div class="modal-footer">
-
             <button type="button" class="btn btn-danger" data-dismiss="modal"
                 (click)="closeErrorMessage()">Close</button>
         </div>

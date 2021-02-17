@@ -241,7 +241,7 @@ body {
 
 	.bhoechie-tab-menu .list-group > a {
 		margin-bottom: 0;
-		font-size: 14px;
+		font-size: 11px;
 		background: none;
 		color: #7f7f7f;
 		padding: 15px;
@@ -885,4 +885,10 @@ li.active.ng-star-inserted {
 .text-area-cstm{
 	height: 132px !important;
     width: 529px !important;
+}
+.fot-label{
+	font-size: 12.28px !important;
+    margin-top: 4px;
+    font-weight: 400;
+    color: #757575;
 }

@@ -471,7 +471,8 @@ export class SalesQuoteService {
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
     partNumberObj.qtyPrevQuoted = selectedPart.quantityAlreadyQuoted;
     partNumberObj.methodType =
-      selectedPart.method === "Stock Line" ? "S" : "I";
+      // selectedPart.method === "Stock Line" ? "S" : "I";
+      selectedPart.stockLineId != null ? "S" : "I";
     partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0;
     partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
@@ -609,5 +610,11 @@ export class SalesQuoteService {
 
   approverslistbyTaskId(taskId, id) {
     return this.salesQuoteEndPointSevice.approverslistbyTaskId(taskId, id);
+  }
+
+  deleteMultiplePart(salesOrderQuotePartIds: any) {
+    return Observable.forkJoin(
+      this.salesQuoteEndPointSevice.deleteMultiplePart(salesOrderQuotePartIds)
+    );
   }
 }

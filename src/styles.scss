@@ -6405,19 +6405,19 @@ h6.block {
 }
 
 .m-t-10 {
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
 
 .m-t-20 {
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 
 .m-t-15 {
-  margin-top: 15px;
+  margin-top: 15px !important;
 }
 
 .m-b-10 {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 
 .p-10 {
@@ -8178,8 +8178,8 @@ hr {
 
 #accordion .panel-title a {
   display: block;
-   padding: 10px;
-  // padding: 0.35rem 1.25rem 0.15rem 1.25rem;
+  // padding: 10px;
+  padding: 0.35rem 1.25rem 0.15rem 1.25rem;
 }
 
 .cdetails-top {
@@ -11005,7 +11005,7 @@ a.ui-button:active,
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-   opacity: 0.35;
+  opacity: 0.35;
   filter: Alpha(Opacity=35);
   /* support: IE8 */
   background-image: none;
@@ -15311,7 +15311,7 @@ input[type='number']::-webkit-outer-spin-button {
 
 .lastcol-fix thead th:last-child {
   right: 0;
-  z-index: 1;
+  z-index: 4;
   padding-left: 5px;
   position: sticky;
 }
@@ -15339,7 +15339,7 @@ input[type='number']::-webkit-outer-spin-button {
 .rro-part-table-cstm th:last-child,
 .lastcol-fix th:last-child {
   right: 0;
-  z-index: 1;
+  z-index: 4;
   padding-left: 5px;
   position: sticky;
 }

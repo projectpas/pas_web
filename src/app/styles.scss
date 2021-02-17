@@ -7825,7 +7825,7 @@ html {
 
 .cat-heading,
 .scat-heading {
-  font-size: 15px;
+  font-size: 11px;
   display: block;
   background: #295d92;
   padding: 5px;
@@ -8180,7 +8180,8 @@ hr {
 
 #accordion .panel-title a {
   display: block;
-  padding: 10px;
+  // padding: 10px;
+  padding: 0.35rem 1.25rem 0.15rem 1.25rem;
 }
 
 .cdetails-top {
@@ -11006,7 +11007,7 @@ a.ui-button:active,
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-  opacity: 0.35;
+  // opacity: 0.35;
   filter: Alpha(Opacity=35);
   /* support: IE8 */
   background-image: none;
@@ -13737,7 +13738,7 @@ body .ui-table .ui-table-tbody>tr>td a.btn {
 .workflow-table-equip label,
 .workflow-table-charges label,
 .workflow-table-material tr th {
-  font-size: 10.5px !important;
+  font-size: 10px !important;
   padding: 3px !important;
 }
 
@@ -15279,7 +15280,7 @@ p-autocomplete .ui-autocomplete input.ui-inputtext {
 .rpo-table-cstm .ui-table .ui-table-tbody>tr>td,
 .wf-table-cstm .ui-table .ui-table-tbody>tr>td,
 .ptable-custom .ui-table .ui-table-tbody>tr>td {
-  padding: 5px 2px !important; //4px 2px
+  padding: 2px 2px !important; //4px 2px
 }
 
 .ptable-cus-pma .ui-table .ui-table-tbody>tr {
@@ -15322,7 +15323,7 @@ p-table .ui-paginator-bottom {
 }
 
 .rro-table-cstm {
-  overflow: hidden;
+  overflow: inherit !important;
   //overflow-y: hidden;
 }
 
@@ -15400,7 +15401,7 @@ input[type='number']::-webkit-outer-spin-button {
 .rro-table-cstm thead th:last-child,
 .lastcol-fix thead th:last-child {
   right: 0;
-  z-index: 1;
+  z-index: 4;
   padding-left: 5px;
   position: sticky;
 }
@@ -17115,4 +17116,35 @@ input[type="date"]::-webkit-clear-button {
 }
 ng-multiselect-dropdown{
   border-radius: 4px !important;
+}
+.workflow-table-measment td {
+  padding: 3px !important;
+}
+.class-Attribue{
+  margin-right: 70px;
+}
+.class-task{
+  margin-right: 30px;
+}
+.workflowTable-class td{
+  padding:3px !important
+}
+.input_adjust{
+  max-width: 30px !important;
+}
+.w150_clas{
+  min-width: 150px !important;
+}
+.memo_cehck{
+  width: 99% !important;
+}
+.w120_clas{
+  min-width: 120px !important;
+}
+// below two calsses for work order material list
+.Materials_wo .adj_width1{
+  width: 150px !important;
+}
+.Materials_wo .adj_width2{
+  width: 190px !important;
 }

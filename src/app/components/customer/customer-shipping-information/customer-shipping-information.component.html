@@ -38,13 +38,13 @@
                       <div style="text-align: right;">
                         <a *ngIf="isViewMode == false" 
                           data-toggle="modal" data-target="#addShippingInfo">
-                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm new-btn-primary"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
+                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
                             Add Domestic Shipping Information
                           </button>
                         </a>              
                       </div>
-                      <div class="card-body new-card-body">
-                        <p-table #domestictable class="rpo-table-cstm" 
+                      <div class="card-body header-body">
+                        <p-table #domestictable class="rpo-table-cstm rro-table-cstm" 
                         [value]="domesticShippingData"
                           [(selection)]="selectedrowsFromDomestic" 
                           [rows]="pageSizeForDomestic" 
@@ -60,13 +60,12 @@
                               <div class="col">
                               <p-multiSelect [options]="domesticShippingHeaders" [(ngModel)]="selectedColumnsForDomesticTable"
                                 name="domesticShiipingTable" optionLabel="header" selectedItemsLabel="{0} columns selected"
-                                [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                              defaultLabel="Choose Columns"  class="multiselect-field"></p-multiSelect>
                               </div>
                               <div class="col">
-                                <div
-                                  style="width: auto !important; float: right;"
-                                  class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                >   
+                                <div					
+                                class="global-search-field inner-addon right-addon inline-block"
+                                >  
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50"
                                  class="form-control" (input)="
@@ -74,7 +73,8 @@
                                       $event.target.value,
                                       'contains'
                                     )
-                                  " placeholder=" Filter" style="height: 28px !important;" />
+                                  " placeholder=" Filter" 
+                                  />
                               </div>
                               </div>
                               <div class="excel-upload  excel-upload-cstm">
@@ -87,19 +87,18 @@
                               >
                                 <div class="form-group">
                                   <div
-                                    class="pull-left"
-                                    style="margin-top: 4px; margin-right: 15px;"
+                                    class="pull-left radio-buttons-align"
                                   >
                                   <p-radioButton class="custom_set" name="groupname" value="Active" label="Active"(click)="geListByStatusDomsetic('Active')" [(ngModel)]="currentstatus1"></p-radioButton>
                               </div>
-                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                              <div class="pull-left radio-buttons-align">
                                   <p-radioButton class="custom_set" name="groupname" value="InActive" label="In-active" (click)="geListByStatusDomsetic('InActive')" [(ngModel)]="currentstatus1"></p-radioButton>
                               </div>
-                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                              <div class="pull-left radio-buttons-align">
                                   <p-radioButton class="custom_set" name="groupname" value="ALL" label="All" (click)="geListByStatusDomsetic('ALL')" [(ngModel)]="currentstatus1"></p-radioButton>
                               </div>
-                                  <div class="checkbox-cstm" style="margin-left: 0;">
-                                    <label style="width: auto !important;margin-top: 4px;">
+                              <div class="checkbox-cstm" style="margin-left: 0;">
+                                <label style="width: auto !important;margin-top: 4px;">
                                       <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"  (click)="getDeleteListByStatusDomestic($event.target.checked)"
                                         />
                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -126,21 +125,21 @@
             
                           <ng-template pTemplate="header" let-columns>
                             <tr>
-                              <th style="width: 40px;">Flag</th>
-                              <th *ngFor="let col of columns" pResizableColumn
+                              <th class="table-column-width">Flag</th>
+                              <th class="table-column-width" *ngFor="let col of columns" pResizableColumn
                                pReorderableColumn [pSortableColumn]="col.field"
                                 [hidden]="col.header == 'IsPrimary'">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
-                              <th style="width: 140px;">Actions</th>
+                              <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
-                              <th></th>
-                              <th style="width:auto" *ngFor="let col of columns"
+                              <th class="table-column-width"></th>
+                              <th class="table-column-width" *ngFor="let col of columns"
                                [hidden]="col.field == 'isPrimary'"
                                 [ngSwitch]="col.field">
-                                <input style="width:100%;" pInputText type="text" (input)="
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     domestictable.filter(
                                       $event.target.value,
                                       col.field,
@@ -148,21 +147,21 @@
                                     )
                                   " />
                               </th>
-                              <th></th>
+                              <th class="table-actions-column"></th>
                             </tr>
                           </ng-template>
             
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                               (dblclick)="viewSelectedRowdbl(rowData)">
-                              <td>
+                              <td class="table-column-width">
                                 <span class="flag">
                                   <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                       color: rowData.isPrimary == true ? 'green' : 'none'
                                     }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                                 </span>
                               </td>
-                              <td *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'"
+                              <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'"
                                 pReorderableRowHandle>
                                 {{
                                   col.field == 'createdDate'
@@ -172,7 +171,7 @@
                                     : rowData[col.field]
                                 }}
                               </td>
-                              <td *ngIf="isViewMode == false" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false" style="text-align: center">
                                   <div *ngIf="currentDeletedstatus1==false">
                                   <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
@@ -212,7 +211,7 @@
                                   <span ><a class="btn nobg" (click)="restore1(restoreId1,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
-                              <td *ngIf="isViewMode == true" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
                                 <span data-toggle="modal" data-target="#viewShipping">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
@@ -232,19 +231,19 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="domesticShippingData?.length == 0">
                             <tr>
-                              <td [attr.colspan]="9" style="color: red; font-weight: bold; text-align: center">
+                              <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="domestictable._totalRecords" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="domestictable._totalRecords" [disabled]="true" pInputText
                               type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
             
-                            <input style="width: 5%;" [ngModel]="
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(domestictable._totalRecords, pageSize)
                               " [disabled]="true" pInputText type="text" />
                           </ng-template>
@@ -266,13 +265,13 @@
                       <div style="text-align: right;">
                         <a *ngIf="isViewMode == false" 
                          data-toggle="modal" data-target="#addInternationalShippingInfo">
-                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm new-btn-primary"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
+                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
                             Add International Shipping Information
                           </button>
                         </a>              
                       </div>
-                      <div class="card-body new-card-body">
-                        <p-table #intlShippingTable class="rpo-table-cstm" 
+                      <div class="card-body header-body">
+                        <p-table #intlShippingTable class="rpo-table-cstm rro-table-cstm" 
                         [value]="internationalShippingData" 
                         [paginator]="true"
                           [pageLinks]="3" 
@@ -290,15 +289,16 @@
                               <div class="col">
                               <p-multiSelect [options]="internationalShippingHeaders"
                                 [(ngModel)]="selectedColumnsForInternationTable" [ngModelOptions]="{ standalone: true }"
-                                optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
-                                defaultLabel="Choose Columns" style="float:left">
+                                optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                class="multiselect-field"
+                                defaultLabel="Choose Columns"
+                                >
                               </p-multiSelect>
                             </div>
                             <div class="col">
-                              <div
-                                style="width: auto !important; float: right;"
-                                class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                              >   
+                              <div					
+                              class="global-search-field inner-addon right-addon inline-block"
+                              >  
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50"
                                  class="form-control" (input)="
@@ -306,7 +306,7 @@
                                       $event.target.value,
                                       'contains'
                                     )
-                                  " placeholder=" Filter" style="height: 28px !important;" />
+                                  " placeholder=" Filter"  />
                               </div>
                               </div>
                               <div class="excel-upload  excel-upload-cstm">
@@ -314,33 +314,32 @@
                             </div>
                             <div class="row">
                               <div class="col">
-                                 <div class="col"
-                                   style="width: 370px; float: right; padding-top: 3px;"
-                                 >
+                              <div class="col"
+                                style="width: 370px; float: right; padding-top: 3px;"
+                              >
                                    <div class="form-group">
                                      <div
-                                       class="pull-left"
-                                       style="margin-top: 4px; margin-right: 15px;"
+                                       class="pull-left radio-buttons-align"
                                      >
                                      <label class="radio-cstm wauto">
                                       <input type="radio" name="shipstatus" class="form-control" value="Active" (click)="geListByStatusInternational('Active')" [(ngModel)]="currentstatus2">
                                       <span class="checkmark"></span>Active
                                   </label>
                               </div>
-                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                              <div class="pull-left radio-buttons-align">
                                   <label class="radio-cstm wauto">
                                       <input type="radio" name="shipstatus" class="form-control" value="InActive" (click)="geListByStatusInternational('InActive')" [(ngModel)]="currentstatus2">
                                       <span class="checkmark"></span>In-Active
                                   </label>
                               </div>
-                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                              <div class="pull-left radio-buttons-align">
                                   <label class="radio-cstm wauto">
                                       <input type="radio" name="shipstatus" class="form-control" value="ALL" (click)="geListByStatusInternational('ALL')" [(ngModel)]="currentstatus2">
                                       <span class="checkmark"></span>All
                                   </label>
                               </div>
-                                  <div class="checkbox-cstm" style="margin-left: 0;">
-                                    <label style="width: auto !important;margin-top: 4px;">
+                              <div class="checkbox-cstm" style="margin-left: 0;">
+                                <label style="width: auto !important;margin-top: 4px;">
                                       <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"  (click)="getDeleteListByStatusIntern($event.target.checked)"
                                         />
                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -366,21 +365,21 @@
             
                           <ng-template pTemplate="header" let-columns>
                             <tr>
-                              <th style="width: 40px;">Flag</th>
-                              <th *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
+                              <th class="table-column-width">Flag</th>
+                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
                                 pReorderableColumn [pSortableColumn]="col.field">
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
-                              <th style="width: 140px;" *ngIf="selectedColumnsForInternationTable.length > 0">
+                              <th class="table-actions-column" *ngIf="selectedColumnsForInternationTable.length > 0">
                                 Actions
                               </th>
                             </tr>
                             <tr>
-                              <th></th>
-                              <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
+                              <th class="table-column-width"></th>
+                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                 [ngSwitch]="col.field">
-                                <input style="width:100%;" pInputText type="text" (input)="
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     intlShippingTable.filter(
                                       $event.target.value,
                                       col.field,
@@ -388,14 +387,14 @@
                                     )
                                   " />
                               </th>
-                              <th></th>
+                              <th class="table-actions-column"></th>
                             </tr>
                           </ng-template>
             
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                               (dblclick)="viewInterShipping(rowData)">
-                              <td>
+                              <td class="table-column-width">
                                 <span class="flag">
                                   <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                       color: rowData.isPrimary == true ? 'green' : 'none'
@@ -403,7 +402,7 @@
                                 </span>
                               </td>
                               <ng-container *ngFor="let col of columns">
-                                <td class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" *ngIf="col.field != 'amount'"
+                                <td class="table-column-width" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" *ngIf="col.field != 'amount'"
                                 pReorderableRowHandle>
                                 {{
                                   col.field == 'createdDate'
@@ -417,12 +416,12 @@
                                     : rowData[col.field]
                                 }}
                               </td>
-                              <td *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
+                              <td class="table-column-width" *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
                                 <p class="m-0 p-0 text-right"> {{ rowData[col.field] }}</p>
                               </td>
                               </ng-container>
                               
-                              <td *ngIf="isViewMode == false" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false" style="text-align: center">
                                 
                                 <div *ngIf="currentDeletedstatus2==false">
                                 <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
@@ -466,7 +465,7 @@
                                   <span ><a class="btn nobg" (click)="restore2(restoreId2,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
-                              <td *ngIf="isViewMode == true" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true" style="text-align: center">
                                 <span data-toggle="modal" data-target="#viewInter">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
@@ -484,19 +483,19 @@
                           </ng-template>
                           <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingData?.length == 0">
                             <tr>
-                              <td [attr.colspan]="8" style="color: red; font-weight: bold; text-align: center">
+                              <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
                                 No records found
                               </td>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="intlShippingTable._totalRecords" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="intlShippingTable._totalRecords" [disabled]="true" pInputText
                               type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
             
-                            <input style="width: 5%;" [ngModel]="
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(intlShippingTable._totalRecords, pageSize)
                               " [disabled]="true" pInputText type="text" />
                           </ng-template>
@@ -620,7 +619,7 @@
             <div class="clear"></div>
             <h6 class="mt-3 mb-2">Ship Via Details</h6>
             <div style="margin: -10px">
-            <p-table #domesShipVia class="rpo-table-cstm" 
+            <p-table #domesShipVia class="rpo-table-cstm rro-table-cstm" 
             name="domesticShipViaTable" 
             [rows]="pageSizeForShipViaDomestic"  
             [paginator]="true" 
@@ -637,13 +636,13 @@
               <!-- [loading]="loaderForDomesticShipVia" -->
               <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                  <col *ngFor="let col of columns" />
+                  <col *ngFor="let col of columns" class="table-column-width" />
                 </colgroup>
               </ng-template>
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th style="width: 40px;">Flag</th>
-                  <th *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
+                  <th class="table-column-width">Flag</th>
+                  <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                     [pSortableColumn]="col.field">
                     {{ col.header }}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -651,10 +650,10 @@
                  
                 </tr>
                 <tr>
-                  <th></th>
-                  <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
+                  <th class="table-column-width"></th>
+                  <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                     [ngSwitch]="col.field">
-                    <input style="width:100%;" pInputText type="text" (input)="
+                    <input class="table-header-input-width" pInputText type="text" (input)="
                         domesShipVia.filter(
                           $event.target.value,
                           col.field,
@@ -666,14 +665,16 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData">
-                  <td style="width: 40px;">
+                  <td class="table-column-width">
                     <span class="flag">
                       <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                           color: rowData.isPrimary == true ? 'green' : 'none'
                         }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                     </span>
                   </td>
-                  <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                  <ng-container *ngFor="let col of columns">
+                  <td  class="table-column-width" *ngIf="col.field != 'memo'" 
+                   class="ui-resizable-column" pReorderableRowHandle>
                     {{
                       col.field == 'createdDate'
                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -682,23 +683,27 @@
                         : rowData[col.field]
                     }}
                   </td>
+                  <td class="table-column-width" *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                </td>
+                </ng-container>
                   
                 </tr>
               </ng-template>
               <ng-template pTemplate="emptymessage" let-columns *ngIf="demosticShippingViaData.length == 0">
                 <tr>
-                  <td colspan="4" style="color: red; font-weight: bold; text-align: center">
+                  <td colspan="4" class="no-records-cstm no-records-msg">
                     No records found
                   </td>
                 </tr>
               </ng-template>
               <ng-template pTemplate="summary" id="footer">
                 <label id="footer" class="footer">Total:</label>
-                <input style="width: 5%;" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
+                <input class="footer-input-width" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
                   pInputText type="text" />
                 &nbsp;&nbsp;
                 <label id="footer" class="footer1">Pages Count:</label>
-                <input style="width: 5%;" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
+                <input class="footer-input-width" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
                   [disabled]="true" pInputText type="text" />
               </ng-template>
             </p-table>
@@ -897,8 +902,9 @@
       </div> 
     </div>
     <div class="modal-body">
-      <div class="table-responsive">
-        <table class="table table-bordered">
+      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+        <div class="tableFixHead">  
+        <table class="table table-bordered header-table-width">
           <thead>
             <tr>
               <th>Ship Via</th>
@@ -983,6 +989,7 @@
             </td>                   
           </tr>
         </table>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1204,7 +1211,7 @@
             </h6>
             <div style="margin: -10px">
               <p-table #internationShipVia 
-              class="rpo-table-cstm" 
+              class="rpo-table-cstm rro-table-cstm" 
               name="internationalshipViaTable"
                 [rows]="pageSizeForShipViaInt" [first]="0" 
                 [value]="internationalShippingViaData" [paginator]="true"
@@ -1254,7 +1261,8 @@
                           }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                       </span>
                     </td>
-                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                    <ng-container *ngFor="let col of columns">
+                    <td  *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
                       {{
                         col.field == 'createdDate'
                           ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -1263,6 +1271,10 @@
                           : rowData[col.field]
                       }}
                     </td>
+                    <td class="table-column-width" *ngIf="col.field == 'memo'">
+                      <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                  </td>
+                  </ng-container>
                     
                   </tr>
                 </ng-template>
@@ -1408,7 +1420,7 @@
                         <h4 class="modal-title">Edit Memo</h4>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-fixed workflow-table-material">
+                        <!-- <table class="table table-bordered table-fixed workflow-table-material">
                             <thead>
                                 <th style="color: #fff;">Memo</th>
                             </thead>
@@ -1420,11 +1432,13 @@
                                     </td>
                                 </tr>
                             </tbody> 
-                        </table>
-                        <div style="float:right;margin-top: 12px;">
-                            <button type="button" class="btn btn-primary"
+                        </table> -->
+                        <p-editor [(ngModel)]="textDomesticMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                        name="textDomesticMemo" ></p-editor>
+                        <div class="editor-buttons">
+                            <button type="button" class="btn btn-primary editor-buttons-margin"
                              (ngModelChange)="enableSave()" (click)="onSaveDomesticMemo()" [disabled]="disableEditor">Save</button>
-                        <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(1)">Close</button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo(1)">Close</button>
                        </div> 
                     </div>
                 </div>
@@ -1441,7 +1455,7 @@
               </label>
             </div>
           </div>
-          <p-table #domesShipVia class="rpo-table-cstm" 
+          <p-table #domesShipVia class="rpo-table-cstm rro-table-cstm" 
           name="domesticShipViaTable" 
           [rows]="pageSizeForShipViaDomestic" 
           [paginator]="true" 
@@ -1620,7 +1634,7 @@
         </strong>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel2()">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel2()">
           Yes
         </button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1662,7 +1676,7 @@
         </strong>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="restoreItemAndCloseModel()">
+        <button type="button" class="btn btn-primary" (click)="restoreItemAndCloseModel()">
           Yes
         </button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1704,7 +1718,7 @@
         </strong>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="restoreIternationalItemAndCloseModel()">
+        <button type="button" class="btn btn-primary" (click)="restoreIternationalItemAndCloseModel()">
           Yes
         </button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1749,8 +1763,9 @@
         </div> 
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width">
             <thead>
               <tr>
                 <th>Ship Via</th>
@@ -1835,6 +1850,7 @@
               </td>                         
             </tr>
           </table>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -2029,7 +2045,7 @@
                         <h4 class="modal-title">Edit Memo</h4>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-fixed workflow-table-material">
+                        <!-- <table class="table table-bordered table-fixed workflow-table-material">
                             <thead>
                                 <th style="color: #fff;">Memo</th>
                             </thead>
@@ -2041,11 +2057,13 @@
                                     </td>
                                 </tr>
                             </tbody> 
-                        </table>
-                        <div style="float:right;margin-top: 12px;">
-                            <button type="button" class="btn btn-primary" (ngModelChange)="enableSave()"
+                        </table> -->
+                        <p-editor [(ngModel)]="textInternationalMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                        name="textAreaInf2o" ></p-editor>
+                        <div class="editor-buttons">
+                            <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="enableSave()"
                             (click)="onSaveInternationalMemo()" [disabled]="disableEditor">Save</button>
-                        <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(2)">Close</button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo(2)">Close</button>
                        </div> 
                     </div>
                 </div>
@@ -2062,7 +2080,7 @@
             </div>
           </div>
           <p-table #internationShipVia 
-          class="rpo-table-cstm" 
+          class="rpo-table-cstm rro-table-cstm" 
           name="internationalshipViaTable"
             [rows]="pageSizeForShipViaInt" [first]="0" 
             [value]="internationalShippingViaData" [paginator]="true"
@@ -2257,7 +2275,7 @@
         </strong>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel3()">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel3()">
           Yes
         </button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -2448,7 +2466,7 @@
       </strong>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+      <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
         Yes
       </button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -2493,7 +2511,7 @@
       </strong>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel1()">
+      <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel1()">
         Yes
       </button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -2530,8 +2548,9 @@
       </div>
     </div>
     <div class="modal-body">
-      <div class="table-responsive">
-        <table class="table table-bordered">
+      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+        <div class="tableFixHead">  
+        <table class="table table-bordered header-table-width">
           <thead>
             <tr>
               <th>Site Name</th>
@@ -2643,6 +2662,7 @@
             </td>
           </tr>
         </table>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -2680,8 +2700,9 @@
       </div>
     </div>
     <div class="modal-body">
-      <div class="table-responsive">
-        <table class="table table-bordered">
+      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+        <div class="tableFixHead">  
+        <table class="table table-bordered header-table-width">
           <thead>
             <tr>
               <th>Export License</th>
@@ -2802,6 +2823,7 @@
             </td>
           </tr>
         </table>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -2890,7 +2912,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="restoreRecordDomestic()">Yes</button>
+      <button type="button" class="btn btn-primary" (click)="restoreRecordDomestic()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template> 
@@ -2930,7 +2952,7 @@
       </strong>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="restoreRecordIntern()">Yes</button>
+      <button type="button" class="btn btn-primary" (click)="restoreRecordIntern()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template> 

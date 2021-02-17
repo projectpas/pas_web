@@ -61,25 +61,26 @@
                 <span class="checkmark"></span>PN View
               </label>
             </div> -->
+            <div class="pull-left radio-buttons-align">
+              <label class="radio-cstm wauto">
+                <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
+                  (click)="changeOfStatus('','soqview')">
+                <span class="checkmark"></span>SOQ View
+              </label>
+            </div>
+            <div class="pull-left radio-buttons-align">
+              <label class="radio-cstm wauto">
+                <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
+                  (click)="changeOfStatus('','pnview')">
+                <span class="checkmark"></span>PN View
+              </label>
+            </div>
           </div>
           <div class="pull-right buttons-div-align">
             <div class="col">
               <div class="col buttons-top-padding">
                 <div class="form-group">
-                  <div class="pull-left radio-buttons-align">
-                    <label class="radio-cstm wauto">
-                      <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
-                        (click)="changeOfStatus('','soqview')">
-                      <span class="checkmark"></span>SOQ View
-                    </label>
-                  </div>
-                  <div class="pull-left radio-buttons-align">
-                    <label class="radio-cstm wauto">
-                      <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
-                        (click)="changeOfStatus('','pnview')">
-                      <span class="checkmark"></span>PN View
-                    </label>
-                  </div>
+                
                   <div class="pull-left radio-buttons-align" *ngFor="let status of statusList">
                     <label class="radio-cstm wauto">
                       <input type="radio" name="currentStatus" class="form-control" value="{{status.value}}"
@@ -148,8 +149,6 @@
               (change)="dt.filter($event.target.value, col.field, 'contains')">
             <input type="date" *ngIf="col.field == 'updatedDate'" class="table-header-input-width" name="updatedDate"
               (change)="dt.filter($event.target.value, col.field, 'contains')">
-
-
           </th>
           <th class="table-actions-column"></th>
         </tr>

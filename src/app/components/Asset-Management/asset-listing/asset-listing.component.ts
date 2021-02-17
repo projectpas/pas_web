@@ -106,12 +106,13 @@ export class AssetListingComponent implements OnInit {
     selectedCol: { field: string; header: string; }[];
     cols = [
         { field: 'name', header: 'Asset Name', colspan: '1' },
-        { field: 'assetId', header: 'Asset ID', colspan: '1' },
+        { field: 'assetId', header: 'ID', colspan: '1' },
         { field: 'alternateAssetId', header: 'Alt Asset ID', colspan: '1' },
         { field: 'manufacturerName', header: 'Manufacturer', colspan: '1' },
         { field: 'isSerializedNew', header: 'Serialized', colspan: '1' },
         { field: 'calibrationRequiredNew', header: 'Calibrated', colspan: '1' },
         { field: 'assetClass', header: 'Asset Category', colspan: '1' },
+        { field: 'deprAmort', header: 'Depr/Amort', colspan: '1' },
         // { field: 'companyName', header: 'Level 01', colspan: '1' },
         // { field: 'buName', header: 'Level 02', colspan: '1' },
         // { field: 'deptName', header: 'Level 03', colspan: '1' },
@@ -121,7 +122,7 @@ export class AssetListingComponent implements OnInit {
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'Updated By' },
-    ];
+    ]; 
     cols1 = [
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
@@ -153,13 +154,13 @@ export class AssetListingComponent implements OnInit {
         this.assetService.indexObj.next(this.activeIndex);
         if (this.isWorkOrder) {
             this.assetService.getAssetsById(this.assetsId).subscribe(res => {
-                this.openView('', res[0]);
-            }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            })
+                this.openView('', res[0]); 
+                }, err => {
+                    const errorLog = err;
+                    this.errorMessageHandler(errorLog);
+                })
+            }
         }
-    }
     loadEventData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;
@@ -286,7 +287,18 @@ export class AssetListingComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.allAssetInfo = [];
         this.allAssetInfo = allWorkFlows.results;
-        this.allAssetInfoOriginal = allWorkFlows.results;
+       this.allAssetInfo.forEach(x=>{
+         if(x.assetClass=='Tangible' ){
+    x.deprAmort=x.isDepreciable==true ? 'yes' :'No';
+         }
+         if(x.assetClass=='Intangible' ){
+                x.deprAmort=x.isAmortizable==true? 'yes' :'No';
+                     }
+            x.createdDate=x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '';
+						x.updatedDate=x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '';
+        
+                              })
+        this.allAssetInfoOriginal = this.allAssetInfo
         this.lazyLoadEventDataInput.first = allWorkFlows.first;
     }
     private onDataLoadFailed(error: any) {
@@ -303,11 +315,11 @@ export class AssetListingComponent implements OnInit {
     getAuditHistoryById(rowData) {
         this.assetService.getAssetCapesAudit(rowData.assetCapesId).subscribe(res => {
             this.auditHistory = res;
-        }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        })
-    }
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            })
+        }
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
         const dataLength = data.length;
@@ -350,9 +362,8 @@ export class AssetListingComponent implements OnInit {
                     ...lazyEvent.filters,
                     status: this.status
                 }
-            })
-
-        }, err => {
+            }) 
+               }, err => {
             const errorLog = err;
             this.errorMessageHandler(errorLog);
         });
@@ -453,16 +464,15 @@ export class AssetListingComponent implements OnInit {
     }
     openViewData(content, row) {
         this.assetViewList = row;
+        this.assetViewList.showIsActive=this.assetViewList.isActive;
         this.assetViewList.depreOrIntang = row.isDepreciable == true ? 'Tangible' : 'Intangible';
         this.assetViewList.manufacturerName = row.manufacturer ? row.manufacturer.name : "";
-        this.assetViewList.isSerialized = row.isSerialized == true ? 'Yes' : 'No';
         this.assetViewList.currencyId = row.currency ? row.currency.code : '';
         this.assetViewList.calibrationDefaultCost = row.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(row.calibrationDefaultCost, 2) : "";
         this.assetViewList.certificationDefaultCost = row.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(row.certificationDefaultCost, 2) : "";
         this.assetViewList.inspectionDefaultCost = row.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(row.inspectionDefaultCost, 2) : "";
         this.assetViewList.verificationDefaultCost = row.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(row.verificationDefaultCost, 2) : "";
         this.assetViewList.residualPer = row.residualPer ? formatNumberAsGlobalSettingsModule(row.residualPer, 2) : "";
-        this.assetViewList.isSerialized = row.isSerialized == true ? 'Yes' : 'No';
         this.assetViewList.unitOfMeasureId = this.getUOMName(row.unitOfMeasureId);
         this.assetViewList.assetTypeId = row.assetType ? row.assetType.assetTypeName : "";
         this.assetRecordId = row.assetRecordId;
@@ -604,12 +614,8 @@ export class AssetListingComponent implements OnInit {
     }
     errorMessageHandler(log) {
         this.isSpinnerVisible = false;
-        this.alertService.showMessage(
-            'Error',
-            log,
-            MessageSeverity.error
-        );
     }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(

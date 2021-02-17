@@ -24,6 +24,8 @@ export class ReceivingEndpointService extends EndpointFactory {
     private readonly _updateStockLinesUrl: string = "/api/receivingro/UpdateStockLines";
     private readonly _createStockLinesUrl: string = "/api/receivingPart/CreateStockLine";
     private readonly _createStockLinesForRepairOrderUrl: string = "/api/receivingRO/CreateStockLine";
+    private readonly receivingRepairOrderDataById: string = "/api/receivingro/getRepairOrderPartById";
+
 
     get getAll() { return this.configurations.baseUrl + this.getAllURL; }
     get removeById() { return this.configurations.baseUrl + this.removeByIdURL; }
@@ -34,7 +36,9 @@ export class ReceivingEndpointService extends EndpointFactory {
     get ReceivePartsURL() { return this.configurations.baseUrl + this._receivePartsUrl; }
     get UpdateStockLinesURL() { return this.configurations.baseUrl + this._updateStockLinesUrl; }
     get CreateStockLinesURL() { return this.configurations.baseUrl + this._createStockLinesUrl; }
-
+    get receivingRepairOrderDataGet() { return this.configurations.baseUrl + this.receivingRepairOrderDataById; }
+    get createStocklineRo() { return this.configurations.baseUrl + this._createStockLinesForRepairOrderUrl; }
+   
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 
         super(http, configurations, injector);
@@ -44,7 +48,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.get<T>(this.getAll, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllReceivingData());
+                return this.handleErrorCommon(error, () => this.getAllReceivingData());
             });
     }
 
@@ -52,7 +56,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this.addURL, JSON.stringify(assetObj), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addReceivingData(assetObj));
+                return this.handleErrorCommon(error, () => this.addReceivingData(assetObj));
             });
     }
 
@@ -61,7 +65,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.editReceivingData(assetTypeId));
+                return this.handleErrorCommon(error, () => this.editReceivingData(assetTypeId));
             });
     }
 
@@ -70,7 +74,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(assetObj), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateReceivingData(assetObj));
+                return this.handleErrorCommon(error, () => this.updateReceivingData(assetObj));
             });
     }
 
@@ -79,7 +83,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.deleteReceivingData(assetTypeId));
+                return this.handleErrorCommon(error, () => this.deleteReceivingData(assetTypeId));
             });
     }
     
@@ -88,24 +92,30 @@ export class ReceivingEndpointService extends EndpointFactory {
         let url = `${this.itemMasterDataGet}/${itemid}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getItemMasterDataById(itemid));
+                return this.handleErrorCommon(error, () => this.getItemMasterDataById(itemid));
             });
     }
 
-    getReceivingPODataById<T>(receivingId: any): Observable<T> {
-        let url = `${this.receivingPurchaseOrderDataGet}/${receivingId}`;
+    getReceivingPODataById<T>(receivingId: any,employeeId = 0): Observable<T> {
+        let url = `${this.receivingPurchaseOrderDataGet}?receivingId=${receivingId !== undefined ? receivingId : '0'}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getReceivingPODataById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataById(receivingId,employeeId));
             });
     }
 
-    getReceivingPODataForEditById<T>(receivingId: any): Observable<T> {
+    getAllRecevingEditID(purchaseOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/getAllRecevingEditID?poID=${purchaseOrderId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllRecevingEditID(purchaseOrderId));  
+        });
+      }
 
-        let url = `${this.receivingPurchaseOrderForEditDataGet}/${receivingId}`;
+    getReceivingPODataForEditById<T>(receivingId: any,employeeId = 0): Observable<T> {
+        let url = `${this.receivingPurchaseOrderForEditDataGet}?receivingId=${receivingId}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getReceivingPODataForEditById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataForEditById(receivingId,employeeId));
             });
     }
 
@@ -114,16 +124,15 @@ export class ReceivingEndpointService extends EndpointFactory {
         let url = `${this.receivingPurchaseOrderForViewDataGet}/${receivingId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getReceivingPurchaseForView(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPurchaseForView(receivingId));
             });
     }
 
     addPartStocklineMapper<T>(mapperObject: any): Observable<T>
     {
-        debugger;
         return this.http.post<T>(this.addStocklineMapperData, JSON.stringify(mapperObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addPartStocklineMapper(mapperObject));
+                return this.handleErrorCommon(error, () => this.addPartStocklineMapper(mapperObject));
             });
     }
 
@@ -143,13 +152,16 @@ export class ReceivingEndpointService extends EndpointFactory {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingRO/getRepairOrderHeaderById/${repairOrderId}`)
     }
 
-    getReceivingROPartById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getRepairOrderPartById/${repairOrderId}`)
+    getReceivingROPartById(repairOrderId,employeeId = 0) {                
+        let url = `${this.receivingRepairOrderDataGet}?repairOrderId=${repairOrderId !== undefined ? repairOrderId : '0'}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;              
+        return this.http.get<any>(url, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getReceivingROPartById(repairOrderId,employeeId));
+        });
     }
 
     receiveParts<T>(receiveParts: ReceiveParts[]): Observable<T> {
         var listObj = [];
-
         for (let part of receiveParts) {
             let Obj = {
                 'itemMasterId': part.itemMasterId,
@@ -158,17 +170,17 @@ export class ReceivingEndpointService extends EndpointFactory {
                 'repairOrderPartRecordId': part.repairOrderPartRecordId,
                 'quantityActuallyReceived': part.quantityActuallyReceived,
                 'stockLines': part.stockLines,
-                'timeLife': part.timeLife
+                'timeLife': part.timeLife,                              
+                'altEquiPartNumberId':0, 
+                'mappingType':0,
+                'quantityRejected': part.quantityRejected,
             };
-
             listObj.push(Obj);
         }
-
         return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.receiveParts(receiveParts));
+                return this.handleErrorCommon(error, () => this.receiveParts(receiveParts));
             });
-
     }
 
     getReceivingROPartsForViewById(repairOrderId) {
@@ -235,21 +247,31 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(receiveParts)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateStockLine(receiveParts));
+                return this.handleErrorCommon(error, () => this.updateStockLine(receiveParts));
             });
     }
 
     CreateStockLine(purchaseOrderId: any) {
         let url = `${this.CreateStockLinesURL}/${purchaseOrderId}`;
-        return this.http.get<any>(url);
+        return this.http.get<any>(url).catch(error => {
+                return this.handleErrorCommon(error, () => this.CreateStockLine(purchaseOrderId));
+            });
     }
 
     CreateStockLineForRepairOrder(repairOrder: any) {
-        let url = `${this._createStockLinesForRepairOrderUrl}/${repairOrder}`;
+        let url = `${this.createStocklineRo}/${repairOrder}`;
+        console.log(url)
         return this.http.get<any>(url);
     }
 
     deleteStockLineDraft(stockLineDraftId, quantity) {
         return this.http.put<any>(`${this.configurations.baseUrl}/api/receivingPart/deletestocklinedraft?stockLineDraftId=${stockLineDraftId}&quantity=${quantity}`, this.getRequestHeaders());
     }
+
+    getAllRecevingROEditID(repairOrderId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getAllRecevingROEditID?roID=${repairOrderId}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllRecevingROEditID(repairOrderId));  
+        });
+      }
 }

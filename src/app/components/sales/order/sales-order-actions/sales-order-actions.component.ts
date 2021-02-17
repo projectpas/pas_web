@@ -99,7 +99,6 @@ export class SalesOrderActionsComponent implements OnInit {
     instance.onConfirm.subscribe(this.onActionClick);
     instance.salesOrderActionType = actionType;
     instance.modalRef = this.modal;
-    this.modal.result.then(() => { }, () => { });
   }
 
 

@@ -1,16 +1,16 @@
 ﻿
 <p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="card-header header">
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading">
+          <h4 class="header-name">
               {{editCalendarPage ? 'Edit' : 'Create' }} Accounting Calender</h4>
         </div>
-        <div>
+        <div> 
           <button
             type="button"
-            class="btn-sm new-btn-primary"
+            class="btn-sm header-button"
             [routerLink]="[
             '/generalledgermodule/generalledgerpage/app-accounting-listing-calendar'
             ]"
@@ -20,13 +20,13 @@
         </div>
       </div>
     </div>
-    <div class="card-body new-card-body"> 
+    <div class="card-body header-body"> 
            <div class="col-xs-12 x_content">
         <!-- <h4 class="page-heading">{{pageTitle}}</h4> -->
         <div class="col-md-12 col-sm-12 col-xs-12 mt8">
             <div class="tab-content">
                 <div class="tab-pane active" id="home">
-                    <div class="col-sm-6" style="margin-left: 30px">
+                    <div class="col-sm-6 accounting-calendar-div">
                         <div class="form-group col-sm-12">
                             <label class="col-sm-3">Ledger Name<strong class="clr-red">*</strong></label>
                             <div class="col-sm-5 inner-addon right-addon inline-block">
@@ -65,8 +65,10 @@
                             <label class="col-sm-3">Start Date<strong class="clr-red">*</strong></label>
                             <div class="col-sm-5">
                                 <p-calendar [(ngModel)]="currentCalendarObj.fromDate"
+                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
+                                 class="calendar" [showIcon]="true"  appendTo="body"
                                 [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                 [showIcon]="true" [minDate]="minDate"></p-calendar>
+                                  [minDate]="minDate"></p-calendar>
                             </div>
                         </div>
                         <div class="form-group col-sm-12">
@@ -101,16 +103,20 @@
                     </div>
                     <div class="clear"></div>
                     <hr>
-                    <button *ngIf="!editCalendarPage" class="btn btn-success pull-right add-cal-btn" (click)="addCalendar()">Add Calendar</button>
+                    <button *ngIf="!editCalendarPage" class="btn btn-primary pull-right add-cal-btn" (click)="addCalendar()">Add Calendar</button>
                     <div class="clear"></div>
                 </div>
             </div>
         </div>
 
         <div [@fadeInOut] class="col-md-12 col-sm-12 col-xs-12">
-            <button *ngIf="showManual" (click)="addPeriod()" class="btn btn-warning pull-right add-cal-btn" style="font-size: 12px;padding: 2px 5px;">Add Period <i class="fa fa-plus"></i></button>
-            <div id="" class="accountCalendarTable table-responsive default-bg clear calendar-table-12 col-10 input-85" *ngIf="showTable">
-                <table class="table table-bordered table-striped">
+            <button *ngIf="showManual" (click)="addPeriod()" class="btn btn-warning pull-right add-cal-btn accounting-period-button"
+            >Add Period <i class="fa fa-plus"></i></button>
+            <!-- <div id="" class="accountCalendarTable table-responsive default-bg clear calendar-table-12 col-10 input-85" *ngIf="showTable">
+                <table class="table table-bordered table-striped"> -->
+                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                        <div class="tableFixHead">
+                            <table class="table table-bordered header-table-width">
                     <thead>
                         <tr>
                             <th>Calendar/Fiscal</th>
@@ -130,10 +136,18 @@
                             <td>{{obj.quater}}</td>
                             <td>{{obj.period}}</td>
                             <td>
-                                <p-calendar [(ngModel)]="obj.fromDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"></p-calendar>
+                                <p-calendar [(ngModel)]="obj.fromDate"
+                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''"
+                                 class="calendar" name="fromDate"
+                                [showIcon]="true"  appendTo="body"
+                                 [yearNavigator]="true" [monthNavigator]="true"
+                                  yearRange="1900:2100"></p-calendar>
                             </td>
                             <td>
-                                <p-calendar [(ngModel)]="obj.toDate" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" (onSelect)="setDate(obj,row_no)"></p-calendar>
+                                <p-calendar [(ngModel)]="obj.toDate" 
+                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar"
+                                 [showIcon]="true"  appendTo="body" name="toDate"
+                                 [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" (onSelect)="setDate(obj,row_no)"></p-calendar>
                             </td>
                             <td>{{obj.periodName}}</td>
                             <td *ngIf="obj.adjusting=='yes' "> <input type="checkbox" [(ngModel)]="obj.isAdjustPeriod" disabled /></td>
@@ -161,10 +175,17 @@
                             </td>
                             <td>{{obj.period}}</td>
                             <td>
-                                <p-calendar [(ngModel)]="obj.fromDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"></p-calendar>
+                                <p-calendar [(ngModel)]="obj.fromDate" 
+                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" 
+                                [showIcon]="true"  appendTo="body"
+                                [yearNavigator]="true" [monthNavigator]="true" 
+                                yearRange="1900:2100"></p-calendar>
                             </td>
                             <td>
-                                <p-calendar [(ngModel)]="obj.toDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"></p-calendar>
+                                <p-calendar [(ngModel)]="obj.toDate" 
+                                [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
+                                [yearNavigator]="true" [monthNavigator]="true" 
+                                yearRange="1900:2100"></p-calendar>
                             </td>
                             <td>{{obj.periodName}}</td>
                             <th *ngIf="row_no>0"><input type="checkbox" [(ngModel)]="obj.isAdjustPeriod" (change)="setAdjustingPeriod(obj,row_no)" /></th>
@@ -176,9 +197,10 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <div class="clear"></div>
                 <br>
-                <button class="btn btn-success pull-right" (click)="saveCalendar()">Save</button>
+                <button class="btn btn-primary pull-right" (click)="saveCalendar()">Save</button>
                 <div class="clear"></div>
             </div>
         </div>
@@ -193,6 +215,8 @@
         Please Enter (*) Mandatory Fields
     </h5>
     <p-footer>
-        <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+        <button type="button" pButton class="btn btn-danger" (click)="display=false" label="Close"></button>
     </p-footer>
 </p-dialog>
+
+

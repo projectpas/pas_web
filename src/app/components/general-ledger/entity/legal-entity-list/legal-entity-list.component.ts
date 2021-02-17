@@ -147,7 +147,14 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	}
 	closeDeleteModal() {
         $("#downloadConfirmation").modal("hide");
-    }
+	}
+	
+	get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }    
+	
 	getAuditHistoryById(content, row) {
 		this.alertService.startLoadingMessage();
 		this.entityService.getLeaglEntityHistory(row.legalEntityId).subscribe(
@@ -242,7 +249,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 
 		this.isSpinnerVisible = true;
 		const isdelete = this.currentDeletedstatus ? true : false;
-		data.filters.isDeleted = isdelete
+		data.filters.isDeleted = isdelete;		
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId; 
 		const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
 		this.entityService.getEntityLists(PagingData).subscribe(res => {
 			this.alertService.stopLoadingMessage();
@@ -272,30 +280,33 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	allAssetInfoOriginal:any=[];
 	dateObject:any={}
   dateFilterForTable(date, field) {
-this.dateObject={}
-	  date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-  if(field=='createdDate'){
-	  this.dateObject={'createdDate':date}
-  }else if(field=='updatedDate'){
-	  this.dateObject={'updatedDate':date}
-  }
-  
-  this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters ,...this.dateObject};
-  const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-  this.getList(PagingData); 
-}else{
-  this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
-  if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
-	  delete this.lazyLoadEventDataInput.filters.createdDate;
-  }
-  if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
-	  delete this.lazyLoadEventDataInput.filters.updatedDate;
-  }
-  this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
+	const minyear = '1900';
+	const dateyear = moment(date).format('YYYY');
+	this.dateObject={}
+	date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+    if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
+		if(dateyear > minyear){
+     		if(field=='createdDate'){
+	  			this.dateObject={'createdDate':date}
+  			}else if(field=='updatedDate'){
+			  	this.dateObject={'updatedDate':date}
+		} 
+  		this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters ,...this.dateObject};
+  		const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+	  	this.getList(PagingData); 
+	  }
+	}else{
+  		this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
+  		if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
+	  	delete this.lazyLoadEventDataInput.filters.createdDate;
+  	}
+  	if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
+	  	delete this.lazyLoadEventDataInput.filters.updatedDate;
+  	}
+  	this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
 	  const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
 	  this.getList(PagingData); 
-}
+	}
 	
   }
 	columnsChanges() {
@@ -818,12 +829,11 @@ this.isLockBox=false;
 		exportCSV(dt) {
 		this.isSpinnerVisible = true;
 		const isdelete = this.currentDeletedstatus ? true : false;
-		let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.statusForList, "isDeleted": isdelete }, "globalFilter": this.filterText ? this.filterText :"" }
+		let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": {"masterCompanyId": this.currentUserMasterCompanyId,"status": this.statusForList, "isDeleted": isdelete }, "globalFilter": this.filterText ? this.filterText :"" }		
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x => {
 			PagingData.filters[x] = dt.filters[x].value;
 		});
-
 		this.entityService.getEntityLists(PagingData).subscribe(res => {
 			const vList = res[0]['results'].map(x => {
 				return {

@@ -30,9 +30,9 @@
     </div>
   </div>
   <div class="clearfix"></div>
-  <div class="card-body header-body" style="overflow:auto">
+  <div class="card-body header-body">
   <p-table [columns]="cols" [value]="salesOrderFreightList" [lazy]="false" [paginator]="true" [rows]="10"
-    class="rpo-table-cstm sales-analysis-header ptable-f10" [paginator]="true">
+    class="rpo-table-cstm rro-table-cstm" [paginator]="true">
     <!--freightss-->
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -144,7 +144,7 @@
           </select>
         </td>
         <td class="table-column-width" class="content-to-end">{{freight.weight}}</td>
-        <td>{{freight.uom}}</td>
+        <td class="table-column-width">{{freight.uom}}</td>
         <td class="table-column-width" class="content-to-end">{{freight.length}}</td>
         <td class="table-column-width" class="content-to-end">{{freight.height}}</td>
         <td class="table-column-width" class="content-to-end">{{freight.width}}</td>
@@ -289,10 +289,10 @@
           </span>
         </div>
         <div class="tab-content">
-          <!-- <div class="table-responsive table-overflow" style="height: 340px;"> -->
+          <div class="table-responsive table-overflow" style="height: 340px;">
             <form #frieghtsCreateForm="ngForm">
-              <div style="overflow:auto" class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex" style="min-height: 130px !important;">
-                <div class="tableFixHead">
+              <!-- <div style="overflow:auto" class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex" style="min-height: 130px !important;">
+                <div class="tableFixHead"> -->
                     <table class="table table-bordered">
                 <thead>
                   <tr>
@@ -328,8 +328,19 @@
                     <td>
                       <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel" [options]="shipViaList"
                         (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId"
-                        required>
+                        required appendTo='body' [baseZIndex]="9999">
                       </p-dropdown>
+                      <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
+                        matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
+                        data-target="#AddShipVia" (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
+                      <span style="margin-left:0px;cursor:pointer;"
+                        ><a class="btn nobg"
+                          *ngIf="f.shipViaId > 0" 
+                          matTooltip="Edit Ship Via" matTooltipPosition="above"
+                           data-toggle="modal" data-target="#AddShipVia" 
+                           (click)="onEditShipVia('Edit',f.shipViaId,i)"
+                          ><i class="fa fa-pencil"></i></a>
+                      </span>
                     </td>
                     <td>
                       <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel"
@@ -338,7 +349,7 @@
                     <td>
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()"
                         (input)="onFilterUom($event.target.value)" name="unitOfMeasureId{{ i }}"
-                        [options]="unitOfMeasureList" class="p-dropdown-custom-md" [(ngModel)]="f.uomId" filter="true">
+                        [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md" [(ngModel)]="f.uomId" filter="true">
                       </p-dropdown>
                     </td>
                     <td><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
@@ -350,12 +361,12 @@
                     <td>
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" filter="true"
                         (input)="onFilterUom($event.target.value)" name="dimensionUOMId{{ i }}"
-                        [options]="unitOfMeasureList" class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
+                        [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
                       </p-dropdown>
                     </td>
                     <td>
                       <p-dropdown placeholder="Select " (ngModelChange)="enableUpdate()" name="currencyId{{ i }}"
-                        [options]="currencyList" class="p-dropdown-custom-md" [(ngModel)]="f.currencyId" filter="true"
+                        [options]="currencyList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md" [(ngModel)]="f.currencyId" filter="true"
                         (input)="onFilterCurrency($event.target.value)">
                       </p-dropdown>
                     </td>
@@ -384,8 +395,8 @@
                   </tr>
                 </tbody>
               </table>
-              </div>
-              </div>
+              <!-- </div>
+              </div> -->
             </form>
             <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
               data-keyboard="false">
@@ -396,7 +407,7 @@
                     <h4 class="modal-title">Edit {{"Memo"}}</h4>
                   </div>
                   <div class="modal-body">
-                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                    <table class="table table-bordered table-fixed workflow-table-material">
                       <thead>
                         <th style="color: #fff;">{{"Memo"}}</th>
                       </thead>
@@ -410,10 +421,10 @@
                           </td>
                         </tr>
                       </tbody>
-                    </table> -->
-                    <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                    required>
-                  </p-editor>
+                    </table>
+                    <!-- <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                    required> 
+                  </p-editor>-->
                     <div class="editor-buttons">
                       <button type="button" class="btn btn-primary editor-buttons-margin"
                         (click)="onSaveTextAreaInfo(textAreaInfo);">
@@ -427,7 +438,7 @@
                 </div>
               </div>
             </div>
-          <!-- </div> -->
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -599,3 +610,25 @@
     <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
   </div>
 </ng-template>
+<div class="modal fade" *ngIf="IsAddShipVia1" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog partsList-modal">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Ship Via </h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-row">
+                  <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)"></app-ship-via-create>
+                  <!-- <app-ship-via-create (on-shipvia-save)="refresh(false)"></app-ship-via-create> -->
+              </div>
+          </div>
+          <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" style="display: none;" [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this PO</button>
+                     
+              <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+          </div>
+      </div>
+  </div>
+</div> 

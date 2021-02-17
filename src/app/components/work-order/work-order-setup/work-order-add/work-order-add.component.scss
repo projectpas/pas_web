@@ -28,7 +28,7 @@
   background-color: #337ab7 !important;
 }
 .nav-pills-cstm li a {
-  font-size: 12px !important; //13px
+  font-size: 11px !important; //13px
 }
 li.nav-item {
   margin-right: 1px;
@@ -209,4 +209,39 @@ height: 25px !important;
 // end
 .align-row > label {
   float:  left !important;
+}
+.adjust_he{
+  height: 176px !important;;
+}
+.memo_cehck1 {
+  width: 100% !important;
+}
+.managemnt_Wdt{
+  width: 100px !important;
+  margin: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.qty_width{
+  width: 60px !important;
+}
+.text_center{
+  text-align: center;
+}
+.mn-t7{
+  margin-top: 7px;
+}
+.label_adjf{
+  margin-right: 4px;margin-top: 6px;
+}
+.div_bsck{
+  background: #ffffff; margin-top: 0px;
+}
+.style_h4{
+  cursor: pointer;
+  margin: 0px;
+}
+.hr_mrt{
+  margin-top: 4px;
 }

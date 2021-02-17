@@ -129,6 +129,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	Update: boolean = false;
 	allRolesInfo: any[] = [];
 	activeIndex: number;
+	rowDataToDelete: any = {};
+	rowDataToDeleteStock: any={};
 	sourceItemMaster: any;
 	allEquipmentInfo: any[];
 	allNonstockInfo: any[] = [];
@@ -206,7 +208,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	totalPagesNonStock: number;
 	nonStockPageSize: number = 10;
 	exportDataTable: any;
-
+	dateObject: any = {};
 	searchData = {
 		partNo: '',
 		description: '',
@@ -258,7 +260,9 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	lazyLoadEventDataInputNonStock: any;
 	pageNumber = 0;
 	selectedOnly: boolean = false;
-    targetData: any;
+	nonstockselectedOnly: boolean = false;
+	targetData: any;
+	nonstocktargetData : any;
 
 	/** item-master-list ctor */
 	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
@@ -348,6 +352,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 	closeDeleteModal() {
 		$("#downloadConfirmation").modal("hide");
+		$("#downloadnonstockConfirmation").modal("hide");
 	}
 
 	openEdits(row) {
@@ -392,6 +397,12 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.activeIndex = 2;
 		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-equipment');
 	}
+
+	get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
 	ngAfterViewInit() { }
 
@@ -478,6 +489,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 	getItemsListStock(PagingData){
 		this.isSpinnerVisible = true;
+		PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
 		this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
 			results => {
 				this.stockTable = true;
@@ -502,6 +514,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 	getItemsListNonStock(PagingData){
 	this.isSpinnerVisible = true;
+	PagingData.filters.masterCompanyId = this.currentUserMasterCompanyId;
 		this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
 			results => {
 				this.nonStockTable = true;
@@ -1102,16 +1115,38 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.purchaseSalesInfo = res;
 		});
 	}
+	
+	restoreStockItem(rowData){
+		this.rowDataToDeleteStock = rowData;
+		this.rowDataToDelete = rowData;
+        $("#itemRestore").modal("show");
+	}
+	
+	restoreNonStockItem(rowData){
+		this.rowDataToDelete = rowData;
+		this.rowDataToDeleteStock = rowData;
+        $("#nonStockRestore").modal("show");
+	}
+	closeItemRestore() {
+        $("#itemRestore").modal("hide");
+	} 
+	closeNonStockRestore() {
+        $("#nonStockRestore").modal("hide");
+    } 
 
-	restore(record) {
-        this.commonService.updatedeletedrecords11('ItemMaster', 'itemMasterId', record.itemMasterId).subscribe(res => {
+
+	
+	restore() {
+		const {itemMasterId}=this.rowDataToDeleteStock;
+        this.commonService.updatedeletedrecords11('ItemMaster', 'ItemMaster', itemMasterId).subscribe(res => {
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         })
 	}
 
-	restoreNonStock(record) {
-        this.commonService.updatedeletedrecords11('ItemMasterNonStock', 'ItemMasterNonStockId', record.itemMasterId).subscribe(res => {
+	restoreNonStock() {
+		const {itemMasterId}=this.rowDataToDelete;
+        this.commonService.updatedeletedrecords11('ItemMasterNonStock', 'ItemMasterNonStockId', itemMasterId).subscribe(res => {
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         })
@@ -1402,6 +1437,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			isDeleted : this.currentDeletedstatus,
 			status : this.currentstatus,
 			isHazardousMaterial: searchData.hazardousMaterial === 'Yes' ? true : (searchData.hazardousMaterial === "No" ? false : "" ),
+			masterCompanyId : this.currentUserMasterCompanyId
 		}
 
 		const filterdData = {
@@ -1684,7 +1720,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			status : this.currentstatus,
 			isDeleted : this.currentDeletedstatus,
 			isHazardousMaterial: this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "" ),
-			listPrice: this.searchData.listPrice
+			listPrice: this.searchData.listPrice,
+			masterCompanyId : this.currentUserMasterCompanyId
 		}
 
 		const filterdData = {
@@ -1694,7 +1731,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			sortOrder: 1,
 			filters: itemMasterSearch,
 			globalFilter: "",
-			multiSortMeta: undefined
+			multiSortMeta: undefined			
 		}
 
 		if (this.searchData.stockType === 'Stock') {
@@ -1734,7 +1771,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			}
 	}
 
-	exportCSV(dt) {
+	exportCSV(dt) {		
 		this.isSpinnerVisible = true;
         if(this.radioButtonValue == "Stock"){
 			this.getAllStockDataforDownload(dt);
@@ -1746,7 +1783,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	getAllStockDataforDownload(dt){
 		this.isSpinnerVisible = true;
 		const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus,"isDeleted":isdelete},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId" : this.currentUserMasterCompanyId, "status":this.currentstatus,"isDeleted":isdelete},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
@@ -1762,7 +1799,9 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				}
 			}
 		})
-		this.itemMasterService.advancedSearchStockListData(PagingData).subscribe(
+		PagingData.filters['stockType'] = "";
+		//this.itemMasterService.advancedSearchStockListData(PagingData).subscribe(
+		  this.itemMasterService.getItemMasterStockListData(PagingData).subscribe(
 			results => {
 				this.loadingIndicator = false;
 				dt._value = results[0]['results'].map(x => {
@@ -1786,18 +1825,26 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	getAllNonStockDataforDownload(dt){
 		this.isSpinnerVisible = true;
 		//Need to Set global filters
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus,"isDeleted":false},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId" : this.currentUserMasterCompanyId,"status":this.currentstatus,"isDeleted":false},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
 		})
-		this.itemMasterService.advancedSearchNonStockListData(PagingData).subscribe(
+		//this.itemMasterService.advancedSearchNonStockListData(PagingData).subscribe(
+		  this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
 			results => {
 				this.loadingIndicator = false;
-				dt._value = results[0]['results'];
+				dt._value = results[0]['results'].map(x=>{
+					return{
+						...x,
+						createdDate:x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+						updatedDate:x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+
+					}
+				});
 				dt._value.itemType = 'Non-Stock';
 				dt.exportCSV();
-				dt.value = this.allStockInfo;
+				dt.value = this.allNonstockInfo;
 				this.isSpinnerVisible = false;
 			},
 			error => this.onDataLoadFailed(error)
@@ -1809,4 +1856,72 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	getAuditHistoryById(rowData) {}
 
 	changeStatus(rowData) {}
+
+	dateFilterForItemMasterList(date, field, el) {
+        if (date === '') { el.classList.add("hidePlaceHolder"); }
+        else el.classList.remove("hidePlaceHolder");
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');;
+        this.dateObject = {}
+        date = moment(date).format('MM/DD/YYYY');
+        moment(date).format('MM/DD/YY');
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if (dateyear > minyear) {
+                if (field == 'createdDate') {
+                    this.dateObject = { 'createdDate': date }
+                } else if (field == 'updatedDate') {
+                    this.dateObject = { 'updatedDate': date }
+                } 
+                this.lazyLoadEventDataInputStock.filters = {
+                    ...this.lazyLoadEventDataInputStock.filters,
+                    ...this.dateObject
+                }
+				this.getItemsListStock(this.lazyLoadEventDataInputStock);				
+            }
+        } else {
+            this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, ...this.dateObject };
+            if (this.lazyLoadEventDataInputStock.filters && this.lazyLoadEventDataInputStock.filters.createdDate) {
+                delete this.lazyLoadEventDataInputStock.filters.createdDate;
+            }
+            if (this.lazyLoadEventDataInputStock.filters && this.lazyLoadEventDataInputStock.filters.updatedDate) {
+                delete this.lazyLoadEventDataInputStock.filters.updatedDate;
+            }            
+            this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, ...this.dateObject };            
+			this.getItemsListStock(this.lazyLoadEventDataInputStock);			
+        }
+	}
+	
+	dateFilterForItemNonstockList(date, field, el) {
+        if (date === '') { el.classList.add("hidePlaceHolder"); }
+        else el.classList.remove("hidePlaceHolder");
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');;
+        this.dateObject = {}
+        date = moment(date).format('MM/DD/YYYY');
+        moment(date).format('MM/DD/YY');
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if (dateyear > minyear) {
+                if (field == 'createdDate') {
+                    this.dateObject = { 'createdDate': date }
+                } else if (field == 'updatedDate') {
+                    this.dateObject = { 'updatedDate': date }
+                } 
+                this.lazyLoadEventDataForNonStock.filters = {
+                    ...this.lazyLoadEventDataForNonStock.filters,
+                    ...this.dateObject
+                }
+				this.getItemsListNonStock(this.lazyLoadEventDataForNonStock)				
+            }
+        } else {
+            this.lazyLoadEventDataForNonStock.filters = { ...this.lazyLoadEventDataForNonStock.filters, ...this.dateObject };
+            if (this.lazyLoadEventDataForNonStock.filters && this.lazyLoadEventDataForNonStock.filters.createdDate) {
+                delete this.lazyLoadEventDataForNonStock.filters.createdDate;
+            }
+            if (this.lazyLoadEventDataForNonStock.filters && this.lazyLoadEventDataForNonStock.filters.updatedDate) {
+                delete this.lazyLoadEventDataForNonStock.filters.updatedDate;
+            }            
+            this.lazyLoadEventDataForNonStock.filters = { ...this.lazyLoadEventDataForNonStock.filters, ...this.dateObject };           
+			this.getItemsListNonStock(this.lazyLoadEventDataForNonStock)			
+        }
+    }
 }

@@ -69,9 +69,10 @@ import { CustomerDocumentsComponent } from "../components/customer/customer-docu
 import { CommonService } from "../services/common.service";
 import { TwoDecimalGlobalNumberFormatPipe } from "../pipes/two-decimal-global-number-format-pipe.pipe";
 import { AppSharedModule } from "../app-shared.module";
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 
 
-
+ 
 @NgModule({
     imports: [
         KeyFilterModule,
@@ -94,6 +95,7 @@ import { AppSharedModule } from "../app-shared.module";
         AppSharedModule,
         EditorModule,
         TabViewModule,
+        CommonDocumentsModule
     ],
     declarations: [
         CustomerPagesComponent,

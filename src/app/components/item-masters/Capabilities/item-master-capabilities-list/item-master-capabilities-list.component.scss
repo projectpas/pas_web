@@ -10,3 +10,41 @@
 ::-webkit-scrollbar {
     width: 0px !important;
   }
+  
+  .mgmt-width{
+    width: 600px !important;text-align: center !important;
+  }
+  .memo-header-width{
+    width: 200px !important;text-align: center !important;
+  }
+  .table-width-150{
+    width: 150px !important;
+  }
+  .width-200{
+  width: 200px !important;
+  }
+  .min-height{
+    min-height: 10px !important;
+  }
+  .input-check{
+    margin: 0px auto !important; display: block !important;
+  }
+  .memo-align-left{
+    float: left!important;
+  }
+  .mgmt-table-header{
+    min-width:520px !important
+  }
+  .show-capes-height{
+    min-height: 200px !important;
+  }
+  .capability-dialog-width{
+    min-width: 95% !important;
+  }
+  .capes-memo-pencil{
+    color: #337ab7 !important;margin-top:-16px !important; margin-right: -2px !important;
+  }
+  .capes-memo-div{
+    // margin-left:10px !important;
+     width: 90% !important;line-height:1.5 !important;
+  }

@@ -76,7 +76,7 @@
                 </td>
                 <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
                   <label *ngIf="field.field != 'internalStatusId'"
-                    [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                    [ngClass]="columns.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                   <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2"
@@ -89,7 +89,7 @@
                 </td>
                 <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
                   <label *ngIf="field.field != 'internalStatusId'"
-                    [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                    [ngClass]="columns.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                   <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2"
@@ -103,7 +103,7 @@
                 <td *ngIf="field.field == 'internalMemo'" style="min-width: 100px;">
                   <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['internalMemo']"></p>
                   <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionInternalStatus(approver)">
-                    <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
+                    <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
                       matTooltipPosition="above" matTooltip="Add Memo"
                       (click)="onAddTextAreaInfo('internalMemo',i)"></i>
                   </div>
@@ -177,9 +177,10 @@
       </table>
 
     </div>
-    <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
-      style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+    
   </div>
+  <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
+      style="margin-top: 20px; margin-bottom: 10px;">Submit</button>
 </div>
 
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">

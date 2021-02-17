@@ -1,25 +1,23 @@
 ﻿import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
-import { ItemMasterService } from '../../../../services/itemMaster.service';
-import { VendorService } from '../../../../services/vendor.service';
-import { ConditionService } from '../../../../services/condition.service';
 import { ItemClassificationService } from '../../../../services/item-classfication.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
-import { ActionService } from '../../../../Workflow/ActionService';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
-declare var $ : any;
+declare var $: any;
 import { AuthService } from '../../../../services/auth.service';
 import { Subscription } from 'rxjs';
-import { Pipe, PipeTransform } from "@angular/core";
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { unwrapResolvedMetadata } from '@angular/compiler';
+
 @Component({
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
     styleUrls: ['./work-order-complete-material-list.component.scss'],
     animations: [fadeInOut]
 })
+
 /** WorkOrderCompleteMaterialList component*/
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
     @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
@@ -46,7 +44,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     statusId = null;
     minDateValue: Date = new Date();
     addNewMaterial: boolean = false;
-    // defaultMaterialMandatory: string;
     workFlowWorkOrderId: any;
     reservedList: any;
     alternatePartData: any = [];
@@ -61,7 +58,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     pageSize: number = 10;
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
-
+    isSpinnerVisibleReserve:boolean=false;
     cols = [
         { field: 'taskName', header: 'Task' },
         { field: 'line', header: 'Line Num' },
@@ -123,11 +120,18 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     modal: NgbModalRef;
     showEqParts: any;
     workOrderGeneralInformation: any;
+    currentRow: any = {};
+    handelParts: any = [];
+    countDown: Subscription;
+    counter = 600;
+    tick = 1000;
+    subWoRecord: any = {};
+    viewSubWolist: boolean = false;
+    moduleName: any = '';
+
     /** WorkOrderCompleteMaterialList ctor */
-    constructor(private actionService: ActionService, private itemser: ItemMasterService,
-        private vendorService: VendorService,
+    constructor(
         private workOrderService: WorkOrderService,
-        private conditionService: ConditionService,
         public itemClassService: ItemClassificationService,
         public unitofmeasureService: UnitOfMeasureService,
         private authService: AuthService,
@@ -135,9 +139,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private modalService: NgbModal,
         private alertService: AlertService) {
     }
+
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
+
     ngOnInit() {
         // handel work order and sub work order for subWOPartNoId and  workFlowWorkOrderId
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
@@ -152,13 +158,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
             }
         } else {
-            // console.log("sub woprk order id",this.subWOPartNoId);
-            this.workFlowWorkOrderId = this.subWOPartNoId;
+           this.workFlowWorkOrderId = this.subWOPartNoId;
         }
     }
+
     ngOnChanges(changes: SimpleChanges) {
-        // console.log("changes",changes)
-        // handel work order and sub work order for subWOPartNoId and  workFlowWorkOrderId for sub wo key is subWOPartNoId
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -171,45 +175,42 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
             }
         } else {
-            // console.log("sub woprk order id",this.subWOPartNoId);
-            this.workFlowWorkOrderId = this.subWOPartNoId;
-            // console.log("sub woprk order id",this.workFlowWorkOrderId);
+             this.workFlowWorkOrderId = this.subWOPartNoId;
         }
     }
 
     ngOnDestroy() {
         this.countDown = null;
     }
+
     closeAddNew() {
         this.addNewMaterial = false;
     }
+
     createNew() {
         this.isEdit = false;
         this.editData = undefined;
         this.addNewMaterial = true;
         this.taskList = this.taskList;
     }
+
     edit(rowData) {
         this.editData = undefined;
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
-        this.editData = { ...rowData };
+      
+        rowData.materialMandatoriesId=rowData.mandatorySupplementalId;
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom };
     }
-    currentRow: any = {};
+    
     openDelete(content, row) {
-        console.log("delete model")
         this.currentRow = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        this.modal.result.then(() => {
-
-        }, () => { })
     }
 
-
     delete() {
-        // const { workOrderMaterialsId } = rowData;
-        if (this.isSubWorkOrder == true) {
+       if (this.isSubWorkOrder == true) {
             this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
                 this.refreshData.emit();
                 this.alertService.showMessage(
@@ -219,8 +220,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 );
             },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
                 })
         } else {
             this.workOrderService.deleteWorkOrderMaterialList(this.currentRow.workOrderMaterialsId, this.userName).subscribe(res => {
@@ -232,13 +231,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 );
             },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
                 })
         }
         this.modal.close();
     }
-    getRollupMaterialList(currentRecord, materialindex) {
+
+    getRollupMaterialList(currentRecord, materialindex) { 
         currentRecord.isShowPlus = false;
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
@@ -261,8 +259,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 }
             },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
                 })
         } else {
             this.isSpinnerVisible = true;
@@ -284,10 +280,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                     this.isSpinnerVisible = false;
-                    this.errorHandling(err);
                 })
         }
     }
+
     removeRollUpList(currentRecord, index) {
         currentRecord.isShowPlus = true;
         if (this.isSubWorkOrder == true) {
@@ -295,19 +291,16 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workOrderMaterialList.splice(index + 1, res.length);
             },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
                 })
         } else {
             this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
                 this.workOrderMaterialList.splice(index + 1, res.length);
             },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
                 })
         }
     }
+
     getValues(element) {
         if (element.stockLineNumber) {
             if (element.stockLineNumber.indexOf(',') > -1) {
@@ -338,9 +331,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         }
     }
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
+
     saveMaterialList(event) {
         this.addNewMaterial = false;
         this.saveMaterialListForWO.emit(event);
@@ -351,12 +346,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.updateMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
     }
+
     restrictMinus(e) {
         var inputKeyCode = e.keyCode ? e.keyCode : e.which;
         if (inputKeyCode != null) {
             if (inputKeyCode == 45) e.preventDefault();
         }
     }
+
     validatePartsQuantity(event, data) {
         if (event.target.value == null || event.target.value == '' || event.target.value == undefined || event.target.value == 0) {
             this.savebutonDisabled = false;
@@ -431,8 +428,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.savebutonDisabled = false;
             }
         }
-
     }
+
     childPartValidate(value, currentRecord, type) {
         if (this.statusId == 1 || this.statusId == 3) {
             this.parentInputvalue = 0;
@@ -475,6 +472,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         }
     }
+
     allowAll(value) {
         if (value) {
             this.reservedList = this.reservedList.map(x => {
@@ -531,88 +529,82 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.counter = 600;
         this.tick = 1000;
         this.startTimerplus();
-
         this.statusId = statusId;
         this.reservedList = [];
         this.alternatePartData = [];
         this.eqPartData = [];
         this.isShowEqPN = false;
         this.isShowAlternatePN = false;
-        // console.log("sub woprk order id",this.workFlowWorkOrderId);
-        if (this.workFlowWorkOrderId) {
-            // console.log("saved Data",this.savedWorkOrderData)
-            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
-                //   console.log("current User",this.authService.currentUser)
+       if (this.workFlowWorkOrderId) {
+           this.isSpinnerVisibleReserve=true;
+           this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
+               if(res && res.length !=0){
                 this.reservedList = res.map(x => {
-                    // if(this.isSubWorkOrder==true){
-                    //     x.mandatoryOrSupplementalId=1
-
-                    // }
                     x.masterCompanyId = this.authService.currentUser.masterCompanyId
-                    this.setdefaultValues(x);
-                    if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
-                        this.savebutonDisabled = true;
-                        if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
-                            this.isShowAlternatePN = true;
-                            x.isParentSelected = true;
-                            x.showAlternateParts = true;
-                        } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
-                            this.isShowEqPN = true;
-                            x.isParentSelected = true;
-                            // x.showAlternateParts= false;
-                            x.showEqParts = true;
-                        } else {
-                            x.isParentSelected = false;
-                            x.showAlternateParts = false;
-                            x.showEqParts = false;
-                        }
-                    } else if (this.statusId == 1 || this.statusId == 3) {
-                        x.isParentSelected = false;
-                        x.showAlternateParts = false;
-                        x.showEqParts = false;
-                    }
-                    return {
-                        ...x,
-                        // mandatoryOrSupplementalId:1,  // for  sub work order pupose
-                        reservedDate: new Date(),
-                        issuedDate: new Date(),
-                        reservedById: this.authService.currentEmployee,
-                        issuedById: this.authService.currentEmployee,
-                        woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
-                            this.setdefaultValuesForChild(y);
-                            return {
-                                ...y,
-                                reservedDate: new Date(),
-                                issuedDate: new Date(),
-                                reservedById: this.authService.currentEmployee,
-                                issuedById: this.authService.currentEmployee,
-                                masterCompanyId: this.authService.currentUser.masterCompanyId,
-                                // mandatoryOrSupplementalId:1, 
-                            }
-                        }),
-                        woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
-                            this.setdefaultValuesForChild(y);
-                            return {
-                                ...y,
-                                reservedDate: new Date(),
-                                issuedDate: new Date(),
-                                reservedById: this.authService.currentEmployee,
-                                issuedById: this.authService.currentEmployee,
-                                masterCompanyId: this.authService.currentUser.masterCompanyId,
-                                // mandatoryOrSupplementalId:1,
-                            }
-                        })
-                    }
-
-                });
+                       this.setdefaultValues(x);
+                       if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
+                           this.savebutonDisabled = true;
+                           if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
+                               this.isShowAlternatePN = true;
+                               x.isParentSelected = true;
+                               x.showAlternateParts = true;
+                           } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
+                               this.isShowEqPN = true;
+                               x.isParentSelected = true;
+                               x.showEqParts = true;
+                           } else {
+                               x.isParentSelected = false;
+                               x.showAlternateParts = false;
+                               x.showEqParts = false;
+                           }
+                       } else if (this.statusId == 1 || this.statusId == 3) {
+                           x.isParentSelected = false;
+                           x.showAlternateParts = false;
+                           x.showEqParts = false;
+                       }
+                       return {
+                           ...x,
+                           reservedDate: new Date(),
+                           issuedDate: new Date(),
+                           reservedById: this.authService.currentEmployee,
+                           issuedById: this.authService.currentEmployee,
+                           woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
+                               this.setdefaultValuesForChild(y);
+                               return {
+                                   ...y,
+                                   reservedDate: new Date(),
+                                   issuedDate: new Date(),
+                                   reservedById: this.authService.currentEmployee,
+                                   issuedById: this.authService.currentEmployee,
+                                   masterCompanyId: this.authService.currentUser.masterCompanyId,
+                               }
+                           }),
+                           woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
+                               this.setdefaultValuesForChild(y);
+                               return {
+                                   ...y,
+                                   reservedDate: new Date(),
+                                   issuedDate: new Date(),
+                                   reservedById: this.authService.currentEmployee,
+                                   issuedById: this.authService.currentEmployee,
+                                   masterCompanyId: this.authService.currentUser.masterCompanyId,
+                               }
+                           })
+                       }
+   
+                   });
+               }else{
+                this.reservedList = [] 
+               }
+                this.isSpinnerVisibleReserve=false;
             },
                 err => {
-                    // this.isSpinnerVisible = false;
                     this.reservedList = []
-                    this.errorHandling(err);
+                    this.isSpinnerVisibleReserve=false;
                 })
         }
     }
+
     setdefaultValues(currentRecord) {
         if (this.statusId == 1) {
             if (currentRecord.qtyToBeReserved > currentRecord.quantityAvailable) {
@@ -637,10 +629,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             currentRecord.quantityReserved = currentRecord.quantityAlreadyReserved ? currentRecord.quantityAlreadyReserved : 0;
         }
     }
+
     setdefaultValuesForChild(currentRecord) {
         if (this.statusId == 2) {
             currentRecord.quantityIssued = currentRecord.qtyToBeIssued;
-
         }
 
         else if (this.statusId == 4) {
@@ -650,6 +642,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             currentRecord.quantityReserved = currentRecord.qtyToBeIssued;
         }
     }
+
     resetAlternateParts(event) {
         this.alternatePartData = [];
         this.reservedList = this.reservedList.map(x => {
@@ -663,9 +656,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     }
                 }),
             }
-
         });
     }
+
     resetEqParts(event) {
         this.eqPartData = [];
         this.reservedList = this.reservedList.map(x => {
@@ -681,6 +674,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         });
     }
+
     uncheckAltEqlPartCall(data) {
         this.parentMaterialList = [];
         data.map(x => {
@@ -688,15 +682,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.workOrderService.reservereleasestoclineqty(this.parentMaterialList).subscribe((res: any[]) => {
             },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
-                })
-
+               })
         })
     }
-    handelParts: any = []
+   
     showAlternateParts(isChecked, childPart) {
-        // debugger;
         this.handelParts = [];
         this.alternatePartData = [];
         this.alternatePartData = childPart;
@@ -716,15 +706,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workOrderService.reserveSubWoAltPartData(this.handelParts).subscribe((res: any[]) => {
                 },
                     err => {
-                        // this.isSpinnerVisible = false;
-                        // this.errorHandling(err); 
-                    })
+                     })
             } else {
                 this.workOrderService.reserveAltPartData(this.handelParts).subscribe((res: any[]) => {
                 },
                     err => {
-                        // this.isSpinnerVisible = false;
-                        // this.errorHandling(err);
                     })
             }
 
@@ -760,25 +746,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workOrderService.reserveSubWoEqlPartData(this.eqPartData).subscribe((res: any[]) => {
                 },
                     err => {
-                        // this.isSpinnerVisible = false;
-                        //this.errorHandling(err);
                     })
             } else {
                 this.workOrderService.reserveEqlPartData(this.eqPartData).subscribe((res: any[]) => {
                 },
                     err => {
-                        // this.isSpinnerVisible = false;
-                        //this.errorHandling(err);
-                    })
+                   })
             }
-
-
         }
         if (isChecked === false) {
             this.eqPartData = [];
             this.uncheckAltEqlPartCall(childPart)
         }
     }
+
     selectedParts(currentRecord, event) {
         if (this.statusId === 1 || this.statusId === 5) {
             if (currentRecord.isParentSelected == true && currentRecord.quantityReserved != 0) {
@@ -825,15 +806,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             })
 
         })
-
     }
-    // selectedPartsForChild(event, currentRecord){
 
-    // }
     pageIndexChange(event) {
         this.pageIndex = parseInt(event.first) / event.rows;
         this.pageSize = event.rows;
-
     }
 
     releaseStock() {
@@ -845,24 +822,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 })
             } else {
                 this.reservedList.map(x => {
-                    // if(x.isParentSelected ==true){  comment becaues of chnages by suresh
-
-                    this.releasePartsList.push({ workOrderMaterialsId: x.workOrderMaterialsId });
-
-                    // x.woReservedIssuedAltParts.map(y => {
-
-                    //     // if(y.showAlternateParts==true){
-                    //         this.releasePartsList.push({workOrderMaterialsId:y.workOrderMaterialsId});
-                    //     // }
-                    // })
-                    //     x.woReservedIssuedEquParts.map(z => {
-                    //         // if(z.showEqParts==true){
-                    //             this.releasePartsList.push({workOrderMaterialsId:z.workOrderMaterialsId});
-                    //         // }
-                    //     })
-
-
-                    // }
+                      this.releasePartsList.push({ workOrderMaterialsId: x.workOrderMaterialsId });
                 })
             }
 
@@ -870,41 +830,19 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 this.workOrderService.reservereleaseSubWostoclineqty(this.releasePartsList).subscribe((res: any[]) => {
                 },
                     err => {
-                        // this.isSpinnerVisible = false;
-                        // this.errorHandling(err);
                     })
             } else {
                 this.workOrderService.reservereleasestoclineqty(this.releasePartsList).subscribe((res: any[]) => {
                 },
                     err => {
-                        // this.isSpinnerVisible = false;
-                        // this.errorHandling(err);
                     })
             }
         }
     }
+
     saveRIPart() {
         $('#reserve').modal("hide");
         this.checkedParts = []
-        // this.selectedParts('data','check');
-        // const checkedData = this.reservedList.map(x => {
-        //     if (x.isParentSelected) {
-        //         const { woReservedIssuedAltParts, ...rest } = x
-        //         this.checkedParts.push({ ...rest, partStatusId: this.statusId });
-        //     }
-        //     x.woReservedIssuedAltParts.map(c => {
-        //         if (c.isChildSelected) {
-        //             this.checkedParts.push({ ...c, partStatusId: this.statusId });
-        //         }
-
-        //     })
-        //     x.woReservedIssuedEquParts.map(c => {
-        //         if (c.isChildSelected) {
-        //             this.checkedParts.push({ ...c, partStatusId: this.statusId });
-        //         }
-
-        //         })
-        // })
         this.checkedParts = [];
         this.reservedList.map(x => {
             x.issuedById = x.issuedById.value
@@ -942,9 +880,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.isAllow = false;
         this.savebutonDisabled = false;
     }
+
     createNewPoWorkOrder(rowData) {
-        // const { workOrderMaterialsId } = rowData;
-        if (this.isSubWorkOrder == true) {
+       if (this.isSubWorkOrder == true) {
             window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
         } else {
             window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
@@ -952,7 +890,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     closeMaterial() {
-
         if (this.countDown) {
             this.countDown.unsubscribe();
         }
@@ -961,9 +898,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.isAllow = false;
         this.releaseStock();
     }
-    countDown: Subscription;
-    counter = 600;
-    tick = 1000;
+    
     startTimerplus() {
         this.countDown = timer(0, this.tick).subscribe(() => {
             --this.counter
@@ -984,21 +919,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
             });
     }
 
     opentimerAlertModel() {
         let content = this.timerAlertNotfi;
         this.modal = this.modalService.open(content, { size: "sm" });
-        this.modal.result.then(
-            () => {
-            },
-            () => {
-            }
-        );
     }
+
     actionTimerReset() {
         this.counter = 600;
         this.tick = 1000;
@@ -1007,91 +935,47 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         $('#timerAlertNotfi').modal("hide");
         this.modal.close();
     }
+
     dismissTimerAlert() {
         $('#timerAlertNotfi').modal("hide");
         this.modal.close();
     }
+
     // create sub work order
     editSubWo(currentRecord) {
         const subworkorderid = currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId : 0
-        //  =currentRecord.isSubWorkOrderCreaetd ?currentRecord.subWorkOrderId : 0;
-        window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
+       window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
     }
+
     public dismissModel() {
         this.modal.close();
     }
+
     public dismissModel2() {
         this.modal.close();
         setTimeout(() => {
             this.viewSubWolist = false;
         }, 1000)
     }
-    subWoRecord: any = {}
+    
     subWoClick(currentRecord) {
         this.subWoRecord = {};
         this.subWoRecord = currentRecord;
         let content = this.tabRedirectConfirmationModal;
         this.modal = this.modalService.open(content, { size: "sm" });
-        this.modal.result.then(
-            () => {
-            },
-            () => {
-            }
-        );
-
-
     }
+
     createNewSubWo() {
         this.dismissModel();
         const subworkorderid = 0;
         window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`);
-
     }
-    viewSubWolist: boolean = false;
+    
     addToExistingSubWo() {
         this.viewSubWolist = true;
         this.dismissModel();
-        // const subworkorderid=currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId :0
-        //     window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
     }
-    moduleName: any = '';
-    errorHandling(err) {
-        if (err['error']['errors']) {
-            err['error']['errors'].forEach(x => {
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else {
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
-    handleError(err) {
-        if (err['error']['errors']) {
-            err['error']['errors'].forEach(x => {
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else {
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
-
-    clearautoCompleteInput(workOrderGeneralInformation, employeeId) {}
+   
+    clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
 }
 

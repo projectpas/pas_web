@@ -185,7 +185,7 @@
                     <label for="credit" style="width: 100%;"
                       >Currency <span class="clr-red">*</span>
                     </label>
-                    <p-dropdown
+                    <!-- <p-dropdown 
                       [options]="currencyList"
                       name="currency"
                       #currency="ngModel" required
@@ -193,8 +193,12 @@
                       class="p-dropdown-custom-md-Header"
                       [(ngModel)]="billingorInvoiceForm.currencyId"
                       [disabled]="isViewMode"
-                    >
-                    </p-dropdown>
+                    > -->
+                    <!-- </p-dropdown> -->
+                    <p-dropdown  [showClear]="true" class="p-dropdown-100" 
+                      [options]="currencyList" filter="true" [(ngModel)]="billingorInvoiceForm.currencyId" name="currency" [resetFilterOnHide]="true" placeholder="Select" 
+                      [disabled]="isViewMode"  class="p-dropdown-custom-md-Header"
+                      ></p-dropdown>
                   </div>
                 </div>
               </div>
@@ -666,7 +670,7 @@
                     <div class="col-md-7">
                         <div class="form-group" style="margin-left: -8px;">
                             <p-radioButton
-                              class="p-radiobutton-label-horizontal"
+                              class="p-radiobutton-label-horizontal p-radiobutton-cstm"
                               name="HoursorClockorScan"
                               label="Cost Plus"
                               value="Cost Plus"
@@ -674,7 +678,7 @@
                               [disabled]="isViewMode"
                             ></p-radioButton>
                             <p-radioButton
-                              class="p-radiobutton-label-horizontal col-width"
+                              class="p-radiobutton-label-horizontal p-radiobutton-cstm col-width"
                               name="HoursorClockorScan"
                               value="Flat Rate"
                               label="Flat Rate"

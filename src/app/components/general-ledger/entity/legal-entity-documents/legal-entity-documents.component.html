@@ -1,5 +1,5 @@
 ﻿
-<div class="right_col" role="main" style="padding: 2px 6px;">
+<div role="main" style="padding: 2px 6px;">
     <div>
       <div class="x_content">
             <div *ngIf="isViewMode == false">
@@ -24,11 +24,11 @@
                     </div>
                 </div>
             </div>
-            <div class="card" style="padding: 10px;">
-                <div class="card-header bg-primary new-card-header" >
+            <div class="card new-card">
+                <div class="card-header header" >
                   <div class="row">
                     <div class="col">
-                      <h4 class="new-card-heading">  Documents List</h4>
+                      <h4 class="header-name">  Documents List</h4>
                     </div>
                     <div>
                         
@@ -36,7 +36,7 @@
                             data-toggle="modal"
                             data-target="#addDocumentDetails">
                             <button type="button"
-                            class="btn-sm new-btn-primary"                              
+                            class="btn-sm header-button"                              
                             (click)="addDocumentDetails()"
                             matTooltipPosition="above" 
                             matTooltip="Add Documents">
@@ -49,7 +49,7 @@
                 <div class="clear"></div>
                 <hr />
 
-                <div class="card-body new-card-body">
+                <div class="card-body header-body">
 
                     <p-table #dt class="rpo-table-cstm"
                      [value]="legalEntityDocumentsData" 
@@ -65,7 +65,7 @@
 
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" style="width:auto">
+                                <col *ngFor="let col of columns" class="table-column-width">
                             </colgroup>
                         </ng-template>
 
@@ -137,11 +137,11 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <ng-container *ngFor="let col of columns">
-                                    <th *ngIf="col.field !== 'documents'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                    <th class="table-column-width" *ngIf="col.field !== 'documents'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                         {{col.header}}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th *ngIf="col.field == 'documents'">
+                                    <th class="table-column-width" *ngIf="col.field == 'documents'">
                                         Documents
                                     </th>
                                     <!--
@@ -149,13 +149,13 @@
 
 
                                 </ng-container>
-                                <th>Actions</th>
+                                <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
-                                <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
                                 </th>
-                                <th></th>
+                                <th class="table-actions-column"></th>
                             </tr>
                         </ng-template>
 
@@ -164,24 +164,24 @@
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="docviewdblclick(rowData)">
 
                                 <ng-container *ngFor="let col of columns">
-                                    <td *ngIf="col.field != 'documents' && col.field !='docMemo'" class="ui-resizable-column" pReorderableRowHandle>
+                                    <td class="table-column-width" *ngIf="col.field != 'documents' && col.field !='docMemo'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a '):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a '):rowData[col.field]}}
                                     </td>
                                 
-                                    <td *ngIf="col.field == 'documents'">
+                                    <td class="table-column-width" *ngIf="col.field == 'documents'">
 
                             <tr *ngFor="let x of rowData.attachmentDetails">
                                 <a class="filelink" (click)="downloadFileUpload(x)"> {{x.fileName}},</a>
                             </tr>
 
                             </td>
-                            <td *ngIf="col.field == 'docMemo'">
+                            <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                 <div [innerHTML]="rowData[col.field]"></div>
                             </td>
                           
                             </ng-container>
 
-                            <td class="text-center" *ngIf="isViewMode == false">
+                            <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false">
 <div *ngIf="deletedStatusInfo==false">
                                 <span>
                                     <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(rowData)" matTooltipPosition="above"  matTooltip="View">
@@ -221,7 +221,7 @@
                                              <i class="fa fa-history"></i></a></span>
                                      </div>
                             </td>
-                            <td class="text-center" *ngIf="isViewMode == true">
+                            <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
 
                                 <span>
                                     <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(rowData)" matTooltipPosition="above"  matTooltip="View">
@@ -239,20 +239,20 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" let-columns *ngIf="legalEntityDocumentsData?.length == 0">
                             <tr>
-                                <td [attr.colspan]="9" *ngIf="isViewMode == false" style="color: red; font-weight: bold; text-align: center">
+                                <td [attr.colspan]="9" *ngIf="isViewMode == false" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
-                                <td [attr.colspan]="9" *ngIf="isViewMode == true" style="color: red; font-weight: bold; text-align: center">
+                                <td [attr.colspan]="9" *ngIf="isViewMode == true" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                            <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
 
-                            <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
+                            <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
                         </ng-template>
 
 

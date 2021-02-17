@@ -1,20 +1,20 @@
 ﻿﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary new-card-header">
+    <div class="card-header header">
         <div class="row">
             <div class="col">
-                <h4 class="new-card-heading">Legal Entity List</h4>
+                <h4 class="header-name">Legal Entity List</h4>
             </div>
             <div>
                 <button type="button"
-                        class="btn-sm new-btn-primary"
+                        class="btn-sm header-button"
                         (click)="navigateTogeneralInfo()">
                     Add Legal Entity
                 </button>
             </div>
         </div>
     </div> 
-    <div class="card-body new-card-body"> 
+    <div class="card-body header-body"> 
         <p-table #dt
                  class="rpo-table-cstm rro-table-cstm"
                  [value]="allATAMaininfo"
@@ -40,14 +40,12 @@
                                        [(ngModel)]="selectedColumns"
                                        optionLabel="header"
                                        [maxSelectedLabels]="2"
-                                       [style]="{minWidth: '220px'}"
-                                       style="float:left"
+                                       class="multiselect-field"
                                        (onChange)="columnsChanges()">
                         </p-multiSelect>
                     </div>
                     <div class="col">
-                        <div style="width: auto !important; float: right;margin-right: 7%;"
-                             class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                        <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
                             <input type="text"
                                    pInputText
@@ -61,14 +59,13 @@
                 <div class="row" style="margin: 0px;"> 
                     <div class="col">
                         <button type="button"
-                                class="btn btn-primary new-table-button"
+                                class="btn btn-primary exports-button"
                                 pButton
                                 icon="fa-download"
                                 iconPos="left"
                                 label="Export Data"
                                 matTooltip="Download Data"
                                 matTooltipPosition="above"
-                                style="left:-10px; padding: 5px 10px !important;"
                                 data-toggle="modal"
 
                                 (click)="selectedOnly = false; targetData = dt;" 
@@ -76,12 +73,12 @@
 
                                 <!--data-target="#downloadConfirmation"></button> -->
 
-                        <button type="button" class="btn btn-primary new-table-button"
+                        <button type="button" class="btn btn-primary exports-button"
                                 pButton icon="fa-download" iconPos="left"
                                 label="Export Selected Data"
                                 matTooltip="Download Selected Data"
                                 matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"
-                                style="padding: 5px 12px !important;"></button> 
+                                ></button> 
                     </div>
 
                     <!-- <ng-template #export let-c="close" let-d="dismiss">
@@ -320,8 +317,9 @@
             </div>
 
             <div class="modal-body" *ngIf="auditHistory" >
-                <div class="table-responsive history_hg">
-                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
                                 <th>Legal Entity  <span class="clr-red">*</span></th>
@@ -403,6 +401,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
                             <h4 style="color: #ff5663;">No History Found </h4>
@@ -482,12 +481,12 @@
                 <h4 class="modal-title">Details of Legal Entity </h4>
             </div>
             <div class="col-sm-3" style="margin-top: 5px !important;">
-                Legal Entity <span style="color:red">
+                Legal Entity <span class="clr-red">
                     : {{ viewDataGeneralInformation.name }} 
                 </span>
             </div>
             <div class="col-sm-3" style="margin-top: 5px !important;">
-                Legal Entity Code<span style="color:red">
+                Legal Entity Code<span class="clr-red">
                     : {{ viewDataGeneralInformation.companyCode }}
                 </span>
             </div>
@@ -920,9 +919,9 @@
                                                             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                                                         </div>
                                                     </div> -->
-                                                    <div class="table-responsive rrhistory history_hg">
-                                                        <!-- *ngIf="auditHistoryList.length> 0 else noDatavailable" -->
-                                                        <table class="table table-bordered " >
+                                                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                                        <div class="tableFixHead">
+                                                            <table class="table table-bordered header-table-width" >
                                                             <thead>
                                                                 <tr>
                                                                     <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
@@ -942,9 +941,10 @@
                                     
                                     
                                                         </table>
+                                                        </div>
                                                         <ng-template #noDatavailable>
                                                             <div class="text-center">
-                                                                <h4 style="color: #ff5663;">No History Found </h4>
+                                                                <h4 class="no-history-found-msg">No History Found </h4>
                                                             </div>
                                     
                                                         </ng-template>

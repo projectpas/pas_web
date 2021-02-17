@@ -282,6 +282,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             }
             this.salesOrderFreightList[this.mainEditingIndex] = this.freightForm[0];
             $('#addNewFreight').modal('hide');
+            $('#AddShipVia').modal('hide');
             this.isEdit = false;
         }
         else {
@@ -305,6 +306,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 this.markupChanged({}, 'all');
             }
             $('#addNewFreight').modal('hide');
+            $('#AddShipVia').modal('hide');
         }
         this.isEnableUpdateButton = true;
         this.isSaveChargesDesabled = false;
@@ -633,12 +635,15 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     }
     
     RefreshAfterAddShipVia(ShippingViaId){
-        this.commonService.getShipVia().subscribe(response => {
-            this.isSpinnerVisible = false;
-            this.setShipViaList(response);
-            this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
-            this.IsAddShipVia = false;
-            this.isEnableUpdateButton = false;
-        }, error => this.onDataLoadError(error));
+        if(ShippingViaId != undefined || ShippingViaId > 0){
+            this.commonService.getShipVia().subscribe(response => {
+                this.isSpinnerVisible = false;
+                this.setShipViaList(response);
+                this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+                this.isEnableUpdateButton = false;
+            }, error => this.onDataLoadError(error));
+        }
+        this.IsAddShipVia = false;
+        $('#AddShipVia').modal('hide');
     }
 }

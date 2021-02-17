@@ -366,6 +366,10 @@ dismissModelAlettRestore() {
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
 
+        for (let x of auditHistory) {
+            x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
+            x.amount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g, '')));
+        }
 
         this.freightAudiHistory = auditHistory;
 
@@ -578,5 +582,36 @@ dismissModelAlettRestore() {
 
     openFreight(content) {
         this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
+    }
+
+    IsAddShipVia1:boolean = false;
+    ShipViaEditID:number;
+    shipviaindex;
+    isEditModeShipVia:boolean=false;
+	onEditShipVia(value,id,index) {
+        this.shipviaindex = index;
+		if(value == 'Add') {
+        //this.ShipViabutton = true;
+        this.ShipViaEditID = 0;
+		}	
+		else {
+            this.ShipViaEditID = id;
+			//this.ShipViabutton = false;
+			this.isEditModeShipVia = true;	
+		}
+		this.IsAddShipVia1 = true;
+    }
+    
+    RefreshAfterAddShipVia(ShippingViaId){
+        if(ShippingViaId != undefined || ShippingViaId > 0){
+            this.commonService.getShipVia().subscribe(response => {
+                this.isSpinnerVisible = false;
+                this.setShipViaList(response);
+                this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+                this.isEnableUpdateButton = false;
+            }, error => this.isSpinnerVisible = false);
+        }
+        this.IsAddShipVia1 = false;
+        $('#AddShipVia').modal('hide');
     }
 }

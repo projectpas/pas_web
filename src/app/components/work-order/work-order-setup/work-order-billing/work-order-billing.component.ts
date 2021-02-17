@@ -14,7 +14,7 @@ import {
 } from '../../../../models/work-order-labor.modal';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 
-
+ 
 @Component({
     selector: 'app-work-order-billing',
     templateUrl: './work-order-billing.component.html',
@@ -29,7 +29,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() employeesOriginalData;
     @Input() billingorInvoiceForm;
     @Input() savedWorkOrderData;
-    @Input() currencyList;
+    // @Input() currencyList;
     @Input() isEditBilling = false;
     @Input() workOrderQuoteId = 0;
     @Input() taskList: any = [];
@@ -40,7 +40,7 @@ export class WorkOrderBillingComponent implements OnInit {
     @Input() workOrderChargesList;
 
     @Input() quoteLaborList;
-    @Input() legalEntityList;
+    // @Input() legalEntityList;
     @Input() buildMethodDetails: any = {};
     @Input() isViewMode: boolean = false;
     @Output() saveWOBilling = new EventEmitter();
@@ -69,7 +69,7 @@ export class WorkOrderBillingComponent implements OnInit {
     workOrderId: any;
     shipViaList: Object;
     customerId: any;
-    // legalEntityList: any;
+    legalEntityList: any=[];
     businessUnitList: any;
     divisionList: any;
     departmentList: any;
@@ -117,7 +117,7 @@ export class WorkOrderBillingComponent implements OnInit {
     ];
     unitOfMeasuresList: any;
     conditions: any;
-    
+    currencyList:any=[];
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService,
         private customerService: CustomerService, private quoteService: WorkOrderQuoteService, private alertService: AlertService
 
@@ -750,5 +750,19 @@ export class WorkOrderBillingComponent implements OnInit {
     parseToInt(str : any) {
         return Number(str);
     }
-
+    setEditArray:any=[];
+    private CurrencyData() {
+ 
+        this.setEditArray=[];
+        // if(this.assetService.isEditMode==true){
+        //     this.setEditArray.push(this.currentCalibration.certificationCurrencyId,this.currentCalibration.inspectionCurrencyId,this.currentCalibration.calibrationCurrencyId,this.currentCalibration.verificationCurrencyId); 
+        // }else{
+            this.setEditArray.push(0);
+        // }
+            const strText='';
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
+            this.currencyList = res;
+        
+    })
+}
 }

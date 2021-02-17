@@ -1,0 +1,32 @@
+.modal-body p .label {
+    width: 33%;
+    padding: 0;
+    display: inline-block;
+}
+
+.modal-body p .value {
+    width: 54%;
+    display: inline-block;
+    margin-left: 5%;
+}
+
+.loader-position{
+    position: absolute;
+}
+
+.loader-align{
+    margin-top: 17rem;
+    margin-left: 30rem;
+}
+
+.myclass {
+    margin-top: -5px
+}
+.label{
+    margin-right:0px !important;
+}
+
+.sales-analysis-header tr th{
+    background: #4298ff !important;
+    color:#fff !important;
+}

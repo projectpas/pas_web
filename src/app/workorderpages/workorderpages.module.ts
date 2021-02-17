@@ -3,13 +3,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { QuickAppProMaterialModule } from '../modules/material.module';
-import { CommonModule } from '@angular/common'; //<-- This one
+import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
 import { RouterModule, Routes } from '@angular/router';
 import { GroupByPipe } from '../pipes/group-by.pipe';
 
 import { WorkOrdersPagesRoutingModule } from './workorderpages-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import {EditorModule} from 'primeng/editor';
+import { EditorModule } from 'primeng/editor';
 
 import { WorkOrderPagesComponent } from './workorderpages.component';
 import { DirectLabourAddComponent } from '../components/work-order/work-order-setup/direct-labour-add/direct-labour-add.component';
@@ -78,7 +78,7 @@ import { WorkOrderSmartComponent } from '../components/work-order/work-order-set
 import { WorkOrderViewComponent } from '../components/work-order/work-order-setup/work-order-view/work-order-view.component';
 import { AccordionModule } from 'primeng/accordion';
 import { CommunicationService } from '../shared/services/communication.service';
-import {ShippingComponent} from '../shared/components/shipping/shipping.component';
+import { ShippingComponent } from '../shared/components/shipping/shipping.component';
 import { SalesQuoteService } from '../services/salesquote.service';
 import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.service";
 
@@ -107,11 +107,13 @@ import { SalesOrderService } from '../services/salesorder.service';
 import { SalesOrderEndpointService } from '../services/salesorder-endpoint.service';
 import { FormatTimePipe } from '../pipes/timer-pipe';
 import { TreeTableModule } from 'primeng/treetable';
-
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
+import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
+import { SplitButtonModule } from 'primeng/splitbutton';
 // import { MaterialListCreateComponent } from '../shared/Material-List-Create.component';
 // import { SharedModule } from '../shared/shared.module';
-// import { BrowserModule } from '@angular/platform-browser';
-
+// import { BrowserModule } from '@angular/platform-browser'; 
 @NgModule({
   imports: [
     FormsModule,
@@ -140,7 +142,11 @@ import { TreeTableModule } from 'primeng/treetable';
     FileUploadModule,
     NgMultiSelectDropDownModule,
     EditorModule,
-    TreeTableModule
+    TreeTableModule,
+    BreadcrumbModule,
+    CommonDocumentsModule,
+    CommonCommunicationModule,
+    SplitButtonModule,
   ],
   declarations: [
     WorkOrderPagesComponent,
@@ -191,7 +197,7 @@ import { TreeTableModule } from 'primeng/treetable';
     QuoteViewComponent,
     CommonTeardownComponent,
     TeardownOverviewComponent,
-    MemoComponent, 
+    MemoComponent,
     EmailComponent,
     PhoneComponent,
     TextComponent,
@@ -218,7 +224,8 @@ import { TreeTableModule } from 'primeng/treetable';
     SalesOrderService,
     SalesOrderEndpointService,
     SalesQuoteService,
-    SalesQuoteEndpointService
+    SalesQuoteEndpointService,
+    DatePipe
   ],
   exports: [SubWorkOrderComponent, EmailComponent]
 })

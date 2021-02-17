@@ -95,7 +95,7 @@
                             <div class="">
                               <div
                                 class="col"
-                                style="width: 395px; float: right; padding-top: 3px;">
+                                style="width: 410px; float: right; padding-top: 3px;">
                                 <div class="form-group">
                                   <div
                                     class="pull-left"
@@ -302,7 +302,7 @@
         <div class="modal-body">
           <strong>
             Worklflow ACC:
-            <span class="new-label">{{ currentWorkflow.workflowId }}</span>
+            <span class="new-label">{{ currentWorkflow.workOrderNumber }}</span>
           </strong>
         </div>
         <div class="modal-footer">
@@ -408,8 +408,13 @@
                                                     <label>Revised PN: </label>{{sourceWorkFlow.revisedPartNumber}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.description}}
+                                                    <label>Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.workScopeCode}}
                                                 </div>
+                                                <div class="form-group">
+                                                    <label>Item Group: <span class="clr-red">*</span> </label>{{sourceWorkFlow.itemGroup}}
+                                                </div>
+
+                                                
                                                 <div class="form-group">
                                                     <label>Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
                                                 </div>
@@ -511,6 +516,22 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
+                                        <label>
+                                            Notes
+                                        </label>
+                                        <span>
+                                            <div class="form-group memo-popup-cstm mat_emo">
+                                                <div [innerHTML]="sourceWorkFlow.memo"
+                                                    class="form-control"
+                                                    style="width:100% !important"
+                                                    class="text_editor_box">
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-header" style="padding: 4px 10px;">
                                             <h5 style="margin-bottom: 0;font-size: 15px;">Total Workflow Cost</h5>
@@ -540,38 +561,23 @@
                                                 </div>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label style="width: 130px;">Total Workflow Cost: </label>
-                                                        {{Total}}
+                                                        {{Total !=0 ? Total : '0.00'}}
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label style="width: 130px;">% of BER Threshold: </label>
-                                                        {{PercentBERThreshold}}
+                                                        {{PercentBERThreshold ? PercentBERThreshold : '0.00'}}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
-                                        <label>
-                                            Notes
-                                        </label>
-                                        <span>
-                                            <div class="form-group memo-popup-cstm mat_emo">
-                                                <div [innerHTML]="sourceWorkFlow.memo"
-                                                    class="form-control"
-                                                    style="height: 100px !important; width:100% !important"
-                                                    class="text_editor_box">
-                                                </div>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
+                               
                             
                             </div>
                         </div>
@@ -976,8 +982,13 @@
                                                 <td class="text-right">{{material.extendedCost}}</td>
                                                 <td>
                                                     <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
-                                                </td>
-                                                <td>{{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }}
+                                                </td> 
+                                                <td>
+                                                    <!-- {{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }} -->
+                                                    <input type="checkbox" disabled="disabled"
+                                                    [checked]="material.isDeferred"
+                                                    class="form-control names ui-autocomplete-input">
+                                               
                                                 </td>
                                             </tr>
                                             <tr>

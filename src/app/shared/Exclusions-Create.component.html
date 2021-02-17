@@ -5,7 +5,7 @@
         class="fa fa-plus"></i></span>
   </div>
   <form #exclusionsCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-exclusion">
+    <table class="table table-bordered table-fixed workflow-table-exclusion workflowTable-class">
       <tr>
         <th *ngIf="!isWorkFlow"><label>Task*</label></th>
         <th><label>EPN<span class="clr-red">*</span></label></th>
@@ -28,7 +28,7 @@
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
           </select>
         </td>
-        <td style="width: 180px;padding-top:5px;">
+        <td style="width: 180px;">
           <p-autoComplete appendTo="body" [(ngModel)]="exclusion.partName" [suggestions]="partCollection"
             (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
             class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
@@ -76,10 +76,10 @@
             <option value="{{ occurance.id }}" *ngFor="
                 let occurance of exclusionEstimatedOccurances;
                 let i = index
-              ">{{ occurance.name  }}</option>
+              ">{{ occurance.name + '.00 %' }}</option>
           </select>
         </td>
-        <td style="padding-top:9px">
+        <td >
        <div class="form-group memo-popup-cstm mat_emo"
             style="width: 120px;margin-bottom: 0;display: inline-flex;padding-top: 3px;">
           <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>

@@ -4,6 +4,8 @@ import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
+import { AuthService } from '../services/auth.service';
+
 declare var $ : any;
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
@@ -37,9 +39,11 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     currentPage: number = 1;
     itemsPerPage: number = 10;
     roNumList: any[] = [];
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
 
     constructor(private modalService: NgbModal,private vendorservice: VendorService, 
-         private alertService: AlertService, 
+         private alertService: AlertService, private authService: AuthService,
         private commonService: CommonService) {
     }
 
@@ -51,7 +55,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 this.workFlow.charges = [];
                 const data = {
                     ...this.editData,
-
                     vendorId: this.editData.vendorId,
                     vendorName: this.editData.vendorName, vendor: {
                         vendorId: this.editData.vendorId,
@@ -88,13 +91,13 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                     }
                 })
             }
-
         }
         this.isSpinnerVisible = true;
         let chargesIds = [];
+        chargesIds.push(0);
         if (this.UpdateMode) {
-            chargesIds = this.workFlow.charges.reduce((acc, x) => {
-                return chargesIds.push(acc.chargeId);
+             this.workFlow.charges.forEach(acc => {
+              chargesIds.push(acc.workflowChargeTypeId);
             }, 0)
         }
         this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds)
@@ -137,7 +140,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     reCalculate() {
-
         this.calculateQtySummation();
         this.calculateExtendedCostSummation();
         this.calculateExtendedPriceSummation();
@@ -154,6 +156,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 task['taskName'] = t.description;
             }
         })
+    }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
     }
 
     onChargeTypeChange(event, charge): void {
@@ -194,18 +202,32 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 return arrayVendlsit.push(acc.vendorId);
             }, 0)
         }
-        this.vendorservice.getVendorNameCodeListwithFilter(strText, 20, arrayVendlsit).subscribe(res => {
-            this.allVendors = res.map(x => {
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, arrayVendlsit, this.currentUserMasterCompanyId)
+            .subscribe(res => {
                 this.isSpinnerVisible = false;
-                return {
-                    vendorId: x.vendorId,
-                    vendorName: x.vendorName
-                }
+                this.allVendors = res.map(x => {
+                    return {
+                        vendorId: x.value,
+                        vendorName: x.label
+                    }
+                });
+                this.vendorCollection = this.allVendors;
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-            this.vendorCollection = this.allVendors;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
+
+        // this.vendorservice.getVendorNameCodeListwithFilter(strText, 20, arrayVendlsit).subscribe(res => {
+        //     this.allVendors = res.map(x => {
+        //         this.isSpinnerVisible = false;
+        //         return {
+        //             vendorId: x.vendorId,
+        //             vendorName: x.vendorName
+        //         }
+        //     });
+        //     this.vendorCollection = this.allVendors;
+        // }, error => {
+        //     this.isSpinnerVisible = false;
+        // });
     }
 
     onVendorSelected(charge, event) {
@@ -402,8 +424,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     dismissModel() {
         this.modal.close();
     }
-    deletedRowIndex:any;
-    deleteRowRecord:any={};
+
     openDelete(content, row,index) {
         this.deletedRowIndex=index;
         this.chargesTypes.forEach(element => {
@@ -420,6 +441,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             this.workFlow.charges.splice(this.deletedRowIndex, 1);
         }
         else {
+            this.workFlow.charges[this.deletedRowIndex].isDeleted = true;
             this.workFlow.charges[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();

@@ -9,7 +9,23 @@
     color: red;
     font-weight: bold;
   }
-  
+  .search-clear-button{
+    margin-top: 0.8% !important;
+  }
+  .text-left{
+    text-align: left !important;
+  }
+  .acquired-width{
+    width: 145px !important;
+  }
+  .acquired-div-margin{
+    margin-top: 5px !important;
+  }
+.table-checkbox{
+  margin: 0px auto !important;
+   display: block !important;
+}
+
   input[type='text'],
   input[type='number'],
   input[type='email'],
@@ -77,6 +93,12 @@
   .col-md-1-cstm {
     max-width: 6% !important;
   }
+}
+.item-master-status{
+  margin-left: 50px;
+}
+.item-master-search{
+  margin-top: 26px;
 }
   
   // @media (min-width: 768px) {

@@ -44,14 +44,15 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.row = {};
         }
         this.row.taskId = this.workFlow.taskId;
+     
+    }
+
+    ngOnChanges(): void {
         if(this.workFlow.measurements && this.workFlow.measurements.length !=0){
             this.workFlow.measurements.map((x, index) => {
                     this.workFlow.measurements[index].partName=x; 
             })
         }
-    }
-
-    ngOnChanges(): void {
     }
 
     addRow(): void {
@@ -223,6 +224,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.workFlow.measurements.splice(this.deletedRowIndex, 1);
         }
         else {
+            this.workFlow.measurements[this.deletedRowIndex].isDeleted = true;
             this.workFlow.measurements[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();

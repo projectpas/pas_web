@@ -25,13 +25,14 @@ import { Location } from '@angular/common';
 })
 /** create-asset component*/
 export class CreateAssetInventoryComponent implements OnInit {
+    uploadDocs: Subject<boolean> = new Subject();
     todaysDate= new Date();
     disableSaveForEdit:boolean=false; 
     totalRecords: any;
     breadcrumbs: MenuItem[];
     currentAsset: any = {};
     isSpinnerVisible: boolean = true;
-    assetInventoryId: number;
+    assetInventoryId: any;
     pageSize = 10;
     isEditMode: boolean = false;
     currentDate = new Date();
@@ -100,16 +101,11 @@ export class CreateAssetInventoryComponent implements OnInit {
     formDataInt = new FormData();
     allDocumentListOriginal: any = [];
     index: number;
-    // totalRecordNew: number = 0;
     pageSizeNew: number = 3;
-    // totalPagesNew: number = 0;
     modal: NgbModalRef;
     selectedRowForDelete: any;
     rowIndex: number;
     isDeleteMode: boolean;
-    // AssetId: any;
-    // totalRecordsWarranty: number = 0;
-    // totalPagesWarranty: number = 0;
     allDocumentListOriginalWarranty: any = [];
     disableFileAttachmentSubmitWarranty: boolean = true;
     selectedFileAttachmentWarranty: any = [];
@@ -121,7 +117,12 @@ export class CreateAssetInventoryComponent implements OnInit {
     sourceViewforDocumentInt: any = [];
     selectedRowForDeleteInt: any;
     originalAsset: any;
-    home: any;
+    home: any; 
+    maintanancemoduleName='AssetInventoryMaintenanceFile';
+    warrantymoduleName='AssetInventoryWarrantyFile';
+    intangiblemoduleName='AssetInventoryIntangibleFile';
+    modalIsMaintannce: NgbModalRef;
+    modalWarrenty: NgbModalRef;
     constructor(private commonService: CommonService,private location: Location,  private vendorService: VendorService, private assetService: AssetService, private assetLocationService: AssetLocationService, private alertService: AlertService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private route: Router, private _actRoute: ActivatedRoute, private datePipe: DatePipe) {
         this.currentAsset.entryDate = this.currentDate;
         this.currentAsset.isTangible = 1;
@@ -428,11 +429,11 @@ this.assetRecordIdForCapes=res.assetRecordId;
             this.originalAsset=this.currentAsset;
             this.getAssetStatusList('');
             this.getAssetInventoryStatusList();
-          this.toGetDocumentsListNew(this.assetInventoryId);
-            this.toGetDocumentsListWarranty(this.assetInventoryId);
-            if(!this.currentAsset.isTangible){
-                this.toGetDocumentsListInt(this.assetInventoryId);
-            }
+        //   this.toGetDocumentsListNew(this.assetInventoryId);
+            // this.toGetDocumentsListWarranty(this.assetInventoryId);
+            // if(!this.currentAsset.isTangible){
+                // this.toGetDocumentsListInt(this.assetInventoryId);
+            // }
            const isIntangible = this.currentAsset.isIntangible ? 1 : 0;
             // this.isSpinnerVisible = false;
         },err => {	
@@ -1001,7 +1002,6 @@ if(type=='fromHtml'){
 
     deleteAttachmentRow(rowdata, index, content) {
         this.selectedRowForDelete = rowdata;
-        console.log("row",this.selectedRowForDelete);
         
         this.rowIndex = index;
         this.modal = this.modalService.open(content, { size: 'sm' });
@@ -1782,15 +1782,16 @@ if(this.currentAsset.isTangible==true){
         if(!this.isEditMode) {
             this.assetService.addAssetInventory(this.postData).subscribe(data => {
                 if(data){
+                    this.uploadDocs.next(true);
                     this.currentAsset.updatedBy = this.userName;
                     this.assetInventoryId = data.assetInventoryId;
-                    this.onUploadDocumentListMain();
-                    this.onUploadDocumentListWarranty();
-                    this.onUploadDocumentListInt();
+                    localStorage.setItem('commonId', this.assetInventoryId);
+                    // this.onUploadDocumentListMain();
+                    // this.onUploadDocumentListWarranty();
+                    // this.onUploadDocumentListInt();
                     this.alertService.showMessage("Success", `Asset Inventory Created Successfully.`, MessageSeverity.success);
                     this.route.navigateByUrl(`/assetmodule/assetpages/app-asset-inventory-listing`);
                    
-                    // this.location.replaceState(`/assetmodule/assetpages/app-edit-asset-inventory/${data.assetRecordId}`);
                 }
                 else{
                     this.alertService.showMessage("Failed", `Asset Inventory not created successfully.`, MessageSeverity.error);
@@ -1802,14 +1803,11 @@ if(this.currentAsset.isTangible==true){
         else {
             this.assetService.updateAssetInventory(this.postData).subscribe(data => {
                 if(data){
+                    this.uploadDocs.next(true);
                     this.disableSaveForEdit=true;
                     this.currentAsset.updatedBy = this.userName;
                     this.assetInventoryId = data.assetInventoryId;
-                    // this.onUploadDocumentListMain();
-                    // this.onUploadDocumentListWarranty();
-                    // this.onUploadDocumentListInt();
-                    this.alertService.showMessage("Success", `Asset Inventory Updated Successfully.`, MessageSeverity.success);
-                    // this.route.navigateByUrl(`/assetmodule/assetpages/app-asset-inventory-listing`);
+                   this.alertService.showMessage("Success", `Asset Inventory Updated Successfully.`, MessageSeverity.success);
                 }
                 else {
                     this.alertService.showMessage("Failed", `Asset Inventory not Updated Successfully.`, MessageSeverity.error);
@@ -1825,7 +1823,6 @@ if(this.currentAsset.isTangible==true){
     }
     assetStatusList:any=[];
     assetInventoryStatusList:any=[];
-    // setEditArray:any=[];
     basicValue:any;
   getAssetStatusList(value){
     this.setEditArray=[];
@@ -1847,15 +1844,7 @@ if(this.currentAsset.isTangible==true){
     },err => {			
         const errorLog = err;
         this.errorMessageHandler(errorLog);});
-//     }else{
-//     this.commonService.smartDropDownList('AssetStatus', 'AssetStatusId', 'Name').subscribe(res => {
 
-// this.assetStatusList=res;
-
-//     },err => {			
-//         const errorLog = err;
-//         this.errorMessageHandler(errorLog);});
-//   }  
   }
 
   getAssetInventoryStatusList(){
@@ -1896,33 +1885,7 @@ this.assetInventoryStatusList.forEach(element => {
 
   errorMessageHandler(log) {
     this.isSpinnerVisible=false;
-    this.alertService.showMessage(
-        'Error',
-        log,
-        MessageSeverity.error
-    ); 
-//     var msg = '';
 
-//     if( typeof log.error == 'string' ) {
-//         this.alertService.showMessage(
-//             'Error',
-//             log.error,
-//             MessageSeverity.error
-//         ); 
- 
-//     }else{
-//       if (log.error && log.error.errors.length > 0) {
-//                 for (let i = 0; i < log.error.errors.length; i++){
-//                     msg = msg + log.error.errors[i].message + '<br/>'
-//                 }
-//             }
-//             this.alertService.showMessage(
-//                 log.error.message,
-//                 msg,
-//                 MessageSeverity.error
-//             );
-       
-// }
 }
 
   parsedText(text) {
@@ -1984,5 +1947,28 @@ setTimeout(() => {
     this.route.navigateByUrl(`/assetmodule/assetpages/app-create-asset-inventory`);
     this.assetService.listCollection={};
     this.assetService.isEditMode = false;
+}
+changeOfStatus(){
+    this.disableSaveForEdit=false;
+}
+// modalIsMaintannce: NgbModalRef;
+// modalWarrenty: NgbModalRef;
+
+viewIsCertifiedModal(content){
+    this.modalIsMaintannce = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+}
+closeIsCertifiedModal(){
+    this.modalIsMaintannce.close()
+}
+
+
+
+viewVendorAuditModal(content){
+    this.modalWarrenty = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+}
+
+
+closeVendorAuditModal(){
+    this.modalWarrenty.close()
 }
 }

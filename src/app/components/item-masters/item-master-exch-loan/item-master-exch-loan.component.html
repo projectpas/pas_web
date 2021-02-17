@@ -1,17 +1,18 @@
-
-<div class="card-header bg-primary new-card-header" >
+<div class="card new-card">
+  <div class="card-header header" >
         <div class="row">
           <div class="col">
-            <h4 class="new-card-heading"> Exchange and Loans</h4>
+            <h4 class="header-name"> Exchange and Loans</h4>
           </div>          
         </div>
     </div>
 
-<div class="col-sm-12">
+  <div class="col-sm-12">
         <form #exchloan="ngForm" class="form-horizontal">
         <div class="col-sm-2">
                 <div class="card">
-                        <div class="card-header"  > Exchange <input type="checkbox" name="chkExchange" [(ngModel)]="showExchange"  (change)="handleExchangeCheck()" style="position: relative; top: 3px;"/></div> 
+                        <div class="card-header"  > Exchange <input type="checkbox" name="chkExchange" [(ngModel)]="showExchange"  (change)="handleExchangeCheck()"
+                                 class="exch-header-align"/></div> 
                         <div class="card-body" *ngIf="showExchange">
                                 <div class="col-md-12">
                                         <div class="form-group">
@@ -50,7 +51,8 @@
     </div>
     <div class="col-sm-2">
         <div class="card">
-                <div class="card-header"> Loan <input type="checkbox" name="chkLoan" [(ngModel)]="showLoan"  (change)="handleLoanCheck()" style="position: relative; top: 3px;"/></div> 
+                <div class="card-header"> Loan <input type="checkbox" name="chkLoan" [(ngModel)]="showLoan"  (change)="handleLoanCheck()"
+                         class="exch-header-align"/></div> 
                 <div class="card-body" *ngIf="showLoan">
                         <div class="form-group">
                                 <label for="currencyLoan" class="control-label">Currency</label>
@@ -74,7 +76,8 @@
     </div>
 </form>
 </div>
-<div style="margin-top: 10px;">
+</div>
+<div class="m-t-10">
     <button class="btn btn-primary pull-right " (click)="nextOrPreviousClick('Next')" type="button" >Next</button> &nbsp;
         <button class="btn btn-primary pull-right" [disabled]="upateBTn " (click)="saveAndMove()" type="button" >Save</button> &nbsp;
 

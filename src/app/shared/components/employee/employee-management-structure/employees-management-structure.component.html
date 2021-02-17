@@ -6,31 +6,31 @@
                   <div class="col-md-12 shadow-Box">
                       <div class="col-md-4" >
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto; ">Emp First Name: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="firstName"> {{firstName }} </span> </p>
+                              <label class="control-label labels-font-header wauto">Emp First Name: </label>
+                              <span class="span-header-red text-capital" *ngIf="firstName"> {{firstName }} </span> </p>
                       </div>
                       <div class="col-md-4">
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto; ">Emp Last Name: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="lastName"> {{lastName }} </span> </p>
+                              <label class="control-label labels-font-header wauto">Emp Last Name: </label>
+                              <span class="span-header-red text-capital" *ngIf="lastName"> {{lastName }} </span> </p>
                       </div>
                       <div  class="col-md-4">
                           <p class="fs12">
-                              <label class="control-label labels-font-header" style="width: auto; ">Emp Id: </label>
-                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="empId"> {{empcode}} </span></p>
+                              <label class="control-label labels-font-header wauto">Emp Id: </label>
+                              <span class="span-header-red text-capital" *ngIf="empId"> {{empcode}} </span></p>
                       </div>
                   </div>
-                  <form #empform="ngForm" class="form-horizontal add-custustomer" style="padding-bottom: 16px;">
-                      <div class="card">
-                          <div class="card-header">
-                              <div class="card-header bg-primary">
-                                  <h4 class="new-card-heading">                                    
+                  <form #empform="ngForm" class="form-horizontal add-custustomer mgmt-form-padding">
+                      <div class="card new-card">
+                          <!-- <div class="card-header"> -->
+                              <div class="card-header header">
+                                  <h4 class="header-name">                                    
                                       Management Structure
                                   </h4>
                               </div>
                               
-                          </div>
-                          <div class="card-body">
+                          <!-- </div> -->
+                          <div class="card-body header-body">
                               <div class="employee-setup">
 
                                   <div class="col-12 employer-block">
@@ -42,13 +42,14 @@
                                                       <div class="form-group col-sm-12 display-flex">
                                                           <label class="control-label col-sm-4">
                                                               Roles
-                                                              <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" [routerLink]="['/rolesmodule/rolespages/app-roles-setup']" target="_blank"></a></span>
+                                                              <span class="roles-span"><a class="fa fa-plus-circle fa-lg" [routerLink]="['/rolesmodule/rolespages/app-roles-setup']" target="_blank"></a></span>
                                                           </label>
-                                                          <div class="inner-addon col-12 display-flex" style="margin-left: 5px;">
+                                                          <div class="inner-addon col-12 display-flex roles-margin">
                                                               <!-- <select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceEmployee">
                                                                   <option *ngFor="let certificationtype of ['allCertification','jlkjsdf']" [ngValue]="certificationtype">{{certificationtype}}</option>
                                                               </select> -->
                                                               <ng-multiselect-dropdown  name ="selectedRoles" 
+                                                              class="form-control multiple-custom-select"
                                                                                        [data]="employeeRoleLabel"
                                                                                        [(ngModel)]="selectedRoles"
                                                                                        [settings]="dropdownSettings"
@@ -90,7 +91,7 @@
                                                                       </div>
                                                                   </span>
                                                               </div>
-                                                              <div class="col-sm-1" style="margin-top:7px;">
+                                                              <div class="col-sm-1 memo-popup-margin">
                                                                   <i class="fa fa-pencil"
                                                                      data-toggle="modal"
                                                                      data-target="#memo-popup"
@@ -132,7 +133,7 @@
                 <h4 class="modal-title">Edit Memo</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
                     </thead>
@@ -148,19 +149,23 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div style="float: right;">
+                </table> -->
+                <p-editor spellcheck="true"
+                                (ngModelChange)="editorgetmemo($event)"
+                                          [(ngModel)]="memoPopupContent"
+                                          [style]="{ height: '320px' }"
+                                          name="memoPopupContent"
+                                          required></p-editor>
+                <div class="editor-buttons">
                     <button type="button"
-                            class="btn btn-primary"
-                            style="padding: 6px 12px !important; margin-top: 10px;"
+                            class="btn btn-primary editor-buttons-margin"
                             data-dismiss="modal"
                             [disabled]="disableEditor"
                             (click)="onClickPopupSave()">
                         Save
                     </button>
                     <button type="button"
-                            class="btn btn-danger"
-                            style="padding: 6px 12px !important; margin-top: 10px;"
+                            class="btn btn-danger editor-buttons-margin"
                             data-dismiss="modal">
                         Close
                     </button>
@@ -175,7 +180,7 @@
       <h4 class="modal-title">Confirmation</h4>
     </div>
     <div class="modal-body">
-        <h6 style="text-align: left;">
+        <h6 class="text-left">
             Do you want to Save changes and Continue ?
           </h6>
     </div>

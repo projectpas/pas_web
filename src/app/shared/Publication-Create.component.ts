@@ -11,14 +11,14 @@ import { PublicationService } from "../services/publication.service";
 import { Publication } from "../models/publication.model";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-declare var $ : any;
+declare var $: any;
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { WorkFlowtService } from "../services/workflow.service";
 import { ConfigurationService } from "../services/configuration.service";
 import { getObjectById } from "../generic/autocomplete";
 import { AuthService } from "../services/auth.service";
 import { CommonService } from "../services/common.service";
-
+ 
 @Component({
     selector: 'grd-publication',
     templateUrl: './Publication-Create.component.html',
@@ -31,8 +31,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     @Input() itemMasterId = 0;
     @Input() workFlow: IWorkFlow;
     @Input() UpdateMode: boolean;
-    @Output() notify: EventEmitter<IWorkFlow> =new EventEmitter<IWorkFlow>();
-    publicationTypes: any=[];
+    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
+    publicationTypes: any = [];
     publicationAircraftManufacturers: IPublicationAircraftManufacturer[];
     publicationModels: IPublicationModel[];
     publicationStatuses: IPublicationStatus[];
@@ -106,7 +106,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.dropdownSettings = { 
+        this.dropdownSettings = {
             singleSelection: false,
             idField: 'dashNumberId',
             textField: 'dashNumber',
@@ -140,10 +140,11 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 
     loadPublicationTypes() {
         let publicationTypeIds = [];
+        publicationTypeIds.push(0);
         if (this.UpdateMode) {
-            publicationTypeIds = this.workFlow.publication.reduce((acc, x) => {
-                return publicationTypeIds.push(acc.publicationTypeId);
-            }, 0)
+            this.workFlow.publication.forEach(acc => {
+                publicationTypeIds.push(acc.publicationTypeId);
+            })
         }
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 20, publicationTypeIds)
@@ -180,7 +181,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 
     addRow(): void {
         var newRow = Object.assign({}, this.row);
-        newRow.workflowPublicationsId="0";
+        newRow.workflowPublicationsId = "0";
         newRow.id = "0";
         newRow.taskId = this.workFlow.taskId;
         newRow.publicationId = "0";
@@ -215,35 +216,44 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     getPublicationByItemMasterId(itemMasterId) {
         this.isSpinnerVisible = true;
         this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
-            this.publicationDropdown = res; 
-        
+            this.publicationDropdown = res;
+if(this.publicationDropdown && this.publicationDropdown.length==1){
+    // this.onPublicationChange(event, this.workFlow.publication[0], 0);
+    this.workFlow.publication[0].publicationId=this.publicationDropdown[0].publicationRecordId
+    this.loadPublicationById(this.workFlow.publication[0], true);
+    const pubData = this.publicationDropdown;
+    for (var i = 0; i < pubData.length; i++) {
+        if (parseInt(pubData[i].publicationRecordId) === parseInt(this.workFlow.publication[0].publicationId)) {
+            this.workFlow.publication[0].attachmentDetails = pubData[i].attachmentDetails;
+            break
+        }
+    }
+}
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
-    showAlert:boolean=false;
-    public onPublicationChange(event, wfPublication,index) {
-        console.log("event",wfPublication)
-        console.log("workflow",this.workFlow)
-var isEpnExist = this.workFlow.publication.filter(x => x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
-if (isEpnExist.length > 1) {
-                wfPublication.publicationId='';
-                wfPublication.publicationDescription='';
-                wfPublication.publicationType='';
-                wfPublication.revisionDate='';
-                wfPublication.sequence='';
-                wfPublication.source='';
-                wfPublication.location='';
-                wfPublication.verifiedBy='';
-                wfPublication.verifiedDate='';
-                wfPublication.status='';
-                wfPublication.attachmentDetails=[];
-                this.alertService.showMessage("Workflow", "Pub Id already exist in Exclusion List.", MessageSeverity.error);
-                this.showAlert=false;
-            }
-      
-const pubData = this.publicationDropdown;
+    showAlert: boolean = false;
+     onPublicationChange(event, wfPublication, index) {
+        var isEpnExist = this.workFlow.publication.filter(x => x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
+        if (isEpnExist.length > 1) {
+            wfPublication.publicationId = '';
+            wfPublication.publicationDescription = '';
+            wfPublication.publicationType = '';
+            wfPublication.revisionDate = '';
+            wfPublication.sequence = '';
+            wfPublication.source = '';
+            wfPublication.location = '';
+            wfPublication.verifiedBy = '';
+            wfPublication.verifiedDate = '';
+            wfPublication.status = '';
+            wfPublication.attachmentDetails = [];
+            this.alertService.showMessage("Workflow", "Pub Id already exist in Exclusion List.", MessageSeverity.error);
+            this.showAlert = false;
+        }
+
+        const pubData = this.publicationDropdown;
         for (var i = 0; i < pubData.length; i++) {
             if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {
                 wfPublication.attachmentDetails = pubData[i].attachmentDetails;
@@ -269,15 +279,15 @@ const pubData = this.publicationDropdown;
             this.publications = [];
             this.loadPublicationById(wfPublication, true);
         }
-    } 
-    setAircraftArray:any=[];
-    setModelArray:any=[];
-    setDashNumberArray:any=[];
+    }
+    setAircraftArray: any = [];
+    setModelArray: any = [];
+    setDashNumberArray: any = [];
     getAircraftByPublicationId(data, index) {
-this.setAircraftArray=[];
+        this.setAircraftArray = [];
         this.isSpinnerVisible = true;
-        this.setAircraftArray.push(data.aircraftManufacturer? data.aircraftManufacturer:0);
-        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, data.publicationId? data.publicationId :data,this.setAircraftArray.join()).subscribe(res => {
+        this.setAircraftArray.push(data.aircraftManufacturer ? data.aircraftManufacturer : 0);
+        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, data.publicationId ? data.publicationId : data, this.setAircraftArray.join()).subscribe(res => {
             this['aircraftListByPubId' + index] = res;
             this.isSpinnerVisible = false;
         }, error => {
@@ -286,38 +296,41 @@ this.setAircraftArray=[];
     }
 
     getModelByAircraftId(x, index) {
-        this.setModelArray=[];
-        this.setModelArray.push(x.model? x.model:0);
-        this.publicationService.getAircraftModelByAircraftManfacturerId(this.itemMasterId, x.publicationId, x.aircraftManufacturer,this.setModelArray.join()).subscribe(res => {
+        this.setModelArray = [];
+        this.setModelArray.push(x.model ? x.model : 0);
+        this.publicationService.getAircraftModelByAircraftManfacturerId(this.itemMasterId, x.publicationId, x.aircraftManufacturer, this.setModelArray.join()).subscribe(res => {
             this['aircraftModelListByPubId' + index] = res;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
 
-    getDashNumberByModelandAircraftIds(x, index) {
-        this.setDashNumberArray=[];
+    getDashNumberByModelandAircraftIds(x, index, from) {
+        this.setDashNumberArray = [];
         this.isSpinnerVisible = true;
-       if(x && x.workflowPublicationDashNumbers && x.workflowPublicationDashNumbers.length !=0){
-x.workflowPublicationDashNumbers.forEach(element => {
-    this.setDashNumberArray.push(element.aircraftDashNumberId)
-});
-       }else{
-        this.setDashNumberArray.push(0);
-       }
-        this.publicationService.getDashNumberByModelandAircraftIds(this.itemMasterId, x.publicationId, x.aircraftManufacturer, x.model,this.setDashNumberArray.join()).subscribe(res => {
+        if (x && x.workflowPublicationDashNumbers && x.workflowPublicationDashNumbers.length != 0) {
+            x.workflowPublicationDashNumbers.forEach(element => {
+                this.setDashNumberArray.push(element.aircraftDashNumberId)
+            });
+        } else {
+            this.setDashNumberArray.push(0);
+        }
+        this.publicationService.getDashNumberByModelandAircraftIds(this.itemMasterId, x.publicationId, x.aircraftManufacturer, x.model, this.setDashNumberArray.join()).subscribe(res => {
             this.isSpinnerVisible = false;
             this['dashNumberListByModelId' + index] = res.map(x => {
                 return {
                     // ...x,
-                    AircraftDashNumberId:x.dashNumberId,
+                    AircraftDashNumberId: x.dashNumberId,
                     dashNumberId: x.dashNumberId,
                     dashNumber: x.dashNumber,
-                   
+
                 }
-            }, error => {
-                this.isSpinnerVisible = false;
             });
+            if (from == 'html') {
+                this.workFlow.publication[index].workflowPublicationDashNumbers = null;
+            }
+        }, error => {
+            this.isSpinnerVisible = false;
         })
     }
 
@@ -372,24 +385,25 @@ x.workflowPublicationDashNumbers.forEach(element => {
         return aircraftDashNumbers;
     }
 
-    bindEditModeData(data) { 
+    bindEditModeData(data) {
         this.workFlow.publication = data.map((x, index) => {
             if (x.publicationId) {
-                this.getAircraftByPublicationId(x, index);
-                this.getModelByAircraftId(x, index);
-                this.getDashNumberByModelandAircraftIds(x ,index);
+                // this.getAircraftByPublicationId(x, index);
+                // this.getModelByAircraftId(x, index);
+                // this.getDashNumberByModelandAircraftIds(x, index, 'onload');
             }
             return {
                 ...x
             }
         })
     }
- 
+
     private loadPublicationById(wfPublication: any, isDropdownChange: boolean) {
         this.isSpinnerVisible = true;
         this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
             res => {
                 this.isSpinnerVisible = false;
+                wfPublication.publicationTypeName=res[0].publicationTypeName;
                 if (res[0] != undefined && res[0] != null) {
                     this.publications.push(res[0]);
 
@@ -420,7 +434,6 @@ x.workflowPublicationDashNumbers.forEach(element => {
     }
 
     downloadFileUpload(rowData) {
-        console.log("lin",rowData);
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }
@@ -649,16 +662,16 @@ x.workflowPublicationDashNumbers.forEach(element => {
     dismissModel() {
         this.modal.close();
     }
-    deletedRowIndex:any;
-    deleteRowRecord:any={};
-    openDelete(content, row,index) {
-        this.deletedRowIndex=index;
+    deletedRowIndex: any;
+    deleteRowRecord: any = {};
+    openDelete(content, row, index) {
+        this.deletedRowIndex = index;
         this.publicationDropdown.forEach(element => {
-            if(element.publicationRecordId==row.publicationId){
-                row.publication=element.publicationId;
+            if (element.publicationRecordId == row.publicationId) {
+                row.publication = element.publicationId;
             }
         });
-      this.deleteRowRecord = row;
+        this.deleteRowRecord = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -668,6 +681,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
         }
         else {
             this.workFlow.publication[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.publication[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
     }

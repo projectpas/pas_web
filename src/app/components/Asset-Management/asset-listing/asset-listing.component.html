@@ -78,19 +78,19 @@
                                 style="margin-top: 4px; margin-right: 15px;"
                               >
                               <label class="radio-cstm wauto">
-                                <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="geListByStatus('Active')" [(ngModel)]="currentstatus">
+                                <input type="radio" name="EmpStatus111" class="form-control" value="Active" (click)="geListByStatus('Active')" [(ngModel)]="currentstatus">
                                 <span class="checkmark"></span>Active
                             </label>
                         </div>
                         <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                             <label class="radio-cstm wauto">
-                                <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="geListByStatus('InActive')" [(ngModel)]="currentstatus">
+                                <input type="radio" name="EmpStatus111" class="form-control" value="InActive" (click)="geListByStatus('InActive')" [(ngModel)]="currentstatus">
                                 <span class="checkmark"></span>In-Active
                             </label>
                         </div>
                         <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                             <label class="radio-cstm wauto">
-                                <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)="geListByStatus('ALL')" [(ngModel)]="currentstatus">
+                                <input type="radio" name="EmpStatus111" class="form-control" value="ALL" (click)="geListByStatus('ALL')" [(ngModel)]="currentstatus">
                                 <span class="checkmark"></span>All
                             </label>
                         </div>
@@ -159,17 +159,25 @@
 
                                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
                                         pReorderableRowHandle>
-                                         <ng-container *ngIf="col.field !='calibrationRequiredNew' && col.field!='isSerializedNew'">
-                                            {{
+                                         <ng-container *ngIf="col.field !='calibrationRequiredNew' && col.field!='isSerializedNew' && col.field!='deprAmort'">
+                                            {{rowData[col.field] 
+                                              }}
+                                              <!-- {{
                                                 col.field == 'createdDate'
                                                   ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                                   : rowData[col.field] && col.field == 'updatedDate'
                                                   ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                                   : rowData[col.field] 
-                                              }}
+                                              }} -->
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='calibrationRequiredNew' || col.field =='isSerializedNew'">
                                             <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                                                   style="margin: 0px auto; display: block;" />
+                                        </ng-container>
+                                        <ng-container *ngIf="col.field =='deprAmort'">
+                                            <input type="checkbox" *ngIf="rowData['assetClass']=='Tangible'" disabled [checked]="rowData['isDepreciable'] == true"
+                                                   style="margin: 0px auto; display: block;" />
+                                                   <input type="checkbox" disabled *ngIf="rowData['assetClass']=='Intangible'" [checked]="rowData['isAmortizable'] == true"
                                                    style="margin: 0px auto; display: block;" />
                                         </ng-container>
                                     </td> 
@@ -300,8 +308,8 @@
                                     </button>    
                                 </div>
                                 <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
-                                    <button type="button" name="isActive" [ngClass]="assetViewList.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
-                                        <span class="value">{{assetViewList.isActive ? 'Active' : 'In-Active'}}</span>
+                                    <button type="button" name="showIsActive" [ngClass]="assetViewList.showIsActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                                        <span class="value">{{assetViewList.showIsActive ? 'Active' : 'In-Active'}}</span>
                                      </button> 
                                 </div>
                             </div>
@@ -361,7 +369,7 @@
                                             <span class="label"><b>Entry Date: </b></span><span class="value">{{assetViewList.entryDate | date: 'MM/dd/yyyy  h:mm a'}}</span>
                                         </p>
                                         <p>
-                                            <span class="label"><b>Asset ID: <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetId}}</span>
+                                            <span class="label"><b>ID: <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetId}}</span>
                                         </p>
                                         <p>
                                             <span class="label"><b>Asset Name: <span class="text-danger">*</span></b></span><span class="value">
@@ -409,7 +417,7 @@
                                         </p>
                                        
                                         <p *ngIf="assetViewList.isIntangible==false">
-                                            <span class="label"><b>Asset Location: </b></span><span class="value">{{assetViewList.assetLocationName}}</span> 
+                                            <span class="label"><b>Asset Location:  <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetLocationName}}</span> 
                                         </p>
                                        
                                         <div style="display: inline-flex;width: 100%;" *ngIf="assetViewList.isIntangible==false">

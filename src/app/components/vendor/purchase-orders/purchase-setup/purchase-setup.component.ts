@@ -31,6 +31,7 @@ import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-r
 //import { connectableObservableDescriptor } from 'rxjs/observable/ConnectableObservable';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -271,7 +272,7 @@ export class PurchaseSetupComponent implements OnInit {
 	poTotalCost: number;
 	internalApproversList: any = [];
 	selectallApprovers: boolean;
-	displayWarningModal: boolean = false;
+	displayWarningModal: boolean = false;	
 	poFulfillingstatusID: number = -1;
 	poOpenstatusID: number = -1;
 	poApprovaltaskId = 0;
@@ -371,8 +372,14 @@ export class PurchaseSetupComponent implements OnInit {
 	itemMasterId : number;
 	partName : string;
 	adddefaultpart : boolean = true;
+	salesOrderId:number;
+	home: any;
+	
+	modal: NgbModalRef;
+	alertText:string
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
+		private modalService: NgbModal,
 		public currencyService: CurrencyService,
 		public unitofmeasureService: UnitOfMeasureService,
 		public conditionService: ConditionService,
@@ -399,6 +406,7 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
 		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
+		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
 	}
 
 	ngOnInit() {		
@@ -1954,7 +1962,7 @@ export class PurchaseSetupComponent implements OnInit {
 			parentdata.quantityOrdered = '0';
 			parentdata.workOrderId = null;
 			parentdata.repairOrderId = null;
-			parentdata.salesOrderId = null;
+			//parentdata.salesOrderId = null;
 			parentdata.memo = null;
 			//this.getManagementStructureForParentEdit(parentdata,this.employeeId);
 		}
@@ -2192,22 +2200,32 @@ export class PurchaseSetupComponent implements OnInit {
 		if(event.index == 1 ) {
 			this.showAddresstab = true;
 		}
-		if(event.index == 2 ) {
+		if(event.index == 2 && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 		}
-		if(event.index == 3 ) {
+		if(event.index == 3  && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 			this.getApprovalProcessListById(this.poId);
 			this.enableApproverSaveBtn = false;
 		}
-		if(event.index == 4) {
+		if(event.index == 4 && this.posettingModel.IsEnforceApproval) {
 			this.showVendorCaptab = true;
 			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
 		}
-		if(event.index == 5) {
+		if(event.index == 5 && this.posettingModel.IsEnforceApproval) {
 			this.showDocumenttab = true;
 		}
-		if(event.index == 6) {
+		if(event.index == 6 && this.posettingModel.IsEnforceApproval) {
+			this.showComunicationtab = true;
+		}	
+		if(event.index == 2 && !this.posettingModel.IsEnforceApproval) {
+			this.showVendorCaptab = true;
+			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
+		}
+		if(event.index == 3 && !this.posettingModel.IsEnforceApproval) {
+			this.showDocumenttab = true;
+		}
+		if(event.index == 4 && !this.posettingModel.IsEnforceApproval) {
 			this.showComunicationtab = true;
 		}	
 		
@@ -2345,8 +2363,13 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	loadSalesOrderList(filterVal = '') {
-		if (this.arraySOlist.length == 0) {
-            this.arraySOlist.push(0); }
+		if (this.salesOrderId != undefined && this.salesOrderId != null) {
+			this.arraySOlist.push(this.salesOrderId);
+		}
+		else{
+			if (this.arraySOlist.length == 0) {
+				this.arraySOlist.push(0); }
+		}
 		this.commonService.getSODataFilter(filterVal,20,this.arraySOlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
@@ -2503,19 +2526,29 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 	}
 
-	dismissModel() {
-		this.savePurchaseOrderPartsList(true); 
+	dismissModel(status) {
+		this.displayWarningModal = status;
+		this.modal.close();	
+		if(status)
+		this.savePurchaseOrderPartsList(''); 			
     }
-	savePurchaseOrderPartsList(contwithoutVendorPrice = false) {
+	savePurchaseOrderPartsList(content) {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
 		for (let i = 0; i < this.partListData.length; i++) {
 			this.alertService.resetStickyMessage();			
+			// if(this.partListData[i].quantityOrdered == 0) {	
+			// 	this.isSpinnerVisible = false;	
+			// 	errmessage = errmessage + '<br />' + "Please Enter Qty."
+			// }
 			if(this.partListData[i].quantityOrdered == 0) {	
-				this.isSpinnerVisible = false;	
-				errmessage = errmessage + '<br />' + "Please Enter Qty."
-			}
+				this.isSpinnerVisible = false;
+				this.displayWarningModal = false;
+				this.alertText= 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  +'<br/>'+"Please Enter Qty."
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
+				return;
+		    }
 			if(this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
 				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
@@ -2577,10 +2610,19 @@ export class PurchaseSetupComponent implements OnInit {
 						errmessage = errmessage + '<br />' + "Split Shipment Select Address is required."
 					}					
 
+					// if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
+					// 	this.isSpinnerVisible = false;	
+					// 	errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+					// }
+
 					if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
-						this.isSpinnerVisible = false;	
-						errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+						this.isSpinnerVisible = false;
+						this.displayWarningModal = false;
+						this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  + '<br/>' + "Split Shipment Qty is required."
+						this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
+						return;
 					}
+
 					if(!this.partListData[i].childList[j].managementStructureId || this.partListData[i].childList[j].managementStructureId == 0) {	
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Management Structure is required."
@@ -2598,9 +2640,11 @@ export class PurchaseSetupComponent implements OnInit {
 				return;
 		    }
 
-			if(this.partListData[i].vendorListPrice == 0 && contwithoutVendorPrice == false) {	
-				this.isSpinnerVisible = false;
-				this.displayWarningModal = true;										
+			if(this.partListData[i].vendorListPrice == 0 && this.displayWarningModal == false) {	
+				this.isSpinnerVisible = false;	
+				this.displayWarningModal = true;		    								
+				this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  + '<br />'+"Vendor Price is not populated  - Continue Y/N"
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 				return;
 		    }
 			let childDataList = [];
@@ -4310,7 +4354,6 @@ WarnRescticModel() {
 	addPartNumbers(partNumberId,partName) {
 		this.inputValidCheck = false;			
 		//if (this.vendorService.isEditMode == false) {
-			
 			let newParentObject = new CreatePOPartsList();
 			newParentObject = {
 				...newParentObject, 
@@ -4318,8 +4361,8 @@ WarnRescticModel() {
 				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 				conditionId: this.defaultCondtionId,
 				discountPercent: 0,
-			    partNumberId: {value: partNumberId, label: partName},
-
+				partNumberId: {value: partNumberId, label: partName},
+				salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
 			}
 			this.partListData.push(newParentObject); 			
 			for (let i = 0; i < this.partListData.length; i++) {
@@ -4377,6 +4420,7 @@ WarnRescticModel() {
 			for (let i = 0; i < this.partListData.length; i++) {
 				if (i == this.partListData.length - 1) { 
 					this.partListData[i].conditionId = this.defaultCondtionId;
+					//this.partListData[i].salesOrderId = this.salesOrderId;
 					this.getFunctionalReportCurrencyById(this.partListData[i]);
 				}
 			}
@@ -4391,6 +4435,7 @@ WarnRescticModel() {
 
 			localStorage.removeItem("itemMasterId");
 			localStorage.removeItem("partNumber");
+			localStorage.removeItem("salesOrderId");
 		}
 
 	  }

@@ -1,11 +1,16 @@
-<div class="fixed-table-container-inner table-responsive cat4-table" style="height:300px;">
-  <div style="width: 100%; z-index: 1;" *ngIf="!isEdit">
-    <span class="cat-heading cat4">Add {{ isWorkOrder ? moduleName : ' Tool'
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
+style="overflow: hidden;">
+  <div >
+    <span class="cat-heading cat4" *ngIf="!isEdit">Add {{ isWorkOrder ? moduleName : ' Tool'
       }}<i (click)="addRow()" class="fa fa-plus"></i></span>
   </div>
+
   <form #toolsCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-equip">
-      <tr>
+    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+      <div class="tableFixHead">
+      <table class="table table-bordered" style="height:auto;max-height:350px !important">
+        <thead>
+        <tr>
         <th><label>Tool Name</label></th>
         <th> <label for="">{{moduleName}} ID</label></th>
         <th><label>{{moduleName}} Description</label></th>
@@ -13,19 +18,26 @@
         <th><label>Qty<span class="clr-red">*</span></label></th>
         <th><label>Actions </label></th>
       </tr>
+    </thead>
+    <tbody>
       <tr *ngFor="let eqp of workFlow.equipments; let i = index">
         <td>
-          <p-autoComplete (onSelect)="onPartSelect($event, eqp)" [suggestions]="partCollection"
+          <!-- <p-autoComplete (onSelect)="onPartSelect($event, eqp)" [suggestions]="partCollection"
             (completeMethod)="filterpartItems($event)" [size]="30" [(ngModel)]="eqp.partNumber" [minLength]="1"
             [dropdown]="true" class="workflow-measurement-select" [forceSelection]="true"
             [ngModelOptions]="{standalone: true}">
             <ng-template let-assetId pTemplate="asset">
               <div class="ui-helper-clearfix">{{ assetId  }}</div>
             </ng-template>
-          </p-autoComplete>
+          </p-autoComplete> --> 
+          <p-autoComplete   class="p-autoComplete-ctsm" field="name" name="AName{{i}}" [dropdown]="true"  [forceSelection]="true"
+          errorMessage="Records not found"  emptyMessage="No Records Found"  (completeMethod)="filterpartItems($event)"
+           [size]="30" [minLength]="1" appendTo='body' [baseZIndex]="9999" (onSelect)="onPartSelect($event, eqp,i)" [suggestions]="allPartnumbersInfo"
+           [(ngModel)]="eqp.partNumber" (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
+      </p-autoComplete>
         </td>
         <td>
-          {{ eqp.assetName }}
+          {{ eqp.assetIdName }}
         </td>
         <td>
           {{ eqp.assetDescription }}
@@ -43,16 +55,19 @@
           </button>
         </td>
       </tr>
+      </tbody>
     </table>
+    </div>
+    </div>
   </form>
   <div *ngIf="isWorkOrder && !isEdit" style="float:right">
     <button *ngIf="isWorkOrder" type="button" class="btn btn-primary btn-primary" data-dismiss="modal"
-      (click)="saveEquipmentWorkOrder()" style="padding: 6px 12px !important; margin-top: 10px;"
+      (click)="saveEquipmentWorkOrder()"
       [disabled]="!toolsCreateForm.valid|| checkQuantityAvailability()">
       Save
     </button>
     <button type="button" class="btn btn-danger" data-dismiss="modal"
-      style="padding: 6px 12px !important;margin-top: 10px;">
+     >
       Close
     </button>
   </div>

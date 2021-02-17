@@ -46,7 +46,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllDashNumbers());
+                return this.handleErrorCommon(error, () => this.getAllDashNumbers());
             });
     }
 
@@ -55,7 +55,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDashNumberById(dashNumberId));
+                return this.handleErrorCommon(error, () => this.getDashNumberById(dashNumberId));
             });
     }
 
@@ -64,7 +64,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDashNumberByModelId(AircraftModelId));
+                return this.handleErrorCommon(error, () => this.getDashNumberByModelId(AircraftModelId));
             });
     }
 
@@ -73,7 +73,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(dashNumber), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addDashNumber(dashNumber));
+                return this.handleErrorCommon(error, () => this.addDashNumber(dashNumber));
             });
     }
 
@@ -82,7 +82,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(dashNumberStatus), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateDashNumber(dashNumberStatus));
+                return this.handleErrorCommon(error, () => this.updateDashNumber(dashNumberStatus));
             });
     }
 
@@ -91,7 +91,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeDashNumberById(dashNumberId));
+                return this.handleErrorCommon(error, () => this.removeDashNumberById(dashNumberId));
             });
     }
 
@@ -100,7 +100,7 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateForActive(roleObject, id));
+                return this.handleErrorCommon(error, () => this.getUpdateForActive(roleObject, id));
             });
     }
 
@@ -109,42 +109,42 @@ export class DashNumberEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDashNumberStatusAuditById(dashNumberId));
+                return this.handleErrorCommon(error, () => this.getDashNumberStatusAuditById(dashNumberId));
             });
     }
     getAircraftDashNumberRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.getDashNumber;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAircraftDashNumberRecords(paginationOption));
+                return this.handleErrorCommon(error, () => this.getAircraftDashNumberRecords(paginationOption));
             });
     }
     getDASHLISTByID<T>(Mid: string, Tid: number, Did: string): Observable<T> {
         let endpointUrl = `${this.getDashListByIdsURL}/${Mid}/${Tid}/${Did}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDASHLISTByID(Mid, Tid, Did));
+                return this.handleErrorCommon(error, () => this.getDASHLISTByID(Mid, Tid, Did));
             });
     }
     getDashNumberByModelTypeId<T>(Mid: string, Tid: string): Observable<T> {
         let endpointUrl = `${this.getDash}/${Mid}/${Tid}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDashNumberByModelTypeId(Mid, Tid));
+                return this.handleErrorCommon(error, () => this.getDashNumberByModelTypeId(Mid, Tid));
             });
     }
     getCapesDashNumberByModelTypeId<T>(Mid: string, Tid: string): Observable<T> {
         let endpointUrl = `${this.getCapesDash}/${Mid}/${Tid}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCapesDashNumberByModelTypeId(Mid, Tid));
+                return this.handleErrorCommon(error, () => this.getCapesDashNumberByModelTypeId(Mid, Tid));
             });
     }
     getDASHLISTBy_MultiID<T>(Mid: string, Tid: number, Did: string): Observable<T> {
         let endpointUrl = `${this.getDashListByMultiIdsURL}/${Mid}/${Tid}/${Did}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDASHLISTBy_MultiID(Mid, Tid, Did));
+                return this.handleErrorCommon(error, () => this.getDASHLISTBy_MultiID(Mid, Tid, Did));
             });
     }
     CustomerDashNumberUpload(file) {
@@ -156,7 +156,7 @@ export class DashNumberEndpointService extends EndpointFactory {
         let endpointUrl = `${this.getDashNum}/${Mid}/${Tid}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDashNumByModelTypeId(Mid, Tid));
+                return this.handleErrorCommon(error, () => this.getDashNumByModelTypeId(Mid, Tid));
             });
     }
 }

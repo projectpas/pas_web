@@ -1077,9 +1077,11 @@
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
                         <div>
-                            <app-customer-documents [customerDataFromExternalComponents]="
+                            <!-- <app-customer-documents [customerDataFromExternalComponents]="
                   viewDataGeneralInformation
-                "></app-customer-documents>
+                "></app-customer-documents> -->
+                <app-common-documents [moduleName]="moduleName"  [referenceId]="customerId"
+                [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                         </div>
                     </div>
                 </div>
@@ -1099,8 +1101,9 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">  
+                            <table class="table table-bordered header-table-width">
                                 <thead>
                                     <tr>
                                         <th> Name</th>
@@ -1158,6 +1161,7 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1219,8 +1223,9 @@
         </div>
         
         <div class="modal-body">
-          <div class="table-responsive">           
-            <table class="table table-bordered" > 
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                <div class="tableFixHead">  
+                <table class="table table-bordered header-table-width" > 
               <thead>
                 <tr>
                   <th>Contact</th>
@@ -1304,6 +1309,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
              <!-- <ng-template >
               <div class="text-center">
                 <h4 style="color: #ff5663;">No History Found</h4>

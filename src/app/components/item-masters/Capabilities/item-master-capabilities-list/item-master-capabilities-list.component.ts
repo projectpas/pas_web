@@ -100,11 +100,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     partListData: any[] = [];
     integrationvalues: any[] = [];
     cmmList: any[];
+    disableSaveMemo: boolean = true;
     capabilityTypeData: any[];
     managementStructureData: any = [];
     isDeleteCapabilityPopupOpened: boolean = false;
     selectedForDeleteCapabilityId: any;
     selectedForDeleteContent: any;
+    restorerecord: any = {}
+    capabilityId: any;
     showCapes: boolean = false;
     isEnableCapesList: boolean = true;
     globalSearchData: any = {};
@@ -221,6 +224,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             { field: 'level2'},
             { field: 'level3'},
             { field: 'level4'},
+            { field: 'addedDate', header: 'Added Date' },
             { field: 'isVerified', header: 'Verified' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
@@ -238,6 +242,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             { field: 'level2', header: 'Level 02' },
             { field: 'level3', header: 'Level 03' },
             { field: 'level4', header: 'Level 04' },
+            { field: 'addedDate', header: 'Added Date' },
             { field: 'isVerified', header: 'Verified' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
@@ -262,7 +267,18 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.loadingIndicator = false;
         this.isSpinnerVisible = false;
         this.dataSource.data = allWorkFlows;
-        this.allItemMasterCapsList = allWorkFlows;
+        this.allItemMasterCapsList = allWorkFlows.map(x => {
+            return {
+                ...x,
+                isVerified: x.isVerified == 1 ? true : false,
+                memo: x.memo.replace(/<[^>]*>/g, ''),
+                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+
         this.employeeList.filter(x => {
 
             for(let i = 0; i< this.employeeList.length; i++){
@@ -413,6 +429,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         if(this.selectedItemMasterCapData.addedDate){
             this.selectedItemMasterCapData.addedDate = new Date(this.selectedItemMasterCapData.addedDate);
         }
+    }
+
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
     }
 
     getManagementStructureDetails(id,empployid=0,editMSID=0) {
@@ -568,8 +588,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     resetVerified(rowData, value) {
-            rowData.verifiedById = null;
-            rowData.verifiedDate = new Date();
+            if (value === false) {
+                rowData.verifiedById = null;
+                rowData.verifiedDate = null;
+            }
+             if(value == true){
+                rowData.verifiedDate = new Date();
+                const employee=this.authService.currentEmployee;
+                rowData.verifiedById = employee.value;
+            }
+
     }
 
     openPopUpWithData(content, row) //this is for Edit Data get
@@ -1008,7 +1036,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     async getAllEmployeesByManagmentStructureID() {
 		if(this.arrayEmplsit.length == 0) {			
-		this.arrayEmplsit.push(0); }	
+		this.arrayEmplsit.push(0,this.authService.currentEmployee.value); }	
         await this.commonservice.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
             this.employeeList = res;            
         }, error => error => this.saveFailedHelper(error))
@@ -1131,6 +1159,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     saveCapability() {     
         this.selectedItemMasterCapData["updatedBy"]="admin";  
         this.selectedItemMasterCapData["createdBy"]="admin";  
+        this.selectedItemMasterCapData["isVerified"] = (this.selectedItemMasterCapData.isVerified == true || this.selectedItemMasterCapData.isVerified == 'check') ? true : false,
         this.selectedItemMasterCapData["companyId"]=this.selectedItemMasterCapData.levelId1;  
         this.selectedItemMasterCapData["buId"]=this.selectedItemMasterCapData.levelId2;  
         this.selectedItemMasterCapData["divisionId"]=this.selectedItemMasterCapData.levelId3;  
@@ -1175,21 +1204,39 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     deleteCapability(content, capabilityId, capabilityType) {
         this.selectedForDeleteCapabilityId = capabilityId;
         this.selectedForDeleteContent = content;
-        this.selectedCapabilityType = capabilityType;
+        if(capabilityType != '' && capabilityType != undefined)
+        {
+            this.selectedCapabilityType = capabilityType;
+        }
         if (this.isDeleteCapabilityPopupOpened == true) {
             this.itemMasterService.deleteCapabilityById(capabilityId, "admin").subscribe(res => {
                 this.dismissModel()
                 this.isDeleteCapabilityPopupOpened = false;
                 this.selectedCapabilityType = "";
                 this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-            }),
-                error => {
-                    console.log("ERROR:" + error);
-                }
+            })
         }
         else {
             this.isDeleteCapabilityPopupOpened = true
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        }
+    }
+
+    restore(restorePopupId, rowData) {
+        this.restorerecord = rowData;
+        this.selectedCapabilityType = rowData.capabilityType;
+        this.capabilityId = rowData.itemMasterCapesId;
+        this.modal = this.modalService.open(restorePopupId, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    restoreCapability() {
+        if(this.capabilityId > 0)
+        {
+            this.itemMasterService.restoreCapabilityById(this.capabilityId, "admin").subscribe(res => {
+                this.dismissModel()
+                this.selectedCapabilityType = "";
+                this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
+            })
         }
     }
 
@@ -1215,6 +1262,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
+
+    pageIndexChange(event) {
+		this.itemMasterCapesPageSize = event.rows;
+	}
 
     getAuditHistory(row){
         this.getItemMasterDetailsById(row.itemMasterId)
@@ -1268,17 +1319,23 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         })
     }
 
-    onAddTextAreaInfo(value) {
-		if(value == 'memo') {
-			this.textAreaLabel = 'Memo';
-			this.textAreaInfo = this.selectedItemMasterCapData.memo;
-		}
+    onAddTextAreaInfo(value , content) {
+        this.textAreaInfo = this.selectedItemMasterCapData.memo;
+        this.disableSaveMemo=true;
+        $('#capes-memo').modal('show');
+        
+        //this.modal = this.modalService.open(content, { size: 'sm' });
+		// if(value == 'memo') {
+		// 	//this.textAreaLabel = 'Memo';
+		// 	this.textAreaInfo = this.selectedItemMasterCapData.memo;
+		// }
     }
     
     onSaveTextAreaInfo() {
-		if(this.textAreaLabel == 'Memo') {
-			this.selectedItemMasterCapData.memo = this.textAreaInfo;
-        }
+        this.selectedItemMasterCapData.memo = this.textAreaInfo;
+		// if(this.textAreaLabel == 'Memo') {
+		// 	this.selectedItemMasterCapData.memo = this.textAreaInfo;
+        // }
     }
 
     getCapesListOnDeleteStatus(value) {
@@ -1296,6 +1353,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 ...x,
                 isVerified: x.isVerified == 1 ? 'check' : 'unchecked',
                 memo: x.memo.replace(/<[^>]*>/g, ''),
+                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',

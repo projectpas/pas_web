@@ -18,16 +18,16 @@
 						[size]="30" [minLength]="1" [dropdown]="true"
 						[inputStyle]="{ width: '100%' }" >
 					</p-autoComplete>              
-					<!-- <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true"  [(ngModel)]="itemMasterIDFromPartNumberSelection" name="itemMasterIDFromPartNumberSelection" id="partNumber" title="Part Number" required  placeholder="Select" [showClear]="true" (onChange)="getPartPublicationByItemMasterId(itemMasterIDFromPartNumberSelection)"></p-dropdown> -->
 				</div>
 			  </div>
-			  <div class="col-md-3">
+			  <div class="col-md-2">
 				<div class="form-group">
 					<label class="popup-plusicon-cstm">Capability <strong class="clr-red">*</strong>						
 					</label>
 					<p-multiSelect
 					[maxSelectedLabels]="2"
 					[options]="capabalityTypeList"
+					class="multiselect-field"
 					[(ngModel)]="capabilityTypeId"
 					name="capabilityTypeId"					
 					required></p-multiSelect>
@@ -35,13 +35,13 @@
 			  </div>
 			  <div class="col-md-2">
 				<button
-				  style="margin-top: 20px;"
+				style="margin-top:20px !important"
 				  type="button"
-				  class="btn btn-primary"				  
+				  class="btn btn-primary"			
+				  [disabled]="!addCapesForm.valid"	  
 				  (click)="mapAircraftInformation(); ">
 				  Add
-				</button>
-				<!-- [disabled]="!addCapesForm.valid" -->
+				</button>				
 			  </div>
 			</div>
 			</form>
@@ -57,19 +57,19 @@
 				[paginator]="false">
 			  	<ng-template pTemplate="colgroup" let-columns>
 					<colgroup>
-						<col style="width: 120px;">
-						<col style="width: 150px;">
-						<col style="width: 150px;">
-						<col style="width: 150px;">
-						<col style="width: 150px;">
-						<col *ngFor="let col of columns"  [ngStyle]="{'width': col.width}">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col class="table-column-width">
+						<col *ngFor="let col of columns"  class="table-column-width">
 					</colgroup>
 				</ng-template>
 			  <ng-template pTemplate="header" let-columns>
 				  <tr>
-					<th style="width: 120px;text-align: center; font-weight: lighter !important;" >Capability Type</th>
-					<th style="width: 600px;text-align: center; font-weight: lighter !important;" colspan="4">Managment Structure <span class="clr-red">*</span></th>
-					<th style="text-align: center; font-weight: lighter !important;" *ngFor="let col of columns" pResizableColumn>
+					<th class="table-column-width table-header-text" >Capability Type</th>
+					<th class="table-header-text" style="width:600px !important" colspan="4">Managment Structure <span class="clr-red">*</span></th>
+					<th class="table-column-width table-header-text" *ngFor="let col of columns" pResizableColumn>
 					  {{ col.header }}
 					</th>
 				  </tr>
@@ -82,21 +82,21 @@
 				<ng-container> <!--*ngFor="let rowData of aircraftData; let row_no = index;"-->
 				  <tr>            
 					<td >{{ rowData.capailityTypeName }}</td>
-					<td style="width: 120px;">
+					<td style="width:150px">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
 					  name="company{{row_no}}"
 					  #companyId="ngModel"
-					  [options]="legalEntityList"
+					  [options]="  getDynamicVariableData('legalEntityList',row_no)"
 					  class="p-dropdown-custom-sm"
 					  (onChange)="selectedLegalEntity($event.value, row_no)"
-					  [(ngModel)]="rowData.companyId"
+					  [(ngModel)]="rowData.companyId" 
 					  filter="true" [resetFilterOnHide]="true"
 					  [required]="true">
 					</p-dropdown>
 					</td>
-					<td style="width: 120px;">
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -109,7 +109,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td style="width: 120px;">
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -122,7 +122,7 @@
 					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
-					<td style="width: 120px;">
+					<td class="table-width-150">
 					  <p-dropdown
 					  placeholder="Select"
 					  appendTo='body' [baseZIndex]="9999"
@@ -136,7 +136,7 @@
 					>
 				  </p-dropdown>
 					</td>
-					<td style="width: 110px;">
+					<td class="table-column-width">
 						<p-calendar
 							class="pcal-item-capes"
 							[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -146,16 +146,16 @@
 						  [showIcon]="true"
 						></p-calendar>
 					  </td>
-					<td style="width: 80px;text-align: center;">
+					<td class="table-column-width text-center">
 					  <p-checkbox
 					  	class="pcheckbox-cstm"
 						name="isverified{{row_no}}"
 						binary="false"						
 						[(ngModel)]="rowData.isVerified"
-						(onChange)="resetVerified(rowData, $event)"					
+						(onChange)="resetVerified(rowData, $event,row_no)"					
 					  ></p-checkbox>
 					</td>
-					<td style="width: 130px;">
+					<td class="table-width-150">
 					  <p-dropdown
 						class="p-dropdown-custom-sm"
 						[options]="employeeList"
@@ -168,24 +168,25 @@
 						filter="true" [resetFilterOnHide]="true"
 					  ></p-dropdown>
 					</td>
-					<td style="width: 110px;">
+					<td class="table-column-width">
+						<!-- [required]="rowData.isVerified==true" -->
 					  <p-calendar
 					  	class="pcal-item-capes"
 						[(ngModel)]="rowData.verifiedDate"
 						[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-						[disabled]="!rowData.isVerified"
+						[disabled]="rowData.isVerified"
 						appendTo='body' [baseZIndex]="9999"
-						[required]="rowData.isVerified"
+					
 						name="verifiedDate{{row_no}}"
 						[showIcon]="true"
 					  ></p-calendar>
 					</td>
-					   <td style="width: 130px;">
+					   <td class="table-column-width">
 						<div [innerHTML]="rowData.memo" class="form-control"
 						style="margin-left:10px" 
 						[matTooltip]="parsedText(rowData.memo)" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
 				   <i class="fa fa-pencil pull-right" 
-				   style="margin-top:-16px; margin-right:30px;color: #337ab7"
+				   style="margin-top:-16px; margin-right:9px;color: #337ab7"
 				  
 					  data-toggle="modal"
 					  data-target="#capes-memo" matTooltip="Memo"
@@ -200,16 +201,16 @@
 			<div class="pull-right" *ngIf="viewTable">
 			  <button
 			  type="button"
-			  class="btn btn-primary" [disabled]="!capesForm.valid"
-			  data-dismiss="modal" style="margin-top: 10px;"
+			  class="btn btn-primary m-t-10" [disabled]="!capesForm.valid"
+			  data-dismiss="modal" 
 			  (click)="saveCapability(); "
 			>
 			  Save
 			</button>
 			<button *ngIf="isEnableCapesList"
 			type="button"
-			class="btn btn-danger" 
-			data-dismiss="modal" style="margin-top: 10px;"
+			class="btn btn-danger m-t-10" 
+			data-dismiss="modal"
 			(click)="onCloseCapes();"
 		  >
 			Close
@@ -229,7 +230,7 @@
 					  <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
 					</div>
 					<div class="modal-body">
-					  <table class="table table-bordered table-fixed workflow-table-material">
+					  <!-- <table class="table table-bordered table-fixed workflow-table-material">
 						<thead>
 						  <th style="color: #fff;">{{textAreaLabel}}</th>
 						</thead>
@@ -242,11 +243,13 @@
 							</td>
 						  </tr>
 						</tbody>
-					  </table>
-					  <div style="float:right">
-						<button type="button" class="btn btn-primary"						 
-						  style="padding: 6px 12px !important;margin-top: 10px;" (click)="onSaveTextAreaInfo()">Save</button>
-						<button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;" (click)="closeMemoModel()"
+					  </table> -->
+					  <p-editor [(ngModel)]="textAreaInfo" 
+					  [style]="{'height':'320px'}" name="textAreaInfo" 
+					  required></p-editor>		
+					  <div class="editor-buttons">
+						<button type="button" class="btn btn-primary editor-buttons-margin" (click)="onSaveTextAreaInfo()">Save</button>
+						<button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()"
 						  >Close</button>
 					  </div>
 					</div>

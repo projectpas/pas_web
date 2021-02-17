@@ -13,10 +13,8 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th style="background-color: #4298ff !important;
-                    color: #fff !important;"></th>
-                    <th style="text-align: left !important; background-color: #4298ff !important;
-                    color: #fff !important;" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
+                    <th></th>
+                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn>
                         <span *ngIf="col.field == 'conditionDescription' || col.field == 'qtyToOrder'">
                             {{ col.header }}<span class="clr-red">*</span>
                         </span>
@@ -31,11 +29,11 @@
                 <tr [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
                     <td>
                         <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
-                            <i class="fa fa-plus btn btn-success btn-cstm btn-xs" matTooltip="Show stock line details"
-                                style="padding: 3px 8px !important;"></i>
+                            <i class="fa fa-plus btn btn-success poro-plus-cstm btn-xs"
+                                matTooltip="Show stock line details" style="padding: 3px 8px !important;"></i>
                         </a>
                         <a class="expand-row" *ngIf="hideme[rowIndex]" (click)="hideStockline(rowIndex)">
-                            <i class="fa fa-minus btn-danger btn-cstm btn-xs" matTooltip="Hide stock line details"
+                            <i class="fa fa-minus btn-danger poro-plus-cstm btn-xs" matTooltip="Hide stock line details"
                                 style="padding: 3px 8px !important;"></i>
                         </a>
                     </td>
@@ -161,7 +159,6 @@
                                 <input type="checkbox" (change)="onChangeStock($event, part, 0)"
                                     [disabled]="isStockLineViewMode" />
                             </span>
-
                         </span>
 
                         <span class="float-left" *ngIf=" col.field=='partNumber'">{{ part.partNumber }}
@@ -170,11 +167,7 @@
                         </span>
 
                         <span *ngIf="col.field == 'itemClassification'" class="float-left">
-                            {{
-                                    part.itemClassification !== null
-                                        ? part.itemClassification
-                                        : ""
-                                                }}
+                            {{ part.itemClassification !== null ? part.itemClassification : "" }}
                         </span>
 
                         <span class="float-left"
@@ -182,33 +175,23 @@
                              col.field != 'tagDate' && col.field != 'memo' &&
                              col.field != 'unitCost' && col.field != 'qtyOnHand' && col.field != 'qtyAvailable' && col.field != 'partNumber' && col.field != 'selected' && col.field != 'itemClassification'">{{part[col.field] }}</span>
                         <span *ngIf="col.field == 'tagDate'" class="float-left">
-                            {{
-                                    part.tagDate | date: "MM/dd/yyyy"
-                                                }}
+                            {{part.tagDate | date: "MM/dd/yyyy"}}
                         </span>
                         <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
-                            {{
-                                    part.qtyAvailable | globalNmberFormat
-                                                }}
+                            {{ part.qtyAvailable | globalNmberFormat }}
                             <span matTooltip="Qty Available" matTooltipPosition="above" class="
                                             alternate-part-label"
                                 *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
                             </span>
                         </span>
                         <span *ngIf="col.field == 'certifiedDate'" class="float-left">
-                            {{
-                                    part.certifiedDate | date: "MM/dd/yyyy"
-                                                }}
+                            {{ part.certifiedDate | date: "MM/dd/yyyy" }}
                         </span>
                         <span *ngIf="col.field == 'qtyOnHand'" class="float-right">
-                            {{
-                                    part.qtyOnHand | globalNmberFormat
-                                                }}
+                            {{ part.qtyOnHand | globalNmberFormat }}
                         </span>
                         <span *ngIf="col.field == 'unitCost'" class="float-right">
-                            {{
-                                    part.unitCost | twoDecimalGlobalNumberFormatPipe
-                                                }}
+                            {{ part.unitCost | twoDecimalGlobalNumberFormatPipe }}
                         </span>
                         <span *ngIf="col.field == 'memo'" class="float-right1">
                             <p class="m-0 p-0 p_textEditor" [innerHTML]=part.memo></p>
@@ -233,7 +216,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="roleUpMaterialList.length == 0">
                 <tr>
-                    <td [attr.colspan]="12" class="no-records-cstm" style="text-align: left;">
+                    <td [attr.colspan]="22" class="no-records-cstm" style="text-align: left;">
                         No Record Exist
                     </td>
                 </tr>

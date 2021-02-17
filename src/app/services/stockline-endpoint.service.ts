@@ -39,7 +39,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _stockLineAdjustmentUpdate: string = "/api/StockLine/stockLineAdjustmentReasonPut";
 	private readonly _stockLinePOUnitCost: string = "/api/StockLine/stockLinePOUnitCostGet";
 	private readonly _POUnitCost: string = this.baseUrl + "/api/StockLine/PurchaseOrderUnitCost";
-	private readonly _ROUnitCost: string = "/api/StockLine/RepairOrderUnitCost";
+	private readonly _ROUnitCost: string = this.baseUrl + "/api/StockLine/RepairOrderUnitCost";
 	private readonly _stockLineROUnitCost: string = "/api/StockLine/stockLineROUnitCostGet";
 	private readonly _stockLineAdjustmentDelete: string = "/api/StockLine/stockLineAdjustmentReasonDelete";
 	private readonly _searchStockLine: string = "/api/StockLine/search";
