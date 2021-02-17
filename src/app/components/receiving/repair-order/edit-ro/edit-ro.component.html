@@ -287,7 +287,8 @@
                                             {{part.salesOrderNo}}
                                         </td>
                                         <td>                                            
-                                            <select class="form-control" [(ngModel)]="part.parentCompanyId"
+                                            <select class="form-control" 
+                                                [(ngModel)]="part.parentCompanyId"
                                                 #selects="ngModel"
                                                 [disabled]="!part.isEnabled"
                                                 [ngModelOptions]="{standalone: true}"
