@@ -97,11 +97,9 @@ export class ViewRoComponent {
 
         if (this.repairOrderId == undefined) {
             this.alertService.showMessage(this.pageTitle, "No purchase order is selected to view.", MessageSeverity.error);
-            return this.route.navigate(['/receivingmodule/receivingpages/app-purchase-order']);
+            return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
         }
-
-        this.receivingService.getReceivingROHeaderById(this.repairOrderId).subscribe(res => {
-            console.log(res);
+        this.receivingService.getReceivingROHeaderById(this.repairOrderId).subscribe(res => {           
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';

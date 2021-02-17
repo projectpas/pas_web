@@ -259,7 +259,8 @@ export class WorkOrderAddComponent implements OnInit {
     selectedMPNSubWo: any;
     moduleNamee: any;
     disableForMemo: boolean = false;
-
+    wflowitems:any=[];
+    showWorkflowLabel:any='View WF';
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -278,6 +279,16 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.wflowitems = [
+            {label: 'View WF', command: () => {
+                this.showWorkflowLabel='View WF';
+                this.subTabWorkFlowChange('viewworkFlow');
+            }},
+            {label: 'Edit Existing WF', command: () => {
+                this.showWorkflowLabel='editworkFlow';
+                this.subTabWorkFlowChange('editworkFlow');
+            }}
+        ];
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
@@ -454,6 +465,7 @@ export class WorkOrderAddComponent implements OnInit {
         if (this.workFlowId != 0) {
             this.gridActiveTab = "workFlow";
             this.subTabWorkFlow = "viewworkFlow";
+            this.showWorkflowLabel='View WF';
             this.subTabWorkFlowChange('viewworkFlow');
         } else {
             this.gridActiveTab = 'materialList';
@@ -513,13 +525,16 @@ export class WorkOrderAddComponent implements OnInit {
                 customerId: data.customerDetails,
                 customerPhoneNo: data.customerPhoneNo != null ? data.customerPhoneNo : data.customerDetails.customerPhone,
                 partNumbers: data.partNumbers.map((x, index) => {
+                    // x.technicianName='Suresh-33 Reddy';
                     this.getStockLineByItemMasterId(x.masterPartId, x.conditionId, index);
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId);
                     this.getWorkFlowByPNandScope(null,x,'onload');
                     return {
                         ...x,
-                        partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
+                        
+                        partTechnicianId:{name:x.technicianName,employeeId:x.technicianId},
+                        // partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
                         mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
                         masterPartId: x.woPart,
                         customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
@@ -541,6 +556,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.showTabsGrid = true;
                 this.showGridMenu = true;
                 if (this.workFlowId != 0) {
+                    this.showWorkflowLabel='View WF';
                     this.subTabWorkFlowChange('viewworkFlow')
                 }
             } else {
@@ -1064,6 +1080,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.getWorkFlowTabsData();
             if (this.workFlowId != 0) {
                 this.isWorkOrder = true;
+                this.showWorkflowLabel='View WF';
                 this.subTabWorkFlowChange('viewworkFlow');
             }
         } else {
@@ -1343,6 +1360,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.showGridMenu = true;
         this.getWorkFlowTabsData();
         if (this.workFlowId != 0) {
+            this.showWorkflowLabel='View WF';
             this.subTabWorkFlowChange('viewworkFlow')
         }
     }
@@ -1778,6 +1796,7 @@ export class WorkOrderAddComponent implements OnInit {
                     this.errorHandling(err)
                 })
         } else {
+            console.log("data.equipments",data.equipments)
             const equipmentArr = data.equipments.map(x => {
                 return {
                     ...x,
@@ -2088,6 +2107,11 @@ export class WorkOrderAddComponent implements OnInit {
                         }
                     });
                     this.workOrderMaterialList = res;
+                    this.workOrderMaterialList.forEach(element => {
+                      
+                       element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                       element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                    }); 
                     if (this.gridActiveTab === 'billorInvoice') {
                         this.quoteMaterialList = res;
                     }

@@ -97,7 +97,7 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.partCertificationNumber = SL.partCertificationNumber;
                 stockLine.stockLineDraftId = SL.stockLineDraftId;
                 stockLine.conditionId = SL.conditionId;
-                stockLine.quantityRejected = 0;
+                stockLine.quantityRejected = SL.quantityRejected;
                 stockLine.purchaseOrderUnitCost = SL.purchaseOrderUnitCost;
                 stockLine.purchaseOrderExtendedCost = SL.purchaseOrderExtendedCost;
                 stockLine.manufacturingTrace = SL.manufacturingTrace;
@@ -117,6 +117,7 @@ export class ShippingEndpoint extends EndpointFactory {
                 stockLine.shelfId = SL.shelfId;
                 stockLine.binId = SL.binId;
                 stockLine.isDeleted = SL.isDeleted;
+                stockLine.purchaseOrderId = SL.purchaseOrderId;
                 stockLine.masterCompanyId = SL.masterCompanyId;
                 stockLine.createdDate = SL.createdDate;
                 stockLine.updatedDate = new Date();

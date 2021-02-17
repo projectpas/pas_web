@@ -119,6 +119,13 @@
     <div class="modal-dialog modal-xlg">
         <!-- Modal content-->
         <div class="modal-content">
+            <div class="preloader" *ngIf="isSpinnerVisibleReserve">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div></div><div></div> <div></div><div></div><div></div> <div></div><div></div><div></div>
+                    </div>
+                </div>
+            </div>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="closeMaterial()">&times;</button>
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
@@ -565,6 +572,12 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
    </button>
+    </div> 
+    <div class="modal-body">
+        <strong>
+            PN:
+            <span class="new-label">{{currentRow.partNumber}}</span>
+        </strong>
     </div>  
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>

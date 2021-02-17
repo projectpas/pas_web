@@ -110,10 +110,10 @@ import { TreeTableModule } from 'primeng/treetable';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
+import { SplitButtonModule } from 'primeng/splitbutton';
 // import { MaterialListCreateComponent } from '../shared/Material-List-Create.component';
 // import { SharedModule } from '../shared/shared.module';
 // import { BrowserModule } from '@angular/platform-browser'; 
-
 @NgModule({
   imports: [
     FormsModule,
@@ -145,7 +145,8 @@ import { CommonCommunicationModule } from '../components/common-components/commo
     TreeTableModule,
     BreadcrumbModule,
     CommonDocumentsModule,
-    CommonCommunicationModule
+    CommonCommunicationModule,
+    SplitButtonModule,
   ],
   declarations: [
     WorkOrderPagesComponent,

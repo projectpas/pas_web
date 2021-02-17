@@ -1,9 +1,6 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { ActionService } from "../Workflow/ActionService";
 import { IEquipmentAssetType } from "../Workflow/EquipmentAssetType";
-import { VendorService } from "../services/vendor.service";
-import { AssetService } from "../services/asset/Assetservice";
 import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
@@ -42,8 +39,8 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     isSpinnerVisible = false;
     modal: NgbModalRef;
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
-        private actionService: ActionService, private vendorService: VendorService, private modalService: NgbModal,
-        private assetService: AssetService, private alertService: AlertService) {
+         private modalService: NgbModal,
+        private alertService: AlertService) {
     }
 
     ngOnInit(): void {
@@ -54,7 +51,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 this.workFlow.equipments = [];
                 const data = {
                     ...this.editData,
-                    assetRecordId: this.editData.assetId,
+                    assetRecordId: this.editData.assetRecordId,
                     description: this.editData.assetDescription,
                     assetTypeId: this.editData.assetTypeId,
                     name: this.editData.assetName,
@@ -115,6 +112,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         currentRecord.partNumber = undefined;
     }
     onPartSelect(event, equipment,index) { 
+        this.workFlow.equipments[index].assetRecordId = event.assetRecordId;
             this.workFlow.equipments[index].assetId = event.assetId;
             this.workFlow.equipments[index].partNumber = event;
             this.workFlow.equipments[index].assetDescription = event.description;
@@ -181,6 +179,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     updateEquipmentWorkOrder() {
+        console.log("this.workFlow",this.workFlow)
         this.updateEquipmentListForWO.emit(this.workFlow)
     }
 

@@ -14,7 +14,7 @@
                     </div>
                     <button type="button" class="btn-sm header-button pull-right"
                             [routerLink]="['/receivingmodule/receivingpages/app-purchase-order']">
-                        Reviewing PO Receipt
+                            Receiving PO Receipt
                     </button>
                 </div>
             </div>
@@ -155,13 +155,13 @@
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Notes
-                                        <span class="editor-span">
+                                        <!-- <span class="editor-span">
                                             <a class="btn nobg" data-toggle="modal"
                                                data-target="#add-notes" (click)="onAddNotes()"
                                                matTooltipPosition="above" matTooltip="Notes">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                        </span>
+                                        </span> -->
                                     </label>
                                     <span>
                                         <div [innerHTML]="poDataHeader.notes"
@@ -177,11 +177,11 @@
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Memo
-                                        <span class="editor-span">
+                                        <!-- <span class="editor-span">
                                             <a class="btn nobg" data-toggle="modal"
                                                data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo"
                                                disabled="true" (click)="onAddMemo()"><i class="fa fa-pencil"></i></a>
-                                        </span>
+                                        </span> -->
                                     </label>
                                     <span>
                                         <div [innerHTML]="poDataHeader.poMemo"
@@ -227,13 +227,12 @@
         <div class="card-body">
             <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
                 <div class="tableFixHead">
-                    <table class="table table-bordered " id="po-table">
+                    <table class="table lastcol-fix tableFixHead table-bordered" id="po-table">
                         <thead>
                             <tr>
                                 <!-- <th colspan="2" style="text-align: left;">
                                     <a href="javascript:void(0);" matTooltip="Edit" matTooltipPosition="above" class="btn boxed-float-btn nobg edit" style="padding-bottom:0; color:#fff;"><i class="fa fa-edit" (click)="editPart(part)"></i></a>
-                                </th> -->
-                                <th colspan="2"></th>
+                                </th> -->                               
                                 <th>Item Num</th>
                                 <th>PN</th>
                                 <th>Alt PN</th>
@@ -256,13 +255,14 @@
                                 <th>Location</th>
                                 <th>Shelf</th>
                                 <th>Bin</th>
-                                <th colspan="49"></th>
+                                <th colspan="37"></th>
+                                <th >Action</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="purchaseOrderData != undefined && purchaseOrderData.purchaseOderPart != undefined">
                             <ng-container *ngFor="let part of purchaseOrderData.purchaseOderPart;let row_index=index">
-                                <tr class="table-parent-data" *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
-                                    <td colspan="2"><a matTooltip="Edit" matTooltipPosition="above" class="btn boxed-float-btn nobg edit"><i class="fa fa-edit" (click)="editPart(part)"></i></a></td>
+                                <tr class="table-parent-data greenbackground" *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
+                                  
                                     <td class="text-right">{{row_index + 1}}</td>
                                     <td>{{part.partNumber}}</td>
                                     <td>{{part.altEquiPartNumber}}</td>
@@ -455,14 +455,15 @@
                                             <option *ngFor="let bin of part.BinList" [value]="bin.Key">{{bin.Value}}</option>
                                         </select>
                                     </td>
-                                    <th colspan="49"></th>
+                                    <td colspan="37"></td>
+                                    <td ><a matTooltip="Edit" matTooltipPosition="above" class="btn boxed-float-btn nobg edit"><i class="fa fa-edit" (click)="editPart(part)"></i></a></td>
                                 </tr>
 
                                 <ng-container>
                                     <tr class="child-header splitship-head child-header-back" *ngIf="part.stockLine.length > 0">
-                                        <!--part.stockLine != null-->
-                                        <th colspan="2"></th>
+                                        <!--part.stockLine != null-->                                      
                                         <!--<th>Stock Line</th>-->
+                                        <th></th>
                                         <th>PN</th>
                                         <th>PN Description</th>
                                         <th>Ctrl Id</th>
@@ -510,15 +511,12 @@
                                         <th>Time Life</th>
                                         <th colspan="5">Cycles</th>
                                         <th colspan="5">Time</th>
-                                        <th colspan="5">Last</th>
+                                        <th colspan="4">Last</th>                                        
+                                        <th colspan="1"></th>
                                     </tr>
                                     <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
-                                        <tr *ngIf="!SL.isDeleted">
-                                            <td><a href="javascript:void(0);" class="btn boxed-float-btn nobg edit" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-edit" (click)="editStockLine(SL)"></i></a></td>
-                                            <td>
-                                                <a class="btn nobg btn-delete-cstm"
-                                                   (click)="deleteStockLine(SL)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
-                                            </td>
+                                        <tr *ngIf="!SL.isDeleted">  
+                                            <td></td>                                         
                                             <!--<td>{{SL.stockLineNumber}}</td>-->
                                             <td>{{part.itemMaster.partNumber}}</td>
                                             <td>{{part.itemMaster.partDescription}}</td>
@@ -574,7 +572,7 @@
                                                 #selects="ngModel"
                                                 [disabled]="!SL.isEnabled"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="getStockLineBUList(SL.parentCompanyId, SL);" required>
+                                                (change)="selectedLegalEntitySL(SL.parentCompanyId, SL);" required>
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let company of SL.maincompanylist"
                                                             [value]="company.value">
@@ -598,7 +596,7 @@
                                                 [(ngModel)]="SL.parentbuId"
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="selectedBusinessUnit(SL.parentbuId, SL)">
+                                                (change)="selectedBusinessUnitSL(SL.parentbuId, SL)">
                                             <option value="0">Select</option>
                                             <option [value]="businessUnit.value" *ngFor="let businessUnit of SL.parentBulist">
                                                 {{businessUnit.label}}
@@ -621,7 +619,7 @@
                                                 [(ngModel)]="SL.parentDivisionId"
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="selectedDivision(SL.parentDivisionId, SL)">
+                                                (change)="selectedDivisionSL(SL.parentDivisionId, SL)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let division of SL.parentDivisionlist"
                                                     [value]="division.value">
@@ -645,7 +643,7 @@
                                                 [(ngModel)]="SL.parentDeptId"
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="selectedDepartment(SL.parentDeptId, SL)">
+                                                (change)="selectedDepartmentSL(SL.parentDeptId, SL)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let department of SL.parentDepartmentlist"
                                                     [value]="department.value">
@@ -668,39 +666,42 @@
                                                     <div class="form-row">
                                                         <div class="col-sm-11">
 
-                                                            <p-autoComplete *ngIf="SL.ownerType == 1"
+                                                            <p-autoComplete *ngIf="SL.ownerType == customerModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
 
                                                             </p-autoComplete>
 
-                                                            <p-autoComplete *ngIf="SL.ownerType == 2"
+                                                            <p-autoComplete *ngIf="SL.ownerType == vendorModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
 
                                                             </p-autoComplete>
 
-                                                            <p-autoComplete *ngIf="SL.ownerType == 9"
+                                                            <p-autoComplete *ngIf="SL.ownerType == companyModuleId"
                                                                             [(ngModel)]="SL.ownerObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             (completeMethod)="onFilter($event, SL, SL.ownerType)"
                                                                             (onSelect)="onOwnerSelect(SL)"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
                                                             </p-autoComplete>
 
-                                                            <input *ngIf="SL.ownerType == 4"
+                                                            <input *ngIf="SL.ownerType == otherModuleId"
                                                                    class="form-control"
                                                                    type="text"
                                                                    [ngModelOptions]="{standalone: true}"
@@ -721,10 +722,7 @@
                                                         (change)="onObtainFromChange($event, SL)">
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">{{item.moduleName}}</option>
-                                                    <!-- <option value="1">Customer</option>
-                                                    <option value="2">Vendor</option>
-                                                    <option value="3">Company</option>
-                                                    <option value="4">Other</option> -->
+                                                   
                                                 </select>
                                             </td>
                                             <td>
@@ -732,9 +730,10 @@
                                                     <div class="form-row">
                                                         <div class="col-sm-11">
 
-                                                            <p-autoComplete *ngIf="SL.obtainFromType == 1"
+                                                            <p-autoComplete *ngIf="SL.obtainFromType == customerModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
+                                                                            appendTo="body" 
                                                                             [disabled]="!SL.isEnabled"
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
@@ -743,10 +742,11 @@
 
                                                             </p-autoComplete>
 
-                                                            <p-autoComplete *ngIf="SL.obtainFromType == 2"
+                                                            <p-autoComplete *ngIf="SL.obtainFromType == vendorModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -754,17 +754,18 @@
 
                                                             </p-autoComplete>
 
-                                                            <p-autoComplete *ngIf="SL.obtainFromType == 9"
+                                                            <p-autoComplete *ngIf="SL.obtainFromType == companyModuleId"
                                                                             [(ngModel)]="SL.obtainFromObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.obtainFromType)"
                                                                             (onSelect)="onObtainSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
                                                             </p-autoComplete>
 
-                                                            <input *ngIf="SL.obtainFromType == 4"
+                                                            <input *ngIf="SL.obtainFromType == otherModuleId"
                                                                    class="form-control"
                                                                    type="text"
                                                                    [disabled]="!SL.isEnabled"
@@ -791,10 +792,11 @@
                                                     <div class="form-row">
                                                         <div class="col-sm-11">
 
-                                                            <p-autoComplete *ngIf="SL.traceableToType == 1"
+                                                            <p-autoComplete *ngIf="SL.traceableToType == customerModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CustomerList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -802,10 +804,11 @@
 
                                                             </p-autoComplete>
 
-                                                            <p-autoComplete *ngIf="SL.traceableToType == 2"
+                                                            <p-autoComplete *ngIf="SL.traceableToType == vendorModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="VendorList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
@@ -813,17 +816,18 @@
 
                                                             </p-autoComplete>
 
-                                                            <p-autoComplete *ngIf="SL.traceableToType == 9"
+                                                            <p-autoComplete *ngIf="SL.traceableToType == companyModuleId"
                                                                             [(ngModel)]="SL.traceableToObject"
-                                                                            [suggestions]="SL.filteredRecords"
+                                                                            [suggestions]="CompanyList"
                                                                             [disabled]="!SL.isEnabled"
+                                                                            appendTo="body" 
                                                                             (completeMethod)="onFilter($event, SL, SL.traceableToType)"
                                                                             (onSelect)="onTraceableToSelect(SL)"
                                                                             [dropdown]="true" [size]="32" [minLength]="1"
                                                                             field="Value" class="rpo-acomp">
                                                             </p-autoComplete>
 
-                                                            <input *ngIf="SL.traceableToType == 4"
+                                                            <input *ngIf="SL.traceableToType == otherModuleId"
                                                                    class="form-control"
                                                                    type="text"
                                                                    [disabled]="!SL.isEnabled"
@@ -922,7 +926,8 @@
                                                             appendTo="body"  
                                                             name="manufacturingDate{{stockline_row_index}}" id="manufacturingDate{{stockline_row_index}}" 
                                                             [(ngModel)]="SL.manufacturingDate"
-                                                            [disabled]="!SL.isEnabled"></p-calendar>            
+                                                            [disabled]="!SL.isEnabled"></p-calendar> 
+                                                                       
 
                                             </td>
                                             <td>
@@ -940,19 +945,27 @@
                                                        [maxLength]="200">
                                             </td>
                                             <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                                <p-calendar  class="calendar-grid" 
+                                                            [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100"
                                                             [maxDate]="currentDate"
                                                             [disabled]="!SL.isEnabled"
+                                                            appendTo="body"  
                                                             [showIcon]="true"
-                                                            [ngModelOptions]="{standalone: true}"
-                                                            [(ngModel)]="SL.certifiedDate"></p-calendar>
+                                                            name="certifiedDate{{stockline_row_index}}" id="certifiedDate{{stockline_row_index}}"                                                             
+                                                            [(ngModel)]="SL.certifiedDate"></p-calendar>     
+                                                                                                                        
                                             </td>
-                                            <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                            <td>                                               
+
+                                                <p-calendar  class="calendar-grid" 
+                                                            [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100"
                                                             [maxDate]="currentDate"
                                                             [disabled]="!SL.isEnabled"
+                                                            appendTo="body"  
                                                             [showIcon]="true"
-                                                            [ngModelOptions]="{standalone: true}"
+                                                            name="certifiedDueDate{{stockline_row_index}}" id="certifiedDueDate{{stockline_row_index}}"                                                            
                                                             [(ngModel)]="SL.certifiedDueDate"></p-calendar>
                                             </td>
                                             <td>
@@ -962,19 +975,23 @@
                                                        [disabled]="!SL.isEnabled"
                                                        [maxLength]="200">
                                             </td>
-                                            <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                            <td> <p-calendar  class="calendar-grid" 
+                                                            [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100" [showIcon]="true"                                                            
                                                             [maxDate]="currentDate"
-                                                            [disabled]="!SL.isEnabled"
-                                                            [showIcon]="true"
-                                                            [ngModelOptions]="{standalone: true}"
-                                                            [(ngModel)]="SL.tagDate"></p-calendar>
+                                                            appendTo="body"  
+                                                            name="tagDate{{stockline_row_index}}" id="tagDate{{stockline_row_index}}" 
+                                                            [(ngModel)]="SL.tagDate"
+                                                            [disabled]="!SL.isEnabled"></p-calendar>           
                                             </td>
                                             <td>
-                                                <p-calendar class="pas-clder pas-clder-po-table"
+                                                <p-calendar  class="calendar-grid" 
+                                                           [yearNavigator]="true" [monthNavigator]="true" 
+                                                            yearRange="1900:2100"        
                                                             [showIcon]="true"
                                                             [disabled]="!SL.isEnabled"
-                                                            [ngModelOptions]="{standalone: true}"
+                                                            appendTo="body"  
+                                                            name="expirationDate{{stockline_row_index}}" id="expirationDate{{stockline_row_index}}"                                                            
                                                             [(ngModel)]="SL.expirationDate"></p-calendar>
                                             </td>
                                             <td>
@@ -998,12 +1015,14 @@
                                             <td>
                                                 <input type="text" class="form-control" disabled value="unknown field" />
                                             </td> -->
-                                            <td>{{SL.glAccountText}}</td>
+                                            <td>{{SL.glAccountText}}                                                
+                                            </td>
                                             <td>
                                                 <input type="checkbox" disabled [checked]="part.timeLife[stockline_row_index].stockLineDraftId > 0" /> <!--part.itemMaster.isTimeLife != false-->
+                                               
                                             </td>
-                                            <td colspan="13" *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)">
-                                            </td>
+                                            <td colspan="14" *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)">
+                                            </td>                                            
                                             <ng-container *ngIf="part.timeLife[stockline_row_index].stockLineDraftId > 0">
                                                 <!--part.itemMaster.isTimeLife == true-->
                                                 <td class="time-remaining-td">
@@ -1097,6 +1116,7 @@
                                                         <div class="col-md-5"><input class="form-control time-remaining-input" placeholder="MM" [disabled]="!SL.isEnabled" type="number" pInputText pKeyFilter="hex" [(ngModel)]="part.timeLife[stockline_row_index].lastSinceOVHMin" (change)="onChangeTimeLifeMin('lastSinceOVHMin', stockline_row_index)"></div>
                                                     </div>
                                                 </td>
+                                                
 
                                                 <td class="time-remaining-td">
                                                     <div class="form-row">
@@ -1104,8 +1124,14 @@
                                                         <div class="col-md-1"><span class="time-remaining-span"> : </span></div>
                                                         <div class="col-md-5"><input class="form-control time-remaining-input" placeholder="MM" [disabled]="!SL.isEnabled" type="number" pInputText pKeyFilter="hex" [(ngModel)]="part.timeLife[stockline_row_index].lastSinceInspectionMin" (change)="onChangeTimeLifeMin('lastSinceInspectionMin', stockline_row_index)"></div>
                                                     </div>
-                                                </td>
+                                                </td>  
+                                                <td></td>                                                 
                                             </ng-container>
+                                                                                     
+                                                <td ><a href="javascript:void(0);" class="btn boxed-float-btn nobg edit" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-edit" (click)="editStockLine(SL)"></i></a>
+                                                    <a class="btn nobg btn-delete-cstm"
+                                                       (click)="deleteStockLine(SL)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                                                </td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>

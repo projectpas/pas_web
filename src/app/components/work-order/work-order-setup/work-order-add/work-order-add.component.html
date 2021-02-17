@@ -846,7 +846,8 @@
                             (click)="gridTabChange('workOrderMain');  ">WorkOrder Main</a>
                     </li>
                     <li class="nav-item dropdown" *ngIf="workFlowId !==0">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        <p-splitButton [label]="showWorkflowLabel" [model]="wflowitems"></p-splitButton>
+                        <!-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false"
                             [ngClass]="{active : gridActiveTab === 'workFlow' ||  subTabWorkFlow === 'editworkFlow' || subTabWorkFlow === 'createworkFlow' || subTabWorkFlow === 'viewworkFlow'  }">Workflow</a>
                         <div class="dropdown-menu">
@@ -856,7 +857,7 @@
                                 Existing WF
                             </a>
                             <div class="dropdown-divider"></div>
-                        </div>
+                        </div> -->
                     </li>
                     <li class="nav-item">
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'materialList'}"

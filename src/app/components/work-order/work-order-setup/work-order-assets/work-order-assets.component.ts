@@ -2,17 +2,18 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
-import { getValueFromObjectByKey, editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
+import {editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
 declare var $ : any;
 import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CommonService } from '../../../../services/common.service';
+import { DatePipe } from "@angular/common";
 @Component({
     selector: 'app-work-order-assets',
     templateUrl: './work-order-assets.component.html',
     styleUrls: ['./work-order-assets.component.css']
 })
 export class WorkOrderAssetsComponent implements OnInit {
-    //@Input() workOrderAssetList: any;
     modal: NgbModalRef;
     @Input() isView : boolean = false;
     @Input() savedWorkOrderData: any
@@ -31,6 +32,17 @@ export class WorkOrderAssetsComponent implements OnInit {
     @Input() woOperDate;
     @Input() workOrderPartNumberId;
     @Input() workOrderId;
+    textAreaInfo: any;
+    memoIndex;
+    pageSize: number = 50;
+    pageIndex: number = 0;
+    totalRecords: number = 0;
+    totalPages: number = 0;
+    isGlobalFilter: boolean = false;
+    filterText: any = '';
+    filteredText: any = '';
+    lazyLoadEventData: any;
+    currentDeletedstatus: boolean = false;
     assetChekinCheckoutheaders = [
         { header: "",field: "checkbox"},
         { header: "Tool Name",field: "assetName"},
@@ -47,7 +59,18 @@ export class WorkOrderAssetsComponent implements OnInit {
         { header: "Checked In Date",field: "checkInDate"},
         { header: "Notes",field: "notes"},
     ]
-    // workOrderCheckInCheckOutList:any=[1,2];
+    headers = [
+        { field: 'name', header: 'Tool Name' },
+        { field: 'assetId', header: 'Tool Id' },
+        { field: 'description', header: 'Tool Description' },
+        { field: 'assetTypeName', header: 'Tool Type' },
+        { field: 'quantity', header: 'Qty' },
+        { field: "createdDate", header: "Created Date", width: "130px" },
+        { field: "createdBy", header: "CreatedBy", width: "130px" },
+        { field: "updatedDate", header: "Updated Date", width: "130px" },
+        { field: "updatedBy", header: "UpdatedBy", width: "130px" }
+    ]
+    selectedColumns = this.headers;
     moduleName = "Tool";
     assetRecordId: any;
     assets = {
@@ -74,15 +97,9 @@ export class WorkOrderAssetsComponent implements OnInit {
     addNewEquipment: boolean = false;
 
     ngOnInit(): void {
-        // console.log(this.workFlowObject);
-
-        // this.getWorkOrderAssetList();
-        // console.log(this.workOrderAssetList)
     }
-
-    constructor(private workOrderService: WorkOrderService, private authService: AuthService,
+    constructor(private workOrderService: WorkOrderService, private authService: AuthService,    private datePipe: DatePipe,     private commonService: CommonService,
         private alertService: AlertService,  private modalService: NgbModal,private cdRef: ChangeDetectorRef) {
-
 
     }
 
@@ -93,9 +110,7 @@ export class WorkOrderAssetsComponent implements OnInit {
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
-
     filterEmployee(event): void {
-
         this.employeeList = this.employeesOriginalData;
 
         if (event.query !== undefined && event.query !== null) {
@@ -108,7 +123,6 @@ export class WorkOrderAssetsComponent implements OnInit {
     assetInventoryId:any=0;
     viewAsstes(rowData) {
         this.assetRecordId = rowData.assetRecordId;
-        // this.assetInventoryId=rowData.assetInventoryId;
     }
     workOrderCheckInCheckOutList:any=[];
     AvailableCount:any;
@@ -118,9 +132,7 @@ showcheckInOutlist=false;
         this.workOrderCheckInCheckOutList=[];
         this.AvailableCount=0;
 if(this.status=='checkIn'){
-
     this.workOrderService.checkInAseetInventoryList(this.currentRecord.workOrderAssetId).subscribe(res=>{
-
 this.workOrderCheckInCheckOutList=res;
 if(this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length !=0){
 this.workOrderCheckInCheckOutList.map(element => {
@@ -133,11 +145,9 @@ this.workOrderCheckInCheckOutList.map(element => {
     }
 });
 }
-console.log("res chekin",res)
     })
 }else if(this.status=='checkOut'){
     this.workOrderService.checkOutAseetInventoryList(this.currentRecord.workOrderAssetId,this.workOrderId,this.workOrderPartNumberId,this.currentRecord.assetRecordId,'admin',1).subscribe(res=>{
-        console.log("res chekin",res)
         this.workOrderCheckInCheckOutList=res;
    if(this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length !=0){
     this.workOrderCheckInCheckOutList.map(element => {
@@ -150,15 +160,13 @@ console.log("res chekin",res)
         }
     });
    }
-        console.log("res chekout",res)
     })
 }   
     }
 
     checkStatus(rowData, value) {
         this.showcheckInOutlist=false;
-// checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId)
-        this.assetsform = {
+  this.assetsform = {
             ...this.assetsform, description: rowData.description,
             assetIdNumber: rowData.rowData, assetId: rowData.assetId, assetStatus: value,
             quantity:rowData.quantity,
@@ -187,20 +195,12 @@ array.forEach(element => {
    } 
 });
     }
-    // get userName(): string {
-    //     return this.authService.currentUser ? this.authService.currentUser.userName : "";
-    // }
     saveAssets(formData) {
-        // getValueFromObjectByKey
         this.finalAssetArray=[];
-        console.log("chekc date", formData);
-
-
         const data = {
             ...this.assetsform,
             employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),                        
         }
-        // console.log("data assets", data)
         if (this.status === 'checkIn') {
             formData.forEach(element => {
                 element.checkInById=element.checkInById.value;
@@ -211,21 +211,8 @@ array.forEach(element => {
                     this.finalAssetArray.push(element);
                 }
             });
-            // const assetcheckin = {
-            //     workOrderAssetId: this.currentRecord.workOrderAssetId,
-            //     checkedInById: data.employeeId,
-            //     checkedInDate: data.date,
-            //     updatedBy: this.userName,
-            //     checkInOutStatus: 2,
-            //     checkInQty:data.checkInQty,
-            //     checkInEmpId: editValueAssignByCondition('value', this.assetsform.checkInEmpId),
-               
-
-            // }
-            // console.log("checkindata", assetcheckin)
             if(this.finalAssetArray && this.finalAssetArray.length !=0){
             this.workOrderService.saveCheckInInventory(this.finalAssetArray).subscribe(res => {
-                // this.assetsform = { ...this.assets };
                 this.refreshData.emit();
                 this.alertService.showMessage(
                     '',
@@ -241,25 +228,10 @@ array.forEach(element => {
                         MessageSeverity.success
                     );
                 }else{
-                    this.errorHandling(err);
                 }
             })
         }
         } else {
-
-            // const assetcheckout = {
-            //     workOrderAssetId: this.currentRecord.workOrderAssetId,
-            //     checkedOutById: data.employeeId,
-            //     checkedOutDate: data.date,
-            //     updatedBy: this.userName,
-            //     checkInOutStatus: 1,
-            //     checkInQty:data.checkInQty,
-            //     checkOutQty:data.checkOutQty,
-            //     checkOutEmpId: editValueAssignByCondition('value', this.assetsform.checkOutEmpId),
-                
-            // }
-            console.log("checkindata", formData)
-// debugger;
             formData.forEach(element => {
                 element.checkOutById=element.checkOutById.value;
                 if(element.inventoryStatus=='Available'){
@@ -268,8 +240,6 @@ array.forEach(element => {
             });
             if(this.finalAssetArray && this.finalAssetArray.length !=0){
             this.workOrderService.saveCheckOutInventory(this.finalAssetArray).subscribe(res => {
-                console.log("response",res);
-                // this.assetsform = { ...this.assets };
                 this.refreshData.emit();
                 this.alertService.showMessage(
                     '',
@@ -285,15 +255,11 @@ array.forEach(element => {
                         MessageSeverity.success
                     );
                 }else{
-                    this.errorHandling(err);
                 }
-                console.log("response",err);
-                // this.isSpinnerVisible = false;
               
             })
         }
         }
-        // this.showcheckInOutlist=false;
     } 
     releaseData:any=[];
     releaseInventory(){
@@ -335,12 +301,9 @@ array.forEach(element => {
         const { workOrderAssetId } = rowData;
         this.workOrderService.assetsHistoryByWorkOrderAssetId(workOrderAssetId).subscribe(res => {
             this.assetAuditHistory = res;
-            // console.log("assets history", res);
 
         },
         err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
 
     }
@@ -354,7 +317,6 @@ array.forEach(element => {
   }
     delete() {
         
-        // const { workOrderAssetId } = this.currentRow;
         this.workOrderService.deleteWorkOrderAssetByAssetId(this.isSubWorkOrder ? this.currentRow.subWorkOrderAssetId :   this.currentRow.workOrderAssetId, this.userName,this.isSubWorkOrder).subscribe(res => {
             this.refreshData.emit();
             this.alertService.showMessage(
@@ -364,8 +326,6 @@ array.forEach(element => {
             );
         },
         err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
         })
         this.modal.close();
     }
@@ -378,9 +338,6 @@ array.forEach(element => {
         $('#addNewEquipments').modal('hide');
         this.addNewEquipment = false; 
     }
-    // closeEvent(event){
-    //     this.addNewEquipment = false;  
-    // }
     updateEquipmentList(event) {
         this.updateEquipmentListForWO.emit(event)
         this.isEdit = false;
@@ -400,57 +357,11 @@ array.forEach(element => {
         }
     }
 
-    // getWorkOrderAssetList(): void {
-    //     this.workOrderService.getWorkOrderAssetList(7).subscribe(
-    //         result => {
-    //             this.workOrderAssetList = result;
-    //         }
-    //     );
-    // }
-    errorHandling(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
-    handleError(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
-
-    memoIndex;
     onAddTextAreaInfo(row, index) {
         this.memoIndex = index;
-        // console.log("memolist", material, index);
         this.textAreaInfo = row.notes;
     }
-    textAreaInfo: any;
+
     onSaveTextAreaInfo(notes) {
         if (notes) {
             this.textAreaInfo = notes;
@@ -463,4 +374,112 @@ array.forEach(element => {
     onCloseTextAreaInfo() {
         $("#textarea-popup").modal("hide");
     }
+    getPageCount(totalNoofRecords, pageSize) {
+        return Math.ceil(totalNoofRecords / pageSize)
+    }
+
+    pageIndexChange(event) {
+        this.pageSize = event.rows;
+    }
+
+    globalSearch(value) {
+        this.pageIndex = 0;
+        this.filteredText = value;
+        if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
+            this.isGlobalFilter = true;
+        }
+        else
+        {
+            this.isGlobalFilter = false;
+        }        
+        const pageIndex = parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows;;
+        this.pageIndex = pageIndex;
+        this.pageSize = this.lazyLoadEventData.rows;
+        this.lazyLoadEventData.first = pageIndex;
+        this.lazyLoadEventData.globalFilter = value;
+        this.filterText = value;
+        this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters};
+        // this.getAllWorkOrderList(this.lazyLoadEventData);
+    }
+    loadData(event) {
+        this.lazyLoadEventData = event;
+        const pageIndex = parseInt(event.first) / event.rows;
+        this.pageIndex = pageIndex;
+        this.pageSize = event.rows;
+        event.first = pageIndex;
+        // if (this.viewType && this.currentStatus) {
+            this.lazyLoadEventData.filters = {
+                ...this.lazyLoadEventData.filters,
+                // workOrderStatus: this.lazyLoadEventData.filters.workOrderStatus == undefined ? this.currentStatus : this.lazyLoadEventData.filters.workOrderStatus,
+                // viewType: this.viewType
+            // }
+        }
+
+        if (!this.isGlobalFilter) {   
+            // this.getAllWorkOrderList(event);         
+        } else {
+            this.globalSearch(this.filterText)
+        }
+    }
+    getDeleteListByStatus(value) {
+        this.currentDeletedstatus = true;
+        this.pageIndex = this.lazyLoadEventData.rows > 10 ? parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows : 0;
+        this.pageSize = this.lazyLoadEventData.rows;
+        this.lazyLoadEventData.first = this.pageIndex;
+        if (value == true) {
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            // this.isSpinnerVisible = true;
+            // this.getAllWorkOrderList(this.lazyLoadEventData);
+        } else {
+            this.currentDeletedstatus = false;
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            // this.isSpinnerVisible = true;
+            // this.getAllWorkOrderList(this.lazyLoadEventData);
+        }
+    }
+
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('WorkOrderAssets', 'workOrderAssetId', this.restorerecord.workOrderAssetId).subscribe(res => {
+            this.getDeleteListByStatus(true)
+            this.modal.close();
+            this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
+        }, err => {
+            // this.isSpinnerVisible = false;
+        });
+    }
+    restorerecord:any={};
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    openDownload(content) {
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    closeModal() {
+        this.modal.close();
+    }
+    exportCSV(dt) {
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
+        });
+        this.workOrderService
+            .getWorkOrderList(PagingData).subscribe(res => {
+                const vList = res['results'].map(x => {
+                    return {
+                        ...x,
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    }
+                });
+
+                dt._value = vList;
+                dt.exportCSV();
+                dt.value = this.workOrderAssetList;
+                this.modal.close();
+            }, err => {
+            });
+    }
 }
+

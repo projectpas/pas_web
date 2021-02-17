@@ -99,8 +99,8 @@ export class CommonService extends EndpointFactory {
   }
 
   autoCompleteDropdownsExpertiseTypes(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsExpertiseTypes?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsExpertiseTypes(searchText, startWith, count, idList, managementStructureId));
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsExpertiseTypes?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsExpertiseTypes(searchText, startWith, count, idList, managementStructureId,masterCompanyId));
     });
   }
 
