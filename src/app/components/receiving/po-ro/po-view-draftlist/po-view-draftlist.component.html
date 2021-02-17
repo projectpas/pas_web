@@ -125,7 +125,7 @@
                                                             <div class="col-sm-3">
                                                                 <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagType}}</span></p>
                                                                 <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagDate}}</span></p>
-                                                                <p><span class="label"><b>ESN: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
+                                                                <p><span class="label"><b>Engine Serial Number: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
                                                                 <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].aircraftTailNumber}}</span></p>
                                                                 <p><span class="label"><b>Ship Via: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingViaText}}</span></p>
                                                                 <p><span class="label"><b>Shipping Ref#/AWB: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].shippingReference}}</span></p>
@@ -199,6 +199,11 @@
                                                             </table>
                                                         </div>
                                                     </section>
+                                                    <section *ngIf="!part.timeLife">
+                                                       <div style="color: red; font-weight: bold;">
+                                                        No TimeLife found
+                                                       </div>                                                       
+                                                    </section>
 
                                                     <!--<section>
                                                         <h3 class="add-details-heading" style="text-align: left;">Calibrated Equipment</h3>
@@ -223,5 +228,10 @@
                     </div>
                 </div>
             </div>
+        </div>        
+    </div>
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>

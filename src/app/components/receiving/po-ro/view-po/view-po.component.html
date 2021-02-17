@@ -252,7 +252,7 @@
                             <td>{{part.itemMaster.partNumber}}</td>
                             <td>{{part.altEquiPartNumber}}</td>
                             <td>{{part.itemMaster.partDescription}}</td>
-                            <td>{{part.itemMaster.manufacturer?.name}}</td>
+                            <td>{{part.manufacturer}}</td>
                             <!-- <td>{{part.conditionText}}</td>
                             <td>{{part.uomText}}</td> -->
                             <td>{{part.itemMaster.isPma ? "PMA," : '' + part.itemMaster.isDer ? "DER" : ''}}</td>
@@ -260,9 +260,9 @@
                             <td class="text-right">{{part.discountPerUnit}}</td>
                             <td class="text-right">{{part.unitCost}}</td>
                             <td class="text-right">{{part.extendedCost}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{part.workOrderNo}}</td>
+                            <td>{{part.subWorkOrderNo}}</td>
+                            <td>{{part.salesOrderNo}}</td>
                             <td style="min-width: 130px;">
                                 <!-- <label style="width:90px;">Company:</label> -->
                                 {{part.companyText}}
@@ -281,7 +281,7 @@
                                 <!-- <label style="width:90px;">Dept:</label> -->
                                 {{part.departmentText}}
                             </td>
-                            <th colspan="43"></th>
+                            <td colspan="43"></td>
                         </tr>
 
                         <ng-container>
@@ -351,9 +351,9 @@
                                     <td>{{SL.receiverNumber}}</td>
                                     <td class="text-right">{{SL.purchaseOrderUnitCost}}</td>
                                     <td class="text-right">{{SL.purchaseOrderExtendedCost}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{part.workOrderNo}}</td>
+                                    <td>{{part.subWorkOrderNo}}</td>
+                                    <td>{{part.salesOrderNo}}</td>
                                     <td style="min-width: 120px;">
                                         <!-- <label style="width:90px;">Company:</label> -->
                                         {{SL.companyText}}
@@ -386,13 +386,13 @@
                                             {{part.stockLine[stockline_row_index].binText}}
                                     </td>
                                     <!-- <td>{{SL.ownerType == 3 ? 'Vendor' : SL.ownerType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                    <td>{{SL.ownerType == 1 ? 'Customer' : SL.ownerType == 2 ? 'Vendor' : SL.ownerType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.ownerTypeName }}</td>
                                     <td>{{SL.ownerText}}</td>
                                     <!-- <td>{{SL.obtainFromType == 3 ? 'Vendor' : SL.obtainFromType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                    <td>{{SL.obtainFromType == 1 ? 'Customer' : SL.obtainFromType == 2 ? 'Vendor' : SL.obtainFromType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.obtainFromTypeName}}</td>
                                     <td>{{SL.obtainFromText}}</td>
                                     <!-- <td>{{SL.traceableToType == 3 ? 'Vendor' : SL.traceableToType == 1 ? 'Customer' : 'Other' }}</td> -->
-                                    <td>{{SL.traceableToType == 1 ? 'Customer' : SL.traceableToType == 2 ? 'Vendor' : SL.traceableToType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.traceableToTypeName }}</td>
                                     <td>{{SL.traceableToText}}</td>
                                     <td>{{SL.manufacturingTrace}}</td>
                                     <td>{{SL.manufacturerText}}</td> <!--manufacturerName-->
@@ -447,23 +447,23 @@
                                     <td>
                                         <input type="checkbox" disabled [checked]="part.itemMaster.isTimeLife != false" />
                                     </td>
-                                    <td colspan="13" *ngIf="part.timeLife[stockline_row_index] == undefined "> </td>
-                                    <ng-container *ngIf="part.timeLife[stockline_row_index] != undefined">
-                                        <td style="min-width: 106px;">Remaining {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
-                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
-                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
-                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
-                                        <td style="min-width: 106px;">Since Repair {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
+                                    <td colspan="13"  *ngIf="!(part.timeLife[stockline_row_index].stockLineDraftId > 0)"> </td>
+                                    <ng-container  *ngIf="part.timeLife[stockline_row_index].stockLineDraftId > 0">
+                                        <td style="min-width: 120px;">Remaining {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
+                                        <td style="min-width: 120px;">Since New {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since Repair {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
     
-                                        <td style="min-width: 106px;">Remaining {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
-                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
-                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
-                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
-                                        <td style="min-width: 106px;">Since Repair {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
+                                        <td style="min-width: 120px;">Remaining {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
+                                        <td style="min-width: 120px;">Since New {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since Repair {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
     
-                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
-                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
-                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
+                                        <td style="min-width: 120px;">Since New {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
+                                        <td style="min-width: 120px;">Since OVH {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
+                                        <td style="min-width: 120px;">Since Insp {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
                                     </ng-container>                                
                                 </tr>
                             </ng-container>

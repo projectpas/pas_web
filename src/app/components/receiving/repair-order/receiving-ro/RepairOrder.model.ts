@@ -73,7 +73,7 @@ export class RepairOrderPart {
     trace: string;
     conditionCode: string;
     quantityActuallyReceived: number;
-    quantityRejected: string;
+    quantityRejected: number;
     uomId: number;
     quantityOrdered: number;
     quantityBackOrdered: number;

@@ -37,6 +37,8 @@ export class ReceivingEndpointService extends EndpointFactory {
     get UpdateStockLinesURL() { return this.configurations.baseUrl + this._updateStockLinesUrl; }
     get CreateStockLinesURL() { return this.configurations.baseUrl + this._createStockLinesUrl; }
     get receivingRepairOrderDataGet() { return this.configurations.baseUrl + this.receivingRepairOrderDataById; }
+    get createStocklineRo() { return this.configurations.baseUrl + this._createStockLinesForRepairOrderUrl; }
+   
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 
         super(http, configurations, injector);
@@ -109,11 +111,11 @@ export class ReceivingEndpointService extends EndpointFactory {
         });
       }
 
-    getReceivingPODataForEditById<T>(receivingId: any): Observable<T> {
-        let url = `${this.receivingPurchaseOrderForEditDataGet}/${receivingId}`;
+    getReceivingPODataForEditById<T>(receivingId: any,employeeId = 0): Observable<T> {
+        let url = `${this.receivingPurchaseOrderForEditDataGet}?receivingId=${receivingId}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getReceivingPODataForEditById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataForEditById(receivingId,employeeId));
             });
     }
 
@@ -257,7 +259,8 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     CreateStockLineForRepairOrder(repairOrder: any) {
-        let url = `${this._createStockLinesForRepairOrderUrl}/${repairOrder}`;
+        let url = `${this.createStocklineRo}/${repairOrder}`;
+        console.log(url)
         return this.http.get<any>(url);
     }
 

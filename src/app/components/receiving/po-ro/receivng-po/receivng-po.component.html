@@ -155,13 +155,13 @@
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Notes
-                                        <span class="editor-span">
+                                        <!-- <span class="editor-span">
                                             <a class="btn nobg" data-toggle="modal"
                                                data-target="#add-notes" (click)="onAddNotes()"
                                                matTooltipPosition="above" matTooltip="Notes">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                        </span>
+                                        </span> -->
                                     </label>
                                     <span>
                                         <div [innerHTML]="poDataHeader.notes"
@@ -177,11 +177,11 @@
                                 <div class="form-group memo-popup-cstm">
                                     <label>
                                         Memo
-                                        <span class="editor-span">
+                                        <!-- <span class="editor-span">
                                             <a class="btn nobg" data-toggle="modal"
                                                data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo"
                                                disabled="true" (click)="onAddMemo()"><i class="fa fa-pencil"></i></a>
-                                        </span>
+                                        </span> -->
                                     </label>
                                     <span>
                                         <div [innerHTML]="poDataHeader.poMemo"
@@ -940,6 +940,7 @@
                                                             <label>Certified Date</label>
                                                             <p-calendar  [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
+                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
                                                                         name="certifiedDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDate">
                                                             </p-calendar>
