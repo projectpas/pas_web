@@ -112,6 +112,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         currentRecord.partNumber = undefined;
     }
     onPartSelect(event, equipment,index) { 
+        this.workFlow.equipments[index].assetRecordId = event.assetRecordId;
             this.workFlow.equipments[index].assetId = event.assetId;
             this.workFlow.equipments[index].partNumber = event;
             this.workFlow.equipments[index].assetDescription = event.description;
@@ -178,6 +179,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     updateEquipmentWorkOrder() {
+        console.log("this.workFlow",this.workFlow)
         this.updateEquipmentListForWO.emit(this.workFlow)
     }
 

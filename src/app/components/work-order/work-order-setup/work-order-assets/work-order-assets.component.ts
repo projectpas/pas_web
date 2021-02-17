@@ -6,6 +6,8 @@ import {editValueAssignByCondition, getObjectById } from '../../../../generic/au
 declare var $ : any;
 import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CommonService } from '../../../../services/common.service';
+import { DatePipe } from "@angular/common";
 @Component({
     selector: 'app-work-order-assets',
     templateUrl: './work-order-assets.component.html',
@@ -32,6 +34,15 @@ export class WorkOrderAssetsComponent implements OnInit {
     @Input() workOrderId;
     textAreaInfo: any;
     memoIndex;
+    pageSize: number = 50;
+    pageIndex: number = 0;
+    totalRecords: number = 0;
+    totalPages: number = 0;
+    isGlobalFilter: boolean = false;
+    filterText: any = '';
+    filteredText: any = '';
+    lazyLoadEventData: any;
+    currentDeletedstatus: boolean = false;
     assetChekinCheckoutheaders = [
         { header: "",field: "checkbox"},
         { header: "Tool Name",field: "assetName"},
@@ -48,6 +59,18 @@ export class WorkOrderAssetsComponent implements OnInit {
         { header: "Checked In Date",field: "checkInDate"},
         { header: "Notes",field: "notes"},
     ]
+    headers = [
+        { field: 'name', header: 'Tool Name' },
+        { field: 'assetId', header: 'Tool Id' },
+        { field: 'description', header: 'Tool Description' },
+        { field: 'assetTypeName', header: 'Tool Type' },
+        { field: 'quantity', header: 'Qty' },
+        { field: "createdDate", header: "Created Date", width: "130px" },
+        { field: "createdBy", header: "CreatedBy", width: "130px" },
+        { field: "updatedDate", header: "Updated Date", width: "130px" },
+        { field: "updatedBy", header: "UpdatedBy", width: "130px" }
+    ]
+    selectedColumns = this.headers;
     moduleName = "Tool";
     assetRecordId: any;
     assets = {
@@ -75,7 +98,7 @@ export class WorkOrderAssetsComponent implements OnInit {
 
     ngOnInit(): void {
     }
-    constructor(private workOrderService: WorkOrderService, private authService: AuthService,
+    constructor(private workOrderService: WorkOrderService, private authService: AuthService,    private datePipe: DatePipe,     private commonService: CommonService,
         private alertService: AlertService,  private modalService: NgbModal,private cdRef: ChangeDetectorRef) {
 
     }
@@ -351,4 +374,112 @@ array.forEach(element => {
     onCloseTextAreaInfo() {
         $("#textarea-popup").modal("hide");
     }
+    getPageCount(totalNoofRecords, pageSize) {
+        return Math.ceil(totalNoofRecords / pageSize)
+    }
+
+    pageIndexChange(event) {
+        this.pageSize = event.rows;
+    }
+
+    globalSearch(value) {
+        this.pageIndex = 0;
+        this.filteredText = value;
+        if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
+            this.isGlobalFilter = true;
+        }
+        else
+        {
+            this.isGlobalFilter = false;
+        }        
+        const pageIndex = parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows;;
+        this.pageIndex = pageIndex;
+        this.pageSize = this.lazyLoadEventData.rows;
+        this.lazyLoadEventData.first = pageIndex;
+        this.lazyLoadEventData.globalFilter = value;
+        this.filterText = value;
+        this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters};
+        // this.getAllWorkOrderList(this.lazyLoadEventData);
+    }
+    loadData(event) {
+        this.lazyLoadEventData = event;
+        const pageIndex = parseInt(event.first) / event.rows;
+        this.pageIndex = pageIndex;
+        this.pageSize = event.rows;
+        event.first = pageIndex;
+        // if (this.viewType && this.currentStatus) {
+            this.lazyLoadEventData.filters = {
+                ...this.lazyLoadEventData.filters,
+                // workOrderStatus: this.lazyLoadEventData.filters.workOrderStatus == undefined ? this.currentStatus : this.lazyLoadEventData.filters.workOrderStatus,
+                // viewType: this.viewType
+            // }
+        }
+
+        if (!this.isGlobalFilter) {   
+            // this.getAllWorkOrderList(event);         
+        } else {
+            this.globalSearch(this.filterText)
+        }
+    }
+    getDeleteListByStatus(value) {
+        this.currentDeletedstatus = true;
+        this.pageIndex = this.lazyLoadEventData.rows > 10 ? parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows : 0;
+        this.pageSize = this.lazyLoadEventData.rows;
+        this.lazyLoadEventData.first = this.pageIndex;
+        if (value == true) {
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            // this.isSpinnerVisible = true;
+            // this.getAllWorkOrderList(this.lazyLoadEventData);
+        } else {
+            this.currentDeletedstatus = false;
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            // this.isSpinnerVisible = true;
+            // this.getAllWorkOrderList(this.lazyLoadEventData);
+        }
+    }
+
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('WorkOrderAssets', 'workOrderAssetId', this.restorerecord.workOrderAssetId).subscribe(res => {
+            this.getDeleteListByStatus(true)
+            this.modal.close();
+            this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
+        }, err => {
+            // this.isSpinnerVisible = false;
+        });
+    }
+    restorerecord:any={};
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    openDownload(content) {
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    closeModal() {
+        this.modal.close();
+    }
+    exportCSV(dt) {
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
+        });
+        this.workOrderService
+            .getWorkOrderList(PagingData).subscribe(res => {
+                const vList = res['results'].map(x => {
+                    return {
+                        ...x,
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    }
+                });
+
+                dt._value = vList;
+                dt.exportCSV();
+                dt.value = this.workOrderAssetList;
+                this.modal.close();
+            }, err => {
+            });
+    }
 }
+

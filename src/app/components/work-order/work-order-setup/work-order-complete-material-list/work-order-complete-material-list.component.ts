@@ -236,7 +236,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.modal.close();
     }
 
-    getRollupMaterialList(currentRecord, materialindex) {
+    getRollupMaterialList(currentRecord, materialindex) { 
         currentRecord.isShowPlus = false;
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;

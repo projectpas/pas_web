@@ -86,6 +86,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     // .toUpperCase()
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     this.laborForm.costPlusType = 'Mark Up';
+    console.log("aaaa",this.workOrderLaborList)
     if (this.workOrderLaborList) {
  
       this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
@@ -519,19 +520,46 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       ? this.authService.currentUser.masterCompanyId
       : null;
   }
-  getAllExpertiseType() {
-    this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
-      this.expertiseTypeList = res.map(x => {
-        return {
-          label: x.expertiseType,
-          value: x.employeeExpertiseId
-        }
+  // getAllExpertiseType() {
+  //   this.commonService.autoCompleteDropdownsExpertiseTypes(this.currentUserMasterCompanyId).subscribe(res => {
+  //     this.expertiseTypeList = res.map(x => {
+  //       return {
+  //         label: x.expertiseType,
+  //         value: x.employeeExpertiseId
+  //       }
+  //     });
+  //   },
+  //     err => {
+  //     })
+  // }
+  setEditArray:any=[];
+  getAllExpertiseType(value?) {
+    this.setEditArray = [];
+    console.log("laborlist",this.laborForm.workOrderLaborList[0])
+    if (this.isEdit == true) {
+      this.workOrderLaborList.forEach(element => {
+        
       });
-    },
-      err => {
-      })
-  }
-
+        // this.setEditArray.push(this.workOrderGeneralInformation.employeeId ? this.workOrderGeneralInformation.employeeId.value : 0);
+    }
+    if (this.setEditArray.length == 0) {
+        this.setEditArray.push(0);
+    }
+    const strText = value ? value : '';
+    this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        if (res && res.length != 0) {
+          this.expertiseTypeList = res;
+          // .map(x => {
+          //   return {
+          //     label: x.expertiseType,
+          //     value: x.employeeExpertiseId
+          //   }
+          // });
+        }else{
+          this.expertiseTypeList =[];
+        }
+    })
+}
   getExpertiseEmployeeByExpertiseId(value, index, object) {
     if (!this.isQuote) {
       object.employeeId = null;

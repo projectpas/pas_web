@@ -325,7 +325,7 @@
                 </td>
                 <td> 
                   <p-dropdown placeholder="Select Billing Type" [options]="billableList" class="p-dropdown-custom-md"
-                  [(ngModel)]="rec.billableId" [disabled]="isView"></p-dropdown>
+                  [(ngModel)]="rec.billableId" [disabled]="isView || laborForm.isTaskCompletedByOne"></p-dropdown>
                 </td>
                 <td *ngIf="
                     laborForm.hoursorClockorScan &&
@@ -333,8 +333,7 @@
                     laborForm.hoursorClockorScan !== 3
                   " style="text-align: center;">
                   <button class="btn btn-primary start-btn" (click)="startandStop(rec);calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="
-                      (rec.startDate && rec.endDate) !== null || isView
-                    " >
+                      (rec.startDate && rec.endDate) !== null || isView || laborForm.isTaskCompletedByOne">
                     {{(!rec.startDate)?'Start':'Stop'}}
                   </button>
                   <!-- *ngIf="!rec.startDate || !rec.endDate" -->
@@ -372,7 +371,7 @@
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalHours" [disabled]="isView" style="width: 75px;" required/>
+                    " [(ngModel)]="rec.totalHours" [disabled]="isView " style="width: 75px;" required/>
                     <span style="font-size: 17px; margin: 0 5px;">:</span>
                     <input type="number" class="form-control" (blur)="
                     calculateHoursDifference(rec);
@@ -385,7 +384,7 @@
                 </td>
                 <ng-container *ngIf="!isQuote">
                   <td>
-                      <input type="number" class="form-control" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView"/>
+                      <input type="number" class="form-control" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView || laborForm.isTaskCompletedByOne"/>
                   </td>
                   <td class="content-to-end">
                       {{ rec.adjustedHours }}
@@ -438,14 +437,15 @@
                 </ng-container>
                 <td *ngIf="!isQuote">
                   <!-- <input type="text" class="form-control" [(ngModel)]="rec.memo" [disabled]="isView"/> -->
-                  <div class="align_adh">
+                  <!-- [disabled]=" isView|| laborForm.isTaskCompletedByOne" -->
+                  <div class="align_adh" >
                     <div [innerHTML]="rec.memo"
                         matTooltipPosition="above"
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box" style="width: 100% !important;"></div>
-                    <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                    <i class="fa fa-pencil contoel_v" data-toggle="modal" [ngStyle]="{'pointerEvents':isView|| laborForm.isTaskCompletedByOne ? 'none' : 'inherent'}"
                         data-target="#textarea-popup" matTooltip="Memo"
-                        matTooltipPosition="above"
+                        matTooltipPosition="above" 
                         (click)="onAddTextAreaInfo(rec.memo,task.description,i)"></i>
                 </div>
                
@@ -611,7 +611,7 @@
           <!-- Modal content-->
           <div class="modal-content">
               <div class="modal-header">
-                  <h4 class="modal-title">Are You Sure Want to Delete the existing records?</h4>
+                  <h4 class="modal-title">Are You Sure Want to Complete Task?</h4>
                   <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                       <span aria-hidden="true">&times;</span>
                   </button>
