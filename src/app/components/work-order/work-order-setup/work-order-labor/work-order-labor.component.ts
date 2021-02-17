@@ -86,7 +86,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     // .toUpperCase()
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     this.laborForm.costPlusType = 'Mark Up';
-    console.log("aaaa",this.workOrderLaborList)
     if (this.workOrderLaborList) {
  
       this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
@@ -535,7 +534,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   setEditArray:any=[];
   getAllExpertiseType(value?) {
     this.setEditArray = [];
-    console.log("laborlist",this.laborForm.workOrderLaborList[0])
     if (this.isEdit == true) {
       this.workOrderLaborList.forEach(element => {
         
@@ -878,8 +876,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       return false;
     }
   }
-
-  showDeleteLabourPopup(taskName, index) {
+  currentRecord:any={};
+  showDeleteLabourPopup(taskName, res, index) {
+    this.currentRecord=res;
     this.deletingLabourObj = {
       taskName: taskName,
       index: index

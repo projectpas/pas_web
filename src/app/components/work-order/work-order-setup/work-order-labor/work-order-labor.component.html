@@ -452,7 +452,7 @@
                 </td>
                 <td *ngIf="!isView" class="text-center">
                     <span><button type="button" class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
-                      (click)="showDeleteLabourPopup(task.description, i)"><i class="fa fa-trash"></i></button> </span>
+                      (click)="showDeleteLabourPopup(task.description,rec, i)"><i class="fa fa-trash"></i></button> </span>
                 </td>
               </tr>
               <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -636,6 +636,12 @@
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
+              <div class="modal-body">
+                <strong>
+                    PN:
+                    <span class="new-label" *ngIf="currentRecord && currentRecord.employeeId">{{currentRecord.employeeId.label}}</span>
+                </strong>
+            </div> 
               <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteLabor(deletingLabourObj.taskName, deletingLabourObj.index)">Yes</button>
                   <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
@@ -655,6 +661,12 @@
                   <button type="button" class="close" aria-label="Close" (click)="dismissModelTask()">
                       <span aria-hidden="true">&times;</span>
                   </button>
+              </div>
+              <div class="modal-body">
+              <strong>
+                Task Name:
+                <span class="new-label capitalizer" *ngIf="currentItem && currentItem">{{currentItem.description}}</span>
+            </strong>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-primary" (click)="deleteConfirmationTask(type)">Yes</button>
