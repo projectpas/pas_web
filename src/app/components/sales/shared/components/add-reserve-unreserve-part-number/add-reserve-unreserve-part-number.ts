@@ -43,6 +43,9 @@ export class SalesReserveUnreserveComponent implements OnInit {
     selectAllParts: Boolean = false;
     disableSubmitButtonForAction: boolean = true;
     isSpinnerVisible: boolean = true;
+    onlyParts: PartAction[] = [];
+    altParts: PartAction[] = [];
+    euqParts: PartAction[] = [];
 
     constructor(private itemMasterService: ItemMasterService, private salesOrderService: SalesOrderService, private commonService: CommonService, private authService: AuthService,
         private alertService: AlertService) {
@@ -131,21 +134,24 @@ export class SalesReserveUnreserveComponent implements OnInit {
             .subscribe(data => {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
-                for (let i = 0; i < this.parts.length; i++) {
+                this.onlyParts = data[0];
 
-                    if (this.parts[i].oemDer == null)
-                        this.parts[i].oemDer = this.parts[i].stockType;
-
-                    this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-                    this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-                    this.parts[i]['isSelected'] = false;
-
-                    if (this.parts[i].qtyToReserve == 0) {
-                        this.parts[i].qtyToReserve = null
+                this.bindProperValues();
+                
+                this.parts.forEach((item, index) => {
+                    if (item !== undefined) {
+                        if (item.soReservedAltParts && item.soReservedAltParts.length > 0) {
+                            item.soReservedAltParts.forEach((altPart, i) => {
+                                this.altParts.push(altPart);
+                            });
+                        }
+                        if (item.soReservedEquParts && item.soReservedEquParts.length > 0) {
+                            item.soReservedEquParts.forEach((EquPart, i) => {
+                                this.euqParts.push(EquPart);
+                            });
+                        }
                     }
-
-                    this.parts[i].reservedById = getObjectById('value', this.employeeId, this.employees);
-                }
+                });
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -366,5 +372,42 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 $('#reserve').modal("hide");
             }
         }, 1200)
+    }
+
+    showAlternateParts(event) {
+        debugger;
+        if (event == true) {
+            this.parts = [...this.onlyParts, ...this.altParts]
+        } else {
+            this.parts = [...this.onlyParts];
+        }
+        this.bindProperValues();
+    }
+
+    showEqualientParts(event) {
+        if (event == true) {
+            this.parts = [...this.onlyParts, ...this.euqParts]
+        } else {
+            this.parts = [...this.onlyParts];
+        }
+        this.bindProperValues();
+    }
+
+    bindProperValues() {
+        for (let i = 0; i < this.parts.length; i++) {
+
+            if (this.parts[i].oemDer == null)
+                this.parts[i].oemDer = this.parts[i].stockType;
+
+            this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+            this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+            this.parts[i]['isSelected'] = false;
+
+            if (this.parts[i].qtyToReserve == 0) {
+                this.parts[i].qtyToReserve = null
+            }
+
+            this.parts[i].reservedById = getObjectById('value', this.employeeId, this.employees);
+        }
     }
 }
