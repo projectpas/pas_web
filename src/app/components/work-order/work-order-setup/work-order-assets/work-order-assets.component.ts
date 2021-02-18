@@ -322,7 +322,9 @@ array.forEach(element => {
     delete() {
         
         this.workOrderService.deleteWorkOrderAssetByAssetId(this.isSubWorkOrder ? this.currentRow.subWorkOrderAssetId :   this.currentRow.workOrderAssetId, this.userName,this.isSubWorkOrder).subscribe(res => {
-            this.refreshData.emit();
+            // this.refreshData.emit();
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            this.getAllWorkOrderList(this.lazyLoadEventData);
             this.alertService.showMessage(
                 '',
                 'Deleted WorkOrder Asset  Successfully',
@@ -337,17 +339,7 @@ array.forEach(element => {
     public dismissModel() {
         this.modal.close();
     }
-    saveEquipmentList(event) {
-        this.saveEquipmentListForWO.emit(event)
-        $('#addNewEquipments').modal('hide');
-        this.addNewEquipment = false; 
-    }
-    updateEquipmentList(event) {
-        this.updateEquipmentListForWO.emit(event)
-        this.isEdit = false;
-        $('#addNewEquipments').modal('hide');
-        this.addNewEquipment = false;
-    }
+
 
     getColorCodeForHistory(i, field, value) {
         const data = this.assetAuditHistory;
@@ -509,7 +501,7 @@ array.forEach(element => {
     }
     isSpinnerVisible:boolean=false;
     getAllWorkOrderList(data) {
-        // this.isSpinnerVisible = true;
+ 
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete;
         data.filters.masterCompanyId= this.currentUserMasterCompanyId;
@@ -517,6 +509,7 @@ array.forEach(element => {
         data.filters.workOrderWfId=this.workFlowWorkOrderId;
 
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+        this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderAssetList(this.isSubWorkOrder,PagingData).subscribe(res => {
             this.workOrderAssetList = res['results'].map(x => {
                 return {
@@ -537,6 +530,128 @@ array.forEach(element => {
         }, err => {
             this.isSpinnerVisible = false;
         })
+    }
+
+    //create and update  work order asset
+    saveEquipmentList(event) {
+        // this.saveEquipmentListForWO.emit(event)
+        this.saveWorkOrderEquipmentList(event)
+        
+        $('#addNewEquipments').modal('hide');
+        this.addNewEquipment = false; 
+    }
+    updateEquipmentList(event) {
+        // this.updateEquipmentListForWO.emit(event)
+        this.updateWorkOrderEquipmentList(event)
+        this.isEdit = false;
+        $('#addNewEquipments').modal('hide');
+        this.addNewEquipment = false;
+    }
+    saveWorkOrderEquipmentList(data) {
+        this.equipmentArr = [];
+        if (this.isSubWorkOrder) {
+            this.equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workFlowWorkOrderId: this.workFlowWorkOrderId,
+                    subWOPartNoId: this.subWOPartNoId,
+                    workOrderId: this.subWorkOrderDetails.workOrderId,
+                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+                }
+            })
+        } else {
+            this.equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+                }
+            })
+        }
+        this.isSpinnerVisible = true;
+        this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.workFlowObject.equipments = [];
+            this.alertService.showMessage(
+                this.moduleName,
+                'Saved Work Order Equipment Succesfully',
+                MessageSeverity.success
+            );
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            this.getAllWorkOrderList(this.lazyLoadEventData);
+        },
+            err => {
+                this.isSpinnerVisible = false;
+                // this.errorHandling(err)
+            })
+    }
+    equipmentArr: any = [];
+    updateWorkOrderEquipmentList(data) {
+        this.equipmentArr = [];
+        if (this.isSubWorkOrder) {
+            this.equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workFlowWorkOrderId: this.workFlowWorkOrderId,
+                    subWOPartNoId: this.subWOPartNoId,
+                    workOrderId: this.subWorkOrderDetails.workOrderId,
+                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+                }
+            })
+            this.isSpinnerVisible = true;
+            this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.equipments = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated Work Order Equipment Succesfully',
+                    MessageSeverity.success
+                );
+                this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+                this.getAllWorkOrderList(this.lazyLoadEventData);
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                })
+        } else {
+            console.log("data.equipments",data.equipments)
+            const equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+                }
+            })
+            this.isSpinnerVisible = true;
+            this.workOrderService.updateWorkOrderEquipmentList(equipmentArr).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.equipments = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated  Work Order Equipment Succesfully',
+                    MessageSeverity.success
+                );
+                this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+                this.getAllWorkOrderList(this.lazyLoadEventData);
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                })
+        }
     }
 }
 

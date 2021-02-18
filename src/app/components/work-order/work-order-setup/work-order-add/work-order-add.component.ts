@@ -1719,111 +1719,111 @@ export class WorkOrderAddComponent implements OnInit {
         }, () => { })
     }
 
-    saveWorkOrderEquipmentList(data) {
-        this.equipmentArr = [];
-        if (this.isSubWorkOrder) {
-            this.equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    subWOPartNoId: this.subWOPartNoId,
-                    workOrderId: this.subWorkOrderDetails.workOrderId,
-                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
-                }
-            })
-        } else {
-            this.equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
-                }
-            })
-        }
-        this.isSpinnerVisible = true;
-        this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.workFlowObject.equipments = [];
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saved Work Order Equipment Succesfully',
-                MessageSeverity.success
-            );
-            this.getEquipmentByWorkOrderId();
-        },
-            err => {
-                this.isSpinnerVisible = false;
-                this.errorHandling(err)
-            })
-    }
+    // saveWorkOrderEquipmentList(data) {
+    //     this.equipmentArr = [];
+    //     if (this.isSubWorkOrder) {
+    //         this.equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workFlowWorkOrderId: this.workFlowWorkOrderId,
+    //                 subWOPartNoId: this.subWOPartNoId,
+    //                 workOrderId: this.subWorkOrderDetails.workOrderId,
+    //                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+    //             }
+    //         })
+    //     } else {
+    //         this.equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+    //             }
+    //         })
+    //     }
+    //     this.isSpinnerVisible = true;
+    //     this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.isSpinnerVisible = false;
+    //         this.workFlowObject.equipments = [];
+    //         this.alertService.showMessage(
+    //             this.moduleName,
+    //             'Saved Work Order Equipment Succesfully',
+    //             MessageSeverity.success
+    //         );
+    //         this.getEquipmentByWorkOrderId();
+    //     },
+    //         err => {
+    //             this.isSpinnerVisible = false;
+    //             this.errorHandling(err)
+    //         })
+    // }
 
-    updateWorkOrderEquipmentList(data) {
-        this.equipmentArr = [];
-        if (this.isSubWorkOrder) {
-            this.equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    subWOPartNoId: this.subWOPartNoId,
-                    workOrderId: this.subWorkOrderDetails.workOrderId,
-                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
-                }
-            })
-            this.isSpinnerVisible = true;
-            this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.workFlowObject.equipments = [];
-                this.alertService.showMessage(
-                    this.moduleName,
-                    'Updated Work Order Equipment Succesfully',
-                    MessageSeverity.success
-                );
-                this.getEquipmentByWorkOrderId();
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                    this.errorHandling(err)
-                })
-        } else {
-            console.log("data.equipments",data.equipments)
-            const equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
-                }
-            })
-            this.isSpinnerVisible = true;
-            this.workOrderService.updateWorkOrderEquipmentList(equipmentArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.workFlowObject.equipments = [];
-                this.alertService.showMessage(
-                    this.moduleName,
-                    'Updated  Work Order Equipment Succesfully',
-                    MessageSeverity.success
-                );
-                this.getEquipmentByWorkOrderId();
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                    this.errorHandling(err)
-                })
-        }
-    }
+    // updateWorkOrderEquipmentList(data) {
+    //     this.equipmentArr = [];
+    //     if (this.isSubWorkOrder) {
+    //         this.equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workFlowWorkOrderId: this.workFlowWorkOrderId,
+    //                 subWOPartNoId: this.subWOPartNoId,
+    //                 workOrderId: this.subWorkOrderDetails.workOrderId,
+    //                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+    //             }
+    //         })
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.workFlowObject.equipments = [];
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 'Updated Work Order Equipment Succesfully',
+    //                 MessageSeverity.success
+    //             );
+    //             this.getEquipmentByWorkOrderId();
+    //         },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.errorHandling(err)
+    //             })
+    //     } else {
+    //         console.log("data.equipments",data.equipments)
+    //         const equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+    //             }
+    //         })
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.updateWorkOrderEquipmentList(equipmentArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.workFlowObject.equipments = [];
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 'Updated  Work Order Equipment Succesfully',
+    //                 MessageSeverity.success
+    //             );
+    //             this.getEquipmentByWorkOrderId();
+    //         },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.errorHandling(err)
+    //             })
+    //     }
+    // }
 
     saveWorkOrderChargesList(data) {
         if (this.isSubWorkOrder == true) {
