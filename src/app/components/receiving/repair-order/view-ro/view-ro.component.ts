@@ -17,6 +17,8 @@ import { GlAccount } from '../../../../models/GlAccount.model';
 import { ShippingService } from '../../../../services/shipping/shipping-service';
 import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { RepairOrderService } from '../../../../services/repair-order.service';
+
 
 @Component({
     selector: 'app-view-ro',
@@ -67,7 +69,7 @@ export class ViewRoComponent {
     repairOrderId: number;
     repairOrderHeaderData: any;
     headerManagementStructure: any = {};
-    isSpinnerVisible: boolean = true;
+    isSpinnerVisible: boolean = false;
 
     /** edit-ro ctor */
     constructor(public receivingService: ReceivingService,
@@ -84,9 +86,9 @@ export class ViewRoComponent {
         private glAccountService: GlAccountService,
         private shippingService: ShippingService,
         private _actRoute: ActivatedRoute,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private repairOrderService: RepairOrderService,
     ) {
-
         this.localPoData = this.vendorService.selectedPoCollection;
         this.editPoData = this.localData[0];
         this.currentDate = new Date();
@@ -94,26 +96,22 @@ export class ViewRoComponent {
 
     ngOnInit() {
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
+        this.getReceivingROHeaderById(this.repairOrderId);
+        //this.getStockDetailsOnLoad();
+        this.localData = [
+            { partNumber: 'PN123' }
+        ]
+    }
 
-        if (this.repairOrderId == undefined) {
-            this.alertService.showMessage(this.pageTitle, "No purchase order is selected to view.", MessageSeverity.error);
-            return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
-        }
-        this.receivingService.getReceivingROHeaderById(this.repairOrderId).subscribe(res => {           
+    getReceivingROHeaderById(id) {        
+        this.repairOrderService.getROViewById(id).subscribe(res => {
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
-            this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);
-
+            this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';                        
         });
-
-        this.getStockDetailsOnLoad();
-
-        this.localData = [
-            { partNumber: 'PN123' }
-        ]
     }
 
     getStockDetailsOnLoad() {
@@ -999,4 +997,14 @@ export class ViewRoComponent {
             }
         }
     }
+
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    } 
 }

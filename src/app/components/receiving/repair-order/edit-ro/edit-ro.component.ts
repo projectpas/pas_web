@@ -1645,7 +1645,7 @@ export class EditRoComponent implements OnInit {
             this.receivingService.updateStockLine(receiveParts).subscribe(data => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.pageTitle, 'Stock Line updated successfully.', MessageSeverity.success);
-                //this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
+                this.route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${this.repairOrderId}`);
             },
             errr =>
             {
