@@ -99,12 +99,12 @@ export class SubWorkOrderListComponent implements OnInit {
         // if (workFlowWorkOrderId || workFlowWorkOrderId === 0) {
         // this.workFlowWorkOrderId = this.workFlowWorkOrderData.workFlowWorkOrderId;
         if (workFlowWorkOrderId) {
-            this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,0,false).subscribe(
-                result => {
-                    console.log(result);
-                    this.workOrderAssetList = result;
-                }
-            )
+            // this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,0,false).subscribe(
+            //     result => {
+            //         console.log(result);
+            //         this.workOrderAssetList = result;
+            //     }
+            // )
         }
 
     }

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
-import {editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
+import {editValueAssignByCondition, getObjectById ,listSearchFilterObjectCreation} from '../../../../generic/autocomplete';
 declare var $ : any;
 import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -16,8 +16,9 @@ import { DatePipe } from "@angular/common";
 export class WorkOrderAssetsComponent implements OnInit {
     modal: NgbModalRef;
     @Input() isView : boolean = false;
-    @Input() savedWorkOrderData: any
-    @Input() workOrderAssetList: any
+    @Input() savedWorkOrderData: any;
+    @Input() workOrderAssetList: any;
+    @Input()workFlowWorkOrderId:any;
     @Input() isWorkOrder;
     @Input() employeesOriginalData;
     @Input() workFlowObject;
@@ -123,6 +124,9 @@ export class WorkOrderAssetsComponent implements OnInit {
     assetInventoryId:any=0;
     viewAsstes(rowData) {
         this.assetRecordId = rowData.assetRecordId;
+        // this.assetRecordId = 103;
+        // this.currentRecord.assetRecordId=103;
+        // this.currentRecord.workOrderAssetId=171;
     }
     workOrderCheckInCheckOutList:any=[];
     AvailableCount:any;
@@ -399,7 +403,7 @@ array.forEach(element => {
         this.lazyLoadEventData.globalFilter = value;
         this.filterText = value;
         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters};
-        // this.getAllWorkOrderList(this.lazyLoadEventData);
+        this.getAllWorkOrderList(this.lazyLoadEventData);
     }
     loadData(event) {
         this.lazyLoadEventData = event;
@@ -416,7 +420,7 @@ array.forEach(element => {
         }
 
         if (!this.isGlobalFilter) {   
-            // this.getAllWorkOrderList(event);         
+            this.getAllWorkOrderList(event);         
         } else {
             this.globalSearch(this.filterText)
         }
@@ -429,12 +433,12 @@ array.forEach(element => {
         if (value == true) {
             this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
             // this.isSpinnerVisible = true;
-            // this.getAllWorkOrderList(this.lazyLoadEventData);
+            this.getAllWorkOrderList(this.lazyLoadEventData);
         } else {
             this.currentDeletedstatus = false;
             this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
             // this.isSpinnerVisible = true;
-            // this.getAllWorkOrderList(this.lazyLoadEventData);
+            this.getAllWorkOrderList(this.lazyLoadEventData);
         }
     }
 
@@ -480,6 +484,59 @@ array.forEach(element => {
                 this.modal.close();
             }, err => {
             });
+    }
+
+    // getEquipmentByWorkOrderId(event?) {
+    //     if (this.workFlowWorkOrderId !== 0 && this.workOrderId) { 
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.getWorkOrderAssetList(this.workFlowWorkOrderId, this.workOrderId, this.subWOPartNoId, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
+    //             result => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.workOrderAssetList = result;
+    //             },
+    //             err => {
+    //                 this.handleError(err);
+    //                 this.isSpinnerVisible = false;
+    //             }
+    //         )
+    //     }
+    // }
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+    fieldSearch(field) {
+        this.isGlobalFilter = false;
+    }
+    isSpinnerVisible:boolean=false;
+    getAllWorkOrderList(data) {
+        // this.isSpinnerVisible = true;
+        const isdelete = this.currentDeletedstatus ? true : false;
+        data.filters.isDeleted = isdelete;
+        data.filters.masterCompanyId= this.currentUserMasterCompanyId;
+        // data.filters.employeeId= this.employeeId;
+        data.filters.workOrderWfId=this.workFlowWorkOrderId;
+
+        const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+        this.workOrderService.getWorkOrderAssetList(this.isSubWorkOrder,PagingData).subscribe(res => {
+            this.workOrderAssetList = res['results'].map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                }
+            });
+
+            if (res.results.length > 0) {
+                this.totalRecords = res.totalRecordsCount;
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            } else {
+                this.totalRecords = 0;
+                this.totalPages = 0;
+            }
+            this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 }
 

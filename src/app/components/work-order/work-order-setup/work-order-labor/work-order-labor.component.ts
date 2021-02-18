@@ -535,7 +535,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   setEditArray:any=[];
   getAllExpertiseType(value?) {
     this.setEditArray = [];
-
+    console.log("laborform",this.laborForm)
+    console.log("editmode",this.isEdit)
     if (this.isEdit == true) {
       this.workOrderLaborList.forEach(element => {
         

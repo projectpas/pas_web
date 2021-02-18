@@ -7823,7 +7823,7 @@ html {
 
 .cat-heading,
 .scat-heading {
-  font-size: 15px;
+  font-size: 11px;
   display: block;
   background: #295d92;
   padding: 5px;
@@ -13584,15 +13584,15 @@ body .ui-steps .ui-steps-item .ui-menuitem-link .ui-steps-number {
 
 // tr th {
 //   white-space: nowrap;
-// }
+// } 
 
 .ui-table-scrollable-header.ui-widget-header {
   width: 100% !important;
 }
 
-.ui-table-scrollable-header-table thead tr th:last-child {
-  min-width: 250px !important;
-}
+// .ui-table-scrollable-header-table thead tr th:last-child {
+//   min-width: 250px !important;
+// }
 
 body .ui-table .ui-table-thead>tr>th {
   font-weight: 600 !important;
@@ -13728,7 +13728,7 @@ body .ui-table .ui-table-tbody>tr>td a.btn {
 .workflow-table-equip label,
 .workflow-table-charges label,
 .workflow-table-material tr th {
-  font-size: 10.5px !important;
+  font-size: 10px !important;
   padding: 3px !important;
 }
 
@@ -15185,7 +15185,7 @@ p-autocomplete .ui-autocomplete input.ui-inputtext {
 .rpo-table-cstm .ui-table .ui-table-tbody>tr>td,
 .wf-table-cstm .ui-table .ui-table-tbody>tr>td,
 .ptable-custom .ui-table .ui-table-tbody>tr>td {
-  padding: 5px 2px !important; //4px 2px
+  padding: 2px 2px !important; //4px 2px
   text-transform: uppercase;
 }
 
@@ -15229,7 +15229,7 @@ p-table .ui-paginator-bottom {
 }
 
 .rro-table-cstm {
-  overflow: hidden;
+  overflow: inherit !important;
   //overflow-y: hidden;
 }
 
@@ -17017,4 +17017,55 @@ a.ui-menuitem-link ui-corner-all ui-state-hover {
 }
 input[type="date"]::-webkit-clear-button {
   display: block !important;
+}
+.multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret {
+  width: 29px !important;
+  height: 35px !important;
+  right: 0px !important;
+  top: 0;
+  padding: 2px 0px !important;
+}
+.multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret:before {
+
+  right: 0 !important;
+  top: 35% !important;
+}
+.multiselect-dropdown .dropdown-btn {
+ border: none !important;
+  border-radius: 4px !important;
+  color:#fff !important;
+}
+ng-multiselect-dropdown{
+  border-radius: 4px !important;
+}
+.workflow-table-measment td {
+  padding: 3px !important;
+}
+.class-Attribue{
+  margin-right: 70px;
+}
+.class-task{
+  margin-right: 30px;
+}
+.workflowTable-class td{
+  padding:3px !important
+}
+.input_adjust{
+  max-width: 30px !important;
+}
+.w150_clas{
+  min-width: 150px !important;
+}
+.memo_cehck{
+  width: 99% !important;
+}
+.w120_clas{
+  min-width: 120px !important;
+}
+// below two calsses for work order material list
+.Materials_wo .adj_width1{
+  width: 150px !important;
+}
+.Materials_wo .adj_width2{
+  width: 190px !important;
 }

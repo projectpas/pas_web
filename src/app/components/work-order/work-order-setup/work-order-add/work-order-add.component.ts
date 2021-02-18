@@ -121,7 +121,7 @@ export class WorkOrderAddComponent implements OnInit {
     stockLineList: any;
     workOrderWorkFlowOriginalData: any;
     isDisabledSteps: boolean = false;
-    workFlowId: any = 0;
+    workFlowId: any = null;
     editWorkFlowData: any;
     modal: NgbModalRef;
     workFlowObject = {
@@ -462,7 +462,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.workOrderPartNumberId = data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId = data.workFlowId;
 
-        if (this.workFlowId != 0) {
+        if (this.workFlowId != null) {
             this.gridActiveTab = "workFlow";
             this.subTabWorkFlow = "viewworkFlow";
             this.showWorkflowLabel='View WF';
@@ -515,7 +515,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.getAllCustomerContact(this.workOrderGeneralInformation.customerDetails.customerId, 'edit');
             // }
             this.workOrderId = data.workOrderId;
-            if (this.workOrderGeneralInformation.partNumbers[0].workflowId == 0) {
+            if (this.workOrderGeneralInformation.partNumbers[0].workflowId == null) {
                 this.gridTabChange('materialList');
             }
             this.isRecCustomer = data.isRecCustomer;
@@ -555,7 +555,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.workScope = data.partNumbers[0].workScope;
                 this.showTabsGrid = true;
                 this.showGridMenu = true;
-                if (this.workFlowId != 0) {
+                if (this.workFlowId != null) {
                     this.showWorkflowLabel='View WF';
                     this.subTabWorkFlowChange('viewworkFlow')
                 }
@@ -1078,7 +1078,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.workScope = result.partNumbers[0].workScope;
             this.showGridMenu = true;
             this.getWorkFlowTabsData();
-            if (this.workFlowId != 0) {
+            if (this.workFlowId != null) {
                 this.isWorkOrder = true;
                 this.showWorkflowLabel='View WF';
                 this.subTabWorkFlowChange('viewworkFlow');
@@ -1301,7 +1301,7 @@ export class WorkOrderAddComponent implements OnInit {
                 if (this.workFlowList && this.workFlowList.length > 0) {
                     workOrderPart.workflowId = this.workFlowList[0].value;
                 } else {
-                    workOrderPart.workflowId = 0;
+                    workOrderPart.workflowId = null;
                 }
             },
                 err => {
@@ -1334,7 +1334,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     getWorkFlowData() {
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
-        if (this.selectedWorkFlowId != 0) {
+        if (this.selectedWorkFlowId != null) {
             this.isSpinnerVisible = true;
             this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
@@ -1359,7 +1359,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.workScope = data.workscope;
         this.showGridMenu = true;
         this.getWorkFlowTabsData();
-        if (this.workFlowId != 0) {
+        if (this.workFlowId != null) {
             this.showWorkflowLabel='View WF';
             this.subTabWorkFlowChange('viewworkFlow')
         }
@@ -1514,7 +1514,7 @@ export class WorkOrderAddComponent implements OnInit {
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
                     }
-                    if (this.workFlowId == 0) {
+                    if (this.workFlowId == null) {
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
                         if (this.isSubWorkOrder == true) {
                             this.getMaterialListByWorkOrderIdForSubWO();
@@ -2043,19 +2043,20 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     getEquipmentByWorkOrderId(event?) {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderAssetList(this.workFlowWorkOrderId, this.workOrderId, this.subWOPartNoId, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
-                result => {
-                    this.isSpinnerVisible = false;
-                    this.workOrderAssetList = result;
-                },
-                err => {
-                    this.handleError(err);
-                    this.isSpinnerVisible = false;
-                }
-            )
-        }
+        
+        // if (this.workFlowWorkOrderId !== 0 && this.workOrderId) { 
+        //     this.isSpinnerVisible = true;
+        //     this.workOrderService.getWorkOrderAssetList(this.workFlowWorkOrderId, this.workOrderId, this.subWOPartNoId, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
+        //         result => {
+        //             this.isSpinnerVisible = false;
+        //             this.workOrderAssetList = result;
+        //         },
+        //         err => {
+        //             this.handleError(err);
+        //             this.isSpinnerVisible = false;
+        //         }
+        //     )
+        // }
     }
 
     getValues(element) {
