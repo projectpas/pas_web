@@ -97,76 +97,55 @@ export class ViewRoComponent {
     ngOnInit() {
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
         this.getReceivingROHeaderById(this.repairOrderId);
-        //this.getStockDetailsOnLoad();
+        this.getStockDetailsOnLoad();
         this.localData = [
             { partNumber: 'PN123' }
         ]
     }
 
-    getReceivingROHeaderById(id) {        
+    getReceivingROHeaderById(id) {
         this.repairOrderService.getROViewById(id).subscribe(res => {
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
-            this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';                        
+            this.repairOrderHeaderData.creditLimit = this.repairOrderHeaderData.creditLimit ? formatNumberAsGlobalSettingsModule(this.repairOrderHeaderData.creditLimit, 2) : '0.00';
         });
     }
 
     getStockDetailsOnLoad() {
         this.receivingService.getReceivingROPartsForViewById(this.repairOrderId).subscribe(
             results => {
+                console.log(results)
                 this.repairOrderData = results.map(x => {
                     return {
-                        ...x,
-                        // stockLine: x.stockLineDraft,
-                        stockLine: this.getStockLineDetails(x.stockLineDraft),
-                        timeLife: this.getTimeLifeDetails(x.timeLifeDraft),
+                        ...x,  
                         unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
-                        extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '',
+                        extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '',                                        
+                        stockLine: this.getStockLineDetails(x.stockLine),
+                        timeLife: this.getTimeLifeDetails(x.timeLife)
                     }
-                });
-                for(let i=0; i < this.repairOrderData.length; i++) {
-                    this.getManagementStructureCodesForPart(this.repairOrderData[i]);
-                }
-
-                // this.getManagementStructure().subscribe(
-                //     results => {
-                //         this.managementStructure = results[0];
-                        var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
-                        for (let parent of allParentParts) {
-                            var splitParts = this.repairOrderData.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
-
-                            if (splitParts.length > 0) {
-
-                                parent.hasChildren = true;
-                                parent.quantityOrdered = 0;
-                                for (let childPart of splitParts) {
-                                    parent.stockLineCount += childPart.stockLineCount;
-                                    childPart.managementStructureId = parent.managementStructureId;
-                                    childPart.managementStructureName = parent.managementStructureName;
-                                    parent.quantityOrdered += childPart.quantityOrdered;
-                                }
-                            }
-                            else {
-                                parent.hasChildren = false;
-                            }
+                });                 
+                var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
+                for (let parent of allParentParts) {
+                    var splitParts = this.repairOrderData.filter(x => !x.isParent && x.parentId == parent.repairOrderPartRecordId);  
+                    if (splitParts.length > 0) {
+                        parent.hasChildren = true;
+                        parent.quantityOrdered = 0;
+                        for (let childPart of splitParts) {
+                            parent.stockLineCount += childPart.stockLineCount;
+                            childPart.managementStructureId = parent.managementStructureId;
+                            childPart.managementStructureName = parent.managementStructureName;
+                            parent.quantityOrdered += childPart.quantityOrdered;
                         }
-
-                        // this.getManufacturers();
-                        this.getStatus();
-                        // this.getUOMList();
-                        // this.getConditionList();
-                        // this.loadManagementdata();
-                        // this.loadManufacturerData();
-                        // this.getAllSite();
-                        // this.getAllGLAccount();
-                        // this.getShippingVia();
-                        this.isSpinnerVisible = false;
-                //     },
-                //     error => this.onDataLoadFailed(error)
-                // );
+                    }
+                    else {
+                        parent.hasChildren = false;
+                    }
+                }               
+                this.getStatus();               
+                this.isSpinnerVisible = false;                
             },
             error => {
                 this.alertService.showMessage(this.pageTitle, "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
@@ -196,7 +175,7 @@ export class ViewRoComponent {
                 cyclesSinceRepair: x.cyclesSinceRepair ? x.cyclesSinceRepair : '00:00',
                 timeRemaining: x.timeRemaining ? x.timeRemaining : '00:00',
                 timeSinceInspection: x.timeSinceInspection ? x.timeSinceInspection : '00:00',
-                timeSinceNew: x.timeSinceNew ? x.timeSinceNew : '00:00',                
+                timeSinceNew: x.timeSinceNew ? x.timeSinceNew : '00:00',
                 timeSinceOVH: x.timeSinceOVH ? x.timeSinceOVH : '00:00',
                 timeSinceRepair: x.timeSinceRepair ? x.timeSinceRepair : '00:00',
                 lastSinceInspection: x.lastSinceInspection ? x.lastSinceInspection : '00:00',
@@ -316,9 +295,9 @@ export class ViewRoComponent {
     private getStatus() {
         this.roStatus = [];
         this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description').subscribe(response => {
-			this.roStatus = response;
-			this.roStatus = this.roStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-		});
+            this.roStatus = response;
+            this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+        });
         // this.roStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
         // this.roStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
         // this.roStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
@@ -942,54 +921,29 @@ export class ViewRoComponent {
         stockLine.quantityRejected = 0;
     }
 
-    // private getShippingVia(): void {
-    //     this.shippingService.getAllShippingVia().subscribe(results => {
-    //         this.ShippingViaList = [];
-    //         for (let shippingVia of results[0]) {
-    //             var dropdown = new DropDownData();
-    //             dropdown.Key = shippingVia.shippingViaId.toLocaleString();
-    //             dropdown.Value = shippingVia.name;
-    //             this.ShippingViaList.push(dropdown);
-    //         }
-    //     });
-    // }
-
-    // getManufacturers() {
-    //     this.ManufacturerList = [];
-    //     this.manufacturerService.getManufacturers().subscribe(
-    //         results => {
-    //             for (let manufacturer of results[0]) {
-    //                 var dropdown = new DropDownData();
-    //                 dropdown.Key = manufacturer.manufacturerId.toLocaleString();
-    //                 dropdown.Value = manufacturer.name;
-    //                 this.ManufacturerList.push(dropdown);
-    //             }
-    //         },
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
-    
     CreateRepairOrderStockline() {
+        this.isSpinnerVisible = true;  
         this.receivingService.CreateStockLineForRepairOrder(this.repairOrderId).subscribe(
             results => {
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.pageTitle, "Stockline created successfully.", MessageSeverity.success);
                 return this.route.navigate(['/receivingmodule/receivingpages/app-ro']);
             },
-            error => this.onDataLoadFailed(error)
+            err=>{this.isSpinnerVisible = false;}  
         );
     }
 
-    deleteStockLine(stockLine) {                       
+    deleteStockLine(stockLine) {
         if (stockLine) {
             var OkCancel = confirm("Stock Line will be deleted after save/update. Do you still want to continue?");
             if (OkCancel == true) {
-                this.isSpinnerVisible = true;    
+                this.isSpinnerVisible = true;
                 this.receivingService.deleteStockLineDraft(stockLine.stockLineDraftId, stockLine.quantity).subscribe(res => {
                     this.getStockDetailsOnLoad();
                 },
-                err => {
-                    this.isSpinnerVisible = false;
-                })
+                    err => {
+                        this.isSpinnerVisible = false;
+                    })
                 // stockLine.isEnabled = true;
                 // stockLine.isDeleted = true;
                 this.alertService.showMessage(this.pageTitle, 'Stock Line removed from the list.', MessageSeverity.success);
@@ -1006,5 +960,5 @@ export class ViewRoComponent {
             const decodedString = dom.body.textContent;
             return decodedString;
         }
-    } 
+    }
 }

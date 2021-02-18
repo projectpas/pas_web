@@ -1185,8 +1185,7 @@ export class EditPoComponent implements OnInit {
         }
 
         this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', stockLine.warehouseId).subscribe(
-            results => {
-                console.log(results);
+            results => {                
                 for (let loc of results) {
                     var dropdown = new DropDownData();
                     dropdown.Key = loc.value.toLocaleString();

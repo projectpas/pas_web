@@ -366,7 +366,7 @@ export class AllViewComponent implements OnInit {
     }
   }
 
-  getPurchaseOrderSplit(partList) {
+  getPurchaseOrderSplit(partList) {    
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
         const splitpart = {
