@@ -146,7 +146,7 @@
 			</ng-template>
 			<ng-template pTemplate="body" let-rowData let-columns="columns">
 				<tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
-					(dblclick)="viewSelectedRowdbl(rowData)">
+					(dblclick)="viewSelectedRow(viewPO,rowData)">
 					<td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column"
 						pReorderableRowHandle>
 						{{

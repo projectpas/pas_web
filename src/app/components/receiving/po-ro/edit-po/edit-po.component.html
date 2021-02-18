@@ -238,19 +238,19 @@
                                 <th>Alt PN</th>
                                 <th>PN Description</th>
                                 <th>Manufacturer</th>
-                                <th>Cond</th>
+                                <th>Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <th>UOM</th>
                                 <th>Stock Type</th>
                                 <th>Qty Ord</th>
                                 <th>Discount</th>
-                                <th>Unit Cost</th>
+                                <th>Unit Cost <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <th>Extended Cost</th>
                                 <th>WO</th>
                                 <th>Sub-WO</th>
                                 <th>SO</th>
-                                <th colspan="4" style="text-align: center;">Management Structure</th>
+                                <th colspan="4" style="text-align: center;">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <!-- <th colspan="7"></th> -->
-                                <th>Site</th>
+                                <th>Site <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <th>Warehouse</th>
                                 <th>Location</th>
                                 <th>Shelf</th>
@@ -274,7 +274,7 @@
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!part.isEnabled"
-                                                (change)="conditionChange(part)">
+                                                (change)="conditionChange(part)" required>
                                             <option value="0">Select</option>
                                             <option *ngFor="let condition of ConditionList" [value]="condition.Key">{{condition.Value}}</option>
                                         </select>
@@ -287,7 +287,7 @@
                                         <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum"
                                                (focusout)="calculatePartExtendedCost(part)"
                                                [disabled]="!part.isEnabled"
-                                               [(ngModel)]="part.unitCost">
+                                               [(ngModel)]="part.unitCost" required>
                                     </td>
                                     <td>
                                         <input class="form-control text-right" type="text" disabled pInputText pKeyFilter="pnum"
@@ -405,7 +405,7 @@
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!part.isEnabled"
-                                                (change)="getPartWareHouse(part, true)">
+                                                (change)="getPartWareHouse(part, true)" required>
                                             <option value="0">Select</option>
                                             <option *ngFor="let site of part.SiteList" [value]="site.Key">{{site.Value}}</option>
                                         </select>
@@ -468,24 +468,24 @@
                                         <th>PN Description</th>
                                         <th>Ctrl Id</th>
                                         <th>Ctrl Num</th>
-                                        <th>Cond</th>
+                                        <th>Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
                                         <th>Serial Num</th>
                                         <th>Qty Received</th>
                                         <th>Back Ord</th>
                                         <th>Receiver No.</th>
-                                        <th>Unit Cost <span class="clr-red"></span></th>
+                                        <th>Unit Cost <span _ngcontent-c22="" class="clr-red">*</span></th>
                                         <th>Extended Cost</th>
                                         <th>WO </th>
                                         <th>Sub-WO </th>
                                         <th>SO </th>                                        
-                                        <th colspan="4" style="text-align: center;">Management Structure</th>
+                                        <th colspan="4" style="text-align: center;">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                                         <th>Owner Type</th>
                                         <th>Owner</th>
                                         <th>Obtain From Type</th>
                                         <th>Obtain From</th>
                                         <th>Traceable To Type</th>
                                         <th>Traceable To</th>
-                                        <th>Site</th>
+                                        <th>Site <span _ngcontent-c22="" class="clr-red">*</span></th>
                                         <th>Warehouse</th>
                                         <th>Location</th>
                                         <th>Shelf</th>
@@ -527,7 +527,7 @@
                                                         [(ngModel)]="SL.conditionId"
                                                         #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}"
-                                                        [disabled]="!SL.isEnabled">
+                                                        [disabled]="!SL.isEnabled" required>
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let condition of ConditionList" [value]="condition.Key">{{condition.Value}}</option>
                                                 </select>
@@ -540,7 +540,7 @@
                                                 <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum"
                                                        (focusout)="calculateExtendedCost(part, SL)"
                                                        [disabled]="!SL.isEnabled"
-                                                       [(ngModel)]="SL.purchaseOrderUnitCost" />
+                                                       [(ngModel)]="SL.purchaseOrderUnitCost" required/>
                                             </td>
                                             <td>
                                                 <input class="form-control text-right" type="text" pInputText pKeyFilter="pnum"
@@ -845,7 +845,7 @@
                                                         #selects="ngModel"
                                                         [ngModelOptions]="{standalone: true}"
                                                         [disabled]="!SL.isEnabled"
-                                                        (change)="getStockLineWareHouse(SL, false)">
+                                                        (change)="getStockLineWareHouse(SL, false)" required>
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let site of SL.SiteList" [value]="site.Key">{{site.Value}}</option>
                                                 </select>

@@ -939,8 +939,7 @@
                                                         <div class="form-group">
                                                             <label>Certified Date</label>
                                                             <p-calendar  [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
-                                                                        [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
-                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
+                                                                        [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"                                                                        
                                                                         name="certifiedDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDate">
                                                             </p-calendar>
