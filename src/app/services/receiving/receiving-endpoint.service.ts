@@ -264,10 +264,12 @@ export class ReceivingEndpointService extends EndpointFactory {
             });
     }
 
+    
     CreateStockLineForRepairOrder(repairOrder: any) {
         let url = `${this.createStocklineRo}/${repairOrder}`;
-        console.log(url)
-        return this.http.get<any>(url);
+        return this.http.get<any>(url).catch(error => {
+                return this.handleErrorCommon(error, () => this.CreateStockLineForRepairOrder(repairOrder));
+            });
     }
 
     deleteStockLineDraft(stockLineDraftId, quantity) {
