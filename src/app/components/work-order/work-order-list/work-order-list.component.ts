@@ -750,16 +750,16 @@ export class WorkOrderListComponent implements OnInit {
 
     getEquipmentByWorkOrderId(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId, 0, false).subscribe(
-                result => {
-                    this.isSpinnerVisible = false;
-                    this.workOrderAssetList = result;
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                }
-            )
+            // this.isSpinnerVisible = true;
+            // this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId, 0, false).subscribe(
+            //     result => {
+            //         this.isSpinnerVisible = false;
+            //         this.workOrderAssetList = result;
+            //     },
+            //     err => {
+            //         this.isSpinnerVisible = false;
+            //     }
+            // )
         }
     }
 

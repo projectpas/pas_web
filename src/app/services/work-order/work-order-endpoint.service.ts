@@ -241,17 +241,18 @@ export class WorkOrderEndpointService extends EndpointFactory {
     });
     }
 
-    getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder) {
+    getWorkOrderAssetList(isSubWorkOrder,data) {
         if(isSubWorkOrder==true){
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist?subWOPartNoId=${subWOPartNoId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder));
-    });
+    //         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist?subWOPartNoId=${subWOPartNoId}`, this.getRequestHeaders()).catch(error => {
+    //   return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder));
+    // });
         }else{
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderassetlist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder));
+            return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/workorderassetlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(isSubWorkOrder,data));
     });
         }
     }
+
 
     createWorkOrderLabor(data,isSubWorkOrder) {
         if(isSubWorkOrder==true){

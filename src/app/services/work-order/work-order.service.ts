@@ -135,9 +135,9 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getbillingCostDataForWoOnly(workOrderWorkflowId,managementStructureId);
     }
     
-    getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder) {
-        return this.workOrderEndpointService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder);
-    }
+    getWorkOrderAssetList(isSubWorkOrder,data) {
+        return this.workOrderEndpointService.getWorkOrderAssetList(isSubWorkOrder,data);
+    } 
     createWorkOrderLabor(data,isSubWorkOrder) {
         return this.workOrderEndpointService.createWorkOrderLabor(data,isSubWorkOrder);
     }
