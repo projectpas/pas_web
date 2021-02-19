@@ -60,12 +60,14 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   deletingLabourObj: any;
   taskIndexToggle: any;
   labourHeader: any;
-
+  disabledUpdatebtn:boolean=true; 
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,
     private commonService: CommonService) { }
     
   ngOnInit() {
+    this.disabledUpdatebtn=true;
+    console.log("employee list",this.employeesOriginalData)
     this.allEmployees = this.employeesOriginalData;
     this.dropdownSettings = {
       singleSelection: false,
@@ -122,8 +124,12 @@ laborTaskData:any;
   ngOnChanges() {
     if(this.workOrderLaborList !=undefined){
       this.laborTaskData=this.workOrderLaborList;
+      this.isEdit=true;
+      this.disabledUpdatebtn=true;
     }
-    this.allEmployees = this.employeesOriginalData;
+    if(this.employeesOriginalData && this.employeesOriginalData.length !=0){
+      this.allEmployees = this.employeesOriginalData;
+    }
    this.laborForm.dataEnteredBy = getObjectById('value', this.laborForm.dataEnteredBy, this.employeesOriginalData);
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } });
@@ -370,6 +376,7 @@ laborTaskData:any;
         this.addNewTask(item.description);
       }
     }
+    this.disabledUpdatebtn=false;
   }
   onSelectAll(items: any) {
     items.forEach(x => {
@@ -380,6 +387,7 @@ laborTaskData:any;
         }
       }
     })
+    this.disabledUpdatebtn=false;
   }
   deleteConfirmationTask(type) {
     if (type == 'single') {
@@ -403,6 +411,7 @@ laborTaskData:any;
       })
     })
     $('#confirmationTaskDelete').modal('hide');
+    this.disabledUpdatebtn=false;
   }
 
 
@@ -623,6 +632,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
   }
 
   startandStop(currentRecord) {
+    this.disabledUpdatebtn=false;
     if (currentRecord.startDate === null) {
       currentRecord.startDate = new Date();
     } else if (currentRecord.endDate === null) {
@@ -759,6 +769,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
       this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
     }
     this.saveworkOrderLabor.emit(this.saveFormdata);
+    this.disabledUpdatebtn=true;
   }
   getOverHeadCost(taskList) {
     let total = 0;
@@ -857,6 +868,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
     this.laborForm.workOrderLaborList[0][taskName][index].isDeleted = true;
     let temp = this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
     this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
+    this.disabledUpdatebtn=false;
 this.commonfunctionHandler();
   }
   commonfunctionHandler(){
@@ -1180,6 +1192,7 @@ this.commonfunctionHandler();
       this.laborForm.totalWorkHours = 0;
     }
     $('#confirmation').modal('hide');
+    this.disabledUpdatebtn=false;
   }
   dismissModel() {
     this.laborForm['isTaskCompletedByOne'] = !this.laborForm['isTaskCompletedByOne'];
@@ -1265,8 +1278,13 @@ this.commonfunctionHandler();
             this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = memo;
         }
         $("#textarea-popup").modal("hide");
+        this.disabledUpdatebtn=false;
     }
     onCloseTextAreaInfo() {
         $("#textarea-popup").modal("hide");
     }
+   checkValid(v){
+    this.disabledUpdatebtn=false;
+    }
+    
 }

@@ -589,9 +589,8 @@
                               </a> -->
                               <a
                               class="btn  boxed-float-btn nobg" matTooltip="Asset Inventory View" matTooltipPosition="above"
-                              data-toggle="modal"
-                              data-target="#checkInOutView1"
-                              (click)="viewAsstes(row)"
+                           
+                              (click)="viewAsstesInventory(row)"
                             >
                               <i class="fa fa-eye"></i>
                             </a>
@@ -632,6 +631,24 @@
             </div>
           </div>   
         </div>
+        <!-- <div class="modal fade" id="assetInventView" role="dialog" data-backdrop="static" data-keyboard="false">
+          <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                      <h4 class="modal-title">Details of Asset Inventory</h4>
+                  </div>
+                  <div class="modal-body">
+                    <app-asset-inventory-view [assetInventoryId]="assetRecordId"></app-asset-inventory-view>
+                      <div class="editor-buttons">
+                         <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div> -->
+     
         <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
 

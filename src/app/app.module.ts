@@ -268,8 +268,8 @@ import { CommunicationService } from './shared/services/communication.service';
 import { TabViewModule } from 'primeng/tabview';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
 import { CommonDocumentsModule } from "./components/common-components/common-documents/common-documents.module";
-
- 
+import{AssetInventoryViewComponent} from "./components/Asset-Management/asset-inventory-view/asset-inventory-view.component"
+import { CalendarModule } from "primeng/calendar";
 @NgModule({
   imports: [
     CardModule,
@@ -297,7 +297,8 @@ import { CommonDocumentsModule } from "./components/common-components/common-doc
     AppSharedModule,
     NgbModule,
     TabViewModule,
-    CommonDocumentsModule
+    CommonDocumentsModule,
+    CalendarModule,
   ],
   declarations: [
     AppComponent,
@@ -329,6 +330,7 @@ import { CommonDocumentsModule } from "./components/common-components/common-doc
     StocklineViewComponent,
     StocklineHistoryComponent,
     RefreshAlert, 
+    AssetInventoryViewComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -544,6 +546,7 @@ import { CommonDocumentsModule } from "./components/common-components/common-doc
     StocklineViewComponent,
     StocklineHistoryComponent,
     EntityViewComponent,
+    AssetInventoryViewComponent
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],
