@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../../services/common.service';
 import { DatePipe } from "@angular/common";
+import{AssetInventoryViewComponent} from '../../../Asset-Management/asset-inventory-view/asset-inventory-view.component'
 @Component({
     selector: 'app-work-order-assets',
     templateUrl: './work-order-assets.component.html',
@@ -124,12 +125,13 @@ export class WorkOrderAssetsComponent implements OnInit {
     }
     assetInventoryId: any = 0;
     viewAsstes(rowData) {
-        console.log("rowData",rowData)
         this.assetRecordId = rowData.assetRecordId;
-        // this.assetRecordId = 103;
-        // this.currentRecord.assetRecordId=103;
-        // this.currentRecord.workOrderAssetId=171;
     }
+viewAsstesInventory(rowData){
+    // this.assetRecordId = rowData.assetInventoryId;
+    this.modal = this.modalService.open(AssetInventoryViewComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange'  });
+    this.modal.componentInstance.assetInventoryId = rowData.assetInventoryId;
+}
     workOrderCheckInCheckOutList: any = [];
     AvailableCount: any;
     showcheckInOutlist = false;
@@ -641,7 +643,6 @@ export class WorkOrderAssetsComponent implements OnInit {
                     this.isSpinnerVisible = false;
                 })
         } else {
-            console.log("data.equipments", data.equipments)
             const equipmentArr = data.equipments.map(x => {
                 return {
                     ...x,
