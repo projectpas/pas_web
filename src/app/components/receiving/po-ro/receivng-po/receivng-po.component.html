@@ -305,13 +305,13 @@
                                     </td>
                                     <td style="padding:4px;">
                                         <input type="text"
-                                               *ngIf="!part.hasChildren && part.stockLineCount < part.quantityOrdered"
+                                               *ngIf="!part.hasChildren && (part.stockLineCount + part.draftedStockLineCount + part.quantityRejected) < part.quantityOrdered"
                                                [(ngModel)]="part.quantityActuallyReceived"
                                                (keyup)="addStockLine(part, false)" (ngModelChange)="btnactive($event)"
                                                pInputText pKeyFilter="pnum" class="form-control text-right"
                                                style="width: 50px !important;
                                                margin-right: 10px !important;" [maxLength]="12" required />
-                                        <button *ngIf="!part.hasChildren && part.stockLineCount < part.quantityOrdered"
+                                        <button *ngIf="!part.hasChildren && (part.stockLineCount + part.draftedStockLineCount + part.quantityRejected) < part.quantityOrdered"
                                                [disabled]="!part.quantityActuallyReceived"
                                                class="btn btn-primary btn-po-details"
                                                (click)="toggleStockLine($event, part)">

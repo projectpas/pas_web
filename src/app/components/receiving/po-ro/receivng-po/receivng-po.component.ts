@@ -620,9 +620,10 @@ export class ReceivngPoComponent implements OnInit {
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
         }
-
-        if (quantity > part.quantityOrdered - part.stockLineCount) {
-            this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than quantity ordered", MessageSeverity.error);
+      
+        if (quantity > (part.quantityOrdered - part.stockLineCount - part.draftedStockLineCount - part.quantityRejected )) 
+        {
+            this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than expected Qty", MessageSeverity.error);
             return;
         }
 
