@@ -115,8 +115,8 @@ export class ReceivingService {
         return this.receivingEndpoing.getReceivingROPartsForViewById(repairOrderId);
     }
 
-    getReceivingROPartsForEditById(repairOrderId){
-        return this.receivingEndpoing.getReceivingROPartsForEditById(repairOrderId);
+    getReceivingROPartsForEditById(repairOrderId,employeeId = 0){
+        return this.receivingEndpoing.getReceivingROPartsForEditById(repairOrderId,employeeId);
     }
 
     updateStockLine(receiveParts: ReceiveParts[]) {

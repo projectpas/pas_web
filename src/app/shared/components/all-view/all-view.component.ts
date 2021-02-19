@@ -346,9 +346,9 @@ export class AllViewComponent implements OnInit {
             extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
             foreignExchangeRate: x.foreignExchangeRate ? formatNumberAsGlobalSettingsModule(x.foreignExchangeRate, 5) : '0.00',
             repairOrderSplitParts: this.getRepairOrderSplit(x)
-          }
-          //this.getManagementStructureCodesParent(partList);
+          }         
           this.roPartsList.push(partList);
+          
         });
       }
     }, err => { });
@@ -366,7 +366,7 @@ export class AllViewComponent implements OnInit {
     }
   }
 
-  getPurchaseOrderSplit(partList) {
+  getPurchaseOrderSplit(partList) {    
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
         const splitpart = {

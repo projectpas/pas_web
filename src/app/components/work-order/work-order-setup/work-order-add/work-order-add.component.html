@@ -837,7 +837,7 @@
 </div>
             <div class="card col-md-12 div_bsck" >
                 <!--#f1f1f1-->
-                <ul class="nav nav-pills nav-pills-cstm back_filsd" id="pills-tab" role="tablist"
+                <ul class="nav nav-pills nav-pills-cstm back_filsd wo_td" id="pills-tab" role="tablist"
                     style="margin-top: 2px;" *ngIf="!hideWOHeader">
 
                     <li class="nav-item" *ngIf="isSubWorkOrder">
@@ -846,8 +846,8 @@
                             (click)="gridTabChange('workOrderMain');  ">WorkOrder Main</a>
                     </li>
                     <li class="nav-item dropdown" *ngIf="workFlowId !==0">
-                        <p-splitButton [label]="showWorkflowLabel" [model]="wflowitems"></p-splitButton>
-                        <!-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        <!-- <p-splitButton [label]="showWorkflowLabel" [model]="wflowitems"></p-splitButton> -->
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                             aria-expanded="false"
                             [ngClass]="{active : gridActiveTab === 'workFlow' ||  subTabWorkFlow === 'editworkFlow' || subTabWorkFlow === 'createworkFlow' || subTabWorkFlow === 'viewworkFlow'  }">Workflow</a>
                         <div class="dropdown-menu">
@@ -857,7 +857,7 @@
                                 Existing WF
                             </a>
                             <div class="dropdown-divider"></div>
-                        </div> -->
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'materialList'}"
@@ -1038,7 +1038,7 @@
                     (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)" [woNumber]="workOrderGeneralInformation.workOrderNum" [customerName]="workOrderGeneralInformation.customerDetails.customerName" [woOperDate]="workOrderGeneralInformation.openDate"
                     (refreshData)="getEquipmentByWorkOrderId($event)" [employeesOriginalData]="employeesOriginalData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [isWorkOrder]="isWorkOrder" [workFlowObject]="workFlowObject"  [workOrderId]="workOrderId"
-                    [workOrderAssetList]="workOrderAssetList" [savedWorkOrderData]="savedWorkOrderData" [isView]="isView"> 
+                    [workOrderAssetList]="workOrderAssetList" [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData" [isView]="isView"> 
                 </app-work-order-assets>
             </div>
             <div *ngIf="workOrderId && workOrderPartNumberId && (subTabMainComponent === 'existingRO')"

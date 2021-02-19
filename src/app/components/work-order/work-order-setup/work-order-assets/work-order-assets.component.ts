@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
-import {editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
-declare var $ : any;
+import { editValueAssignByCondition, getObjectById, listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
+declare var $: any;
 import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../../services/common.service';
@@ -15,18 +15,19 @@ import { DatePipe } from "@angular/common";
 })
 export class WorkOrderAssetsComponent implements OnInit {
     modal: NgbModalRef;
-    @Input() isView : boolean = false;
-    @Input() savedWorkOrderData: any
-    @Input() workOrderAssetList: any
+    @Input() isView: boolean = false;
+    @Input() savedWorkOrderData: any;
+    @Input() workOrderAssetList: any;
+    @Input() workFlowWorkOrderId: any;
     @Input() isWorkOrder;
     @Input() employeesOriginalData;
     @Input() workFlowObject;
     @Output() refreshData = new EventEmitter();
     @Output() saveEquipmentListForWO = new EventEmitter();
     @Output() updateEquipmentListForWO = new EventEmitter();
-    @Input() subWorkOrderDetails:any;
-    @Input() subWOPartNoId:any;
-    @Input() isSubWorkOrder:boolean=false;
+    @Input() subWorkOrderDetails: any;
+    @Input() subWOPartNoId: any;
+    @Input() isSubWorkOrder: boolean = false;
     @Input() woNumber;
     @Input() customerName;
     @Input() woOperDate;
@@ -34,7 +35,7 @@ export class WorkOrderAssetsComponent implements OnInit {
     @Input() workOrderId;
     textAreaInfo: any;
     memoIndex;
-    pageSize: number = 50;
+    pageSize: number = 10;
     pageIndex: number = 0;
     totalRecords: number = 0;
     totalPages: number = 0;
@@ -44,20 +45,20 @@ export class WorkOrderAssetsComponent implements OnInit {
     lazyLoadEventData: any;
     currentDeletedstatus: boolean = false;
     assetChekinCheckoutheaders = [
-        { header: "",field: "checkbox"},
-        { header: "Tool Name",field: "assetName"},
-        { header: "Tool ID",field: "assetId"},
-        { header: "Inventory Num",field: "inventoryNumber"},
-        { header: "Tool Type",field: "assetType"},
-        { header: "Manufacturer",field: "manufacturer"},
-        { header: "Serial Num",field: "serialNo"},
-        { header: "Location",field: "assetLocation"},
-        { header: "Status",field: "inventoryStatus"},
-        { header: "Checked Out by",field: "checkOutById"},
-        { header: "Checked Out Date",field: "checkOutDate"},
-        { header: "Checked In by",field: "checkInById"},
-        { header: "Checked In Date",field: "checkInDate"},
-        { header: "Notes",field: "notes"},
+        { header: "", field: "checkbox" },
+        { header: "Tool Name", field: "assetName" },
+        { header: "Tool ID", field: "assetId" },
+        { header: "Inventory Num", field: "inventoryNumber" },
+        { header: "Tool Type", field: "assetType" },
+        { header: "Manufacturer", field: "manufacturer" },
+        { header: "Serial Num", field: "serialNo" },
+        { header: "Location", field: "assetLocation" },
+        { header: "Status", field: "inventoryStatus" },
+        { header: "Checked Out by", field: "checkOutById" },
+        { header: "Checked Out Date", field: "checkOutDate" },
+        { header: "Checked In by", field: "checkInById" },
+        { header: "Checked In Date", field: "checkInDate" },
+        { header: "Notes", field: "notes" },
     ]
     headers = [
         { field: 'name', header: 'Tool Name' },
@@ -70,6 +71,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         { field: "updatedDate", header: "Updated Date", width: "130px" },
         { field: "updatedBy", header: "UpdatedBy", width: "130px" }
     ]
+    disableSaveForEdit:boolean=false; 
     selectedColumns = this.headers;
     moduleName = "Tool";
     assetRecordId: any;
@@ -82,9 +84,9 @@ export class WorkOrderAssetsComponent implements OnInit {
         date: new Date(),
         assetId: null,
         assetStatus: null,
-        quantity:null,
-        checkInQty:null,
-        checkOutQty:null,
+        quantity: null,
+        checkInQty: null,
+        checkOutQty: null,
     }
     assetsform = { ...this.assets }
     status: any;
@@ -98,8 +100,8 @@ export class WorkOrderAssetsComponent implements OnInit {
 
     ngOnInit(): void {
     }
-    constructor(private workOrderService: WorkOrderService, private authService: AuthService,    private datePipe: DatePipe,     private commonService: CommonService,
-        private alertService: AlertService,  private modalService: NgbModal,private cdRef: ChangeDetectorRef) {
+    constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
+        private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {
 
     }
 
@@ -120,165 +122,175 @@ export class WorkOrderAssetsComponent implements OnInit {
             this.employeeList = employee;
         }
     }
-    assetInventoryId:any=0;
+    assetInventoryId: any = 0;
     viewAsstes(rowData) {
+        console.log("rowData",rowData)
         this.assetRecordId = rowData.assetRecordId;
+        // this.assetRecordId = 103;
+        // this.currentRecord.assetRecordId=103;
+        // this.currentRecord.workOrderAssetId=171;
     }
-    workOrderCheckInCheckOutList:any=[];
-    AvailableCount:any;
-showcheckInOutlist=false;
-    openGrid(){
-        this.showcheckInOutlist=true;
-        this.workOrderCheckInCheckOutList=[];
-        this.AvailableCount=0;
-if(this.status=='checkIn'){
-    this.workOrderService.checkInAseetInventoryList(this.currentRecord.workOrderAssetId).subscribe(res=>{
-this.workOrderCheckInCheckOutList=res;
-if(this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length !=0){
-this.workOrderCheckInCheckOutList.map(element => {
-    element.checkOutDate=element.checkOutDate? new Date(element.checkOutDate) :new Date();
-    element.checkInDate=element.checkInDate? new Date(element.checkInDate) :new Date();
-    element.isSelected=false; 
-    element.checkInById=this.authService.currentEmployee;
-    if(element.inventoryStatus=='Available'){
-        this.AvailableCount+1;
-    }
-});
-}
-    })
-}else if(this.status=='checkOut'){
-    this.workOrderService.checkOutAseetInventoryList(this.currentRecord.workOrderAssetId,this.workOrderId,this.workOrderPartNumberId,this.currentRecord.assetRecordId,'admin',1).subscribe(res=>{
-        this.workOrderCheckInCheckOutList=res;
-   if(this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length !=0){
-    this.workOrderCheckInCheckOutList.map(element => {
-        element.checkOutDate=element.checkOutDate? new Date(element.checkOutDate) :new Date();
-        element.checkInDate=element.checkInDate? new Date(element.checkInDate) :new Date();
-        element.isSelected=false; 
-        element.checkOutById=this.authService.currentEmployee;
-        if(element.inventoryStatus=='Available'){
-            this.AvailableCount=this.AvailableCount+1;
+    workOrderCheckInCheckOutList: any = [];
+    AvailableCount: any;
+    showcheckInOutlist = false;
+    openGrid() {
+        this.showcheckInOutlist = true;
+        this.workOrderCheckInCheckOutList = [];
+        this.AvailableCount = 0;
+        if (this.status == 'checkIn') {
+            this.workOrderService.checkInAseetInventoryList(this.currentRecord.workOrderAssetId).subscribe(res => {
+                this.workOrderCheckInCheckOutList = res;
+                if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+                    this.workOrderCheckInCheckOutList.map(element => {
+                        element.checkOutDate = element.checkOutDate ? new Date(element.checkOutDate) : new Date();
+                        element.checkInDate = element.checkInDate ? new Date(element.checkInDate) : new Date();
+                        element.isSelected = false;
+                        element.checkInById = this.authService.currentEmployee;
+                        if (element.inventoryStatus == 'Available') {
+                            this.AvailableCount + 1;
+                        }
+                    });
+                }
+            })
+        } else if (this.status == 'checkOut') {
+            this.workOrderService.checkOutAseetInventoryList(this.currentRecord.workOrderAssetId, this.workOrderId, this.workOrderPartNumberId, this.currentRecord.assetRecordId, 'admin', 1).subscribe(res => {
+                this.workOrderCheckInCheckOutList = res;
+                if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+                    this.workOrderCheckInCheckOutList.map(element => {
+                        element.checkOutDate = element.checkOutDate ? new Date(element.checkOutDate) : new Date();
+                        element.checkInDate = element.checkInDate ? new Date(element.checkInDate) : new Date();
+                        element.isSelected = false;
+                        element.checkOutById = this.authService.currentEmployee;
+                        if (element.inventoryStatus == 'Available') {
+                            this.AvailableCount = this.AvailableCount + 1;
+                        }
+                    });
+                }
+            })
         }
-    });
-   }
-    })
-}   
     }
 
     checkStatus(rowData, value) {
-        this.showcheckInOutlist=false;
-  this.assetsform = {
+        this.showcheckInOutlist = false;
+        this.assetsform = {
             ...this.assetsform, description: rowData.description,
             assetIdNumber: rowData.rowData, assetId: rowData.assetId, assetStatus: value,
-            quantity:rowData.quantity,
-            checkInQty:rowData.checkInQty,
-            checkOutQty:rowData.checkOutQty,
+            quantity: rowData.quantity,
+            checkInQty: rowData.checkInQty,
+            checkOutQty: rowData.checkOutQty,
             checkInEmpId: getObjectById('value', this.employeeId, this.employeesOriginalData),
             checkOutEmpId: getObjectById('value', this.employeeId, this.employeesOriginalData),
         }
         this.currentRecord = rowData;
         this.status = value;
-        console.log("asset check in data",rowData,)
     }
-    finalAssetArray:any=[];
-    quantitySelected:any=0;
-    checkValue(array){
-array.forEach(element => {
-   if(element.isChecked==true){
-    this.quantitySelected=this.quantitySelected+1;
-   }else{
-       if(this.quantitySelected >0){
-           this.quantitySelected=this.quantitySelected-1;   
+    finalAssetArray: any = [];
+    quantitySelected: any = 0;
+    checkValue(array) {
+        array.forEach(element => {
+            if (element.isChecked == true) {
+                this.quantitySelected = this.quantitySelected + 1;
+            } else {
+                if (this.quantitySelected > 0) {
+                    this.quantitySelected = this.quantitySelected - 1;
 
-       }else{
-        this.quantitySelected=0; 
-       }
-   } 
-});
+                } else {
+                    this.quantitySelected = 0;
+                }
+            }
+        });
     }
     saveAssets(formData) {
-        this.finalAssetArray=[];
+        this.finalAssetArray = [];
         const data = {
             ...this.assetsform,
-            employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),                        
+            employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),
         }
+        this.quantitySelected = 0;
         if (this.status === 'checkIn') {
             formData.forEach(element => {
-                element.checkInById=element.checkInById.value;
-                element.createdBy= this.userName;
-                element.UpdatedBy=this.userName;
-                element.masterCompanyId=1;
-                if(element.isChecked==true){
+                element.checkInById = element.checkInById.value;
+                element.createdBy = this.userName;
+                element.UpdatedBy = this.userName;
+                element.masterCompanyId = 1;
+                if (element.isChecked == true) {
                     this.finalAssetArray.push(element);
                 }
             });
-            if(this.finalAssetArray && this.finalAssetArray.length !=0){
-            this.workOrderService.saveCheckInInventory(this.finalAssetArray).subscribe(res => {
-                this.refreshData.emit();
-                this.alertService.showMessage(
-                    '',
-                    'Inventory Checked-In successfully!',
-                    MessageSeverity.success
-                );
-            },
-            err => {
-                if(err && err.error.text=='Inventory Checked-In successfully!' ){
+            if (this.finalAssetArray && this.finalAssetArray.length != 0) {
+                this.workOrderService.saveCheckInInventory(this.finalAssetArray).subscribe(res => {
+                    // this.refreshData.emit();
+            
                     this.alertService.showMessage(
                         '',
                         'Inventory Checked-In successfully!',
                         MessageSeverity.success
                     );
-                }else{
-                }
-            })
-        }
+                },
+                    err => {
+                    //     if (err && err.error.text == 'Inventory Checked-In successfully!') {
+                    //         this.alertService.showMessage(
+                    //             '',
+                    //             'Inventory Checked-In successfully!',
+                    //             MessageSeverity.success
+                    //         );
+                    //         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+                    // this.getAllWorkOrderList(this.lazyLoadEventData);
+                    //     } else {
+                    //     }
+                    })
+            }
         } else {
             formData.forEach(element => {
-                element.checkOutById=element.checkOutById.value;
-                if(element.inventoryStatus=='Available'){
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
                     this.finalAssetArray.push(element);
                 }
             });
-            if(this.finalAssetArray && this.finalAssetArray.length !=0){
-            this.workOrderService.saveCheckOutInventory(this.finalAssetArray).subscribe(res => {
-                this.refreshData.emit();
-                this.alertService.showMessage(
-                    '',
-                    'Inventory Checked-Out successfully!',
-                    MessageSeverity.success
-                );
-            },
-            err => {
-                if(err && err.error.text=='Inventory Checked-Out successfully!' ){
+            if (this.finalAssetArray && this.finalAssetArray.length != 0) {
+                this.workOrderService.saveCheckOutInventory(this.finalAssetArray).subscribe(res => {
+                    // this.refreshData.emit();
                     this.alertService.showMessage(
                         '',
                         'Inventory Checked-Out successfully!',
                         MessageSeverity.success
                     );
-                }else{
-                }
-              
-            })
+                },
+                    err => {
+                    //     if (err && err.error.text == 'Inventory Checked-Out successfully!') {
+                    //         this.alertService.showMessage(
+                    //             '',
+                    //             'Inventory Checked-Out successfully!',
+                    //             MessageSeverity.success
+                    //         );
+                    //         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+                    // this.getAllWorkOrderList(this.lazyLoadEventData);
+                    //     } else {
+                    //     }
+
+                    })
+            }
         }
-        }
-    } 
-    releaseData:any=[];
-    releaseInventory(){
-        this.releaseData=[]; 
-        if(this.assetsform.assetStatus == 'checkOut'){
-    
-        if(this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length !=0){
-            this.workOrderCheckInCheckOutList.forEach(element => {
-                element.checkOutById=element.checkOutById.value;
-                if(element.inventoryStatus=='Available'){
-                   this.releaseData.push(element); 
+    }
+    releaseData: any = [];
+    releaseInventory() {
+        this.releaseData = [];
+        this.quantitySelected = 0;
+        if (this.assetsform.assetStatus == 'checkOut') {
+
+            if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+                this.workOrderCheckInCheckOutList.forEach(element => {
+                    element.checkOutById = element.checkOutById.value;
+                    if (element.inventoryStatus == 'Available') {
+                        this.releaseData.push(element);
+                    }
+                });
+                if (this.releaseData && this.releaseData.length != 0) {
+                    this.workOrderService.releaseAssetInventoryList(this.releaseData).subscribe(res => {
+                    });
                 }
-            });
-            if(this.releaseData && this.releaseData.length !=0){
-            this.workOrderService.releaseAssetInventoryList(this.releaseData).subscribe(res =>{
-        });
-    }
-    }
-    }
+            }
+        }
     }
     closeAddNew() {
         this.addNewEquipment = false;
@@ -303,47 +315,39 @@ array.forEach(element => {
             this.assetAuditHistory = res;
 
         },
-        err => {
-        })
+            err => {
+            })
 
     }
-    currentRow:any={};
+    currentRow: any = {};
     openDelete(content, row) {
-  this.currentRow=row;
-      this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-      this.modal.result.then(() => {
-          
-      }, () => {  })
-  }
+        this.currentRow = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+
+        }, () => { })
+    }
     delete() {
-        
-        this.workOrderService.deleteWorkOrderAssetByAssetId(this.isSubWorkOrder ? this.currentRow.subWorkOrderAssetId :   this.currentRow.workOrderAssetId, this.userName,this.isSubWorkOrder).subscribe(res => {
-            this.refreshData.emit();
+
+        this.workOrderService.deleteWorkOrderAssetByAssetId(this.isSubWorkOrder ? this.currentRow.subWorkOrderAssetId : this.currentRow.workOrderAssetId, this.userName, this.isSubWorkOrder).subscribe(res => {
+            // this.refreshData.emit();
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            this.getAllWorkOrderList(this.lazyLoadEventData);
             this.alertService.showMessage(
                 '',
                 'Deleted WorkOrder Asset  Successfully',
                 MessageSeverity.success
             );
         },
-        err => {
-        })
+            err => {
+            })
         this.modal.close();
     }
 
     public dismissModel() {
         this.modal.close();
     }
-    saveEquipmentList(event) {
-        this.saveEquipmentListForWO.emit(event)
-        $('#addNewEquipments').modal('hide');
-        this.addNewEquipment = false; 
-    }
-    updateEquipmentList(event) {
-        this.updateEquipmentListForWO.emit(event)
-        this.isEdit = false;
-        $('#addNewEquipments').modal('hide');
-        this.addNewEquipment = false;
-    }
+
 
     getColorCodeForHistory(i, field, value) {
         const data = this.assetAuditHistory;
@@ -357,23 +361,54 @@ array.forEach(element => {
         }
     }
 
-    onAddTextAreaInfo(row, index) {
+    // onAddTextAreaInfo(row, index) {
+    //     this.memoIndex = index;
+    //     this.textAreaInfo = row.notes;
+    // }
+
+    // onSaveTextAreaInfo(notes) {
+    //     if (notes) {
+    //         this.textAreaInfo = notes;
+    //         this.workOrderCheckInCheckOutList[this.memoIndex].notes = this.textAreaInfo;
+
+
+    //     }
+    //     $("#textarea-popup").modal("hide");
+    // }
+    // onCloseTextAreaInfo() {
+    //     $("#textarea-popup").modal("hide");
+    // }
+    onAddTextAreaInfo(material,index) {
         this.memoIndex = index;
-        this.textAreaInfo = row.notes;
+        this.textAreaInfo = material;
+        this.disableEditor=true;
     }
-
-    onSaveTextAreaInfo(notes) {
-        if (notes) {
-            this.textAreaInfo = notes;
-            this.workOrderCheckInCheckOutList[this.memoIndex].notes = this.textAreaInfo;
-
-
+    // textAreaInfo: any;
+    disableEditor:any=true;
+    editorgetmemo(ev){
+        this.disableEditor=false;
+                    }
+    onSaveTextAreaInfo(memo) {
+        this.disableSaveForEdit=false;
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.workOrderCheckInCheckOutList[this.memoIndex].notes = memo;
         }
         $("#textarea-popup").modal("hide");
     }
     onCloseTextAreaInfo() {
         $("#textarea-popup").modal("hide");
     }
+    parsedText(text) {
+    
+        if(text){
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+                const decodedString = dom.body.textContent;
+                return decodedString;
+        }
+          }
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
@@ -388,18 +423,17 @@ array.forEach(element => {
         if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
             this.isGlobalFilter = true;
         }
-        else
-        {
+        else {
             this.isGlobalFilter = false;
-        }        
+        }
         const pageIndex = parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows;;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventData.rows;
         this.lazyLoadEventData.first = pageIndex;
         this.lazyLoadEventData.globalFilter = value;
         this.filterText = value;
-        this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters};
-        // this.getAllWorkOrderList(this.lazyLoadEventData);
+        this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+        this.getAllWorkOrderList(this.lazyLoadEventData);
     }
     loadData(event) {
         this.lazyLoadEventData = event;
@@ -408,15 +442,15 @@ array.forEach(element => {
         this.pageSize = event.rows;
         event.first = pageIndex;
         // if (this.viewType && this.currentStatus) {
-            this.lazyLoadEventData.filters = {
-                ...this.lazyLoadEventData.filters,
-                // workOrderStatus: this.lazyLoadEventData.filters.workOrderStatus == undefined ? this.currentStatus : this.lazyLoadEventData.filters.workOrderStatus,
-                // viewType: this.viewType
+        this.lazyLoadEventData.filters = {
+            ...this.lazyLoadEventData.filters,
+            // workOrderStatus: this.lazyLoadEventData.filters.workOrderStatus == undefined ? this.currentStatus : this.lazyLoadEventData.filters.workOrderStatus,
+            // viewType: this.viewType
             // }
         }
 
-        if (!this.isGlobalFilter) {   
-            // this.getAllWorkOrderList(event);         
+        if (!this.isGlobalFilter) {
+            this.getAllWorkOrderList(event);
         } else {
             this.globalSearch(this.filterText)
         }
@@ -428,13 +462,11 @@ array.forEach(element => {
         this.lazyLoadEventData.first = this.pageIndex;
         if (value == true) {
             this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
-            // this.isSpinnerVisible = true;
-            // this.getAllWorkOrderList(this.lazyLoadEventData);
+            this.getAllWorkOrderList(this.lazyLoadEventData);
         } else {
             this.currentDeletedstatus = false;
             this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
-            // this.isSpinnerVisible = true;
-            // this.getAllWorkOrderList(this.lazyLoadEventData);
+            this.getAllWorkOrderList(this.lazyLoadEventData);
         }
     }
 
@@ -444,10 +476,9 @@ array.forEach(element => {
             this.modal.close();
             this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
         }, err => {
-            // this.isSpinnerVisible = false;
         });
     }
-    restorerecord:any={};
+    restorerecord: any = {};
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -459,7 +490,7 @@ array.forEach(element => {
         this.modal.close();
     }
     exportCSV(dt) {
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { }, "globalFilter": "" }
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": {}, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
@@ -473,7 +504,6 @@ array.forEach(element => {
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
-
                 dt._value = vList;
                 dt.exportCSV();
                 dt.value = this.workOrderAssetList;
@@ -481,5 +511,162 @@ array.forEach(element => {
             }, err => {
             });
     }
-}
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+    fieldSearch(field) {
+        this.isGlobalFilter = false;
+    }
+    isSpinnerVisible: boolean = false;
+    getAllWorkOrderList(data) {
+        const isdelete = this.currentDeletedstatus ? true : false;
+        data.filters.isDeleted = isdelete;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
+        // data.filters.employeeId= this.employeeId;
+        data.filters.workOrderWfId = this.workFlowWorkOrderId;
+        const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
+        this.isSpinnerVisible = true;
+        this.workOrderService.getWorkOrderAssetList(this.isSubWorkOrder, PagingData).subscribe(res => {
+            this.workOrderAssetList = res['results'].map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                }
+            });
 
+            if (res.results.length > 0) {
+                this.totalRecords = res.totalRecordsCount;
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            } else {
+                this.totalRecords = 0;
+                this.totalPages = 0;
+            }
+            this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
+    }
+
+    //create and update  work order asset
+    saveEquipmentList(event) {
+        // this.saveEquipmentListForWO.emit(event)
+        this.saveWorkOrderEquipmentList(event)
+
+        $('#addNewEquipments').modal('hide');
+        this.addNewEquipment = false;
+    }
+    updateEquipmentList(event) {
+        // this.updateEquipmentListForWO.emit(event)
+        this.updateWorkOrderEquipmentList(event)
+        this.isEdit = false;
+        $('#addNewEquipments').modal('hide');
+        this.addNewEquipment = false;
+    }
+    saveWorkOrderEquipmentList(data) {
+        this.equipmentArr = [];
+        if (this.isSubWorkOrder) {
+            this.equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workFlowWorkOrderId: this.workFlowWorkOrderId,
+                    subWOPartNoId: this.subWOPartNoId,
+                    workOrderId: this.subWorkOrderDetails.workOrderId,
+                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+                }
+            })
+        } else {
+            this.equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+                }
+            })
+        }
+        this.isSpinnerVisible = true;
+        this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.workFlowObject.equipments = [];
+            this.alertService.showMessage(
+                this.moduleName,
+                'Saved Work Order Equipment Succesfully',
+                MessageSeverity.success
+            );
+            this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+            this.getAllWorkOrderList(this.lazyLoadEventData);
+        },
+            err => {
+                this.isSpinnerVisible = false;
+                // this.errorHandling(err)
+            })
+    }
+    equipmentArr: any = [];
+    updateWorkOrderEquipmentList(data) {
+        this.equipmentArr = [];
+        if (this.isSubWorkOrder) {
+            this.equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workFlowWorkOrderId: this.workFlowWorkOrderId,
+                    subWOPartNoId: this.subWOPartNoId,
+                    workOrderId: this.subWorkOrderDetails.workOrderId,
+                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+                }
+            })
+            this.isSpinnerVisible = true;
+            this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.equipments = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated Work Order Equipment Succesfully',
+                    MessageSeverity.success
+                );
+                this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+                this.getAllWorkOrderList(this.lazyLoadEventData);
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                })
+        } else {
+            console.log("data.equipments", data.equipments)
+            const equipmentArr = data.equipments.map(x => {
+                return {
+                    ...x,
+                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                    isActive: true,
+                    createdBy: this.userName,
+                    updatedBy: this.userName,
+                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+                }
+            })
+            this.isSpinnerVisible = true;
+            this.workOrderService.updateWorkOrderEquipmentList(equipmentArr).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.workFlowObject.equipments = [];
+                this.alertService.showMessage(
+                    this.moduleName,
+                    'Updated  Work Order Equipment Succesfully',
+                    MessageSeverity.success
+                );
+                this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+                this.getAllWorkOrderList(this.lazyLoadEventData);
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                })
+        }
+    }
+}

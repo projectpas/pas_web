@@ -305,13 +305,13 @@
                                     </td>
                                     <td style="padding:4px;">
                                         <input type="text"
-                                               *ngIf="!part.hasChildren && part.stockLineCount < part.quantityOrdered"
+                                               *ngIf="!part.hasChildren && (part.stockLineCount + part.draftedStockLineCount + part.quantityRejected) < part.quantityOrdered"
                                                [(ngModel)]="part.quantityActuallyReceived"
                                                (keyup)="addStockLine(part, false)" (ngModelChange)="btnactive($event)"
                                                pInputText pKeyFilter="pnum" class="form-control text-right"
                                                style="width: 50px !important;
                                                margin-right: 10px !important;" [maxLength]="12" required />
-                                        <button *ngIf="!part.hasChildren && part.stockLineCount < part.quantityOrdered"
+                                        <button *ngIf="!part.hasChildren && (part.stockLineCount + part.draftedStockLineCount + part.quantityRejected) < part.quantityOrdered"
                                                [disabled]="!part.quantityActuallyReceived"
                                                class="btn btn-primary btn-po-details"
                                                (click)="toggleStockLine($event, part)">
@@ -885,7 +885,9 @@
                                                             <label>MFG Date</label>
                                                             <p-calendar [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
-                                                                       name="manufacturingDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
+                                                                       name="manufacturingDate" [yearNavigator]="true" [monthNavigator]="true" 
+                                                                       [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
+                                                                       yearRange="1900:2100"></p-calendar>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>MFG Trace</label>
@@ -940,7 +942,7 @@
                                                             <label>Certified Date</label>
                                                             <p-calendar  [ngClass]="inputValidCheckHeader ? 'calendar-validate' : ''" class="calendar" [showIcon]="true"  appendTo="body"
                                                                         [maxDate]="part.stocklineListObj[part.currentSLIndex].currentDate"
-                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"
+                                                                        [minDate]="part.stocklineListObj[part.currentSLIndex].manufacturingDate"                                                                        
                                                                         name="certifiedDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].certifiedDate">
                                                             </p-calendar>
