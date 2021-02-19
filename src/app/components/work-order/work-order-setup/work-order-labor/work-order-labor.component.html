@@ -28,7 +28,8 @@
                   getExpertiseEmployeeByExpertiseIdForHeader(laborForm.expertiseId); assignLabourExpertise(laborForm.expertiseId)" name="expertise" [required]="laborForm.isTaskCompletedByOne"></p-dropdown>
               </div>
               <div class="form-group" *ngIf="!isQuote">
-                <label for="employee">Employee <span *ngIf="laborForm.isTaskCompletedByOne">*</span></label>
+                <!-- *ngIf="laborForm.isTaskCompletedByOne" -->
+                <label for="employee">Employee <span >*</span></label>
                 <p-autoComplete class="p-autoComplete-ctsm" field="label" name="employee" [dropdown]="true"
                   errorMessage="Records not found" [forceSelection]="true" [suggestions]="employeeList"
                   (completeMethod)="filterEmployee($event); " [size]="30" [minLength]="1" [(ngModel)]="laborForm.employeeId"
