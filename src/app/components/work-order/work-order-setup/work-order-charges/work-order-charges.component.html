@@ -131,30 +131,30 @@
         </ng-container>
       </tr>
       <tr>
-        <th>Task</th>
-        <th *ngFor="let col of columns">
+        <th class="table-column-width">Task</th>
+        <th class="table-column-width" *ngFor="let col of columns">
           {{ col.header }}
         </th>
         <ng-container *ngIf="isQuote">
-          <th>Billing Method</th>
-          <th>Mark Up</th>
+          <th class="table-column-width">Billing Method</th>
+          <th class="table-column-width">Mark Up</th>
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Flate Rate</th> -->
-          <th>
+          <th class="table-column-width">
             Billing Rate
           </th>
-          <th>
+          <th class="table-column-width">
             Billing Amount
           </th>
         </ng-container>
-        <th *ngIf="!isView">Actions</th>
+        <th class="table-actions-column" *ngIf="!isView">Actions</th>
         <!-- <th colspan="4" class="text-center" *ngIf="!isView"></th> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-mainIndex="rowIndex">
       <ng-container *ngFor="let dt of rowData; let subIndex = index">
           <tr *ngIf="!dt['isDeleted']">
-            <td>
+            <td class="table-column-width">
               <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
@@ -162,11 +162,11 @@
               <!-- <p>{{dt.taskName}}</p> -->
             </td>
             <ng-container *ngFor="let col of columns">
-              <td *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+              <td class="table-column-width" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
                 <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
                 {{dt[col.field]}}
               </td>
-              <td *ngIf="col.field == 'roNumberId'">
+              <td class="table-column-width" *ngIf="col.field == 'roNumberId'">
                 <select class="form-control select-read-only" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
                   style="width: 130px;" name="roNum_{{mainIndex}}" disabled>
                   <option [value]="0">Select</option>
@@ -177,14 +177,14 @@
               </td>
             </ng-container>
             <ng-container *ngIf="isQuote">
-              <td>
+              <td class="table-column-width">
                 <select class="form-control" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
                   <option value="">Select</option>
                   <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                     [value]="bm.value">{{bm.label}}</option>
                 </select>
               </td>
-              <td>
+              <td class="table-column-width">
                 <select class="form-control select-markup" (change)="markupChanged(dt, 'row')"
                   [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
                   <option value="">Select</option>
@@ -195,13 +195,13 @@
               <td>
                 <input type="number" [(ngModel)]="dt.flateRate" [disabled]="dt.billingMethodId != 2"/>
               </td> -->
-              <td class="content-to-end">{{ formateCurrency(dt.billingRate) }}</td>
-              <td>
+              <td class="content-to-end table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
+              <td class="table-column-width">
                 <input type="text" class="form-control text-right" pInputText pKeyFilter="money" (change)="dt.billingAmount = dt.billingAmount.toFixed(2)" [(ngModel)]="dt.billingAmount"
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>
-            <td *ngIf="!isView">
+            <td class="table-column-width action-icons-cstm" *ngIf="!isView">
 
               <span data-target="#addNewCharges" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
