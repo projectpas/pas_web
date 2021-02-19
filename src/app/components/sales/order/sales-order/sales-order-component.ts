@@ -47,7 +47,7 @@ export class SalesOrderComponent implements OnInit {
     { field: 'customerCode', header: 'Code' },
     { field: 'accountType', header: 'Account Type' },
     { field: 'customerType', header: 'Type' },
-    { field: 'customerClassificationType', header: 'Classification' },
+    { field: 'customerClassification', header: 'Classification' },
     { field: 'email', header: 'Email' },
     { field: 'city', header: 'City' },
     { field: 'stateOrProvince', header: 'State' },
@@ -298,7 +298,7 @@ export class SalesOrderComponent implements OnInit {
 
   exportCSV(dt) {
     this.isSpinnerVisible = true;
-    let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": true, "isDeleted": false }, "globalFilter": "" };
+    let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": true, "isDeleted": false, "masterCompanyId": this.currentUserMasterCompanyId }, "globalFilter": "" };
     let filters = Object.keys(dt.filters);
     filters.forEach(x => {
       PagingData.filters[x] = dt.filters[x].value;
