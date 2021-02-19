@@ -65,7 +65,7 @@ export class ReceivngPoComponent implements OnInit {
     ManufacturerList: DropDownData[] = [];
     ConditionList: DropDownData[] = [];
     GLAccountList: DropDownData[] = [];
-    ShippingViaList: DropDownData[];
+    ShippingViaList: DropDownData[]= [];
     TagTypeList: any = [];
     receiving_po_header: boolean = false;
     ConditionId: number = 0;
@@ -278,13 +278,12 @@ export class ReceivngPoComponent implements OnInit {
         }       
         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
             true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-        const data= res.map(x => {
-                    return {
-                        Key:x.value,
-                        Value: x.label
-                    }
-                });
-        this.ShippingViaList = data;             
+                for (let company of res) {
+                    var dropdown = new DropDownData();
+                    dropdown.Key = company.value.toLocaleString();
+                    dropdown.Value = company.label
+                    this.ShippingViaList.push(dropdown);
+                }                  
         })   
     }
 
@@ -379,13 +378,13 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
                 var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId);
-                this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00'; 
+                this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00';                 
                 if(!shippingVia || shippingVia == undefined)
                 {
-                 var shippingVia = new DropDownData(); 
-                 shippingVia.Key = this.poDataHeader.shipViaId.toString();
-                 shippingVia.Value = this.poDataHeader.shipVia.toString();
-                 this.ShippingViaList.push(shippingVia);
+                    var shippingVia = new DropDownData(); 
+                    shippingVia.Key = this.poDataHeader.shipViaId;
+                    shippingVia.Value = this.poDataHeader.shipVia;
+                    this.ShippingViaList.push(shippingVia);
                 }  
             });
     }
@@ -621,9 +620,10 @@ export class ReceivngPoComponent implements OnInit {
             part.currentTLIndex = 0;
             part.currentSERIndex = 0;
         }
-
-        if (quantity > part.quantityOrdered - part.stockLineCount) {
-            this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than quantity ordered", MessageSeverity.error);
+      
+        if (quantity > (part.quantityOrdered - part.stockLineCount - part.draftedStockLineCount - part.quantityRejected )) 
+        {
+            this.alertService.showMessage(this.pageTitle, "Quantity receive can not be more than expected Qty", MessageSeverity.error);
             return;
         }
 
@@ -691,7 +691,7 @@ export class ReceivngPoComponent implements OnInit {
             stockLine.manufacturerId = part.itemMaster.manufacturerId;
             stockLine.visible = false;
             stockLine.shippingReference = '';
-            stockLine.shippingViaId = this.poDataHeader.shipViaId;
+            stockLine.shippingViaId = this.poDataHeader.shipViaId;            
             stockLine.shelfId = 0;
             stockLine.warehouseId = 0;
             stockLine.binId = 0;
@@ -744,7 +744,7 @@ export class ReceivngPoComponent implements OnInit {
             return {
                 ...x,                
                 //siteId: this.getSiteDetailsOnEdit(part, x),               
-                // shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
+                //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
                 shippingAccount: part.shippingAccountInfo,
                 purchaseOrderUnitCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderUnitCost, 2),
                 purchaseOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.purchaseOrderExtendedCost, 2)

@@ -78,7 +78,7 @@ export class ReceivingRoComponent implements OnInit {
     manufacturerList: DropDownData[] = [];
     ConditionList: DropDownData[] = [];
     GLAccountList: DropDownData[] = [];
-    ShippingViaList: DropDownData[];
+    ShippingViaList: DropDownData[] = [];
     ConditionId: number = 0;
     allPartGLAccountId: number;
     headerMemo: any;
@@ -288,13 +288,12 @@ export class ReceivingRoComponent implements OnInit {
         }
         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
             true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-                const data = res.map(x => {
-                    return {
-                        Key: x.value,
-                        Value: x.label
-                    }
-                });
-                this.ShippingViaList = data;
+                for (let ship of res) {
+                    var dropdown = new DropDownData();
+                    dropdown.Key = ship.value.toLocaleString();
+                    dropdown.Value = ship.label
+                    this.ShippingViaList.push(dropdown);
+                }  
             })
     }
 
@@ -383,8 +382,8 @@ export class ReceivingRoComponent implements OnInit {
             var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
             if(!shippingVia || shippingVia == undefined) {
                 var shippingVia = new DropDownData(); 
-                shippingVia.Key = this.repairOrderHeaderData.shipViaId.toString();
-                shippingVia.Value = this.repairOrderHeaderData.shipVia.toString();
+                shippingVia.Key = this.repairOrderHeaderData.shipViaId;
+                shippingVia.Value = this.repairOrderHeaderData.shipVia;
                 this.ShippingViaList.push(shippingVia);
             }      
         });
