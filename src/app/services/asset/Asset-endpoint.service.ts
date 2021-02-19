@@ -380,7 +380,7 @@ if(type=='add'){
             });
     }
 
-    getAssetsById(assetRecordId) {
+    getAssetsById(assetRecordId) { 
         return this.http.get<any>(`${this.baseUrl}/api/workOrder/workorderassetview?assetRecordId=${assetRecordId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getAssetsById(assetRecordId));
         });

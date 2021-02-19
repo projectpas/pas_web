@@ -18,10 +18,15 @@ input[type="text"], input[type="number"], select {
 //     background-color: #e9ecef !important;
 // }
 
-.child-data td, .parent-data td {
+.parent-data td {
+    background-color:#EAF2C5 !important ;
+    padding: 3px;
+}
+.child-data td {
     background: #fff !important;
     padding: 3px;
 }
+
 textarea {
     border-radius: 5px !important;
 }

@@ -67,9 +67,9 @@ export class ReceivingService {
             this.receivingEndpoing.getReceivingPODataById<PurchaseOrder>(receivingId,employeeId));
     }
 
-    getPurchaseOrderDataForEditById(receivingId: any) {
+    getPurchaseOrderDataForEditById(receivingId: any,employeeId = 0) {
         return Observable.forkJoin(
-            this.receivingEndpoing.getReceivingPODataForEditById<any>(receivingId));
+            this.receivingEndpoing.getReceivingPODataForEditById<any>(receivingId,employeeId));
     }
 
     getAllRecevingEditID(purchaseOrderId){   
@@ -115,8 +115,8 @@ export class ReceivingService {
         return this.receivingEndpoing.getReceivingROPartsForViewById(repairOrderId);
     }
 
-    getReceivingROPartsForEditById(repairOrderId){
-        return this.receivingEndpoing.getReceivingROPartsForEditById(repairOrderId);
+    getReceivingROPartsForEditById(repairOrderId,employeeId = 0){
+        return this.receivingEndpoing.getReceivingROPartsForEditById(repairOrderId,employeeId);
     }
 
     updateStockLine(receiveParts: ReceiveParts[]) {

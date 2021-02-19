@@ -756,6 +756,7 @@ export class StockLineDraft {
     ShippingVia: string = null;
     WorkOrder: string = null;
     WorkOrderMaterialsName: string = null;
+    tagTypeId: any = null;
 }
 
 export class ReceiveParts {

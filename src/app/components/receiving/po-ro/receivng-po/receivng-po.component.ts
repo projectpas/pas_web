@@ -378,7 +378,8 @@ export class ReceivngPoComponent implements OnInit {
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
                 this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId)
+                var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.poDataHeader.shipViaId);
+                this.poDataHeader.creditLimit = this.poDataHeader.creditLimit ? formatNumberAsGlobalSettingsModule(this.poDataHeader.creditLimit, 2) : '0.00'; 
                 if(!shippingVia || shippingVia == undefined)
                 {
                  var shippingVia = new DropDownData(); 
@@ -823,6 +824,9 @@ export class ReceivngPoComponent implements OnInit {
 			stockLine.managementStructureEntityId = stockLine.parentDivisionId;
 		 }		
     }
+
+
+    
 
     getStockLineSite(stockLine: StockLineDraft): void {
         stockLine.SiteList = [];
@@ -1427,13 +1431,17 @@ export class ReceivngPoComponent implements OnInit {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;
-                if (sl.tagType && sl.tagType.length > 0) {
-                    for (let i = 0; i < sl.tagType.length; i++) {
+               
+                if (sl.tagType && sl.tagType.length > 0) {                    
+                    sl.tagTypeId = sl.tagType.join();                
+                    sl.tagType = sl.tagTypeId.split(',');
+                    for (let i = 0; i < sl.tagType.length; i++) {                        
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                    }
-                    sl.tagType = sl.tagType.join();
+                    }                    
+                    sl.tagType = sl.tagType.join();                  
                 } else {
                     sl.tagType = "";
+                    sl.tagTypeId = "";
                 }
             }
             if (part.isSameDetailsForAllParts) {

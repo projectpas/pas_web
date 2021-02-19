@@ -323,7 +323,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-        debugger;
         if (this.workFlow) {
             this.getConditionsList();
             if (this.workFlow.materialList.length > 0) {

@@ -121,7 +121,7 @@ export class WorkOrderAddComponent implements OnInit {
     stockLineList: any;
     workOrderWorkFlowOriginalData: any;
     isDisabledSteps: boolean = false;
-    workFlowId: any = 0;
+    workFlowId: any = null;
     editWorkFlowData: any;
     modal: NgbModalRef;
     workFlowObject = {
@@ -259,7 +259,8 @@ export class WorkOrderAddComponent implements OnInit {
     selectedMPNSubWo: any;
     moduleNamee: any;
     disableForMemo: boolean = false;
-
+    wflowitems:any=[];
+    showWorkflowLabel:any='View WF';
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -278,6 +279,16 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.wflowitems = [
+            {label: 'View WF', command: () => {
+                this.showWorkflowLabel='View WF';
+                this.subTabWorkFlowChange('viewworkFlow');
+            }},
+            {label: 'Edit Existing WF', command: () => {
+                this.showWorkflowLabel='editworkFlow';
+                this.subTabWorkFlowChange('editworkFlow');
+            }}
+        ];
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
@@ -451,9 +462,10 @@ export class WorkOrderAddComponent implements OnInit {
         this.workOrderPartNumberId = data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId = data.workFlowId;
 
-        if (this.workFlowId != 0) {
+        if (this.workFlowId != null) {
             this.gridActiveTab = "workFlow";
             this.subTabWorkFlow = "viewworkFlow";
+            this.showWorkflowLabel='View WF';
             this.subTabWorkFlowChange('viewworkFlow');
         } else {
             this.gridActiveTab = 'materialList';
@@ -503,7 +515,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.getAllCustomerContact(this.workOrderGeneralInformation.customerDetails.customerId, 'edit');
             // }
             this.workOrderId = data.workOrderId;
-            if (this.workOrderGeneralInformation.partNumbers[0].workflowId == 0) {
+            if (this.workOrderGeneralInformation.partNumbers[0].workflowId == null) {
                 this.gridTabChange('materialList');
             }
             this.isRecCustomer = data.isRecCustomer;
@@ -513,13 +525,16 @@ export class WorkOrderAddComponent implements OnInit {
                 customerId: data.customerDetails,
                 customerPhoneNo: data.customerPhoneNo != null ? data.customerPhoneNo : data.customerDetails.customerPhone,
                 partNumbers: data.partNumbers.map((x, index) => {
+                    // x.technicianName='Suresh-33 Reddy';
                     this.getStockLineByItemMasterId(x.masterPartId, x.conditionId, index);
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId);
                     this.getWorkFlowByPNandScope(null,x,'onload');
                     return {
                         ...x,
-                        partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
+                        
+                        partTechnicianId:{name:x.technicianName,employeeId:x.technicianId},
+                        // partTechnicianId: getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList),
                         mappingItemMasterId: getObjectById('mappingItemMasterId', x.mappingItemMasterId, x.revisedParts),
                         masterPartId: x.woPart,
                         customerRequestDate: x.customerRequestDate ? new Date(x.customerRequestDate) : null,
@@ -540,7 +555,8 @@ export class WorkOrderAddComponent implements OnInit {
                 this.workScope = data.partNumbers[0].workScope;
                 this.showTabsGrid = true;
                 this.showGridMenu = true;
-                if (this.workFlowId != 0) {
+                if (this.workFlowId != null) {
+                    this.showWorkflowLabel='View WF';
                     this.subTabWorkFlowChange('viewworkFlow')
                 }
             } else {
@@ -1062,8 +1078,9 @@ export class WorkOrderAddComponent implements OnInit {
             this.workScope = result.partNumbers[0].workScope;
             this.showGridMenu = true;
             this.getWorkFlowTabsData();
-            if (this.workFlowId != 0) {
+            if (this.workFlowId != null) {
                 this.isWorkOrder = true;
+                this.showWorkflowLabel='View WF';
                 this.subTabWorkFlowChange('viewworkFlow');
             }
         } else {
@@ -1284,7 +1301,7 @@ export class WorkOrderAddComponent implements OnInit {
                 if (this.workFlowList && this.workFlowList.length > 0) {
                     workOrderPart.workflowId = this.workFlowList[0].value;
                 } else {
-                    workOrderPart.workflowId = 0;
+                    workOrderPart.workflowId = null;
                 }
             },
                 err => {
@@ -1317,7 +1334,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     getWorkFlowData() {
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
-        if (this.selectedWorkFlowId != 0) {
+        if (this.selectedWorkFlowId != null) {
             this.isSpinnerVisible = true;
             this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
@@ -1342,7 +1359,8 @@ export class WorkOrderAddComponent implements OnInit {
         this.workScope = data.workscope;
         this.showGridMenu = true;
         this.getWorkFlowTabsData();
-        if (this.workFlowId != 0) {
+        if (this.workFlowId != null) {
+            this.showWorkflowLabel='View WF';
             this.subTabWorkFlowChange('viewworkFlow')
         }
     }
@@ -1496,7 +1514,7 @@ export class WorkOrderAddComponent implements OnInit {
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
                     }
-                    if (this.workFlowId == 0) {
+                    if (this.workFlowId == null) {
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
                         if (this.isSubWorkOrder == true) {
                             this.getMaterialListByWorkOrderIdForSubWO();
@@ -1701,110 +1719,111 @@ export class WorkOrderAddComponent implements OnInit {
         }, () => { })
     }
 
-    saveWorkOrderEquipmentList(data) {
-        this.equipmentArr = [];
-        if (this.isSubWorkOrder) {
-            this.equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    subWOPartNoId: this.subWOPartNoId,
-                    workOrderId: this.subWorkOrderDetails.workOrderId,
-                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
-                }
-            })
-        } else {
-            this.equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
-                }
-            })
-        }
-        this.isSpinnerVisible = true;
-        this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.workFlowObject.equipments = [];
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saved Work Order Equipment Succesfully',
-                MessageSeverity.success
-            );
-            this.getEquipmentByWorkOrderId();
-        },
-            err => {
-                this.isSpinnerVisible = false;
-                this.errorHandling(err)
-            })
-    }
+    // saveWorkOrderEquipmentList(data) {
+    //     this.equipmentArr = [];
+    //     if (this.isSubWorkOrder) {
+    //         this.equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workFlowWorkOrderId: this.workFlowWorkOrderId,
+    //                 subWOPartNoId: this.subWOPartNoId,
+    //                 workOrderId: this.subWorkOrderDetails.workOrderId,
+    //                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+    //             }
+    //         })
+    //     } else {
+    //         this.equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+    //             }
+    //         })
+    //     }
+    //     this.isSpinnerVisible = true;
+    //     this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.isSpinnerVisible = false;
+    //         this.workFlowObject.equipments = [];
+    //         this.alertService.showMessage(
+    //             this.moduleName,
+    //             'Saved Work Order Equipment Succesfully',
+    //             MessageSeverity.success
+    //         );
+    //         this.getEquipmentByWorkOrderId();
+    //     },
+    //         err => {
+    //             this.isSpinnerVisible = false;
+    //             this.errorHandling(err)
+    //         })
+    // }
 
-    updateWorkOrderEquipmentList(data) {
-        this.equipmentArr = [];
-        if (this.isSubWorkOrder) {
-            this.equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    subWOPartNoId: this.subWOPartNoId,
-                    workOrderId: this.subWorkOrderDetails.workOrderId,
-                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
-                }
-            })
-            this.isSpinnerVisible = true;
-            this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.workFlowObject.equipments = [];
-                this.alertService.showMessage(
-                    this.moduleName,
-                    'Updated Work Order Equipment Succesfully',
-                    MessageSeverity.success
-                );
-                this.getEquipmentByWorkOrderId();
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                    this.errorHandling(err)
-                })
-        } else {
-            const equipmentArr = data.equipments.map(x => {
-                return {
-                    ...x,
-                    masterCompanyId: this.authService.currentUser.masterCompanyId,
-                    isActive: true,
-                    createdBy: this.userName,
-                    updatedBy: this.userName,
-                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
-                }
-            })
-            this.isSpinnerVisible = true;
-            this.workOrderService.updateWorkOrderEquipmentList(equipmentArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.workFlowObject.equipments = [];
-                this.alertService.showMessage(
-                    this.moduleName,
-                    'Updated  Work Order Equipment Succesfully',
-                    MessageSeverity.success
-                );
-                this.getEquipmentByWorkOrderId();
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                    this.errorHandling(err)
-                })
-        }
-    }
+    // updateWorkOrderEquipmentList(data) {
+    //     this.equipmentArr = [];
+    //     if (this.isSubWorkOrder) {
+    //         this.equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workFlowWorkOrderId: this.workFlowWorkOrderId,
+    //                 subWOPartNoId: this.subWOPartNoId,
+    //                 workOrderId: this.subWorkOrderDetails.workOrderId,
+    //                 subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+    //             }
+    //         })
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.createWorkOrderEquipmentList(this.equipmentArr, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.workFlowObject.equipments = [];
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 'Updated Work Order Equipment Succesfully',
+    //                 MessageSeverity.success
+    //             );
+    //             this.getEquipmentByWorkOrderId();
+    //         },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.errorHandling(err)
+    //             })
+    //     } else {
+    //         console.log("data.equipments",data.equipments)
+    //         const equipmentArr = data.equipments.map(x => {
+    //             return {
+    //                 ...x,
+    //                 masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //                 isActive: true,
+    //                 createdBy: this.userName,
+    //                 updatedBy: this.userName,
+    //                 workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+    //             }
+    //         })
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.updateWorkOrderEquipmentList(equipmentArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.workFlowObject.equipments = [];
+    //             this.alertService.showMessage(
+    //                 this.moduleName,
+    //                 'Updated  Work Order Equipment Succesfully',
+    //                 MessageSeverity.success
+    //             );
+    //             this.getEquipmentByWorkOrderId();
+    //         },
+    //             err => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.errorHandling(err)
+    //             })
+    //     }
+    // }
 
     saveWorkOrderChargesList(data) {
         if (this.isSubWorkOrder == true) {
@@ -2024,19 +2043,20 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     getEquipmentByWorkOrderId(event?) {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderAssetList(this.workFlowWorkOrderId, this.workOrderId, this.subWOPartNoId, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
-                result => {
-                    this.isSpinnerVisible = false;
-                    this.workOrderAssetList = result;
-                },
-                err => {
-                    this.handleError(err);
-                    this.isSpinnerVisible = false;
-                }
-            )
-        }
+        
+        // if (this.workFlowWorkOrderId !== 0 && this.workOrderId) { 
+        //     this.isSpinnerVisible = true;
+        //     this.workOrderService.getWorkOrderAssetList(this.workFlowWorkOrderId, this.workOrderId, this.subWOPartNoId, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(
+        //         result => {
+        //             this.isSpinnerVisible = false;
+        //             this.workOrderAssetList = result;
+        //         },
+        //         err => {
+        //             this.handleError(err);
+        //             this.isSpinnerVisible = false;
+        //         }
+        //     )
+        // }
     }
 
     getValues(element) {
@@ -2088,6 +2108,11 @@ export class WorkOrderAddComponent implements OnInit {
                         }
                     });
                     this.workOrderMaterialList = res;
+                    this.workOrderMaterialList.forEach(element => {
+                      
+                       element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+                       element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+                    }); 
                     if (this.gridActiveTab === 'billorInvoice') {
                         this.quoteMaterialList = res;
                     }

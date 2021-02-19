@@ -73,7 +73,7 @@ export class RepairOrderPart {
     trace: string;
     conditionCode: string;
     quantityActuallyReceived: number;
-    quantityRejected: string;
+    quantityRejected: number;
     uomId: number;
     quantityOrdered: number;
     quantityBackOrdered: number;
@@ -266,6 +266,7 @@ export class StockLine {
     certifiedDate: Date;
     tagDate: Date;
     tagType: any;
+    tagTypeId:any;
     certifiedDueDate: Date;
     calibrationMemo: string;
     orderDate: Date;
