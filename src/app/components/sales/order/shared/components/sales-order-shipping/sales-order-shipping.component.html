@@ -198,7 +198,7 @@
                                           </button> -->
                                         </span>
                                         <span>
-                                            <button class="btn nobg" mat-icon-button (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
                                               matTooltipPosition="above" style="font-weight: bold;"
                                               >
                                               <i class="fa fa-pencil"></i>
@@ -507,7 +507,7 @@
                                         <label>Site <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
+                                        <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddresses()"
                                             [disabled]="isView" name="soldToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList"
