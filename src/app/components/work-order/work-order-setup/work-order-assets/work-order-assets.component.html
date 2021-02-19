@@ -511,7 +511,7 @@
                           <th *ngFor="let col of assetChekinCheckoutheaders" style="text-align:center">
                             {{col.header}}
                           </th>
-                          <th style="width: 45px;">Actions </th>
+                          <th style="width: 45px;" class="table-actions-column">Actions </th>
                         </tr>
                       </thead>
                       <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length !=0">
@@ -550,7 +550,7 @@
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy'}}</div>
                           </td>
                           <td style="width: 135px;">
-                            <div class="form-group" *ngIf="assetsform.assetStatus == 'checkIn'">
+                            <div  *ngIf="assetsform.assetStatus == 'checkIn'">
                               <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="row.checkInById" [disabled]="!row.isChecked"
                                 name="checkInBy{{i}}" [suggestions]="employeeList"
                                 (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1" [dropdown]="true"
@@ -566,9 +566,22 @@
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>
                           </td>
-                          <td> <i class="fa fa-info-circle fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" 
-                            matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(row,i)"></i></td>
                           <td>
+                             <!-- <i class="fa fa-info-circle fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" 
+                            matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(row,i)"></i> -->
+                            <div class="align_adh">
+                              <div [innerHTML]="row.notes"
+                                  matTooltipPosition="above"
+                                  [matTooltip]="parsedText(row.notes)"
+                                  class="text_editor_box" style="width: 100% !important;"></div>
+                              <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                  data-target="#textarea-popup" matTooltip="Memo"
+                                  matTooltipPosition="above"
+                                  (click)="onAddTextAreaInfo(row.notes,i)"></i>
+                          </div>
+
+                          </td>
+                          <td class="action-icons-cstm table-column-width "> 
                             <span> 
                               <!-- data-toggle="modal" data-target="#view" -->
                               <!-- <a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#checkInOutView"   matTooltip="Asset Inventory View" matTooltipPosition="above">
@@ -578,7 +591,7 @@
                               class="btn  boxed-float-btn nobg" matTooltip="Asset Inventory View" matTooltipPosition="above"
                               data-toggle="modal"
                               data-target="#checkInOutView1"
-                              (click)="viewAsstes(assets)"
+                              (click)="viewAsstes(row)"
                             >
                               <i class="fa fa-eye"></i>
                             </a>
@@ -592,47 +605,54 @@
                         </tr>
                         <!-- </ng-container> -->
                       </tbody>
+                      <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length ==0">
+                        <tr>
+                          <td colspan="16" class="no-records-msg no-records-cstm">
+                              No records found
+                          </td>
+                      </tr>
+                      </tbody>
                     </table>
                     </div>
                   </div>
-
-                  <div class="text-right save-work-btn cust_ma">
+                  <div class="text-right cust_ma">
                     <!-- ; getEquipmentData.emit() -->
                     <button class="btn btn-primary btn-primary" (click)="saveAssets(workOrderCheckInCheckOutList)"
                        data-dismiss="modal" [disabled]="!assetCheckForm.valid"
                       type="submit">
                       Save
                     </button>
-                    <button type="button" class="btn btn-danger" (click)="releaseInventory()" data-dismiss="modal"
-                     >
+                    <button type="button" class="btn btn-danger" (click)="releaseInventory()" data-dismiss="modal">
                       Close
-                    </button>
+                    </button> 
                   </div>
                 </form>
 
               </div>
             </div>
-          </div>
+          </div>   
         </div>
-        
         <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
-          <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-                <h4 class="modal-title">Memo</h4>
+          <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                      <h4 class="modal-title">Edit Memo</h4>
+                  </div>
+                  <div class="modal-body">
+                      <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}"
+                      (ngModelChange)="editorgetmemo($event)" name="textAreaInfo" required>
+                  </p-editor>
+                      <div class="editor-buttons">
+                          <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
+                              (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                          <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+                      </div>
+                  </div>
               </div>
-              <div class="modal-body">
-                  <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
-  
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
-              </div>
-            </div>
           </div>
-        </div>
+      </div>
         <div class="modal fade" id="checkInOutView" role="dialog" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
             <div class="modal-content">
@@ -852,7 +872,10 @@
       </button>
   </div>
   <div class="modal-body">
-      <h6 class="modal-body">WO Number : {{restorerecord.name}}</h6>
+      <strong>
+        WO Number :
+          <span class="new-label">{{restorerecord.name}}</span>
+      </strong>
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
