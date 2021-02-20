@@ -100,4 +100,5 @@ export class SalesOrderPart implements ISalesOrderPart {
   notes: string;
   altOrEqType: string;
   qtyRequested: number;
+  itemNo:number;
 }
