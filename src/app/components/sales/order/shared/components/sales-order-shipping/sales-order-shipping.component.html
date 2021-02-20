@@ -197,6 +197,13 @@
                                             <i class="fa fa-check"></i>
                                           </button> -->
                                         </span>
+                                        <span>
+                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                              matTooltipPosition="above" style="font-weight: bold;"
+                                              >
+                                              <i class="fa fa-pencil"></i>
+                                            </button>
+                                    </span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -228,7 +235,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text"
-                                            [(ngModel)]="shippingHeader.woShippingNum" name="shippingOrderNum"
+                                            [(ngModel)]="shippingHeader.soShippingNum" name="shippingOrderNum"
                                             disabled />
                                     </div>
                                 </div>
@@ -332,7 +339,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input type="number" class="input-field-value" pKeyFilter="num" pInputText
-                                            maxlength="10" [(ngModel)]="shippingHeader.shipWeight" name="shipWeight"
+                                            maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
                                             id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
                                     </div>
                                 </div>
@@ -500,7 +507,7 @@
                                         <label>Site <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
+                                        <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddresses()"
                                             [disabled]="isView" name="soldToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList"

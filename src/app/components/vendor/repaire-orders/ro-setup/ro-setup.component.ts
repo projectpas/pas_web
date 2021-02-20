@@ -1994,8 +1994,9 @@ export class RoSetupComponent implements OnInit {
 		}
 		this.itemTypeId = 1;
 
-		//For Getting Data After Part Selected
-		this.purchaseOrderService.getPartDetailsWithidForSinglePart(itemMasterId).subscribe(
+		//For Getting Data After Part Selected	
+		this.isSpinnerVisible = true;	
+		this.repairOrderService.getPartDetailsWithidForSinglePart(itemMasterId).subscribe(
 			data1 => {
 				if (data1[0]) {
 					this.partWithId = data1[0];
@@ -2011,7 +2012,8 @@ export class RoSetupComponent implements OnInit {
 					parentdata.UOMId = this.partWithId.purchaseUnitOfMeasureId;
 					parentdata.UOMShortName = this.partWithId.shortName;
 					parentdata.partNumber = this.partWithId.partNumber;
-					parentdata.itemMasterId = this.partWithId.itemMasterId;					
+					parentdata.itemMasterId = this.partWithId.itemMasterId;	
+					parentdata.conditionId = this.partWithId.conditionId;	
 					parentdata.altPartCollection = this.partWithId.altPartNumList.map(x => {
 						return {value: x.altEquiPartNumberId, label: x.altEquiPartNumber }});				
 					if(parentdata.conditionId && value != 'onEdit') {
@@ -2022,13 +2024,16 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}					
+					}
+										
 				}
-			}, err => {								
+				this.isSpinnerVisible = false;
+			}, err => {	this.isSpinnerVisible = false;								
 			});			
 	}
 
-	getPriceDetailsByCondId(parentdata) {	
+	getPriceDetailsByCondId(parentdata) {
+		this.isSpinnerVisible = true;	
 		this.commonService.getPriceDetailsByCondId(parentdata.itemMasterId, parentdata.conditionId).subscribe(res => {
 			if(res) {
 				parentdata.vendorListPrice = res.vendorListPrice ? formatNumberAsGlobalSettingsModule(res.vendorListPrice, 2) : '0.00';
@@ -2038,8 +2043,10 @@ export class RoSetupComponent implements OnInit {
 				this.onGetDiscPerUnit(parentdata);
 				this.onGetDiscAmount(parentdata);
 				this.onGetExtCost(parentdata);
+				this.isSpinnerVisible = false;
 			}
-		})
+		},err=>{
+			this.isSpinnerVisible =  false;} )
 		this.getStockLineByItemMasterId(parentdata);		
 	}
 	
@@ -2878,16 +2885,22 @@ export class RoSetupComponent implements OnInit {
 		});
 	}
 	
-	loapartItems(strvalue = '') {
-			this.commonService.getStockpartnumbersAutoComplete(strvalue, false, 0,this.currentUserMasterCompanyId).subscribe(res => {
+	loapartItems(strvalue = '', initialCall = false) {
+        this.isSpinnerVisible = true;
+        let measurementIds = [];       
+        this.commonService.autoCompleteDropdownsItemMasterWithStockLine(strvalue, true, 20, '0')
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
 				this.partCollection = res.map(x => {
 					return {
-						value: x.itemMasterId,
-						label: x.partNumber
+						value: x.value,
+						label: x.label
 					}
 				});
-			})	
-	}
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
 
 	filterpartItems(event) {
 		if (event.query !== undefined && event.query !== null) {
@@ -4442,12 +4455,14 @@ WarnRescticModel() {
 
 	getStockLineDetails(partList) {
 		if(partList.stocklineId) {
+			this.isSpinnerVisible = true;
 			this.stocklineService.getStockLineDetailsByStockLineId(partList.stocklineId.stockLineId).subscribe(res => {
 				partList.controlId = res.controlId;
 				partList.purchaseOrderNum = res.purchaseOrderNo;
 				partList.controlNumber = res.controlNumber;
 				//partList.workOrderId = res.WorkOrderId;
-			},err => {});
+				this.isSpinnerVisible = false;
+			},err => {this.isSpinnerVisible = false;});
 		}
 	}
 
@@ -4461,7 +4476,8 @@ WarnRescticModel() {
 		}
 	}
 	
-	getStockLineByItemMasterId(partList) {		
+	getStockLineByItemMasterId(partList) {
+		this.isSpinnerVisible = true;		
 		partList.stocklineId = null;
 		partList.controlId = '';
 		partList.purchaseOrderNum = '';
@@ -4472,7 +4488,8 @@ WarnRescticModel() {
 				partList.stocklineId = partList.allStocklineDetails[0];
 				this.getStockLineDetails(partList);
 			}
-		},err => {});
+			this.isSpinnerVisible = false;
+		},err => {	this.isSpinnerVisible = false;});
 	}
 
 	addPartNumbers(partNumberId,partName) {

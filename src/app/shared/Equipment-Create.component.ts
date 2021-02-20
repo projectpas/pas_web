@@ -54,28 +54,34 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                     assetRecordId: this.editData.assetRecordId,
                     description: this.editData.assetDescription,
                     assetTypeId: this.editData.assetTypeId,
-                    name: this.editData.assetName,
+                    name: this.editData.name,
                     assetTypeName: this.editData.assetTypeName,
                     partNumber: this.editData.assetId,
+                    // partNumber: {name:this.editData.assetName,assetId:this.editData.assetId},
                     assetId: this.editData.assetId,
                     assetDescription: this.editData.description,
                 }
                 this.workFlow.equipments.push(data);
+                this.workFlow.equipments.forEach(ev=>{
+                    ev.partNumber={name:ev.name,assetId:ev.assetRecordId}
+                })
             } else {
                 this.workFlow.equipments = [];
                 this.row = this.workFlow.equipments[0];
                 this.addRow();
             }
+
         } else {
             this.row = this.workFlow.equipments[0];
             if (this.row == undefined) {
                 this.row = {};
             }
             this.row.taskId = this.workFlow.taskId;
+            this.workFlow.equipments.forEach(ev=>{
+                ev.partNumber={name:ev.assetName,assetId:ev.assetId}
+            })
         }
-        this.workFlow.equipments.forEach(ev=>{
-            ev.partNumber={name:ev.assetName,assetId:ev.assetId}
-        })
+      
         this.ptnumberlistdata('');
     }
 
@@ -179,7 +185,6 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     updateEquipmentWorkOrder() {
-        console.log("this.workFlow",this.workFlow)
         this.updateEquipmentListForWO.emit(this.workFlow)
     }
 
