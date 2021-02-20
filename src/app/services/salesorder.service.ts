@@ -601,5 +601,11 @@ export class SalesOrderService {
     );
   }
 
+  getShippingEdit(salesOrderShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getShippingEdit(salesOrderShippingId)
+    );
+  }
+
   //ed --nitin
 }
