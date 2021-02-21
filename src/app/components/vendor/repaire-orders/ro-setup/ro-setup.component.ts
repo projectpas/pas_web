@@ -3103,7 +3103,8 @@ export class RoSetupComponent implements OnInit {
 						needByDate: this.headerInfo.needByDate,
 						conditionId: this.defaultCondtionId,
 						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-						discountPercent: 0
+						discountPercent: 0,
+						itemMasterId:x.itemMasterId 
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsById(newObject);
