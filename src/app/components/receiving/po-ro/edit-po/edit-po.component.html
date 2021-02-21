@@ -1140,9 +1140,10 @@
                         </tbody>
                         <tbody *ngIf="!isPOStockline">
                             <tr>
-                                <td colspan="50" style="color: red; font-weight: bold; text-align: center; padding: 5px;">
+                                <td colspan="50" style="color: red; background-color: white; font-weight: bold; text-align: center; padding: 5px;">
                                     No records found
                                 </td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1152,7 +1153,7 @@
         </div>
     </div>
 
-    <button class="btn btn-primary pull-right" (click)="updateStockLine()">Submit</button>
+    <button *ngIf="isPOStockline" class="btn btn-primary pull-right" (click)="updateStockLine()">Submit</button>
 </div>
 
 
