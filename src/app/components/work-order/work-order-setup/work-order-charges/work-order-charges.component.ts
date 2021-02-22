@@ -45,7 +45,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     { field: 'extendedCost', header: 'Extented Cost' },
     // { field: 'unitPrice', header: 'Unit Price' },
     // { field: 'extendedPrice', header: 'Extended Price' },
-  ]
+  ] 
   modal: NgbModalRef;
   isEdit: boolean = false;
   editData: any;
@@ -76,8 +76,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       }, Object.create(null));
       this.workOrderChargesList = [];
       for(let x in this.workOrderChargesLists){
-        // this.workOrderChargesList = [...this.workOrderChargesList, ...this.workOrderChargesLists[x].map(da=>{ return {...da, taskId:x}})]
-        this.workOrderChargesList.push(this.workOrderChargesLists[x]);
+       this.workOrderChargesList.push(this.workOrderChargesLists[x]);
       }
     }
     this.fromquote=this.fromquote;
@@ -157,8 +156,7 @@ dismissModel() {
       this.modal.close();
       // this.workOrderChargesList[i].isDeleted = true;
     } else {
-// if(this.isSubWorkOrder==true){}
-      const chargesId  =this.isSubWorkOrder==true ? this.currentRow.subWorkOrderChargesId: this.currentRow.workOrderChargesId;
+   const chargesId  =this.isSubWorkOrder==true ? this.currentRow.subWorkOrderChargesId: this.currentRow.workOrderChargesId;
       this.workOrderService.deleteWorkOrderChargesByChargesId(chargesId, this.userName,this.isSubWorkOrder).subscribe(res => {
         this.refreshData.emit();
         this.alertService.showMessage(
@@ -207,7 +205,6 @@ dismissModel() {
   }
 
   createChargeQuote() {
-    // task.masterCompany.masterCompanyId
     let WorkOrderQuoteTask = [];
     this.workOrderChargesList.forEach(
       (taskCharge)=>{
@@ -252,7 +249,6 @@ dismissModel() {
     try {
       this.markupList.forEach((markup) => {
         if (type == 'row' && markup.value == matData.markupPercentageId) {
-          // matData.tmAmount = Number(matData.extendedCost) + ((Number(matData.extendedCost) / 100) * Number(markup.label))
           matData['billingRate'] = formatNumberAsGlobalSettingsModule((Number(matData['unitCost'].toString().split(',').join(''))) + ((Number(matData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
           matData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(matData['billingRate'].toString().split(',').join('')) * Number(matData.quantity), 0);
         }
@@ -260,8 +256,6 @@ dismissModel() {
           this.workOrderChargesList.forEach((data) => {
             data.forEach((mData)=>{
               if (mData.billingMethodId && Number(mData.billingMethodId) == 1) {
-                // mData.markupPercentageId = this.overAllMarkup;
-                // mData.tmAmount = Number(mData.extendedCost) + ((Number(mData.extendedCost) / 100) * Number(markup.label))
                 mData.markupPercentageId = this.overAllMarkup;
                 mData['billingRate'] = formatNumberAsGlobalSettingsModule(Number(mData['unitCost'].toString().split(',').join('')) + ((Number(mData['unitCost'].toString().split(',').join('')) / 100) * Number(markup.label)), 0);
                 mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate'].toString().split(',').join('')) * Number(mData.quantity), 0);
@@ -270,13 +264,7 @@ dismissModel() {
           })
         }
       })
-
-      // this.markupList.forEach((markup) => {
-      //   if (markup.value == matData.markupPercentageId) {
-      //     matData.chargesCostPlus = (matData.extendedCost) + (((matData.extendedCost) / 100) * Number(markup.label))
-      //   }
-      // })
-    }
+ }
     catch (e) {
     }
   }
@@ -337,9 +325,7 @@ dismissModel() {
         }
       )
     }
-    // return  total ? formatNumberAsGlobalSettingsModule(total, 0) : '0.00';
     const newTotal= total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    // console.log("new",newTotal);
     return newTotal + '.00'
   }
 
@@ -354,12 +340,9 @@ dismissModel() {
         }
       )
     }
-    // console.log("new tt",total);
-    const newTotal= total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    // console.log("new",newTotal);
+   const newTotal= total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
     return newTotal + '.00';
   }
-
   getTotalBillingRate() {
     let total = 0;
     if (this.workOrderChargesList) {
@@ -373,7 +356,6 @@ dismissModel() {
     }
     return  total ? formatNumberAsGlobalSettingsModule(total, 0) : '0.00';
   }
-
   getTotalBillingAmount() {
     let total = 0;
     if (this.workOrderChargesList) {
@@ -384,10 +366,8 @@ dismissModel() {
       )
     }
     this.chargesFlatRateBillingAmount = total.toFixed(2);
-    // return  total ? formatNumberAsGlobalSettingsModule(total, 0) : '0.00';
     const newTotal= total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    // console.log("new",newTotal);
-    return newTotal + '.00'
+   return newTotal + '.00'
   }
 
   getTotalTaskBillingAmount(tData){
@@ -401,9 +381,8 @@ dismissModel() {
         }
       )
     }
-    // return  total ? formatNumberAsGlobalSettingsModule(total, 0) : '0.00';
     const newTotal= total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    // console.log("new",newTotal);
+
     return newTotal + '.00';
   }
 
