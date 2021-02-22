@@ -332,7 +332,7 @@
                     laborForm.hoursorClockorScan &&
                     laborForm.hoursorClockorScan !== 1 &&
                     laborForm.hoursorClockorScan !== 3
-                  " style="text-align: center;">
+                  " class="text-center">
                   <button class="btn btn-primary start-btn" (click)="startandStop(rec);calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="
                       (rec.startDate && rec.endDate) !== null || isView || laborForm.isTaskCompletedByOne">
                     {{(!rec.startDate)?'Start':'Stop'}}

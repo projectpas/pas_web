@@ -1,4 +1,4 @@
-﻿<div class="card" style="align-items: center;">
+﻿<div class="card align-center" >
     <div class="card-body">
         <form #shippingForm="ngForm">
             <div class="form-row">
@@ -205,7 +205,7 @@
                 <div class="col-md-4">
                     <div class="card card-stock">
                         <div class="card-header">
-                            <h5 style="text-align: center;">Origin</h5>
+                            <h5 class="text-center">Origin</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group col-md-12">
@@ -305,7 +305,7 @@
                 <div class="col-md-4">
                     <div class="card card-stock">
                         <div class="card-header">
-                            <h5 style="text-align: center;">Bill To</h5>
+                            <h5 class="text-center">Bill To</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group col-md-12">
@@ -386,8 +386,8 @@
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToCountryName" name="soldToCountryName" [disabled]="isView" required disabled />
                                 </div>
                             </div>
-                            <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 3px;">
+                            <div class="checkbox-cstm sipto-ceck-div">
+                                <label class="shipto-ceck-label">
                                   <!--  -->
                                   <input type="checkbox" [(ngModel)]="shippingHeader.isSameForShipTo" name="cparent" id="cparent"  (click)="assignDetails($event.target.checked)"
                                     />
@@ -402,7 +402,7 @@
                 <div class="col-md-4">
                     <div class="card card-stock">
                         <div class="card-header">
-                            <h5 style="text-align: center;">Ship To</h5>
+                            <h5 class="text-center">Ship To</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group col-md-12">
@@ -616,7 +616,7 @@
         </form>
     </div>
     <div class="row">
-        <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;" (click)="save()" [disabled]="!shippingForm.valid">Save</button>
+        <button *ngIf="!isView" class="btn btn-primary pull-right btn-width-100" (click)="save()" [disabled]="!shippingForm.valid">Save</button>
     </div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
