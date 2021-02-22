@@ -518,7 +518,7 @@
                                             [disabled]="isView" name="soldToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList"
-                                                [value]="site.customerDomensticShippingId">
+                                                [value]="site.customerBillingAddressId">
                                                 {{site.siteName}}
                                             </option>
                                         </select>
@@ -700,22 +700,24 @@
                                 <div class="card-body">
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>Entry Type </label>
+                                            <label>Entry Type <span style="color: red;"
+                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryType']"
-                                                name="entryType" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="entryType" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>Entry Num</label>
+                                            <label>Entry Num <span style="color: red;"
+                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryNumber']"
-                                                name="entryNumber" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="entryNumber" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -736,22 +738,24 @@
                                 <div class="card-body">
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>EPU </label>
+                                            <label>EPU <span style="color: red;"
+                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['epu']" name="epu"
-                                                [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>UCR</label>
+                                            <label>UCR <span style="color: red;"
+                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['ucr']" name="ucr"
-                                                [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -782,22 +786,24 @@
                                 <div class="card-body">
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label class="workorder-label">Customs Value </label>
+                                            <label class="workorder-label">Customs Value <span style="color: red;"
+                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['customsValue']"
-                                                name="customsValue" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="customsValue" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>Net Mass</label>
+                                            <label>Net Mass <span style="color: red;"
+                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['netMass']"
-                                                name="netMass" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="netMass" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">

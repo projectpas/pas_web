@@ -254,7 +254,7 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader['shipToCity'] = site.city;
                 this.shippingHeader['shipToState'] = site.stateOrProvince;
                 this.shippingHeader['shipToZip'] = site.postalCode;
-                this.shippingHeader['shipToCountryId'] = site.countryId;
+                //this.shippingHeader['shipToCountryId'] = site.countryId;
                 this.shippingHeader['shipToSiteName'] = site.siteName;
                 this.shippingHeader['shipToCountryName'] = site.countryName;
                 this.shippingHeader['shipToCountryId'] = site.countryId;
@@ -264,7 +264,8 @@ export class SalesOrderShippingComponent {
 
     setSoldToAddresses() {
         this.soldCustomerSiteList.forEach(site => {
-            if (site.customerDomensticShippingId == Number(this.shippingHeader.soldToSiteId)) {
+            //if (site.customerDomensticShippingId == Number(this.shippingHeader.soldToSiteId)) {
+            if (site.customerBillingAddressId == Number(this.shippingHeader.soldToSiteId)) {  
                 this.shippingHeader['soldToAddress1'] = site.address1;
                 this.shippingHeader['soldToAddress2'] = site.address2;
                 this.shippingHeader['soldToCity'] = site.city;
@@ -387,7 +388,8 @@ export class SalesOrderShippingComponent {
         this.clearSoldToAddress();
         let customerId = object.userID;
         //this.getSiteName(customerId);
-        await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+        //await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+        await this.customerService.getCustomerBillAddressGet(customerId).subscribe(res => {
             this.soldCustomerShippingOriginalData = res[0];
             this.soldCustomerSiteList = res[0]; 
             // this.soldCustomerShippingOriginalData.forEach(
@@ -417,7 +419,8 @@ export class SalesOrderShippingComponent {
     async setSiteNamesBySoldCustomerId(object, siteId) {
         this.clearSoldToAddress();
         let customerId = object.userID;
-        await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+        //this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
+        await this.customerService.getCustomerBillAddressGet(customerId).subscribe(res => {
             this.soldCustomerSiteList = res[0];
             this.soldCustomerShippingOriginalData = res[0];
             this.shippingHeader.soldToSiteId = siteId;
@@ -531,6 +534,7 @@ export class SalesOrderShippingComponent {
     sourceSOApproval: any = {};
     shipToAddress: any = {};
     billToAddress: any = {};
+    shipvia:any={};
 
     getAddressById(salesOrderId) {
         this.isSpinnerVisible = true;
@@ -607,6 +611,11 @@ export class SalesOrderShippingComponent {
                 postalCode: this.sourceSOApproval.billToPostalCode,
             }
 
+            this.shipvia = {
+                shipviaId: this.sourceSOApproval.shipViaId,
+                shipvia: this.sourceSOApproval.shipVia,
+            }
+
             this.bindShippingInformation();
         });
     }
@@ -636,6 +645,10 @@ export class SalesOrderShippingComponent {
             this.shippingHeader.shipToState = this.shipToAddress.stateOrProvince;
             this.shippingHeader.shipToCountryName = this.shipToAddress.country;
             this.shippingHeader.shipToZip = this.shipToAddress.postalCode;
+        }
+
+        if (this.shipvia !== undefined) {
+            this.shippingHeader.shipviaId = this.shipvia.shipviaId;
         }
     }
 
@@ -674,6 +687,7 @@ export class SalesOrderShippingComponent {
           .subscribe((response: any) => {
             this.isSpinnerVisible = false;
             this.shippingHeader = response[0];
+            this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
             let shiptocustomerobj = getObjectByValue('userID', this.shippingHeader.shipToCustomerId, this.customerNamesList);
             this.shippingHeader.shipToCustomerId = shiptocustomerobj;
             this.shippingHeader['shipToSiteId'] = this.shippingHeader.shipToSiteId;
