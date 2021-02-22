@@ -90,4 +90,5 @@ export interface ISalesOrderPart {
     notes: string;
     altOrEqType: string;
     qtyRequested: number;
+    itemNo:number;
 }

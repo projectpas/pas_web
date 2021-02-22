@@ -42,13 +42,16 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns; let i = index"
                                         style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                                        <span *ngIf="summaryColumn.field == 'count'">
+                                        <!-- <span *ngIf="summaryColumn.field == 'count'">
                                             Item {{ rowIndex + 1 }}
-                                        </span>
+                                        </span> -->
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
-                                        <span *ngIf="summaryColumn.field != 'count'
+                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                            Item {{summaryPart[summaryColumn.field] }}
+                                        </span>
+                                        <span *ngIf="summaryColumn.field != 'itemNo'
                                                     && summaryColumn.field != 'quantityRequested'
                                                     && summaryColumn.field != 'quantityToBeQuoted'
                                                     && summaryColumn.field != 'quantityAlreadyQuoted'

@@ -680,7 +680,11 @@ export class SalesOrderCreateComponent implements OnInit {
     }
 
     let partList: any[] = this.salesOrderView.parts;
-    for (let i = 0; i < partList.length; i++) {
+
+    if (this.selectedParts.length > 0)
+      this.selectedParts = [];
+    
+      for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
       let partNumberObj = this.salesOrderService.marshalSOPartToView(selectedPart, this.salesOrderObj);
       this.selectedParts.push(partNumberObj);

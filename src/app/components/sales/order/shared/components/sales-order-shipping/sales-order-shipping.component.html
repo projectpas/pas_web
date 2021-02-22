@@ -113,7 +113,10 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of headers"
                                         style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                                        <span>
+                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                            Item {{summaryPart[summaryColumn.field] }}
+                                        </span>
+                                        <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                     </td>
@@ -135,6 +138,7 @@
                                     <th>Ship Date</th>
                                     <th>Shipping Num </th>
                                     <th>Pick Ticket Ref</th>
+                                    <th>Item #</th>
                                     <th>PN</th>
                                     <th>PN Description</th>
                                     <th style="min-width: 120px;">Stk Line Num</th>
@@ -163,6 +167,9 @@
                                     </td>
                                     <td>
                                         {{ ship.soPickTicketNumber }}
+                                    </td>
+                                    <td>
+                                        Item {{ ship.itemNo}}
                                     </td>
                                     <td>
                                         {{ ship.partNumber }}
