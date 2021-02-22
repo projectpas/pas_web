@@ -1184,14 +1184,15 @@
 
 <div *ngIf="isWorkOrder && responseDataForWorkFlow">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header header">
             <nav class="pull-left" aria-label="breadcrumb">
                 <ol class="breadcrumb" style="background-color: transparent;">
-                    <li class="breadcrumb-item active" aria-current="page" style="font-size: 16px;margin-top: 3px;">Work
-                        Flow Details</li>
+                    <li class="breadcrumb-item active" aria-current="page" style="font-size: 16px;margin-top: 3px;">
+                        <h4 class="header-name">Work
+                        Flow Details </h4></li>
                 </ol>
             </nav>
-            <button class="btn btn-primary pull-right" (click)="toggle_wf_header=!toggle_wf_header">
+            <button class="btn-sm header-button pull-right" (click)="toggle_wf_header=!toggle_wf_header">
                 {{toggle_wf_header ? 'Collapse' : 'Expand'}}
             </button>
         </div>
@@ -1393,7 +1394,8 @@
             <div *ngIf="task.publication && task.publication.length > 0">
                 
                 <h5 class="po-head">Publications</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1434,11 +1436,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.measurements && task.measurements.length > 0">
                 <h5 class="po-head m-t-20">Measurements</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1469,11 +1473,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.exclusions && task.exclusions.length > 0">
                 <h5 class="po-head m-t-20">Exclusions</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1518,11 +1524,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.directions && task.directions.length > 0">
                 <h5 class="po-head m-t-20">Directions</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1545,11 +1553,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.expertise && task.expertise.length > 0">
                 <h5 class="po-head m-t-20">Expertise</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1586,11 +1596,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.equipments && task.equipments.length > 0">
                 <h5 class="po-head m-t-20">Tools</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1611,11 +1623,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.charges && task.charges.length > 0">
                 <h5 class="po-head m-t-20">Charges</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1655,11 +1669,13 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div *ngIf="task.materialList && task.materialList.length > 0">
                 <h5 class="po-head m-t-20">Material List</h5>
-                <div class="table-responsive">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
                             <tr>
@@ -1722,6 +1738,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </p-accordionTab>

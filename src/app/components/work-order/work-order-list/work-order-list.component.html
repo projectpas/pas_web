@@ -68,7 +68,7 @@
                                                 <span class="checkmark"></span>WO View
                                             </label>
                                         </div>
-                                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                                        <label class="radiobtn-label status-left">Status:</label>
                                         <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="woStatus" class="form-control" value="open"
@@ -369,7 +369,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive" *ngIf="viewWorkOrderMPN" style="height: 300px;">
+                <div class="table-responsive table-height" *ngIf="viewWorkOrderMPN">
                     <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
                         id="mpn-list-table">
                         <thead>
@@ -403,7 +403,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="mpn-row" style="display: table-row;"
+                            <tr class="mpn-row display-table-row" 
                                 *ngFor="let p of viewWorkOrderMPN; let i = index">
                                 <td>
                                     {{ p.partNumber }}
@@ -724,19 +724,19 @@
                     </p-tabPanel>
 
                     <p-tabPanel>
-                        <ng-template pTemplate="header" style="height: 36px; width: 134px;">
+                        <ng-template pTemplate="header" class="communication-panel">
                             Communication
                             <i (click)="showOtherCommunicationOptions()" class="fa fa-caret-down"
                                 aria-hidden="true"></i>
                             <div class="vertical-menu-wolist" *ngIf="communicationOptionShow">
                                 <a (click)="otherCommunicationOptionSelected('memo')"
-                                    style="color: #333333 !important">Memo</a>
+                                 class="communication-buttons">Memo</a>
                                 <a (click)="otherCommunicationOptionSelected('email')"
-                                    style="color: #333333 !important">Email</a>
+                                class="communication-buttons">Email</a>
                                 <a (click)="otherCommunicationOptionSelected('phone')"
-                                    style="color: #333333 !important">Phone</a>
+                                class="communication-buttons">Phone</a>
                                 <a (click)="otherCommunicationOptionSelected('text')"
-                                    style="color: #333333 !important">Text</a>
+                                class="communication-buttons">Text</a>
                             </div>
 
                         </ng-template>
@@ -797,20 +797,20 @@
 
 
                     <p-tabPanel>
-                        <ng-template pTemplate="header" style="height: 36px; width: 134px;">
+                        <ng-template pTemplate="header" class="communication-panel">
                             Other Options
                             <i (click)="showOtherOptions()" class="fa fa-caret-down" aria-hidden="true"></i>
                             <div class="vertical-menu-wolist" *ngIf="otherOptionShow">
                                 <a (click)="otherOptionSelected('freight')"
-                                    style="color: #333333 !important">Freight</a>
+                                class="communication-buttons">Freight</a>
                                 <a (click)="otherOptionSelected('contactGrid')"
-                                    style="color: #333333 !important">Contact Grid</a>
+                                class="communication-buttons">Contact Grid</a>
                                 <a (click)="otherOptionSelected('accounting')"
-                                    style="color: #333333 !important">Accounting</a>
+                                class="communication-buttons">Accounting</a>
                                 <a (click)="otherOptionSelected('charges')"
-                                    style="color: #333333 !important">Charges</a>
+                                class="communication-buttons">Charges</a>
                                 <a (click)="otherOptionSelected('exclusion')"
-                                    style="color: #333333 !important">Exclusion</a>
+                                class="communication-buttons">Exclusion</a>
                             </div>
 
                         </ng-template>
@@ -894,9 +894,9 @@
                     having restrictions
                 </p>
             </div>
-            <div class="modal-footer" style="padding:10px;">
-                <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
-                    style="padding: 6px 12px !important;">
+            <div class="modal-footer footer-padding">
+                <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="WarnRescticModel()"
+                  >
                     Ok
                 </button>
             </div>
