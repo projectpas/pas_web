@@ -195,7 +195,7 @@ export class SalesOrderPartNumberComponent {
     }
 
     this.summaryColumns = [
-      { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
+      { field: 'itemNo', header: 'Item #', width: '50px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: "140px" },
       { field: 'partDescription', header: 'PN Description', width: "200px" },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
@@ -441,6 +441,7 @@ export class SalesOrderPartNumberComponent {
     });
     this.part.quantityToBeQuoted = Number(event.quantityFromThis);
     this.part.quantityAlreadyQuoted = Number(event.quantityFromThis);
+    this.part.itemNo = this.countItemNo + 1;
     this.salesQuoteService.updateSearchPartObject(this.query);
 
     let partObj = { ...this.part };
@@ -736,7 +737,7 @@ export class SalesOrderPartNumberComponent {
     );
     this.checkUpdateOrsaveButton();
   }
-
+  countItemNo:number=0;
   calculateSummarizedRow(parts: PartDetail[], uniquePart) {
     uniquePart = new SummaryPart();
     parts.forEach(part => {
@@ -770,6 +771,8 @@ export class SalesOrderPartNumberComponent {
     uniquePart.customerRef = parts[0].customerRef;
     uniquePart.pmaStatus = parts[0].pmaStatus;
     uniquePart.marginPercentageExtended = (uniquePart.marginPercentageExtended) / parts.length;
+    uniquePart.itemNo = parts[0].itemNo;
+    this.countItemNo = parts[0].itemNo;
     return uniquePart;
   }
 

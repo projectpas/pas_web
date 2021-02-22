@@ -434,6 +434,7 @@ export class SalesOrderService {
     partNumberObj.taxAmount = selectedPart.taxAmount;
     partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.taxPercentage = selectedPart.taxPercentage;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
   marshalSOPartToView(selectedPart, salesOrderObj) {
@@ -509,6 +510,7 @@ export class SalesOrderService {
     partNumberObj.taxPercentage = selectedPart.taxPercentage;
     partNumberObj.createdBy = selectedPart.createdBy;
     partNumberObj.notes = selectedPart.notes;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
 
