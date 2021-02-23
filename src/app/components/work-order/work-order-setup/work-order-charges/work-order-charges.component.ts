@@ -22,6 +22,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Input() isQuote = false;
   @Input() markupList;
   @Output() saveChargesListForWO = new EventEmitter();
+  @Output() saveChargesListDeletedStatus = new EventEmitter();
+  
   @Output() updateChargesListForWO = new EventEmitter();
   @Output() refreshData = new EventEmitter();
   @Output() createQuote = new EventEmitter();
@@ -32,6 +34,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Input() buildMethodDetails: any = {};
   @Input() isSubWorkOrder:any=false;
   @Input() subWOPartNoId;
+  currentDeletedstatus:boolean=false;
   roNumList: any[];
   cols = [ 
     { field: 'vendorName', header: 'Vendor Name' },
@@ -169,6 +172,27 @@ dismissModel() {
     }
   }
  
+  getDeleteListByStatus(value) {
+    if (value == true) {
+     this.currentDeletedstatus = true;
+   } else {
+        this.currentDeletedstatus = false;
+   }
+   this.saveChargesListDeletedStatus.emit(this.currentDeletedstatus);
+}
+restoreRecord() {
+  this.commonService.updatedeletedrecords('WorkOrderCharges', 'WorkOrderChargesId', this.restorerecord.workOrderChargesId).subscribe(res => {
+    this.saveChargesListDeletedStatus.emit(this.currentDeletedstatus);
+      this.modal.close();
+      this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
+  });
+}
+
+restorerecord:any={};
+restore(content, rowData) {
+  this.restorerecord = rowData;
+  this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+}
   saveChargesList(event) {
     event['charges'].forEach(
       x=>{

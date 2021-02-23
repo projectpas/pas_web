@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { CopyConsiderationsForSalesQuote } from 'src/app/components/sales/quotes/models/copy-considerations-for-sales-quote';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 declare var $ : any;
 
@@ -133,7 +134,7 @@ export class SubWorkOrderListComponent implements OnInit {
     getChargesListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
 
         if (workFlowWorkOrderId) {
-            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId).subscribe(res => {
+            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,false).subscribe(res => {
                 this.workOrderChargesList = res;
             })
 

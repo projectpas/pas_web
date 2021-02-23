@@ -1067,7 +1067,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     getWOChargesList(){
         this.isSpinnerVisible = true;
-        this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId).subscribe((res: any[]) => {
+        this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,false).subscribe((res: any[]) => {
             this.isSpinnerVisible = false;
             this.workOrderChargesList = res;
             for (let charge in this.workOrderChargesList) {

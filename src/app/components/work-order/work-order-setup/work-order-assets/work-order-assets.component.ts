@@ -50,7 +50,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         { header: "Tool Name", field: "assetName" },
         { header: "Tool ID", field: "assetId" },
         { header: "Inventory Num", field: "inventoryNumber" },
-        { header: "Tool Type", field: "assetType" },
+        { header: "Tool Class", field: "assetType" },
         { header: "Manufacturer", field: "manufacturer" },
         { header: "Serial Num", field: "serialNo" },
         { header: "Location", field: "assetLocation" },
@@ -599,7 +599,7 @@ viewAsstesInventory(rowData){
             this.workFlowObject.equipments = [];
             this.alertService.showMessage(
                 this.moduleName,
-                'Saved Work Order Equipment Succesfully',
+                'Saved Work Order Tools Succesfully',
                 MessageSeverity.success
             );
             this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
@@ -633,7 +633,7 @@ viewAsstesInventory(rowData){
                 this.workFlowObject.equipments = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated Work Order Equipment Succesfully',
+                    'Updated Work Order Tools Succesfully',
                     MessageSeverity.success
                 );
                 this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
@@ -659,7 +659,7 @@ viewAsstesInventory(rowData){
                 this.workFlowObject.equipments = [];
                 this.alertService.showMessage(
                     this.moduleName,
-                    'Updated  Work Order Equipment Succesfully',
+                    'Updated  Work Order Tools Succesfully',
                     MessageSeverity.success
                 );
                 this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
