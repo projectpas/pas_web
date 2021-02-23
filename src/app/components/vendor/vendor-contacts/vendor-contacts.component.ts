@@ -126,7 +126,7 @@ export class VendorContactsComponent implements OnInit {
         { field: 'attention', header: 'Attention' },
         { field: 'mobilePhone', header: 'Mobile Phone' },
         { field: 'fullContactNo', header: 'Work Phone' },
-        { field: 'Notes', header: 'Memo' },
+        { field: 'notes', header: 'Memo' },
         //{ field: 'fax', header: 'FAX' },
         { field: 'isDefaultContact', header: 'IsPrimary' },
         { field: 'createdDate', header: 'Created Date' },
