@@ -14,6 +14,24 @@
   width:100% !important;
 
 }
+.width-36{
+  width:36px !important;
+}
+.width-135{
+  width: 135px !important;
+}
+.tool-history{
+  height:auto !important;max-height:350px !important;
+}
+.text-end{
+  text-align: end !important;
+}
+.tool-table{
+  border: 1px solid #c8c8c8 !important; width: 100% !important;table-layout: fixed !important;
+}
+.step2-padding{
+  padding: 3px 8px !important;
+}
 .ptable-wo-btns {
   margin: 0 !important;
   padding: 0 !important;

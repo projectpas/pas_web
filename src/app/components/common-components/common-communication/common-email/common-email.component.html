@@ -54,7 +54,7 @@
                     <div class="pull-right buttons-div-align">
                         <div class="col">
                             <div class="col buttons-top-padding">
-                                <div class="form-group" style="float: right;">
+                                <div class="form-group float-right">
                                     <div class="checkbox-cstm pull-left checkbox-align">
                                         <label class="checkbox-label-align">
                                             <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55"
@@ -303,7 +303,7 @@
                             <td
                                 [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                 {{audit.updatedBy}}</td>
-                            <td style="text-align: center;">
+                            <td class="text-center">
                                 <span class="value">
                                     <label class="wauto">
                                         <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true"
@@ -402,7 +402,7 @@
                                         #bccEmail="ngModel" name="bcc" [(ngModel)]="bcc" multiple="true">
                                     <div *ngIf="bccEmail.errors" [ngClass]="'error'">
                                         <div *ngIf="bccEmail.errors.pattern">
-                                            <span style="color:red">Email not valid</span>
+                                            <span class="clr-red">Email not valid</span>
                                         </div>
                                     </div>
                                 </div>
@@ -453,7 +453,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label style="float: none;width: auto;">Attachments:</label>
+                                    <label class="attachments-label">Attachments:</label>
                                     <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple"
                                         [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
                                         (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"
@@ -601,8 +601,7 @@
                         <span class="value" [innerHTML]="emailViewData.emailBody"></span>
                     </p>
                     <div>
-                        <label class="label"
-                            style="float: left; width: 30%; padding: 0; display: inline-block;">Attachments:</label>
+                        <label class="label attachments-label-width">Attachments:</label>
                         <ul style="list-style: none;">
                             <li *ngFor="let attachment of emailViewData.attachmentDetails">
                                 {{attachment.fileName}} - <a class="filelink"

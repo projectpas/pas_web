@@ -13,6 +13,53 @@
 .nav-pills-cstm li {
   float: left;
 }
+.m-t-15{
+  margin-top: 15px !important;
+}
+.radios-left{
+  margin-left: -8px !important;
+}
+.grand-total-div{
+  border-style: groove !important; border-radius: 10px !important;
+   margin-top: 7px !important;padding: 2px 5px !important;
+}
+.grand-total{
+  color : #295d92 !important; float: left !important; margin: 0 !important;
+}
+.grand-total-span{
+  color: red !important; float: right !important;
+}
+.tr-back{
+  color: #f1f1f1 !important; background-color: #fff !important;
+}
+.radios-width{
+  width: 450px !important;
+}
+.radios-align{
+  text-align: center !important; 
+  display: flex !important;margin-bottom: 0px !important;
+}
+.cost-plus-radio{
+  margin-bottom: 10px !important; margin-left: 30px !important;margin-right: 30px !important;
+}
+.td-back{
+  background: #fff !important; border: 1px solid #fff !important;
+}
+.actions{
+  min-width: 60px !important;
+}
+.min-width-100{
+  min-width: 100px !important;
+}
+.width-130{
+  width: 130px !important;
+}
+.m-t-6{
+  margin-top: 6px !important;
+}
+.overflow-x-hidden{
+  overflow-x: hidden !important;
+}
 .nav-pills-cstm li a {
   background-color: #4298ffb0;
   color: white;

@@ -182,7 +182,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="credit" style="width: 100%;"
+                    <label for="credit" class="input-width-100-percent"
                       >Currency <span class="clr-red">*</span>
                     </label>
                     <!-- <p-dropdown 
@@ -660,7 +660,7 @@
         </div>
       </div>
 
-      <div class="row" style="margin-top: 15px;" *ngIf="billingorInvoiceForm">
+      <div class="row" class="m-t-15" *ngIf="billingorInvoiceForm">
         <div class="col-md-7">
             <div class="card">
             
@@ -668,7 +668,7 @@
               <div>
                   <div class="col-md-12">
                     <div class="col-md-7">
-                        <div class="form-group" style="margin-left: -8px;">
+                        <div class="form-group radios-left">
                             <p-radioButton
                               class="p-radiobutton-label-horizontal p-radiobutton-cstm"
                               name="HoursorClockorScan"
@@ -689,9 +689,9 @@
                            
                           </div>
                     </div>
-                    <div class="col-md-5" style="border-style: groove; border-radius: 10px; margin-top: 7px;padding: 2px 5px;">
-                     <h4 style="color : #295d92; float: left; margin: 0;"> Grand Total: </h4>
-                     <span style="color: red; float: right;">{{billingorInvoiceForm.grandTotal}}</span>
+                    <div class="col-md-5 grand-total-div">
+                     <h4 class="grand-total"> Grand Total: </h4>
+                     <span class="grand-total-span">{{billingorInvoiceForm.grandTotal}}</span>
                     </div>
 
                     </div>
@@ -913,7 +913,7 @@
                     <div class="row">
                       <div class="col-md-5">
                           <div class="form-group">
-                              <label for="credit" style="width: 100%;">Ship Via
+                              <label for="credit" class="input-width-100-percent">Ship Via
                                    </label>
                         <p-dropdown
                           placeholder="Select Site Name"
@@ -973,30 +973,30 @@
         </div>
       </div>
 
-      <div style="float: right;" *ngIf="!isViewMode">
+      <div class="float-right" *ngIf="!isViewMode">
         <button class="btn btn-primary pull-right"  *ngIf="!isEditBilling" (click)="saveWorkOrderBilling()" [disabled]="!billinForm.valid">Save</button>
         <button class="btn btn-primary pull-right"  *ngIf="isEditBilling" (click)="updateWorkOrderBilling()">Update</button>
       </div>
     </form>
   </div>
 </div>
-<div class="card" style="margin-top: 6px;" *ngIf="workOrderQuoteId !=0 && quotestatusofCurrentPart =='Approved'">
+<div class="card m-t-6" *ngIf="workOrderQuoteId !=0 && quotestatusofCurrentPart =='Approved'">
   <div class="card-body p-10" >
 
                 <p-accordion class="p-accordion-cstm">
                     <p-accordionTab  header="Material List" >
                         <div class="equipment-tab-content"  >
-                            <div class="x_panel" *ngIf="quoteMaterialList" style="overflow-x: hidden;">
+                            <div class="x_panel overflow-x-hidden" *ngIf="quoteMaterialList">
                                 <div class="tab-content">
                                     <div class="table-responsive table-overflow" id="workflow-attributes-block">
                                         <table class="table table-bordered ">
                                             <thead>
-                                                <tr style="color: #f1f1f1; background-color: #fff;">
+                                                <tr class="tr-back">
                                                     <td colspan="10" class="table-header-col1">&nbsp;</td>
                                                     <td colspan="4">
                             
-                                                        <div class="display-flex" style="width: 450px;">
-                                                            <div class="form-group" style="text-align: center; display: flex;margin-bottom: 0px;">
+                                                        <div class="display-flex radios-width">
+                                                            <div class="form-group radios-align">
                                                                 <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92"
                                                                                name="costPlusTypes"
                                                                                label="T&M - Mark Up"
@@ -1004,13 +1004,14 @@
                                                                                [(ngModel)]="costPlusType"
                                                                                [disabled]="isView"></p-radioButton>
                                                                 <div>
-                                                                    <select class="form-control select-markup" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                                                                    <select class="form-control select-markup m-t-10" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" 
+                                                                    >
                                                                         <option value="">Select</option>
                                                                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div style="margin-bottom: 10px; margin-left: 30px;margin-right: 30px;">
+                                                            <div class="cost-plus-radio">
                                                                 <p-radioButton class="p-radiobutton-label-horizontal"
                                                                                name="costPlusType"
                                                                                value="2"
@@ -1026,7 +1027,7 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="background: #fff; border: 1px solid #fff;"></td>
+                                                    <td class="td-back"></td>
                                                 </tr>
                                                 <tr>
                                                     <th>Task</th>
@@ -1047,7 +1048,7 @@
                                                     <th>
                                                       Billing Amount
                                                     </th>
-                                                    <th style="min-width: 60px;" *ngIf="!isView">Actions</th>
+                                                    <th class="actions" *ngIf="!isView">Actions</th>
                                                   </tr>
                                             </thead>
                                         
@@ -1060,7 +1061,7 @@
                                                         <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
                                                       </select>
                                                     </td>
-                                                    <td><div style="min-width: 100px;">{{matQuotation.partNumber}}</div></td>
+                                                    <td><div class="min-width-100">{{matQuotation.partNumber}}</div></td>
                                                     <td>{{matQuotation.partDescription}}</td>
                                                     <td>{{matQuotation.provision}}</td>
                                                     <td class="content-to-end">{{matQuotation.quantity}}</td>
@@ -1080,7 +1081,8 @@
                                                     <td class="content-to-end">{{matQuotation.unitCost}}</td>
                                                     <td class="content-to-end">{{(matQuotation.quantity * matQuotation.unitCost).toFixed(2)}}</td>
                                                     <td>
-                                                      <select class="form-control" [(ngModel)]="matQuotation.billingMethodId" style="width: 130px;" [disabled]="isView || costPlusType == 3">
+                                                      <select class="form-control width-130" [(ngModel)]="matQuotation.billingMethodId"
+                                                       [disabled]="isView || costPlusType == 3">
                                                         <option value="">Select</option>
                                                         <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]" [value]="bm.value">{{bm.label}}</option>
                                                       </select>
@@ -1133,12 +1135,12 @@
   </div>
 </div>
 <!-- // for without quote -billing  -->
-<div class="card" style="margin-top: 6px;" *ngIf="quotestatusofCurrentPart =='NotApproved'">
+<div class="card m-t-6" *ngIf="quotestatusofCurrentPart =='NotApproved'">
   <div class="card-body p-10">
                 <p-accordion class="p-accordion-cstm">
                     <p-accordionTab  header="Material List" >
                         <div class="equipment-tab-content"  >
-                            <div class="x_panel"  style="overflow-x: hidden;">
+                            <div class="x_panel overflow-x-hidden">
                                 <div class="tab-content">
                                     <div class="table-responsive table-overflow" id="workflow-attributes-block">
                                       <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10 " id="custome_material" [columns]="cols" #materialTble
@@ -1147,7 +1149,7 @@
                                       <ng-template pTemplate="header" let-columns>
                                           <tr>
                                               <!-- <th></th> -->
-                                              <th *ngFor="let col of columns" style="width: 100px !important;">
+                                              <th *ngFor="let col of columns" class="width-100">
                                                   {{col.header}} 
                                               </th>
                                                </tr>
@@ -1175,7 +1177,7 @@
                                     [value]="workOrderChargesList">
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th *ngFor="let col of columns" style="width: 100px !important;">
+                                            <th *ngFor="let col of columns" class="width-100">
                                                 {{col.header}} 
                                             </th>
                                              </tr>
