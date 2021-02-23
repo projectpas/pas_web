@@ -1366,7 +1366,7 @@
                 <div class="form-group">
                   <label>Ship Via <span class="clr-red">*</span></label>
                     <p-dropdown  name="company1" (ngModelChange)="enableSaveShipViaDomestic()"
-                    #wocompanyId="ngModel"  required
+                    #wocompanyId="ngModel"  
                     [options]="shipViaDropdownList" placeholder="Select Ship Via"
                     class="p-dropdown-custom-md p-dropdown-cus-fullwidth"
                     [(ngModel)]="shipViaDomestic.shipViaId">
@@ -1377,7 +1377,7 @@
                 <div class="form-group">
                   <label>Shipping Account Info <span class="clr-red">*</span></label>
                   <input class="form-control" type="text" name="shippingAccountinfo" (ngModelChange)="enableSaveShipViaDomestic()"
-                    [(ngModel)]="shipViaDomestic.shippingAccountInfo" required />
+                    [(ngModel)]="shipViaDomestic.shippingAccountInfo" />
                 </div>
               </div>
               <div class="col-md-2">
