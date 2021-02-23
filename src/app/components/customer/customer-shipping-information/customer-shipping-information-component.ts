@@ -160,7 +160,7 @@ export class CustomerShippingInformationComponent implements OnInit {
     arrayCountrylist:any[] = [];
     currentDeletedstatusShipVia:boolean=false;
     currentDeletedstatusIntShipVia:boolean=false;
-
+    shipviaInfo = [];
     constructor(private customerService: CustomerService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService,
@@ -221,7 +221,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if(this.arrayCountrylist.length == 0) {
             this.arrayCountrylist.push(0); }
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,20,this.arrayCountrylist.join()).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value
@@ -285,13 +285,17 @@ export class CustomerShippingInformationComponent implements OnInit {
     getshipvialistList(){
         this.isSpinnerVisible = true;
         this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
-              this.shipViaDropdownList = res.map(x => {
+             const data = res.map(x => {
                   return {
                       ...x,
                       id: x.value,
                       name: x.label
                   }
-              });
+              });    
+              this.shipviaInfo = [
+				{ label: 'Select',value: 0, id: 0, name: '-- Select --'}
+              ];                            
+              this.shipViaDropdownList = [...this.shipviaInfo, ...data];             
               this.isSpinnerVisible = false;
           },error => this.saveFailedHelper(error))
       }
@@ -580,7 +584,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if(this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(0); }
 
-            this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName','',true,20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName','',true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                     return {
                         siteName: x.label, value: x.value
@@ -606,7 +610,7 @@ export class CustomerShippingInformationComponent implements OnInit {
             if(rowData.countryId > 0)
                     this.arrayCountrylist.push(rowData.countryId);
 
-                this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join()).subscribe(res => {
+                this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
                     this.countryListOriginal = res.map(x => {
                         return {
                             nice_name: x.label, countries_id: x.value
@@ -1028,7 +1032,7 @@ export class CustomerShippingInformationComponent implements OnInit {
         if(rowData.shipToCountryId > 0)
             this.arrayCountrylist.push(rowData.shipToCountryId);
 
-        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value
@@ -1404,7 +1408,7 @@ export class CustomerShippingInformationComponent implements OnInit {
     getAllDomesticSiteSmartDropDown(strText = ''){
 		if(this.arrayDomesricShipIdlist.length == 0) {
 			this.arrayDomesricShipIdlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName',strText,true,20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('CustomerDomensticShipping', 'CustomerDomensticShippingId', 'SiteName',strText,true,20,this.arrayDomesricShipIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.domesticSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value

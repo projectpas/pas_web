@@ -81,6 +81,7 @@ export class CustomerContactsComponent implements OnInit {
 		{ field: 'email', header: 'Email' },
 		{ field: 'workPhone', header: 'Work Phone' },
 		{ field: 'mobilePhone', header: 'Mobile Phone' },
+		{ field: 'notes', header: 'Memo' },
 		{ field: 'fax', header: 'Fax' },
 		{ field: 'createdDate', header: 'Created Date' },
 		{ field: 'createdBy', header: 'Created By' },
@@ -260,6 +261,7 @@ export class CustomerContactsComponent implements OnInit {
 				...x,
 				createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
 				updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+				notes: x.notes ? this.parsedText(x.notes) : '',
 			}
 		});
 		contact.exportCSV();

@@ -10,6 +10,7 @@ import { LocalStoreManager } from '../../../services/local-store-manager.service
 import { DBkeys } from '../../../services/db-Keys';
 import { CommonService } from '../../../services/common.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { any } from 'underscore';
 
 @Component({
     selector: 'app-customer-sales-person',
@@ -63,11 +64,14 @@ export class CustomerSalesPersonComponent implements OnInit {
         primarySalesPersonName: "",
         secondarySalesPersonName: "",
         csrId: "",
-        saId: "",
+        saId: undefined,
         annualRevenuePotential: "",
         annualQuota: "",
     }
-
+    PSPinfo = [];
+    SSPinfo = [];
+    CSRinfo = [];
+    Agentinfo = [];
     constructor(public vendorservice: VendorService, public customerService: CustomerService, 
         public employeeService: EmployeeService,
         private commonService: CommonService,
@@ -137,7 +141,7 @@ export class CustomerSalesPersonComponent implements OnInit {
 		  : null;
     }
 
-      getSalesInfoByCustomerId(id) {		
+    getSalesInfoByCustomerId(id) {		
         if(id > 0)
         {
             this.isSpinnerVisible = true;
@@ -184,19 +188,29 @@ export class CustomerSalesPersonComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    checkSameAsSalesPerson(value)
-    {
-        if(this.salesInfo.primarySalesPersonId != undefined && value != undefined)
+    checkSameAsSalesPerson(value,content)
+    {  
+        if(this.salesInfo.saId.employeeId > 0)
         {
-            const primarySalesPersonId =  this.salesInfo.primarySalesPersonId.employeeId;
-            const agentId =  value.employeeId;
-            if (value.employeeId == this.salesInfo.primarySalesPersonId.employeeId)
-                this.isAgentSameAsPSalesPeson = true;
-            else
-                this.isAgentSameAsPSalesPeson = false;
-        }
+            if(this.salesInfo.primarySalesPersonId.employeeId != undefined && value != undefined)
+            {           
+                const primarySalesPersonId =  this.salesInfo.primarySalesPersonId.employeeId;
+                const agentId =  value.employeeId;
+                if (value.employeeId == this.salesInfo.primarySalesPersonId.employeeId)
+                    this.isAgentSameAsPSalesPeson = true;
+                else
+                    this.isAgentSameAsPSalesPeson = false;
+            }
+            if(this.salesInfo.primarySalesPersonId.employeeId || this.salesInfo.secondarySalesPersonId.employeeId){
+                if(this.salesInfo.primarySalesPersonId.employeeId > 0 || this.salesInfo.secondarySalesPersonId.employeeId > 0){
+                    this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												                   
+                }
+            }
+        }     
     }
 
+    
+    
     filterPrimary(event) {
         let data;
         if (!this.editMode) {
@@ -216,15 +230,19 @@ export class CustomerSalesPersonComponent implements OnInit {
             } else {
                 data = this.salesPersonOriginalList;
             }
-        }
- 
-        this.primarySPList = data;
-
-        const primarySPData = [...data.filter(x => {
+        } 
+        this.PSPinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
+       //this.primarySPList = data;
+        // const primarySPData = [...data.filter(x => {
+        //     return x.name.toLowerCase().includes(event.query.toLowerCase())
+        // })]
+        //this.primarySPList = primarySPData;
+        this.primarySPList = [...this.PSPinfo, ...data.filter(x => {
             return x.name.toLowerCase().includes(event.query.toLowerCase())
-        })]
-        this.primarySPList = primarySPData;
+        })];
     }
+
+   
 
     filterSecondary(event) {
         let data;
@@ -244,32 +262,43 @@ export class CustomerSalesPersonComponent implements OnInit {
             } else {
                 data = this.salesPersonOriginalList;
             }
-        }
-
-        this.secondarySPList = data;
-
-        const secondarySPData = [...data.filter(x => {
+        }       
+        this.SSPinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
+        // this.secondarySPList = data;
+        // const secondarySPData = [...data.filter(x => {
+        //     return x.name.toLowerCase().includes(event.query.toLowerCase())
+        // })]
+        // this.secondarySPList = secondarySPData;
+        this.secondarySPList = [...this.SSPinfo, ...data.filter(x => {
             return x.name.toLowerCase().includes(event.query.toLowerCase())
-        })]
-        this.secondarySPList = secondarySPData;
+        })];
     }
 
+    
     filterCSR(event) {
         this.csrList = this.csrOriginalList;
+        this.CSRinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
 
-        const CSRData = [...this.csrOriginalList.filter(x => {
+        // const CSRData = [...this.csrOriginalList.filter(x => {
+        //     return x.name.toLowerCase().includes(event.query.toLowerCase())
+        // })]       
+        //this.csrList = CSRData;
+        this.csrList =[...this.CSRinfo, ...this.csrOriginalList.filter(x => {
             return x.name.toLowerCase().includes(event.query.toLowerCase())
-        })]
-        this.csrList = CSRData;
+        })];
     }
-
+    
     filterAgents(event) {
         this.agentList = this.agentsOriginalList;
+        this.Agentinfo = [{employeeId: 0, jobTitleId: 0, employeeCode: "", name: "-- Select --"}]
 
-        const agentData = [...this.agentsOriginalList.filter(x => {
+        // const agentData = [...this.agentsOriginalList.filter(x => {
+        //     return x.name.toLowerCase().includes(event.query.toLowerCase())
+        // })]
+        // this.agentList = agentData;
+        this.agentList =[...this.Agentinfo, ...this.agentsOriginalList.filter(x => {
             return x.name.toLowerCase().includes(event.query.toLowerCase())
-        })]
-        this.agentList = agentData;
+        })];        
     }
 
     selectedSalesPerson(object, type) {
@@ -291,6 +320,15 @@ export class CustomerSalesPersonComponent implements OnInit {
 
     saveSalesInformation() {
         this.isSpinnerVisible = true;
+        if(!this.salesInfo.primarySalesPersonId.employeeId){
+            this.alertService.showMessage(
+                'Alert',
+                `Please Select Primary Sales Person`,
+                MessageSeverity.error
+            );
+            this.isSpinnerVisible = false;
+            return;            
+        }       
         this.customerService.updatesalesinfo({
             ...this.salesInfo,
             customerSalesId: this.customerSalesId == undefined ? 0 : this.customerSalesId,
@@ -353,7 +391,8 @@ export class CustomerSalesPersonComponent implements OnInit {
 
     nextClick(nextOrPrevious) {
         this.nextOrPreviousTab = nextOrPrevious;
-        if (this.formdata.form.dirty) {
+        //if (this.formdata.form.dirty) {
+        if(!this.disableSave == true) {
             let content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: 'sm' });
         }
@@ -396,6 +435,18 @@ export class CustomerSalesPersonComponent implements OnInit {
         if(this.nextOrPreviousTab == "Previous"){
             this.tab.emit('Shipping');
         }
+    }
+
+    saveAgentSalesInformation(){
+        if(!this.disableSave){
+            this.modal.close();
+            this.saveSalesInformation();            
+        } 
+    }
+
+    dismissAgentModel(){
+        this.modal.close();
+        this.salesInfo.saId = undefined;
     }
 
     private saveFailedHelper(error: any) {
