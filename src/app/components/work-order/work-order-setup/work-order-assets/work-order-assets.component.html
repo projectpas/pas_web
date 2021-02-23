@@ -155,7 +155,7 @@
           let-columns="columns">
           <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
               (dblclick)="openViewOnDbl(rowData)">
-              <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+              <td *ngFor="let col of columns" class="ui-resizable-column wauto"
               pReorderableRowHandle>
                <ng-container>
                 
@@ -415,16 +415,16 @@
         </h4>
       </div>
       <div class="modal-body" *ngIf="assetRecordId">
-        <div class="form-row" style="margin-top: 10px;">
+        <div class="form-row m-t-10">
           <div class="col-md-3">
             <div class="form-group">
-              <label style="width: auto;">WO Num</label>
+              <label class="wauto">WO Num</label>
               <input class="form-control" type="text" [(ngModel)]="woNumber" name="woNumber" disabled />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label style="width: auto;">Customer</label>
+              <label class="wauto">Customer</label>
               <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" disabled />
             </div>
           </div>
