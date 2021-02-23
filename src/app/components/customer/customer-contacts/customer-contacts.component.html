@@ -191,7 +191,7 @@
 
               <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isDefaultContact'"
                 pReorderableRowHandle>
-                <ng-container *ngIf="col.field != 'workPhone' && col.field != 'tag' && col.field != 'lastName' && col.field != 'contactTitle'">
+                <ng-container *ngIf="col.field != 'workPhone' && col.field != 'tag' && col.field != 'notes' && col.field != 'lastName' && col.field != 'contactTitle'">
                   {{
                     col.field == 'createdDate'
                       ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
@@ -199,6 +199,9 @@
                       ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
                       : rowData[col.field]
                   }}
+                </ng-container>
+                <ng-container *ngIf="col.field == 'notes'">                  
+                  <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="rowData.notes"></p></span>
                 </ng-container>
                 <ng-container *ngIf="col.field == 'workPhone'">
                     {{ rowData.workPhone }} {{rowData.workPhoneExtn && rowData.workPhoneExtn.trim() != '' ? 'Ext ' : ''}} {{ rowData.workPhoneExtn }}
@@ -1297,7 +1300,7 @@
   <div class="modal-body">
     <strong>
       Contact Name:
-      <span class="new-label">{{ selectedRowforDelete.firstName }}</span>
+      <span class="new-label" style="text-transform: capitalize">{{ selectedRowforDelete.firstName }} - {{ selectedRowforDelete.lastName }}</span>
     </strong>
   </div>
 
@@ -1618,7 +1621,7 @@
   <div class="modal-body">
       <strong>
           Contact Name:
-          <span class="new-label">{{restorerecord.firstName}}</span>
+          <span class="new-label" style="text-transform: capitalize">{{restorerecord.firstName}} - {{restorerecord.lastName}}</span>
       </strong>
   </div>
   <div class="modal-footer">

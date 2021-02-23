@@ -800,7 +800,7 @@ export class WorkOrderListComponent implements OnInit {
     getChargesListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId).subscribe(res => {
+            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,false).subscribe(res => {
                 this.workOrderChargesList = res;
                 this.isSpinnerVisible = false;
             },

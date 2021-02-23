@@ -785,7 +785,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
 
     getChargesListData(chargesMPN){
         this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderChargesList(chargesMPN.workFlowWorkOrderId, this.workOrderId).subscribe(res => {
+        this.workOrderService.getWorkOrderChargesList(chargesMPN.workFlowWorkOrderId, this.workOrderId,false).subscribe(res => {
             this.isSpinnerVisible = false;
             chargesMPN.workOrderChargesList = res;
             for(let charge in chargesMPN.workOrderChargesList){

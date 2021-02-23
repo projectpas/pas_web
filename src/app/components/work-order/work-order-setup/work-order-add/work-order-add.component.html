@@ -1139,7 +1139,9 @@
                 [ngClass]="{hidedataOthers :  subTabOtherOptions !== 'charges'} ">
                 <app-work-order-charges [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder"
                     [workOrderChargesList]="workOrderChargesList" [subWOPartNoId]="subWOPartNoId"
-                    (saveChargesListForWO)="saveWorkOrderChargesList($event)"
+                    (saveChargesListForWO)="saveWorkOrderChargesList($event)"  
+                    (saveChargesListDeletedStatus)="getChargesDeletedStatus($event)" 
+                    
                     (updateChargesListForWO)="updateWorkOrderChargesList($event)" [taskList]="taskList"
                     (refreshData)="getChargesListByWorkOrderId()" [isView]="isView || isViewForApprovedPart"></app-work-order-charges>
             </div>

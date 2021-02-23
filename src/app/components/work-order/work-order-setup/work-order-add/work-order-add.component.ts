@@ -2274,7 +2274,11 @@ export class WorkOrderAddComponent implements OnInit {
     mainComponentTabSelected(value) {
         this.subTabMainComponent = value;
     }
-
+    chargesDeletedStatus:boolean=false;
+    getChargesDeletedStatus(event){
+        this.chargesDeletedStatus=event ? event :false;
+        this.getChargesListByWorkOrderId();
+    }
     getChargesListByWorkOrderId() {
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
@@ -2300,7 +2304,7 @@ export class WorkOrderAddComponent implements OnInit {
             if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
                 this.isSpinnerVisible = true;
                 //Handle Apis for work order and sub work order in work order-endpoint.service
-                this.workOrderService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,this.chargesDeletedStatus).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
 
                     for (let charge in res) {
