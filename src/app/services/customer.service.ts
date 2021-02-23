@@ -287,7 +287,10 @@ export class CustomerService {
     }
 
 
-
+    getCustomerBillAddressGet(customerId: any) {
+        return Observable.forkJoin(
+            this.customerEndpoint.getCustomerBillAddressGet<any[]>(customerId));
+    }
     BillviaHistory(actionId: number) {
         return Observable.forkJoin(this.customerEndpoint.getBillviaHistory<AuditHistory[]>(actionId));
     }

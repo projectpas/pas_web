@@ -24,6 +24,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _addressUrl: string = "/api/Customer/AddressGet";
     private readonly _customerBillAddressUrl = "/api/Customer/customerAddressGet";
     private readonly _cusShippingGeturl = "/api/Customer/cusshippingGet";
+    private readonly _cusBillingGeturl = "/api/Customer/getCustomerBillViaDetails";
     private readonly _cusShippingGeturlwithId = "/api/Vendor/cusshippingGetwithid";
     private readonly _customerList: string = environment.baseUrl + '/api/Customer/List';
     private readonly __venshipwithid = "/api/Vendor/venshippingGetwithid";
@@ -166,6 +167,7 @@ export class CustomerEndpoint extends EndpointFactory {
     get paginate() { return this.configurations.baseUrl + this.getCustomer; }
     get customerBillAddressUrl() { return this.configurations.baseUrl + this._customerBillAddressUrl; }
     get cusShippingUrl() { return this.configurations.baseUrl + this._cusShippingGeturl; }
+    get cusBillinggUrl() { return this.configurations.baseUrl + this._cusBillingGeturl; }
     get cusShippingUrlwithaddressid() { return this.configurations.baseUrl + this._cusShippingGeturlwithId; }
     get venShippingUrlwithaddressid() { return this.configurations.baseUrl + this.__venshipwithid; }
     get customerBillViaDetails() { return this.configurations.baseUrl + this._customerBillViaDetails; }
@@ -800,6 +802,14 @@ export class CustomerEndpoint extends EndpointFactory {
         return this.http.get<T>(endpointurl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getvenHippingaddresdetailswithid(customerId));
+            });
+    }
+
+    getCustomerBillAddressGet<T>(customerId: any): Observable<T> {
+        let endpointurl = `${this.cusBillinggUrl}/${customerId}`;
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCustomerBillAddressGet(customerId));
             });
     }
 
