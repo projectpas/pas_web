@@ -3,53 +3,44 @@
     (isEdit &&
     editWorkOrderGeneralInformation &&
     workOrderTypes &&
-    workOrderStatusList &&
-    creditTerms &&
+    workOrderStatusList &&    
     workOrderStagesList &&
-
     partNumberOriginalData &&
     jobTitles   && salesPersonOriginalList && salesAgentsOriginalList
-     && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList
-     )
-  ">
+     && csrOriginalList && technicianOriginalList 
+     )">
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
-      [jobTitles]="jobTitles" 
+      [jobTitles]="jobTitles" [workOrderStagesList]="workOrderStagesList"
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
       [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
-      [workOrderStagesList]="workOrderStagesList"
-      [workorderSettings]="workorderSettings" 
-      [partNumberOriginalData]="partNumberOriginalData" 
-       [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+      [workorderSettings]="workorderSettings" [partNumberOriginalData]="partNumberOriginalData" 
+      [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
      >
     </app-work-order-add>
   </div>
+  <!-- creditTerms && && technicianByExpertiseTypeList -->
+
   <div *ngIf="
     !(
       isEdit &&
       workOrderTypes &&
-      workOrderStatusList &&
-      creditTerms &&
-      workOrderStagesList &&
-    
-      partNumberOriginalData &&
-     
-       jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList
-       
-    )
-  ">
+      workOrderStatusList &&      
+      workOrderStagesList &&    
+      partNumberOriginalData &&     
+       jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList 
+    )">
     <!-- using add form as subworkOrder also -->
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
       [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList"
-      [creditTerms]="creditTerms" [jobTitles]="jobTitles" 
-      [salesPersonOriginalList]="salesPersonOriginalList"
+      [jobTitles]="jobTitles" [salesPersonOriginalList]="salesPersonOriginalList"
       [salesAgentsOriginalList]="salesAgentsOriginalList" [csrOriginalList]="csrOriginalList"
       [technicianOriginalList]="technicianOriginalList" 
       [workOrderStagesList]="workOrderStagesList" [workorderSettings]="workorderSettings" 
       [partNumberOriginalData]="partNumberOriginalData" 
-       [workOrderGeneralInformation]="workOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
-      
+      [creditTerms]="creditTerms" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+      [workOrderGeneralInformation]="workOrderGeneralInformation" 
       (getLatestDefaultSettingByWorkOrderTypeId)="getWorkOrderDefaultSetting($event)">
     </app-work-order-add>
   </div>
