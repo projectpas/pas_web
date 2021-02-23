@@ -18,8 +18,7 @@
                 <table class="table table-bordered" id="so-table">
                     <!-- <tr class="header-table-width" style="font-size: 10px"> -->
                     <tr style="font-size: 10px">
-                        <th *ngFor="let summaryColumn of summaryColumns"
-                            [ngStyle]="{'min-width': summaryColumn.width}">
+                        <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
                             <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                  || summaryColumn.field == 'customerRef'
                                  || summaryColumn.field == 'quantityRequested'">
@@ -116,19 +115,6 @@
                                             <a class="btn nobg btn-pluspo-cstm" (click)="createPO(summaryPart)"
                                                 matTooltip="Create PO" matTooltipPosition="above">
                                                 <i class="fa fa-plus"> </i>
-                                            </a>
-                                        </span>
-                                        <span>
-                                            <a class="btn nobg btn-plusro-cstm" (click)="createRO(summaryPart)"
-                                                matTooltip="Create RO" matTooltipPosition="above">
-                                                <i class="fa fa-plus" style="color: #259e08;"></i>
-                                            </a>
-                                        </span>
-                                        <span>
-                                            <a class="btn nobg btn-plusro-cstm"
-                                                (click)="initiateCreateWOROPO(summaryPart, 'WO')" matTooltip="Create WO"
-                                                matTooltipPosition="above">
-                                                <i class="fa fa-plus" style="color: #24089e;"></i>
                                             </a>
                                         </span>
                                     </td>
@@ -405,6 +391,19 @@
                                                 class="btn nobg" (click)="openPartDelete(deleteContent,part)"
                                                 matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-plusro-cstm" (click)="createRO(part)"
+                                                matTooltip="Create RO" matTooltipPosition="above">
+                                                <i class="fa fa-plus" style="color: #259e08;"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-plusro-cstm"
+                                                (click)="initiateCreateWOROPO(part, 'WO')" matTooltip="Create WO"
+                                                matTooltipPosition="above">
+                                                <i class="fa fa-plus" style="color: #24089e;"></i>
                                             </a>
                                         </span>
                                     </td>
