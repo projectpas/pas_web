@@ -38,6 +38,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
     modal: NgbModalRef;
+    disableUpdate:boolean=true;
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
          private modalService: NgbModal,
         private alertService: AlertService) {
@@ -60,7 +61,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                     // partNumber: {name:this.editData.assetName,assetId:this.editData.assetId},
                     assetId: this.editData.assetId,
                     assetDescription: this.editData.description,
+                    assetIdName:this.editData.assetId
                 }
+                this.disableUpdate=true;
                 this.workFlow.equipments.push(data);
                 this.workFlow.equipments.forEach(ev=>{
                     ev.partNumber={name:ev.name,assetId:ev.assetRecordId}
@@ -186,6 +189,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
 
     updateEquipmentWorkOrder() {
         this.updateEquipmentListForWO.emit(this.workFlow)
+        // this.disableUpdate=true;
     }
 
     checkQuantityAvailability() {
@@ -244,7 +248,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         }
         this.dismissModel();
     }
-  
+    getActive(){
+    this.disableUpdate=false;
+  }
 }
 
 

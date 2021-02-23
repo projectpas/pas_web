@@ -16,7 +16,7 @@ style="overflow: hidden;">
         <th><label>{{moduleName}} Description</label></th>
         <th><label>Tool Class</label></th>
         <th><label>Qty<span class="clr-red">*</span></label></th>
-        <th><label>Actions </label></th>
+        <th *ngIf="!isEdit"><label>Actions </label></th>
       </tr>
     </thead>
     <tbody>
@@ -30,11 +30,11 @@ style="overflow: hidden;">
               <div class="ui-helper-clearfix">{{ assetId  }}</div>
             </ng-template>
           </p-autoComplete> --> 
-          <p-autoComplete   class="p-autoComplete-ctsm" field="name" name="AName{{i}}" [dropdown]="true"  [forceSelection]="true"
+          <p-autoComplete (ngModelChange)="getActive()"  class="p-autoComplete-ctsm" field="name" name="AName{{i}}" [dropdown]="true"  [forceSelection]="true"
           errorMessage="Records not found"  emptyMessage="No Records Found"  (completeMethod)="filterpartItems($event)"
            [size]="30" [minLength]="1" appendTo='body' [baseZIndex]="9999" (onSelect)="onPartSelect($event, eqp,i)" [suggestions]="allPartnumbersInfo"
            [(ngModel)]="eqp.partNumber" (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
-      </p-autoComplete>
+      </p-autoComplete> 
         </td>
         <td>
           {{ eqp.assetIdName }}
@@ -46,10 +46,10 @@ style="overflow: hidden;">
           {{ eqp.assetTypeName }}
         </td>
         <td class="text-center">
-          <input type="text" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
+          <input type="text" (ngModelChange)="getActive()" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
-        <td  style="text-align: center;">
+        <td  style="text-align: center;" *ngIf="!isEdit">
           <button class="btn btn-danger nobg" (click)="openDelete(content,eqp,i)">
             <i class="fa fa-trash"></i>
           </button>
@@ -74,7 +74,7 @@ style="overflow: hidden;">
   <div *ngIf="isWorkOrder && isEdit" style="float:right">
     <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateEquipmentWorkOrder()"
       style="padding: 6px 12px !important; margin-top: 10px;"
-      [disabled]="!toolsCreateForm.valid || checkQuantityAvailability()">
+      [disabled]="!toolsCreateForm.valid || checkQuantityAvailability() || disableUpdate">
       Update
     </button>
     <button type="button" class="btn btn-danger" data-dismiss="modal"

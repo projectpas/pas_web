@@ -498,7 +498,7 @@ viewAsstesInventory(rowData){
             PagingData.filters[x] = dt.filters[x].value;
         });
         this.workOrderService
-            .getWorkOrderList(PagingData).subscribe(res => {
+            .getWorkOrderAssetList(this.isSubWorkOrder, PagingData).subscribe(res => {
                 const vList = res['results'].map(x => {
                     return {
                         ...x,
