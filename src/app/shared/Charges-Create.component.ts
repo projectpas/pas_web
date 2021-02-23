@@ -12,7 +12,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     selector: 'grd-charges',
     templateUrl: './Charges-Create.component.html',
     styleUrls: ['./Charges-Create.component.css']
-})
+}) 
 export class ChargesCreateComponent implements OnInit, OnChanges {
     vendorCollection: any[] = [];
     ccRegex: RegExp = /[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/;
@@ -70,7 +70,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 this.workFlow.totalChargesCost = 0;
 
                 this.row = this.workFlow.charges[0];
-                this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+                // this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
 
                 this.workFlow.charges = [];
                 this.addRow();
@@ -80,7 +80,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             if (this.row == undefined) {
                 this.row = {};
             } else {
-                this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+                // this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
             }
             this.row.taskId = this.workFlow.taskId;
             if (this.workFlow.charges.length > 0) {
@@ -103,6 +103,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
+                console.log("chages",res);
                 this.chargesTypes = res.map(x => {
                     return {
                         ...x,
@@ -270,14 +271,10 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         newRow.vendorName = "";
         newRow.workflowChargeTypeId = "0";
         newRow.isDelete = false;
-        newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+        // newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
         this.workFlow.charges.push(newRow);
 
-        if (this.workFlow.charges && this.workFlow.charges.length < 1) {
-            this.workFlow.charges.forEach(element => {
-                element.isShowDelete = false;
-            });
-        }
+    
     }
 
     // calculate row wise extended cost

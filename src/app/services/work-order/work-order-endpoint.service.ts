@@ -393,9 +393,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
     });
     }
 
-    getWorkOrderChargesList(workFlowWorkOrderId, workOrderId) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getworkflowworkorderchargeslist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId));
+    getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted?) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getworkflowworkorderchargeslist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&isDeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted));
     });
     }
 

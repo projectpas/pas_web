@@ -203,8 +203,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getWorkOrderPublicationList(workFlowWorkOrderId, workOrderId)
     }
 
-    getWorkOrderChargesList(workFlowWorkOrderId, workOrderId) {
-        return this.workOrderEndpointService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId)
+    getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted) {
+        return this.workOrderEndpointService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted)
     }
 
     deleteWorkOrderChargesByChargesId(workOrderChargeId, updatedBy,isSubWorkOrder) {
