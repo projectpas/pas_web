@@ -8,7 +8,7 @@
     <table class="table table-bordered table-fixed workflow-table-charges  workflowTable-class">
       <tr>
         <th *ngIf="!isWorkFlow"><label>Task <span class="clr-red">*</span></label></th>
-        <th><label>Type <span class="clr-red">*</span></label></th>
+        <th><label>Charge Type <span class="clr-red">*</span></label></th>
         <th *ngIf="isWorkOrder || isQuote"><label>Gl Account</label></th>
         <th><label>Description</label></th>
         <th><label>Qty <span class="clr-red">*</span></label></th>
@@ -16,20 +16,20 @@
         <th><label>Unit Cost<span class="clr-red">*</span> </label></th>
         <th><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
         <th><label>Vendor Name</label></th>
-        <th *ngIf="!isQuote || !isEdit">
+        <th *ngIf="!isQuote && !isEdit">
           <label style="text-align: left;">Actions </label>
         </th>
       </tr>
       <tr class="charge-tr" [hidden]="charge.isDelete" *ngFor="let charge of workFlow.charges; let i = index">
         <td *ngIf="!isWorkFlow">
-          <select class="form-contro wf-pub-id full-width" [(ngModel)]="charge.taskId" name="task_{{i}}" required
+          <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
             (change)="onTaskChange(charge)">
             <option value="">--Select--</option>
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
           </select>
         </td>
         <td>
-          <select class="form-control full-width" id="dllChargesType" (change)="onChargeTypeChange($event, charge)"
+          <select class="form-control full-width" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
             [(ngModel)]="charge.workflowChargeTypeId" style="border-radius: 4px;" name="type_{{i}}" required>
             <option [value]="0">--Select--</option>
             <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
@@ -38,16 +38,16 @@
           </select>
         </td>
         <td *ngIf="isWorkOrder || isQuote">
-          <input type="text" pInputText pKeyFilter="money1" class="form-control" [disabled]="true"
+          <input type="text" pInputText pKeyFilter="money1" (ngModelChange)="getActive()" class="form-control" [disabled]="true"
             value="{{ charge.glAccountName }}" [(ngModel)]="charge.glAccountName" name="exd1_{{i}}" disabled />
         </td>
         <td>
-          <input type="text" pInputText value="{{ charge.description }}" [(ngModel)]="charge.description"
+          <input type="text" pInputText value="{{ charge.description }}" (ngModelChange)="getActive()" [(ngModel)]="charge.description"
             class="form-control" name="desc_{{i}}" />
         </td>
 
         <td>
-          <input type="text" pInputText pKeyFilter="pnum" maxlength="15" class="form-control text-right"
+          <input type="text" pInputText pKeyFilter="pnum" maxlength="15" (ngModelChange)="getActive()" class="form-control text-right"
             value="{{ charge.quantity }}" (change)="
               calculateQtySummation();
               calculateExtendedCost(charge);
@@ -55,28 +55,28 @@
             " [(ngModel)]="charge.quantity" name="qty_{{i}}" required />
         </td>
         <td *ngIf="isWorkOrder || isQuote">
-          <input type="text" pInputText maxlength="15" class="form-control" value="{{ charge.refNum }}"
+          <input type="text" pInputText maxlength="15" class="form-control" (ngModelChange)="getActive()" value="{{ charge.refNum }}"
             [(ngModel)]="charge.refNum" name="refNum_{{i}}" />
         </td>
         <td>
-          <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{ charge.unitCost }}"
+          <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getActive()" class="form-control text-right" value="{{ charge.unitCost }}"
             (change)="calculateExtendedCost(charge)" [(ngModel)]="charge.unitCost" name="unitCost_{{i}}" maxlength="15"
             required />
         </td>
         <td>
-          <input type="text" pInputText pKeyFilter="money" class="form-control text-right" [disabled]="true"
+          <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getActive()" class="form-control text-right" [disabled]="true"
             value="{{ charge.extendedCost }}" [(ngModel)]="charge.extendedCost"
             (change)="calculateExtendedCostSummation();calculateExtendedPriceSummation()" name="exd_{{i}}" [required]="!isWorkOrder" disabled
             maxlength="15" />
         </td>
         <td>
-          <p-autoComplete [(ngModel)]="charge.vendor" [suggestions]="vendorCollection" [forceSelection]="true"
+          <p-autoComplete [(ngModel)]="charge.vendor" (ngModelChange)="getActive()" [suggestions]="vendorCollection" [forceSelection]="true"
             (completeMethod)="filterVendor($event)" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
             [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
           </p-autoComplete>
         </td>
         <!-- [disabled]="!charge.isShowDelete"  -->
-        <td *ngIf="!isQuote || !isEdit" style="text-align: center;">
+        <td *ngIf="!isQuote &&  !isEdit" style="text-align: center;">
           <button class="btn btn-danger nobg"  (click)="openDelete(content,charge,i)">
             <i class="fa fa-trash"></i>
           </button>
@@ -115,7 +115,7 @@
 
 <div *ngIf="isWorkOrder && isEdit" style="float:right">
   <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateChargesWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;">
+    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="disableUpdate">
     Update
   </button>
   <button type="button" class="btn btn-danger" data-dismiss="modal"

@@ -428,15 +428,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     }
 
-    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId) {
+    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted) {
         if(isSubWorkOrder==true){
             //handle  workFlowWorkOrderId also
-            return this.http.get(`${this.configurations.baseUrl}/api/workorder/subWorkorderfreightlist?subWOPartNoId=${subWOPartNoId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId));
+            return this.http.get(`${this.configurations.baseUrl}/api/workorder/subWorkorderfreightlist?subWOPartNoId=${subWOPartNoId}&isDeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted));
     });
         }else{
-            return this.http.get(`${this.configurations.baseUrl}/api/workorder/workorderfreightlist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId));
+            return this.http.get(`${this.configurations.baseUrl}/api/workorder/workorderfreightlist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&isDeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted));
     });
         }
     }

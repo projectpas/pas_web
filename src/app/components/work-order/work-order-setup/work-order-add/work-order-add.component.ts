@@ -2405,7 +2405,7 @@ export class WorkOrderAddComponent implements OnInit {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.isSpinnerVisible = true;
             // handle both sub and work order apis in end point using isSubWorkOrder Status and subWOPartNoId
-            this.workOrderService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,false).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workOrderFreightList = res;
             },

@@ -16,7 +16,7 @@
   </div>
 </div>
 <div id="addNewCharges" class="modal fade" role="dialog" data-backdrop="static" *ngIf="!view">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -36,7 +36,7 @@
         <div *ngIf="isEdit && editData ">
           <grd-charges [isEdit]="isEdit" [editData]="editData" [workFlow]="workFlowObject" [isWorkOrder]="isWorkOrder"
             [markupList]="markupList" [isQuote]="isQuote" [taskList]="taskList"
-            (updateChargesListForWO)="updateChargesList($event)"></grd-charges>
+            (updateChargesListForWO)="updateChargesList($event)"></grd-charges> 
         </div>
       </div> 
     </div>
@@ -48,7 +48,7 @@
   <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10" [columns]="cols" [value]="workOrderChargesList"
     [paginator]="true" [rows]="10">
     <ng-template pTemplate="caption">
-      <div class="checkbox-cstm pull-right checkbox-align">
+        <div class="checkbox-cstm pull-right checkbox-align">
         <label class="checkbox-label-align">
             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
                 id="cparent"
@@ -59,7 +59,7 @@
     </div>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
-    
+ 
       <tr style="color: #f1f1f1;" *ngIf="isQuote">
         <th colspan="8" style="background: #fff; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">&nbsp;</th>
         <ng-container *ngIf="isView">
@@ -184,7 +184,7 @@
                 <option value="">Select</option>
                 <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
               </select> -->
-              <p>{{dt.taskName}}</p>
+              <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
               <td class="table-column-width" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
@@ -234,15 +234,15 @@
                   class="fa fa-trash"></i></a> </span> 
               </div>
                   <div *ngIf="currentDeletedstatus == true">
-                    <span data-toggle="modal" data-target="#viewWorkOrder">
+                    <!-- <span data-toggle="modal" data-target="#viewWorkOrder">
                         <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
                             matTooltipPosition="above">
                             <i class="fa fa-eye"></i>
                         </a>
-                    </span>
+                    </span> -->
                  
                     <span>
-                        <a class="btn nobg" (click)="restore(restoreIdWo,rowData);"
+                        <a class="btn nobg" (click)="restore(restoreIdWo,dt);"
                             matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                 aria-hidden="true"></i></a>
                     </span>
@@ -259,20 +259,28 @@
       <tr *ngIf="rowData && rowData[0]" class="task-total">
         <td><strong>Total ({{getTaskName(rowData[0].taskId)}})</strong></td>
         <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
         <td class="content-to-end"><strong>{{ getTotalTaskQuantity(rowData) }}</strong></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
         <td class="content-to-end"><strong>{{ getTotalTaskUnitCost(rowData) }} </strong></td>
+        <td>&nbsp;</td>
         <!-- <td>&nbsp;</td> -->
         <!-- <td>&nbsp;</td> -->
-        <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
-        <td *ngIf="!isView">&nbsp;</td>
+        <!-- <td *ngIf="isQuote">&nbsp;</td> -->
+        <!-- <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td> -->
+        <td *ngIf="!isView && !isEdit">&nbsp;</td>
+    
       </tr>
     </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+          <td colspan="10" class="no-records-msg no-records-cstm">
+              No records found
+          </td>
+      </tr>
+  </ng-template>
     <ng-template pTemplate="footer" *ngIf="isQuote">
       <tr class="footer">
         <td>Total</td>
@@ -310,8 +318,11 @@
       </button>
   </div>
   <div class="modal-body">
-      <h6 class="modal-body">Task Name : {{restorerecord.taskName}}</h6>
-  </div>
+    <strong>
+      Charge Type :
+        <span class="new-label">{{restorerecord.chargeType}}</span>
+    </strong>
+</div>
   <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
@@ -323,16 +334,17 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      
       <h4 class="modal-title">Are You Sure Want to Delete?</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
           <span aria-hidden="true">&times;</span>
-
-      
       </button>
-    
   </div>
-
+  <div class="modal-body">
+    <strong>
+      Charge Type :
+        <span class="new-label">{{currentRow.chargeType}}</span>
+    </strong>
+</div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>

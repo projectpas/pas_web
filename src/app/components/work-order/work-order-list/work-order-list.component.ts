@@ -826,7 +826,7 @@ export class WorkOrderListComponent implements OnInit {
     getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId, false, 0).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId, false, 0,false).subscribe(res => {
                 this.workOrderFreightList = res;
                 this.isSpinnerVisible = false;
             },
