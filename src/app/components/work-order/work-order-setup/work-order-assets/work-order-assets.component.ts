@@ -65,7 +65,7 @@ export class WorkOrderAssetsComponent implements OnInit {
         { field: 'name', header: 'Tool Name' },
         { field: 'assetId', header: 'Tool Id' },
         { field: 'description', header: 'Tool Description' },
-        { field: 'assetTypeName', header: 'Tool Type' },
+        { field: 'assetTypeName', header: 'Tool Class' },
         { field: 'quantity', header: 'Qty' },
         { field: "createdDate", header: "Created Date", width: "130px" },
         { field: "createdBy", header: "CreatedBy", width: "130px" },
@@ -492,13 +492,14 @@ viewAsstesInventory(rowData){
         this.modal.close();
     }
     exportCSV(dt) {
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": {}, "globalFilter": "" }
+        const isdelete = this.currentDeletedstatus ? true : false;
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": {isDeleted:isdelete,masterCompanyId : this.currentUserMasterCompanyId ,workOrderWfId : this.workFlowWorkOrderId}, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
+            
         });
-        this.workOrderService
-            .getWorkOrderAssetList(this.isSubWorkOrder, PagingData).subscribe(res => {
+        this.workOrderService.getWorkOrderAssetList(this.isSubWorkOrder, PagingData).subscribe(res => {
                 const vList = res['results'].map(x => {
                     return {
                         ...x,
