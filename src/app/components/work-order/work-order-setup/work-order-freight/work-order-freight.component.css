@@ -45,4 +45,8 @@ select.select-read-only {
   width: unset !important;
   margin-right: 10px;
 }
+.ui-table .ui-table-caption {
+  border: none !important;
+  background: transparent !important;
+}
 

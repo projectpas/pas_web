@@ -24,6 +24,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     @Output() saveFreightListForWO = new EventEmitter();
     @Output() updateFreightListForWo = new EventEmitter();
     @Output() refreshData = new EventEmitter();
+    @Output() saveFreightsListDeletedStatus = new EventEmitter();
     @Input() view: boolean = false;
  @Input() subWorkOrderDetails;
     @Input() isWorkOrder;
@@ -59,7 +60,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     currencyList: any = [];
     workOrderFreightLists: any;
     freightFlatBillingAmount: any;
-
+    currentDeletedstatus:boolean=false;
     constructor(private workOrderService: WorkOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -424,7 +425,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         if (tData) {
             tData.forEach(
                 (material) => {
-                    if (material.amount && !material.isDeleted) {
+                    if (material.amount) {
                         total += Number(material.amount.toString().replace(/\,/g,''));
                     }
                 }
@@ -477,5 +478,25 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     formateCurrency(amount){
         return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
     }
-
+    getDeleteListByStatus(value) {
+        if (value == true) {
+         this.currentDeletedstatus = true;
+       } else {
+            this.currentDeletedstatus = false;
+       }
+       this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
+    }
+    restoreRecord() {
+      this.commonService.updatedeletedrecords('WorkOrderFreight', 'WorkOrderFreightId', this.restorerecord.workOrderFreightId).subscribe(res => {
+        this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
+          this.modal.close();
+          this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
+      });
+    }
+    
+    restorerecord:any={};
+    restore(content, rowData) {
+      this.restorerecord = rowData;
+      this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
 }
