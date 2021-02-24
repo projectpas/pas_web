@@ -44,32 +44,30 @@
                                                    [options]="cols"
                                                    optionLabel="header"
                                                    [(ngModel)]="selectedColumns"
-                                                   [style]="{minWidth: '200px'}" style="float:left"
+                                                  class="multiselect-field"
                                                    selectedItemsLabel="{0} columns selected"
                                                    defaultLabel="Choose Columns">
                                     </p-multiSelect>
                                 </div>
                                 <div class="col">
-                                  <div
-                                    style="width: auto !important; float: right;"
-                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                  >
+                                    <div class="global-search-field inner-addon right-addon inline-block">
                                     <i class="fa fa-search"></i>
                                     <input type="text" pInputText size="50"
                                      class="form-control"
                                     (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                    placeholder="Filter" style="min-height: 28px;" />
+                                    placeholder="Filter"  />
                                  </div>
                                 </div>
                             </div>
                             <div class="row">
                               <div class="col">
-                                <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
-                                pButton icon="fa-download" iconPos="left" label="Export All Data" style="padding: 5px 12px !important;"  data-toggle="modal"
+                                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                                pButton icon="fa-download" iconPos="left" label="Export All Data"
+                                  data-toggle="modal"
                                 (click)="selectedOnly = false; targetData = dt;" 
                                 data-target="#downloadConfirmation"></button>
-                                 <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
-                                pButton icon="fa-download" iconPos="left" style="padding: 5px 12px !important;"
+                                 <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
+                                pButton icon="fa-download" iconPos="left"
                                  label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
                                 ></button>
                                 <!-- data-toggle="modal"
@@ -86,28 +84,27 @@
                                         <div class="form-group">
                                           <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
                                         <div
-                                            class="pull-left"
-                                            style="margin-top: 4px; margin-right: 15px;"
+                                            class="pull-left radio-buttons-align"
                                           >
                                               <label class="radio-cstm wauto">
                                               <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="geListByStatus('Active')" [(ngModel)]="currentstatus">
                                               <span class="checkmark"></span>Active
                                               </label>
                                         </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="geListByStatus('InActive')" [(ngModel)]="currentstatus">
                                             <span class="checkmark"></span>In-active
                                         </label>
                                     </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)="geListByStatus('ALL')" [(ngModel)]="currentstatus">
                                             <span class="checkmark"></span>All
                                         </label>
                                     </div>
-                                    <div class="checkbox-cstm" style="margin-left: 0;">
-                                        <label style="width: auto !important;margin-top: 3px;">
+                                    <div class="checkbox-cstm pull-left checkbox-align">
+                                        <label class="checkbox-label-align">
                                          
                                           <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
                                             />
@@ -123,38 +120,38 @@
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" style="width:140px">
+                                    <col *ngFor="let col of columns" class="table-column-width">
                                 </colgroup>
                             </ng-template>
-                            <ng-template pTemplate="header" let-columns style="padding-top: 1% !important">
+                            <ng-template pTemplate="header" let-columns >
                                 <tr>
                                     <ng-container *ngFor="let col of columns">
-                                        <th class="text-center" *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='deptName' && col.field!='divName'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                        <th class="text-center table-column-width" *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='deptName' && col.field!='divName'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                             {{col.header}}
                                             <p-sortIcon [field]="col.field"></p-sortIcon>
                                         </th>
-                                        <th class="text-center" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                        <th class="text-center table-column-width" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                             Management Structure
                                         </th>
                                     </ng-container>
                                     <th style="width:150px;position: sticky;" *ngIf="selectedColumns.length> 0">Actions</th>
                                 </tr>
                                 <tr>
-                                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                         <!--  -->
-                                        <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
-                                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                        <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                        <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                                         name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+<input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
                      (change)="dateFilterForTable($event.target.value,col.field)" />
                                     </th>
-                                    <th style="width:150px;position: sticky"></th>
+                                    <th style="width:150px;position: sticky;"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)" >
 
-                                    <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+                                    <td  *ngFor="let col of columns" class="ui-resizable-column table-column-width"
                                         pReorderableRowHandle>
 
                                           <ng-container *ngIf="col.field !='calibrationRequiredNew'">
@@ -171,7 +168,7 @@
                                                    style="margin: 0px auto; display: block;" />
                                         </ng-container>
                                     </td>
-                                    <td class="action-icons-cstm" style="width:150px" *ngIf="selectedColumns.length> 0">
+                                    <td class="action-icons-cstm" style="width:150px;position:sticky" *ngIf="selectedColumns.length> 0">
                                         <div *ngIf="currentDeletedstatus==false">
                                         <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
@@ -196,7 +193,7 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage" let-columns>
                                 <tr>
-                                    <td colspan="21" style="color: red; font-weight: bold; text-align: start;padding-left: 21% !important;">
+                                    <td colspan="21" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
@@ -204,9 +201,9 @@
                             <ng-template pTemplate="summary" id="footer">
                                 <div style="text-align: right;">
                                     <label id="footer" class="footer">Total:</label>
-                                    <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                                    <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
                                     <label id="footer" class="footer1">Pages Count:</label>
-                                    <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
+                                    <input class="footer-input-width" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
                                 </div>
                             </ng-template>
                         </p-table>
@@ -237,31 +234,31 @@
 
                 <h4 class="modal-title">Details of Asset Inventory  <span *ngIf="currentAsset">"{{currentAsset.assetId}}" </span></h4> <!--: <span *ngIf="currentAsset">"{{currentAsset.assetId}}"</span>-->
             </div>
-            <div class="form-row" style="width: 100%;">
+            <div class="form-row input-width-100-percent">
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-2">
                         <p class="fs12">
                             <span class="control-label labels-font-header">Asset ID : </span>
-                            <span class="span-header-red pl-1" style="text-transform: capitalize;">{{ currentAsset.assetId }}</span>
+                            <span class="span-header-red pl-1 text-capital">{{ currentAsset.assetId }}</span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
                             <span class="control-label labels-font-header">Asset Name : </span>
-                            <span class="span-header-red pl-1" style="text-transform: capitalize; ">{{ currentAsset.name }}</span>
+                            <span class="span-header-red pl-1 text-capital" >{{ currentAsset.name }}</span>
                         </p>
                     </div>
                     <div class="col-md-3">
                         <p class="fs12">
                             <span class="control-label labels-font-header">Alt Asset ID : </span>
-                            <span class="span-header-red pl-1" style="text-transform: capitalize">{{ currentAsset.alternateAssetRecord }}</span>
+                            <span class="span-header-red pl-1 text-capital">{{ currentAsset.alternateAssetRecord }}</span>
                         </p>
                     </div>
                     <div class="col-md-3">
                         <p class="fs12">
                             <span class="control-label labels-font-header">Asset Class : </span>
-                            <span class="span-header-red pl-1" style="text-transform: capitalize" *ngIf="currentAsset.isTangible">{{ currentAsset.assetType }}</span>
-                            <span class="span-header-red pl-1" style="text-transform: capitalize" *ngIf="!currentAsset.isTangible">{{ currentAsset.assetIntangibleTypeName }}</span>
+                            <span class="span-header-red pl-1 text-capital" *ngIf="currentAsset.isTangible">{{ currentAsset.assetType }}</span>
+                            <span class="span-header-red pl-1 text-capital"  *ngIf="!currentAsset.isTangible">{{ currentAsset.assetIntangibleTypeName }}</span>
                             
                         </p>
                     </div>
@@ -284,13 +281,13 @@
                 <div class="form-row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm  wauto">
                                     <input type="radio" name="assetRadio" class="form-control" value="1" disabled [checked]="currentAsset.isTangible">
                                     <span class="checkmark"></span> Tangible
                                 </label>
                             </div>
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm  wauto">
                                     <input type="radio" name="assetRadio" class="form-control" value="2" disabled [checked]="currentAsset.isIntangible">
                                     <span class="checkmark"></span> Intangible
@@ -303,13 +300,13 @@
             
                     <div class="col-md-3" *ngIf="currentAsset.isTangible">
                         <div class="form-group">
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm  wauto">
                                     <input type="radio" name="assetisDepreciable" class="form-control" value="1" disabled [checked]="currentAsset.isDepreciable">
                                     <span class="checkmark"></span> Depreciable
                                 </label>
                             </div>
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align" >
                                 <label class="radio-cstm  wauto">
                                     <input type="radio" name="assetisDepreciable" class="form-control" value="2" disabled [checked]="currentAsset.isNonDepreciable">
                                     <span class="checkmark"></span> Non-Depreciable
@@ -320,13 +317,13 @@
             
                     <div class="col-md-3" *ngIf="currentAsset.isIntangible">
                         <div class="form-group">
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm  wautomodal-dialog modal-xlg">
                                     <input type="radio" name="assetisAmortizable" class="form-control" value="1" disabled [checked]="currentAsset.isAmortizable">
                                     <span class="checkmark"></span> Amortizable
                                 </label>
                             </div>
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm  wautomodal-dialog modal-xlg">
                                     <input type="radio" name="assetisAmortizable" class="form-control" value="2" disabled [checked]="currentAsset.isNonAmortizable">
                                     <span class="checkmark"></span> Non-Amortizable
@@ -386,7 +383,7 @@
                                 <p-calendar [showIcon]="true" name="manufacturedDate" [(ngModel)]="currentAsset.manufacturedDate" [disabled]="true"></p-calendar>
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                     <label>
                                         <input type="checkbox" name="isSerialized" [(ngModel)]="currentAsset.isSerialized" disabled>
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -584,7 +581,7 @@
     <div class="col-md-3-custm1"  >
         <div [ngClass]="(currentAsset.calibrationRequired) ? 'border-box-cstm' : ''">
             <div class="form-group">
-                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                     <label>
                         <input type="checkbox" name="calibrationRequired" [(ngModel)]="currentAsset.calibrationRequired" disabled>
                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -646,7 +643,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-row">
-                            <label style="width: 100%; margin-left: 6px;">Min</label>
+                            <label class="label-align">Min</label>
                             <div class="col-md-6">
                                 <div class="form-group">                                                
                                     <input type="number" class="form-control" name="assetCalibrationMin" [(ngModel)]="currentAsset.assetCalibrationMin" disabled>
@@ -659,7 +656,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <label style="width: 100%; margin-left: 6px;">Max</label>
+                            <label class="label-align">Max</label>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="number" class="form-control" name="assetCalibratonMax" [(ngModel)]="currentAsset.assetCalibratonMax" disabled>
@@ -672,7 +669,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <label style="width: 100%; margin-left: 6px;">Expected</label>
+                            <label class="label-align">Expected</label>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="number" class="form-control" name="assetCalibrationExpected" [(ngModel)]="currentAsset.assetCalibrationExpected" disabled>
@@ -698,7 +695,7 @@
         <div class="col-md-3-custm1" >
         <div [ngClass]="(currentAsset.certificationRequired) ? 'border-box-cstm m-t-5' : ''">
             <div class="form-group">
-                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                     <label>
                         <input type="checkbox" name="certificationRequired" [(ngModel)]="currentAsset.certificationRequired" disabled>
                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -760,7 +757,7 @@
     <div class="col-md-3-custm1" >
         <div [ngClass]="(currentAsset.inspectionRequired) ? 'border-box-cstm m-t-5' : ''">
             <div class="form-group">
-                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                     <label>
                         <input type="checkbox" name="inspectionRequired" [(ngModel)]="currentAsset.inspectionRequired" disabled>
                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -822,7 +819,7 @@
     <div class="col-md-3-custm1" >
         <div [ngClass]="(currentAsset.verificationRequired) ? 'border-box-cstm m-t-5' : ''">
             <div class="form-group">
-                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                     <label>
                         <input type="checkbox" name="verificationRequired" [(ngModel)]="currentAsset.verificationRequired" disabled>
                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -888,7 +885,7 @@
                         <div class="form-row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                         <label>
                                             <input type="checkbox" name="assetIsMaintenanceReqd" [(ngModel)]="currentAsset.assetIsMaintenanceReqd" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -937,7 +934,7 @@
                                 </div>
                         </div>
                         <div class="form-row" *ngIf="currentAsset.assetIsMaintenanceReqd">
-                            <div *ngIf="assetInventoryId" style="width:100%;">
+                            <div *ngIf="assetInventoryId" class="input-width-100-percent">
                                 <app-common-documents [moduleName]="maintanancemoduleName"  [referenceId]="assetInventoryId"
                                 [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                             </div>
@@ -963,37 +960,37 @@
                                         
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns" style="width:100px" />
+                                            <col *ngFor="let col of columns" class="table-column-width" />
                                         </colgroup>
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 {{ col.header }}
                                                 <p-sortIcon [field]="col.field">
                                                 </p-sortIcon>
                                             </th>
-                                            <th style="width:70px;position:sticky">Actions</th>
+                                            <th class="table-actions-column">Actions</th>
                                         </tr>
                                         <tr>
-                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                                 <!--  -->
                                                 <input type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                                        (input)="table4.filter($event.target.value, col.field,'contains') "
                                                       
-                                                       style="width:100%;" pInputText>
-                                                <input type="date" class="hidePlaceHolder"
+                                                       class="table-header-input-width" pInputText>
+                                                <input type="date" class="hidePlaceHolder table-header-input-width"
                                                        *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                       style="width:100%;"
+                                                       
                                                        (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                                <input type="date" class="hidePlaceHolder"
+                                                <input type="date" class="hidePlaceHolder table-header-input-width"
                                                        *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                       style="width:100%;"
+                                                      
                                                        (change)="dateFilterForTableNew($event.target.value, col.field )">
                                             </th>
 
-                                            <th style="width:70px;position:sticky"></th>
+                                            <th class="table-actions-column"></th>
 
                                         </tr>
                                     </ng-template>
@@ -1005,7 +1002,7 @@
                                         <tr [pSelectableRow]="rowData">
                                             <ng-container *ngFor="let col of columns">
                                                 <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
-                                                    class="ui-resizable-column"
+                                                    class="ui-resizable-column table-column-width"
                                                     pReorderableRowHandle>
                                                     {{
                                                     col.field == 'createdDate'
@@ -1015,17 +1012,17 @@
                                                         : rowData[col.field]
                                                     }}
                                                 </td>
-                                                <td *ngIf="col.field == 'fileName'">
+                                                <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                                     <a class="filelink" (click)="downloadFileUpload(rowData)">
                                                         {{ rowData[col.field] }}
                                                     </a>
                                                 </td>
-                                                <td *ngIf="col.field == 'docMemo'">
+                                                <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                                     <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
                                                 </td>
                                             </ng-container>
 
-                                            <td style="width: 70px;">
+                                            <td class="action-icons-cstm table-column-width">
                                                 <button class="btn-edit set_proper_align set_position"
                                                         mat-icon-button (click)="openHistoryDoc(contentAuditHist,rowData)"
                                                         matTooltip="History" matTooltipPosition="above">
@@ -1039,7 +1036,7 @@
                                                  let-columns>
                                         <tr>
                                             <td [attr.colspan]="10"
-                                                style="color: red; font-weight: bold; text-align: left; padding-left: 30% !important;">
+                                                class="no-records-msg no-records-msg">
                                                 No records found
                                             </td>
 
@@ -1049,12 +1046,12 @@
                                     <ng-template pTemplate="summary" id="footer1">
                                         <label id="footer" class="footer">Total:</label> 
                                         <!-- [(ngModel)]="table4._totalRecords"   [(ngModel)]="totalRecords" -->
-                                        <input style="width: 5%;"  [(ngModel)]="table4._totalRecords"  name="mainTotalRecords" disabled
+                                        <input class="footer-input-width"  [(ngModel)]="table4._totalRecords"  name="mainTotalRecords" disabled
                                                pInputText type="text" />
                                         &nbsp;&nbsp;
                                         <label id="footer" class="footer1">Pages Count:</label>
                                         <!-- [ngModel]="getPageCount(table4._totalRecords, pageSizeNew)"      [(ngModel)]="totalPages"  -->
-                                        <input style="width: 5%;"
+                                        <input class="footer-input-width"
                                                name="mainpagecount" [ngModel]="getPageCount(table4._totalRecords, pageSizeNew)" disabled pInputText type="text" />
                                     </ng-template>
 
@@ -1066,7 +1063,7 @@
                         <div class="form-row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <div class="checkbox-cstm checkbox-cstm-d m-t-10">
                                         <label>
                                             <input type="checkbox" name="warrantyRequired" [(ngModel)]="currentAsset.isWarrantyRequired" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -1117,7 +1114,7 @@
                                 </div>
                         </div>
                         <div class="form-row" *ngIf="currentAsset.isWarrantyRequired">
-                            <div *ngIf="assetInventoryId" style="width:100%;">
+                            <div *ngIf="assetInventoryId" class="input-width-100-percent">
                                 <app-common-documents [moduleName]="warrantymoduleName"  [referenceId]="assetInventoryId"
                                 [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                             </div>
@@ -1141,37 +1138,35 @@
 
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns" style="width:100px" />
+                                            <col *ngFor="let col of columns" class="table-column-width" />
                                         </colgroup>
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 {{ col.header }}
                                                 <p-sortIcon [field]="col.field">
                                                 </p-sortIcon>
                                             </th>
-                                            <th style="width:70px;position:sticky">Actions</th>
+                                            <th class="table-actions-column">Actions</th>
 
                                         </tr>
                                         <tr>
-                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                                 <!--  -->
                                                 <input type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                                        (input)="table5.filter($event.target.value, col.field,'contains') "
                                                       
-                                                       style="width:100%;" pInputText>
-                                                <input type="date" class="hidePlaceHolder"
+                                                      class="table-header-input-width" pInputText>
+                                                <input type="date" class="hidePlaceHolder table-header-input-width"
                                                        *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                       style="width:100%;"
                                                        (change)="dateFilterForTableWarranty($event.target.value, col.field )">
-                                                <input type="date" class="hidePlaceHolder"
+                                                <input type="date" class="hidePlaceHolder table-header-input-width"
                                                        *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                       style="width:100%;"
                                                        (change)="dateFilterForTableWarranty($event.target.value, col.field )">
                                             </th>
-                                            <th style="width:70px;position:sticky"></th>
+                                            <th class="table-actions-column"></th>
 
                                         </tr>
                                     </ng-template>
@@ -1183,7 +1178,7 @@
                                         <tr [pSelectableRow]="rowData">
                                             <ng-container *ngFor="let col of columns">
                                                 <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
-                                                    class="ui-resizable-column"
+                                                    class="ui-resizable-column table-column-width"
                                                     pReorderableRowHandle>
                                                     {{
                                                     col.field == 'createdDate'
@@ -1193,17 +1188,17 @@
                                                         : rowData[col.field]
                                                     }}
                                                 </td>
-                                                <td *ngIf="col.field == 'fileName'">
+                                                <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                                     <a class="filelink" (click)="downloadFileUpload(rowData)">
                                                         {{ rowData[col.field] }}
                                                     </a>
                                                 </td>
-                                                <td *ngIf="col.field == 'docMemo'">
+                                                <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                                     <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
                                                 </td>
                                             </ng-container>
 
-                                            <td style="width: 70px;">
+                                            <td class="action-icons-cstm table-column-width">
                                                 <button class="btn-edit set_proper_align set_position"
                                                         mat-icon-button (click)="openHistoryDoc(contentAuditHist,rowData)"
                                                         matTooltip="History" matTooltipPosition="above">
@@ -1219,7 +1214,7 @@
                                    >
                            <tr>
                                <td [attr.colspan]="10"
-                                   style="color: red; font-weight: bold; text-align: left; padding-left: 30% !important;">
+                                  class="no-records-msg no-records-cstm">
                                    No records found
                                </td>
 
@@ -1227,11 +1222,11 @@
                        </ng-template> 
                                     <ng-template pTemplate="summary" id="footer1">
                                         <label id="footer" class="footer">Total:</label>
-                                        <input style="width: 5%;" [(ngModel)]="table5._totalRecords" name="warrTotalRecords" disabled
+                                        <input class="footer-input-width" [(ngModel)]="table5._totalRecords" name="warrTotalRecords" disabled
                                                pInputText type="text" />
                                         &nbsp;&nbsp;
                                         <label id="footer" class="footer1">Pages Count:</label>
-                                        <input style="width: 5%;" [ngModel]="getPageCount(table5._totalRecords, pageSizeNew)"
+                                        <input class="footer-input-width" [ngModel]="getPageCount(table5._totalRecords, pageSizeNew)"
                                                name="warrpagecount" disabled pInputText type="text" />
                                     </ng-template>
                                 </p-table>
@@ -1241,7 +1236,7 @@
                 </div>
 
                 <div class="form-row" *ngIf="currentAsset.isIntangible">
-                    <div *ngIf="assetInventoryId" style="width:100%;">
+                    <div *ngIf="assetInventoryId" class="input-width-100-percent">
                         <app-common-documents [moduleName]="intangiblemoduleName"  [referenceId]="assetInventoryId"
                         [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                     </div>
@@ -1266,31 +1261,29 @@
                                          [rowsPerPageOptions]="[3, 6, 9, 15]">
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 {{ col.header }}
                                                 <p-sortIcon [field]="col.field">
                                                 </p-sortIcon>
                                             </th>
-                                            <th style="width:70px;position:sticky">Actions</th>
+                                            <th class="table-actions-column">Actions</th>
                                         </tr>
                                         <tr>
-                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                                 <!-- -->
                                                 <input type="text"  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                                        (input)="intUpload.filter($event.target.value, col.field,'contains') "
                                                  
-                                                       style="width:100%;" pInputText>
-                                                <input type="date" class="hidePlaceHolder"
+                                                      class="table-header-input-width" pInputText>
+                                                <input type="date" class="hidePlaceHolder table-header-input-width"
                                                        *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                       style="width:100%;"
                                                        (change)="dateFilterForTableInt($event.target.value, col.field )">
-                                                <input type="date" class="hidePlaceHolder"
+                                                <input type="date" class="hidePlaceHolder table-header-input-width"
                                                        *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                       style="width:100%;"
                                                        (change)="dateFilterForTableInt($event.target.value, col.field )">
                                             </th>
-                                            <th style="width:70px;position:sticky"></th>
+                                            <th class="table-actions-column"></th>
 
                                         </tr>
                                     </ng-template>
@@ -1302,7 +1295,7 @@
                                         <tr [pSelectableRow]="rowData">
                                             <ng-container *ngFor="let col of columns">
                                                 <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
-                                                    class="ui-resizable-column"
+                                                    class="ui-resizable-column table-column-width"
                                                     pReorderableRowHandle>
                                                     {{
                                                     col.field == 'createdDate'
@@ -1312,17 +1305,17 @@
                                                         : rowData[col.field]
                                                     }}
                                                 </td>
-                                                <td *ngIf="col.field == 'fileName'">
+                                                <td class="table-column-width" *ngIf="col.field == 'fileName'">
                                                     <a class="filelink" (click)="downloadFileUpload(rowData)">
                                                         {{ rowData[col.field] }}
                                                     </a>
                                                 </td>
-                                                <td *ngIf="col.field == 'docMemo'">
+                                                <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                                                     <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
                                                 </td>
                                             </ng-container>
 
-                                            <td style="width: 70px;">
+                                            <td class="action-icons-cstm table-column-width">
                                                 <button class="btn-edit set_proper_align set_position"
                                                         mat-icon-button (click)="openHistoryDoc(contentAuditHist,rowData)"
                                                         matTooltip="History" matTooltipPosition="above">
@@ -1338,7 +1331,7 @@
                                                  >
                                         <tr>
                                             <td [attr.colspan]="10"
-                                                style="color: red; font-weight: bold; text-align: center;">
+                                                class="no-records-cstm no-records-msg">
                                                 No records found
                                             </td>
 
@@ -1347,11 +1340,11 @@
 
                                     <ng-template pTemplate="summary" id="footer1">
                                         <label id="footer" class="footer">Total:</label>
-                                        <input style="width: 5%;" [(ngModel)]="intUpload._totalRecords" name="intTotalRecords" disabled
+                                        <input class="footer-input-width" [(ngModel)]="intUpload._totalRecords" name="intTotalRecords" disabled
                                                pInputText type="text" />
                                         &nbsp;&nbsp;
                                         <label id="footer" class="footer1">Pages Count:</label>
-                                        <input style="width: 5%;" [ngModel]="getPageCount(intUpload._totalRecords, pageSizeNew)"
+                                        <input class="footer-input-width" [ngModel]="getPageCount(intUpload._totalRecords, pageSizeNew)"
                                                name="intpagecount" disabled pInputText type="text" />
                                     </ng-template>
 
@@ -1395,7 +1388,7 @@
 <ng-template #contentAuditHist
              let-c="close"
              let-d="dismiss"
-             style="width:auto"
+            class="wauto"
              data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of  Documents</h4>
@@ -1407,8 +1400,9 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+                <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th> Name</th>
@@ -1476,6 +1470,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
@@ -1855,8 +1850,8 @@
           <ng-template *ngIf="!showhistorylist">
             <div class="text-center">
                 <div class="text-center">
-                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                    <h4 style="color: #ff5663;">No History Found </h4>
+                    <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
+                    <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
             </div>
           </ng-template>
