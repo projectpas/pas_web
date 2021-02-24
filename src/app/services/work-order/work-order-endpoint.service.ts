@@ -428,15 +428,15 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     }
 
-    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId) {
+    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted) {
         if(isSubWorkOrder==true){
             //handle  workFlowWorkOrderId also
-            return this.http.get(`${this.configurations.baseUrl}/api/workorder/subWorkorderfreightlist?subWOPartNoId=${subWOPartNoId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId));
+            return this.http.get(`${this.configurations.baseUrl}/api/workorder/subWorkorderfreightlist?subWOPartNoId=${subWOPartNoId}&isDeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted));
     });
         }else{
-            return this.http.get(`${this.configurations.baseUrl}/api/workorder/workorderfreightlist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId));
+            return this.http.get(`${this.configurations.baseUrl}/api/workorder/workorderfreightlist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&isDeleted=${isDeleted}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted));
     });
         }
     }
@@ -1195,4 +1195,36 @@ reserveSubWoAltPartData(data){
             return this.handleErrorCommon(error, () => this.getWoAssetInventoryHistory(workOrderAssetId));
         });
     }
+    getChargesHistory(isSubworkOrder,chargeId) {
+        if(isSubworkOrder==true){
+      return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subWorkorderchargesauditlist?subWorkOrderChargesId=${chargeId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getChargesHistory(isSubworkOrder,chargeId));
+            
+        });
+    }else{
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassetinventoryhistory?workOrderChargesId=${chargeId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getChargesHistory(isSubworkOrder,chargeId));
+            
+        });  
+    }
+    }
+    getFreightHistory(isSubworkOrder,freightId) {
+       if(isSubworkOrder==true){
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subWorkorderfreightauditlist?subWorkOrderFreightId=${freightId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getChargesHistory(isSubworkOrder,freightId));
+            
+        });
+       }else{
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassetinventoryhistory?workOrderFreightId=${freightId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getChargesHistory(isSubworkOrder,freightId));
+            
+        });
+       }
+      }
+
+
+//     api/workOrder/getworkorderChargesauditlist?workOrderChargesId=154
+// api/workOrder/workorderfreightauditlist?workOrderFreightId=154
+// api/workOrder/subWorkorderfreightauditlist?subWorkOrderFreightId=27
+// api/workOrder/subWorkorderchargesauditlist?subWorkOrderChargesId=27
 }

@@ -37,15 +37,17 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   currentDeletedstatus:boolean=false;
   roNumList: any[];
   cols = [ 
-    { field: 'vendorName', header: 'Vendor Name' },
-    { field: 'quantity', header: 'Qty' },
-    // { field: 'roNumberId', header: 'RO Num' },refNum
-    { field: 'refNum', header: 'Ref Num' },
-    // { field: 'invoiceNum', header: 'Invoice Num' },
     { field: 'chargeType', header: 'Charge Type' },
+    { field: 'glAccountName', header: 'Gl Account Name' },
     { field: 'description', header: 'Description' },
+    { field: 'quantity', header: 'Qty' },
+    { field: 'refNum', header: 'Ref Num' },
     { field: 'unitCost', header: 'Unit Cost' },
     { field: 'extendedCost', header: 'Extented Cost' },
+    { field: 'vendorName', header: 'Vendor Name' },
+    // { field: 'roNumberId', header: 'RO Num' },refNum
+
+    // { field: 'invoiceNum', header: 'Invoice Num' },
     // { field: 'unitPrice', header: 'Unit Price' },
     // { field: 'extendedPrice', header: 'Extended Price' },
   ] 

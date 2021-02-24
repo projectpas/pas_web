@@ -24,6 +24,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     @Output() saveFreightListForWO = new EventEmitter();
     @Output() updateFreightListForWo = new EventEmitter();
     @Output() refreshData = new EventEmitter();
+    @Output() saveFreightsListDeletedStatus = new EventEmitter();
     @Input() view: boolean = false;
  @Input() subWorkOrderDetails;
     @Input() isWorkOrder;
@@ -59,7 +60,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     currencyList: any = [];
     workOrderFreightLists: any;
     freightFlatBillingAmount: any;
-
+    currentDeletedstatus:boolean=false;
     constructor(private workOrderService: WorkOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -73,10 +74,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         }
         this.customerId = editValueAssignByCondition('customerId', this.savedWorkOrderData.customerId);
         this.getShipViaByCustomerId();
-        this.getUOMList();
-        this.getCurrencyList();
+        this.getUOMList('');
+        this.getCurrencyList('');
         this.getCarrierList();
-        console.log(this.workOrderFreightList);
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
@@ -117,13 +117,30 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-
-    getUOMList() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName').subscribe(res => {
-            console.log(res);
-            this.unitOfMeasureList = res;
-        })
+    onFilterUomAction(value){
+        this.getUOMList(value)
     }
+    setEditArray:any=[];
+    private getUOMList(value) { 
+        this.setEditArray=[];
+        if(this.isEdit==true){
+            this.freightForm.forEach(element => {
+            if(element.uomId){
+                this.setEditArray.push(element.uomId); 
+            }
+            if(element.dimensionUOMId){
+                this.setEditArray.push(element.dimensionUOMId); 
+            }
+            });
+        }else{
+            this.setEditArray.push(0);
+        }
+            const strText= value ? value:'';
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName',strText,true,20,this.setEditArray.join()).subscribe(res => {
+            this.unitOfMeasureList = res;
+        },err => {			
+    })
+}
 
     parsedText(text) {
         if (text) {
@@ -134,13 +151,27 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             return decodedString;
         }
     }
-
-    getCurrencyList() {
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(res => {
-            console.log(res);
-            this.currencyList = res;
-        })
+    onFilterAction(value){
+        this.getCurrencyList(value)
     }
+    private getCurrencyList(value) {
+ 
+        this.setEditArray=[];
+        if(this.isEdit==true){
+            this.freightForm.forEach(element => {
+            if(element.currencyId){
+                this.setEditArray.push(element.currencyId); 
+            }
+            });
+        }else{
+            this.setEditArray.push(0);
+        }
+            const strText= value ? value:'';
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
+            this.currencyList = res;
+        },err => {			
+    })
+}
 
     getCarrierList() {
         this.commonService.smartDropDownList('Carrier', 'CarrierId', 'Description').subscribe(res => {
@@ -168,11 +199,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         newFreight.isShowDelete=false;
         newFreight.amount = this.formateCurrency(newFreight.amount);
         const taskId = this.taskList.filter(x => x.description === 'Shipping');
-        console.log(taskId);
 
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [newFreight];
-        console.log(newFreight);
 
     }
     addNewRow() {
@@ -189,11 +218,20 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         // )
 
     }
+    disableUpdate:boolean=true;
     edit(rowData, mainIndex, subIndex) {
         this.mainEditingIndex = mainIndex;
         this.subEditingIndex = subIndex;
         this.isEdit = true;
+        rowData.amount=rowData.amount? this.formateCurrency( rowData.amount) : '0.00';
         this.freightForm = [rowData];
+        this.getCurrencyList('');
+       this.getUOMList('');
+       this.disableUpdate=true;
+    }
+   
+    getActive(){
+        this.disableUpdate=false;
     }
     deleteRow(index): void {
         if (this.freightForm[index].workOrderFreightId == undefined || this.freightForm[index].workOrderFreightId == "0" || this.freightForm[index].workOrderFreightId == "") {
@@ -208,17 +246,15 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     memoIndex;
     onAddTextAreaInfo(material, index) {
         this.memoIndex = index;
-        console.log("memolist", material, index);
         this.textAreaInfo = material.memo;
     }
     textAreaInfo: any;
     onSaveTextAreaInfo(memo) {
         if (memo) {
             this.textAreaInfo = memo;
-            console.log("hello cjkf", this.freightForm)
             this.freightForm[this.memoIndex].memo = this.textAreaInfo;
-            console.log("index", this.freightForm);
             // items.indexOf(3452)
+            this.disableUpdate=false;
 
         }
         $("#textarea-popupFreight").modal("hide");
@@ -384,7 +420,6 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             })
         }
         catch (e) {
-            console.log(e);
         }
     }
 
@@ -424,7 +459,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         if (tData) {
             tData.forEach(
                 (material) => {
-                    if (material.amount && !material.isDeleted) {
+                    if (material.amount) {
                         total += Number(material.amount.toString().replace(/\,/g,''));
                     }
                 }
@@ -477,5 +512,25 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     formateCurrency(amount){
         return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
     }
-
+    getDeleteListByStatus(value) {
+        if (value == true) {
+         this.currentDeletedstatus = true;
+       } else {
+            this.currentDeletedstatus = false;
+       }
+       this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
+    }
+    restoreRecord() {
+      this.commonService.updatedeletedrecords('WorkOrderFreight', 'WorkOrderFreightId', this.restorerecord.workOrderFreightId).subscribe(res => {
+        this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
+          this.modal.close();
+          this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
+      });
+    }
+    
+    restorerecord:any={};
+    restore(content, rowData) {
+      this.restorerecord = rowData;
+      this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
 }

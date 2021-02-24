@@ -1,13 +1,17 @@
 header {
     margin: 1em;
+    background: #fdfdfd;
 }
 
 header .mat-icon {
     width: 36px;
     height: 36px;
-    font-size: 36px;
+    font-size: 23px !important;
     display: inline-block;
     vertical-align: middle;
+    position: relative;
+    top: 9px;
+    left: 11px;
 }
 
 header h3 {

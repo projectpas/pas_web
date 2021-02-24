@@ -217,8 +217,8 @@ export class WorkOrderService {
     deleteWorkOrderExclusionByExclusionId(workOrderExclusionsId, updatedBy) {
         return this.workOrderEndpointService.deleteWorkOrderExclusionByExclusionId(workOrderExclusionsId, updatedBy)
     }
-    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId){
-        return this.workOrderEndpointService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId)
+    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted){
+        return this.workOrderEndpointService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted)
     }
     getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId) {
         return this.workOrderEndpointService.getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId)
@@ -579,6 +579,14 @@ export class WorkOrderService {
     getWoAssetInventoryHistory(workOrderAssetId){
         return this.workOrderEndpointService.getWoAssetInventoryHistory(workOrderAssetId);
     }
+
+    getChargesHistory(isSubworkOrder,chargeId){
+        return this.workOrderEndpointService.getChargesHistory(isSubworkOrder,chargeId);
+    }
+    getFreightHistory(isSubworkOrder,freightId){
+        return this.workOrderEndpointService.getFreightHistory(isSubworkOrder,freightId);
+    }
+    
 } 
 
 

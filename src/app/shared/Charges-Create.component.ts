@@ -41,12 +41,14 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     roNumList: any[] = [];
     deletedRowIndex:any;
     deleteRowRecord:any={};
-
+    disableUpdate:boolean=true;
     constructor(private modalService: NgbModal,private vendorservice: VendorService, 
          private alertService: AlertService, private authService: AuthService,
         private commonService: CommonService) {
     }
-
+    getActive(){
+        this.disableUpdate=false;
+      }
     ngOnInit(): void {
         this.loadAllVendors();
         if (this.isWorkOrder) {
@@ -60,9 +62,10 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                         vendorId: this.editData.vendorId,
                         vendorName: this.editData.vendorName
                     }
-                }
+                } 
                 this.workFlow.charges.push(data);
                 this.reCalculate()
+                this.disableUpdate=true;
             } else {
                 this.workFlow.charges = [];
                 this.workFlow.qtySummation = 0;
@@ -103,7 +106,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
-                console.log("chages",res);
                 this.chargesTypes = res.map(x => {
                     return {
                         ...x,
@@ -166,7 +168,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     onChargeTypeChange(event, charge): void {
-        console.log("eveene",event, charge)
         this.isSpinnerVisible = true;
         var isTypeExist = this.workFlow.charges.filter(x => x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
         this.chargesTypes.forEach((ct) => {
