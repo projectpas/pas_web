@@ -579,6 +579,14 @@ export class WorkOrderService {
     getWoAssetInventoryHistory(workOrderAssetId){
         return this.workOrderEndpointService.getWoAssetInventoryHistory(workOrderAssetId);
     }
+
+    getChargesHistory(isSubworkOrder,chargeId){
+        return this.workOrderEndpointService.getChargesHistory(isSubworkOrder,chargeId);
+    }
+    getFreightHistory(isSubworkOrder,freightId){
+        return this.workOrderEndpointService.getFreightHistory(isSubworkOrder,freightId);
+    }
+    
 } 
 
 
