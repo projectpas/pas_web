@@ -1,4 +1,4 @@
-﻿<div class="modal-header">
+﻿<!-- <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title"></h4>
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 
@@ -51,9 +51,9 @@
 
 
             </div>
-            <div class="second-block top">
-                <!-- <h5><b>Sales Order Quotation</b></h5> -->
-                <div class="second-block-div">
+            <div class="second-block top"> -->
+<!-- <h5><b>Sales Order Quotation</b></h5> -->
+<!-- <div class="second-block-div">
                     <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
                     <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.salesOrder.soPickTicketNumber}}</label>
                     <img src="{{this.salesOrder.soPickTicketBarcode}}" alt="barcode" class="border" Placeholder="Barcode" style="width:30%" />
@@ -98,9 +98,9 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="second-block col-sm-6">
-                    <!-- first-block  -->
-                    <br /><br />
+                <div class="second-block col-sm-6"> -->
+<!-- first-block  -->
+<!-- <br /><br />
                     <h5 style="padding-left:10px"> <b>Sold To</b> </h5>
                     <div class="col-sm-12 first-block-4">
                         <div class="second-block-div">
@@ -135,9 +135,9 @@
                     </div>
                 </div>
 
-                <div class="second-block col-sm-6">
-                    <!-- first-block-right -->
-                    <br /><br />
+                <div class="second-block col-sm-6"> -->
+<!-- first-block-right -->
+<!-- <br /><br />
                     <h5 style="padding-left:10px"> <b>Ship To</b> </h5>
                     <div class="col-sm-12 first-block-4">
                         <div class="second-block-div">
@@ -198,9 +198,9 @@
                                 <td>{{part.partNumber}}</td>
                                 <td>{{part.partDescription}}</td>
                                 <td>{{part.serialNumber}}</td>
-                                <td>{{part.uom}}</td>
-                                <!-- <td>{{this.salesOrderpartConditionDescription}}</td> -->
-                                <td>{{part.conditionDescription}}</td>
+                                <td>{{part.uom}}</td> -->
+<!-- <td>{{this.salesOrderpartConditionDescription}}</td> -->
+<!-- <td>{{part.conditionDescription}}</td>
                                 <td>{{part.priorityName}}</td>
                                 <td>{{part.poNumber}}</td>
                                 <td>{{part.qty}}</td>
@@ -220,10 +220,10 @@
                                 <tr class="border3" *ngIf="part">
                                     <td colspan="3">
                                         <img src="{{part.partBarcode}}" alt="barcode" class="border" />
-                                    </td>
+                                    </td> -->
 
-                                    <!-- <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td> -->
-                                    <td colspan="1"><b>SL Num:</b> {{part.stockLineNumber}}</td>
+<!-- <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td> -->
+<!-- <td colspan="1"><b>SL Num:</b> {{part.stockLineNumber}}</td>
                                     <td colspan="3"><b>Control Id:</b>{{part.controlNumber}}</td>
                                     <td colspan="4"><b>ID #:</b>{{part.idNumber}}</td>
 
@@ -265,4 +265,508 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">No</button>
     <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
-</div>
+</div> -->
+
+
+
+<!-- <html>
+
+<head>
+    <style>
+        table {
+            width: 1000px;
+            overflow: auto !important;
+        }
+
+        table thead {
+            background: #808080;
+        }
+
+        table thead tr {
+            background: #0d57b0 !important;
+        }
+
+        table,
+        thead,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table,
+        thead,
+        th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table thead tr th {
+            background: #0d57b0 !important;
+            padding: 5px !important;
+            color: #fff;
+            letter-spacing: 0.3px;
+            font-size: 10px;
+            text-transform: capitalize;
+            z-index: 1;
+        }
+
+        table tbody {
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        table tbody tr td {
+            background: #fff;
+            padding: 2px;
+            line-height: 22px;
+            color: #333;
+            font-size: 11.5px !important;
+            letter-spacing: 0.1px;
+        }
+
+        h4 {
+            padding: 5px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin: 0;
+        }
+
+        hr {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 0;
+            border-top: 1px solid #e0e0e0;
+            height: 0;
+            box-sizing: content-box;
+        }
+
+        .first-block-name {
+            margin-right: 20px
+        }
+
+        .first-block-sold-to {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            border: 1px solid black;
+            background: #fff;
+            width: 95%;
+            padding-left: 2px;
+        }
+
+        .first-block-ship-to {
+            position: relative;
+            min-height: 1px;
+            padding-right: 2px;
+            border: 1px solid black;
+            background: #fff;
+            width: 95%;
+            padding-left: 2px;
+        }
+
+        .first-block-sold {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 50%;
+        }
+
+        .first-block-ship {
+            position: relative;
+            min-height: 1px;
+            float: right;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 48%;
+        }
+
+        .address-block {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            border: 1px solid black;
+            width: 75%;
+            padding-left: 2px;
+        }
+
+        .first-block-address {
+            margin-right: 20px;
+            text-align: left
+        }
+
+
+        .second-block {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            width: 49.33333333%;
+            padding-left: 2px;
+            box-sizing: border-box;
+        }
+
+        .second-block-div {
+            margin: 2px 0;
+            position: relative;
+            min-height: 1px;
+            padding-left: 50px;
+            width: 100%;
+        }
+
+        .second-block-label {
+            position: relative;
+            min-height: 1px;
+            float: left;
+            padding-right: 2px;
+            padding-left: 2px;
+            width: 38.33333333%;
+            text-transform: capitalize;
+            margin-bottom: 0;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .form-div {
+            top: 6px;
+            position: relative;
+            font-weight: normal;
+            margin-top: 10px;
+        }
+
+        .image {
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .logo-block {
+            margin: auto;
+            text-align: center
+        }
+
+        .pdf-block {
+            width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 25px 15px;
+        }
+
+        .picked-by {
+            position: relative;
+            float: left;
+            width: 48%
+        }
+
+        .confirmed-by {
+            position: relative;
+            float: right;
+            width: 48%
+        }
+
+        .first-part {
+            position: relative;
+            float: left;
+            width: 50%
+        }
+
+        .seond-part {
+            position: relative;
+            float: right;
+            width: 24%
+        }
+
+        .input-field-border {
+            width: 88px;
+            border: none;
+            border-bottom: 1px solid black;
+        }
+
+        .pick-ticket-header {
+            border: 1px solid black;
+            text-align: center;
+            background: #0d57b0 !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+
+<body> -->
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"></h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+    </div>
+    <div class="modal-content" style="width:90%"  id="soPickTicket">
+        <div class="modal-body">
+        <div class="col-sm-12 pdf-block">
+            <div class="clear"></div>
+            <form id="" name="" action="#" method="post" onsubmit="return false;">
+                <div class="image">
+                    <div style="padding: 0; margin: 0;">
+                        <div>
+
+                            <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                                <div class="logo-block">
+                                    <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> </div>
+                                <div class="clear"></div>
+                                <hr />
+                                <div class="pick-ticket-header" style="margin-bottom: 15px;">
+                                    <h4>SALES ORDER PICK TIKET</h4>
+                                </div>
+                                <div class="first-block-sold">
+                                    <div class="col-sm-4 address-block">
+                                        <div class="col-sm-12 first-block-name">Company Logo</div>
+
+                                        <br /><br />
+                                        <div class="col-sm-12 first-block-name">Tagline</div>
+
+                                        <br /><br />
+                                        <div class="col-sm-12 first-block-name">Address</div>
+                                        <div class="col-sm-12 first-block-name">Address</div>
+                                        <div class="col-sm-12 first-block-name">City</div>
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="second-block">
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
+                                        <input type="text" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label"> Date & time</label>
+                                        <input type="text" placeholder="" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label">SO Num</label>
+                                        <input type="text" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label">Ship Via</label>
+                                        <input type="text" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label">Num of Items</label>
+                                        <input type="text" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label">Num of Containers</label>
+                                        <input type="text" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label">Date/Time Printed</label>
+                                        <input type="text" value="" disabled />
+                                    </div>
+                                    <div class="second-block-div">
+                                        <label class="col-sm-4 second-block-label">Page</label>
+                                        <input type="text" placeholder="1 of 1" value="" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-sm-8" style="margin-top:28%">
+                                    <div class="first-block-sold col-sm-4">
+                                        <label><b>Sold To:</b></label>
+                                        <div class="first-block-sold-to">
+
+                                            <div class="col-sm-12"></div><br /><br />
+
+                                            <div class="col-sm-12 first-block-address"></div><br /><br />
+                                            <div class="col-sm-12 first-block-address"></div>
+                                            <div class="col-sm-12 first-block-address"></div><br /><br />
+
+                                            <div class="col-sm-12 first-block-address"></div><br />
+                                        </div>
+                                    </div>
+
+                                    <div class="first-block-ship col-sm-4">
+                                        <label><b> Ship To:</b></label>
+                                        <div class="first-block-ship-to">
+
+                                            <div class="col-sm-12"></div><br /><br />
+
+                                            <div class="col-sm-12 first-block-address"></div><br /><br />
+                                            <div class="col-sm-12 first-block-address"></div>
+                                            <div class="col-sm-12 first-block-address"></div><br /><br />
+
+                                            <div class="col-sm-12 first-block-address"></div><br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <hr />
+                                <div class="clear"></div>
+
+                            </form>
+
+
+                            <div class="col-sm-12">
+                                <table style="width:99%">
+
+                                    <thead>
+                                        <tr>
+
+                                            <th>Line Num</th>
+                                            <th>PN Information</th>
+
+                                            <th colspan="2">Cust PO</th>
+                                            <th colspan="3">Consignment</th>
+                                            <th colspan="2">Lot Num</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+
+                                            <td>1</td>
+                                            <td> PN: 7785122</td>
+                                            <td>UOM: Ea</td>
+                                            <td>Cond: New</td>
+                                            <td> Priority: Routine </td>
+                                            <td>Qty OH: 4</td>
+                                            <td>Qty Avl: 2</td>
+                                            <td>Qty to Pick: 3</td>
+                                            <td>Qty Picked: 2</td>
+
+
+                                        </tr>
+                                        <tr>
+
+                                            <td> <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
+                                                    class="image" /></td>
+                                            <td> PN Description: Bearing</td>
+                                            <td>Site: Site XXXX</td>
+                                            <td></td>
+                                            <td> Warehouse: XXXX </td>
+                                            <td>Location: XXX</td>
+                                            <td></td>
+                                            <td>Shelf: XX</td>
+                                            <td> Bin: X </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td></td>
+                                            <td> Serial Num: SN-1245</td>
+                                            <td>SL Num: 4</td>
+                                            <td>Cntrl #: 4000003</td>
+                                            <td> </td>
+                                            <td>ID #: 15</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td rowspan="2" colspan="9">
+                                                <b>
+                                                    Notes
+                                                </b>
+                                            </td>
+
+
+
+                                        </tr>
+                                        <tr>
+
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td> PN: 694008</td>
+                                            <td>UOM: Pack</td>
+                                            <td>Cond: New</td>
+                                            <td>Priority: Routine</td>
+                                            <td>Qty OH: 15</td>
+                                            <td>Qty Avl: 12</td>
+                                            <td>Qty to Pick: 10</td>
+                                            <td> Qty Picked: 10 </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
+                                                    class="image" /></td>
+                                            <td> PN Description: Packings</td>
+                                            <td>Site: Site AAAAA</td>
+                                            <td></td>
+                                            <td> Warehouse: AAAA </td>
+                                            <td>Location: AAA</td>
+                                            <td></td>
+                                            <td>Shelf:AA</td>
+                                            <td>Bin: A</td>
+                                        </tr>
+                                        <tr>
+
+                                            <td></td>
+                                            <td> Serial Num:</td>
+                                            <td>SL Num: 4</td>
+                                            <td>Cntrl #: 56000003</td>
+                                            <td> </td>
+                                            <td>ID #: 9</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2" colspan="9">
+                                                <b>
+                                                    Notes
+                                                </b>
+                                            </td>
+
+
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+
+                            <br />
+
+                            <div class="picked-by col-sm-4">
+                                <div class="first-part">
+                                    <label for="pickedBy">Picked By</label>
+                                    <input class="input-field-border" type="text" id="pickedBy" value="" />
+                                </div>
+
+                                <div class="second-part">
+                                    <label for="date">Date</label>
+                                    <input class="input-field-border" type="text" id="date" value="" />
+                                </div>
+                            </div>
+                            <div class="confirmed-by col-sm-4">
+                                <div class="first-part">
+                                    <label>Confirmed By</label>
+                                    <input class="input-field-border" type="text" value="" />
+                                </div>
+
+                                <div class="second-part">
+                                    <label>Date</label>
+                                    <input class="input-field-border" type="text" value="" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div style="height:100px"> &nbsp;</div>
+    </div>
+    </div>
+    <!-- </div> -->
+
+<!-- </body>
+
+</html> -->
