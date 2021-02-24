@@ -33,15 +33,6 @@
                                         <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['memo']"></p>
                                     </td>
                                     <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
-                                    <!-- <td style="text-align: right;">
-                                                {{approver.lowerValue | twoDecimalGlobalNumberFormatPipe}}
-                                            </td>
-                                            <td style="text-align: right;">
-                                                {{approver.upperValue | twoDecimalGlobalNumberFormatPipe}}
-                                            </td>
-                                            <td>
-                                                {{approver.message}}
-                                            </td> -->
                                 </tr>
                                 <tr *ngIf="approvers && approvers.length == 0">
                                     <td [attr.colspan]="29" class="no-records-cstm no-records-msg">

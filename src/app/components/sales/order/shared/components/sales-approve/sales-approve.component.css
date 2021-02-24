@@ -54,5 +54,6 @@ label {
 }
 
 .red {
-    background-color: #ff0000 !important; 
+    color: #ED2939 !important;
+    font-weight: bold !important;
 }
