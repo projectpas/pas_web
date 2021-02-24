@@ -445,7 +445,7 @@
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box" style="width: 100% !important;"></div>
                     <i class="fa fa-pencil contoel_v" data-toggle="modal" [ngStyle]="{'pointerEvents':isView|| laborForm.isTaskCompletedByOne ? 'none' : 'inherent'}"
-                        data-target="#textarea-popup" matTooltip="Memo"
+                        data-target="#textarea-popup5" matTooltip="Memo"
                         matTooltipPosition="above" 
                         (click)="onAddTextAreaInfo(rec.memo,task.description,i)"></i>
                 </div>
@@ -456,7 +456,7 @@
                       (click)="showDeleteLabourPopup(task.description,rec, i)"><i class="fa fa-trash"></i></button> </span>
                 </td>
               </tr>
-              <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+              <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
     
                     <div class="modal-content">
@@ -466,12 +466,12 @@
                         </div>
                         <div class="modal-body">
                          
-                            <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" class="text_sen"
-                            (ngModelChange)="editorgetmemo($event)" name="textA_{{i}}" required>
+                            <p-editor [(ngModel)]="textAreaInfoLabor" [style]="{'height':'320px'}" class="text_sen"
+                            (ngModelChange)="editorgetmemo($event)" name="textAfd_{{i}}" required>
                         </p-editor>
                             <div class="editor-buttons">
                                 <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
-                                    (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                                    (click)="onSaveTextAreaInfo(textAreaInfoLabor)" [disabled]="disableEditor">Save</button>
                                 <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
                             </div>
                         </div>
