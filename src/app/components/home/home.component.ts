@@ -7,6 +7,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { ConfigurationService } from '../../services/configuration.service';
 import { Params, ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 declare var $ : any;
 import { AppComponent } from '../../app.component';
 @Component({
@@ -16,9 +17,9 @@ import { AppComponent } from '../../app.component';
     animations: [fadeInOut]
 })
 export class HomeComponent implements AfterViewInit {
-
+    dashboardUrl = environment.dashboardUrl;
     constructor(public appcomponent: AppComponent, public configurations: ConfigurationService, private router: ActivatedRoute, private route: Router) {
-
+console.log("configurations.dashboardUrl",this.dashboardUrl)
     }
     customerModule() {
         this.appcomponent.setStep(1);

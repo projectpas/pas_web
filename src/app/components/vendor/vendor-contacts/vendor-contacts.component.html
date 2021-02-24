@@ -200,14 +200,47 @@
                                   </span>
                               </td>
                               <td class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isDefaultContact'"
-                                  class=" uiTable_td_ovrflw_control" pReorderableRowHandle>
-                                  {{
-                                  col.field == 'createdDate'
-                                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                                    : rowData[col.field] && col.field == 'updatedDate'
-                                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                                    : rowData[col.field]
-                                  }}
+                                  class=" uiTable_td_ovrflw_control" pReorderableRowHandle>                                 
+                                  <ng-container *ngIf="col.field != 'firstName' && col.field != 'lastName' && 
+                                                       col.field != 'contactTitle' && col.field != 'email' && 
+                                                       col.field != 'tagName' && col.field != 'attention' &&
+                                                       col.field != 'mobilePhone' && col.field != 'fullContactNo' &&
+                                                       col.field != 'notes'">
+                                                       {{
+                                                          col.field == 'createdDate'
+                                                          ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                                                          : rowData[col.field] && col.field == 'updatedDate'
+                                                          ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                                                          : rowData[col.field]
+                                                       }}
+                                  </ng-container>
+                                  <ng-container *ngIf="col.field == 'firstName'">                  
+                                   {{rowData.firstName}}
+                                  </ng-container>
+                                  <ng-container *ngIf="col.field == 'lastName'">                  
+                                    {{rowData.lastName}}
+                                   </ng-container>
+                                   <ng-container *ngIf="col.field == 'contactTitle'">                  
+                                    {{rowData.contactTitle}}
+                                   </ng-container>
+                                   <ng-container *ngIf="col.field == 'email'">                  
+                                    {{rowData.email}}
+                                   </ng-container>
+                                   <ng-container *ngIf="col.field == 'tagName'">                  
+                                    {{rowData.tagName}}
+                                   </ng-container>
+                                   <ng-container *ngIf="col.field == 'attention'">                  
+                                    {{rowData.attention}}
+                                   </ng-container>
+                                   <ng-container *ngIf="col.field == 'mobilePhone'">                  
+                                    {{rowData.mobilePhone}}
+                                   </ng-container>
+                                   <ng-container *ngIf="col.field == 'fullContactNo'">                  
+                                    {{rowData.fullContactNo}}
+                                   </ng-container>  
+                                   <ng-container *ngIf="col.field == 'notes'">                  
+                                    <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="rowData.notes"></p></span>
+                                   </ng-container>
                               </td>
                               <td class="action-icons-cstm table-column-width">
                                   <div *ngIf="currentDeletedstatus==false">

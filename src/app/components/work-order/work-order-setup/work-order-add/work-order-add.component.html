@@ -1146,7 +1146,7 @@
                     (refreshData)="getChargesListByWorkOrderId()" [isView]="isView || isViewForApprovedPart"></app-work-order-charges>
             </div>
 
-
+            
             <div *ngIf="workOrderId && (subTabOtherOptions == 'exclusions')" class="wf-label-cstm"
                 [ngClass]="{hidedataOthers :  subTabOtherOptions !== 'exclusions'} ">
                 <app-work-order-exclusions [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
@@ -1157,7 +1157,7 @@
             </div>
             <div *ngIf="workOrderId && (subTabOtherOptions == 'freight')" class="wf-label-cstm"
                 [ngClass]="{hidedataOthers :  subTabOtherOptions !== 'freight'} ">
-                <app-work-order-freight [freightForm]="freight" [workOrderFreightList]="workOrderFreightList" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
+                <app-work-order-freight  (saveFreightsListDeletedStatus)="getFreightssDeletedStatus($event)"  [freightForm]="freight" [workOrderFreightList]="workOrderFreightList" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [savedWorkOrderData]="savedWorkOrderData" (saveFreightListForWO)="saveWorkOrderFreightsList($event)"
                     (updateFreightListForWo)="updateWorkOrderFreightsList($event)"
                     (refreshData)="getFreightListByWorkOrderId()" [taskList]="taskList" [isView]="isView || isViewForApprovedPart">

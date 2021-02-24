@@ -270,6 +270,7 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
 import { CommonDocumentsModule } from "./components/common-components/common-documents/common-documents.module";
 import{AssetInventoryViewComponent} from "./components/Asset-Management/asset-inventory-view/asset-inventory-view.component"
 import { CalendarModule } from "primeng/calendar";
+import { SafePipe } from './pipes/safe.pipe';
 @NgModule({
   imports: [
     CardModule,
@@ -330,7 +331,8 @@ import { CalendarModule } from "primeng/calendar";
     StocklineViewComponent,
     StocklineHistoryComponent,
     RefreshAlert, 
-    AssetInventoryViewComponent
+    AssetInventoryViewComponent,
+    SafePipe
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },

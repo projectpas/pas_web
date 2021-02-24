@@ -195,22 +195,22 @@
                                     <!-- <td colspan="2"></td> -->
                                     <td class="zui-sticky-col" style="width:107px !important">
                                         <span>
-                                            <button *ngIf="ship.qtyShipped == 0" type="submit" class="btn submit-btn btn btn-primary"
+                                            <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;"><i
-                                                    class="fa fa-plus"></i></button>
+                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                <i class="fa fa-plus"></i></button>
                                             <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
                                             matTooltipPosition="above" style="font-weight: bold;">
                                             <i class="fa fa-check"></i>
                                           </button> -->
                                         </span>
                                         <span>
-                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
-                                              matTooltipPosition="above" style="font-weight: bold;"
-                                              >
-                                              <i class="fa fa-pencil"></i>
+                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
+                                                (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                <i class="fa fa-pencil"></i>
                                             </button>
-                                    </span>
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -511,11 +511,23 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
-                                        <label>Site <span class="clr-red">*</span></label>
+                                        <label>Site <span class="clr-red">*</span>
+                                            <span *ngIf="shippingHeader.soldToName" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createBillingSiteName" (click)="onClickBillSiteName('Add')"></a></span>
+                                        </label>
                                     </div>
+                                    <!-- <span style="margin-left:0px;cursor:pointer;">
+                                        <a class="btn nobg"
+                                        matTooltipPosition="above" matTooltip="Edit Site Name"
+                                        *ngIf="shippingHeader.soldToSiteId > 0"
+                                        data-toggle="modal" data-target="#createBillingSiteName"
+                                        (click)="onClickBillSiteName('Edit', sourcePoApproval)">
+                                        <i class="fa fa-pencil" ></i>
+                                        </a>
+                                    </span> -->
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddresses()"
-                                            [disabled]="isView" name="soldToSite" required>
+                                        <select [(ngModel)]="shippingHeader.soldToSiteId"
+                                            (change)="setSoldToAddresses()" [disabled]="isView" name="soldToSite"
+                                            required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList"
                                                 [value]="site.customerBillingAddressId">
@@ -588,7 +600,7 @@
                     <div class="col-md-4">
                         <div class="card card-stock">
                             <div class="card-header">
-                                <div class="checkbox-cstm" style="margin-left: 0; width: 148px; display: inline-block;">
+                                <!-- <div class="checkbox-cstm" style="margin-left: 0; width: 148px; display: inline-block;">
                                     <label style="width: auto !important;margin-top: 3px;">
                                         <input type="checkbox" [(ngModel)]="shippingHeader.isSameForShipTo"
                                             name="cparent" id="cparent"
@@ -596,8 +608,8 @@
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         Same as Bill To
                                     </label>
-                                </div>
-                                <h5 style="text-align: center; width: 110px; display: inline-block;">Ship To</h5>
+                                </div> -->
+                                <h5 style="text-align: center;">Ship To</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -618,7 +630,9 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
-                                        <label>Site <span class="clr-red">*</span></label>
+                                        <label>Site <span class="clr-red">*</span>
+                                            <span *ngIf="shippingHeader.shipToCustomerId" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createPOSiteName" (click)="onClickShipSiteName('Add')"></a></span>
+                                        </label>
                                     </div>
                                     <div class="col-md-8">
                                         <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
@@ -701,23 +715,25 @@
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
                                             <label>Entry Type <span style="color: red;"
-                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
+                                                    *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryType']"
-                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="entryType" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId"
+                                                name="entryType" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
                                             <label>Entry Num <span style="color: red;"
-                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
+                                                    *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['entryNumber']"
-                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="entryNumber" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId"
+                                                name="entryNumber" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -739,23 +755,25 @@
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
                                             <label>EPU <span style="color: red;"
-                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
+                                                    *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['epu']" name="epu"
-                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId"
+                                                [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
                                             <label>UCR <span style="color: red;"
-                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
+                                                    *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="text"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['ucr']" name="ucr"
-                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId"
+                                                [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -787,23 +805,25 @@
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
                                             <label class="workorder-label">Customs Value <span style="color: red;"
-                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
+                                                    *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['customsValue']"
-                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="customsValue" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId"
+                                                name="customsValue" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
                                             <label>Net Mass <span style="color: red;"
-                                                *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
+                                                    *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <input class="form-control" type="number"
                                                 [(ngModel)]="shippingHeader['salesOrderCustomsInfo']['netMass']"
-                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId" name="netMass" [disabled]="isView" />
+                                                [required]="shippingHeader.originCountryId !=shippingHeader.shipToCountryId"
+                                                name="netMass" [disabled]="isView" />
                                         </div>
                                     </div>
                                     <div class="form-group col-md-12">
@@ -846,6 +866,162 @@
             <div></div>
             <div></div>
             <div></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createBillingSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog partsList-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="resetAddressBillingForm();">&times;</button>
+                <h4 class="modal-title">Add Bill To Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <form #addBillNameForm="ngForm" class="form-horizontal">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Is Primary </label>
+                            <input type="checkbox" name="isPrimary"  class="form-control col-md-6"  [(ngModel)]="addressFormForBilling.isPrimary"  (ngModelChange)="billAddChange()">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Site Name <span class="clr-red">*</span></label>
+                            <p-autoComplete                 
+                            class="autocomp-customer-cstm" 
+                            name="siteName"
+                            [(ngModel)]="addressFormForBilling.siteName" 
+                            [suggestions]="lstfilterBillingSite"                     
+                            emptyMessage="No Match Found" 
+                            field="siteName" 
+                            (onKeyUp)="checkSiteNameExist($event.target.value)"
+                            (onChange)="checkSiteNameExist($event.target.value)"
+                            (onSelect)="checkSiteNameSelect()"
+                            (completeMethod)="filterBillingSite($event);" 
+                            (ngModelChange)="billAddChange()" 
+                            [size]="30" [minLength]="1" [dropdown]="true" required>
+                          </p-autoComplete>
+                          <div *ngIf="isSiteNameAlreadyExists" class="clr-red">
+                                    Site Name Already Exists
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="address1"  (change)="billAddChange()" [(ngModel)]="addressFormForBilling.address1" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 2 </label>
+                            <input type="text" class="form-control col-md-6" name="address2" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.address2">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">City <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="city" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.city" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">State <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="stateOrProvince" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.stateOrProvince" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="postalCode" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.postalCode" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                            <p-autoComplete field="label" class="pautocomp-cstm"  (onSelect)="billAddChange()" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.countryId" name="country" [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required></p-autoComplete>
+                        </div>
+                        <!-- <div class="form-group col-md-12" style="margin-top: 8px;">
+                              <button type="button" class="btn btn-primary" 
+                              (click)="saveBillingAddress();"  
+                              *ngIf="(!isEditModeBilling) || isEditModeBilling"
+                               [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)" 
+                                data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>
+                        </div> -->
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" 
+                              (click)="saveBillingAddress();"  
+                              *ngIf="(!isEditModeBilling) || isEditModeBilling"
+                               [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)" 
+                                data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetAddressBillingForm();">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="createPOSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog partsList-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="resetAddressShippingForm();">&times;</button>
+                <h4 class="modal-title">Add Ship To Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <form #addSiteNameForm="ngForm" class="form-horizontal">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Is Primary </label>
+                            <input type="checkbox" name="isPrimary"  class="form-control col-md-6"  [(ngModel)]="addressFormForShipping.isPrimary"  (ngModelChange)="shipAddChange()">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Site Name <span class="clr-red">*</span> :</label>
+                            <p-autoComplete                 
+                            class="autocomp-customer-cstm" 
+                            name="siteName"
+                            [(ngModel)]="addressFormForShipping.siteName" 
+                            [suggestions]="lstfilterShippingSite"                     
+                            emptyMessage="No Match Found" 
+                            field="siteName" 
+                            (onKeyUp)="checkShippingSiteNameExist($event.target.value)"
+                            (onChange)="checkShippingSiteNameExist($event.target.value)"
+                            (onSelect)="checkShippingSiteNameSelect()"
+                            (completeMethod)="filterShippingSite($event);" 
+                            (ngModelChange)="shipAddChange()" 
+                            [size]="30" [minLength]="1" [dropdown]="true" required>
+                          </p-autoComplete>
+                          <div *ngIf="isShippingSiteNameAlreadyExists" class="clr-red">
+                                    Site Name Already Exists
+                          </div>
+                            <!-- <input type="text" class="form-control col-md-6" name="siteName" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.siteName" required>-->
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="address1" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.address1" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Address 2:</label>
+                            <input type="text" class="form-control col-md-6" name="address2" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.address2">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">City <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="city" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.city" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">State <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="stateOrProvince" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.stateOrProvince" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control col-md-6" name="postalCode" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.postalCode" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                            <p-autoComplete field="label" class="pautocomp-cstm" (onSelect)="shipAddChange()" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.countryId" name="country" [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required></p-autoComplete>
+                        </div>
+                        <!-- <div class="form-group col-md-12" style="margin-top: 8px;">
+                            <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
+                            <!-- <button type="button" class="btn btn-primary" *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly" [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists) || addressFormForShipping.isPrimary" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+                        </div> -->
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetAddressShippingForm();">Close</button>
+            </div>
         </div>
     </div>
 </div>

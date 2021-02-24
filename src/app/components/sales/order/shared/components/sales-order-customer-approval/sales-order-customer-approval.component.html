@@ -5,9 +5,9 @@
     <table class="table table-bordered header-table-width"  id="mpn-list-table">
         <thead>
           <tr class="pad_workflo">
-            <th>
+            <th class="approver-th-align th-width">
               <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall"
-                [disabled]="isView" /> Select All
+                [disabled]="isView" /> 
             </th>
             <th *ngFor="let header of columns">{{header.header}}</th>
           </tr>

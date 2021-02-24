@@ -12,6 +12,7 @@ import { editValueAssignByCondition, getValueFromObjectByKey, getObjectByValue, 
 import { AuthService } from '../../../../../../services/auth.service';
 import { AddressTypeEnum } from '../../../../../../shared/components/address-component/Address-type-enum';
 import { AppModuleEnum } from '../../../../../../enum/appmodule.enum';
+import { CustomerShippingModel } from '../../../../../../models/customer-shipping.model';
 
 @Component({
     selector: 'app-sales-order-shipping',
@@ -136,17 +137,17 @@ export class SalesOrderShippingComponent {
         this.getCustomerNameList();
         this.getOriginSiteNames();
         this.getUnitOfMeasure();
-        this.getAddressById(this.salesOrderId);
+        //this.getAddressById(this.salesOrderId);
 
-        if (this.customerDetails) {
-            this.shippingHeader['soldToName'] = this.customerDetails['name'];
-            this.shippingHeader['shipToName'] = this.customerDetails['name'];
-            if (!this.shippingHeader.shipToCustomerId) {
-                this.shippingHeader.shipToCustomerId = this.customerDetails;
-                this.getSiteNamesByShipCustomerId(this.customerDetails['name']);
-            }
-            this.shippingHeader['customerId'] = this.customerDetails['customerId'];
-        }
+        // if (this.customerDetails) {
+        //     this.shippingHeader['soldToName'] = this.customerDetails['name'];
+        //     this.shippingHeader['shipToName'] = this.customerDetails['name'];
+        //     if (!this.shippingHeader.shipToCustomerId) {
+        //         this.shippingHeader.shipToCustomerId = this.customerDetails;
+        //         this.getSiteNamesByShipCustomerId(this.customerDetails['name']);
+        //     }
+        //     this.shippingHeader['customerId'] = this.customerDetails['customerId'];
+        // }
     }
 
     onSelectPartNumber(rowData) {
@@ -202,6 +203,7 @@ export class SalesOrderShippingComponent {
         userShipingIdList.push(0);
         this.commonService.autoSuggestionSmartuserDropDownList(1, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
+            this.getAddressById(this.salesOrderId);
         }, err => {
         });
     }
@@ -364,10 +366,11 @@ export class SalesOrderShippingComponent {
         }, err => {
         });
     }
-
+    shipToUserId:any=0;
     async getSiteNamesByShipCustomerId(object) {
         this.clearShipToAddress();
         let customerId = object.userID;
+        this.shipToUserId = object.userID;
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
             this.shipCustomerShippingOriginalData = res[0];
             this.shipCustomerSiteList = res[0];
@@ -380,13 +383,24 @@ export class SalesOrderShippingComponent {
             //     }
             // )
             this.setShipToAddress();
+
+            this.shipToSite = res[0];;
+			if(this.shipToSite && this.shipToSite.length !=0){
+			this.shippingSieListOriginal = this.shipToSite.map(x => {
+				    return {
+					    siteName: x.siteName, siteId: x.siteId
+				    }
+                });
+            }
+            
         }, err => {
         });
     }
-
+    billToUserId:any=0;
     async getSiteNamesBySoldCustomerId(object) {
         this.clearSoldToAddress();
         let customerId = object.userID;
+        this.billToUserId = object.userID;
         //this.getSiteName(customerId);
         //await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
         await this.customerService.getCustomerBillAddressGet(customerId).subscribe(res => {
@@ -400,18 +414,39 @@ export class SalesOrderShippingComponent {
             //         }
             //     }
             // )
+
+            this.billToSite = res[0];
+                if(this.billToSite && this.billToSite.length !=0){
+                	     this.billingSieListOriginal = this.billToSite.map(x => {
+		            return {
+			            siteName: x.siteName, siteId: x.customerBillingAddressId
+		            }
+	            })
+            }	 
+
             this.setSoldToAddresses();
         }, err => {
         });
     }
-
+    
     async setSiteNamesByShipCustomerId(object, siteId) {
         this.clearShipToAddress();
         let customerId = object.userID;
+        this.shipToUserId = object.userID;
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
             this.shipCustomerShippingOriginalData = res[0];
             this.shipCustomerSiteList = res[0];
             this.shippingHeader.shipToSiteId = siteId;
+
+            this.shipToSite = res[0];;
+			if(this.shipToSite && this.shipToSite.length !=0){
+			this.shippingSieListOriginal = this.shipToSite.map(x => {
+				    return {
+					    siteName: x.siteName, siteId: x.siteId
+				    }
+                });
+            }
+            this.setShipToAddress();
         }, err => {
         });
     }
@@ -419,11 +454,24 @@ export class SalesOrderShippingComponent {
     async setSiteNamesBySoldCustomerId(object, siteId) {
         this.clearSoldToAddress();
         let customerId = object.userID;
+        this.billToUserId = object.userID;
         //this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
         await this.customerService.getCustomerBillAddressGet(customerId).subscribe(res => {
             this.soldCustomerSiteList = res[0];
             this.soldCustomerShippingOriginalData = res[0];
             this.shippingHeader.soldToSiteId = siteId;
+
+            this.billToSite = res[0];
+	        //if(this.sourcePoApproval.billToSiteId) {
+	            //this.onBillToGetAddress(this.sourcePoApproval.billToSiteId);}
+                    if(this.billToSite && this.billToSite.length !=0){
+                	     this.billingSieListOriginal = this.billToSite.map(x => {
+		            return {
+			            siteName: x.siteName, siteId: x.customerBillingAddressId
+		            }
+	            })
+            }
+            this.setSoldToAddresses();
         }, err => {
         });
     }
@@ -492,6 +540,12 @@ export class SalesOrderShippingComponent {
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+          ? this.authService.currentUser.masterCompanyId
+          : null;
     }
 
     shippingList: any[] = [];
@@ -635,10 +689,10 @@ export class SalesOrderShippingComponent {
         }
 
         if (this.shipToAddress !== undefined) {
-            let customer = getObjectByValue('userID', this.shipToAddress.userId, this.customerNamesList);
-            this.shippingHeader.shipToCustomerId = customer;
+            let shipcustomer = getObjectByValue('userID', this.shipToAddress.userId, this.customerNamesList);
+            this.shippingHeader.shipToCustomerId = shipcustomer;
             //this.shippingHeader.shipToSiteId = this.shipToAddress.siteId;
-            this.setSiteNamesByShipCustomerId(customer, this.shipToAddress.siteId);
+            this.setSiteNamesByShipCustomerId(shipcustomer, this.shipToAddress.siteId);
             this.shippingHeader.shipToAddress1 = this.shipToAddress.address1;
             this.shippingHeader.shipToAddress2 = this.shipToAddress.address2;
             this.shippingHeader.shipToCity = this.shipToAddress.city;
@@ -650,6 +704,7 @@ export class SalesOrderShippingComponent {
         if (this.shipvia !== undefined) {
             this.shippingHeader.shipviaId = this.shipvia.shipviaId;
         }
+        this.isSpinnerVisible = false;
     }
 
     // getShippingData() {
@@ -706,4 +761,387 @@ export class SalesOrderShippingComponent {
       ngOnDestroy(){
         this.partSelected = false;
       }
+
+      addressFormForBilling = new CustomerShippingModel();
+      lstfilterBillingSite: any[];
+      billingSieListOriginal: any[];
+      billToSite: any;
+      changeName: boolean = false;
+      isSiteNameAlreadyExists: boolean = false;
+      editSiteName: string = '';
+      billAddbutton: boolean = false;
+      isEditModeBilling: boolean = false;
+      countriesList: any = [];
+
+      filterBillingSite(event) {
+        this.lstfilterBillingSite = this.billingSieListOriginal;
+    
+        if (event.query !== undefined && event.query !== null) {
+            const billingSite = [...this.billingSieListOriginal.filter(x => {
+                return x.siteName.toLowerCase().includes(event.query.toLowerCase())
+            })]
+            this.lstfilterBillingSite = billingSite;
+        }
+      }
+
+      checkSiteNameSelect() {
+        //if(this.isEditModeBillingPoOnly == false && this.isEditModeBilling == false) {
+        if(this.isEditModeBilling == false) {
+            this.isSiteNameAlreadyExists = true;
+            this.billAddbutton = false;} 
+        else {
+                if(this.editSiteName  != editValueAssignByCondition('siteName', this.addressFormForBilling.siteName))
+                {
+                    this.isSiteNameAlreadyExists = true;
+                    this.billAddbutton = false;
+                }else
+                {
+                    this.isSiteNameAlreadyExists = false;
+                    this.billAddbutton = true;
+                }
+        
+            }
+        }
+
+        checkSiteNameExist(value) {
+            // if(this.isEditModeBillingPoOnly == false && this.isEditModeBilling == false) {
+            // this.changeName = true;
+            // this.isSiteNameAlreadyExists = false;
+            // this.billAddbutton = true;
+            // if (value != undefined && value != null ) {
+            //     if(this.billingSieListOriginal && this.billingSieListOriginal.length !=0){
+            //     for (let i = 0; i < this.billingSieListOriginal.length; i++) {
+            //         if ((this.addressFormForBilling.siteName == this.billingSieListOriginal[i].siteName 
+            //             || value.toLowerCase() == this.billingSieListOriginal[i].siteName.toLowerCase())
+            //             && this.addressFormForBilling.siteName != '') {
+            //             this.isSiteNameAlreadyExists = true;
+            //             this.billAddbutton = false;
+            //             return;
+            //         }
+            //     }
+            // }
+            // }}
+            // else {
+                this.changeName = true;
+                this.isSiteNameAlreadyExists = false;
+                this.billAddbutton = true;
+                if (value != undefined && value != null && value != this.editSiteName) {
+                    if(this.billingSieListOriginal && this.billingSieListOriginal.length !=0){
+                    for (let i = 0; i < this.billingSieListOriginal.length; i++) {
+                        if ((this.addressFormForBilling.siteName == this.billingSieListOriginal[i].siteName 
+                            || value.toLowerCase() == this.billingSieListOriginal[i].siteName.toLowerCase())
+                            && this.addressFormForBilling.siteName != '') {
+                            this.isSiteNameAlreadyExists = true;
+                            this.billAddbutton = false;
+                            return;
+                        }
+                    }
+                }
+                }}
+        //}
+
+        billAddChange(){
+            this.billAddbutton = true;
+        }
+
+        onClickBillSiteName(value, data?){
+			this.resetAddressBillingForm();
+			if (value === 'Add') {
+				//this.addressSiteNameHeader = 'Add Ship To ' + this.billingingModuleName +' Details';
+				this.billAddbutton =  true;
+				this.editSiteName = '';
+				//this.isEditModeBillingPoOnly = false;
+				this.isEditModeBilling = false;	
+			}
+			// if (value === 'Edit') {
+				
+			// 	this.addressSiteNameHeader = 'Edit Ship To ' + this.billingingModuleName +' Details';
+			// 	this.billAddbutton =  false;				
+			// 	if(this.sourcePoApproval.billAddIsPoOnly) 
+			// 		this.isEditModeBillingPoOnly = true;
+			// 	else
+			// 		this.isEditModeBilling = true;	
+            //         if(this.billToAddressList && this.billToAddressList.length!=0){
+			// 		for(let i=0; i < this.billToAddressList.length; i++ ) {
+			// 			if(this.billToAddressList[i].siteID == this.sourcePoApproval.billToSiteId ) {
+			// 				this.addressFormForBilling.isPrimary = this.billToAddressList[i].isPrimary;								
+			// 				this.addressFormForBilling.siteId = this.billToAddressList[i].siteID;	
+			// 				this.editSiteName = this.billToAddressList[i].siteName;
+			// 				this.addressFormForBilling.siteName = getObjectByValue('siteName',this.billToAddressList[i].siteName, this.billingSieListOriginal);
+			// 				this.addressFormForBilling.addressID = this.billToAddressList[i].addressId;
+			// 				this.addressFormForBilling.address1 = this.billToAddressList[i].address1;
+			// 				this.addressFormForBilling.address2 = this.billToAddressList[i].address2;
+			// 				this.addressFormForBilling.city =  this.billToAddressList[i].city;
+			// 				this.addressFormForBilling.stateOrProvince = this.billToAddressList[i].stateOrProvince;
+			// 				this.addressFormForBilling.postalCode = this.billToAddressList[i].postalCode;
+			// 				this.addressFormForBilling.countryId= getObjectByValue('value',this.billToAddressList[i].countryId ,this.allCountriesList);
+			// 				return;
+			// 			} 
+			// 		}
+			// 	}				
+			// }
+        }
+        
+        filterCountries(event) {
+            this.countriesList = this.countryList;
+            if (event.query !== undefined && event.query !== null) {
+                const countries = [...this.countryList.filter(x => {
+                    return x.label.toLowerCase().includes(event.query.toLowerCase())
+                })]
+                this.countriesList = countries;
+            }
+        }
+
+        saveBillingAddress() {
+			const data = {
+				...this.addressFormForBilling,
+				createdBy: this.userName,
+				updatedBy: this.userName,
+				masterCompanyId: this.currentUserMasterCompanyId,
+				isActive: true,
+			}		
+			const addressData = { ...data, 
+									  siteName: editValueAssignByCondition('siteName', data.siteName),									 
+									  userTypeId: AppModuleEnum.Customer, 
+									  userId: this.billToUserId, 
+									  countryId: getValueFromObjectByKey('value', data.countryId),
+									  addressType: 'Bill' 
+									}
+			
+			if (!this.isEditModeBilling) {
+				 this.commonService.createAllAddres(addressData).subscribe(response => {  
+					 if(response) {
+                        //this.onBillToSelected(this.sourcePoApproval.billToUserId,0,0,response);                   			
+                        let soldtocustomerobj = getObjectByValue('userID', this.shippingHeader.soldToName.userID, this.customerNamesList);
+                        this.shippingHeader.soldToName = soldtocustomerobj;
+                        this.setSiteNamesBySoldCustomerId(soldtocustomerobj,response);
+						 this.alertService.showMessage(
+							 'Success',
+							 `Saved Shipping Information Successfully`,
+							 MessageSeverity.success
+						 );}else {
+							this.alertService.showMessage(
+								'Error',
+								`Eroor While Saving Shipping Address`,
+								MessageSeverity.error
+							);
+						 }
+					 },err => {
+						 this.isSpinnerVisible = false;
+						 const errorLog = err;
+						 //this.errorMessageHandler(errorLog);		
+					});
+				} else {
+					 this.commonService.createAllAddres(addressData).subscribe(response => {  
+						if(response) {
+						//this.onBillToSelected(this.sourcePoApproval.billToUserId,0,0,response);						         			
+						 this.alertService.showMessage(
+							 'Success',
+							 `Shipping Information Updated Successfully`,
+							 MessageSeverity.success
+						 ); }else {
+							this.alertService.showMessage(
+								'Error',
+								`Eroor While Saving Shipping Address`,
+								MessageSeverity.error
+							);
+						 }
+					 },err => {
+						 this.isSpinnerVisible = false;
+						 const errorLog = err;
+						 //this.errorMessageHandler(errorLog);		
+					});
+			     }
+        }
+        
+        resetAddressBillingForm() {
+			this.addressFormForBilling = new CustomerShippingModel();
+			this.isEditModeBilling = false;
+        }
+        
+        addressFormForShipping = new CustomerShippingModel();
+        lstfilterShippingSite: any[];
+        shippingSieListOriginal: any[];
+        shipToSite: any;
+        //changeName: boolean = false;
+        isShippingSiteNameAlreadyExists: boolean = false;
+        //editSiteName: string = '';
+        ShipAddbutton: boolean = false;
+        isEditModeShipping: boolean = false;
+
+        filterShippingSite(event) {
+            this.lstfilterShippingSite = this.shippingSieListOriginal;
+            if (event.query !== undefined && event.query !== null) {
+                const shippingSite = [...this.shippingSieListOriginal.filter(x => {
+                    return x.siteName.toLowerCase().includes(event.query.toLowerCase())
+                })]
+                this.lstfilterShippingSite = shippingSite;	
+            }
+        }
+
+        checkShippingSiteNameSelect() {
+            //if(this.isEditModeShippingPoOnly == false && this.isEditModeShipping == false) {
+            if(this.isEditModeShipping == false) {
+                this.isShippingSiteNameAlreadyExists = true;
+                this.ShipAddbutton = false;}
+                else {
+                    if(this.editSiteName  != editValueAssignByCondition('siteName', this.addressFormForShipping.siteName))
+                    {
+                        this.isShippingSiteNameAlreadyExists = true;
+                        this.ShipAddbutton = false;
+                    }else
+                    {
+                        this.isShippingSiteNameAlreadyExists = false;
+                        this.ShipAddbutton = true;
+                    }
+                }
+        }
+
+        checkShippingSiteNameExist(value) {
+            if(this.isEditModeShipping == false) {
+            this.changeName = true;
+            this.isShippingSiteNameAlreadyExists = false;
+            this.ShipAddbutton = true;
+            if (value != undefined && value != null ) {
+                if(this.shippingSieListOriginal && this.shippingSieListOriginal.length !=0){
+                for (let i = 0; i < this.shippingSieListOriginal.length; i++) {
+                    if ((this.addressFormForShipping.siteName == this.shippingSieListOriginal[i].siteName 
+                        || value.toLowerCase() == this.shippingSieListOriginal[i].siteName.toLowerCase())
+                        &&  this.addressFormForShipping.siteName !=  '') {
+                        this.isShippingSiteNameAlreadyExists = true;
+                        this.ShipAddbutton = false;
+                        return;
+                    }
+                }
+            }
+            }
+            }else {
+                this.changeName = true;
+            this.isShippingSiteNameAlreadyExists = false;
+            this.ShipAddbutton = true;
+            if (value != undefined && value != null && value != this.editSiteName) {
+                if(this.shippingSieListOriginal && this.shippingSieListOriginal.length !=0){
+                for (let i = 0; i < this.shippingSieListOriginal.length; i++) {
+                    if ((this.addressFormForShipping.siteName == this.shippingSieListOriginal[i].siteName 
+                        || value.toLowerCase() == this.shippingSieListOriginal[i].siteName.toLowerCase())
+                        &&  this.addressFormForShipping.siteName !=  '') {
+                        this.isShippingSiteNameAlreadyExists = true;
+                        this.ShipAddbutton = false;
+                        return;
+                    }
+                }
+            }
+            }
+          }
+        }
+
+        shipAddChange(){
+            this.ShipAddbutton = true;
+        }
+
+        onClickShipSiteName(value, data?){			
+			this.resetAddressShippingForm();
+			if (value === 'Add') {
+				//this.addressSiteNameHeader = 'Add Ship To ' + this.shippingModuleName +' Details';
+				this.ShipAddbutton = true;
+				this.editSiteName = '';
+				//this.isEditModeShippingPoOnly = false;
+				this.isEditModeShipping = false;	
+			}
+			// if (value === 'Edit') {
+			// 	this.ShipAddbutton = false;
+			// 	this.addressSiteNameHeader = 'Edit Ship To ' + this.shippingModuleName +' Details';				
+			// 	if(this.sourcePoApproval.shipAddIsPoOnly) 
+			// 		this.isEditModeShippingPoOnly = true;
+			// 	else
+			// 		this.isEditModeShipping = true;		
+			// 		if(this.shipToAddressList && this.shipToAddressList.length!=0){
+			// 	for(let i=0; i < this.shipToAddressList.length; i++ ) {
+			// 			if(this.shipToAddressList[i].siteID == this.sourcePoApproval.shipToSiteId ) {
+			// 				this.addressFormForShipping.isPrimary = this.shipToAddressList[i].isPrimary;								
+			// 				this.addressFormForShipping.siteId = this.shipToAddressList[i].siteID;	
+			// 				this.editSiteName = this.shipToAddressList[i].siteName;
+			// 				this.addressFormForShipping.siteName = getObjectByValue('siteName',this.shipToAddressList[i].siteName, this.shippingSieListOriginal); 
+			// 				this.addressFormForShipping.addressID = this.shipToAddressList[i].addressId;							
+			// 				this.addressFormForShipping.address1 = this.shipToAddressList[i].address1;
+			// 				this.addressFormForShipping.address2 = this.shipToAddressList[i].address2;
+			// 				this.addressFormForShipping.city =  this.shipToAddressList[i].city;
+			// 				this.addressFormForShipping.stateOrProvince = this.shipToAddressList[i].stateOrProvince;
+			// 				this.addressFormForShipping.postalCode = this.shipToAddressList[i].postalCode;
+			// 				this.addressFormForShipping.countryId= getObjectByValue('value',this.shipToAddressList[i].countryId ,this.allCountriesList);
+			// 				return;
+			// 			} 
+			// 		}		
+			
+			// 		}
+			// 	}
+        }
+        
+        resetAddressShippingForm() {
+			this.addressFormForShipping = new CustomerShippingModel();
+			this.isEditModeShipping = false;
+		}
+        
+        saveShippingAddress() {
+			const data = {
+				...this.addressFormForShipping,
+				createdBy: this.userName,
+				updatedBy: this.userName,
+				masterCompanyId: this.currentUserMasterCompanyId,
+				isActive: true,
+			}		
+			const addressData = { ...data, 									 
+                                      userTypeId: AppModuleEnum.Customer,
+                                      userId: this.shipToUserId,
+									  siteName: editValueAssignByCondition('siteName', data.siteName),  
+									  countryId: getValueFromObjectByKey('value', data.countryId) 
+									}
+			
+			if (!this.isEditModeShipping) {
+				 this.commonService.createAllAddres(addressData).subscribe(response => {  
+					 if(response) {
+                        //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,response);                   			
+                        let shiptocustomerobj = getObjectByValue('userID', this.shippingHeader.shipToCustomerId.userID, this.customerNamesList);
+                        this.shippingHeader.shipToCustomerId = shiptocustomerobj;
+                        //this.shippingHeader['shipToSiteId'] = this.shippingHeader.shipToSiteId;
+                        this.setSiteNamesByShipCustomerId(shiptocustomerobj,response);
+						 this.alertService.showMessage(
+							 'Success',
+							 `Saved Shipping Information Successfully`,
+							 MessageSeverity.success
+						 ); }
+						 else {
+							this.alertService.showMessage(
+								'Error',
+								`Eroor While Saving Shipping Address`,
+								MessageSeverity.error
+							);
+						 }
+					 },err => {
+						 this.isSpinnerVisible = false;
+						 const errorLog = err;
+						 //this.errorMessageHandler(errorLog);		
+					});
+				} else {
+					 this.commonService.createAllAddres(addressData).subscribe(response => {  
+						 if(response) {
+						//this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,response);						         			
+						 this.alertService.showMessage(
+							 'Success',
+							 `Shipping Information Updated Successfully`,
+							 MessageSeverity.success
+						 );}else {
+							this.alertService.showMessage(
+								'Error',
+								`Eroor While Saving Shipping Address`,
+								MessageSeverity.error
+							);
+						 }
+					 },err => {
+						 this.isSpinnerVisible = false;
+						 const errorLog = err;
+						 //this.errorMessageHandler(errorLog);		
+					});
+			     }
+		}
 }

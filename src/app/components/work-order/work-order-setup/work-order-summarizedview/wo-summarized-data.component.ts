@@ -868,7 +868,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     getFreightListByWorkOrderId(freightMPN) {
         if (freightMPN.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderFrieghtsList(freightMPN.workFlowWorkOrderId, this.workOrderId,false,0).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(freightMPN.workFlowWorkOrderId, this.workOrderId,false,0,false).subscribe(res => {
                 this.isSpinnerVisible = false;
                 freightMPN.workOrderFreightList = res;
             },
