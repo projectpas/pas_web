@@ -15,6 +15,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { DatePipe } from '@angular/common';
+import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 
 @Component({
     selector: 'app-vendor-capes',
@@ -88,7 +89,7 @@ export class VendorCapesComponent implements OnInit {
         vendorRanking: 0,
         isPMA: false,
         isDER: false,
-        cost: null,
+        cost: '0.00',
         TAT: null,
         memo: null,
         isEditable: false,
@@ -222,7 +223,7 @@ export class VendorCapesComponent implements OnInit {
                             memo: x.memo,
                             isPMA: x.isPMA,
                             isDER: x.isDER,
-                            cost: x.cost,
+                            cost: x.cost ? formatNumberAsGlobalSettingsModule(x.cost, 2) : '0.00',
                             TAT: x.tat,
                             isDeleted: x.isDeleted, 
                             isActive: x.isActive,                          
@@ -358,7 +359,7 @@ export class VendorCapesComponent implements OnInit {
         this.newFields.vendorRanking = 0;
         this.newFields.isPMA = false;
         this.newFields.isDER = false;
-        this.newFields.cost = null;
+        this.newFields.cost = '0.00';                 
         this.newFields.TAT = null;
         this.newFields.memo = null;
         this.disableCapes = false;
@@ -428,7 +429,7 @@ export class VendorCapesComponent implements OnInit {
         const data = this.fieldArray.map(obj => {
             obj.isPMA = obj.isPMA;
             obj.isDER = obj.isDER;           
-            obj.cost =  obj.cost ? parseFloat(obj.cost) : 0;
+            obj.cost =  obj.cost ? formatNumberAsGlobalSettingsModule(obj.cost, 2) : '0.00';
             obj.TAT = obj.TAT ? parseFloat(obj.TAT) : 0; 
             obj.vendorRanking = obj.vendorRanking ? parseInt(obj.vendorRanking) : 0;
             obj.itemMasterId = obj.partNumber.itemMasterId;
@@ -743,4 +744,8 @@ export class VendorCapesComponent implements OnInit {
       enableSave() {}
 
       onChangeItemMasterId(field) {}
+
+      onChangeCost(field){
+            field.cost = field.cost ? formatNumberAsGlobalSettingsModule(field.cost, 2) : '0.00';
+      }
 }
