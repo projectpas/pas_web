@@ -1,11 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
-import { PartDetail } from "../../models/part-detail";
-import { SalesQuote } from "../../../../../models/sales/SalesQuote.model";
-import { ISalesQuote } from "../../../../../models/sales/ISalesQuote.model";
+import { Component, Input, OnInit } from "@angular/core";
 import { SalesQuoteView } from "../../../../../models/sales/SalesQuoteView";
 import { CustomerService } from "../../../../../services/customer.service";
 import { SalesQuoteService } from "../../../../../services/salesquote.service";
-import { ISalesOrderQuotePart } from "../../../../../models/sales/ISalesOrderQuotePart";
 
 @Component({
   selector: "app-sales-quote-print-template",
@@ -21,32 +17,31 @@ export class SalesQuotePrintTemplateComponent implements OnInit {
   subtotal: number = 0;
   totalAmount: number = 0;
 
-constructor(private customerService: CustomerService, private salesQuoteService: SalesQuoteService){
-
-}
-  ngOnInit() {
-   console.log(this.salesQuoteView)
-   this.getSalesQuoteView();
-   this.getCustomerById(this.salesQuoteView.salesOrderQuote.customerId);
-   
+  constructor(private customerService: CustomerService, private salesQuoteService: SalesQuoteService) {
   }
-  getCustomerById(customerId){
+
+  ngOnInit() {
+    this.getSalesQuoteView();
+    this.getCustomerById(this.salesQuoteView.salesOrderQuote.customerId);
+  }
+
+  getCustomerById(customerId) {
     this.customerService.getCustomerdataById(customerId).subscribe(res => {
       this.customerAddress = res[0]
     })
   }
-  getSalesQuoteView(){
+  
+  getSalesQuoteView() {
     this.salesQuoteService.getview(this.salesQuoteView.salesOrderQuote.salesOrderQuoteId).subscribe(res => {
       this.salesQuoteView = res[0];
-      this.salesQuote =this.salesQuoteView.salesOrderQuote;
+      this.salesQuote = this.salesQuoteView.salesOrderQuote;
       this.parts = this.salesQuoteView.parts;
-      if(this.parts.length > 0){
-        for(let i=0; i< this.parts.length; i++){
-          this.subtotal = this.subtotal+this.parts[i].totalSales;
+      if (this.parts.length > 0) {
+        for (let i = 0; i < this.parts.length; i++) {
+          this.subtotal = this.subtotal + this.parts[i].totalSales;
           this.totalAmount = this.subtotal
         }
       }
-console.log(this.salesQuoteView, "this.salesQuoteview" )
     })
   }
 }

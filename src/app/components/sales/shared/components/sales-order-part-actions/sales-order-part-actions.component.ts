@@ -2,19 +2,13 @@ import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { ItemMasterService } from "../../../../../services/itemMaster.service";
 import { ItemSearchType } from "../../../quotes/models/item-search-type";
 import { PartDetail } from "../../models/part-detail";
-import { IPartJson } from "../../models/ipart-json";
 import { ISalesQuote } from "../../../../../models/sales/ISalesQuote.model";
-import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import { SalesOrderService } from "../../../../../services/salesorder.service";
-import { SalesOrder } from "../../../../../models/sales/SalesOrder.model";
-import { ISalesOrder } from "../../../../../models/sales/ISalesOrder.model";
 import { PartAction } from "../../models/part-action";
 import { CommonService } from "../../../../../services/common.service";
-import { DBkeys } from "../../../../../services/db-Keys";
 import { AlertService, MessageSeverity } from "../../../../../services/alert.service";
 import { AuthService } from "../../../../../services/auth.service";
-import { Column } from "primeng/components/common/shared";
 
 @Component({
   selector: "app-sales-order-part-actions",
@@ -66,19 +60,9 @@ export class SalesOrderPartActionsComponent implements OnInit {
       { field: "oemDer", header: "OEM / PMA / DER", width: "100px" },
       { field: "quantity", header: "Qty Required ", width: "100px" },
       { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
-      //{ field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
-      ////{ field: "quantityIssued", header: "Qty Issued  ", width: "100px" },
-      ////{ field: "qtyToIssued", header: "Qty To Issue", width: "100px" },
-      //{ field: "qtyToReserveAndIssue", header: "Qty To Reserve And Issue", width: "100px" },
-      //{ field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
-      //{ field: "qtyToUnIssued ", header: "Qty To UnIssue", width: "100px" },
       { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
       { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
-      { field: "quantityOnOrder", header: "Qty On Order", width: "100px" },
-      //{ field: "reservedDate", header: "Reserved Date", width: "150px" },
-      //{ field: "reservedById", header: "Reserved By", width: "150px" },
-      //{ field: "issuedDate", header: "Issued Date", width: "150px" },
-      //{ field: "issuedById", header: "Issued By", width: "150px" }      
+      { field: "quantityOnOrder", header: "Qty On Order", width: "100px" }
     ];
   }
 
@@ -151,9 +135,6 @@ export class SalesOrderPartActionsComponent implements OnInit {
           this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i]['isSelected'] = false;
-          // if (this.parts[i].qtyToReserve == 0) {
-          //   this.parts[i].qtyToReserve = null
-          // }
         }
 
         for (let i = 0; i < this.columns.length; i++) {
@@ -313,7 +294,6 @@ export class SalesOrderPartActionsComponent implements OnInit {
   }
 
   filterReservedBy(event) {
-    // this.firstCollection = this.employeesList;
     const employeeListData = [
       ...this.employeesList.filter(x => {
         if (x.name.toLowerCase().includes(event.query.toLowerCase())) {
@@ -329,8 +309,6 @@ export class SalesOrderPartActionsComponent implements OnInit {
     parts.filter(x => {
       x.createdBy = this.userName;
       x.updatedBy = this.userName;
-      // x.reservedById = x.reservedById.value;
-      // x.issuedById = x.issuedById.value;
       if (x.isSelected == true) {
         tempParts.push(x)
       }
@@ -345,7 +323,6 @@ export class SalesOrderPartActionsComponent implements OnInit {
           `Part updated.`,
           MessageSeverity.success
         );
-        // this.partActionModalClose.emit(true)
         this.onClose()
       },
         error => this.saveFailedHelper(error));
@@ -353,23 +330,22 @@ export class SalesOrderPartActionsComponent implements OnInit {
 
   private saveFailedHelper(error: any) {
     this.alertService.stopLoadingMessage();
-    // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
     this.alertService.showStickyMessage(error, null, MessageSeverity.error);
   }
 
   showAlternateParts(event) {
     if (event == true) {
-      this.parts = [ ...this.onlyParts, ...this.altParts]
+      this.parts = [...this.onlyParts, ...this.altParts]
     } else {
-      this.parts = [ ...this.onlyParts];
+      this.parts = [...this.onlyParts];
     }
   }
 
   showEqualientParts(event) {
     if (event == true) {
-      this.parts = [ ...this.onlyParts, ...this.euqParts]
+      this.parts = [...this.onlyParts, ...this.euqParts]
     } else {
-      this.parts = [ ...this.onlyParts];
+      this.parts = [...this.onlyParts];
     }
   }
 }

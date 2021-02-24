@@ -1,9 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { PartDetail } from "../../models/part-detail";
-import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { CommonService } from '../../../../../services/common.service';
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
-import { formatNumberAsGlobalSettingsModule, formatStringToNumber } from "../../../../../generic/autocomplete";
+import { formatStringToNumber } from "../../../../../generic/autocomplete";
 
 @Component({
   selector: "app-sales-margin",
@@ -16,21 +15,22 @@ export class SalesMarginComponent implements OnInit {
   @Input() part: PartDetail;
   @Input() display: boolean;
   @Input() isEdit: boolean;
-
   query: ItemMasterSearchQuery;
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
-  constructor(private salesQuoteService: SalesQuoteService, private commonservice: CommonService,) {
 
+  constructor(private commonservice: CommonService,) {
   }
 
   ngOnInit() {
     this.getPercents();
     this.calculate();
   }
+
   formatStringToNumberGlobal(val) {
     return formatStringToNumber(val)
   }
+
   getPercents() {
     this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
       this.percentage = res;
@@ -41,7 +41,6 @@ export class SalesMarginComponent implements OnInit {
     event.preventDefault();
     this.close.emit(true);
   }
-
 
   onSave(event: Event): void {
     event.preventDefault();
@@ -68,11 +67,9 @@ export class SalesMarginComponent implements OnInit {
       this.part.markupExtended = + (Number(this.part.markupPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
       this.part.salesDiscountPerUnit = + ((Number(this.part.salesDiscount) / 100) * (Number(this.part.salesPricePerUnit) + Number(this.part.markupPerUnit))).toFixed(2);
       this.part.salesDiscountExtended = +(Number(this.part.salesDiscountPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
-
       this.part.netSalesPricePerUnit = +(Number(this.part.salesPricePerUnit) + Number(this.part.markupPerUnit) - Number(this.part.salesDiscountPerUnit)).toFixed(2);
       this.part.netSalesPriceExtended = +(Number(this.part.salesPriceExtended) + Number(this.part.markupExtended) - Number(this.part.salesDiscountExtended)).toFixed(2);
       this.part.taxAmount = +((Number(this.part.netSalesPriceExtended) / 100) * Number(this.part.taxPercentage)).toFixed(2);
-      // let taxAmountPerUnit = ((Number(this.part.netSalesPricePerUnit) / 100) * Number(this.part.taxPercentage)).toFixed(2);
       this.part.marginAmountPerUnit = +(Number(this.part.netSalesPricePerUnit) - Number(this.part.unitCostPerUnit)).toFixed(2);
       this.part.marginAmountExtended = +(Number(this.part.marginAmountPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
       this.part.unitCostExtended = +(Number(this.part.unitCostPerUnit) * Number(this.part.quantityFromThis)).toFixed(2);
@@ -86,14 +83,8 @@ export class SalesMarginComponent implements OnInit {
       } else {
         this.part.marginPercentageExtended = 0;
       }
-      // this.part.marginPercentagePerUnit = +((Number(this.part.netSalesPricePerUnit) / 100) * Number(this.part.marginAmountPerUnit)).toFixed(2);
-      // this.part.marginPercentageExtended = +((Number(this.part.netSalesPriceExtended) / 100) * Number(this.part.marginAmountExtended)).toFixed(2);
-
       this.part.grossSalePrice = Number(this.part.salesPriceExtended) + Number(this.part.markupExtended);
       this.part.grossSalePricePerUnit = Number(this.part.salesPricePerUnit) + Number(this.part.markupPerUnit);
-      // this.part.freight = 0.00;
-      // this.part.misc = 0.00;
-      // this.part.totalSales = +(Number(this.part.netSalesPriceExtended) + Number(this.part.taxAmount) + Number(this.part.freight) + Number(this.part.misc)).toFixed(2);
       this.part.totalSales = +(Number(this.part.netSalesPriceExtended) + Number(this.part.taxAmount)).toFixed(2);
     }
     catch (e) {
@@ -106,13 +97,10 @@ export class SalesMarginComponent implements OnInit {
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
       }
       else {
-        // this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && this.part.quantityFromThis > this.part.qtyAvailable;
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted;
       }
     } else {
       this.invalidQuantityenteredForQuantityFromThis = true;
     }
-
-
   }
 }

@@ -752,7 +752,6 @@ export class SalesOrderShippingComponent {
             this.shippingHeader.soldToName = soldtocustomerobj;
             this.shippingHeader['soldToSiteId'] = this.shippingHeader.soldToSiteId;
             this.getSiteNamesBySoldCustomerId(soldtocustomerobj);
-             console.log("this.shippingHeader",this.shippingHeader);
           }, error => {
             this.isSpinnerVisible = false;
           });

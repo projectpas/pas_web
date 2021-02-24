@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
 
 @Component({
@@ -8,7 +8,7 @@ import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
 })
 export class CustomerDetailComponent {
   @Input() customer: any;
-  @Input() salesQuote:ISalesQuote;
+  @Input() salesQuote: ISalesQuote;
   constructor() {
     this.customer = {
       customerName: '',
