@@ -337,7 +337,7 @@ viewAsstesInventory(rowData){
             this.getAllWorkOrderList(this.lazyLoadEventData);
             this.alertService.showMessage(
                 '',
-                'Deleted WorkOrder Asset  Successfully',
+                'Deleted WorkOrder Tools  Successfully',
                 MessageSeverity.success
             );
         },

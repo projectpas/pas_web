@@ -55,8 +55,10 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             this.row = this.workFlow.charges[0];
             if (this.isEdit) {
                 this.workFlow.charges = [];
+                console.log("edit data",this.editData)
                 const data = {
                     ...this.editData,
+
                     vendorId: this.editData.vendorId,
                     vendorName: this.editData.vendorName, vendor: {
                         vendorId: this.editData.vendorId,

@@ -770,6 +770,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
     }
     this.saveworkOrderLabor.emit(this.saveFormdata);
     this.disabledUpdatebtn=true;
+    this.isEdit=true;
   }
   getOverHeadCost(taskList) {
     let total = 0;

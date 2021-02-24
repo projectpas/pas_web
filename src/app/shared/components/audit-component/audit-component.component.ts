@@ -1,20 +1,18 @@
 import { Component, OnInit,Input } from '@angular/core';
-
+import { NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 @Component({
    selector: 'app-audit-component',
    templateUrl: './audit-component.component.html',
    styleUrls: ['./audit-component.component.scss']
 })
 
-export class AuditComponentComponent implements OnInit {
+export class AuditComponentComponent implements OnInit { 
     @Input() auditHistoryHeader : any;
     @Input() auditHistory : any;
     data:any;
-    constructor() { }
+    constructor( private activeModal: NgbActiveModal,) { } 
 
     ngOnInit() {
-        console.log("header1", this.auditHistoryHeader);
-        console.log("data", this.auditHistory);
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -28,4 +26,7 @@ export class AuditComponentComponent implements OnInit {
             }
         }
       }
+      dismissModel() {
+        this.activeModal.close();
+    }
 }

@@ -1,20 +1,11 @@
 ﻿import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { QuickAppProMaterialModule } from '../modules/material.module';
 import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
-import { RouterModule, Routes } from '@angular/router';
-import { GroupByPipe } from '../pipes/group-by.pipe';
-
 import { WorkOrdersPagesRoutingModule } from './workorderpages-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EditorModule } from 'primeng/editor';
-
 import { WorkOrderPagesComponent } from './workorderpages.component';
 import { DirectLabourAddComponent } from '../components/work-order/work-order-setup/direct-labour-add/direct-labour-add.component';
-
-
 import { WorkOrderAddComponent } from '../components/work-order/work-order-setup/work-order-add/work-order-add.component';
 import { ManualEntryLaborHoursComponent } from '../components/work-order/work-order-setup/labor/manual-entry-labor-hours/manual-entry-labor-hours.component';
 import { SystemGeneratedLaborHoursComponent } from '../components/work-order/work-order-setup/labor/system-generated-labor-hours/system-generated-labor-hours.component';
@@ -41,16 +32,12 @@ import { CommunicationComponent } from '../components/work-order/work-order-setu
 import { AnalysisComponent } from '../components/work-order/work-order-setup/work-order-summarizedview/components/analysis/analysis.component';
 import { MaterialListSummarisedComponent } from '../components/work-order/work-order-setup/work-order-summarizedview/components/material-list/material-list.component';
 import { WOReturnToCustomerComponent } from '../components/work-order/work-order-setup/wo-return-to-customer/wo-return-to-customer.component';
-
-
 import { WorkOrderLaborComponent } from '../components/work-order/work-order-setup/work-order-labor/work-order-labor.component';
 import { WorkOrderLabourAnalysisComponent } from '../components/work-order/work-order-setup/work-order-labour-analysis/work-order-labour-analysis.component';
-
 import { WorkOrderReportComponent } from '../components/reports/workorder/workorder-report.component';
 import { PurchaseOrderReportComponent } from '../components/reports/purchase-order/purchase-order-report.component';
 import { ReceivingLogReportComponent } from '../components/reports/receiving-log/receiving-log-report.component';
 import { InventoryReportComponent } from '../components/reports/inventory/inventory-report.component';
-
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -81,8 +68,6 @@ import { CommunicationService } from '../shared/services/communication.service';
 import { ShippingComponent } from '../shared/components/shipping/shipping.component';
 import { SalesQuoteService } from '../services/salesquote.service';
 import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.service";
-
-
 import { WorkFlowtService } from '../services/workflow.service';
 import { AssetmanagementModule } from '../assetmanagement/assetmanagement.module';
 import { WorkOrderChargesComponent } from '../components/work-order/work-order-setup/work-order-charges/work-order-charges.component';
@@ -111,9 +96,6 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CommonDocumentsModule } from '../components/common-components/common-documents/common-documents.module';
 import { CommonCommunicationModule } from '../components/common-components/common-communication/common-communiation.module';
 import { SplitButtonModule } from 'primeng/splitbutton';
-// import { MaterialListCreateComponent } from '../shared/Material-List-Create.component';
-// import { SharedModule } from '../shared/shared.module';
-// import { BrowserModule } from '@angular/platform-browser'; 
 @NgModule({
   imports: [
     FormsModule,
@@ -182,9 +164,6 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     LabourComponent,
     MaterialListSummarisedComponent,
     WOReturnToCustomerComponent,
-
-
-
     WorkOrderAssetsComponent,
     WorkOrderAddressesComponent,
     WorkOrderSmartComponent,
