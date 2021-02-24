@@ -1,4 +1,4 @@
-﻿<div class="modal-header">
+﻿<!-- <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title"></h4>
     <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
 
@@ -53,7 +53,7 @@
             </div>
             <div class="second-block top">
                 <!-- <h5><b>Sales Order Quotation</b></h5> -->
-                <div class="second-block-div">
+                <!-- <div class="second-block-div">
                     <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
                     <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.salesOrder.soPickTicketNumber}}</label>
                     <img src="{{this.salesOrder.soPickTicketBarcode}}" alt="barcode" class="border" Placeholder="Barcode" style="width:30%" />
@@ -98,9 +98,9 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="second-block col-sm-6">
+                <div class="second-block col-sm-6"> -->
                     <!-- first-block  -->
-                    <br /><br />
+                    <!-- <br /><br />
                     <h5 style="padding-left:10px"> <b>Sold To</b> </h5>
                     <div class="col-sm-12 first-block-4">
                         <div class="second-block-div">
@@ -136,7 +136,7 @@
                 </div>
 
                 <div class="second-block col-sm-6">
-                    <!-- first-block-right -->
+                     first-block-right 
                     <br /><br />
                     <h5 style="padding-left:10px"> <b>Ship To</b> </h5>
                     <div class="col-sm-12 first-block-4">
@@ -199,7 +199,7 @@
                                 <td>{{part.partDescription}}</td>
                                 <td>{{part.serialNumber}}</td>
                                 <td>{{part.uom}}</td>
-                                <!-- <td>{{this.salesOrderpartConditionDescription}}</td> -->
+                                <!-- <td>{{this.salesOrderpartConditionDescription}}</td> 
                                 <td>{{part.conditionDescription}}</td>
                                 <td>{{part.priorityName}}</td>
                                 <td>{{part.poNumber}}</td>
@@ -222,7 +222,7 @@
                                         <img src="{{part.partBarcode}}" alt="barcode" class="border" />
                                     </td>
 
-                                    <!-- <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td> -->
+                                    <!-- <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td> 
                                     <td colspan="1"><b>SL Num:</b> {{part.stockLineNumber}}</td>
                                     <td colspan="3"><b>Control Id:</b>{{part.controlNumber}}</td>
                                     <td colspan="4"><b>ID #:</b>{{part.idNumber}}</td>
@@ -265,4 +265,274 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">No</button>
     <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+</div> -->
+ 
+
+
+
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+
 </div>
+    <div class="modal-content pdf-block " style="width:90%">
+        <div class="modal-body">
+          
+         
+            <div class="clear"></div>
+            <form id=""  name="" action="#" method="post" onsubmit="return false;" >
+              <div class="image">
+                <div style="padding: 0; margin: 0;">
+<div>
+                
+                    <form id="" class="form-div" name="" action="#"
+                     method="post" onsubmit="return false;" >
+                        <div class="logo-block">
+              <img src="http://design.poweraerosuites.com/image/logo.png" width="130" /> </div>
+                        <div class="clear"></div>
+                        <hr/>
+            <div class="pick-ticket-header" style="margin-bottom: 15px;">
+              <h4 >SALES ORDER PICK TIKET</h4>
+            </div>
+              <div class="first-block-sold">
+                  <div class="col-sm-12 address-block">
+                       <div class="col-sm-12 first-block-name">Company Logo</div>
+                      
+                       <br/><br/>
+                       <br/><br/>
+                       <br/><br/>
+                        <div class="col-sm-12 first-block-name">Tagline</div>
+                      
+                       <br/><br/>
+                       <br/><br/>
+                       <div class="col-sm-12 first-block-name">Address</div>
+                       <div class="col-sm-12 first-block-name">Address</div>
+                       <div class="col-sm-12 first-block-name">City</div>
+                      
+                    </div>
+                </div>
+                       
+
+                    
+                    
+                <div class="second-block">
+                        <div class="second-block-div">
+                            <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
+                            <input type="text" value="" disabled />
+                       </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-4 second-block-label"> Date & time</label>
+                            <input type="text" placeholder="" value="" disabled />
+                        </div>
+                    <div class="second-block-div">
+                        <label class="col-sm-4 second-block-label">SO Num</label>
+                      <input type="text" value="" disabled />
+                    </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-4 second-block-label">Ship Via</label>
+                            <input type="text" value="" disabled />
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-4 second-block-label">Num of Items</label>
+                            <input type="text" value="" disabled />
+                        </div>
+                    <div class="second-block-div">
+                        <label class="col-sm-4 second-block-label">Num of Containers</label>
+                        <input type="text" value="" disabled />
+                    </div>
+                    <div class="second-block-div">
+                        <label class="col-sm-4 second-block-label">Date/Time Printed</label>
+                        <input type="text" value="" disabled />
+                    </div>
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label">Page</label>
+                    <input type="text" placeholder="1 of 1" value="" disabled />
+                </div>
+            </div>                    
+                <div class="col-sm-12" style="margin-top:5%">
+                    <div class="first-block-sold col-sm-6">
+                        <label><b>Sold To:</b></label>
+                        <div class="first-block-sold-to">
+                        
+                        
+                        </div>
+                    </div>
+
+                    <div class="first-block-ship col-sm-6">
+                       <label><b> Ship To:</b></label>
+                        <div class="first-block-ship-to">
+                        
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="clear"></div>
+                <hr />
+                <div class="clear"></div>
+
+        <div class="col-sm-12">
+            <table style="width:99%;margin-left:5px;">
+           
+                <thead>
+                  <tr>
+                    
+                    <th>Line Num</th>
+                    <th>PN Information</th>
+                   
+                    <th colspan="2">Cust PO</th>
+                    <th colspan="3">Consignment</th>
+                    <th colspan="2">Lot Num</th>
+                  
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      
+                        <td>1</td>
+                        <td>  PN: 7785122</td>
+                        <td>UOM: Ea</td>
+                        <td>Cond: New</td>
+                        <td> Priority: Routine </td>
+                        <td>Qty OH: 4</td>
+                        <td>Qty Avl: 2</td>
+                        <td>Qty to Pick: 3</td>
+                        <td>Qty Picked: 2</td>
+
+                      
+                    </tr>
+                    <tr>
+                       
+                        <td> <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
+                        class="image" /></td>
+                        <td>  PN Description: Bearing</td>
+                        <td>Site: Site XXXX</td>
+                        <td></td>
+                        <td> Warehouse: XXXX </td>
+                        <td>Location: XXX</td>
+                        <td></td>
+                        <td>Shelf: XX</td>
+                        <td> Bin: X </td>
+                       
+                    </tr>
+                    <tr>
+                       
+                        <td></td>
+                        <td>  Serial Num: SN-1245</td>
+                        <td>SL Num: 4</td>
+                        <td>Cntrl #: 4000003</td>
+                        <td>  </td>
+                        <td>ID #: 15</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                       
+                    </tr>
+                   
+                    <tr>
+                        <td rowspan="2" colspan="9">
+                         <b>
+                            Notes
+                         </b>
+                        </td>
+                       
+                       
+                        
+                    </tr>
+                     <tr>
+                     
+                    </tr>
+                    <tr>
+                       <td>2</td>
+                        <td>  PN: 694008</td>
+                        <td>UOM: Pack</td>
+                        <td>Cond: New</td>
+                        <td>Priority: Routine</td>
+                        <td>Qty OH: 15</td>
+                        <td>Qty Avl: 12</td>
+                        <td>Qty to Pick: 10</td>
+                        <td> Qty Picked: 10 </td>
+                    </tr>
+                    <tr>
+                       <td> <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
+                      class="image" /></td>
+                        <td>  PN Description: Packings</td>
+                        <td>Site: Site AAAAA</td>
+                        <td></td>
+                        <td> Warehouse: AAAA </td>
+                         <td>Location: AAA</td>
+                        <td></td>
+                        <td>Shelf:AA</td>
+                        <td>Bin: A</td>
+                    </tr>
+                    <tr>
+                       
+                        <td></td>
+                        <td>  Serial Num:</td>
+                        <td>SL Num: 4</td>
+                        <td>Cntrl #: 56000003</td>
+                        <td>  </td>
+                        <td>ID #: 9</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                       
+                    </tr>
+                    <tr>
+                        <td rowspan="2" colspan="9">
+                         <b>
+                            Notes
+                         </b>
+                        </td>
+                       
+                     
+                    </tr>
+                   <tr></tr>
+                </tbody>
+              
+            </table>   
+        </div> 
+
+
+                <br/>
+
+                    <div class="picked-by col-sm-6">
+                        <div class="first-part">
+                            <label for="pickedBy">Picked By</label>
+                            <input class="input-field-border" type="text" id="pickedBy" value="" />
+                        </div>
+
+                        <div class="second-part">
+                            <label for="date">Date</label>
+                            <input class="input-field-border" type="text" id="date" value="" />
+                        </div>
+                    </div>
+                    <div class="confirmed-by col-sm-6">
+                        <div class="first-part">
+                            <label >Confirmed By</label>
+                            <input class="input-field-border" type="text" value="" />
+                        </div>
+
+                        <div class="second-part">
+                            <label>Date</label>
+                            <input class="input-field-border" type="text" value="" />
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <hr />
+                    <div class="clear"></div>
+     
+                 </form>
+</div>
+</div>
+                </div>
+            </form>
+          </div>
+        
+       <div style="height:100px"> &nbsp;</div>
+    </div>
+  <!-- </div> -->
+<!-- </div> -->
+
+<!-- </body> -->
+<!-- </html> -->
