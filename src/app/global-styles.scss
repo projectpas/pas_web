@@ -34,8 +34,13 @@
   .header-button-alignment{
     margin-left: 20px !important;
   }
-  .communication-buttons{
-    color: #333333 !important
+  
+  .width-100{
+    width: 100px !important;
+  }
+  .input-width-100-percent{
+    width:100% !important;
+  
   }
   .multiselect-field{
     min-width: 200px;
@@ -620,4 +625,7 @@ padding-bottom: 0 !important;
 
 .accounting-calendar-div{
   margin-left: 30px !important;
+}
+.back-white{
+  background: #fff !important;
 }

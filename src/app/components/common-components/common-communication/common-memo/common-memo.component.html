@@ -57,7 +57,7 @@
                     </div> -->
 
                     </div>
-                    <div class="col" style="text-align: end;">
+                    <div class="col text-end">
                         <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50" class="form-control"
@@ -79,11 +79,11 @@
                     </div>
                     <div class="col">
                         <div class="">
-                            <div class="col" style="width: 395px; float: right; padding-top: 3px;">
+                            <div class="col show-deleted-div">
                                 <!-- <div 
                       style="text-align: end;padding-right: 2%;"
                     > -->
-                                <div class="form-group" style="float: right;">
+                                <div class="form-group float-right">
                                     <div class="checkbox-cstm pull-left checkbox-align">
                                         <label class="checkbox-label-align">
                                             <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55"
@@ -211,7 +211,7 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" style="font-size:24px;"
+                        <button type="button" class="close btn-font"
                             data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"> Memo Details</h4>
                         <!-- <div class="col-md-12 shadow-box-cstm">
@@ -282,10 +282,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <strong style="    display: inline-flex;">
+                <strong class="memo-display">
                     Memo:
                     <!-- <span class="new-label">{{restorerecord.name}}</span> -->
-                    <span class="value textareaMemos new-label" style="margin-left: 6px;"
+                    <span class="value textareaMemos new-label memo-left"
                         [innerHTML]="restorerecord.description"></span>
                 </strong>
             </div>
@@ -399,10 +399,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <strong style="    display: inline-flex;" *ngIf="deletingRow">
+                    <strong class="memo-display" *ngIf="deletingRow">
                         Memo:
                         <!-- <span class="new-label">{{restorerecord.name}}</span> -->
-                        <span class="value textareaMemos new-label" style="margin-left: 6px;"
+                        <span class="value textareaMemos new-label memo-left"
                             [innerHTML]="deletingRow.description"></span>
                     </strong>
                 </div>
@@ -477,7 +477,7 @@
                                     <td>{{audit.createdBy}}</td>
                                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                     <td>{{audit.updatedBy}}</td>
-                                    <td style="text-align: center;">
+                                    <td class="text-center">
                                         <span class="value">
                                             <label class="wauto">
                                                 <input type="checkbox" name="isDeleted"

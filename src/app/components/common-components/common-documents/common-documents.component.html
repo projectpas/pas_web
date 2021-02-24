@@ -51,8 +51,8 @@
           </div>
           <div class="col">
             <div class="">
-              <div class="col" style="width: 395px; float: right; padding-top: 3px;">
-                <div class="form-group" style="float: right;">
+              <div class="col show-deleted-width">
+                <div class="form-group float-right">
                   <div class="checkbox-cstm pull-left checkbox-align">
                     <label class="checkbox-label-align">
                       <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
@@ -116,7 +116,7 @@
                           }}
             </td>
             <td class="table-column-width" *ngIf="col.field == 'docMemo'">
-              <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+              <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
             </td>
             <td class="table-column-width" *ngIf="col.field == 'fileName'">
         <tr *ngFor="let x of rowData.attachmentDetails">
@@ -192,7 +192,7 @@
       </ng-template>
     </p-table>
   </div>
-  <div style="margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
+  <div class="margin-bottom-30" *ngIf="isViewMode == false && offLineUpload==true">
     <!-- <div style="margin-top:-40px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
             <div style="margin-top:-10px;margin-bottom: 15px;" *ngIf="isViewMode == false && offLineUpload==true"> -->
     <button [disabled]="isEnableUpdateButton" type="button" class="btn btn-primary pull-right submit-btn"
@@ -245,7 +245,7 @@
         <span class="new-label">{{ selectedRowForDelete.docName }}</span>
       </strong> -->
     <div class="form-row">
-      <div class="col-md-12" style="margin-right: 0px !important;">
+      <div class="col-md-12 margin-right">
         <label class="fs12"> Document Name: </label>
         <span class="new-label"> {{selectedRowForDelete.docName}}</span>
       </div>
@@ -360,7 +360,7 @@
                 </tr>
                 <tr>
                   <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input style="width:100%;" class="incorn_border" pInputText type="text" (input)="
+                    <input class="incorn_border input-width-100-percent" pInputText type="text" (input)="
                           dt.filter($event.target.value, col.field, 'contains')" />
                   </th>
                   <th class="table-actions-column"></th>
@@ -718,7 +718,7 @@
               <td>{{audit.createdBy}}</td>
               <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
               <td>{{audit.updatedBy}}</td>
-              <td style="text-align: center;">
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                     <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
