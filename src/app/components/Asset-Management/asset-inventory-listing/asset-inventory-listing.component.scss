@@ -53,6 +53,13 @@ label {
   .card-tolerance .form-group {
     margin-bottom: 4px;
   }
+  .label-align{
+    width: 100% !important; margin-left: 6px !important;
+  }
+  .text-capital{
+    text-transform: capitalize !important;
+  }
+  
   .header-h5 {
     line-height: normal!important;
     color: initial!important;

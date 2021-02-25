@@ -8,15 +8,15 @@
             </nav>
 		</div> -->
 		<div class="card new-card">
-            <div class="card-header bg-primary new-card-header">
+            <div class="card-header header">
               <div class="row">
                 <div class="col">
-                  <h4 class="new-card-heading">Asset Adjustment</h4>
+                  <h4 class="header-name">Asset Adjustment</h4>
                 </div>
                 <div>
                   <button
                     type="button"
-                    class="btn-sm new-btn-primary"
+                    class="btn-sm header-button"
                     [routerLink]="['/assetmodule/assetpages/app-asset-inventory-listing']"
                   >
                     Asset Inventory List
@@ -24,7 +24,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-body new-card-body">
+            <div class="card-body header-body">
 			<form #assetAdjForm="ngForm">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -46,7 +46,7 @@
 						<span><b class="clr-red">Existing Book Value:</b> {{assetAdjustmentSetup.unitCost}}</span>
 					</div>
                 </div>
-                <div class="form-row" style="margin-top: 8px;">
+                <div class="form-row m-t-8">
                     <div class="col-md-2">
 						<span><b class="clr-red">Serial Num:</b> {{assetAdjustmentSetup.serialNo}}</span>
 					</div>
@@ -57,8 +57,9 @@
 						<span><b class="clr-red">Asset Life:</b> {{assetAdjustmentSetup.assetLife}}</span>
 					</div>
                 </div>
-				<div class="table-responsive mtop10" id="smovement">
-					<table class="table table-bordered">
+				<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" id="smovement">
+					<div class="tableFixHead">
+                        <table class="table table-bordered header-table-width">
 						<thead>
 							<tr>
 								<th></th>
@@ -92,7 +93,7 @@
 												</select>
 											</div>
 										</td>
-										<td rowspan="4" style="vertical-align: top;">
+										<td rowspan="4" class="vertical-align">
                                             <!-- <textarea *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="MgmtStructureReason" required></textarea> -->
                                             <div *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="col-md-8">
 												<select class="form-control" name="mgmtStructureAdjReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeMgmtStrucAdjReason(item.adjustmentReasonId)" required>
@@ -101,7 +102,7 @@
 												</select>
 											</div>
 										</td>
-										<td rowspan="4" style="vertical-align: top;">
+										<td rowspan="4" class="vertical-align">
 											<textarea *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="form-control" [(ngModel)]="item.adjustmentMemo" name="ManagementStructureMemo"></textarea>
                                         </td>
                                         <td rowspan="4"></td>
@@ -269,6 +270,7 @@
 							</ng-container>							
 						</tbody>
 					</table>
+                    </div>
 				</div>
 				<div class="clear"></div>
 				<br>
