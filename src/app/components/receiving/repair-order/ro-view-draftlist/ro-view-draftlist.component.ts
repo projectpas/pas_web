@@ -26,23 +26,50 @@ export class ROViewStockDraftListComponent implements OnInit {
     }
     
     ngOnInit() {
+       console.log(this.repairOrderData)
        this.repairOrderData.map(x => {
         const data = {
-                ...x,
-                stockLine: this.getStockline(x),
-                timeLife: x.timeLifeDraft
+                ...x,  
+                unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '',
+                extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '',                                                                       
+                stockLine: this.getStockLineDetails(x.stockLine),
+                timeLife: x.timeLife // this.getTimeLifeDetails(x.timeLife)
             }
             this.repairOrderPart.push(data);
-        });
-        // this.purchaseOrderPart = data;
-        // console.log(this.purchaseOrderPart);
-        // this.purchaseOrderPart[0].stockLine.map((x, index) => {
-        //     return {
-        //         ...x,
-        //         currentSLIndexDraft: index
-        //     }
-        // })
-        // console.log(this.purchaseOrderPart);
+        });        
+    }
+
+    getStockLineDetails(stockline) {
+        stockline = stockline.map((x,index) => {
+            return {
+                ...x,
+                repairOrderUnitCost: x.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2) : '0.00',
+                repairOrderExtendedCost: x.repairOrderExtendedCost ? formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2) : '0.00',
+                currentSLIndexDraft: index
+            }
+        })
+        return stockline;
+    }
+
+    getTimeLifeDetails(timeLife) {
+        timeLife = timeLife.map(x => {
+            return {
+                cyclesRemaining: x.cyclesRemaining ? x.cyclesRemaining : '00:00',
+                cyclesSinceInspection: x.cyclesSinceInspection ? x.cyclesSinceInspection : '00:00',
+                cyclesSinceNew: x.cyclesSinceNew ? x.cyclesSinceNew : '00:00',
+                cyclesSinceOVH: x.cyclesSinceOVH ? x.cyclesSinceOVH : '00:00',
+                cyclesSinceRepair: x.cyclesSinceRepair ? x.cyclesSinceRepair : '00:00',
+                timeRemaining: x.timeRemaining ? x.timeRemaining : '00:00',
+                timeSinceInspection: x.timeSinceInspection ? x.timeSinceInspection : '00:00',
+                timeSinceNew: x.timeSinceNew ? x.timeSinceNew : '00:00',
+                timeSinceOVH: x.timeSinceOVH ? x.timeSinceOVH : '00:00',
+                timeSinceRepair: x.timeSinceRepair ? x.timeSinceRepair : '00:00',
+                lastSinceInspection: x.lastSinceInspection ? x.lastSinceInspection : '00:00',
+                lastSinceNew: x.lastSinceNew ? x.lastSinceNew : '00:00',
+                lastSinceOVH: x.lastSinceOVH ? x.lastSinceOVH : '00:00'
+            }
+        })
+        return timeLife;
     }
 
     getStockline(data) {

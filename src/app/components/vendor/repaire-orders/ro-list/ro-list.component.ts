@@ -98,6 +98,7 @@ export class RoListComponent implements OnInit {
     targetData: any;    
     internalApproversList: any = [];
     roTotalCost: number;
+    isReceivingro:boolean;
     approvalProcessHeader = [        
         {
             header: 'Action',
@@ -455,6 +456,9 @@ export class RoListComponent implements OnInit {
         this.PovendorId = rowData.vendorId;
         this.orderId = rowData.repairOrderId;
         this.orderType = 'Repair Order';
+        if(this.isReceivingRolist == true){
+            this.isReceivingro = true;
+        }
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
   
