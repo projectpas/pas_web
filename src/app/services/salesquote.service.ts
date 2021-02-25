@@ -224,9 +224,11 @@ export class SalesQuoteService {
       this.salesQuoteEndPointSevice.saveCustomerQuotesApprovedEndPoint(data)
     );
   }
+  
   sentForInternalApproval(data) {
     return this.salesQuoteEndPointSevice.sentForInternalApproval(data);
   }
+
   update(salesquote: ISalesQuoteView): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesQuoteEndPointSevice.update(salesquote)
