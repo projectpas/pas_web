@@ -1,10 +1,7 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import * as $ from "jquery";
+import { Component, OnInit } from "@angular/core";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
-import {
-  AlertService
-} from "../../../../services/alert.service";
+import { AlertService } from "../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
@@ -29,7 +26,6 @@ import { SalesOrderService } from "../../../../services/salesorder.service";
   styleUrls: ["./sales-order-analysis.component.css"]
 })
 export class SalesOrderAnalysisComponent implements OnInit {
-  // @ViewChild("dt")
   isEnablePOList: any;
   searchParameters: ISalesSearchParameters;
   sales: any[] = [];
@@ -50,7 +46,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
   showPaginator: boolean = false;
   isSpinnerVisible: boolean = true;
   partColumns: any[];
-
   customerDetails: any;
   salesQuote: ISalesQuote;
   salesOrderQuote: ISalesOrderQuote;
@@ -62,7 +57,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
   allEmployeeinfo: any[] = [];
   customerWarningData: any = [];
   accountTypes: any[];
-  // approvers: any[];
   customerId: any;
   salesQuoteId: any;
   statusList: any = [];
@@ -75,12 +69,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
 
   constructor(
     private salesOrderService: SalesOrderService,
-    private alertService: AlertService,
-    private modalService: NgbModal,
-    private router: Router,
-    private customerService: CustomerService,
     public employeeService: EmployeeService,
-    private commonservice: CommonService,
     public currencyService: CurrencyService,
     private authService: AuthService
   ) { }
@@ -90,7 +79,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
     this.salesQuote = new SalesQuote();
     this.salesOrderQuote = new SalesOrderQuote();
     this.searchParameters = new SalesSearchParameters();
-    // this.getStatusList();
     this.initColumns();
     this.searchParameters.filters = {
       ...this.searchParameters.filters,
@@ -99,8 +87,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
     this.isSpinnerVisible = false;
   }
 
-
-
   get userName(): string {
     return this.authService.currentUser
       ? this.authService.currentUser.userName
@@ -108,7 +94,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
   }
 
   get userId() {
-    console.log(this.authService.currentUser);
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
 
@@ -140,9 +125,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
       { field: "unitCostExtended", header: "Extended Cost", width: "130px" },
       { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
       { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
-      {
-        field: "freight", header: "Freight", width: "120px", style: "text - align: right"
-      },
+      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
       { field: "taxAmount", header: "Tax Amt", width: "120px" },
       { field: "totalRevenue", header: "Total Revenue", width: "130px" },
       { field: "notes", header: "Notes", width: "120px" },
@@ -154,8 +137,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
     this.salesOrderId = id;
     this.onSearch();
   }
-
-
 
   loadData(event, globalFilter = "") {
     event.filters.statusId = this.currentStatus;
@@ -176,18 +157,14 @@ export class SalesOrderAnalysisComponent implements OnInit {
     }
 
     this.searchParameters.globalFilter = globalFilter;
-
-    // this.onSearch();
   }
 
   globalSearch(val) {
     this.searchParameters.globalFilter = val
     const lazyEvent = this.lazyLoadEventData;
-    // this.loadData(lazyEvent, val);
-
   }
+
   onSearch() {
-    //this.alertService.startLoadingMessage();
     this.isSpinnerVisible = true;
     this.salesOrderService
       .getAllSalesOrderAnalysis(this.salesOrderId)
@@ -213,9 +190,11 @@ export class SalesOrderAnalysisComponent implements OnInit {
   dismissModel() {
     this.modal.close();
   }
+
   dismissViewModel() {
     this.modal.close();
   }
+
   dismissPartViewModel() {
     this.partModal.close();
   }
@@ -254,13 +233,11 @@ export class SalesOrderAnalysisComponent implements OnInit {
 
   calculateTotalRevenue(part: PartDetail, i) {
     return this.sales[i].netSales + this.sales[i].misc;
-
   }
 
   calculateProductRevenue(part, i) {
     return this.sales[i].netSales + this.sales[i].misc + this.sales[i].freight + this.sales[i].taxAmount;
   }
-
 
   getPercentage(key) {
     if (this.sales && this.sales.length > 0) {
@@ -293,6 +270,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
   formateCurrency(amount) {
     return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
   }
+
   initSummaryColumns() {
     this.headers = [
       { field: "salesOrderNumber", header: "SO Num", width: "120px" },
@@ -302,25 +280,18 @@ export class SalesOrderAnalysisComponent implements OnInit {
       { field: "uomName", header: "UOM", width: "100px" },
       { field: "qtyQuoted", header: "Qty Quoted", width: "100px" },
       { field: "currency", header: "Curr", width: "100px" },
-      // { field: "markupPerUnit", header: "MarkUp Amt", width: "120px" },
-      // { field: "grossSalePricePerUnit", header: "Gross Price/Unit", width: "140px" },
-      // { field: "discountAmount", header: "Disc. Amt", width: "120px" },
       { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
       { field: "grossSalePrice", header: "Gross Sales Amt", width: "120px" },
       { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
       { field: "netSales", header: "Net Sales Amt", width: "130px" },
       { field: "misc", header: "Misc Amt", width: "120px" },
       { field: "totalSales", header: "Product Revenue", width: "130px" },
-      // { field: "unitCost", header: "Unit Cost", width: "130px" },
       { field: "unitCostExtended", header: "Prod Cost", width: "130px" },
       { field: "marginAmountExtended", header: "Prod Margin Amt", width: "120px", style: "text-align:right" },
       { field: "marginPercentage", header: " Prod Margin %", width: "100px", style: "text-align:right" },
-      {
-        field: "freight", header: "Freight", width: "120px", style: "text - align: right"
-      },
+      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
       { field: "taxAmount", header: "Tax Amt", width: "120px" },
-      { field: "totalRevenue", header: "Total Revenue", width: "130px" },
-      // { field: "notes", header: "Notes", width: "120px" },
+      { field: "totalRevenue", header: "Total Revenue", width: "130px" }
     ];
     this.selectedColumns = this.headers;
   }
@@ -389,7 +360,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
 
   getUniqueParts(myArr, prop1) {
     let uniqueParts = JSON.parse(JSON.stringify(myArr));
-    // let uniquePartsFiltered = [];
     uniqueParts.reduceRight((acc, v, i) => {
       if (acc.some(obj => v[prop1] === obj[prop1])) {
         uniqueParts.splice(i, 1);
@@ -400,5 +370,4 @@ export class SalesOrderAnalysisComponent implements OnInit {
     }, []);
     return uniqueParts;
   }
-
 }

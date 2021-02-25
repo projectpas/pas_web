@@ -19,7 +19,6 @@
             selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
             (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
             [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
-
             <ng-template pTemplate="caption">
                 <div class="row">
                     <div class="col">
@@ -47,9 +46,6 @@
                             matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download"
                             iconPos="left" label="Export Selected Data"
                             (click)="dt.exportCSV({selectionOnly:true})"></button>
-                        <!-- data-toggle="modal"
-                            data-target="#downloadConfirmation"
-                            (click)="selectedOnly = true; targetData = dt;" -->
                         <div class="pull-left radio-buttons-align">
                             <label class="radio-cstm wauto">
                                 <input type="radio" name="viewType" class="form-control" value="pnview"
@@ -65,13 +61,10 @@
                             </label>
                         </div>
                     </div>
-
                     <div class="pull-right buttons-div-align">
                         <div class="col">
                             <div class="col buttons-top-padding">
                                 <div class="form-group">
-
-
                                     <div class="pull-left radio-buttons-align" *ngFor="let status of statusList">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="currentStatus" class="form-control"
@@ -90,7 +83,6 @@
                                     </div>
                                     <div class="checkbox-cstm pull-left checkbox-align">
                                         <label class="checkbox-label-align">
-                                            <!--  -->
                                             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
                                                 id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -160,9 +152,6 @@
                         <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDateType"
                             class="table-header-input-width"
                             (change)="dt.filter($event.target.value, col.field, 'contains')">
-
-                        <!-- <input style="width:100%;" pInputText type="text"
-                                (input)="dt.filter($event.target.value, col.field, 'contains')"> -->
                     </th>
                     <th class="table-actions-column"></th>
                 </tr>
@@ -179,10 +168,9 @@
                                     rowData['estimatedShipDateType'] != 'Multiple'||
                                     rowData['priorityType'] != 'Multiple'"
                         [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
-                        <!-- {{convertDate(col.field , rowData)}} -->
                         <span
                             *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field != 'openDate'">
-                            {{convertDate(col.field , rowData)}}
+                            {{convertDate(col.field , rowData) == '01-01-0001' ? '' : convertDate(col.field , rowData)}}
                         </span>
                         <span *ngIf="col.field == 'openDate'">
                             {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy'}}
@@ -192,7 +180,6 @@
                         </span>
                     </td>
                     <td class="action-icons-cstm table-column-width">
-
                         <div *ngIf="currentDeletedstatus==false">
                             <span>
                                 <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
@@ -214,16 +201,11 @@
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </span>
-                            <!-- <span data-toggle="modal" data-target="#soHistory">
-                                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
-                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                            </span> -->
                             <span>
                                 <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)"
                                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
                         </div>
-
                         <div *ngIf="currentDeletedstatus==true">
                             <span>
                                 <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
@@ -236,13 +218,7 @@
                             <span><a class="btn nobg" (click)="restore(restoreIdSo,rowData);"
                                     matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                         aria-hidden="true"></i></a> </span>
-
                         </div>
-                        <!-- <button class="btn-delete" mat-icon-button matTooltip="Delete"
-                                matTooltipPosition="above" (click)="openDelete(content,sale)">
-                                <mat-icon color="warn">delete</mat-icon>
-                            </button> -->
-
                     </td>
                 </tr>
             </ng-template>
@@ -259,7 +235,6 @@
                     type="text" />
                 &nbsp;&nbsp;
                 <label id="footer" class="footer1">Pages Count:</label>
-
                 <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
             </ng-template>
         </p-table>
@@ -287,7 +262,6 @@
         </div>
     </div>
 </div>
-
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
@@ -302,13 +276,10 @@
         <button type="button" class="btn btn-primary" (click)="deleteQuote()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
-
 </ng-template>
 <ng-template #restoreIdSo let-c="close" let-d="dismiss" data-backdrop="static">
-
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Restore?</h4>
-
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -328,7 +299,6 @@
         </button>
         <h4 class="modal-title">Details of Sales Order</h4>
     </div>
-
     <div class="modal-body">
         <app-sales-order-view [customerId]="customerId" [salesOrderId]="salesOrderId" [salesOrderView]="salesOrderView">
         </app-sales-order-view>
@@ -336,14 +306,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
     </div>
-
 </ng-template>
-
-<!-- <div class="preloader loader-position" *ngIf="isSpinnerVisible">
-    <div class="loader-css loader-align">
-        <img src="../../../../assets/images/loader.gif" />
-    </div>
-</div> -->
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">
@@ -358,10 +321,7 @@
         </div>
     </div>
 </div>
-<!-- <div id="soHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"> -->
 <ng-template #soHistory let-c="close" let-d="dismiss" data-backdrop="static">
-    <!-- <div class="modal-dialog modal-xl"> -->
-    <!-- Modal content-->
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -462,5 +422,4 @@
             <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
         </div>
     </div>
-    <!-- </div> -->
 </ng-template>

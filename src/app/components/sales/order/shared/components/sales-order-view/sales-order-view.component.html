@@ -38,15 +38,13 @@
         <p><span class="label"><b>Restrict PMA: </b></span>
           <span class="value">
             <input type="checkbox" [(ngModel)]="salesOrder.restrictPMA" name="restrictPMA" id="restrictPMA"
-            [disabled]="true" />
-            <!-- {{salesOrder.restrictPMA == true ? 'Yes' : "No" }} -->
+              [disabled]="true" />
           </span>
         </p>
         <p><span class="label"><b>Restrict DER: </b></span>
           <span class="value">
             <input type="checkbox" [(ngModel)]="salesOrder.restrictDER" name="restrictDER" id="restrictDER"
-            [disabled]="true" />
-            <!-- {{salesOrder.restrictDER == true ? 'Yes' : "No" }} -->
+              [disabled]="true" />
           </span>
         </p>
       </div>
@@ -87,10 +85,6 @@
         </p>
       </div>
       <div class="col-md-3">
-        <!-- <p><span class="label"><b>Customer Hold: </b></span>
-          <span class="value">{{salesOrder.customerHold}}
-          </span>
-        </p> -->
         <p><span class="label"><b>Salesperson/Agent: </b></span>
           <span class="value">{{salesOrder.salesPersonName}}
           </span>
@@ -117,13 +111,11 @@
         </p>
         <p><span class="label"><b>Memo: </b></span>
           <span class="value">
-            <!-- {{salesOrder.memo}} -->
             <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.memo"></p>
           </span>
         </p>
         <p><span class="label"><b>Notes: </b></span>
           <span class="value">
-            <!-- {{salesOrder.notes}} -->
             <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.notes"></p>
           </span>
         </p>
@@ -161,22 +153,6 @@
                 style="text-align:right">{{marginSummary.marginPercentage |twoDecimalGlobalNumberFormatPipe}}
               </span>
             </p>
-            <!-- <label style="font-weight: normal">Sales<span
-                style="float: right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}</span></label>
-            <label style="font-weight: normal">Misc<span
-                style="float: right">{{marginSummary.misc| twoDecimalGlobalNumberFormatPipe}}</span></label>
-            <label style="font-weight: normal">Net
-              Sales<span
-                style="float: right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
-            <label style="font-weight: normal">Product
-              Cost<span
-                style="float: right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
-            <label style="font-weight: normal">Margin
-              Amt<span
-                style="float: right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
-            <label style="font-weight: normal">Margin
-              %<span
-                style="float: right">{{marginSummary.marginpercentage | twoDecimalGlobalNumberFormatPipe}}</span></label> -->
           </div>
         </div>
         <div style="padding-top: 10px"></div>
@@ -208,8 +184,6 @@
     <p-tabPanel header="Parts List">
       <app-sales-order-part-number [salesQuote]="salesQuote" [salesOrderId]="salesOrder.salesOrderId"
         [isViewMode]="true" [employeesList]="allEmployeeinfo"></app-sales-order-part-number>
-
-
     </p-tabPanel>
     <p-tabPanel header="Internal Approvers">
       <app-sales-order-approve>
@@ -247,9 +221,7 @@
               class="value">{{salesOrder.shipToCountry ? salesOrder.shipToCountry : '-'}}</span></p>
           <p><span class="label"><b>Contact Name: </b></span><span
               class="value">{{salesOrder.shipToContactName ? salesOrder.shipToContactName : '-'}}</span></p>
-          <p><span class="label"><b>Memo: </b></span><span
-              class="value">
-              <!-- {{salesOrder.shipViaMemo ? salesOrder.shipViaMemo : '-'}} -->
+          <p><span class="label"><b>Memo: </b></span><span class="value">
               <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.shipToMemo"></p>
             </span></p>
           <p><span class="label"><b>Ship Via: </b></span><span
@@ -259,7 +231,8 @@
           <p><span class="label"><b>Handling Cost: </b></span><span
               class="value">{{salesOrder.handlingCost ? salesOrder.handlingCost : '-'}}</span></p>
           <p><span class="label"><b>Shipping Acct Num: </b></span><span
-              class="value">{{salesOrder.shipViaShippingAccountInfo ? salesOrder.shipViaShippingAccountInfo : '-'}}</span></p>
+              class="value">{{salesOrder.shipViaShippingAccountInfo ? salesOrder.shipViaShippingAccountInfo : '-'}}</span>
+          </p>
         </div>
         <div class="col-sm-4">
           <h5 class="po-head">Bill To</h5>
@@ -285,10 +258,7 @@
               class="value">{{salesOrder.billToCountry ? salesOrder.billToCountry : '-'}}</span></p>
           <p><span class="label"><b>Contact Name: </b></span><span
               class="value">{{salesOrder.billToContactName ? salesOrder.billToContactName : '-'}}</span></p>
-          <p><span class="label"><b>Memo: </b></span><span
-              class="value">
-              <!-- {{salesOrder.billToMemo ? salesOrder.billToMemo : '-'}} -->
-
+          <p><span class="label"><b>Memo: </b></span><span class="value">
               <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.billToMemo"></p>
             </span></p>
         </div>
@@ -311,14 +281,11 @@
       </app-sales-order-charges>
     </p-tabPanel>
     <p-tabPanel header="Billing/Invoicing">
-      <!-- <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="id" [salesOrder]="salesQuote">
-      </app-sales-order-billing> -->
       <p>Billing/Invoicing under implementation</p>
     </p-tabPanel>
     <p-tabPanel header="Shipping">
       <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
-      [customerDetails]="customerDetails" [salesOrder]="salesOrder"
-      [managementStructureId]="managementStructureId">
+        [customerDetails]="customerDetails" [salesOrder]="salesOrder" [managementStructureId]="managementStructureId">
       </app-sales-order-shipping>
     </p-tabPanel>
     <p-tabPanel header="Document">

@@ -1,15 +1,12 @@
 ﻿<div class="card">
     <div class="card new-card">
-        <div class="card-header bg-primary">
+        <div class="card-header header">
             <div class="row">
                 <div class="col">
-                    <h4 class="new-card-heading">{{isEditMode ? 'Edit' : 'Create'}} Sales Order Quote Settings</h4>
+                    <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Sales Order Quote Settings</h4>
                 </div>
                 <div>
-
-                    <button type="button" class="btn-sm new-btn-primary" [routerLink]="[
-                '/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list'
-                ]">
+                    <button type="button" class="btn-sm header-button" [routerLink]="['/salesordersettingsmodule/salesordersettings/app-sales-quote-settings-list']">
                         Sales Order Quote Settings List
                     </button>
                 </div>
@@ -27,8 +24,6 @@
                                     [options]="salesOrderViewList" placeholder="Select SOQ List View"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.soqListViewId">
                                 </p-dropdown>
-
-
                             </div>
                         </div>
                         <div class="col-md-3 work_order_teardown">
@@ -109,7 +104,6 @@
                         </div>
                         <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
                             <div class="form-group">
-
                                 <p-checkbox name="isApprovalRule" binary="true"
                                     [(ngModel)]="receivingForm.isApprovalRule">
                                 </p-checkbox>
@@ -118,17 +112,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
                 <div class="form-row pull-right m-t-10">
                     <button type="submit" class="btn btn-primary" (click)="saveOrUpdateSOQuoteSetting()"
                         [disabled]="!soQuoteSettingsForm.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
                 </div>
             </form>
         </div>
-
     </div>
     <ng-template #errorMessagePop let-c="close" let-d="dismiss">
         <div class="modal-header">
@@ -139,7 +129,6 @@
             <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
         </div>
         <div class="modal-footer">
-
             <button type="button" class="btn btn-danger" data-dismiss="modal"
                 (click)="closeErrorMessage()">Close</button>
         </div>

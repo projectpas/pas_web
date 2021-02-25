@@ -56,9 +56,15 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList));
+  autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList,masterCompanyId));
+    });
+  }
+
+  autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,vendorId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList,masterCompanyId,vendorId));
     });
   }
 

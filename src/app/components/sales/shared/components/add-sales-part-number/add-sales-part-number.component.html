@@ -15,17 +15,8 @@
       <app-part-details [parts]="parts" [query]="query" (select)="onSelect($event)"
         [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)"></app-part-details>
     </ng-container>
-    <!--<ng-container *ngIf="searchType === '1'">
-          <app-part-details [parts]="parts" (onPartSelect)="onShowModalMargin($event)"></app-part-details>
-        </ng-container>-->
-    <!--<ng-container *ngIf="searchType === '2'">
-          <app-stockline-part-details [parts]="parts" (select)="onSelect($event)"></app-stockline-part-details>
-        </ng-container>-->
   </div>
   <div class="modal-footer">
-    <!-- <button type="submit" (click)="onClose()" class="btn btn-success">
-      Save
-    </button> -->
     <button type="button" (click)="onClose()" class="btn btn-danger">
       Close
     </button>

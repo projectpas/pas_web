@@ -1,25 +1,22 @@
 ﻿<div>
-
     <div class="page-content">
-
         <div class="right_col" role="main">
             <div class="x_content">
                 <div class="card new-card">
-                    <div class="card-header bg-primary new-card-header">
+                    <div class="card-header header">
                         <div class="row">
                             <div class="col">
-                                <h4 class="new-card-heading">List of Sales Order settings</h4>
+                                <h4 class="header-name">Sales Order Settings</h4>
                             </div>
                             <div *ngIf="!disableCreateNewSettings">
-                                <button type="button" class="btn-sm new-btn-primary" (click)="AddPage()"
+                                <button type="button" class="btn-sm header-button" (click)="AddPage()"
                                     [disabled]="disableCreateNewSettings">
                                     Create New Setting
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body new-card-body">
-
+                    <div class="card-body header-body">
                         <p-table #dt [value]="soqSettingsList" class="rpo-table-cstm rro-table-cstm" [rows]="10"
                             [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
                             [columns]="selectedGridColumns" [metaKeySelection]="true" selectionMode="multiple"
@@ -28,7 +25,6 @@
                             <ng-template pTemplate="caption">
                                 <div class="row">
                                     <div class="col">
-
                                         <p-multiSelect [maxSelectedLabels]="2" [options]="gridColumns"
                                             optionLabel="header" [(ngModel)]="selectedGridColumns"
                                             [style]="{ minWidth: '220px' }" style="float:left"
@@ -52,12 +48,6 @@
                                             icon="fa-download" iconPos="left" label="Export Data" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = dt;"
                                             data-target="#downloadConfirmation"></button>
-
-                                        <!-- <button type="button" class="btn btn-primary new-table-button" pButton
-                                        icon="fa-download" iconPos="left"
-                                        style="left:-10px;padding: 5px 12px !important;" label="Export Data"
-                                        matTooltip="Download Data" matTooltipPosition="above"
-                                        (click)="dt.exportCSV()"></button> -->
                                         <button type="button" class="btn btn-primary new-table-button" pButton
                                             icon="fa-download" iconPos="left" label="Export Selected Data"
                                             style="padding: 5px 12px !important;" matTooltip="Download Selected Data"
@@ -65,9 +55,6 @@
                                             (click)="dt.exportCSV({selectionOnly:true})"></button>
                                     </div>
                                 </div>
-
-
-
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
@@ -82,7 +69,6 @@
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
                                     <th style="width:200px;position:sticky">Actions</th>
-                                    <!--<th></th>-->
                                 </tr>
                                 <tr>
                                     <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -99,25 +85,15 @@
                                         <span>
                                             {{rowData[col.field]}}
                                         </span>
-                                        <!-- <span *ngIf="col.field == 'validDays'" style="float: right !important;">
-                                            {{rowData[col.field]}}
-                                        </span> -->
-
                                     </td>
-                                    <!-- <td style="text-align: right;" *ngIf="col.field == ''">
-                                        {{rowData[col.field]}}
-                                    </td> -->
-
                                     <td class="action-icons-cstm" style="width:200px">
                                         <div>
-
                                             <span>
                                                 <a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
                                                     matTooltipPosition="above">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
                                             </span>
-
                                             <span>
                                                 <a class="btn nobg" (click)="openDelete(content,rowData)"
                                                     matTooltip="Delete" matTooltipPosition="above">
@@ -129,27 +105,7 @@
                                                     (click)="getAuditHistoryById(rowData)" matTooltip="History"
                                                     matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                             </span>
-
-                                            <!-- <button class="btn-edit" mat-icon-button (click)="edit(rowData)"
-                                                matTooltip="Edit" data-dismiss="modal">
-                                                <mat-icon>edit</mat-icon>
-                                            </button>
-                                            <button class="btn-history" mat-icon-button matTooltip="History"
-                                                data-toggle="tooltip" matTooltipPosition="above" data-target="#history"
-                                                data-toggle="modal" (click)="getAuditHistoryById(rowData)">
-                                                <mat-icon color="green">history</mat-icon>
-                                            </button>
-                                            <button class="btn-delete" mat-icon-button
-                                                (click)="openDelete(content,rowData)" matTooltip="Delete"
-                                                data-dismiss="modal">
-                                                <mat-icon color="warn">delete</mat-icon>
-                                            </button> -->
                                         </div>
-                                        <!--<span data-toggle="modal" data-target="#history">
-                            <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History" (click)="getAuditHistoryById(rowData)" tooltipPosition="bottom" title="" class="btn btn-success nobg" data-original-title="History">
-                                <i class="fa fa-history"></i>
-                            </a>
-                        </span>-->
                                     </td>
                                 </tr>
                             </ng-template>
@@ -165,18 +121,9 @@
                         </p-table>
                     </div>
                 </div>
-                <!-- </div> -->
-
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="history" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-xl">
@@ -184,10 +131,9 @@
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
                         name="">×</button>
-                    <h4 class="modal-title">History of Sales order settings</h4>
+                    <h4 class="modal-title">History of sales order settings</h4>
                 </div>
                 <div class="modal-body" *ngIf="auditHistory">
-
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm"
                         *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
@@ -203,9 +149,7 @@
                             </tr>
                         </thead>
                         <tbody class="audithistory-cstm">
-                            <!--*ngIf="auditHistory.length> 0"-->
                             <tr *ngFor="let audit of auditHistory; let i = index;">
-                                <!-- auditHistory[i>0 ? i-1 : i] -->
                                 <td
                                     [ngStyle]="{'color':  getColorCodeForHistory(i, 'typeName', audit.typeName)  ? 'black' : 'red'  }">
                                     {{audit.typeName}}</td>
@@ -227,9 +171,7 @@
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                     {{audit.updatedBy}}</td>
-
                                 <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
-
                             </tr>
                         </tbody>
                     </table>
@@ -248,14 +190,12 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-
         <div class="modal-footer">
             <button type="button" class="btn btn-success" (click)="deleteSettings()">Yes</button>
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>
 </div>
-
 <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">

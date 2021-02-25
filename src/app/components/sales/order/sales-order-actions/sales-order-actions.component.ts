@@ -24,40 +24,25 @@ export class SalesOrderActionsComponent implements OnInit {
   salesOrderQuote: ISalesOrderQuote;
   salesQuoteView: ISalesQuoteView;
   salesQuoteId: any;
-
   @Input("customer-id") customerId: number;
-
   @Input('sales-order-id') salesOrderId: number;
-
   @Input('is-edit-mode') isEditmode: boolean;
-
   @Input('control-settings') controlSettings: any;
-
   @Input('router') router: Router;
-
   @Output('on-click') onActionClick: EventEmitter<SalesOrderEventArgs> = new EventEmitter<SalesOrderEventArgs>();
-
   /*Action Items*/
   printItems: MenuItem[];
   communicationItems: MenuItem[];
-
   paymentItems: MenuItem[];
-
   actionItems: MenuItem[];
-
   @ViewChild("salesOrderConfirmationModal",{static:false})
   public salesOrderConfirmationModal: ElementRef;
   @ViewChild("printPickTicketModal",{static:false})
   public printPickTicketModal: ElementRef;
-
   modal: NgbModalRef;
-
   salesOrderActionType = SalesOrderActionType;
-
   actionType: SalesOrderActionType = SalesOrderActionType.None;
-
   confirmationType: SalesOrderConfirmationType = SalesOrderConfirmationType.None;
-
   confirmationModal: any = {
     header: 'Confirm',
     body: {
@@ -67,10 +52,7 @@ export class SalesOrderActionsComponent implements OnInit {
     }
   }
 
-
-  constructor(private modalService: NgbModal,
-    private salesQuoteService: SalesQuoteService, ) {
-
+  constructor(private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -101,7 +83,6 @@ export class SalesOrderActionsComponent implements OnInit {
     instance.modalRef = this.modal;
   }
 
-
   onConfirm(eventArgs: SalesOrderEventArgs): void {
     this.onActionClick.emit(eventArgs);
   }
@@ -126,6 +107,7 @@ export class SalesOrderActionsComponent implements OnInit {
       }
     ];
   }
+
   initCommunication(): void {
     this.communicationItems = [
       {
@@ -151,6 +133,7 @@ export class SalesOrderActionsComponent implements OnInit {
       }
     ];
   }
+
   initPayment(): void {
     this.paymentItems = [
       {
@@ -161,7 +144,6 @@ export class SalesOrderActionsComponent implements OnInit {
       {
         label: 'Partial Payment', command: () => {
           this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.PartialPayment, SalesOrderConfirmationType.None));
-
         }
       },
       {
@@ -176,6 +158,7 @@ export class SalesOrderActionsComponent implements OnInit {
       }
     ];
   }
+
   initActions(): void {
     this.actionItems = [
       {
@@ -223,8 +206,8 @@ export class SalesOrderActionsComponent implements OnInit {
 
     instance.salesOrderCopyParameters.customerId = this.customerId;
     instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
-    this.modal.result.then(() => { }, () => { });
   }
+
   PrintTicket() {
     this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
     let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
@@ -234,9 +217,8 @@ export class SalesOrderActionsComponent implements OnInit {
       this.navigate($event);
     });
     instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
-
-    this.modal.result.then(() => { }, () => { });
   }
+
   Memo() {
     this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
     let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
@@ -246,9 +228,8 @@ export class SalesOrderActionsComponent implements OnInit {
       this.navigate($event);
     });
     instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
-
-    this.modal.result.then(() => { }, () => { });
   }
+
   Email() {
     this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
     let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
@@ -258,9 +239,8 @@ export class SalesOrderActionsComponent implements OnInit {
       this.navigate($event);
     });
     instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
-
-    this.modal.result.then(() => { }, () => { });
   }
+
   Phone() {
     this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
     let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
@@ -270,9 +250,8 @@ export class SalesOrderActionsComponent implements OnInit {
       this.navigate($event);
     });
     instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
-
-    this.modal.result.then(() => { }, () => { });
   }
+
   Text() {
     this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
     let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
@@ -297,17 +276,8 @@ export class SalesOrderActionsComponent implements OnInit {
 
   viewSelectedRow(content) {
     this.modal = this.modalService.open(content, { size: "lg" });
-    this.modal.result.then(
-      () => {
-        console.log("When user closes");
-      },
-      () => {
-        console.log("Backdrop click");
-      }
-    );
   };
   dismissModel() {
     this.modal.close();
   }
-
 }

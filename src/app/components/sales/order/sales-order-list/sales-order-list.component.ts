@@ -19,7 +19,7 @@ import { DatePipe } from "@angular/common";
 import { MenuItem } from "primeng/api";
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { AuditHistory } from "../../../../models/audithistory.model";
-import { ISalesOrderView } from 'src/app/models/sales/ISalesOrderView';
+import { ISalesOrderView } from "../../../../models/sales/ISalesOrderView";
 
 @Component({
   selector: "app-sales-order-list",
@@ -133,7 +133,6 @@ export class SalesOrderListComponent implements OnInit {
       { field: "createdBy", header: "Created By", width: "130px" },
       { field: "updatedDate", header: "Updated Date", width: "130px" },
       { field: "updatedBy", header: "Updated By", width: "130px" }
-
     ];
     this.selectedColumns = this.headers;
   }
@@ -168,21 +167,21 @@ export class SalesOrderListComponent implements OnInit {
       }
     ];
   }
-  
+
   auditHistoryHeader = [
-    { field: 'salesOrderQuoteNumber', header: 'Quote Num', isRequired:0 },
-    { field: 'status', header: 'Status', isRequired:1 },     
-    { field: 'salesOrderNumber', header: 'SO Num', isRequired:1 },
-    { field: 'customerName', header: 'Customer Name', isRequired:1 },
-    { field: 'customerType', header: 'Customer Type', isRequired:1 },
-    { field: 'customerReference', header: 'Cust Ref', isRequired:1 },
-    { field: 'priority', header: 'Priority', isRequired:0 },
-    { field: 'salesPerson', header: 'Salesperson', isRequired:1 },
-    { field: 'createdDate', header: 'Created Date', isRequired:1 },
-    { field: 'createdBy', header: 'Created By', isRequired:1 },
-    { field: 'updatedDate', header: 'Updated Date', isRequired:1 },
-    { field: 'updatedBy', header: 'Updated By', isRequired:1 },
-    { field: 'isDeleted', header: 'Is Deleted', isRequired:0 }
+    { field: 'salesOrderQuoteNumber', header: 'Quote Num', isRequired: 0 },
+    { field: 'status', header: 'Status', isRequired: 1 },
+    { field: 'salesOrderNumber', header: 'SO Num', isRequired: 1 },
+    { field: 'customerName', header: 'Customer Name', isRequired: 1 },
+    { field: 'customerType', header: 'Customer Type', isRequired: 1 },
+    { field: 'customerReference', header: 'Cust Ref', isRequired: 1 },
+    { field: 'priority', header: 'Priority', isRequired: 0 },
+    { field: 'salesPerson', header: 'Salesperson', isRequired: 1 },
+    { field: 'createdDate', header: 'Created Date', isRequired: 1 },
+    { field: 'createdBy', header: 'Created By', isRequired: 1 },
+    { field: 'updatedDate', header: 'Updated Date', isRequired: 1 },
+    { field: 'updatedBy', header: 'Updated By', isRequired: 1 },
+    { field: 'isDeleted', header: 'Is Deleted', isRequired: 0 }
   ]
 
   getDeleteListByStatus(value) {
@@ -249,6 +248,8 @@ export class SalesOrderListComponent implements OnInit {
                 quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy') : '',
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                requestedDateType: moment(x.requestedDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.requestedDateType ? this.datePipe.transform(x.requestedDateType, 'MMM-dd-yyyy hh:mm a') : ''),
+                estimatedShipDateType: moment(x.estimatedShipDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '')
               }
             });
 
@@ -265,7 +266,6 @@ export class SalesOrderListComponent implements OnInit {
   }
 
   closeModal() {
-    //$("#downloadConfirmation").modal("hide");
     this.modal.close();
   }
 
@@ -435,9 +435,9 @@ export class SalesOrderListComponent implements OnInit {
     const isdelete = this.currentDeletedstatus ? true : false;
     let PagingData;
     PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "StatusId": this.currentStatus, "isDeleted": isdelete, "ViewType": this.viewType }, "globalFilter": "" }
-    
+
     let filters = Object.keys(dt.filters);
-    
+
     filters.forEach(x => {
       PagingData.filters[x] = dt.filters[x].value;
     });
@@ -449,6 +449,8 @@ export class SalesOrderListComponent implements OnInit {
             ...x,
             openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy hh:mm a') : '',
             quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MMM-dd-yyyy hh:mm a') : '',
+            requestedDateType: moment(x.requestedDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.requestedDateType ? this.datePipe.transform(x.requestedDateType, 'MMM-dd-yyyy hh:mm a') : ''),
+            estimatedShipDateType: moment(x.estimatedShipDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : ''),
             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
           }
@@ -457,7 +459,6 @@ export class SalesOrderListComponent implements OnInit {
         dt._value = vList;
         dt.exportCSV();
         dt.value = this.sales;
-        this.modal.close();
         this.isSpinnerVisible = false;
       }, err => {
         this.isSpinnerVisible = false;

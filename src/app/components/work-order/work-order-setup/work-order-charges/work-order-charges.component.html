@@ -59,11 +59,10 @@
     </div>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
- 
-      <tr style="color: #f1f1f1;" *ngIf="isQuote">
-        <th colspan="8" style="background: #fff; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">&nbsp;</th>
+      <tr class="tr-color" *ngIf="isQuote">
+        <th colspan="8" class="th-color">&nbsp;</th>
         <ng-container *ngIf="isView">
-            <th colspan="4" style="background: #fff; border: 1px solid #e7ecf1;">
+            <th colspan="4" class="isview-th">
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -83,19 +82,19 @@
                     </div> -->
       
                 <div class="display-flex">
-                  <div class="form-group" style="text-align: center; display: flex;">
+                  <div class="form-group radios-align">
                     <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div>
-                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                        [disabled]="isView || costPlusType != 1" >
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
                     </div>
                   </div>
-                  <div style="float: left;margin-left: 10px;margin-right: 10px;">
+                  <div class="radios-margin">
                     <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
                   </div>
@@ -108,7 +107,7 @@
               </th>
         </ng-container>
         <ng-container *ngIf="!isView">
-            <th colspan="4" style="background: #fff; border: 1px solid #e7ecf1;">
+            <th colspan="4" class="isview-th">
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -128,19 +127,19 @@
                     </div> -->
       
                 <div class="display-flex">
-                  <div class="form-group" style="text-align: center; display: flex;">
+                  <div class="form-group radios-align">
                     <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                     <div>
-                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                        [disabled]="isView || costPlusType != 1">
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
                     </div>
                   </div>
-                  <div style="float: left;margin-left: 10px;margin-right: 10px;">
+                  <div class="radios-margin">
                     <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
@@ -192,8 +191,8 @@
                 {{dt[col.field]}}
               </td>
               <td class="table-column-width" *ngIf="col.field == 'roNumberId'">
-                <select class="form-control select-read-only" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
-                  style="width: 130px;" name="roNum_{{mainIndex}}" disabled>
+                <select class="form-control select-read-only width-130" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
+                 name="roNum_{{mainIndex}}" disabled>
                   <option [value]="0">Select</option>
                   <option [value]="ctype.value" *ngFor="let ctype of roNumList">{{
                     ctype.label

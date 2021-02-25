@@ -11,7 +11,6 @@ import { CustomerViewComponent } from '../../../../shared/components/customer/cu
 import { CommonService } from "../../../../services/common.service";
 import { DBkeys } from "../../../../services/db-Keys";
 import { MenuItem } from "primeng/api";
-import * as moment from 'moment';
 declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { AuthService } from "../../../../services/auth.service";
@@ -41,7 +40,6 @@ export class SalesOrderComponent implements OnInit {
   breadcrumbs: MenuItem[];
   home: any;
   isSpinnerVisible = false;
-
   headers = [
     { field: 'name', header: 'Name' },
     { field: 'customerCode', header: 'Code' },
@@ -60,7 +58,6 @@ export class SalesOrderComponent implements OnInit {
   selectedOnly: boolean = false;
   @ViewChild("warningPopup",{static:false}) public warningPopup: ElementRef;
   @ViewChild("restrictionPopup",{static:false}) public restrictionPopup: ElementRef;
-
 
   constructor(
     private customerService: CustomerService,
@@ -103,6 +100,7 @@ export class SalesOrderComponent implements OnInit {
   columnsChanges() {
     this.refreshList();
   }
+
   refreshList() {
     if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
       this.globalSearch(this.filteredText);
@@ -110,8 +108,6 @@ export class SalesOrderComponent implements OnInit {
     else {
       this.table.reset();
     }
-
-
   }
 
   globalSearch(value) {
@@ -125,32 +121,24 @@ export class SalesOrderComponent implements OnInit {
   }
 
   loadData(event) {
-
     this.lazyLoadEventData = event;
     const pageIndex = parseInt(event.first) / event.rows;;
     this.pageIndex = pageIndex;
     this.pageSize = event.rows;
     event.first = pageIndex;
     this.getList(event)
-
   }
-
-
 
   filterData(data) {
   }
+
   getPageCount(totalNoofRecords, pageSize) {
     return Math.ceil(totalNoofRecords / pageSize)
   }
 
   viewSelectedRow(rowData) {
-
     this.modal = this.modalService.open(CustomerViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.customerId = rowData.customerId;
-    this.modal.result.then(() => {
-      console.log('When user closes');
-    }, () => { console.log('Backdrop click') })
-
   }
 
   onSearch(event) {
@@ -167,9 +155,6 @@ export class SalesOrderComponent implements OnInit {
   }
 
   createOrder(customer: any) {
-    // this.router.navigateByUrl(
-    //   `salesmodule/salespages/sales-order-create/${customer.customerId}`
-    // );
     this.getTypesOfWarnings(customer.customerId)
   }
 
@@ -201,22 +186,12 @@ export class SalesOrderComponent implements OnInit {
           this.getCustomerWarningsData(customerWarningListId, customerId)
         } else {
           this.modal = this.modalService.open(this.restrictionPopup, { size: 'lg', backdrop: 'static', keyboard: false });
-          this.modal.result.then(() => {
-            console.log('When user closes');
-          }, () => { console.log('Backdrop click') })
         }
-
-        // let warningRes = res[0].warningsData || [];
-        // for (let i = 0; i < warningRes.length; i++) {
-        //   if (warningRes[i].customerWarningId == this.globalCustomerWarningId) {
-        //     this.customerWarningData.push(warningRes[i]);
-        //   }
-        // }
-
       }, error => {
         this.isSpinnerVisible =false;
       });
   }
+
   async getCustomerWarningsData(customerWarningListId: number, customerId) {
     this.isSpinnerVisible = true;
     await this.customerService
@@ -229,44 +204,23 @@ export class SalesOrderComponent implements OnInit {
           this.moveToCreate(customerId)
         } else {
           this.modal = this.modalService.open(this.warningPopup, { size: 'lg', backdrop: 'static', keyboard: false });
-          this.modal.result.then(() => {
-            console.log('When user closes');
-
-          }, () => { console.log('Backdrop click') })
         }
-
-        // let warningRes = res[0].warningsData || [];
-        // for (let i = 0; i < warningRes.length; i++) {
-        //   if (warningRes[i].customerWarningId == this.globalCustomerWarningId) {
-        //     this.customerWarningData.push(warningRes[i]);
-        //   }
-        // }
-
       }, error => {
         this.isSpinnerVisible =false;
       });
   }
-  onDataLoadFailed(error) {
-    this.isSpinnerVisible = false;
-    let errorMessage = '';
-    if (error.message) {
-      errorMessage = error.message;
-    }
-    this.alertService.resetStickyMessage();
-    this.alertService.showStickyMessage("Sales Order Quote", errorMessage, MessageSeverity.error, error);
-    // this.alertService.showMessage(error);
-  }
+
   moveToCreate(customerId) {
     this.closeModal()
     this.router.navigateByUrl(
       `salesmodule/salespages/sales-order-create/${customerId}`
     );
   }
+  
   closeModal() {
     if (this.modal) {
       this.modal.close();
     }
-
   }
 
   private searchCustomer() {

@@ -1,21 +1,13 @@
 import { Component, ViewChild } from "@angular/core";
-import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { SalesOrderService } from "../../../../services/salesorder.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
-import {
-  AlertService,
-  MessageSeverity
-} from "../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesOrder } from "../../../../models/sales/ISalesOrder.model";
 import { ISalesOrderView } from "../../../../models/sales/ISalesOrderView";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
-import { CustomerService } from "../../../../services/customer.service";
-import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
 import { MenuItem } from "primeng/api";
@@ -44,7 +36,6 @@ export class SalesOrderConfirmationListComponent {
   showPaginator: boolean = false;
   isSpinnerVisible: boolean = false;
   partColumns: any[];
-
   customerDetails: any;
   salesQuote: ISalesQuote;
   salesOrder: ISalesOrder;
@@ -69,14 +60,9 @@ export class SalesOrderConfirmationListComponent {
   customerId: any;
   
   constructor(
-    private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
-    private alertService: AlertService,
     private modalService: NgbModal,
-    private router: Router,
-    private customerService: CustomerService,
     public employeeService: EmployeeService,
-    private commonservice: CommonService,
     public currencyService: CurrencyService,
     private authService: AuthService
   ) {
@@ -84,29 +70,18 @@ export class SalesOrderConfirmationListComponent {
       { label: 'Sales Order' },
       { label: ' Confirmation List' },
     ];
-
   }
 
   ngOnInit() {
-
-
     this.initColumns();
     this.isSpinnerVisible = true;
     this.salesOrderService.getsoconfirmationlist()
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.sales = response[0];
-
       }, error => {
         this.isSpinnerVisible = false;
       });
-
-
-  }
-
-  private onDataLoadFailed(error: any) {
-    this.isSpinnerVisible = false;
-    this.alertService.showMessage("Sales Order", error, MessageSeverity.error);
   }
 
   get userName(): string {
@@ -116,7 +91,6 @@ export class SalesOrderConfirmationListComponent {
   }
 
   get userId() {
-    console.log(this.authService.currentUser);
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
 
@@ -133,12 +107,9 @@ export class SalesOrderConfirmationListComponent {
       { field: "qtyReserved", header: "Qty Confirmed", width: "110px", type: "text" },
       { field: "confirmedBy", header: "Confirmed By", width: "110px", type: "text" },
       { field: "estimatedShipDate", header: "Est Ship Date", width: "110px", type: "date" },
-      // { field: "estimatedShipDate", header: "Qty Previously Confirmed", width: "100px", type: "date" },
-      // { field: "salesOrderNumber", header: "Qty Not Confirmed", width: "100px", type: "text" },
       { field: "salesOrderNumber", header: "SO Num", width: "110px", type: "text" },
       { field: "customerName", header: "Customer", width: "110px", type: "text" },
       { field: "customerMemo", header: "Memo", width: "130px", type: "text" }
-
     ];
     this.selectedColumns = this.headers;
   }
@@ -149,24 +120,19 @@ export class SalesOrderConfirmationListComponent {
 
   loadData(event) {
     event.filters.statusId = this.currentStatus;
-
     this.searchParameters.first = parseInt(event.first) / event.rows;
-
     this.searchParameters.rows = event.rows;
-
     this.searchParameters.sortOrder = event.sortOrder;
     this.lazyLoadEventData = event;
-
     this.searchParameters.filters = listSearchFilterObjectCreation(
       event.filters
     );
 
     this.searchParameters.globalFilter = ""
-
     this.onSearch();
   }
+
   onSearch() {
-    //this.alertService.startLoadingMessage();
     this.isSpinnerVisible = true;
     this.salesOrderService
       .search(this.searchParameters)
@@ -179,14 +145,13 @@ export class SalesOrderConfirmationListComponent {
         );
         this.showPaginator = this.totalRecords > 0;
         this.isSpinnerVisible = false;
-        //this.alertService.stopLoadingMessage();
       }, error => {
         this.isSpinnerVisible = false;
       });
   }
+
   globalSearch(val) {
     this.searchParameters.globalFilter = val
-
     this.salesOrderService
       .globalSearch(this.searchParameters)
       .subscribe((response: any) => {
@@ -197,32 +162,17 @@ export class SalesOrderConfirmationListComponent {
         );
         this.showPaginator = this.totalRecords > 0;
         this.isSpinnerVisible = false;
-        //this.alertService.stopLoadingMessage();
       }, error => {
         this.isSpinnerVisible = false;
       });
-
   }
 
-
-
   viewSelectedRow(content, row) {
-    //this.alertService.startLoadingMessage();
     this.isSpinnerVisible = true;
     this.salesOrderService.getview(row.salesOrderId).subscribe(res => {
-      console.log(res, "view res+++")
       this.salesOrderView = res[0];
       this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
-      this.modal.result.then(
-        () => {
-          console.log("When user closes");
-        },
-        () => {
-          console.log("Backdrop click");
-        }
-      );
       this.isSpinnerVisible = false;
-      //this.alertService.stopLoadingMessage();
     }, error => {
       this.isSpinnerVisible = false;
     });

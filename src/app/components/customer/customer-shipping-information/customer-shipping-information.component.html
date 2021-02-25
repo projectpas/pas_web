@@ -1311,7 +1311,7 @@
 
   <!-- Add Domestic Ship Via -->
   <div class="modal fade popup-blur" id="addDomesticShipVia" data-backdrop="static">
-    <form #addShippingVia="ngForm">
+    <form #addShippingVia="ngForm"> 
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -1364,7 +1364,7 @@
               </div>
               <div class="col-md-3 cli_vds">
                 <div class="form-group">
-                  <label>Ship Via <span class="clr-red">*</span></label>
+                  <label>Ship Via <span class="clr-red"></span></label>
                     <p-dropdown  name="company1" (ngModelChange)="enableSaveShipViaDomestic()"
                     #wocompanyId="ngModel"  
                     [options]="shipViaDropdownList" placeholder="Select Ship Via"
@@ -1375,7 +1375,7 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <label>Shipping Account Info <span class="clr-red">*</span></label>
+                  <label>Shipping Account Info <span class="clr-red"></span></label>
                   <input class="form-control" type="text" name="shippingAccountinfo" (ngModelChange)="enableSaveShipViaDomestic()"
                     [(ngModel)]="shipViaDomestic.shippingAccountInfo" />
                 </div>
@@ -1386,7 +1386,7 @@
                   <div class="align_adh">
                       <div [innerHTML]="shipViaDomestic.memo" 
                       [(ngModel)]="shipViaDomestic.memo"
-                       matTooltipPosition="above"
+                        matTooltipPosition="above"
                         [matTooltip]="parsedText(shipViaDomestic.memo)" class="text_editor_box"
                           style="width: 96% !important;"></div>
                       <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
@@ -1600,6 +1600,8 @@
         </div>
       </div>
     </form>
+  </div>
+
     <ng-template #deleteContent2 let-c="close" let-d="dismiss" data-backdrop="static">
       <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
@@ -1859,7 +1861,7 @@
         </button>
       </div>
     </ng-template>
-  </div>
+  
 
   <!-- Add International Ship Via  -->
   <div class="modal fade" id="addInternationShipVia" data-backdrop="static">

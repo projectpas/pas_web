@@ -5,10 +5,6 @@
     templateUrl: './sales-order-settings.component.html',
     styleUrls: ['./sales-order-settings.component.scss']
 })
-/** sales-order-settings component*/
 export class SalesOrderSettingsComponent {
-    /** sales-order-settings ctor */
-    constructor() {
-
-    }
+    constructor() {}
 }

@@ -77,9 +77,9 @@
             <div class="pull-right buttons-div-align">
                 <div class="col">
                   <div class="col buttons-top-padding">
-                  <div class="form-group" style="float: right;"> 
-                 <div class="checkbox-cstm pull-left" style="margin-left: 0;">
-                        <label style="width: auto !important;margin-top: 3px;">
+                  <div class="form-group float-right"> 
+                 <div class="checkbox-cstm pull-left check-left">
+                        <label class="check-label">
                             <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55" (click)="getDeleteListByStatus($event.target.checked)" />
                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                             Show  Deleted List
@@ -358,7 +358,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Notes</label>
-                            <p-editor class="p-editor-cstm" [(ngModel)]="addList[0].notes" (ngModelChange)="getmemo()" style="overflow-y: auto;;"
+                            <p-editor class="p-editor-cstm" [(ngModel)]="addList[0].notes" (ngModelChange)="getmemo()"
+                             style="overflow-y: auto;;"
                                      [style]="{'height':'150px'}" name="notes"></p-editor>
                             <!-- <p-editor [(ngModel)]="addList[0].notes" [style]="{'height':'320px'}" name="notes"></p-editor> -->
                         </div> 
@@ -553,7 +554,7 @@
                                 <td>{{audit.createdBy}}</td>
                                 <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                 <td>{{audit.updatedBy}}</td>
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <span class="value">
                                       <label class="wauto">
                                           <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>

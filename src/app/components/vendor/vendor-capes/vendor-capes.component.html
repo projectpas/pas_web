@@ -3,230 +3,268 @@
     <div class="right_col" role="main">
       <div>
         <div class="x_content"> -->
-          <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
-            <div class="col-md-4">
-              <p class="fs12">
-                <label class="control-label labels-font-header wauto">Vendor Name:
-                </label>
-                <span class="span-header-red text-capital">
-                   {{ vendorCodeandName?.vendorName }}
-                </span>
-              </p>
-            </div>
-            <div class="col-md-4">
-              <p class="fs12">
-                <label class="control-label labels-font-header wauto">Vendor Code:
-                </label>
-                <span class="span-header-red text-capital">
-                 {{ vendorCodeandName?.vendorCode }}
-                </span>
-              </p>
-            </div>
-          </div>
-          <div class="card new-card">
-              <div class="card-header header">
-                  <div class="row">
-                      <div class="col">
-                          <h4 class="header-name"> Capabilities</h4>
-                      </div>
-                      <div>
-                          <a class="plusicon-cstm" *ngIf="!isViewMode"  data-toggle="modal" >
-                              <button type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus" (click)="addFieldValue()">
-                                  Add Capabilities
-                              </button>
-                          </a>
-                      </div>
-                  </div>
-              </div>
-                <div class="form-row">
-                  <div class="col-md-8">
-                    <table *ngIf="!isViewMode">
-                      <tr>
-                        <td style="padding-top: 10px;">
-                          <div class="row">
-                            <div class="col">
-                              
-                                  <!-- <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+<div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
+  <div class="col-md-4">
+    <p class="fs12">
+      <label class="control-label labels-font-header wauto">Vendor Name:
+      </label>
+      <span class="span-header-red text-capital">
+        {{ vendorCodeandName?.vendorName }}
+      </span>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <p class="fs12">
+      <label class="control-label labels-font-header wauto">Vendor Code:
+      </label>
+      <span class="span-header-red text-capital">
+        {{ vendorCodeandName?.vendorCode }}
+      </span>
+    </p>
+  </div>
+</div>
+<div class="card new-card">
+  <div class="card-header header">
+    <div class="row">
+      <div class="col">
+        <h4 class="header-name"> Capabilities</h4>
+      </div>
+      <div>
+        <a class="plusicon-cstm" *ngIf="!isViewMode" data-toggle="modal">
+          <button type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus"
+            (click)="addFieldValue()">
+            Add Capabilities
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-md-8">
+      <table *ngIf="!isViewMode">
+        <tr>
+          <td style="padding-top: 10px;">
+            <div class="row">
+              <div class="col">
+
+                <!-- <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
                                           matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                                           (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
                                         pButton icon="fa-download" iconPos="left" label="Export Data"  -->
-                              <div class="excel-upload  excel-upload-cstm">
-                                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
-                                data-toggle="modal" 
-                                (click)="exportCSV()">
-                                          Export Data
-                                  </button>
+                <div class="excel-upload  excel-upload-cstm">
+                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                    matTooltipPosition="above" data-toggle="modal" (click)="exportCSV()">
+                    Export Data
+                  </button>
 
-                            <button type="button" class="btn btn-primary exports-button"
-                                    matTooltip="Download Sample File" matTooltipPosition="above"
-                                    (click)="sampleExcelDownload()">
-                                Sample File Download
-                            </button>
-                              <input type="file" name="upload[]" id="upload"
-                              (change)="customExcelUpload($event)" class="uploaddoc upload-file"
-                              accept=".xlsx, .xls, .csv">
-                            <label for="upload">
-                                <span style="margin-bottom:-10px" matTooltip="Upload Data (Excel)" matTooltipPosition="above">
-                                    <i class="fa fa-upload"></i>
-                                </span>
-                            </label>
-                          </div>
-                            </div>
-                        </div>
-                        </td>
-                      </tr>
-                    </table>                        
-                  </div>
-                  <div class="col-md-4">                              
-                      <div class="checkbox-cstm" style="margin-left: 0; margin-top: 10px; margin-right: 0px !important; text-align: right;">
-                          <label style="width: 120px;">
-                            <input type="checkbox" [(ngModel)]="currentDeletedStatus" name="cparent" (click)="getCapesListByDeleteStatus($event.target.checked)" />
-                            <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
-                            <p style="font-weight: bold;"> Show Deleted List </p>  
-                          </label>
-                      </div>
-                  </div>
-                </div>        
-              <div class="clear"></div>
-              <hr />
-              <form #vendorCapes="ngForm">
-                <div class="table-responsive ">
-                    <table class="table table-bordered table-striped table-sorting mpn-list-table fixed-column-table column-r1-fixed" id="mpn-list-table">
-                        <thead>
-                            <tr>
-                                <th style="line-height: 20px;" colspan="3">Part Details</th>
-                                <th colspan="2" class="bg2">Capability Details</th>
-                                <th colspan="4" class="bg3">General Info.</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <th style="line-height: 20px; width: 200px;">PN <span class="clr-red">*</span></th>
-                                <th style="width: 250px;">PN Decription <span class="clr-red">*</span></th>
-                                <th style="width: 250px;">Manufacturer <span class="clr-red">*</span></th>
-                                <th class="bg2" style="width: 200px;">Capability Type <span class="clr-red">*</span></th>
-                                <th class="bg2" style="width: 250px;">Capability Desc  <span class="clr-red">*</span></th>
-                                <th class="bg3" style="width: 85px;">Vendor Ranking </th>
-                                <!-- <th class="bg3">PMA</th>
-                                <th class="bg3">DER</th> -->                                
-                                <th class="bg3" style="width: 85px;">TAT (Days)</th>
-                                <th class="bg3" style="width: 85px;">Price </th>
-                                <th class="bg3" style="width: 250px;">Memo</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let field of fieldArray; let i = index">
-                                <!-- Part Number   -->
-                                <td>
-                                    <p-autoComplete appendTo="body" class="autocomp-customer-cstm" [(ngModel)]="field.partNumber"  name="partNumber{{i}}" field="partNumber" [suggestions]="itemMasterlistCollection" (onChange)="onChangeItemMasterId(field)" (onSelect)="getPNDetailsById($event, field)" 
-                                    (completeMethod)="filterPartNumber($event)" [size]="30" [minLength]="1" [dropdown]="true" [inputStyle]="{ width: '100%' }" [forceSelection]="true" [disabled]="field.isEditable == false" required>
-                                    </p-autoComplete>
-                                </td>
-                                <!-- Part Decription * -->
-                                <td>
-                                    <input type="text" style="width: 100%;" class="input-field-value" pInputText maxlength="100" [(ngModel)]="field.partDescription"  name="PartDescription{{i}}"  disabled required/> 
-                                </td>
-                                <!-- Part Manufacture -->
-                                <td> 
-                                    <input type="text" class="input-field-value" style="width: 100%;" pInputText maxlength="100" name="manufacturerName{{i}}" [(ngModel)]="field.manufacturerName" disabled required/>
-                                </td>
-                                <!-- Capability Type  class="p-dropdown-100px"-->
-                                <td>
-                                    <p-dropdown appendTo="body" class="p-dropdown-150px" [options]="CapesTypelistCollection" [(ngModel)]="field.capabilityTypeId" name="capabilityTypeId{{i}}" placeholder="Select" [showClear]="true" (onChange)="onChangeCapabilityTypeId(field)" appendTo="body" [disabled]="field.isEditable == false" required></p-dropdown>
-                                </td>
-                                <!-- Capability Desc. -->
-                                <td>
-                                    <input type="text" class="input-field-value" style="width: 100%;" pInputText maxlength="100" name="capabilityTypeDescription{{i}}" [(ngModel)]="field.capabilityTypeDescription" disabled required/>
-                                </td>
-                                <!-- Vendor Ranking -->
-                                <td>
-                                  <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="num" maxlength="7" [(ngModel)]="field.vendorRanking"  name="vendorRanking{{i}}" [disabled]="!field.isEditable"/> 
-                                </td>
-                                <!-- PMA -->
-                                <!-- <td>
+                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
+                    matTooltipPosition="above" (click)="sampleExcelDownload()">
+                    Sample File Download
+                  </button>
+                  <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
+                    class="uploaddoc upload-file" accept=".xlsx, .xls, .csv">
+                  <label for="upload">
+                    <span style="margin-bottom:-10px" matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                      <i class="fa fa-upload"></i>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-4">
+      <div class="checkbox-cstm"
+        style="margin-left: 0; margin-top: 10px; margin-right: 0px !important; text-align: right;">
+        <label style="width: 120px;">
+          <input type="checkbox" [(ngModel)]="currentDeletedStatus" name="cparent"
+            (click)="getCapesListByDeleteStatus($event.target.checked)" />
+          <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
+          <p style="font-weight: bold;"> Show Deleted List </p>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+  <hr />
+  <form #vendorCapes="ngForm">
+    <!-- <div class="table-responsive ">
+    <table class="table table-bordered table-striped table-sorting mpn-list-table fixed-column-table column-r1-fixed" id="mpn-list-table"> -->
+      <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
+      <table class="table lastcol-fix tableFixHead table-bordered" id="mpn-list-table">
+        <thead>
+          <tr>
+            <th style="line-height: 12px;" colspan="3">Part Details</th>
+            <th colspan="2" class="bg2">Capability Details</th>
+            <th colspan="4" class="bg3">General Info.</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th style="line-height: 12px; width: 200px;">PN <span class="clr-red">*</span></th>
+            <th style="width: 250px;">PN Decription <span class="clr-red">*</span></th>
+            <th style="width: 250px;">Manufacturer <span class="clr-red">*</span></th>
+            <th class="bg2" style="width: 200px;">Capability Type <span class="clr-red">*</span></th>
+            <th class="bg2" style="width: 250px;">Capability Desc <span class="clr-red">*</span></th>
+            <th class="bg3" style="width: 130px;">Vendor Ranking </th>
+            <!-- <th class="bg3">PMA</th>
+                                <th class="bg3">DER</th> -->
+            <th class="bg3" style="width: 85px;">TAT(Days)</th>
+            <th class="bg3" style="width: 85px;">Price/Unit</th>
+            <!-- <th class="bg3" style="width: 85px;">Curr</th> -->
+            <th class="bg3" style="width: 250px;">Memo</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-parent-data" *ngFor="let field of fieldArray; let i = index">
+            <!-- Part Number   -->
+            <td>
+              <p-autoComplete appendTo="body" class="autocomp-customer-cstm" [(ngModel)]="field.partNumber"
+                name="partNumber{{i}}" field="partNumber" [suggestions]="itemMasterlistCollection"
+                (onChange)="onChangeItemMasterId(field)" (onSelect)="getPNDetailsById($event, field)"
+                (completeMethod)="filterPartNumber($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                [inputStyle]="{ width: '100%' }" [forceSelection]="true" [disabled]="field.isEditable == false"
+                required>
+              </p-autoComplete>
+            </td>
+            <!-- Part Decription * -->
+            <td>
+              <input type="text" style="width: 100%;" class="input-field-value" pInputText maxlength="100"
+                [(ngModel)]="field.partDescription" name="PartDescription{{i}}" disabled required />
+            </td>
+            <!-- Part Manufacture -->
+            <td>
+              <input type="text" class="input-field-value" style="width: 100%;" pInputText maxlength="100"
+                name="manufacturerName{{i}}" [(ngModel)]="field.manufacturerName" disabled required />
+            </td>
+            <!-- Capability Type  class="p-dropdown-100px"-->
+            <td>
+              <p-dropdown appendTo="body" class="p-dropdown-150px" [options]="CapesTypelistCollection"
+                [(ngModel)]="field.capabilityTypeId" name="capabilityTypeId{{i}}" placeholder="Select"
+                [showClear]="true" (onChange)="onChangeCapabilityTypeId(field)" appendTo="body"
+                [disabled]="field.isEditable == false" required></p-dropdown>
+            </td>
+            <!-- Capability Desc. -->
+            <td>
+              <input type="text" class="input-field-value" style="width: 100%;" pInputText maxlength="100"
+                name="capabilityTypeDescription{{i}}" [(ngModel)]="field.capabilityTypeDescription" disabled required />
+            </td>
+            <!-- Vendor Ranking -->
+            <td>
+              <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="num"
+                maxlength="7" [(ngModel)]="field.vendorRanking" name="vendorRanking{{i}}"
+                [disabled]="!field.isEditable" />
+            </td>
+            <!-- PMA -->
+            <!-- <td>
                                   <input type="checkbox" name="isPMA{{i}}" [(ngModel)]="field.isPMA" [disabled]="!field.isEditable">
                                 </td> -->
-                                <!-- DER -->
-                                <!-- <td>
+            <!-- DER -->
+            <!-- <td>
                                   <input type="checkbox" name="isDER{{i}}" [(ngModel)]="field.isDER" [disabled]="!field.isEditable">
                                 </td> -->
-                                 <!-- TAT -->
-                                 <td>
-                                    <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="7" [(ngModel)]="field.TAT"  name="TAT{{i}}" [disabled]="!field.isEditable"/> 
-                                </td>
-                                <!-- Cost -->
-                                <td>  
-                                  <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="num" maxlength="7" [(ngModel)]="field.cost"  name="cost{{i}}" [disabled]="!field.isEditable"/> 
-                                </td>
-                               
-                                <!-- Memo -->
-                                <td >
-                                  <table class="table table-bordered table-striped">
-                                    <tr >
-                                      <td style="width: 95%;"> 
-                                          <div [innerHTML]="field.memo"  [matTooltip]="parsedText(field.memo)" matTooltipPosition="above" class="form-control" style="width: 102%; text-align: left; min-width: 100px;line-height:1.5;" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
-                                      </td>
-                                      <td *ngIf="field.isEditable" style="width: 5%" >
-                                        <!-- <div *ngIf="field.isEditable"> -->
-                                          <i class="fa fa-pencil fa-lg pull-right capes-memo"  data-toggle="modal" data-target="#capes-memo" matTooltip="Memo" matTooltipPosition="above" 
-                                          (click)="onAddTextAreaInfo('memo',i, field); isAdd = true;"> </i>
-                                        <!-- </div>                                       -->
-                                      </td>
-                                    </tr>
-                                  </table>
-                                </td>
-                                <!-- Action -->
-                                <td *ngIf="!isViewMode" class="purSaleLastCol"><p style="width:80px">
-                                    <ng-container *ngIf="!currentDeletedStatus">
-                                        <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editCapes(i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                        <span data-toggle="modal" data-target="#capesDelete"><a class="btn nobg" (click)="deleteCapesRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
-                                            <i class="fa fa-trash"></i></a></span>
-                                        <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                    </ng-container>
-                                    <ng-container *ngIf="currentDeletedStatus">
-                                        <span data-toggle="modal" data-target="#capesRestore"><a class="btn nobg" (click)="restoreCapesRow(i, field);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
-                                        <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                    </ng-container>
-                                    <ng-container *ngIf="isViewMode">
-                                      <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                    </ng-container>
-                                    </p>
-                                </td>
-                                <td *ngIf="isViewMode" class="purSaleLastCol"><p style="width:80px">
-                                    <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                  </p>
-                              </td>
-                            </tr>
-                            <tr style="height: 25px;" *ngIf="fieldArray.length == 0 ">
-                              <td colspan="10" class="no-records-cstm no-records-msg text-upper">
-                                No records found
-                              </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="margin-top: 10px;" *ngIf="!isViewMode">
-                    <button class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
-                    <button class="btn btn-primary pull-right" (click)="saveVendorCapes()" [disabled]="!vendorCapes.valid && !vendorCapes.disabled" [disabled]="disableCapes" type="submit">Save </button> &nbsp;
-                    <button class="btn btn-primary pull-right" type="button" (click)="previousOrNextTab('Previous')">Previous</button>
-                </div>
-            </form>
-          </div>
-        <!-- </div>
+            <!-- TAT -->
+            <td>
+              <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money"
+                maxlength="7" [(ngModel)]="field.TAT" name="TAT{{i}}" [disabled]="!field.isEditable" />
+            </td>
+            <!-- Cost -->
+            <td>
+              <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money"
+                maxlength="7" (change)="onChangeCost(field);" [(ngModel)]="field.cost" name="cost{{i}}" [disabled]="!field.isEditable" />
+            </td>
+            <!-- <td>1 </td> -->
+
+            <!-- Memo -->
+            <td>
+              <table class="table table-bordered table-striped">
+                <tr>
+                  <td style="width: 95%;">
+                    <div [innerHTML]="field.memo" [matTooltip]="parsedText(field.memo)" matTooltipPosition="above"
+                      class="form-control" style="width: 102%; text-align: left; min-width: 100px;line-height:1.5;"
+                      (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
+                  </td>
+                  <td *ngIf="field.isEditable" style="width: 5%">
+                    <!-- <div *ngIf="field.isEditable"> -->
+                    <i class="fa fa-pencil fa-lg pull-right capes-memo" data-toggle="modal" data-target="#capes-memo"
+                      matTooltip="Memo" matTooltipPosition="above"
+                      (click)="onAddTextAreaInfo('memo',i, field); isAdd = true;"> </i>
+                    <!-- </div>                                       -->
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <!-- Action -->
+            <td *ngIf="!isViewMode" class="purSaleLastCol">
+              <p style="width:80px">
+                <ng-container *ngIf="!currentDeletedStatus">
+                  <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editCapes(i)" matTooltip="Edit"
+                      matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                  <span data-toggle="modal" data-target="#capesDelete"><a class="btn nobg"
+                      (click)="deleteCapesRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
+                      <i class="fa fa-trash"></i></a></span>
+                  <span *ngIf="field.isNewItem == false"><a class="btn nobg"
+                      (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History"
+                      matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                </ng-container>
+                <ng-container *ngIf="currentDeletedStatus">
+                  <span data-toggle="modal" data-target="#capesRestore"><a class="btn nobg"
+                      (click)="restoreCapesRow(i, field);" matTooltip="Restore Record" matTooltipPosition="above"><i
+                        class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                  <span *ngIf="field.isNewItem == false"><a class="btn nobg"
+                      (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History"
+                      matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                </ng-container>
+                <ng-container *ngIf="isViewMode">
+                  <span *ngIf="field.isNewItem == false"><a class="btn nobg"
+                      (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History"
+                      matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                </ng-container>
+              </p>
+            </td>
+            <td *ngIf="isViewMode" class="purSaleLastCol">
+              <p style="width:80px">
+                <span *ngIf="field.isNewItem == false"><a class="btn nobg"
+                    (click)="openHistoryOfCapes(contentVendorCapesHist, field)" matTooltip="History"
+                    matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+              </p>
+            </td>
+          </tr>
+          <tr style="height: 25px;" *ngIf="fieldArray.length == 0 ">
+            <td colspan="10" class="no-records-cstm no-records-msg text-upper">
+              No records found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 10px;" *ngIf="!isViewMode">
+      <button class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
+      <button class="btn btn-primary pull-right" (click)="saveVendorCapes()"
+        [disabled]="!vendorCapes.valid && !vendorCapes.disabled" [disabled]="disableCapes" type="submit">Save </button>
+      &nbsp;
+      <button class="btn btn-primary pull-right" type="button" (click)="previousOrNextTab('Previous')">Previous</button>
+    </div>
+  </form>
+</div>
+<!-- </div>
       </div>
     </div>
   
 </div> -->
 
-<div class="modal fade" id="capes-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="capes-memo" style="z-index: 10000;" role="dialog" data-backdrop="static"
+  data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
-    </div>
-    <div class="modal-body">
-      <!-- <table class="table table-bordered table-fixed workflow-table-material">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
+      </div>
+      <div class="modal-body">
+        <!-- <table class="table table-bordered table-fixed workflow-table-material">
       <thead>
         <th style="color: #fff;">{{textAreaLabel}}</th>
       </thead>
@@ -240,139 +278,136 @@
         </tr>
       </tbody>
       </table> -->
-      <p-editor [(ngModel)]="textAreaInfo" 
-          [style]="{'height':'320px'}" name="textAreaInfo" 
-          required></p-editor>
-      <div class="editor-buttons">
-      <button type="button" class="btn btn-primary editor-buttons-margin"	
-         (click)="onSaveTextAreaInfo()">Save</button>
-      <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()"
-        >Close</button>
+        <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+        <div class="editor-buttons">
+          <button type="button" class="btn btn-primary editor-buttons-margin"
+            (click)="onSaveTextAreaInfo()">Save</button>
+          <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">Close</button>
+        </div>
       </div>
-    </div>
-  
+
     </div>
   </div>
 </div>
 
 <div id="capesDelete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
-          </div>
-          <div class="modal-body" *ngIf="deleteCapesRecordRow">
-              <strong>
-                  PN:
-                  <span class="new-label">{{deleteCapesRecordRow != undefined ? deleteCapesRecordRow.partNumber.partNumber : ''}} - {{deleteCapesRecordRow != undefined ? deleteCapesRecordRow.capabilityTypeName : ''}}</span>
-              </strong>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteCapesRowRecord('Yes')">Yes</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteCapesRowRecord('No')">No</button>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
       </div>
+      <div class="modal-body" *ngIf="deleteCapesRecordRow">
+        <strong>
+          PN:
+          <span
+            class="new-label">{{deleteCapesRecordRow != undefined ? deleteCapesRecordRow.partNumber.partNumber : ''}} -
+            {{deleteCapesRecordRow != undefined ? deleteCapesRecordRow.capabilityTypeName : ''}}</span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+          (click)="deleteCapesRowRecord('Yes')">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+          (click)="deleteCapesRowRecord('No')">No</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <div id="capesRestore" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
-          </div>
-          <div class="modal-body" *ngIf="restoreCapesRecordRow">
-              <strong>
-                  PN:
-                  <span class="new-label">{{restoreCapesRecordRow != undefined ? restoreCapesRecordRow.partNumber.partNumber : ''}} - {{restoreCapesRecordRow != undefined ? restoreCapesRecordRow.capabilityTypeName : ''}} </span>
-              </strong>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="restoreCapesRowRecord('Yes')">Yes</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="restoreCapesRowRecord('No')">No</button>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
       </div>
+      <div class="modal-body" *ngIf="restoreCapesRecordRow">
+        <strong>
+          PN:
+          <span
+            class="new-label">{{restoreCapesRecordRow != undefined ? restoreCapesRecordRow.partNumber.partNumber : ''}}
+            - {{restoreCapesRecordRow != undefined ? restoreCapesRecordRow.capabilityTypeName : ''}} </span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+          (click)="restoreCapesRowRecord('Yes')">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+          (click)="restoreCapesRowRecord('No')">No</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<ng-template #contentVendorCapesHist
-             let-c="close"
-             let-d="dismiss"
-             style="width:auto"
-             data-backdrop="static">
-      <div class="modal-header">
-          <h4 class="modal-title">History of Vendor Capability</h4>
-          <button type="button"
-                  class="close"
-                  aria-label="Close"
-                  (click)="dismissModel()">
-              <span aria-hidden="true">&times;</span>
-          </button>
+<ng-template #contentVendorCapesHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">History of Vendor Capability</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ vendorCodeandName.vendorName }}
+          </span>
+        </p>
       </div>
-      <div class="modal-body">
-        <div class="col-md-12 shadow-box-cstm">
-          <div class="col-md-6">
-            <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;"
-                >Vendor Name:
-              </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
-                {{ vendorCodeandName.vendorName }}
-              </span>
-            </p>
-          </div>
-          <div class="col-md-6">
-            <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;" >
-                Vendor Code:
-              </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
-                {{ vendorCodeandName.vendorCode }}
-              </span>
-            </p>
-          </div>
-        </div>
-        <div class="table-responsive pandsHistoryTable mt-2">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                    <th style="line-height: 20px;" colspan="3">Part Details</th>
-                    <th colspan="2" class="bg2">Capability Details</th>
-                    <th colspan="4" class="bg3">General Info.</th>
-                    <th colspan="5"></th>
-                </tr>
-                <tr>
-                    <th style="line-height: 20px; width: 150px;">PN <span class="clr-red">*</span></th>
-                    <th style="width: 150px;">PN Decription <span class="clr-red">*</span></th>
-                    <th style="width: 150px;">Manufacturer <span class="clr-red">*</span></th>
-                    <th style="width: 150px;" class="bg2">Capability Type <span class="clr-red">*</span></th>
-                    <th style="width: 150px;" class="bg2">Capability Desc <span class="clr-red">*</span></th>
-                    <th style="width: 90px;" class="bg3">Vendor Ranking </th>
-                    <!-- <th class="bg3">PMA</th>
-                    <th class="bg3">DER</th> -->                    
-                    <th class="bg3">TAT (Days)</th>
-                    <th class="bg3">Price </th>
-                    <th style="width: 150px;" class="bg3">Memo</th>                    
-                    <th style="width: 120px;">Created Date</th>
-                    <th style="width: 100px;">Created By</th>
-                    <th style="width: 120px;">Updated Date</th>
-                    <th style="width: 100px;">Updated By</th>
-                    <th style="width: 100px;">Is Deleted</th>
-                </tr>
-            </thead>
-                <tbody>
-                    <tr *ngFor="let audit of sourceViewforVendorCapesAudit"></tr>
-                    <tr *ngFor="let audit of sourceViewforVendorCapesAudit; let i = index">
-                        <td [ngStyle]="{width: '150px',
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">
+            Vendor Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ vendorCodeandName.vendorCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+    <div class="table-responsive pandsHistoryTable mt-2">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th style="line-height: 20px;" colspan="3">Part Details</th>
+            <th colspan="2" class="bg2">Capability Details</th>
+            <th colspan="4" class="bg3">General Info.</th>
+            <th colspan="5"></th>
+          </tr>
+          <tr>
+            <th style="line-height: 20px; width: 150px;">PN <span class="clr-red">*</span></th>
+            <th style="width: 150px;">PN Decription <span class="clr-red">*</span></th>
+            <th style="width: 150px;">Manufacturer <span class="clr-red">*</span></th>
+            <th style="width: 150px;" class="bg2">Capability Type <span class="clr-red">*</span></th>
+            <th style="width: 150px;" class="bg2">Capability Desc <span class="clr-red">*</span></th>
+            <th style="width: 90px;" class="bg3">Vendor Ranking </th>
+            <!-- <th class="bg3">PMA</th>
+                    <th class="bg3">DER</th> -->
+            <th class="bg3">TAT (Days)</th>
+            <th class="bg3">Price </th>
+            <th style="width: 150px;" class="bg3">Memo</th>
+            <th style="width: 120px;">Created Date</th>
+            <th style="width: 100px;">Created By</th>
+            <th style="width: 120px;">Updated Date</th>
+            <th style="width: 100px;">Updated By</th>
+            <th style="width: 100px;">Is Deleted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let audit of sourceViewforVendorCapesAudit"></tr>
+          <tr *ngFor="let audit of sourceViewforVendorCapesAudit; let i = index">
+            <td [ngStyle]="{width: '150px',
                               color: getColorCodeForHistoryForPandS(i, 'partNumber', audit.partNumber)
                                 ? 'black'
                                 : 'red'
                             }">
-                           <p style="width: 150px;"> {{ audit.partNumber }}</p>
-                        </td>
-                        <td [ngStyle]="{width: '150px',
+              <p style="width: 150px;"> {{ audit.partNumber }}</p>
+            </td>
+            <td [ngStyle]="{width: '150px',
                             color: getColorCodeForHistoryForPandS(
                               i,
                               'partDescription',
@@ -381,37 +416,37 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 150px;"> {{ audit.partDescription }}</p>
-                        </td>
-                        <td [ngStyle]="{width: '150px',
+              <p style="width: 150px;"> {{ audit.partDescription }}</p>
+            </td>
+            <td [ngStyle]="{width: '150px',
                             color: getColorCodeForHistoryForPandS(i, 'manufacturerName', audit.manufacturerName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 150px;">  {{ audit.manufacturerName }}</p>
-                        </td>
-                        <td [ngStyle]="{width: '150px',
+              <p style="width: 150px;"> {{ audit.manufacturerName }}</p>
+            </td>
+            <td [ngStyle]="{width: '150px',
                             color: getColorCodeForHistoryForPandS(i, 'capabilityType', audit.capabilityType)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 150px;">  {{ audit.capabilityType }}</p>
-                        </td>
-                        <td [ngStyle]="{width: '150px',
+              <p style="width: 150px;"> {{ audit.capabilityType }}</p>
+            </td>
+            <td [ngStyle]="{width: '150px',
                             color: getColorCodeForHistoryForPandS(i, 'capabilityTypeDescription', audit.capabilityTypeDescription)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 150px;">    {{ audit.capabilityTypeDescription }}</p>
-                        </td>
-                        <td [ngStyle]="{width: '90px',
+              <p style="width: 150px;"> {{ audit.capabilityTypeDescription }}</p>
+            </td>
+            <td [ngStyle]="{width: '90px',
                             color: getColorCodeForHistoryForPandS(i, 'vendorRanking', audit.vendorRanking)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 90px; text-align: center;">    {{ audit.vendorRanking }}</p>
-                        </td>
-                        <!-- <td style="text-align: center;">
+              <p style="width: 90px; text-align: center;"> {{ audit.vendorRanking }}</p>
+            </td>
+            <!-- <td style="text-align: center;">
                             <span class="value">
                                 <label class="wauto">
                                     <input type="checkbox" name="isPMA" [(ngModel)]="audit.isPMA" disabled>
@@ -425,57 +460,62 @@
                                 </label>
                             </span>
                         </td> -->
-                        <td class="text-right" [ngStyle]="{width: '80px',
+            <td class="text-right" [ngStyle]="{width: '80px',
                             color: getColorCodeForHistoryForPandS(i, 'tat', audit.tat)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 80px;">     {{ audit.tat | twoDecimalGlobalNumberFormatPipe }}</p>
-                        </td>
-                        <td class="text-right" [ngStyle]="{width: '80px',
+              <p style="width: 80px;"> {{ audit.tat | twoDecimalGlobalNumberFormatPipe }}</p>
+            </td>
+            <td class="text-right" [ngStyle]="{width: '80px',
                             color: getColorCodeForHistoryForPandS(i, 'cost', audit.cost)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 80px;">     {{ audit.cost | twoDecimalGlobalNumberFormatPipe }}</p>
-                        </td>                        
-                        <td [ngStyle]="{width: '150px',color: getColorCodeForHistoryForPandS(i, 'memo', audit.memo) ? 'black' : 'red'}">
-                          <p style="width: 150px;" class="p_editor" [innerHTML]="audit.memo"></p>
-                        </td>
-                        <td><p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td [ngStyle]="{width: '100px',
+              <p style="width: 80px;"> {{ audit.cost | twoDecimalGlobalNumberFormatPipe }}</p>
+            </td>
+            <td
+              [ngStyle]="{width: '150px',color: getColorCodeForHistoryForPandS(i, 'memo', audit.memo) ? 'black' : 'red'}">
+              <p style="width: 150px;" class="p_editor" [innerHTML]="audit.memo"></p>
+            </td>
+            <td>
+              <p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+            </td>
+            <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'createdBy', audit.createdBy)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.createdBy  }}</p>
-                        </td>
-                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td [ngStyle]="{width: '100px',
+              <p style="width: 100px;"> {{ audit.createdBy  }}</p>
+            </td>
+            <td>
+              <p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+            </td>
+            <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'updatedBy', audit.updatedBy)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.updatedBy  }}</p>
-                        </td>
-                        <td style="text-align: center; background-color: #fff">
-                          <span class="value">
-                              <label class="wauto">
-                                  <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
-                              </label>
-                          </span>
-                      </td>
-                        <!-- <td style="background-color: #fff !important; text-align: center;"><p style="width: 60px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td> -->
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+              <p style="width: 100px;"> {{ audit.updatedBy  }}</p>
+            </td>
+            <td style="text-align: center; background-color: #fff">
+              <span class="value">
+                <label class="wauto">
+                  <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                </label>
+              </span>
+            </td>
+            <!-- <td style="background-color: #fff !important; text-align: center;"><p style="width: 60px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td> -->
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="dismissModel()">
-            Close
-        </button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      Close
+    </button>
+  </div>
 </ng-template>
 
 <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
@@ -497,6 +537,15 @@
 
 <div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
-      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </div>

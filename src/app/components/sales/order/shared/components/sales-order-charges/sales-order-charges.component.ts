@@ -12,14 +12,11 @@ import { SalesOrderCharge } from '../../../../../../models/sales/SalesOrderCharg
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from "@angular/forms";
 
-
-
 @Component({
     selector: 'app-sales-order-charges',
     templateUrl: './sales-order-charges.component.html',
     styleUrls: ['./sales-order-charges.component.scss'],
     encapsulation: ViewEncapsulation.None
-
 })
 
 export class SalesOrderChargesComponent implements OnChanges, OnInit {
@@ -46,7 +43,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     ]
     isEdit: boolean = false;
     unitOfMeasureList: any = [];
-    // currencyList: any = [];
     salesOrderChargesLists: any;
     chargesFlatBillingAmount: any;
     isSpinnerVisible = false;
@@ -66,6 +62,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     isSaveChargesDesabled: boolean = true;
     frieghtsCreateForm: any;
     isUpdate: boolean = false;
+
     constructor(private salesOrderService: SalesOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -75,6 +72,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         private vendorService: VendorService,
         private modalService: NgbModal) {
     }
+
     ngOnInit() {
         if (this.chargeForm) {
             let newCharge = new SalesOrderCharge();
@@ -84,7 +82,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             newCharge.salesOrderId = this.salesOrderId;
             this.chargeForm = [...this.chargeForm, new SalesOrderCharge()];
         }
-        console.log(this.salesOrderChargesList);
         if (this.salesOrderChargesList && this.salesOrderChargesList.length > 0 && this.salesOrderChargesList[0].headerMarkupId) {
             this.costPlusType = this.salesOrderChargesList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.salesOrderChargesList[0].headerMarkupId);
@@ -111,25 +108,14 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     refresh(isView) {
         this.arrayVendlsit = [];
         this.arrayPercentList.push(0);
-        // this.isView = isView;
         this.isSpinnerVisible = true;
         forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo),
             this.actionService.getCharges(),
-            //this.vendorService.getVendorsForDropdown(),
-            //this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join()),
-            //this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")
             this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
             this.chargesTypes = res[1];
-            //let vendorList: any = res[2];
-            // this.allVendors = vendorList.map(x => {
-            //     return {
-            //         vendorId: x.vendorId,
-            //         vendorName: x.vendorName
-            //     }
-            // });
             this.markupList = res[2];
             this.setVendors();
             this.vendorList('');
@@ -163,8 +149,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo).subscribe(res => {
             this.isSpinnerVisible = false;
             //Handeling offline Records also
-            console.log("set", this.storedData);
-
             if (this.storedData && this.storedData.length != 0) {
                 if (this.deletedStatusInfo == true) {
                     this.deletedStatusInfo = true;
@@ -185,7 +169,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             } else {
                 this.setChargesData(res);
             }
-            console.log("set2", this.storedData);
             if (fromDelete) {
                 this.getTotalBillingAmount();
                 this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
@@ -211,7 +194,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
         this.chargeForm = [];
         this.salesOrderChargesLists = [];
-
     }
 
     get userName(): string {
@@ -224,8 +206,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.isEdit = false;
         let newCharge = this.getNewChargeObject();
         this.chargeForm = [newCharge];
-        console.log(this.chargeForm);
-
     }
 
     getNewChargeObject() {
@@ -261,25 +241,26 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         rowData.extendedCost = this.formateCurrency(rowData.extendedCost);
         this.chargeForm = [rowData];
     }
+
     memoIndex;
     onAddTextAreaInfo(material, index) {
         this.memoIndex = index;
-        console.log("memolist", material, index);
         this.textAreaInfo = material.memo;
     }
+
     textAreaInfo: any;
     onSaveTextAreaInfo(memo) {
         if (memo) {
             this.textAreaInfo = memo;
-            console.log("hello cjkf", this.chargeForm)
             this.chargeForm[this.memoIndex].memo = this.textAreaInfo;
-            console.log("index", this.chargeForm);
         }
         $("#textarea-popupFreight").modal("hide");
     }
+
     onCloseTextAreaInfo() {
         $("#textarea-popupFreight").modal("hide");
     }
+
     saveChargesList() {
         this.chargeForm = this.chargeForm.map(x => {
             return {
@@ -299,9 +280,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
         else {
             let temp = [];
-            // this.salesOrderChargesList.forEach((x) => {
-            //     temp = [...temp, ...x];
-            // })
             this.salesOrderChargesList.forEach((x) => {
                 if (typeof x[Symbol.iterator] === 'function')
                     temp = [...temp, ...x];
@@ -326,10 +304,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
 
     createChargesQuote() {
         let temp = this.salesOrderChargesList;
-        let sendData = []
-        // for (let index = 0; index < temp.length; index++) {
-        //     sendData = [...sendData, ...temp[index]];
-        // }
+        let sendData = [];
+
         for (let index = 0; index < temp.length; index++) {
             if (typeof temp[index][Symbol.iterator] === 'function')
                 sendData = [...sendData, ...temp[index]];
@@ -342,6 +318,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
                 vendorId: editValueAssignByCondition("vendorId", f.vendor)
             }
         })
+
         let result = { 'data': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
         this.isSpinnerVisible = true;
         this.salesOrderService.createSOQCharge(sendData).subscribe(result => {
@@ -364,7 +341,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         if (!this.selectedRowForDelete.salesOrderChargesId) {
             this.selectedRowForDelete.isDeleted = true;
             this.isSpinnerVisible = false;
-            // this.salesOrderChargesList.splice(this.selectedRowIndexForDelete, 1);
             if (this.storedData && this.storedData.length != 0) {
                 this.storedData.forEach(element => {
                     if (
@@ -411,7 +387,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
         this.alertService.resetStickyMessage();
         this.alertService.showStickyMessage("Sales Order", errorMessage, MessageSeverity.error, error);
-        // this.alertService.showMessage(error);
     }
 
     markupChanged(matData, type) {
@@ -434,7 +409,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             })
         }
         catch (e) {
-            console.log(e);
         }
     }
 
@@ -521,13 +495,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     }
 
     filterVendor(event) {
-        // this.vendorCollection = this.allVendors;
-        // const vendors = [
-        //     ...this.allVendors.filter(x => {
-        //         return x.vendorName.toLowerCase().includes(event.query.toLowerCase());
-        //     })
-        // ];
-        // this.vendorCollection = vendors;
         if (event && event.query != undefined) {
             this.vendorList(event.query)
         } else {
@@ -539,36 +506,11 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         for (var charge of this.salesOrderChargesList) {
             var vendor = this.allVendors.filter(x => x.vendorId == charge.vendorId)[0];
             if (vendor != undefined) {
-                console.log('Test')
                 charge.vendor = {
                     vendorId: vendor.vendorId,
                     vendorName: vendor.vendorName
                 };
             }
-        }
-    }
-
-    onDataLoadFailed(log) {
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
         }
     }
 
@@ -580,6 +522,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
                 });
         }
     }
+
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
         for (let x of auditHistory) {
@@ -589,11 +532,12 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
         this.chargesAudiHistory = auditHistory;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-
     }
+
     dismissModelHistory() {
         this.modal.close();
     }
+
     getColorCodeForHistory(i, field, value) {
         const data = this.chargesAudiHistory;
         const dataLength = data.length;
@@ -624,7 +568,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     restore(content, rowData, index) {
         this.restorerecord = rowData;
         this.deletedrowIndex = index;
-        console.log("restore", this.restorerecord)
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -654,7 +597,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             });
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             this.modal.close();
-            console.log("set2", this.storedData);
         }
     }
 
