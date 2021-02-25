@@ -77,6 +77,7 @@ export class SalesOrderShippingComponent {
     allSizeUnitOfMeasureInfo: any = [];
     currSOPickTicketId: number;
     currQtyToShip: number;
+    salesOrderPartId:number;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -155,6 +156,7 @@ export class SalesOrderShippingComponent {
         //     if (rowData.selected) {
         this.currSOPickTicketId = rowData.soPickTicketId;
         this.currQtyToShip = rowData.qtyToShip;
+        this.salesOrderPartId = rowData.salesOrderPartId;
         this.partSelected = true;
         // } else {
         //     this.partSelected = false;
@@ -493,7 +495,8 @@ export class SalesOrderShippingComponent {
 
     save() {
         this.shippingHeader['salesOrderId'] = this.salesOrderId;
-        this.shippingHeader['salesOrderPartId'] = this.salesOrderPartNumberId;
+        //this.shippingHeader['salesOrderPartId'] = this.salesOrderPartNumberId;
+        this.shippingHeader['salesOrderPartId'] = this.salesOrderPartId;
         this.shippingHeader['masterCompanyId'] = this.salesOrder['masterCompanyId'];
         //this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = this.salesOrder['masterCompanyId'];
         //this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = 1;
@@ -503,8 +506,9 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['updatedDate'] = new Date().toDateString();
         //this.shippingHeader['salesOrderCustomsInfo']['createdDate'] = new Date().toDateString();
         //this.shippingHeader['salesOrderCustomsInfo']['updatedDate'] = new Date().toDateString();
-        this.shippingHeader['trackingNum'] = 23;
-        this.shippingHeader['houseAirwayBill'] = 349;
+        // this.shippingHeader['trackingNum'] = 23;
+        // this.shippingHeader['houseAirwayBill'] = 349;
+        this.shippingHeader['shipToName'] = this.shippingHeader.shipToCustomerId.userName;
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('userID', this.shippingHeader['shipToCustomerId']);
         this.shippingHeader['soldToName'] = this.shippingHeader.soldToName.userName;
         this.shippingHeader['sOPickTicketId'] = this.currSOPickTicketId;
