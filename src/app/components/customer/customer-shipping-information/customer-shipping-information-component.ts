@@ -293,7 +293,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                   }
               });    
               this.shipviaInfo = [
-				{ label: 'Select',value: 0, id: 0, name: '-- Select --'}
+				{ label: '-- Select --',value: 0, id: 0, name: '-- Select --'}
               ];                            
               this.shipViaDropdownList = [...this.shipviaInfo, ...data];             
               this.isSpinnerVisible = false;

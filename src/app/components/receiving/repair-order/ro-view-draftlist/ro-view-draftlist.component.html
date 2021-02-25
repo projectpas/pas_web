@@ -38,7 +38,7 @@
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>PN Description: </b></span><span class="value">{{part.itemMaster?.partDescription}}</span></p>
-                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.itemMaster?.quantityRejected}}</span></p>
+                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.quantityRejected}}</span></p>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p><span class="label"><b>Cond: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].conditionText}}</span></p>
@@ -61,16 +61,44 @@
                                                     <section class="receiving-stockline-view" *ngIf="part.stockLine">
                                                         <div class="label-value-row">
                                                             <div class="col-sm-3" style="margin-right: 20px;width: 210px !important;">
-                                                                <div class="card" style="margin-top: 13px;">
-                                                                    <div class="card-header" style="padding: 0 10px;">
+                                                                <!-- <div class="card" style="margin-top: 13px;"> -->
+                                                                    <!-- <div class="card-header" style="padding: 0 10px;">
                                                                         <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure</h5>
-                                                                    </div>
-                                                                    <div class="card-body" style="padding: 0 12px 12px;">
+                                                                    </div> -->
+                                                                    <!-- <div class="card-body" style="padding: 0 12px 12px;">
                                                                         <p><span class="label"><b>Company: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].companyText}}</span></p>
                                                                         <p><span class="label"><b>BU: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].businessUnitText}}</span></p>
                                                                         <p><span class="label"><b>Division: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].divisionText}}</span></p>
-                                                                        <p><span class="label"><b>Dept: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].departmentText}}</span></p>
+                                                                        <p><span class="label"><b>Dept: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].departmentText}}</span></p>                                                                  
+
+                                                                    
+                                                                    </div> -->
+
+                                                                    <div class="card view-management-structure-card">
+                                                                        <div class="card-header view-management-structure-card-header">
+                                                                          <h5 class="view-management-structure-header">Management Structure <span class="text-danger">*</span></h5>
+                                                                        </div>
+                                                                        <div class="card-body view-structure-card-body">
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="companyName" 
+                                                                                 [(ngModel)]="part.stockLine[currentStockLineShowIndex].companyText" disabled>
+                                                                          </div>
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="BUName"
+                                                                                 [(ngModel)]="part.stockLine[currentStockLineShowIndex].businessUnitText" disabled>
+                                                                          </div>
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="divisionName"
+                                                                                 [(ngModel)]="part.stockLine[currentStockLineShowIndex].divisionText" disabled>
+                                                                          </div>
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="deptName"
+                                                                                 [(ngModel)]="part.stockLine[currentStockLineShowIndex].departmentText" disabled>
+                                                                          </div>
+                                                                        <!-- </div> -->
                                                                     </div>
+
+
                                                                 </div>
                                                                
                                                                 <p><span class="label"><b>Site: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].siteText}}</span></p>
@@ -84,7 +112,7 @@
                                                                 <p><span class="label"><b>Obtain From: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].obtainFrom}}</span></p>
                                                                 <p><span class="label"><b>Owner: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].owner}}</span></p>
                                                                 <p><span class="label"><b>Traceable To: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].traceableTo}}</span></p>
-                                                                <p><span class="label"><b>MFG: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturerName}}</span></p>
+                                                                <p><span class="label"><b>MFG: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturerText}}</span></p>
                                                                 <p><span class="label"><b>MFG Lot Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturerLotNumber}}</span></p>
                                                                 <p><span class="label"><b>MFG Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturingDate}}</span></p>
                                                                 <p><span class="label"><b>MFG Trace: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].manufacturingTrace}}</span></p>
@@ -98,12 +126,12 @@
                                                                     {{part.stockLine[currentStockLineShowIndex].repairOrderUnitCost}}</span></p>
                                                                 <p><span class="label"><b>Extended Cost: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].repairOrderExtendedCost}}</span></p>
                                                                 <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].partCertificationNumber}}</span></p>
-                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedByName}}</span></p>
+                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedBy}}</span></p>
                                                                 <p><span class="label"><b>Certified Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedDate}}</span></p>
                                                                 <p><span class="label"><b>Certified Due Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].certifiedDueDate}}</span></p>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tageTypeName}}</span></p>
+                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagType}}</span></p>
                                                                 <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].tagDate}}</span></p>
                                                                 <p><span class="label"><b>Engine Serial Number: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].engineSerialNumber}}</span></p>
                                                                 <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[currentStockLineShowIndex].aircraftTailNumber}}</span></p>

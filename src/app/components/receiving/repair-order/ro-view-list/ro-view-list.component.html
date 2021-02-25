@@ -37,7 +37,7 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <p><span class="label"><b>PN Description: </b></span><span class="value">{{part.itemMaster?.partDescription}}</span></p>
-                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.itemMaster?.quantityRejected}}</span></p>
+                                                        <p><span class="label"><b>Qty Rejected: </b></span><span class="value">{{part.quantityRejected}}</span></p>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <p><span class="label"><b>Cond: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].conditionText}}</span></p>
@@ -59,16 +59,40 @@
                                                     <section class="receiving-stockline-view">
                                                         <div class="label-value-row">
                                                             <div class="col-sm-3" style="margin-right: 20px;width: 210px !important;">
-                                                                <div class="card" style="margin-top: 13px;">
+                                                                <!-- <div class="card" style="margin-top: 13px;">
                                                                     <div class="card-header" style="padding: 0 10px;">
                                                                         <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure</h5>
-                                                                    </div>
-                                                                    <div class="card-body" style="padding: 0 12px 12px;">
+                                                                    </div> -->
+                                                                    <!-- <div class="card-body" style="padding: 0 12px 12px;">
                                                                         <p><span class="label"><b>Company: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].companyText}}</span></p>
                                                                         <p><span class="label"><b>BU: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].businessUnitText}}</span></p>
                                                                         <p><span class="label"><b>Division: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].divisionText}}</span></p>
                                                                         <p><span class="label"><b>Dept: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].departmentText}}</span></p>
-                                                                    </div>
+                                                                    </div> -->
+
+                                                                    <div class="card view-management-structure-card">
+                                                                        <div class="card-header view-management-structure-card-header">
+                                                                          <h5 class="view-management-structure-header">Management Structure <span class="text-danger">*</span></h5>
+                                                                        </div>
+                                                                        <div class="card-body view-structure-card-body">
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="companyName" 
+                                                                                 [(ngModel)]="part.stockLine[part.currentSLIndex].companyText" disabled>
+                                                                          </div>
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="BUName"
+                                                                                 [(ngModel)]="part.stockLine[part.currentSLIndex].businessUnitText" disabled>
+                                                                          </div>
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="divisionName"
+                                                                                 [(ngModel)]="part.stockLine[part.currentSLIndex].divisionText" disabled>
+                                                                          </div>
+                                                                          <div class="form-group view-structure-body-alignment">
+                                                                            <input class="form-control" type="text" name="deptName"
+                                                                                 [(ngModel)]="part.stockLine[part.currentSLIndex].departmentText" disabled>
+                                                                          </div>
+                                                                        <!-- </div> -->                                                                   
+                                                                    </div> 
                                                                 </div>
                                                                
                                                                 <p><span class="label"><b>Site: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].siteText}}</span></p>
@@ -81,7 +105,7 @@
                                                                 <p><span class="label"><b>Obtain From: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].obtainFrom}}</span></p>
                                                                 <p><span class="label"><b>Owner: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].owner}}</span></p>
                                                                 <p><span class="label"><b>Traceable To: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].traceableTo}}</span></p>
-                                                                <p><span class="label"><b>MFG: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturerName}}</span></p>
+                                                                <p><span class="label"><b>MFG: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturerText}}</span></p>
                                                                 <p><span class="label"><b>MFG Lot Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturerLotNumber}}</span></p>
                                                                 <p><span class="label"><b>MFG Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturingDate}}</span></p>
                                                                 <p><span class="label"><b>MFG Trace: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].manufacturingTrace}}</span></p>
@@ -92,12 +116,12 @@
                                                                 <p><span class="label"><b>Unit Cost: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].repairOrderUnitCost}}</span></p>
                                                                 <p><span class="label"><b>Extended Cost: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].repairOrderExtendedCost}}</span></p>
                                                                 <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].partCertificationNumber}}</span></p>
-                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedByName}}</span></p>
+                                                                <p><span class="label"><b>Cert By: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedBy}}</span></p>
                                                                 <p><span class="label"><b>Certified Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedDate}}</span></p>
                                                                 <p><span class="label"><b>Certified Due Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].certifiedDueDate}}</span></p>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].tageTypeName}}</span></p>
+                                                                <p><span class="label"><b>Tag Type: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].tagType}}</span></p>
                                                                 <p><span class="label"><b>Tag Date: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].tagDate}}</span></p>
                                                                 <p><span class="label"><b>Engine Serial Number: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].engineSerialNumber}}</span></p>
                                                                 <p><span class="label"><b>Aircraft Tail Num: </b></span><span class="value">{{part.stockLine[part.currentSLIndex].aircraftTailNumber}}</span></p>

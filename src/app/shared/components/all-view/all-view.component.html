@@ -958,9 +958,7 @@
             [vendorId]= "capvendorId"            
             [isViewMode]="isViewMode">
           </app-vendor-capes>
-        </p-tabPanel>   
-        
-      
+        </p-tabPanel> 
 
         <p-tabPanel header="Documents">
           <app-common-documents [isViewMode]="true" [moduleName]="romoduleName" [offLineUpload]="true" [referenceId]="selectedRepairOrderId">      
@@ -971,6 +969,14 @@
           <app-communication [isViewMode]="true"  [idForContact]="vendorIdByParams ? vendorIdByParams :vendorId" [type]="2" [moduleName]="romoduleName"  [referenceId]="selectedRepairOrderId">            
           </app-communication>
         </p-tabPanel> 
+
+        <p-tabPanel header="Receiving Draft" *ngIf="this.isReceivingro">
+          <app-ro-view-draftlist *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData"></app-ro-view-draftlist>
+        </p-tabPanel>
+
+        <p-tabPanel header="Receiving" *ngIf="this.isReceivingro">
+          <app-ro-view-list  *ngIf="repairOrderData.length > 0" [repairOrderData]="repairOrderData" ></app-ro-view-list>
+        </p-tabPanel>
 
       </p-tabView>
 

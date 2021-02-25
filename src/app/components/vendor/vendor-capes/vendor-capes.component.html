@@ -112,6 +112,7 @@
                                 <th class="bg3">DER</th> -->
             <th class="bg3" style="width: 85px;">TAT(Days)</th>
             <th class="bg3" style="width: 85px;">Price/Unit</th>
+            <!-- <th class="bg3" style="width: 85px;">Curr</th> -->
             <th class="bg3" style="width: 250px;">Memo</th>
             <th>Actions</th>
           </tr>
@@ -174,6 +175,7 @@
               <input type="text" style="width: 100%;" class="input-field-value text-right" pInputText pKeyFilter="money"
                 maxlength="7" (change)="onChangeCost(field);" [(ngModel)]="field.cost" name="cost{{i}}" [disabled]="!field.isEditable" />
             </td>
+            <!-- <td>1 </td> -->
 
             <!-- Memo -->
             <td>
