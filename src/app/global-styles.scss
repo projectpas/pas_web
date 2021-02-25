@@ -225,7 +225,14 @@ table.table-bordered {
   border: 1px solid #ff586b;
 }
 
-
+//audihistory css
+.history_hg table.table-bordered thead tr th {
+  color: #fff;
+  letter-spacing: 0.3px;
+  font-size: 10px;
+  min-width: 116px !important;
+  padding: 7px 2px !important;
+}
 // Calendar 
 
 

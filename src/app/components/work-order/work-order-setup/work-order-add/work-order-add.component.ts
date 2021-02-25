@@ -847,7 +847,7 @@ export class WorkOrderAddComponent implements OnInit {
                     this.isSpinnerVisible = false;
                 });
         }
-    }
+    } 
 
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
@@ -1796,7 +1796,6 @@ export class WorkOrderAddComponent implements OnInit {
     //                 this.errorHandling(err)
     //             })
     //     } else {
-    //         console.log("data.equipments",data.equipments)
     //         const equipmentArr = data.equipments.map(x => {
     //             return {
     //                 ...x,
@@ -2005,8 +2004,10 @@ export class WorkOrderAddComponent implements OnInit {
 
         for (let labList in data.workOrderLaborList) {
             for (let labSubList of data.workOrderLaborList[labList]) {
-                if (labSubList && labSubList['expertiseId'] != null)
+                if (labSubList && labSubList['expertiseId'] != null){
+                    labSubList.masterCompanyId=this.currentUserMasterCompanyId;
                     this.result.LaborList.push(labSubList);
+                }
             }
         }
         return this.result;

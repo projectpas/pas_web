@@ -1202,7 +1202,7 @@ reserveSubWoAltPartData(data){
             
         });
     }else{
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassetinventoryhistory?workOrderChargesId=${chargeId}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderChargesauditlist?workOrderChargesId=${chargeId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getChargesHistory(isSubworkOrder,chargeId));
             
         });  
@@ -1215,7 +1215,7 @@ reserveSubWoAltPartData(data){
             
         });
        }else{
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassetinventoryhistory?workOrderFreightId=${freightId}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderfreightauditlist?workOrderFreightId=${freightId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getChargesHistory(isSubworkOrder,freightId));
             
         });

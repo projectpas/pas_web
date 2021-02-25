@@ -67,7 +67,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     
   ngOnInit() {
     this.disabledUpdatebtn=true;
-    console.log("employee list",this.employeesOriginalData)
     this.allEmployees = this.employeesOriginalData;
     this.dropdownSettings = {
       singleSelection: false,
@@ -770,6 +769,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
     }
     this.saveworkOrderLabor.emit(this.saveFormdata);
     this.disabledUpdatebtn=true;
+    this.isEdit=true;
   }
   getOverHeadCost(taskList) {
     let total = 0;
@@ -1263,10 +1263,10 @@ this.commonfunctionHandler();
       onAddTextAreaInfo(material,taskName,index) {
         this.currentIndex=index;
         this.currentTaks=taskName;
-        this.textAreaInfo = material;
+        this.textAreaInfoLabor = material;
         this.disableEditor=true;
     }
-    textAreaInfo: any;
+    textAreaInfoLabor: any;
     disableEditor:any=true;
     editorgetmemo(ev){
         this.disableEditor=false;
@@ -1274,14 +1274,14 @@ this.commonfunctionHandler();
     onSaveTextAreaInfo(memo) {
         this.disableSaveForEdit=false;
         if (memo) {
-            this.textAreaInfo = memo;
+            this.textAreaInfoLabor = memo;
             this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = memo;
         }
-        $("#textarea-popup").modal("hide");
+        $("#textarea-popup5").modal("hide");
         this.disabledUpdatebtn=false;
     }
     onCloseTextAreaInfo() {
-        $("#textarea-popup").modal("hide");
+        $("#textarea-popup5").modal("hide");
     }
    checkValid(v){
     this.disabledUpdatebtn=false;
