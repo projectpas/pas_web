@@ -121,7 +121,7 @@ table, thead, th {
   .seond-part{position:relative;display:flex;float:right;width:24%}  
 .input-field-border{width: 88px; border-radius:0px !important;border: none; border-bottom: 1px solid black;}
 
-.pick-ticket-header{border: 1px solid black;text-align: center; background: #0d57b0 !important;color: #fff !important;}
+.pick-ticket-header{border: 1px solid black;text-align: center; background: #0d57b0 !important;color: #fff !important;-webkit-print-color-adjust: exact; }
 .first-block-label {
     position: relative;
     min-height: 1px;
@@ -136,6 +136,7 @@ table, thead, th {
 .logo{margin-top: 10px;}
 .sold-block-div{margin: 2px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
 .ship-block-div{margin: 2px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
+.parttable th{background: #0d57b0 !important;color: #fff !important;-webkit-print-color-adjust: exact; }
               </style>
             </head>
         <body onload="window.print();window.close()">${printContents}</body>
