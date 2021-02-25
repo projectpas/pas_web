@@ -14,37 +14,9 @@
           disabled="true" />
       </div>
     </div>
-    <!-- <div class="col-2 column">
-      <div class="form-group">
-        <label>Cust Request Date</label>
-        <p-calendar name="customerRequestDate" [(ngModel)]="salesQuote.customerRequestDate" disabled="true" >
-        </p-calendar>
-      </div>
-    </div>
-
-   
-
-    <div class="col-2 column">
-      <div class="form-group">
-        <label>Promised Date</label>
-        <input type="text" class="form-control" name="promisedDate" [ngModel]="salesQuote.customerPromisedDate| date:'M/d/y'" disabled="true" />
-      </div>
-    </div> -->
-    <!--
- <div class="col-2 column">
-      <div class="form-group">
-        <label>Warnings</label>
-        <input type="text" class="form-control" name="notes" [ngModel]="salesQuote.notes" disabled="true" />
-      </div>
-    </div>
-    -->
-
     <div class="col-2 column">
       <div class="form-group">
         <label> Memo</label>
-        <!-- <input type="text" class="form-control" name="memo" [ngModel]="salesQuote.memo"
-         disabled="true" /> -->
-
         <div [innerHTML]="salesQuote.memo" class="form-control" style="width:100%;" class="text_editor_box"></div>
       </div>
     </div>

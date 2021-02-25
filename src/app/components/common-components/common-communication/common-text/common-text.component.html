@@ -34,13 +34,13 @@
                     <div class="col">
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
                             [ngModelOptions]="{ standalone: true }" optionLabel="header"
-                            selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
-                            defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                            selectedItemsLabel="{0} columns selected" class="multiselect-field"
+                            defaultLabel="Choose Columns" ></p-multiSelect>
 
 
 
                     </div>
-                    <div class="col" style="text-align: end;">
+                    <div class="col text-end">
                         <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50" class="form-control"
@@ -62,8 +62,8 @@
                     </div>
                     <div class="col">
                         <div class="">
-                            <div class="col" style="width: 395px; float: right; padding-top: 3px;">
-                                <div class="form-group" style="float: right;">
+                            <div class="col show-deleted-width">
+                                <div class="form-group float-right">
                                     <div class="checkbox-cstm pull-left checkbox-align">
                                         <label class="checkbox-label-align">
                                             <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55"
@@ -291,8 +291,9 @@
                                 <!-- <input class="form-control" type="number" [(ngModel)] = "addList[0].mobile" maxlength="20" name="phoneNo" required/> -->
 
                                 <input type="text" id="phone" name="phoneNo" [pattern]="phonePattern"
-                                    (ngModelChange)="setvaliDate()" #phoneNumberNg="ngModel" class="form-control"
-                                    minlength="6" style="text-align: end;" maxlength="10"
+                                    (ngModelChange)="setvaliDate()" #phoneNumberNg="ngModel" 
+                                    class="form-control text-end"
+                                    minlength="6"  maxlength="10"
                                     (keypress)="patternMobilevalidationWithSpl($event)" [(ngModel)]="addList[0].mobile"
                                     required />
 
@@ -402,7 +403,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" style="font-size:24px;" data-dismiss="modal">&times;</button>
+                <button type="button" class="close button-font" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title"> Text Details</h4>
                 <!-- <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
@@ -575,7 +576,7 @@
                                 <td>{{audit.createdBy}}</td>
                                 <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                 <td>{{audit.updatedBy}}</td>
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <span class="value">
                                         <label class="wauto">
                                             <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true"

@@ -159,7 +159,9 @@ import { ROViewListComponent } from "../components/receiving/repair-order/ro-vie
 		PoSettingsComponent,
 		AllViewComponent,
 		POViewStockDraftListComponent,
-		POViewListComponent
+		POViewListComponent,
+		ROViewStockDraftListComponent,
+		ROViewListComponent
 	],
 	providers: [
 		VendorClassificationComponent,

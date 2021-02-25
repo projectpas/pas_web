@@ -3,6 +3,67 @@
   left: 100%;
   margin-top: -1px;
 }
+.padding-10{
+  padding: 10px !important;
+}
+.background-white{
+  background-color: #fff !important;
+}
+.labour-radio-buttons{
+  min-width: 410px !important; padding: 0 !important;
+}
+.labour-radio-buttons-align{
+  text-align: center !important; display: flex !important;
+}
+.cost-plus-type-align{
+  margin-left: 10px !important; margin-right: 10px !important;
+}
+.memo-th{
+  padding: 7px 53px !important;z-index:2 !important
+}
+.edit-btn{
+  margin-top: 10px !important;margin-bottom: 10px !important;
+}
+.start-date-th{
+  width: 100px !important;z-index: 2 !important;
+}
+.th-zindex-2{
+  z-index: 2 !important;
+}
+.employee-th{
+  padding: 8px 64px !important;z-index: 2 !important;
+}
+.expertise-th{
+  min-width: 150px !important;
+}
+.check-valid-td{
+  width: 120px !important;
+}
+.check-flex{
+  display: flex !important;
+}
+.check-flex-div{
+  float: right !important;min-width: 155px !important;
+}
+.check-flex-input{
+  width: 75px !important;
+}
+.check-flex-span{
+  font-size: 17px !important; margin: 0 5px !important;
+}
+.total-minutes-input{
+  width: 50px !important;
+}
+.min-width-130{
+  min-width: 130px !important;
+}
+.min-width-100{
+  min-width: 100px !important;
+}
+
+.tasks-th{
+  min-width: 120px !important;
+}
 
 label {
   text-align: left;

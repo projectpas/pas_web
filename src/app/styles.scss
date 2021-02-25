@@ -462,7 +462,7 @@ a:hover {
 }
 
 .float-right {
-  float: right;
+  float: right !important;
 }
 
 .byline,
@@ -6406,11 +6406,11 @@ h6.block {
 }
 
 .m-t-10 {
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
 
 .m-t-20 {
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 
 .m-t-15 {
@@ -9373,7 +9373,7 @@ button.multiselect {
 }
 
 .float-right {
-  float: right;
+  float: right !important;
 }
 
 .blue-bg {

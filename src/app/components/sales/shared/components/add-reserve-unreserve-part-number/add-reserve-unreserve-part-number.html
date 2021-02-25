@@ -12,7 +12,7 @@
     </div> -->
 
     <div class="modal-body">
-        <div class="row margin-row">
+        <!-- <div class="row margin-row">
         </div>
         <div class="row margin-row mt-2">
             <div class="col-md-12 col-sm-12 col-12">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <p-table #dt [value]="parts" class="rpo-table-cstm ptable-custom" [columns]="columns" [scrollable]="true"
             [resizableColumns]="true" selectionMode="single" [responsive]="true" [metaKeySelection]="true"
@@ -156,7 +156,7 @@
         </p-table>
     </div>
     <div class="modal-footer">
-        <button type="submit" (click)="savereserveissuesparts(parts)" class="btn btn-success"
+        <button type="submit" (click)="savereserveissuesparts(parts)" class="btn btn-primary"
             [disabled]="!partActionsForm.valid || disableSubmitButtonForAction == true">
             Save
         </button>

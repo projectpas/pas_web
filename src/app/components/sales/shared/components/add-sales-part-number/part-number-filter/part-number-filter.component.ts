@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy,ChangeDetectorRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import { ItemSearchType } from "../../../../quotes/models/item-search-type";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -8,11 +8,9 @@ import { SalesQuoteService } from "../../../../../../services/salesquote.service
 import { ConditionService } from '../../../../../../services/condition.service';
 import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
 import { PartSearchParamters } from "../../../../quotes/models/part-search-parameters";
-import { IPartJson } from "../../../models/ipart-json";
-import { ISalesItemMaster } from "../../../models/isales-item-master";
 import { IMultiPartJson } from "../../../models/imulti-part-json";
 import { Router } from "@angular/router";
-import { formatNumberAsGlobalSettingsModule, formatStringToNumber } from "../../../../../../generic/autocomplete";
+import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 import { AlertService, MessageSeverity } from "../../../../../../services/alert.service";
 import { Subscription } from 'rxjs';
@@ -40,7 +38,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   partDetail: any;
   searchDisabled: boolean;
   historicalDisabled: boolean;
-
   displayPartError: boolean = false;
   enableMultiSearch: boolean = false;
   errorMessages: any[] = [];
@@ -83,15 +80,12 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       this.query.partSearchParamters.partDescription = selectedSummaryRow.partDescription;
       this.query.partSearchParamters.quantityAlreadyQuoted = selectedSummaryRow.quantityAlreadyQuoted;
       this.query.partSearchParamters.quantityRequested = selectedSummaryRow.quantityRequested;
-      // this.query.partSearchParamters.quantityToQuote =
-      //   Number(selectedSummaryRow.quantityRequested) - Number(selectedSummaryRow.quantityToBeQuoted);
       this.query.partSearchParamters.conditionId = selectedSummaryRow.conditionId;
       let part = { exist: false, partDescription: '', partId: '', partNumber: '', restricted: false, stockType: '' };
       part.partDescription = selectedSummaryRow.partDescription;
       part.partId = selectedSummaryRow.partId;
       part.partNumber = selectedSummaryRow.partNumber;
       part.stockType = selectedSummaryRow.pmaStatus;
-      
       this.query.partSearchParamters.partNumberObj = part;
       this.partDetails.push(part);
       this.calculate();
@@ -99,12 +93,9 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //this.ptnumberlistdata();
-    //this.loadData();
     this.salesQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
-        // this.query.partSearchParamters.conditionId = 0;
         this.calculate();
       });
 
@@ -150,11 +141,10 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     let searchQuery = JSON.parse(JSON.stringify(this.query));
     searchQuery.partSearchParamters.restrictDER = !searchQuery.partSearchParamters.restrictDER;
     searchQuery.partSearchParamters.restrictPMA = !searchQuery.partSearchParamters.restrictPMA;
-    if (searchQuery.partSearchParamters.conditionIds !== undefined && searchQuery.partSearchParamters.conditionIds.length == 0)
-    {
+    if (searchQuery.partSearchParamters.conditionIds !== undefined && searchQuery.partSearchParamters.conditionIds.length == 0) {
       searchQuery.partSearchParamters.conditionIds.push(searchQuery.partSearchParamters.conditionId);
     }
-    
+
     if (!programaticSearch) {
       $event.preventDefault();
     }
@@ -202,7 +192,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       }
     }
   }
-  
+
   calculate() {
     if (this.query.partSearchParamters.conditionIds.length > 0
       && this.query.partSearchParamters.partNumber
@@ -229,8 +219,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     this.query.partSearchParamters.partNumber = part.partNumber;
     this.query.partSearchParamters.partId = part.partId;
     this.query.partSearchParamters.partDescription = part.partDescription;
-    // this.query.partSearchParamters.restrictDER = this.salesQuote.restrictDER;
-    // this.query.partSearchParamters.restrictPMA = this.salesQuote.restrictPMA;
     this.query.partSearchParamters.customerId = this.salesQuote.customerId;
     this.query.partSearchParamters.conditionId = 0;
     this.query.partSearchParamters.quantityAlreadyQuoted = 0;
@@ -239,11 +227,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     this.query.partSearchParamters.quantityToQuote = 0;
     this.query.partSearchParamters.qtyOnHand = 0;
     this.query.partSearchParamters.qtyAvailable = 0;
-    // this.query.partSearchParamters.includeAlternatePartNumber = false;
-    // this.query.partSearchParamters.includeEquivalentPartNumber = false;
     this.query.partSearchParamters.includeMultiplePartNumber = false;
-    // this.query.partSearchParamters.restrictDER = false;
-    // this.query.partSearchParamters.restrictPMA = false;
     this.enableMultiSearch = false;
     if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.quantityRequested > 0)
       this.searchDisabled = false;
@@ -263,7 +247,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
 
   bindPartsDroppdown(query) {
     this.searchDisabled = true;
-    //this.partDetails = [...this.partDetailsList];
     let partSearchParamters = {
       'partNumber': query,
       "restrictPMA": this.query.partSearchParamters.restrictPMA,
@@ -275,19 +258,17 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       "includeEquivalentPartNumber": this.query.partSearchParamters.includeEquivalentPartNumber,
       "idlist": '0'
     };
-    //this.isSpinnerVisible = true;
     this.subscription = this.itemMasterService.searchPartNumberAdvanced(partSearchParamters).subscribe(
       (result: any) => {
-          //this.isSpinnerVisible = false;
-          if (result && result.length > 0) {
-            this.partDetailsList = result;
-            this.partDetails = [...this.partDetailsList];
-          }
-          else {
-            this.partDetailsList = [];
-            this.partDetails = [];
-          }
-          this.changeDetector.detectChanges();
+        if (result && result.length > 0) {
+          this.partDetailsList = result;
+          this.partDetails = [...this.partDetailsList];
+        }
+        else {
+          this.partDetailsList = [];
+          this.partDetails = [];
+        }
+        this.changeDetector.detectChanges();
       }
     )
   }
@@ -299,7 +280,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       case "1":
         searchType = ItemSearchType.ItemMaster;
         break;
-
       case "2":
         searchType = ItemSearchType.StockLine;
         break;
@@ -325,7 +305,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       }
     }
     if (multiParts.length > 0) {
-      // this.query.partSearchParamters = new PartSearchParamters();
       this.query.multiPartSearchParamters = multiParts;
       switch (this.query.partSearchParamters.itemSearchType) {
         case ItemSearchType.StockLine:
@@ -336,7 +315,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
               this.isSpinnerVisible = false;
             });
           break;
-
         default:
           this.itemMasterService.multiSearch(this.query)
             .subscribe(result => {
@@ -369,7 +347,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   includeMultiplePN(event) {
     let checked: boolean = event.srcElement.checked;
     if (checked) {
-      //this.openMultiPartSearch();
       this.enableMultiSearch = true;
       if (this.multiSearchResult.length > 0)
         this.searchDisabled = false;

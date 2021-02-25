@@ -59,6 +59,7 @@
                                     type="radio"
                                     value="2"
                                     checked="checked"
+                                    [disabled]="editMode"
                                     (ngModelChange)="enableSave()"
                                     name="optradio"
                                     [(ngModel)]="
@@ -74,7 +75,8 @@
                                   <input
                                     type="radio"
                                     value="1"
-                                    name="optradio"
+                                    name="optradio2"
+                                    [disabled]="editMode"
                                     (ngModelChange)="enableSave()"
                                     [(ngModel)]="
                                       generalInformation.customerAffiliationId
@@ -90,7 +92,8 @@
                                   <input
                                     type="radio"
                                     value="3"
-                                    name="optradio"
+                                    [disabled]="editMode"
+                                    name="optradio3"
                                     (ngModelChange)="enableSave()"
                                     [(ngModel)]="
                                       generalInformation.customerAffiliationId

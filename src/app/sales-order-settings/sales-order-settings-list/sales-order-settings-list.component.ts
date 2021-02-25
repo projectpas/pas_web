@@ -11,13 +11,13 @@ import { SalesOrderService } from "../../services/salesorder.service";
 import { SOSettingsModel } from "../../components/sales/quotes/models/verify-sales-quote-model";
 import { DatePipe } from "@angular/common";
 import * as $ from "jquery";
+
 @Component({
     selector: 'app-sales-order-settings-list',
     templateUrl: './sales-order-settings-list.component.html',
     styleUrls: ['./sales-order-settings-list.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
-/** sales-order-settings-list component*/
 export class SalesOrderSettingsListComponent {
     title: string = "SO settings";
     soqSettingsList: any = [];
@@ -54,6 +54,7 @@ export class SalesOrderSettingsListComponent {
     selected;
     selectedOnly: boolean = false;
     noDatavailable: any;
+
     constructor(private router: ActivatedRoute,
         public customerService: CustomerService,
         public salesQuoteService: SalesQuoteService,
@@ -73,11 +74,11 @@ export class SalesOrderSettingsListComponent {
     closeModal() {
         $("#downloadConfirmation").modal("hide");
     }
+
     ngOnChange() {
     }
 
     columnsChanges() {
-        // this.refreshList();
     }
 
     globalSearch(value) {
@@ -154,7 +155,6 @@ export class SalesOrderSettingsListComponent {
     }
 
     getAllSOSettings(): void {
-        // this.soqSettingsList = [];
         this.isSpinnerVisible = true;
         this.salesOrderService.getAllSalesOrderSettings().pipe(takeUntil(this.onDestroy$)).subscribe(
             result => {
@@ -184,6 +184,7 @@ export class SalesOrderSettingsListComponent {
     AddPage() {
         this.route.navigateByUrl('/salesordersettingsmodule/salesordersettings/app-create-sales-order-settings');
     }
+
     openEdit(row) {
         this.route.navigateByUrl('/salesordersettingsmodule/salesordersettings/app-create-sales-order-settings');
     }
@@ -191,15 +192,8 @@ export class SalesOrderSettingsListComponent {
     openDelete(content, rowData) {
         this.selected = rowData.salesOrderSettingId;
         this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-        this.modal.result.then(
-            () => {
-                console.log("When user closes");
-            },
-            () => {
-                console.log("Backdrop click");
-            }
-        );
     }
+
     exportCSV(dt) {
         this.isSpinnerVisible = true;
         this.salesOrderService
@@ -218,34 +212,6 @@ export class SalesOrderSettingsListComponent {
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.onDataLoadFailed(errorLog);
             });
-
-    }
-
-    onDataLoadFailed(log) {
-        // this.isSpinnerVisible = false;
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
     }
 }

@@ -21,6 +21,12 @@
 .workflow-table-material{
     padding-bottom: 50%;
 }
+.attachments-label{
+    float: none !important;width: auto !important;
+}
+.attachments-label-width{
+    float: left !important; width: 30% !important; padding: 0 !important; display: inline-block !important;
+}
 .fileupload{
     overflow: scroll;
 }

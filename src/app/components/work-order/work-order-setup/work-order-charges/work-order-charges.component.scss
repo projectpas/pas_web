@@ -18,6 +18,25 @@ select:disabled{
   box-shadow: none !important;
 }
 
+.tr-color{
+  color: #f1f1f1 !important;
+}
+.th-color{
+  background: #fff !important; border: 1px solid #fff !important;
+  border-right: 1px solid #e7ecf1 !important;
+}
+.isview-th{
+  background: #fff !important; border: 1px solid #e7ecf1 !important;
+}
+.radios-align{
+  text-align: center !important; display: flex !important;
+}
+.radios-margin{
+  float: left !important;margin-left: 10px !important;margin-right: 10px !important;
+}
+.width-130{
+  width: 130px !important;
+}
 // .rro-table-cstm th{
 //   width: unset !important;
 // }

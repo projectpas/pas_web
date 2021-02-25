@@ -20,7 +20,7 @@ import { ReceivingService } from '../../../services/receiving/receiving.service'
 import { RepairOrderService } from '../../../services/repair-order.service';
 import { PurchaseOrder, PurchaseOrderPart, StockLine, StockLineDraft, DropDownData, TimeLife, ReceiveParts, TimeLifeDraft } from '../../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
 import { ManagementStructure } from '../../../components/receiving/po-ro/receivng-po/managementstructure.model';
-
+import { RepairOrder, RepairOrderPart } from '../../../components/receiving/repair-order/receiving-ro/RepairOrder.model';
 
 @Component({
   selector: 'app-all-view',
@@ -64,6 +64,7 @@ export class AllViewComponent implements OnInit {
   @Input() PovendorId: any;
   @Input() vendorId: number;
   @Input() isReceivingpo: boolean;
+  @Input() isReceivingro: boolean;
   roTotalCost: number;
 
   addressType: any = 'PO';
@@ -73,6 +74,7 @@ export class AllViewComponent implements OnInit {
   //showPartListtab: boolean = false;
   showVendorCaptab: boolean = false;
   purchaseOrderData: PurchaseOrder;
+  repairOrderData: RepairOrderPart[] = [];
 
   approvalProcessHeader = [
     {
@@ -153,6 +155,8 @@ export class AllViewComponent implements OnInit {
     let PovendorId = this.vendorId;
     this.vendorIdByParams = this.PovendorId;
     let isReceivingpo = this.isReceivingpo;
+    let isReceivingro = this.isReceivingro;
+
     this.isPoViewMode = true;
     this.vendorId = this.PovendorId;
     this.capvendorId = this.PovendorId;
@@ -161,15 +165,16 @@ export class AllViewComponent implements OnInit {
       this.getPOViewById(OrderId);
       this.getPOPartsViewById(OrderId);
       this.getApproversListById(OrderId);
-      this.getApprovalProcessListById(OrderId);            
-      this.tabindex = 0;   
-      }  
+      this.getApprovalProcessListById(OrderId);
+      this.tabindex = 0;
+    }
     else if (this.OrderTypes == 'Repair Order') {
       this.getROViewById(OrderId);
       this.getROPartsViewById(OrderId);
       this.getRoApproversListById(OrderId);
       this.getRoApprovalProcessListById(OrderId);
       this.tabindex = 0;
+      //this.viewRepairOrder(OrderId)
     }
   }
 
@@ -178,7 +183,7 @@ export class AllViewComponent implements OnInit {
   }
 
   onChangeTabView(event) {
-
+    
     if (event.index == 0) {
       //this.showPartListtab = true;
       //this.getPOPartsViewById(this.OrderId);      
@@ -210,15 +215,27 @@ export class AllViewComponent implements OnInit {
 
     if (event.index == 7 && this.isReceivingpo == true) {
       //this.isSpinnerVisible = true;
-      if(!this.purchaseOrderData){
-        this.viewPurchaseOrder( this.id );}
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
     }
     if (event.index == 8 && this.isReceivingpo == true) {
       //this.isSpinnerVisible = true;
-      if(!this.purchaseOrderData){
-      this.viewPurchaseOrder( this.id );}
+      if (!this.purchaseOrderData) {
+        this.viewPurchaseOrder(this.id);
+      }
     }
-
+    if (event.index == 7 && this.isReceivingro == true) {
+      //this.isSpinnerVisible = true;      
+      //if(this.repairOrderData.length>0){        
+      this.viewRepairOrder(this.id);
+    }
+    if (event.index == 8 && this.isReceivingro == true) {
+      //this.isSpinnerVisible = true;      
+      //if(this.repairOrderData.length>0){        
+      this.viewRepairOrder(this.id);
+    }
+    //} 
   }
 
 
@@ -259,7 +276,7 @@ export class AllViewComponent implements OnInit {
   viewPurchaseOrder(purchaseOrderId: number): void {
     this.isSpinnerVisible = true;
     this.receivingService.getPurchaseOrderDataForViewById(purchaseOrderId).subscribe(
-      results => {
+      results => {        
         this.purchaseOrderData = results[0];
         this.purchaseOrderData.openDate = new Date(results[0].openDate).toLocaleDateString();
         this.purchaseOrderData.needByDate = new Date(results[0].needByDate);
@@ -322,8 +339,58 @@ export class AllViewComponent implements OnInit {
     );
   }
 
+  viewRepairOrder(repairOrderId: number): void {
+    this.receivingService.getReceivingROPartsForViewById(repairOrderId).subscribe(
+      results => {
+        this.repairOrderData = results;
+
+        var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
+        for (let parent of allParentParts) {
+          var splitParts = this.repairOrderData.filter(x => !x.isParent && x.parentId == parent.repairOrderPartRecordId);
+          if (splitParts.length > 0) {
+            parent.hasChildren = true;
+            parent.quantityOrdered = 0;
+            for (let childPart of splitParts) {
+              parent.stockLineCount += childPart.stockLineCount;
+              childPart.managementStructureId = parent.managementStructureId;
+              childPart.managementStructureName = parent.managementStructureName;
+              parent.quantityOrdered += childPart.quantityOrdered;
+            }
+          }
+          else {
+            parent.hasChildren = false;
+          }
+        }
+
+        for (let part of this.repairOrderData) {
+          part.toggleIcon = false;
+          part.currentSLIndex = 0;
+          part.currentTLIndex = 0;
+          part.currentSERIndex = 0;
+          part.visible = false;
+          part.showStockLineGrid = false;
+
+          part.isEnabled = false;
+          part.conditionId = 0;
+
+          if (part.stockLine != null) {
+            for (var SL of part.stockLine) {
+              SL.isEnabled = false;
+            }
+          }          
+        }        
+        //this.getStatus();               
+        this.isSpinnerVisible = false;
+        console.log(this.repairOrderData);
+
+      }, error => {
+        this.alertService.showMessage("", "Something went wrong while loading the Repair Order detail", MessageSeverity.error);
+      }
+    )
+  }
+
   getROViewById(roId) {
-    this.repairOrderService.getROViewById(roId).subscribe(res => {     
+    this.repairOrderService.getROViewById(roId).subscribe(res => {
       this.roHeaderAdd = {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
@@ -334,7 +401,7 @@ export class AllViewComponent implements OnInit {
 
   getROPartsViewById(roId) {
     this.roPartsList = [];
-    this.repairOrderService.getROPartsViewById(roId).subscribe(res => {      
+    this.repairOrderService.getROPartsViewById(roId).subscribe(res => {
       if (res) {
         res.map(x => {
           const partList = {
@@ -346,15 +413,15 @@ export class AllViewComponent implements OnInit {
             extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
             foreignExchangeRate: x.foreignExchangeRate ? formatNumberAsGlobalSettingsModule(x.foreignExchangeRate, 5) : '0.00',
             repairOrderSplitParts: this.getRepairOrderSplit(x)
-          }         
+          }
           this.roPartsList.push(partList);
-          
+
         });
       }
     }, err => { });
   }
 
-  getRepairOrderSplit(partList) {    
+  getRepairOrderSplit(partList) {
     if (partList.roPartSplits) {
       return partList.roPartSplits.map(y => {
         const splitpart = {
@@ -366,7 +433,7 @@ export class AllViewComponent implements OnInit {
     }
   }
 
-  getPurchaseOrderSplit(partList) {    
+  getPurchaseOrderSplit(partList) {
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
         const splitpart = {

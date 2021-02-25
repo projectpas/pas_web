@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-declare var $ : any;
+declare var $: any;
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
@@ -12,7 +12,6 @@ import { SalesOrderpickTicketComponent } from "../sales-order-pickTicket/sales-o
 import { SOPickTicket } from "../../../../models/sales/SOPickTicket";
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { DatePipe } from "@angular/common";
-import { NumberFormat } from 'xlsx/types';
 import { StocklineViewComponent } from "../../../../shared/components/stockline/stockline-view/stockline-view.component";
 
 @Component({
@@ -56,6 +55,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   pickticketauditHistory: any[] = [];
   pickTicketItemInterfaceheader: any[];
   disableSubmitButton: boolean = true;
+
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
@@ -79,7 +79,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   }
 
   get userId() {
-    console.log(this.authService.currentUser);
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
 
@@ -88,33 +87,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       ? this.authService.currentUser.masterCompanyId
       : 1;
   }
-
-  // initColumns() {
-  //   this.headers = [
-  //     { field: "soPickTicketNumber", header: "PT Num", width: "130px" },
-  //     { field: "soPickTicketDate", header: "PT Date", width: "130px" },
-  //     { field: "partNumber", header: "PN", width: "130px" },
-  //     { field: "partDescription", header: "PN Description", width: "130px" },
-  //     { field: "serialNumber", header: "Serial Num", width: "130px" },
-  //     { field: "uom", header: "UOM", width: "130px" },
-  //     { field: "qty", header: "Qty Ordered", width: "130px" },
-  //     { field: "qtyReserved", header: "Qty to Pick", width: "130px" },
-  //     { field: "qtyToShip", header: "Qty Picked", width: "130px" },
-  //     { field: "qtyRemaining", header: "Qty Remaining", width: "130px" },
-  //     { field: "strStatus", header: "Status", width: "130px" },
-  //     { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
-  //     { field: "soNumber", header: "SO Num", width: "130px" },
-  //     { field: "woNumber", header: "WO Num", width: "130px" },
-  //     { field: "customer", header: "Customer", width: "130px" },
-  //     { field: "poNumber", header: "PO Num", width: "130px" },
-  //     { field: "shipToCity", header: "Ship To City", width: "130px" },
-  //     { field: "shipToCountry", header: "Ship to Country", width: "130px" },
-  //     { field: "pickedByName", header: "Picked By", width: "130px" },
-  //     { field: "woNumber", header: "Confirmed By", width: "130px" },
-  //     { field: "memo", header: "Memo", width: "130px" }
-  //   ];
-  //   this.selectedColumns = this.headers;
-  // }
 
   initColumns() {
     this.headers = [
@@ -155,9 +127,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   loadData(event, globalFilter = "") {
     event.filters.statusId = this.currentStatus;
     this.searchParameters.first = parseInt(event.first) / event.rows;
-
     this.searchParameters.rows = event.rows;
-
     this.searchParameters.sortOrder = event.sortOrder;
     this.searchParameters.sortField = event.sortField;
     this.lazyLoadEventData = event;
@@ -173,12 +143,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     this.searchParameters.globalFilter = globalFilter;
   }
 
-  // globalSearch(val) {
-  //   this.searchParameters.globalFilter = val
-  //   const lazyEvent = this.lazyLoadEventData;
-
-  // }
-
   onSearch() {
     this.isSpinnerVisible = true;
     this.salesOrderService
@@ -186,7 +150,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.pickTickes = response[0];
-        console.log("this.pickTickesList ",this.pickTickes);
         this.showPaginator = this.totalRecords > 0;
       }, error => {
         this.isSpinnerVisible = false;
@@ -228,22 +191,8 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     instance.soPickTicketId = rowData.soPickTicketId;
   }
 
-  // PickTicketDetails = {
-  //   salesOrderId: 0,
-  //   salesOrderPartId:0,
-  //   stockLineNumber:'',
-  //   qty:0,
-  //   qtyToShip:0,
-  //   partNumber: '',
-  //   partDescription: '',
-  //   soPickTicketNumber:'',
-  //   soPickTicketDate:null,
-  //   soPickTicketId:0,
-  //   memo:''
-  // }
-  QtyRem : Number = 0;
-  openEdit(rowData){
-    // this.soPickTicket = rowData;
+  QtyRem: Number = 0;
+  openEdit(rowData) {
     this.QtyRem = rowData.qtyRemaining;
     this.PickTicketDetails = rowData;
   }
@@ -258,13 +207,11 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     this.memoPopupContent = '';
     $('#memo-popup-pt').modal("hide");
     this.disabledMemo = true;
-    //this.disableSave = false;
-}
+  }
 
   disabledMemo: boolean = false;
-
   enableSaveMemo() {
-      this.disabledMemo = false;
+    this.disabledMemo = false;
   }
 
   closeMemoModel() {
@@ -274,17 +221,16 @@ export class SalesOrderPickTicketsComponent implements OnInit {
 
   parsedText(text) {
     if (text) {
-        const dom = new DOMParser().parseFromString(
-            '<!doctype html><body>' + text,
-            'text/html');
-        const decodedString = dom.body.textContent;
-        return decodedString;
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
     }
   }
 
   closeMyModel(type) {
     $(type).modal("hide");
-    //this.disableSave = true;
   }
 
   get employeeId() {
@@ -293,16 +239,16 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       : "";
   }
 
-  updatePickTicket(){
+  updatePickTicket() {
     const data = {
       ...this.PickTicketDetails,
-      IsActive : true,
-      CreatedBy:this.userName,
-      UpdatedBy:this.userName,
+      IsActive: true,
+      CreatedBy: this.userName,
+      UpdatedBy: this.userName,
       pickedById: this.employeeId,
       confirmedById: this.employeeId
-     }
-     this.salesOrderService.updatePickTicket(data).subscribe(response => {
+    }
+    this.salesOrderService.updatePickTicket(data).subscribe(response => {
       this.alertService.showMessage(
         'Success',
         `Updated Pick Ticket Sucessfully`,
@@ -310,29 +256,26 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       );
       $('#editpickticket').modal("hide");
       this.onSearch();
-      console.log("response",response);
-    },err => {
-      this.isSpinnerVisible = false;		
+    }, err => {
+      this.isSpinnerVisible = false;
     })
-     console.log("data ", data);
   }
 
   enableSave() {
-      this.disableSave = false;
+    this.disableSave = false;
   }
 
   getpickticketHistory(rowData) {
     this.isSpinnerVisible = true;
     this.salesOrderService.getpickticketHistory(rowData.soPickTicketId).subscribe(res => {
-        //this.auditHistory = res;
-                        this.pickticketauditHistory  = res.map(x => {
-                          return {
-                              ...x,                    
-                              createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '',
-                              updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '',
-                          }
-                      });  
-        this.isSpinnerVisible = false;
+      this.pickticketauditHistory = res.map(x => {
+        return {
+          ...x,
+          createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a') : '',
+          updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a') : '',
+        }
+      });
+      this.isSpinnerVisible = false;
     }, err => {
       this.isSpinnerVisible = false;
     });
@@ -342,11 +285,11 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     const data = this.pickticketauditHistory;
     const dataLength = data.length;
     if (i >= 0 && i <= dataLength) {
-        if ((i + 1) === dataLength) {
-            return true;
-        } else {
-            return data[i + 1][field] === value
-        }
+      if ((i + 1) === dataLength) {
+        return true;
+      } else {
+        return data[i + 1][field] === value
+      }
     }
   }
 
@@ -354,53 +297,36 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     $("#pickticketHistory").modal("hide");
   }
 
-  checkQtyToPicked(value){
-    if(value > this.QtyRem){
-    //   this.PickTicketDetails.qtyToShip = 0;
-    //   this.disableSave = true;
-    //   this.alertService.showMessage(
-    //     'Error',
-    //     `Qty to pick is greater than Qty Remaining`,
-    //     MessageSeverity.error
-    //   );
+  checkQtyToPicked(value) {
+    if (value > this.QtyRem) {
     }
   }
 
   parts: any[] = [];
-  qtyToPick:number=0;
-  //pickticketItemInterface(itemMasterId,conditionId,salesOrderId,salesOrderPartId,pickticketieminterface){
-    pickticketItemInterface(rowData,pickticketieminterface){
-      const itemMasterId = rowData.itemMasterId;
-      const conditionId = rowData.conditionId;
-      const salesOrderId = rowData.salesOrderId;
-      const salesOrderPartId = rowData.salesOrderPartId;
-      this.qtyToPick = rowData.qtyToPick;
-      console.log("rowData",rowData);
+  qtyToPick: number = 0;
+  pickticketItemInterface(rowData, pickticketieminterface) {
+    const itemMasterId = rowData.itemMasterId;
+    const conditionId = rowData.conditionId;
+    const salesOrderId = rowData.salesOrderId;
+    const salesOrderPartId = rowData.salesOrderPartId;
+    this.qtyToPick = rowData.qtyToPick;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.salesOrderService
-      .getStockLineforPickTicket(itemMasterId,conditionId,salesOrderId)
+      .getStockLineforPickTicket(itemMasterId, conditionId, salesOrderId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response[0];
-        console.log("this.pickTickesitemlist ",this.parts);
         for (let i = 0; i < this.parts.length; i++) {
-          console.log(this.parts[i].oemDer);
           if (this.parts[i].oemDer == null)
-              this.parts[i].oemDer = this.parts[i].stockType;
-
-          // this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-          // this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+            this.parts[i].oemDer = this.parts[i].stockType;
           this.parts[i]['isSelected'] = false;
           this.parts[i]['salesOrderId'] = salesOrderId;
           this.parts[i]['salesOrderPartId'] = salesOrderPartId;
           this.parts[i].qtyToShip = this.qtyToPick;
-          // if(this.parts[i].qtyToReserve){
           if (this.parts[i].qtyToReserve == 0) {
-              this.parts[i].qtyToReserve = null
+            this.parts[i].qtyToReserve = null
           }
-          // }
-      }
-        //this.showPaginator = this.totalRecords > 0;
+        }
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -409,92 +335,81 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   onChangeOfPartSelection(event) {
     let selectedPartsLength = 0;
     for (let i = 0; i < this.parts.length; i++) {
-        if (event == true) {
-            selectedPartsLength = selectedPartsLength + 1;
+      if (event == true) {
+        selectedPartsLength = selectedPartsLength + 1;
+      }
+      else {
+        if (selectedPartsLength != 0) {
+          selectedPartsLength = selectedPartsLength - 1;
         }
-        else {
-            if (selectedPartsLength != 0) {
-                selectedPartsLength = selectedPartsLength - 1;
-            }
-        }
+      }
     }
 
     if (selectedPartsLength == 0) {
-        this.disableSubmitButton = true;
+      this.disableSubmitButton = true;
     } else {
-        this.disableSubmitButton = false;
+      this.disableSubmitButton = false;
     }
   }
-  
-  savepickticketiteminterface(parts){
+
+  savepickticketiteminterface(parts) {
     let tempParts = [];
     let invalidQty = false;
-        parts.filter(x => {
-            x.createdBy = this.userName;
-            x.updatedBy = this.userName;
-            x.pickedById = this.employeeId;
-            x.masterCompanyId = this.masterCompanyId;
-
-            console.log(x.qtyToShip);
-            if (x.isSelected == true) {
-                tempParts.push(x)
-                
-            }
-        })
-        parts = [];
-        parts = tempParts;
-        console.log("parts ",parts);
-        for (let i = 0; i < parts.length; i++) {
-          let selectedItem = parts[i];
-          var errmessage = '';
-          if (selectedItem.qtyToShip > this.qtyToPick) {
-              this.isSpinnerVisible = false;
-              invalidQty = true;
-              errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
-          }
-        }
-        if (invalidQty) {
-          this.isSpinnerVisible = false;
-          this.alertService.resetStickyMessage();
-          this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
-        }
-        else{
-          this.disableSubmitButton = true;
-          this.salesOrderService
-            .savepickticketiteminterface(parts)
-            .subscribe(data => {
-                this.alertService.stopLoadingMessage();
-                this.alertService.showMessage(
-                    "Success",
-                    `Item Picked Successfully..`,
-                    MessageSeverity.success
-                );
-                //$('#pickticketieminterface').modal("hide");
-                this.dismissModel();
-                this.onSearch();
-                // this.partActionModalClose.emit(true)
-               
-            },error => this.isSpinnerVisible = false);
-          }
+    parts.filter(x => {
+      x.createdBy = this.userName;
+      x.updatedBy = this.userName;
+      x.pickedById = this.employeeId;
+      x.masterCompanyId = this.masterCompanyId;
+      if (x.isSelected == true) {
+        tempParts.push(x)
+      }
+    })
+    parts = [];
+    parts = tempParts;
+    for (let i = 0; i < parts.length; i++) {
+      let selectedItem = parts[i];
+      var errmessage = '';
+      if (selectedItem.qtyToShip > this.qtyToPick) {
+        this.isSpinnerVisible = false;
+        invalidQty = true;
+        errmessage = errmessage + '<br />' + "You cannot pick more than Qty To Pick"
+      }
+    }
+    if (invalidQty) {
+      this.isSpinnerVisible = false;
+      this.alertService.resetStickyMessage();
+      this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
+    }
+    else {
+      this.disableSubmitButton = true;
+      this.salesOrderService
+        .savepickticketiteminterface(parts)
+        .subscribe(data => {
+          this.alertService.stopLoadingMessage();
+          this.alertService.showMessage(
+            "Success",
+            `Item Picked Successfully..`,
+            MessageSeverity.success
+          );
+          this.dismissModel();
+          this.onSearch();
+        }, error => this.isSpinnerVisible = false);
+    }
   }
 
-  confirmselected:number;
-  ptNumber:number;
-  confirmedById:any;
+  confirmselected: number;
+  ptNumber: number;
+  confirmedById: any;
   ConfirmPTpopup(confirm, part) {
     this.confirmselected = part.soPickTicketId;
     this.ptNumber = part.soPickTicketNumber;
     this.modal = this.modalService.open(confirm, { size: "sm", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => { },
-      () => { }
-    );
   }
 
   confirmPickTicket(): void {
     this.isSpinnerVisible = true;
     this.confirmedById = this.employeeId;
-    this.salesOrderService.confirmPickTicket(this.confirmselected,this.confirmedById).subscribe(response => {
+    this.salesOrderService.confirmPickTicket(this.confirmselected, this.confirmedById).subscribe(response => {
       this.isSpinnerVisible = false;
       this.modal.close();
       this.alertService.showMessage(
@@ -512,30 +427,27 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
-  //soPickTicketId:number=0;
-  pickticketItemInterfaceedit(rowData,pickticketieminterface){
+  
+  pickticketItemInterfaceedit(rowData, pickticketieminterface) {
     const soPickTicketId = rowData.soPickTicketId;
     const salesOrderId = rowData.salesOrderId;
     const salesOrderPartId = rowData.salesOrderPartId;
     this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
     this.salesOrderService
-      .getPickTicketEdit(soPickTicketId,salesOrderId,salesOrderPartId)
+      .getPickTicketEdit(soPickTicketId, salesOrderId, salesOrderPartId)
       .subscribe((response: any) => {
         this.isSpinnerVisible = false;
         this.parts = response;
         for (let i = 0; i < this.parts.length; i++) {
-          console.log(this.parts[i].oemDer);
           if (this.parts[i].oemDer == null)
-              this.parts[i].oemDer = this.parts[i].stockType;
+            this.parts[i].oemDer = this.parts[i].stockType;
 
           this.parts[i]['isSelected'] = false;
           this.parts[i]['soPickTicketId'] = soPickTicketId;
           this.qtyToPick = this.parts[i].qtyToPick;
-          // if(this.parts[i].qtyToReserve){
           if (this.parts[i].qtyToReserve == 0) {
-              this.parts[i].qtyToReserve = null
+            this.parts[i].qtyToReserve = null
           }
-          // }
         }
       }, error => {
         this.isSpinnerVisible = false;
