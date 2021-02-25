@@ -672,9 +672,9 @@
                                                     </div>
                                                     <div class="col-md-2 " *ngIf="!isViewMode">
                                                         <div class="form-group">
-                                                            <label>Shipping Account Info <span class="clr-red">*</span></label>
+                                                            <label>Shipping Account Info <span class="clr-red"></span></label>
                                                             <input class="form-control" type="text" name="shippingAccountinfoDomestic"
-                                                                   [(ngModel)]="shipViaObj.shippingAccountInfo" (ngModelChange)="enableSaveDomeSticShipVia()" required />
+                                                                   [(ngModel)]="shipViaObj.shippingAccountInfo" (ngModelChange)="enableSaveDomeSticShipVia()" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2" *ngIf="!isViewMode">
@@ -2326,9 +2326,9 @@
                         </div>
                         <div class="col-md-2" *ngIf="!isViewMode">
                             <div class="form-group">
-                                <label>Shipping Account Info <span class="clr-red">*</span></label>
+                                <label>Shipping Account Info <span class="clr-red"></span></label>
                                 <input class="form-control" type="text" name="shippingAccountinfoInter" (ngModelChange)="enableSaveInternationalShipVia()"
-                                       [(ngModel)]="shipViaInterObj.shippingAccountInfo" required />
+                                       [(ngModel)]="shipViaInterObj.shippingAccountInfo"  />
                             </div>
                         </div>
                         <div class="col-md-2" *ngIf="!isViewMode">
