@@ -1,6 +1,4 @@
 import { Component, Input, ViewChild, ElementRef, Output, EventEmitter } from "@angular/core";
-import { ISalesOrderQuoteApproverList } from '../../../../../../models/sales/ISalesOrderQuoteApproverList';
-import { SalesOrderQuoteApproverList } from '../../../../../../models/sales/SalesOrderQuoteApproverList';
 import { ISalesOrderQuote } from "../../../../../../models/sales/ISalesOrderQuote";
 import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 import { EmployeeService } from '../../../../../../services/employee.service';
@@ -14,7 +12,6 @@ import { SalesQuote } from "../../../../../../models/sales/SalesQuote.model";
 import { SalesOrderQuote } from "../../../../../../models/sales/SalesOrderQuote";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerService } from "../../../../../../services/customer.service";
-import { SalesQuoteViewComponent } from "../sales-quote-view/sales-quote-view.component";
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 declare var $ : any;
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
@@ -24,6 +21,7 @@ import { SOQuoteMarginSummary } from "../../../../../../models/sales/SoQuoteMarg
 import { ApprovalProcessEnum } from "../../../models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../models/approval-status-enum";
 import { ApprovalTaskEnum } from "../../../models/approval-task-enum";
+
 @Component({
     selector: "app-sales-customer-approvals",
     templateUrl: "./sales-customer-approvals.component.html",
@@ -65,12 +63,9 @@ export class SalesCustomerApprovalsComponent {
         { field: 'partNumber', header: 'PN', width: "100px" },
         { field: 'partDescription', header: 'PN Desc', width: "110px" },
         { field: 'qtyQuoted', header: 'Qty', width: "90px" },
-        // { field: 'markUpPercentage', header: 'Mark Up %', width: "80px" },
         { field: 'markupExtended', header: 'Mark Up Amt.', width: "90px" },
-        // { field: 'discount', header: 'Disc %', width: "60px" },
         { field: 'discountAmount', header: 'Disc Amt.', width: "90px" },
         { field: 'netSales', header: 'Net Sales', width: "90px" },
-        // { field: 'unitCost', header: 'Unit Cost', width: "90px" },
         { field: 'unitCostExtended', header: 'Ext Cost', width: "90px" },
         { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
         { field: 'marginPercentage', header: 'Margin %', width: "60px" },
@@ -86,7 +81,6 @@ export class SalesCustomerApprovalsComponent {
     partModal: NgbModalRef;
     salesQuoteId: number;
     statusListForApproval = [];
-
     @ViewChild("customerApprovalConfirmationModal",{static:false})
     public customerApprovalConfirmationModal: ElementRef;
     disableSubmitButtonForCustomerApproval: boolean = false;
@@ -111,7 +105,6 @@ export class SalesCustomerApprovalsComponent {
             this.customerId = +this.customerIdFromQuoteList;
             this.salesQuoteId = +this.salesQuoteIdFromQuoteList;
         }
-        // this.getApproverStatusList();
         this.selectedColumns = this.columns;
         this.setDefaultContact();
     }
@@ -140,21 +133,13 @@ export class SalesCustomerApprovalsComponent {
 
         }
         forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
-            //this.salesQuoteService.getInternalApproversList(ApprovalTaskEnum.SalesQuoteApproval, marginSummary.netSales),
             this.salesQuoteService.approverslistbyTaskId(ApprovalTaskEnum.SalesQuoteApproval, this.salesQuoteId),
             this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId)).subscribe(response => {
                 this.isSpinnerVisible = false;
-                // this.setApprovers = response[0];
-                // if (response[1] && response[1].length > 0) {
-                //     this.approvers = response[1];
-                // } else {
-                //     this.approvers = [];
-                // }
                 this.approvers = response[1];
-                // this.getCustomerQuotesList();
                 this.setApprovers(response[0])
                 this.setApproverProcessdata(response[2]);
-            }, error => this.saveFailedHelper(error))
+            }, error => {})
     }
 
     onApprovalSelected(approver, i) {
@@ -254,8 +239,6 @@ export class SalesCustomerApprovalsComponent {
                 this.isSpinnerVisible = false;
                 this.setApproverProcessdata(data);
             }, error => {
-                // this.isSpinnerVisible = false;
-                this.saveFailedHelper(error);
             });
     }
 
@@ -304,7 +287,6 @@ export class SalesCustomerApprovalsComponent {
             if (this.quotesList[i].customerApprovedDate) {
                 this.quotesList[i].customerApprovedDate = new Date(this.quotesList[i].customerApprovedDate);
             }
-
         }
     }
 
@@ -329,15 +311,16 @@ export class SalesCustomerApprovalsComponent {
         }
         return;
     }
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
-
     }
+
     selectAllApproval(type, isSelected) {
         this.quotesList.forEach(
             (x, i) => {
                 let disableEdit = this.getPartToDisableOrNot(x);
-                if (disableEdit) {//if (!disableEdit) {
+                if (disableEdit) {
                     x.isSelected = !isSelected;
                     this.onApprovalSelected(x, i);
                 }
@@ -357,6 +340,7 @@ export class SalesCustomerApprovalsComponent {
         }
         return disableEdit;
     }
+
     viewSelectedRow(content, row) {
         const { salesQuoteId } = row;
         let customerId = row.customerId;
@@ -364,16 +348,7 @@ export class SalesCustomerApprovalsComponent {
         this.salesOrderQuote = new SalesOrderQuote();
         this.selectedParts = [];
         this.getCustomerWarningsData(customerId);
-        // this.getSalesQuoteInstance(salesQuoteId, customerId);
         this.modal = this.modalService.open(content, { size: "lg" });
-        //this.modal.result.then(
-        //    () => {
-        //        console.log("When user closes");
-        //    },
-        //    () => {
-        //        console.log("Backdrop click");
-        //    }
-        //);
     }
 
     async getCustomerWarningsData(customerId) {
@@ -384,17 +359,6 @@ export class SalesCustomerApprovalsComponent {
             });
     }
 
-    saveFailedHelper(error) {
-        this.isSpinnerVisible = false;
-        let errorMessage = '';
-        if (error.message) {
-            errorMessage = error.message;
-        }
-        this.alertService.resetStickyMessage();
-        this.alertService.showStickyMessage("SO Quote", errorMessage, MessageSeverity.error, error);
-        // this.alertService.showMessage(error);
-    }
-
     onChangeOfQuoteCheckbox(event, rowdata) {
         rowdata.statusId = event ? DBkeys.DEFAULT_SALES_QUOTE_APPROVAL_ID : rowdata.tempStatusId;
     }
@@ -403,9 +367,6 @@ export class SalesCustomerApprovalsComponent {
         if (rowData.stockLineId) {
             this.partModal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
             this.partModal.componentInstance.stockLineId = rowData.stockLineId;
-            //this.partModal.result.then(() => {
-            //    console.log('When user closes');
-            //}, () => { console.log('Backdrop click') })
         }
     }
 
@@ -416,10 +377,6 @@ export class SalesCustomerApprovalsComponent {
     openConfirmationModal() {
         if (this.hasPartsSelected()) {
             this.modal = this.modalService.open(this.customerApprovalConfirmationModal, { size: "sm" });
-            this.modal.result.then(
-                () => { },
-                () => { }
-            );
         }
     }
 
@@ -441,9 +398,9 @@ export class SalesCustomerApprovalsComponent {
     canDisplayInDropDown(status: any) {
         return status.displayInDropdown && (status.id === ApprovalStatusEnum.Pending || status.id === ApprovalStatusEnum.WaitingForApproval);
     }
+    
     saveApprovalProcess() {
         let openEmail = false;
-        console.log(this.approvers);
         if (this.approvers && this.approvers.length > 0) {
             this.approvers.forEach(
                 x => {
@@ -460,12 +417,11 @@ export class SalesCustomerApprovalsComponent {
             this.saveApprovalData();
         }
     }
+
     saveApprovalData() {
-        // if (this.approvalGridActiveTab == 'setForInternalApproval' || this.approvalGridActiveTab == 'sentForCustomerApproval') {
         let payLoad = [];
         let currentEmployee = this.employeeId;
         let mastercompanyid = this.currentUserMasterCompanyId;
-
         let approvedParts = 0;
         let hasError = false;
         let validmessages = '';
@@ -488,7 +444,6 @@ export class SalesCustomerApprovalsComponent {
                         "ApprovedContactId": x.approvedContactId,
                         "InternalSentDate": x.internalSentDate,
                         "InternalApprovedDate": x.internalApprovedDate,
-                        //"InternalApprovedById": currentEmployee.employeeId,
                         "CustomerSentDate": x.customerSentDate,
                         "CustomerApprovedDate": x.customerApprovedDate,
                         "CustomerApprovedById": x.customerApprovedById,
@@ -496,13 +451,11 @@ export class SalesCustomerApprovalsComponent {
                         "CustomerStatusId": x.customerStatusId,
                         "InternalMemo": x.internalMemo,
                         "CustomerMemo": x.customerMemo,
-                        "UpdatedBy": this.userName, //"admin",
+                        "UpdatedBy": this.userName,
                         "salesOrderQuoteApprovalId": x.salesOrderQuoteApprovalId,
                         "ApprovalActionId": x.approvalActionId,
                         "IsInternalApprove": x.isInternalApprove,
-
-                        "createdBy": this.userName, //"admin",
-                        //"updatedBy": "admin",
+                        "createdBy": this.userName,
                         "createdDate": new Date().toDateString(),
                         "updatedDate": new Date().toDateString(),
                         "isActive": true,
@@ -611,6 +564,7 @@ export class SalesCustomerApprovalsComponent {
         }
         return result;
     }
+
     getApproversEmails() {
         let result = '';
         if (this.approvers && this.approvers.length > 0) {
@@ -618,6 +572,7 @@ export class SalesCustomerApprovalsComponent {
         }
         return result;
     }
+
     getApprovalActionInternalStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
             return true;
@@ -633,6 +588,7 @@ export class SalesCustomerApprovalsComponent {
             return false;
         }
     }
+
     memoIndex;
     memoType;
     onAddTextAreaInfo(material, index) {
@@ -640,6 +596,7 @@ export class SalesCustomerApprovalsComponent {
         this.memoType = material;
         this.textAreaInfo = this.quotesList[index][material];
     }
+
     textAreaInfo: any;
     onSaveTextAreaInfo(memo) {
         if (memo) {
@@ -648,12 +605,12 @@ export class SalesCustomerApprovalsComponent {
         }
         $("#memo-popup").modal("hide");
     }
+
     onCloseTextAreaInfo() {
         $("#memo-popup").modal("hide");
     }
 
     getInternalSentDateEnableStatus(approver) {
-        console.log('getInternalSentDateEnableStatus approver:', approver)
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SentForInternalApproval;
     }
 

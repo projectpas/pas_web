@@ -1,5 +1,4 @@
 <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
-
 <div class="card new-card">
   <div class="card-header header">
     <div class="row">
@@ -53,10 +52,8 @@
           <col *ngFor="let col of columns" style="width:130px">
         </colgroup>
       </ng-template>
-
       <ng-template pTemplate="header" let-columns>
         <tr>
-
           <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn
             [pSortableColumn]="col.field">
             {{ col.header }}
@@ -122,7 +119,6 @@
     </p-table>
   </div>
 </div>
-
 <ng-template #warningPopup let-c="close" let-d="dismiss">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
@@ -132,8 +128,6 @@
     <p class="warning_color">{{customerWarning.warningMessage}}</p>
   </div>
   <div class="modal-footer">
-    <!-- <button type="button" class="btn btn-primary" data-dismiss="modal"
-      (click)="moveToCreate(customerWarning.customerId)">Ok</button> -->
     <h5>Continue ?</h5>
     <button type="button" class="btn btn-primary" data-dismiss="modal"
       (click)="moveToCreate(customerWarning.customerId)">Yes</button>
@@ -150,7 +144,6 @@
     <p class="restrict_color">{{customerWarning.restrictMessage}}</p>
   </div>
   <div class="modal-footer">
-
     <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="closeModal()">Ok</button>
   </div>
 </ng-template>

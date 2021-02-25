@@ -10,13 +10,13 @@ import { AuthService } from "../../services/auth.service";
 import * as $ from "jquery";
 import { DatePipe } from "@angular/common";
 import { SOQSettingsModel } from "../../components/sales/quotes/models/verify-sales-quote-model";
+
 @Component({
     selector: 'app-sales-quote-settings-list',
     templateUrl: './sales-quote-settings-list.component.html',
     styleUrls: ['./sales-quote-settings-list.component.scss'],
     encapsulation: ViewEncapsulation.None,
 })
-/** sales-order-settings-list component*/
 export class SalesQuoteSettingsListComponent {
     title: string = "SO Quote settings";
     soqSettingsList: any = [];
@@ -75,7 +75,6 @@ export class SalesQuoteSettingsListComponent {
     }
 
     columnsChanges() {
-        // this.refreshList();
     }
 
     globalSearch(value) {
@@ -89,9 +88,11 @@ export class SalesQuoteSettingsListComponent {
             }
         })
     }
+
     closeModal() {
         $("#downloadConfirmation").modal("hide");
     }
+
     getAuditHistoryById(rowData) {
         this.isSpinnerVisible = true;
         this.salesQuoteService.getSOQuoteSettingHistory(rowData.salesOrderQuoteSettingId)
@@ -154,7 +155,6 @@ export class SalesQuoteSettingsListComponent {
     }
 
     getAllSOQuoteSettings(): void {
-        // this.soqSettingsList = [];
         this.isSpinnerVisible = true;
         this.salesQuoteService.getAllSalesOrderQuoteSettings().pipe(takeUntil(this.onDestroy$)).subscribe(
             result => {
@@ -190,14 +190,6 @@ export class SalesQuoteSettingsListComponent {
     openDelete(content, rowData) {
         this.selected = rowData.salesOrderQuoteSettingId;
         this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-        this.modal.result.then(
-            () => {
-                console.log("When user closes");
-            },
-            () => {
-                console.log("Backdrop click");
-            }
-        );
     }
 
     exportCSV(dt) {
@@ -218,36 +210,6 @@ export class SalesQuoteSettingsListComponent {
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.onDataLoadFailed(errorLog);
             });
-
     }
-
-    onDataLoadFailed(log) {
-        // this.isSpinnerVisible = false;
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
-
-
 }

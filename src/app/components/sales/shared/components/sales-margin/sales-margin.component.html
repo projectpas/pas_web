@@ -4,7 +4,6 @@
   </button>
   <h4 class="modal-title" *ngIf="!isEdit">Compute Sales Price</h4>
   <h4 class="modal-title" *ngIf="isEdit">Edit Margin Details</h4>
-
 </div>
 <div class="modal-body">
   <div class="row margin-row">
@@ -78,10 +77,8 @@
             (ngModelChange)="part.quantityToBeQuoted=formatStringToNumberGlobal($event)" />
         </div>
       </div>
-
     </div>
   </div>
-
   <div class="row margin-row row-table calculation">
     <table>
       <thead>
@@ -101,8 +98,7 @@
           <td><span><input type="text" class="form-control text-right"
                 [ngModel]="part.salesPricePerUnit  | twoDecimalGlobalNumberFormatPipe"
                 [ngModelOptions]="{updateOn:'blur'}"
-                (ngModelChange)="part.salesPricePerUnit=formatStringToNumberGlobal($event)"
-                (blur)="calculate()"
+                (ngModelChange)="part.salesPricePerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
                 pKeyFilter="money" /></span></td>
           <td><span>{{part.salesPriceExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
         </tr>
@@ -118,10 +114,8 @@
             <span style="padding-left: 5px;">%</span>
           </td>
           <td><span><input type="text" class="form-control text-right"
-                [ngModel]="part.markupPerUnit | twoDecimalGlobalNumberFormatPipe" 
-                [ngModelOptions]="{updateOn:'blur'}"
-                (ngModelChange)="part.markupPerUnit=formatStringToNumberGlobal($event)" 
-                (blur)="calculate()"
+                [ngModel]="part.markupPerUnit | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}"
+                (ngModelChange)="part.markupPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
                 pKeyFilter="money" /></span>
           </td>
           <td><span>{{part.markupExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
@@ -139,13 +133,11 @@
 
           </td>
           <td>
-            <input type="text" 
-              class="form-control text-right"
+            <input type="text" class="form-control text-right"
               [ngModel]="part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe"
               [ngModelOptions]="{updateOn:'blur'}"
-              (ngModelChange)="part.salesDiscountPerUnit=formatStringToNumberGlobal($event)" 
-              (blur)="calculate()" 
-              pKeyFilter="money"/>
+              (ngModelChange)="part.salesDiscountPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()"
+              pKeyFilter="money" />
           </td>
           <td><span>{{part.salesDiscountExtended | twoDecimalGlobalNumberFormatPipe}}</span></td>
         </tr>
@@ -168,13 +160,7 @@
             <span>Unit Cost</span>
           </td>
           <td>
-
           </td>
-          <!--
-                <td>
-                  <span><input type="number" class="form-control" [(ngModel)]="part.unitCostPerUnit" (change)="calculate()" /></span>
-                </td>
-              -->
           <td><span>{{ part.unitCostPerUnit | twoDecimalGlobalNumberFormatPipe }}</span></td>
           <td><span>{{ part.unitCostExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
         </tr>
@@ -184,10 +170,6 @@
           </td>
           <td>
           </td>
-          <!-- <td>
-                    <input type="number" class="form-control" [(ngModel)]="part.marginAmountPerUnit" (change)="calculate()" />
-                </td>
-              -->
           <td><span>{{ part.marginAmountPerUnit | twoDecimalGlobalNumberFormatPipe }}</span></td>
           <td><span>{{ part.marginAmountExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
         </tr>
@@ -197,13 +179,6 @@
           </td>
           <td>
           </td>
-          <!--
-                <td>
-                  <select [(ngModel)]="part.marginPercentagePerUnit" (change)="calculate()">
-                      <option *ngFor="let p of percentage" [ngValue]="p.value">{{ p.label }}</option> 
-                  </select>
-                </td>
-              -->
           <td><span>{{ part.marginPercentagePerUnit | twoDecimalGlobalNumberFormatPipe }} % </span></td>
           <td><span>{{ part.marginPercentageExtended | twoDecimalGlobalNumberFormatPipe }} %</span></td>
         </tr>

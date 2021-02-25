@@ -1,13 +1,9 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../../../services/auth.service';
-import { FormBuilder } from '@angular/forms';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
-import { MasterComapnyService } from '../../../../../../services/mastercompany.service';
-
-import { MatDialog } from '@angular/material';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { ConfigurationService } from '../../../../../../services/configuration.service';
 import { AuditHistory } from '../../../../../../models/audithistory.model';
@@ -16,20 +12,16 @@ import { Documents } from '../../../../../../models/documents.model';
 import { CommonService } from '../../../../../../services/common.service';
 import { CustomerService } from '../../../../../../services/customer.service';
 import * as moment from 'moment';
+
 @Component({
 	selector: "app-sales-order-document",
 	templateUrl: "./sales-order-document.component.html",
 	styleUrls: ["./sales-order-document.component.scss"]
 })
-/** Customer component*/
 export class SalesOrderDocumentComponent implements OnInit {
-
-
 	@Output() tab = new EventEmitter<any>();
 	@ViewChild('fileUpload',{static:false}) fileUpload: any;
-
 	documentInformation = { ...new Documents() };
-
 	salesQuoteDocumentsData: any = [];
 	salesQuoteDocumentsColumns = [
 		{ field: 'docName', header: 'Name' },
@@ -41,21 +33,16 @@ export class SalesOrderDocumentComponent implements OnInit {
 		{ field: 'fileCreatedDate', header: 'Created Date' },
 		{ field: 'fileUpdatedBy', header: 'Updated By' },
 		{ field: 'fileUpdatedDate', header: 'Updated Date' },
-
 	];
 	selectedColumns = this.salesQuoteDocumentsColumns;
-
 	headersforAttachment = [
 		{ field: 'fileName', header: 'File Name' },
-
 	];
 	sourceViewforDocumentListColumns = [
 		{ field: 'fileName', header: 'File Name' },
 	]
 	formData = new FormData()
-
 	isEditButton: boolean = false;
-
 	sourceViewforDocument: any;
 	localCollection: any;
 	sourceViewforDocumentList: any = [];
@@ -63,8 +50,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 	activeIndex: any = 11;
 	isDeleteMode: boolean = false;
 	@Input() isEditMode: boolean = false;
-	private isEditModeHeader: boolean = false;
-	private isSaving: boolean;
 	modal: NgbModalRef;
 	public auditHisory: AuditHistory[] = [];
 	loadingIndicator: boolean;
@@ -75,7 +60,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 	pageSize: number = 10;
 	totalPages: number = 0;
 	@Input() salesOrderId: number = 0;
-	// @Input() SalesOrderId: number = 0;
 	@Input() viewMode: boolean = false;
 	documentsDestructuredData: any = [];
 	documentsDestructuredDataListOriginal: any[];
@@ -83,19 +67,16 @@ export class SalesOrderDocumentComponent implements OnInit {
 	disableSave: boolean = true;
 	isSpinnerVisible: boolean = false;
 
-	constructor(public salesOrderService: SalesOrderService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService,
-		private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, public commonService: CommonService, public customerService: CustomerService) {
+	constructor(public salesOrderService: SalesOrderService, private route: Router, private authService: AuthService, private modalService: NgbModal, private alertService: AlertService,
+		private configurations: ConfigurationService, public commonService: CommonService, public customerService: CustomerService) {
 	}
 
 	ngOnInit(): void {
-		// this.getList(this.salesOrderId);
-
 	}
 
 	refresh() {
 		this.getList(this.salesOrderId);
 	}
-
 
 	get userName(): string {
 		return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -107,19 +88,15 @@ export class SalesOrderDocumentComponent implements OnInit {
 		this.sourceViewforDocumentList = [];
 		this.clearFileUpload();
 		this.isEditButton = false;
-
 	}
+
 	clearFileUpload() {
 		this.fileUpload.clear();
 	}
 
-
 	dateFilterForTable(date, field) {
 		if (date !== '' && moment(date).format('MMMM DD YYYY')) {
-
 			const data = [...this.documentsDestructuredData.filter(x => {
-				console.log(moment(x.createdDate).format('MMMM DD YYYY'), moment(date).format('MMMM DD YYYY'));
-
 				if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
 					return x;
 				} else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
@@ -130,22 +107,16 @@ export class SalesOrderDocumentComponent implements OnInit {
 		} else {
 			this.documentsDestructuredData = this.documentsDestructuredDataListOriginal;
 		}
-
 	}
 
-
 	fileUploadForDocuments(event) {
-		console.log(event);
-
 		if (event.files.length === 0) {
 			return this.disableSave = true;
 		} else {
 			this.disableSave = false;
 		}
 
-
 		for (let file of event.files) {
-
 			if (!this.formData.has(file.name)) {
 				this.formData.append(file.name, file);
 			}
@@ -157,25 +128,17 @@ export class SalesOrderDocumentComponent implements OnInit {
 				);
 			}
 		}
-
 		this.disableSave = false;
-		// fileUpload.clear();
-
 	}
-	removeFile(event) {
-		console.log("event deletre", event);
-		this.formData.delete(event.file.name);
-		// this.enableSave();
 
+	removeFile(event) {
+		this.formData.delete(event.file.name);
 	}
 
 	getList(salesOrderId) {
-
 		var moduleId = 46;
 		this.isSpinnerVisible = true;
-
 		this.loaderForDocuments = true;
-		//const SalesOrderId = this.SalesOrderId;
 		this.documentsDestructuredData = [];
 		this.salesOrderService.getDocumentList(salesOrderId).subscribe(res => {
 			let arr = [];
@@ -185,17 +148,14 @@ export class SalesOrderDocumentComponent implements OnInit {
 					const y = x.attachmentDetails;
 					arr.push({
 						...x,
-						// documents: y[i].fileName,
 						fileName: y[i].fileName,
 						link: y[i].link,
 						fileCreatedDate: y[i].createdDate,
 						fileCreatedBy: y[i].createdBy,
 						fileUpdatedBy: y[i].updatedBy,
 						fileUpdatedDate: y[i].updatedDate,
-						// fileSize: `${y[i].fileSize} MB`
 						fileSize: y[i].fileSize,
 						attachmentDetailId: y[i].attachmentDetailId
-
 					})
 				}
 				this.documentsDestructuredData = arr;
@@ -211,7 +171,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 	}
 
 	saveDocumentInformation() {
-
 		if (this.isEditMode) {
 			this.salesOrderId = this.salesOrderId;
 		}
@@ -228,8 +187,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 		}
 
 		this.salesOrderService.documentUploadAction(this.formData).subscribe(res => {
-			console.log("hello text");
-
 			this.documentInformation.docDescription = '';
 			this.documentInformation.docMemo = '';
 			this.documentInformation.docName = '';
@@ -261,41 +218,29 @@ export class SalesOrderDocumentComponent implements OnInit {
 	}
 
 	openHistory(content, row) {
-
 		this.alertService.startLoadingMessage();
-
-		this.isSaving = true;
 		this.salesOrderService.getSalesQuoteDocumentAuditHistory(row.salesOrderDocumentDetailId).subscribe(
 			results => this.onAuditHistoryLoadSuccessful(results, content),
 			error => this.saveFailedHelper(error));
-
-
-
 	}
+
 	backClick() {
 		this.activeIndex = 10;
 		this.salesOrderService.changeofTab(this.activeIndex);
-
 	}
 
 	CreateNewClick() {
-
 		this.route.navigateByUrl('/salesmodule/salespages/sales-order-list');
-
 	}
+
 	private onAuditHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
-
 		this.documentauditHisory = auditHistory;
-
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-		this.modal.result.then(() => {
-			console.log('When user closes');
-		}, () => { console.log('Backdrop click') })
 	}
+
 	private saveFailedHelper(error: any) {
-		this.isSaving = false;
 		this.alertService.stopLoadingMessage();
 		this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
 		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
@@ -315,7 +260,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 
 	editVendorDocument(rowdata, e) {
 		this.isEditButton = true;
-
 		this.documentInformation = { ...rowdata };
 		this.salesOrderService.toGetUploadDocumentsList(rowdata.attachmentId, rowdata.salesOrderId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;
@@ -324,13 +268,12 @@ export class SalesOrderDocumentComponent implements OnInit {
 	}
 
 	openView(row) {
-
 		this.salesOrderService.toGetUploadDocumentsList(row.attachmentId, row.salesOrderId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;
 			this.sourceViewforDocument = row;
-
 		})
 	}
+
 	openViewOnDblClick(row) {
 		this.salesOrderService.toGetUploadDocumentsList(row.attachmentId, row.salesOrderId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;
@@ -338,27 +281,18 @@ export class SalesOrderDocumentComponent implements OnInit {
 		});
 		$('#docView').modal('show');
 	}
+
 	openDelete(content, row) {
 		this.isEditMode = false;
 		this.isDeleteMode = true;
 		delete row.updatedBy;
 		this.localCollection = row;
-		console.log("attachmentId", row)
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-		this.modal.result.then(() => {
-			console.log('When user closes');
-		}, () => { console.log('Backdrop click') })
 	}
 
 	deleteItemAndCloseModel() {
-
-		// if (vendorDocumentDetailId > 0) {
-		this.isSaving = true;
-
 		let vendorDocumentDetailId = this.localCollection.attachmentDetails[0].attachmentDetailId;
-		// getDeleteDocumentListbyId
 		this.customerService.deleteDocumentByCustomerAttachementId(vendorDocumentDetailId, this.userName).subscribe(
-
 			res => {
 				this.getList(this.salesOrderId);
 				this.alertService.showMessage(
@@ -367,9 +301,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 					MessageSeverity.success
 				)
 			});
-
-		// }
-
 		this.modal.close();
 	}
 
@@ -390,7 +321,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 	}
 
 	enableSave() {
-		console.log("isenamebsd", this.sourceViewforDocumentList.length)
 		if (this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0) {
 			this.disableSave = false;
 		} else if (this.isEditButton == true) {
@@ -399,7 +329,4 @@ export class SalesOrderDocumentComponent implements OnInit {
 			this.disableSave = true;
 		}
 	}
-
 }
-
-

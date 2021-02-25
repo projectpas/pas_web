@@ -170,7 +170,6 @@ export class SalesOrderBillingComponent implements OnInit {
         this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
             .subscribe(
                 (res) => {
-
                     this.isSpinnerVisible = false;
                     this.shipViaList = res;
                 },
@@ -342,13 +341,7 @@ export class SalesOrderBillingComponent implements OnInit {
     }
 
     convertDate(key, data) {
-        // debugger;
-        // console.log("data checked data",key,data);
-        // if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
-        //     return moment(data[key]).format('MM-DD-YYYY');
-        // } else {
         return data[key];
-        // }
     }
 
     loadData(event) {

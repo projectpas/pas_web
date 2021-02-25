@@ -21,19 +21,19 @@ import { SalesOrderFreightComponent } from "../sales-order-freight/sales-order-f
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { SalesOrderDocumentComponent } from "../sales-document/sales-order-document.component";
 import { SalesOrderAnalysisComponent } from "../../../sales-order-analysis/sales-order-analysis.component";
+
 @Component({
   selector: "app-sales-order-view",
   templateUrl: "./sales-order-view.component.html",
   styleUrls: ["./sales-order-view.component.scss"]
 })
 export class SalesOrderViewComponent implements OnInit {
-
-  @ViewChild(SalesOrderApproveComponent,{static:false}) public salesOrderApproveComponent: SalesOrderApproveComponent;
-  @ViewChild(SalesOrderCustomerApprovalComponent,{static:false}) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
-  @ViewChild(SalesOrderChargesComponent,{static:false}) public salesOrderChargesComponent: SalesOrderChargesComponent;
-  @ViewChild(SalesOrderFreightComponent,{static:false}) public salesOrderFreightComponent: SalesOrderFreightComponent;
-  @ViewChild(SalesOrderDocumentComponent,{static:false}) public salesOrderDocumentComponent: SalesOrderDocumentComponent;
-  @ViewChild(SalesOrderAnalysisComponent,{static:false}) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
+  @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
+  @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
+  @ViewChild(SalesOrderChargesComponent, { static: false }) public salesOrderChargesComponent: SalesOrderChargesComponent;
+  @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
+  @ViewChild(SalesOrderDocumentComponent, { static: false }) public salesOrderDocumentComponent: SalesOrderDocumentComponent;
+  @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
   @Input() salesOrderId: any;
   @Input() customerId;
   @Input() salesOrderView: any;
@@ -47,9 +47,7 @@ export class SalesOrderViewComponent implements OnInit {
   pageIndex: number = 0;
   first = 0;
   showPaginator: boolean = false;
-
   partColumns: any[];
-
   customerDetails: any;
   salesQuote: any;
   salesOrder: any;
@@ -72,6 +70,7 @@ export class SalesOrderViewComponent implements OnInit {
   freight = [];
   charge = [];
   moduleName: any = "SalesOrder";
+
   constructor(
     private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
@@ -124,10 +123,6 @@ export class SalesOrderViewComponent implements OnInit {
   viewSelectedStockLine(rowData) {
     this.partModal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.partModal.componentInstance.stockLineId = rowData.stockLineId;
-    this.partModal.result.then(() => {
-    }, () => {
-    })
-
   }
 
   get userId() {
@@ -186,12 +181,11 @@ export class SalesOrderViewComponent implements OnInit {
   }
 
   verifySalesQuoteConversion(event) {
-
   }
 
   onPartsApprovedEvent(event) {
-
   }
+
   setManagementStructureCodes(res) {
     if (res.Level1) {
       this.managementStructure.level1 = res.Level1;
@@ -219,7 +213,6 @@ export class SalesOrderViewComponent implements OnInit {
   }
 
   updateSalesOrderFreightsList(e) {
-
   }
 
   getFreightList() {
@@ -229,10 +222,8 @@ export class SalesOrderViewComponent implements OnInit {
   }
 
   updateSalesOrderChargesList(e) {
-
   }
 
   getChargesList() {
   }
-
 }
