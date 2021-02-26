@@ -10,34 +10,24 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router'
-import { ModalService } from '../../../../services/Index';
 import { EmployeeService } from '../../../../services/employee.service';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { CustomerService } from '../../../../services/customer.service';
 import { SiteService } from '../../../../services/site.service';
 import { WarehouseService } from '../../../../services/warehouse.service';
-import { Site } from '../../../../models/site.model';
 import { BinService } from '../../../../services/bin.service';
 import { ManufacturerService } from '../../../../services/manufacturer.service';
 import { StocklineService } from '../../../../services/stockline.service';
 import { ReceivingService } from '../../../../services/receiving/receiving.service';
 import { RepairOrder, RepairOrderPart, StockLine, DropDownData, TimeLife, ReceiveParts } from './RepairOrder.model';
 import { ManagementStructure } from './managementstructure.model';
-import { Dropdown } from 'primeng/dropdown';
 import { AccountService } from '../../../../services/account.service';
 import { CompanyService } from '../../../../services/company.service';
-import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
 import { AddressModel } from '../../../../models/address.model';
-import { Warehouse } from '../../../../models/warehouse.model';
-import { Bin } from '../../../../models/bin.model';
-import { Shelf } from '../../../../models/shelf.model';
-import { error } from '@angular/compiler/src/util';
-import { Customer } from '../../../../models/customer.model';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 import { ShippingService } from '../../../../services/shipping/shipping-service';
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
-import { DBkeys } from '../../../../services/db-Keys';
 import { AuthService } from '../../../../services/auth.service';
 import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
@@ -139,10 +129,7 @@ export class ReceivingRoComponent implements OnInit {
         public conditionService: ConditionService,
         public creditTermsService: CreditTermsService,
         public employeeService: EmployeeService,
-        private alertService: AlertService,
-        private accountService: AccountService,
-        private glAccountService: GlAccountService,
-        private shippingService: ShippingService,
+        private alertService: AlertService,        
         private _actRoute: ActivatedRoute,
         private commonService: CommonService,
         private localStorage: LocalStoreManager,
