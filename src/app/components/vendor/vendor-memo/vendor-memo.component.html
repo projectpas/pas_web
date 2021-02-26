@@ -106,7 +106,7 @@
                                             <p-sortIcon [field]="col.field"></p-sortIcon>
                                         </th>
                                         <th class="table-column-width">
-                                            Memo text
+                                            Memo Text
                                         </th>
                                         <th class="table-actions-column">Actions</th>
                                     </tr>
@@ -137,12 +137,12 @@
                                                                 <div
                                                                     name="notes"
                                                                     [innerHTML]="rowData.notes"
-                                                                    style="width: 100%;padding:0px !important;line-height: 2;white-space:inherit;height:48px;"
+                                                                    style="width: 100%;padding:0px !important;line-height: 2;white-space:inherit;height:38px;"
                                                                     class="form-control text_editor_box"></div>
                                                             </div>
                                                         </span>
                                                     </div>
-                                                    <div class="col-sm-1" style="margin-top: 15px;">
+                                                    <!-- <div class="col-sm-1" style="margin-top: 15px;">
                                                         <i
                                                             class="fa fa-pencil fa-lg"
                                                             data-toggle="modal"
@@ -150,17 +150,36 @@
                                                             matTooltipPosition="above"
                                                             matTooltip="Add Memo"
                                                             (click)="onClickMemo(rowData)"></i>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </td>
                                             <td class="action-icons-cstm table-column-width" style="text-align: center;">
-                                                <button
+                                                <!-- <button
                                                     class="btn btn-primary"
                                                     (click)="updateMemoTxext(rowData,$event)"
                                                     matTooltip="Save"
                                                     matTooltipPosition="above">
                                                     Save
-                                                </button>
+                                                </button> -->
+                                            <!-- <button
+                                            type="button"
+                                            class="btn btn-primary"
+                                            matTooltip="View"
+                                            matTooltipPosition="above"
+                                            pButton="pButton"
+                                            label="View"
+                                            data-toggle="modal" 
+                                            (click)="onClickMemo(rowData)"                                            
+                                            data-target="#viewmemo"></button> -->
+
+                                            <a class="btn nobg btn-view-cstm"
+                                            data-toggle="modal" 
+                                            data-target="#viewmemo"
+                                            (click)="onClickMemo(rowData)" 
+                                            matTooltip="View" 
+                                            matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
+
+
                                             </td>
                                         </tr>
                                     </ng-template>
@@ -293,4 +312,56 @@
                 <div class="loading">
                     <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                 </div>
-              </div>
+            </div>
+
+            <div class="modal fade" id="viewmemo" role="dialog" data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                &times;
+                            </button>
+                            <h4 class="modal-title">View Memo</h4>
+                        </div>
+                        <div class="modal-body" *ngIf="memoPopupContent">                         
+                            <div style="white-space: inherit">                                
+                                <h4></h4>
+                                <input
+                                type="text"
+                                [disabled]="true"
+                                pInputText="pInputText"
+                                size="50"
+                                class="form-control"
+                                placeholder=""
+                                [(ngModel)]="memoPopupContent.module"
+                               >                            
+                            </div>
+                            <h4></h4>                            
+                            <div style="white-space: inherit">                              
+                              <input
+                                type="text"
+                                [disabled]="true"
+                                pInputText="pInputText"
+                                size="50"
+                                class="form-control"
+                                placeholder=""
+                                [(ngModel)]="memoPopupContent.orderNumber"
+                               > 
+                            </div>
+                            <h4></h4>                            
+                            <div style="white-space: inherit">
+                                <p-editor
+                                    spellcheck="true"
+                                    readonly="true"
+                                    [(ngModel)]="memoPopupContent.notes"
+                                    [style]="{ height: '180px' }"
+                                    name="memoPopupContent"
+                                    required></p-editor>
+                            </div> 
+                        </div>
+                        <div class="modal-footer">                            
+                            <button type="button" class="btn btn-danger" (click)="closeViewModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
