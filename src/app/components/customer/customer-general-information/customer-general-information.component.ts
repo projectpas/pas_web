@@ -1116,6 +1116,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.disableAccountType = true;
         }
         else {
+            this.generalInformation.customerTypeId = 0;
             this.disableAccountType = false;
         }
     }

@@ -894,7 +894,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.workFlowtService.listCollection = res[0];
                 this.workFlowtService.enableUpdateMode = true;
-                this.workFlowtService.currentWorkFlowId = res.workflowId;
+                this.workFlowtService.currentWorkFlowId = res[0].workflowId;
                 this.editWorkFlowData = res;
             },
                 err => {
@@ -1332,7 +1332,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    getWorkFlowData() {
+    getWorkFlowData() { 
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
         if (this.selectedWorkFlowId != null) {
             this.isSpinnerVisible = true;
@@ -1432,15 +1432,17 @@ export class WorkOrderAddComponent implements OnInit {
             workFlowDataObject.workOrderId = this.subWorkOrderDetails.workOrderId;
             workFlowDataObject.subWOPartNoId = this.subWOPartNoId;
         }
+        delete workFlowDataObject.customerName;
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
+            // this._workflowService.currentWorkFlowId=
             this.workFlowWorkOrderId = res.workFlowWorkOrderId;
             if (this.workFlowWorkOrderId !== 0) {
                 this.isDisabledSteps = true;
             }
             this.getWorkOrderWorkFlowNos();
-            this.getWorkFlowLaborList();
+            // this.getWorkFlowLaborList();
             this.alertService.showMessage(
                 '',
                 'Work Order Work Flow Saved Succesfully',
@@ -2302,7 +2304,7 @@ export class WorkOrderAddComponent implements OnInit {
                     this.handleError(err);
                     this.isSpinnerVisible = false;
                 })
-        } else {
+        } else { 
 
             if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
                 this.isSpinnerVisible = true;

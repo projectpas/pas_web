@@ -126,7 +126,7 @@
                                     name="customerTypeId"
                                     required
                                     [disabled]="disableAccountType">
-                                  <option value="">-- Select --</option>
+                                   <option value="0">-- Select --</option>
                                     <option
                                       *ngFor="let CustomerType of customertypes"
                                       [ngValue]="CustomerType.customerTypeId"
@@ -421,13 +421,13 @@
                             <input
                               class="form-control"
                               type="text"
-                              name="postalCode"
-                              pKeyFilter="pint"
+                              name="postalCode"                              
                               [(ngModel)]="generalInformation.postalCode"
                               (ngModelChange)="enableSave()"
                               required
-                            />
+                            />                         
                           </div>
+                           <!-- pKeyFilter="pint" Removed for special character allow from post code -->
                           <div class="form-group">
                             <label>Country <span class="clr-red">*</span></label>
                             <div class="inner-addon right-addon inline-block">

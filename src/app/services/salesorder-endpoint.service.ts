@@ -2,27 +2,21 @@
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
-
 import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
 import { ISalesOrder } from "../models/sales/ISalesOrder.model";
-import { ISalesQuote } from "../models/sales/ISalesQuote.model";
-import { ISalesQuoteView } from "../models/sales/ISalesQuoteView";
-import { ISalesOrderQuote } from "../models/sales/ISalesOrderQuote";
 import { ISalesSearchParameters } from "../models/sales/ISalesSearchParameters";
-import { ISalesQuoteListView } from "../models/sales/ISalesQuoteListView";
 import { ISalesOrderView } from "../models/sales/ISalesOrderView";
-import { PartDetail } from "../components/sales/shared/models/part-detail";
 import { PartAction } from "../components/sales/shared/models/part-action";
-import { SalesOrderReference } from "../models/sales/salesOrderReference";
 import { ISalesOrderCustomerApproval } from "../components/sales/order/models/isales-order-customer-approval";
 import { ISOFreight } from "../models/sales/ISOFreight";
 import { ISalesOrderCharge } from "../models/sales/ISalesOrderCharge";
 import { MarginSummary } from "../models/sales/MarginSummaryForSalesorder";
 import { SalesOrderBillingAndInvoicing } from "../models/sales/salesOrderBillingAndInvoicing";
 import { SalesOrderShipping } from "../models/sales/salesOrderShipping";
-import { environment } from 'src/environments/environment';
 import { SOPickTicket } from "../models/sales/SOPickTicket";
+import { environment } from "../../environments/environment";
+
 @Injectable()
 export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getNewSalesOrderInstanceUrl: string = environment.baseUrl + "/api/salesorder/new";
@@ -40,7 +34,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly savepickticketiteminterfaceUrl: string = environment.baseUrl + "/api/salesorder/savepickticketiteminterface"
   private readonly getSalesOrdePickTicketPrint: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticketforprint";
   private readonly getShippingDataListURL: string = environment.baseUrl + "/api/SalesOrder/getsalesordershippinglist";
-
+  private readonly getBillingInvoiceListUrl: string = environment.baseUrl + "/api/SalesOrder/salesorderBillingInvoicelist";
   // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
   private readonly globalSearchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesorderglobalsearch";
@@ -63,7 +57,6 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getCopyEndPointUrl = environment.baseUrl + "/api/salesorder/copy";
   private readonly saleOrderDeleteMultiplePart: string = environment.baseUrl + "/api/salesorder/deletemultiplepart";
   //*Start savesarvice end point creation implementation --nitin
-
   private readonly _addDocumentDetails: string = environment.baseUrl + "/api/SalesOrder/SalesOrderDocumentUpload";
   private readonly _getsalesquoteDocslist: string = environment.baseUrl + "/api/SalesOrder/getSalesOrderDocumentDetailList";
   private readonly _getSalesOrderPartsViewByIdUrl: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderPartsViewById";
@@ -77,7 +70,6 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly _getDeleteCharge: string = environment.baseUrl + "/api/SalesOrder/deletesalesordercharge";
   private readonly _getSoMarginSummary: string = environment.baseUrl + "/api/SalesOrder/create-so-margin-data";
   private readonly _getMarginSummary: string = environment.baseUrl + "/api/SalesOrder/get-sales-margin-data";
-
   private readonly salesorderBillingSave: string = environment.baseUrl + "/api/SalesOrder/createbillinginvoicing";
   private readonly salesorderShippingSave: string = environment.baseUrl + "/api/SalesOrder/createsalesordershipping";
   private readonly salesorderBillingGet: string = environment.baseUrl + "/api/SalesOrder/billinginvoicingdetailsbysopartId";
@@ -98,23 +90,16 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   //**End  savesarvice end point creation implementation --nitin
 
-
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
-    injector: Injector
-  ) {
+    injector: Injector) {
     super(http, configurations, injector);
   }
 
-
   createSOMarginSummary(marginSummary: MarginSummary) {
     return this.http
-      .post(
-        this._getSoMarginSummary,
-        JSON.stringify(marginSummary),
-        this.getRequestHeaders()
-      )
+      .post(this._getSoMarginSummary, JSON.stringify(marginSummary), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.createSOMarginSummary(marginSummary));
       });
@@ -129,9 +114,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getNewSalesOrderInstance<ISalesOrderView>(
-    customerId: number
-  ): Observable<ISalesOrderView> {
+  getNewSalesOrderInstance<ISalesOrderView>(customerId: number): Observable<ISalesOrderView> {
     const URL = `${this.getNewSalesOrderInstanceUrl}/${customerId}`;
     return this.http
       .get<ISalesOrderView>(URL, this.getRequestHeaders())
@@ -142,13 +125,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  create(salesOrder: ISalesOrderView): Observable<ISalesOrder> {
+  create(salesOrder: ISalesOrderView): Observable<any> {
     return this.http
-      .post(
-        this.salesorder,
-        JSON.stringify(salesOrder),
-        this.getRequestHeaders()
-      )
+      .post(this.salesorder, JSON.stringify(salesOrder), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.create(salesOrder));
       });
@@ -163,31 +142,23 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-    createBilling(billingAndInvoicing: SalesOrderBillingAndInvoicing) {
+  createBilling(billingAndInvoicing: SalesOrderBillingAndInvoicing) {
     return this.http
-      .post(
-        this.salesorderBillingSave,
-        JSON.stringify(billingAndInvoicing),
-        this.getRequestHeaders()
-      )
-        .catch(error => {
+      .post(this.salesorderBillingSave, JSON.stringify(billingAndInvoicing), this.getRequestHeaders())
+      .catch(error => {
         return this.handleErrorCommon(error, () => this.createBilling(billingAndInvoicing));
       });
   }
 
   createShipping(shippingInfo: SalesOrderShipping): Observable<any> {
     return this.http
-      .post(
-        this.salesorderShippingSave,
-        JSON.stringify(shippingInfo),
-        this.getRequestHeaders()
-      )
+      .post(this.salesorderShippingSave, JSON.stringify(shippingInfo), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.createShipping(shippingInfo));
       });
   }
 
-  update(salesOrder: ISalesOrderView): Observable<ISalesOrder> {
+  update(salesOrder: ISalesOrderView): Observable<any> {
     let url: string = `${this.salesorder}/${salesOrder.salesOrder.salesOrderId}`;
     return this.http
       .put(url, JSON.stringify(salesOrder), this.getRequestHeaders())
@@ -196,39 +167,22 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  search(
-    salesQuoteSearchParameters :ISalesSearchParameters
-  ): Observable<ISalesQuoteListView> {
+  search(salesQuoteSearchParameters: ISalesSearchParameters): Observable<any> {
     let params = JSON.stringify(salesQuoteSearchParameters);
-    return this.http
-      .post(
-        this.searchSalesOrder,
-        params,
-        this.getRequestHeaders()
-      )
+    return this.http.post(this.searchSalesOrder, params, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () =>
-          this.search(salesQuoteSearchParameters)
-        );
+        return this.handleErrorCommon(error, () => this.search(salesQuoteSearchParameters));
       });
   }
 
-  globalSearch
-    (
-      salesQuoteSearchParameters: ISalesSearchParameters
-    ): Observable<ISalesQuoteListView> {
+  globalSearch(salesQuoteSearchParameters: ISalesSearchParameters): Observable<any> {
     return this.http
-      .post(
-        this.globalSearchSalesOrder,
-        JSON.stringify(salesQuoteSearchParameters),
-        this.getRequestHeaders()
-      )
+      .post(this.globalSearchSalesOrder, JSON.stringify(salesQuoteSearchParameters), this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () =>
-          this.globalSearch(salesQuoteSearchParameters)
-        );
+        return this.handleErrorCommon(error, () => this.globalSearch(salesQuoteSearchParameters));
       });
   }
+
   delete(salesOrderId: number): Observable<boolean> {
     let endpointUrl = `${this.salesorder}/${salesOrderId}`;
     return this.http
@@ -247,7 +201,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getSalesOrder(salesOrderId: number): Observable<ISalesOrderView> {
+  getSalesOrder(salesOrderId: number): Observable<any> {
     const URL = `${this.getSalesOrderDetails}/${salesOrderId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -292,7 +246,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getSalesOrderConformation(): Observable<ISalesOrderView> {
+  getSalesOrderConformation(): Observable<any> {
     const URL = `${this.getsoconfirmationlist}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -301,7 +255,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getReservedParts(salesOrderId: number): Observable<PartAction> {
+  getReservedParts(salesOrderId: number): Observable<any> {
     const URL = `${this.getReservedPartsUrl}?salesorderid=${salesOrderId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -310,7 +264,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getIssuedParts(salesOrderId: number): Observable<PartAction> {
+  getIssuedParts(salesOrderId: number): Observable<any> {
     const URL = `${this.getIssuedPartsUrl}?salesorderid=${salesOrderId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -318,6 +272,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getIssuedParts(salesOrderId));
       });
   }
+
   GetTotal(salesQuoteId: number): Observable<any> {
     const URL = `${this.getSalesQuoteTotalDetails}/${salesQuoteId}`;
     return this.http
@@ -326,6 +281,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.GetTotal(salesQuoteId));
       });
   }
+
   getReservestockpartlists(salesOrderId: number, itemMasterId: number): Observable<PartAction> {
     const URL = `${this.getreserverstockPartsUrl}?salesorderid=${salesOrderId}&itemmasterid=${itemMasterId}`;
     return this.http
@@ -344,7 +300,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getReservedAndIssuedParts(salesOrderId: number): Observable<PartAction> {
+  getReservedAndIssuedParts(salesOrderId: number): Observable<any> {
     const URL = `${this.getReservedAndIssuedPartsUrl}?salesorderid=${salesOrderId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -353,7 +309,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getUnreservedParts(salesOrderId: number): Observable<PartAction> {
+  getUnreservedParts(salesOrderId: number): Observable<any> {
     const URL = `${this.getUnreservedPartsUrl}?salesorderid=${salesOrderId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -362,7 +318,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getUnissuedParts(salesOrderId: number): Observable<PartAction> {
+  getUnissuedParts(salesOrderId: number): Observable<any> {
     const URL = `${this.getUnissuedPartsUrl}?salesorderid=${salesOrderId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -371,7 +327,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getcommonsalesorderdetails(salesOrderId: number, salesOrderPartId: number): Observable<SalesOrderReference> {
+  getcommonsalesorderdetails(salesOrderId: number, salesOrderPartId: number): Observable<any> {
     const URL = `${this.getcommonsalesorderdetailsUrl}?salesorderid=${salesOrderId}&salesorderpartid=${salesOrderPartId}`;
     return this.http
       .get<ISalesOrder>(URL, this.getRequestHeaders())
@@ -379,6 +335,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getcommonsalesorderdetails(salesOrderId, salesOrderPartId));
       });
   }
+
   getunreservedstockpartslist(salesOrderId: number, itemMasterId: number): Observable<PartAction> {
     const URL = `${this.getunreserverstockPartsUrl}?salesorderid=${salesOrderId}&itemmasterid=${itemMasterId}`;
     return this.http
@@ -387,6 +344,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getunreservedstockpartslist(salesOrderId, itemMasterId));
       });
   }
+
   getunreservedstockpartslistBySOId(salesOrderId: number): Observable<PartAction> {
     const URL = `${this.getunreserverstockPartsBySOIdUrl}?salesorderid=${salesOrderId}`;
     return this.http
@@ -395,6 +353,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getunreservedstockpartslistBySOId(salesOrderId));
       });
   }
+
   releasestocklinereservedparts(salesOrderId: number): Observable<any> {
     const URL = `${this.getrelesereservepartUrl}?salesorderid=${salesOrderId}`;
     return this.http
@@ -403,6 +362,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.releasestocklinereservedparts(salesOrderId));
       });
   }
+
   getholdstocklinereservedparts(salesOrderId: number, salesOrderPartId: number, stockLineId: number, quantityRequested: number): Observable<PartAction> {
     const URL = `${this.getholdreservepartUrl}?salesorderid=${salesOrderId}&salesorderpartid=${salesOrderPartId}&stocklineid=${stockLineId}&quantityrequested=${quantityRequested}`;
     return this.http
@@ -420,7 +380,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.savereserveissuesparts(parts));
       });
   }
-  
+
   getview(salesOrderId: number): Observable<any> {
     const URL = `${this.getSalesOrderViewDetails}/${salesOrderId}`;
     return this.http
@@ -457,6 +417,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
+  getBillingInvoiceList(salesOrderId: number): Observable<any> {
+    const URL = `${this.getBillingInvoiceListUrl}/${salesOrderId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getBillingInvoiceList(salesOrderId));
+      });
+  }
+
   getCustomerApprovalList(salesOrderId: number): Observable<ISalesOrderCustomerApproval[]> {
     const URL = `${this.getCustomerApprovalListUrl}/${salesOrderId}`;
     return this.http
@@ -466,40 +435,40 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  approveParts(data: ISalesOrderCustomerApproval[]): Observable<boolean> {
+  approveParts(data: ISalesOrderCustomerApproval[]): Observable<any> {
     return this.http
-      .post(
-        this.saveCustomerApprovalEndPointUrl,
-        data,
-        this.getRequestHeaders()
-      )
+      .post(this.saveCustomerApprovalEndPointUrl, data, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.approveParts(data));
       });
   }
+
   sentForInternalApproval(data) {
-    return this.http.post<any>(`${this.configurations.baseUrl}/api/salesorder/soapproval`, JSON.stringify(data), this.getRequestHeaders());
+    return this.http.post<any>(`${this.configurations.baseUrl}/api/salesorder/soapproval`, JSON.stringify(data), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.approveParts(data));
+      });
   }
 
-  close(salesOrderId: number,updatedBy:string): Observable<boolean> {
+  close(salesOrderId: number, updatedBy: string): Observable<any> {
     const URL = `${this.getCloseEndPointUrl}/${salesOrderId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.close(salesOrderId,updatedBy));
+        return this.handleErrorCommon(error, () => this.close(salesOrderId, updatedBy));
       });
   }
 
-  cancel(salesOrderId: number,updatedBy:string): Observable<boolean> {
+  cancel(salesOrderId: number, updatedBy: string): Observable<any> {
     const URL = `${this.getCancelEndPointUrl}/${salesOrderId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.cancel(salesOrderId,updatedBy));
+        return this.handleErrorCommon(error, () => this.cancel(salesOrderId, updatedBy));
       });
   }
 
-  copy(salesOrderId: number): Observable<ISalesOrderView> {
+  copy(salesOrderId: number): Observable<any> {
     const URL = `${this.getCopyEndPointUrl}/${salesOrderId}`;
     return this.http
       .get(URL, this.getRequestHeaders())
@@ -509,22 +478,24 @@ export class SalesOrderEndpointService extends EndpointFactory {
   }
 
   //start SalesOrderQuoteDocument--nitin
-
   getDocumentUploadEndpoint<T>(file: any): Observable<T> {
     const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
     return this.http.post<T>(`${this._addDocumentDetails}`, file);
   }
+
   getDocumentList(salesQuoteId) {
     return this.http.get<any>(`${this._getsalesquoteDocslist}/${salesQuoteId}`, this.getRequestHeaders())
   }
+
   GetUploadDocumentsList(attachmentId, salesquoteId, moduleId) {
     return this.http.get<any>(`${this._getsalesquoteDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${salesquoteId}&moduleId=${moduleId}`, this.getRequestHeaders())
   }
+
   getSalesQuoteDocumentAuditHistory(id) {
     return this.http.get<any>(`${this._geSaleQuoteDocumentHistory}/${id}`, this.getRequestHeaders())
   }
 
-  createFreight(salesOrderFreights: ISOFreight[]): Observable<ISalesOrderQuote> {
+  createFreight(salesOrderFreights: ISOFreight[]): Observable<any> {
     return this.http
       .post(
         this._getSaveFreights,
@@ -536,7 +507,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  createCharges(salesOrderCharges: ISalesOrderCharge[]): Observable<ISalesOrderQuote> {
+  createCharges(salesOrderCharges: ISalesOrderCharge[]): Observable<any> {
     return this.http
       .post(
         this._getSaveCharges,
@@ -551,6 +522,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   getSalesOrderFreights(id, isDeleted) {
     return this.http.get<any>(`${this._getFreights}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
   }
+
   getSalesOrderCharges(id, isDeleted) {
     return this.http.get<any>(`${this._getCharges}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
   }
@@ -572,7 +544,6 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.deleteCharge(chargeId, userName));
       });
   }
-
 
   getAllSalesOrderSettings<T>(): Observable<T> {
     let endPointUrl = this.getSalesOrderSetting;
@@ -603,6 +574,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.deleteSoSetting(salesOrderSettingId, updatedBy));
       });
   }
+
   getSOSettingHistory(id) {
     return this.http.get<any>(`${this.getSalesOrderSettingsAuditHistory}/${id}`, this.getRequestHeaders())
   }
@@ -611,9 +583,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http.get<any>(`${this.getFreightAudihistory}/?SalesOrderFreightId=${id}`, this.getRequestHeaders())
   }
 
-    getSOChargesHistory(id) {
-        return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
-    }
+  getSOChargesHistory(id) {
+    return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
+  }
 
   getSOHistory(salesOrderId) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/salesorder/getSalesOrderHistory/?salesOrderId=${salesOrderId}`)
@@ -664,16 +636,16 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getStockLineforPickTicket(itemMasterId: number, conditionId: number,salesOrderId: number): Observable<PartAction> {
+  getStockLineforPickTicket(itemMasterId: number, conditionId: number, salesOrderId: number): Observable<PartAction> {
     const URL = `${this.getstocklineforPickTicketUrl}?itemMasterId=${itemMasterId}&conditionId=${conditionId}&salesOrderId=${salesOrderId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId, conditionId,salesOrderId));
+        return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId, conditionId, salesOrderId));
       });
   }
 
-  savepickticketiteminterface(parts: SOPickTicket): Observable<SOPickTicket> {
+  savepickticketiteminterface(parts: SOPickTicket): Observable<any> {
     let url: string = `${this.savepickticketiteminterfaceUrl}`;
     return this.http
       .post(url, parts, this.getRequestHeaders())
@@ -682,12 +654,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  confirmPickTicket(pickticketId: number,confirmById:string): Observable<boolean> {
+  confirmPickTicket(pickticketId: number, confirmById: string): Observable<any> {
     const URL = `${this.confirmpickticketUrl}/${pickticketId}?confirmById=${confirmById}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.confirmPickTicket(pickticketId,confirmById));
+        return this.handleErrorCommon(error, () => this.confirmPickTicket(pickticketId, confirmById));
       });
   }
 
@@ -701,12 +673,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getPickTicketEdit(soPickTicketId: number,salesOrderId: number,salesOrderPartId: number): Observable<PartAction> {
+  getPickTicketEdit(soPickTicketId: number, salesOrderId: number, salesOrderPartId: number): Observable<PartAction> {
     const URL = `${this.getPickTicketforEdit}?soPickTicketId=${soPickTicketId}&salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getPickTicketEdit(soPickTicketId,salesOrderId,salesOrderPartId));
+        return this.handleErrorCommon(error, () => this.getPickTicketEdit(soPickTicketId, salesOrderId, salesOrderPartId));
       });
   }
 

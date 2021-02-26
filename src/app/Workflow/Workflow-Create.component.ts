@@ -26,7 +26,7 @@ import { MenuItem } from 'primeng/api';
 })
 
 export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
-    @Input() isWorkOrder;
+    @Input() isWorkOrder=false;
     @Input() savedWorkOrderData;
     @Input() WorkOrderType;
     @Input() workFlowId;
@@ -256,8 +256,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 { label: 'Edit Work Flow' }
             ];
         }
-
+if(!this.isWorkOrder){
         this.sourceWorkFlow.workFlowId = +this.router.snapshot.paramMap.get("id");
+}
         this.isFixedcheck('');
         // this.loadItemClassData();
         // this.getMaterialMandatory();
@@ -290,8 +291,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             itemsShowLimit: 3,
             allowSearchFilter: false
         };
-
+// if(!this.isWorkOrder){
         this.loadWorkFlow();
+// }
         this.getAllPercentages();
     }
     getTaksAttributes() {
@@ -424,7 +426,7 @@ validateCOstflow(){
 masterItemMasterId:any;
     loadWorkFlow() {
         if (this._workflowService.enableUpdateMode == true && !this.UpdateMode) {
-            let workFlowId: any = this._workflowService.currentWorkFlowId;
+            let workFlowId: any = this.isWorkOrder ? this.workFlowId : this._workflowService.currentWorkFlowId;
             this.isSpinnerVisible = true;
             this.actionService.getWorkFlow(workFlowId).subscribe(workFlow => {
                 this.sourceWorkFlow = workFlow[0];
@@ -2345,6 +2347,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         this.sourceWorkFlow['isVersionIncrease'] = isIncrease;
         if (this.isWorkOrder) {
             this.saveWorkFlowWorkOrderData['isVersionIncrease'] = isIncrease;
+            this._workflowService.currentWorkFlowId=this.sourceWorkFlow.workflowId !=0 ?this.sourceWorkFlow.workflowId  :this.sourceWorkFlow.existingWorkFlowId
             this.savedWorkFlowWorkOrderData.emit(this.saveWorkFlowWorkOrderData);
         }
         else {
@@ -2652,7 +2655,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             const saveWorkFlowWorkOrderData = {
                 ...this.sourceWorkFlow,
                 isSaveToWorkFlow: isSaveToWorkFlow,
-                workflowId: 0,
+                workflowId: this.sourceWorkFlow.workflowId,
                 workOrderId: this.savedWorkOrderData.workOrderId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 workOrderPartNoId: this.workOrderPartNumberId,

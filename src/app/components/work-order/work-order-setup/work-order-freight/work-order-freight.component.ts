@@ -208,14 +208,16 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         let newFreight = new Freight();
         newFreight.isShowDelete=false;
         newFreight.amount = this.formateCurrency(newFreight.amount);
-        const taskId = this.taskList.filter(x => x.description === 'Shipping');
+        const taskId = this.taskList.filter(x => x.description === 'shipping');
+        console.log("taskId",taskId)
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [newFreight];
 
     }
     addNewRow() {
         let newFreight = new Freight();
-        const taskId = this.taskList.filter(x => x.description === 'Shipping');
+        const taskId = this.taskList.filter(x => x.description === 'shipping');
+        console.log("taskId",taskId)
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [...this.freightForm, newFreight];
     }

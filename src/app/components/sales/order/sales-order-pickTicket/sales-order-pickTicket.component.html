@@ -503,30 +503,56 @@
                             <br />
 
                             <div class="picked-by col-sm-6">
-                                <div class="first-part">
-                                    <label for="pickedBy">Picked By</label>
-                                    <!-- <input class="input-field-border" type="text" id="pickedBy" value="{{this.salesOrder.pickedByName}}" /> -->
+                                <p>
+                                    <span class="label">
+                                        <b>Picked By:</b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.pickedByName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Customer Code: </b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
+                                    </span>
+                                </p>
+
+                                <!-- <div class="first-part col-sm-12">
+                                    <label for="pickedBy">Picked By:</label>
                                     <label for="pickedBy" class="input-field-border" style="width:50%" disabled>{{this.salesOrder.pickedByName}}</label>
                                 </div>
 
-                                <div class="second-part">
-                                    <label for="date">Date</label>
-                                    <!-- <input class="input-field-border" type="text" id="date" value="{{this.salesOrder.pickedDate | date : 'MM/dd/yyyy'}}" /> -->
+                                <div class="second-part col-sm-12">
+                                    <label for="date">Date:</label>
                                     <label for="date" style="width:13%" disabled>{{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="confirmed-by col-sm-6">
-                                <div class="first-part">
-                                    <label>Confirmed By</label>
-                                    <!-- <input class="input-field-border" type="text" value="{{this.salesOrder.confirmedByName}}" /> -->
+                                <p>
+                                    <span class="label">
+                                        <b>Confirmed By: </b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.confirmedByName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Date: </b>
+                                    </span><span class="value">
+                                        {{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}
+                                    </span>
+                                </p>
+
+                                <!-- <div class="first-part col-sm-12">
+                                    <label>Confirmed By:</label>
                                     <label style="width:50%" class="input-field-border" disabled>{{this.salesOrder.confirmedByName}}</label>
                                 </div>
 
-                                <div class="second-part">
-                                    <label>Date</label>
-                                    <!-- <input class="input-field-border" type="text" value="{{this.salesOrder.confirmedDate | date : 'MM/dd/yyyy'}}" /> -->
+                                <div class="second-part col-sm-12">
+                                    <label>Date:</label>
                                     <label style="width:13%" disabled>{{this.salesOrder.confirmedDate | date : "MM/dd/yyyy"}}</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="clear"></div>
                             <hr />

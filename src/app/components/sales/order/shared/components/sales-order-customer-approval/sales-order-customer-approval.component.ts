@@ -77,7 +77,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     { field: 'marginAmountExtended', header: 'Margin Amt.', width: "90px" },
     { field: 'marginPercentage', header: 'Margin %', width: "60px" },
   ];
-
   selectedColumns: any = this.columns;
   isSpinnerVisible = false;
   statusListForApproval = [];
@@ -133,7 +132,9 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       if (response[2] && response[2].length > 0) {
         this.loadApprovalListView(response[2][0]);
       }
-    }, error => {})
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
   }
 
   ngOnChanges(changes) {
@@ -241,7 +242,9 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         if (data && data.length > 0) {
           this.loadApprovalListView(data[0]);
         }
-      }, error => {});
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
   }
 
   selectAllApproval(type, isSelected) {
@@ -505,7 +508,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.salesOrderService.sentForInternalApproval(payLoad)
       .subscribe(
         res => {
-          $('#quoteVersion').modal('hide');
           this.alertService.showMessage(
             "Success",
             `Saved Approver Process Successfully`,
@@ -518,13 +520,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
           this.getCustomerApprovalList();
         },
         err => {
-          this.alertService.showMessage(
-            this.moduleName,
-            `Data updating failed`,
-            MessageSeverity.error
-          );
           this.isSpinnerVisible = false;
-          $('#quoteVersion').modal('hide');
         }
       )
   }
@@ -582,6 +578,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         this.onPartApprovedEvent.emit();
       }, error => {
         this.getCustomerApprovalList();
+        this.isSpinnerVisible = false;
       });
     }
   }
