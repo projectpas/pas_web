@@ -135,7 +135,7 @@
         <!-- *ngIf="!dt['isDeleted']" -->
         <tr >
           <td class="table-column-width">
-            <p>{{dt.taskName}}</p>
+            <p  class="mrg_0">{{dt.taskName}}</p>
             <!-- <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
               <option value="">Select</option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
@@ -152,10 +152,11 @@
               </select>
             </td>
             <td class="table-column-width" *ngIf="col.field == 'shipVia'">
-              <select class="form-control select-read-only back-transparent" [(ngModel)]="dt.shipViaId" disabled>
+              <!-- <select class="form-control select-read-only back-transparent" [(ngModel)]="dt.shipViaId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
-              </select>
+              </select> -->
+              <p class="mrg_0">{{dt.shipVia}}</p>
             </td>
           </ng-container>
           <td class="content-to-end table-column-width">{{dt.weight}}</td>
@@ -257,7 +258,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage" let-columns>
       <tr>
-          <td colspan="10" class="no-records-msg no-records-cstm">
+          <td colspan="12" class="no-records-msg no-records-cstm">
               No records found
           </td>
       </tr>
