@@ -438,13 +438,13 @@
                   <td>
                     <input class="form-control text-right" type="text" (ngModelChange)="checkValid(27)" pInputText pKeyFilter="money" (change)="rec.billingAmount = formateCurrency(rec.billingAmount)" [(ngModel)]="rec.billingAmount" [disabled]="isView || rec.billingMethodId != 2"/> <!--class="width-unset"-->
                   </td>
-                </ng-container>
+                </ng-container> 
                 <td *ngIf="!isQuote">
                   <!-- <input type="text" class="form-control" [(ngModel)]="rec.memo" [disabled]="isView"/> -->
                   <!-- [disabled]=" isView|| laborForm.isTaskCompletedByOne" -->
                   <div class="align_adh" >
-                    <div [innerHTML]="rec.memo"
-                        matTooltipPosition="above"
+                    <div [innerHTML]="rec.memo" 
+                        matTooltipPosition="above" [ngStyle]="{'border':rec.adjustments > 0 ? '1px solid red' : 'inherent'}"
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box input-width-100-percent"></div>
                     <i class="fa fa-pencil contoel_v" data-toggle="modal" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
