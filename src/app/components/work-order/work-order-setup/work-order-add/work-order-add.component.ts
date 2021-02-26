@@ -894,7 +894,9 @@ export class WorkOrderAddComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.workFlowtService.listCollection = res[0];
                 this.workFlowtService.enableUpdateMode = true;
-                this.workFlowtService.currentWorkFlowId = res.workflowId;
+                console.log("res workflow",res)
+                console.log("res workflow",res.workflowId)
+                this.workFlowtService.currentWorkFlowId = res[0].workflowId;
                 this.editWorkFlowData = res;
             },
                 err => {
@@ -1432,6 +1434,7 @@ export class WorkOrderAddComponent implements OnInit {
             workFlowDataObject.workOrderId = this.subWorkOrderDetails.workOrderId;
             workFlowDataObject.subWOPartNoId = this.subWOPartNoId;
         }
+        delete workFlowDataObject.customerName;
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
@@ -2302,7 +2305,7 @@ export class WorkOrderAddComponent implements OnInit {
                     this.handleError(err);
                     this.isSpinnerVisible = false;
                 })
-        } else {
+        } else { 
 
             if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
                 this.isSpinnerVisible = true;

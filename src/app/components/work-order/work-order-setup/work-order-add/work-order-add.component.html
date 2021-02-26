@@ -1000,11 +1000,11 @@
             </div>  
             <div [ngClass]="{hidedata :  subTabWorkFlow !== 'createworkFlow' }">
                 <!-- <wf-create [isWorkOrder]="isWorkOrder" [savedWorkOrderData]="savedWorkOrderData" (savedWorkFlowWorkOrderData)="savedWorkFlowData($event)" > </wf-create> -->
-            </div>
+            </div> 
             <div *ngIf="workFlowId && subTabWorkFlow && editWorkFlowData"
                 [ngClass]="{hidedata: subTabWorkFlow !== 'editworkFlow' }">
                 <wf-create [isWorkOrder]="isWorkOrder" [workOrderPartNumberId]="workOrderPartNumberId"
-                    [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData"
+                    [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData" [workFlowId]="workFlowId"
                     (savedWorkFlowWorkOrderData)="savedWorkFlowData($event)"> </wf-create>
                 <!-- <app-workflow-list></app-workflow-list> -->
             </div>
