@@ -55,4 +55,5 @@ export class SalesOrderQuotePart implements ISalesOrderQuotePart {
   idNumber: string;
   qtyAvailable: number;
   customerReference: string;
+  itemNo:number;
 }

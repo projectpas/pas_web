@@ -5,7 +5,7 @@ import { SalesOrderService } from "../../../../services/salesorder.service";
 import { SalesOrderPickTicketView } from "../../../../models/sales/SalesOrderPickTicketView";
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
-import { environment } from "../../../../../environments/environment.dev";
+import { environment } from "../../../../../environments/environment";
 
 @Component({
     selector: "app-sales-order-pickTicket",
@@ -36,7 +36,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
     }
 
     getSalesPickTicketView() {
-        this.salesOrderService.getPickTicketPrint(this.salesOrderId, this.soPickTicketId).subscribe(res => {
+        this.salesOrderService.getPickTicketPrint(this.salesOrderId,this.salesOrderPartId,this.soPickTicketId).subscribe(res => {
             this.salesOrderoView = res[0];
             this.salesOrder = res[0].soPickTicketViewModel;
             this.parts = res[0].soPickTicketPartViewModel;

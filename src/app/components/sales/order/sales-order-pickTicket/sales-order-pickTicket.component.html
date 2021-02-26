@@ -310,7 +310,7 @@
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label"> Date & time</label>
                                     <!-- <input type="text" placeholder="" value="{{todayDate| date:'medium' }}" disabled /> -->
-                                    <label class="col-sm-6 second-block-label" disabled>{{todayDate| date:'medium' }}</label>
+                                    <label class="col-sm-6 second-block-label" disabled>{{this.salesOrder.ptCreatedDate | date:'medium' }}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
@@ -443,7 +443,7 @@
                                             <td> Priority: {{part.priorityName}} </td>
                                             <td>Qty OH: {{part.quantityOnHand}}</td>
                                             <td>Qty Avl: {{part.qtyAvailable}}</td>
-                                            <td>Qty to Pick: 3</td>
+                                            <td>Qty to Pick: {{part.qtyToPick}}</td>
                                             <td>Qty Picked: {{part.qtyShipped}}</td>
 
 
