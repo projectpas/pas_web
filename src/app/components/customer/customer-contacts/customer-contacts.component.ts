@@ -429,7 +429,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownContactList('firstName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('firstName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -463,7 +463,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownContactList('middleName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('middleName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -497,7 +497,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownContactList('lastName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('lastName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
