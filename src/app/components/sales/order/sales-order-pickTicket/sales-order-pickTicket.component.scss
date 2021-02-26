@@ -212,7 +212,7 @@ table, thead, th {
   table thead tr th {background: #0d57b0 !important;padding: 5px!important;color: #fff;letter-spacing: 0.3px; font-size: 10px;text-transform: capitalize; z-index: 1;} 
   table tbody{   overflow-y: auto; max-height: 500px;  }
   table tbody tr td{ background: #fff; padding: 2px;line-height: 22px;color: #333;
-   font-size: 11.5px !important; letter-spacing: 0.1px;}
+   font-size: 11.5px !important;max-width:100px; letter-spacing: 0.1px;}
   h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: 600; width: 100%; margin: 0;}
   
   hr{margin-top: 10px; margin-bottom: 10px;border: 0;border-top: 1px solid #e0e0e0; height: 0; box-sizing: content-box;}
@@ -231,7 +231,7 @@ table, thead, th {
   .second-block-label{position: relative; min-height: 1px;float: left;padding-right: 2px;padding-left: 2px;width: 38.33333333%;text-transform: capitalize;margin-bottom: 0;text-align: left; }
   .clear{clear: both;}
   .form-div{top: 6px; position: relative;font-weight: normal; margin-top: 10px;}
-  .image{border: 1px solid #ccc; padding: 5px; width:100%;}
+  .image{border: 1px solid #ccc; padding: 5px; width:100%;display:block;}
   .logo-block { margin: auto; text-align: center }
   .pdf-block { width: 800px; margin: auto; border: 1px solid #ccc;padding: 25px 15px; } 
                             
