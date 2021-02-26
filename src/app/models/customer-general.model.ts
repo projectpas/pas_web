@@ -52,7 +52,7 @@ export class CustomerGeneralInformation {
         this.isAddressForBilling = true;
         this.isAddressForShipping = true;
         this.customerAffiliationId = 2;
-        this.customerTypeId = null;
+        this.customerTypeId = 0;
         this.name = '';
         this.customerPhone = '';
         this.customerPhoneExt = '';

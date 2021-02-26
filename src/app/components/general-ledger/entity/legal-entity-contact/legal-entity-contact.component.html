@@ -5,14 +5,14 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{companyName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital"> {{companyName }} </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{companyCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                            <span class="span-header-red text-capital"> {{companyCode }} </span>
                         </p>
                     </div>
                 </div>
@@ -65,8 +65,10 @@
                     <ng-template pTemplate="caption" >
                         <div class="row">
                             <div class="col">
-                            <p-multiSelect *ngIf="isViewMode == false" [options]="entityContactsColumns" [(ngModel)]="selectedColumns" [ngModelOptions]="{standalone: true}" optionLabel="header"
-                                           selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                            <p-multiSelect *ngIf="isViewMode == false" [options]="entityContactsColumns" [(ngModel)]="selectedColumns"
+                             [ngModelOptions]="{standalone: true}" optionLabel="header"
+                                           selectedItemsLabel="{0} columns selected"
+                                           defaultLabel="Choose Columns" class="multiselect-field"></p-multiSelect>
                                         </div>
                                         <div class="col">
                                             <div class="global-search-field inner-addon right-addon inline-block">
@@ -82,7 +84,8 @@
                       <div class="row">
                         <div class="col">
                             <button type="button" *ngIf="isViewMode==false "
-                             class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above" (click)="openTag(export)"  style="padding: 5px 10px !important;"></button>
+                             class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above" (click)="openTag(export)" 
+                             ></button>
                             <button type="button" *ngIf="isViewMode==false " 
                             class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                              (click)="dt.exportCSV({selectionOnly:true})" ></button>
@@ -130,7 +133,7 @@
                                 class="col"
                                 style=" padding-top: 3px;text-align: end;"
                               >
-                                <div class="form-group" style="float: right;min-width: 335px;"> 
+                                <div class="form-group" style="float: right;min-width: 313px;"> 
                                     <div
                                     class="pull-left radio-buttons-align"
                                   >
@@ -151,8 +154,8 @@
                                     <span class="checkmark"></span>All
                                 </label>
                             </div>
-                            <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 3px;float: right !important;">
+                            <div class="checkbox-cstm" style="margin-right: 15px;">
+                                <label style="width: auto !important;margin-top: 3px;">
                      
                                     <input type="checkbox" [(ngModel)]="currentDeletedstatusCOntact" name="cparent" id="cparent"  (click)="getDeleteListByStatusContact($event.target.checked)"
                                     />
@@ -208,7 +211,8 @@
                             <td class="table-column-width">
                                 <span class="flag" style="width: 40px;">
                                     <i *ngIf="rowData.isDefaultContact == true" [ngStyle]="{'color': rowData.isDefaultContact == true ? 'green' : 'none'}"
-                                       class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true" style="width: 40px;"></i>
+                                       class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"
+                                        style="width: 40px;"></i>
                                 </span>
 
                             </td>
@@ -262,14 +266,14 @@ col.field == 'createdDate'?
                                 <div class="col-md-12 shadow-box-cstm">
                                     <div class="col-md-6">
                                         <p class="fs12">
-                                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyName }} </span>
+                                            <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                                            <span class="span-header-red text-capital"> {{ companyName }} </span>
                                         </p>
                                     </div>
                                     <div class="col-md-6">
                                         <p class="fs12">
-                                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyCode }} </span>
+                                            <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                                            <span class="span-header-red text-capital"> {{ companyCode }} </span>
                                         </p>
                                     </div>
                                 </div><br>
@@ -296,14 +300,14 @@ col.field == 'createdDate'?
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                            <span class="span-header-red text-capital"> {{ companyName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                            <span class="span-header-red text-capital"> {{ companyCode }} </span>
                         </p>
                     </div>
                 </div><br>
@@ -382,14 +386,14 @@ col.field == 'createdDate'?
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                            <span class="span-header-red text-capital"> {{ companyName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                            <span class="span-header-red text-capital"> {{ companyCode }} </span>
                         </p>
                     </div>
                 </div><br>
@@ -522,13 +526,13 @@ col.field == 'createdDate'?
                                 <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td> -->
                                 <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isDefaultContact', audit.isDefaultContact)  ? 'black' : 'red'  }">{{audit.isDefaultContact}}</td> -->
                              
-                                <td style="text-align: center;"> <p>
+                                <td class="text-center"> <p>
                                     <!-- {{viewData.isActive === true ? 'Yes' : 'No'}} -->
                                     <input type="checkbox" disabled [checked]="audit.isActive === true"
                                       />
    </p></td>
                              
-                                    <td style="text-align: center;">
+                                    <td class="text-center">
                                         <p>
                                             <input type="checkbox" disabled [checked]="audit.isDefaultContact === true"
                                               /></p></td>
@@ -538,7 +542,7 @@ col.field == 'createdDate'?
                                 <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a'}}</td>
 
                                 <td>{{audit.updatedBy}}</td>
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <p>
                                         <input type="checkbox" disabled [checked]="audit.isDeleted === true"
                                           />
@@ -551,7 +555,7 @@ col.field == 'createdDate'?
                     </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
 
                     </ng-template>
@@ -574,14 +578,14 @@ col.field == 'createdDate'?
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                            <span class="span-header-red text-capital"> {{ companyName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                            <span class="span-header-red text-capital"> {{ companyCode }} </span>
                         </p>
                     </div>
                 </div>
@@ -608,7 +612,7 @@ col.field == 'createdDate'?
                             </div>
                             <div class="form-group">
                                 <label>First Name <span class="clr-red">*</span></label>
-                                <div class="inner-addon right-addon inline-block" style="width: 100%">  
+                                <div class="inner-addon right-addon inline-block input-width-100-percent">  
                                     <p-autoComplete class="autocomp-customer-cstm"
                                                     [(ngModel)]="contactInformation.firstName" name="firstName" field="label" [suggestions]="firstNamesList" (completeMethod)="filterFirstNames($event)" [size]="30"
                                                     [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}" (onSelect)="onFirstNameSelected()"  required (ngModelChange)="enableSave()">
@@ -620,7 +624,7 @@ col.field == 'createdDate'?
                             </div>
                             <div class="form-group">
                                 <label>Middle Name</label>
-                                <div class="inner-addon right-addon inline-block" style="width: 100%">
+                                <div class="inner-addon right-addon inline-block input-width-100-percent">
                                     <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="contactInformation.middleName"
                                                     name="middleName" [suggestions]="middleNamesList" field="label" (completeMethod)="filterMiddleNames($event)" [size]="30"
                                                     [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}" (onSelect)="onMiddleNameSelected()"  (ngModelChange)="enableSave()">
@@ -632,7 +636,7 @@ col.field == 'createdDate'?
                             </div>
                             <div class="form-group">
                                 <label>Last Name <span class="clr-red">*</span></label>
-                                <div class="inner-addon right-addon inline-block" style="width: 100%">
+                                <div class="inner-addon right-addon inline-block input-width-100-percent">
                                     <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="contactInformation.lastName"
                                                     name="lastName" [suggestions]="lastNamesList" field="label" (completeMethod)="filterLastNames($event)"
                                                     [size]="30" [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}" required (onSelect)="onLastNameSelected()"  (ngModelChange)="enableSave()">
@@ -658,20 +662,24 @@ col.field == 'createdDate'?
                                 <input autocomplete="off" class="form-control" type="text" name="contactTitle"  #contactTitle="ngModel"  [pattern]="titlePattern" [(ngModel)]="contactInformation.contactTitle" (ngModelChange)="enableSave()">
                                 <div *ngIf="contactTitle.errors" [ngClass]="'error'">
                                     <div *ngIf="contactTitle.errors.pattern">
-                                      <span style="color:red">At least One Alphabet is Required.</span>
+                                      <span class="clr-red">At least One Alphabet is Required.</span>
                                     </div>
                                 </div> 
                             </div>
-                            <div class="form-group" style="width:300px;margin-top:20px;">
+                            <div class="form-group workphone-div">
                       
                                 <div class="col-md-12">
-                                    <div class="col-md-6 pl-0" style="margin: 0px;">
+                                    <div class="col-md-6 pl-0 margin-0">
                                         <label>Work Phone <span class="clr-red">*</span></label>
-                                    <input #workPhonePatt="ngModel" [pattern]="phonePattern" (keypress)="patternMobilevalidationWithSpl($event)" autocomplete="off" class="form-control" type="text" name="workPhone" [(ngModel)]="contactInformation.workPhone" style="width: 90% !important;" (keypress)="patternMobilevalidationWithSpl($event)" required (ngModelChange)="enableSave()">
+                                    <input #workPhonePatt="ngModel" [pattern]="phonePattern" (keypress)="patternMobilevalidationWithSpl($event)" autocomplete="off" 
+                                    class="form-control work-phone-width" type="text" name="workPhone" [(ngModel)]="contactInformation.workPhone"
+                                     (keypress)="patternMobilevalidationWithSpl($event)" required (ngModelChange)="enableSave()">
                                 </div>
                                     <div class="col-md-6 pl-0">
-                                        <label style="width: 100%;">Ext</label> 
-                                    <input (keypress)="numberonly($event)" autocomplete="off" class="form-control" type="text" name="workPhoneExtn" [disabled]="!contactInformation.workPhone" [(ngModel)]="contactInformation.workPhoneExtn" style="width: 53% !important;" (keypress)="patternMobilevalidationWithSpl($event)" (ngModelChange)="enableSave()">
+                                        <label class="input-width-100-percent">Ext</label> 
+                                    <input (keypress)="numberonly($event)" autocomplete="off" class="form-control ext-input-width" type="text" 
+                                    name="workPhoneExtn" [disabled]="!contactInformation.workPhone" 
+                                    [(ngModel)]="contactInformation.workPhoneExtn"  (keypress)="patternMobilevalidationWithSpl($event)" (ngModelChange)="enableSave()">
                                </div>
                                 </div>
                             </div>
@@ -679,7 +687,7 @@ col.field == 'createdDate'?
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <div class="form-group" style="margin-top: 15px; margin-bottom: 20px;">
+                                <div class="form-group primary-contact">
                                     <span class="checkbox-cstm">
                                         <label>
                                             <input type="checkbox" name="isDefaultContact" (ngModelChange)="enableSave()" 
@@ -696,7 +704,7 @@ col.field == 'createdDate'?
                                 <input autocomplete="off" class="form-control" type="text" name="websiteURL" #url="ngModel" [(ngModel)]="contactInformation.websiteURL" [pattern]="urlPattern" (ngModelChange)="enableSave()">
                                 <div *ngIf="url.errors" [ngClass]="'error'">
                                     <div *ngIf="url.errors.pattern">
-                                        <span style="color:red">URL not valid</span>
+                                        <span class="clr-red">URL not valid</span>
                                     </div>
                                 </div>
                             </div>
@@ -706,7 +714,7 @@ col.field == 'createdDate'?
                             </div>
                             <div *ngIf="mobPhon.errors" [ngClass]="'error'">
                                 <div *ngIf="mobPhon.errors.pattern">
-                                    <span style="color: red;">Please enter atleast 6 digits</span>
+                                    <span class="clr-red">Please enter atleast 6 digits</span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -715,7 +723,7 @@ col.field == 'createdDate'?
                             </div>
                             <div *ngIf="altPhon.errors" [ngClass]="'error'">
                                 <div *ngIf="altPhon.errors.pattern">
-                                    <span style="color: red;">Please enter atleast 6 digits</span>
+                                    <span class="clr-red">Please enter atleast 6 digits</span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -724,7 +732,7 @@ col.field == 'createdDate'?
                             </div>
                             <div *ngIf="faxpat.errors" [ngClass]="'error'">
                                 <div *ngIf="faxpat.errors.pattern">
-                                    <span style="color: red;">Please enter atleast 6 digits</span>
+                                    <span class="clr-red">Please enter atleast 6 digits</span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -747,7 +755,7 @@ col.field == 'createdDate'?
                                 </div>
 
                                 <div class="col-sm-1">
-                                    <span style="margin-left:10px"  data-toggle="modal"  data-target="#memo-popup">
+                                    <span data-toggle="modal" class="margin-left-10"  data-target="#memo-popup">
                                         <a class="btn nobg"                                          
                                            (ngModelChange)="enableSave()"                                          
                                            (click)="onClickMemo()"
@@ -765,7 +773,7 @@ col.field == 'createdDate'?
                                 <input autocomplete="off" class="form-control" email type="text" name="email" [pattern]="emailPattern" #contactEmail="ngModel" [(ngModel)]="contactInformation.email" required (ngModelChange)="enableSave()">
                                 <div *ngIf="contactEmail.errors" [ngClass]="'error'">
                                     <div *ngIf="contactEmail.errors.pattern">
-                                        <span style="color:red">Contact Email  not valid</span>
+                                        <span class="clr-red">Contact Email  not valid</span>
                                     </div>
                                 </div>
 
@@ -774,14 +782,14 @@ col.field == 'createdDate'?
                         </div>
                         <div class="col-md-12" *ngIf="workPhonePatt.errors" [ngClass]="'error'">
                             <div *ngIf="workPhonePatt.errors.pattern">
-                                <span style="color: red;">Please enter atleast 6 digits</span>
+                                <span class="clr-red">Please enter atleast 6 digits</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer"> 
-                    <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn" style="text-align:center" [disabled]="!addContactForm.valid ||contactEmail.errors || disablesaveForFirstname || disableSaveMiddleName || disableSaveLastName || disableSave" (click)="saveContactInformation() " >Save</button>
-                    <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn" style="text-align:center" (click)="updateCustomerContact()" [disabled]="!addContactForm.valid || contactEmail.errors || disablesaveForFirstname || disableSaveMiddleName || disableSaveLastName || disableSave" >Update</button>
+                    <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"  [disabled]="!addContactForm.valid ||contactEmail.errors || disablesaveForFirstname || disableSaveMiddleName || disableSaveLastName || disableSave" (click)="saveContactInformation() " >Save</button>
+                    <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn" (click)="updateCustomerContact()" [disabled]="!addContactForm.valid || contactEmail.errors || disablesaveForFirstname || disableSaveMiddleName || disableSaveLastName || disableSave" >Update</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMyModel()" >Close</button>
                 </div>
             </form>

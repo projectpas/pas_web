@@ -12,7 +12,7 @@
                 <div class="x_content">
                     <div class="clear"></div>
                     <form #generalInfoForm="ngForm" class="form-horizontal1">
-                        <div class="form-row" style="margin-left: 13px;margin-top: 10px;">
+                        <div class="form-row generalinfo-div">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Legal Entity <span class="clr-red">*</span></label>
@@ -87,7 +87,7 @@
                             <div class="col-md-3">
                           
                                 <div class="form-group">
-                                    <label style="margin-bottom: 11px !important;">Invoice Address Position</label>
+                                    <label class="address-label">Invoice Address Position</label>
                                     <div class="col-md-12">
                                         <div>
                                             <label class="radio-cstm wauto pull-left">
@@ -115,7 +115,7 @@
                                 </div> 
                                 <div *ngIf="faxPattren.errors" [ngClass]="'error'">
                                     <div *ngIf="faxPattren.errors.pattern">
-                                        <span style="color: red;">Please enter atleast 6 digits</span>
+                                        <span class="clr-red">Please enter atleast 6 digits</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -130,19 +130,19 @@
                                         </div>
                                         <div class="col-md-6"> 
                                             <label>Ext </label>
-                                            <input type="text" (keypress)="numberonly($event)" name="phoneExt" style="text-align: start !important;" pInputText maxlength="15" (ngModelChange)="setvaliDate()"
+                                            <input type="text" (keypress)="numberonly($event)" name="phoneExt" class="text-start" pInputText maxlength="15" (ngModelChange)="setvaliDate()"
                                                 [disabled]="!generalInformation.phoneNumber " [(ngModel)]="generalInformation.phoneExt" />
                                         </div>
 
                                     </div>
                                     <div *ngIf="phoneNumberNg.errors" [ngClass]="'error'">
                                         <div *ngIf="phoneNumberNg.errors.pattern">
-                                            <span style="color: red;">Please enter atleast 6 digits</span>
+                                            <span class="clr-red">Please enter atleast 6 digits</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" style="margin-top: 30px;">
-                                    <label style="margin-bottom: 9px !important;margin-top: 4px;">Invoice Fax/Phone Position</label>
+                                <div class="form-group m-t-30">
+                                    <label class="phone-position-label">Invoice Fax/Phone Position</label>
                                     <div class="col-md-12">
                                         <div>
                                             <label class="radio-cstm wauto pull-left">
@@ -162,8 +162,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" style="margin-top: 23px;">
-                                    <label style="    margin-top: 4px;">Functional Currency <span class="clr-red">*</span></label>
+                                <div class="form-group currency-div">
+                                    <label class="currency-label">Functional Currency <span class="clr-red">*</span></label>
                 
                                     <p-dropdown required (input)="onFilterCurrency($event.target.value)"  
                                         [showClear]="true" class="p-dropdown-100 form-control border_nne" (ngModelChange)="setvaliDate()"
@@ -202,7 +202,7 @@
                                 </div>
                               
                                 <div class="form-group">
-                                    <label style="    margin-top: 5px;">Cage Code</label>
+                                    <label class="m-t-5">Cage Code</label>
                                     <input class="form-control" type="text" id="cageCode" name="cageCode" (ngModelChange)="setvaliDate()"
                                         [(ngModel)]="generalInformation.cageCode" />
                                 </div>
@@ -212,31 +212,31 @@
                                         [(ngModel)]="generalInformation.faaLicense" />
                                 </div>
                                 <div class="form-group">
-                                    <label style="    margin-top: 3px;">TAX Id</label>
+                                    <label class="tax-label">TAX Id</label>
                                     <input class="form-control" type="text" id="taxId" name="taxId" (ngModelChange)="setvaliDate()"
                                         [(ngModel)]="generalInformation.taxId" />
                                 </div>
                             </div>
                             <div class="col-md-6 col-md-6-cstm">
                                 <div class="form-group">
-                                    <label style="float: none;">Logo</label>
+                                    <label class="logo-label">Logo</label>
                                     <p-fileUpload #fileUploadInput name="fileupload[]" accept="image/*" (ngModelChange)="setvaliDate()"
                                         [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
                                         (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"></p-fileUpload>
                                 </div>
                                 <div class="table-responsive table-overflow"
                                     *ngIf="sourceViewforDocumentList.length > 0">
-                                    <h4 class="panel-title B-bold" style="padding-left: 9px;"><strong>Attachment Details:</strong></h4>
+                                    <h4 class="panel-title B-bold attachment-title"><strong>Attachment Details:</strong></h4>
                                     <p-table class="table-responsive ptable-cus-pma"
                                         [paginator]="sourceViewforDocumentList.length > 0"
                                         [value]="sourceViewforDocumentList" [rows]="3"
                                         [columns]="sourceViewforDocumentListColumns">
                                         <ng-template pTemplate="header" let-columns>
                                             <tr>
-                                                <th *ngFor="let col of columns">
+                                                <th class="table-column-width" *ngFor="let col of columns">
                                                     {{col.header}}
                                                 </th>
-                                                <th style="width: 100px;">
+                                                <th class="table-actions-column">
                                                     Download
                                                 </th>
                                             </tr>
@@ -244,12 +244,12 @@
                                         <ng-template pTemplate="body" let-part let-rowData let-columns="columns"
                                             let-i="rowIndex">
                                             <tr>
-                                                <td *ngFor="let col of columns">
+                                                <td class="table-column-width" *ngFor="let col of columns">
                                                     <ng-container *ngIf="col.field=='fileName'">
                                                         {{part[col.field]}}
                                                     </ng-container>
                                                 </td>
-                                                <td style="text-align: center;">
+                                                <td class="table-column-width action-icons-cstm text-center">
                                                     <a (click)="downloadFileUpload(part)" matTooltip="Download"
                                                         matTooltipPosition="above" class="btn nobg btn-cstm"><span><i
                                                                 class="fa fa-download"></i></span></a>
@@ -266,7 +266,7 @@
                                             *ngIf="sourceViewforDocumentList.length == 0">
                                             <tr>
                                                 <td [attr.colspan]="2"
-                                                    style="color: red; font-weight: bold; text-align: center">
+                                                   class="no-records-msg no-records-cstm">
                                                     No records found
                                                 </td>
                                             </tr>
@@ -293,8 +293,8 @@
                                         </ng-template>
                                     </p-table>
                                 </div>
-                                <div class="form-group" style="margin-top: 15px;">
-                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                <div class="form-group m-t-15">
+                                    <div class="checkbox-cstm check-margin">
                                         <label>
                                             <input type="checkbox" name="isAddressForBilling" [(ngModel)]="
                                 generalInformation.isAddressForBilling"  (ngModelChange)="setvaliDate()"/>
@@ -303,8 +303,8 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form-group" style="margin-top: 15px;">
-                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                <div class="form-group m-t-15">
+                                    <div class="checkbox-cstm check-margin">
                                         <label>
                                             <input type="checkbox" name="isAddressForShipping" [(ngModel)]="
                                 generalInformation.isAddressForShipping"  (ngModelChange)="setvaliDate()"/>
@@ -313,8 +313,8 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form-group" style="margin-top: 10px;">
-                                    <span class="checkbox-cstm" style="margin-left: 0;">
+                                <div class="form-group m-t-10">
+                                    <span class="checkbox-cstm check-margin">
                                         <label>
                                             <input type="checkbox" name="isBalancingEntity" (ngModelChange)="setvaliDate()"
                                                 [(ngModel)]="generalInformation.isBalancingEntity" />
@@ -324,9 +324,9 @@
                                     </span>
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-6" style="padding: 0px;">
-                                        <div class="form-group" style="margin-top: 10px;">
-                                            <span class="checkbox-cstm" style="margin-left: 6px;">
+                                    <div class="col-md-6 last-level-padding">
+                                        <div class="form-group m-t-10">
+                                            <span class="checkbox-cstm last-level-check">
                                                 <label>
                                                     <input type="checkbox" name="lastLevel"
                                                         [(ngModel)]="generalInformation.lastLevel" (ngModelChange)="setvaliDate()"
@@ -338,7 +338,7 @@
                                         </div>
                                         <div class="form-group" *ngIf="generalInformation.lastLevel">
                                             
-                                            <div class="tagNameDiv" style="display: inline-flex;    padding-left: 5px;">
+                                            <div class="tagNameDiv tagname-align" >
                                              <div>
                                                 <label>Tag Name</label>
                                                 <input class="form-control" type="text" id="tagName" name="tagName"
@@ -346,7 +346,8 @@
                                              </div>
                                                 <!-- <i class="fa fa-plus-circle fa-lg" matTooltipPosition="above" style="font-size: 19px !important;" (ngModelChange)="setvaliDate()"
                                                     matTooltip="Add Tag Name" (click)="onAddTagName();"></i> -->
-                                                    <button type="button" class="btn btn-primary but_stl" [disabled]="!tagName" (click)="onAddTagName();" style="margin-left: 10px;">Add</button>
+                                                    <button type="button" class="btn btn-primary but_stl add-button-margin" [disabled]="!tagName" (click)="onAddTagName();" 
+                                                    >Add</button>
                                             </div>
                                         </div>
                                     </div>
@@ -362,30 +363,30 @@
                                         [totalRecords]="totalRecords"> 
                                         <ng-template pTemplate="header" let-columns>
                                             <tr>
-                                                <th *ngFor="let col of columns">
+                                                <th class="table-column-width" *ngFor="let col of columns">
                                                     {{ col.header }}
                                                 </th>
-                                                <th style="width: 25px;">
+                                                <th class="table-actions-column">
                                                     Actions
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <th style="width:auto" *ngFor="let col of columns"
+                                                <th class="table-column-width" *ngFor="let col of columns"
                                                     [ngSwitch]="col.field">
-                                                    <input style="width:100%;" pInputText type="text" (input)="
+                                                    <input class="table-header-input-width" pInputText type="text" (input)="
                                             ptabletagName.filter($event.target.value, col.field, 'contains')
                                             " />
                                                 </th>
-                                                <th></th>
+                                                <th class="table-actions-column"></th>
                                             </tr>
                                         </ng-template>
                                         <ng-template pTemplate="body" let-rowData let-columns="columns"
                                             let-i="rowIndex">
                                             <tr>
-                                                <td *ngFor="let col of columns">
+                                                <td class="table-column-width" *ngFor="let col of columns">
                                                     {{rowData[col.field]}}
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="action-icons-cstm table-column-width">
                                                     <span>
                                                         <a class="btn nobg btn-edit-cstm"
                                                             (click)="onEditTagName(editContent,rowData,i)"
@@ -404,20 +405,20 @@
                                         <ng-template pTemplate="emptymessage" let-columns *ngIf="tagNames.length == 0">
                                             <tr>
                                                 <td [attr.colspan]="2"
-                                                    style="color: red; font-weight: bold; text-align: center">
+                                                    class="no-records-cstm no-records-msg">
                                                     No records found
                                                 </td>
                                             </tr>
                                         </ng-template>
                                         <ng-template pTemplate="summary" id="footer">
                                             <label id="footer" class="footer">Total: </label>
-                                            <input style="width: 5%;" [value]="tagNames.length" name="totalRecords" disabled
+                                            <input class="footer-input-width" [value]="tagNames.length" name="totalRecords" disabled
                                               pInputText type="text" />
                   
                                             &nbsp;&nbsp;
                                             <label id="footer" class="footer1">Pages Count:</label>
                   
-                                            <input style="width: 5%;" [ngModel]="
+                                            <input class="footer-input-width" [ngModel]="
                                                 getTaxPageCount(
                                                   tagNames.length,
                                                   pageSizeTax
@@ -495,7 +496,7 @@
             <h4 class="modal-title">Confirmation</h4>
         </div>
         <div class="modal-body">
-            <h6 style="text-align: start;">
+            <h6 class="text-start">
                 <!-- Are you sure you want to go to {{nextOrPreviousTab}} tab? Unsaved changes will be lost. -->
                 Do you want to Save changes and Continue ?
             </h6>

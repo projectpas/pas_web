@@ -88,7 +88,7 @@ export class VendorMemoComponent implements OnInit {
 	}
 
 	onClickMemo(rowData) {
-		this.memoPopupContent = {...rowData};
+		this.memoPopupContent = {...rowData};		
 	}
 	closeDeleteModal() {
 		$("#downloadConfirmation").modal("hide");
@@ -191,5 +191,9 @@ export class VendorMemoComponent implements OnInit {
 
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
+	}
+
+	closeViewModal() {
+		$("#viewmemo").modal("hide");
 	}
 }   

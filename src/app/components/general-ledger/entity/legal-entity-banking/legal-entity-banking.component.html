@@ -3,14 +3,14 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-4">
                 <p class="fs12">
-                    <label  class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{companyName }} </span>
+                    <label  class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                    <span class="span-header-red text-capital"> {{companyName }} </span>
                 </p>
             </div>
             <div class="col-md-4">
                 <p class="fs12">
-                    <label  class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{companyCode }} </span>
+                    <label  class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                    <span class="span-header-red text-capital"> {{companyCode }} </span>
                 </p>
             </div>
         </div>
@@ -35,10 +35,10 @@
                 <div class="x_content payment-info">
                     <div class="mt-2">
                         <ul class="nav nav-pills">
-                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="Lockbox()" [class.extraclass]="LockboxStyle">Lockbox</button></li>
-                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="DomesticWire()" [class.extraclass]="domesticWireStyle">Domestic Wire</button></li>
-                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="InternationalWire()" [class.extraclass]="internationalStyle">International Wire</button></li>
-                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="ACH()" [class.extraclass]="ACHStyle">ACH</button></li>
+                            <li><button class="btn banking-tab-buttons"  (click)="Lockbox()" [class.extraclass]="LockboxStyle">Lockbox</button></li>
+                            <li><button class="btn banking-tab-buttons" (click)="DomesticWire()" [class.extraclass]="domesticWireStyle">Domestic Wire</button></li>
+                            <li><button class="btn banking-tab-buttons" (click)="InternationalWire()" [class.extraclass]="internationalStyle">International Wire</button></li>
+                            <li><button class="btn banking-tab-buttons" (click)="ACH()" [class.extraclass]="ACHStyle">ACH</button></li>
                         </ul>
                     </div>
                     <div class="clear"></div>
@@ -137,7 +137,7 @@
                                                     <input type="text" (ngModelChange)="domesticval()" #bankbiff="ngModel"  [pattern]="titlePattern"  class="form-control"   name="Bank" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBankName" required>  
                                                     <div *ngIf="bankbiff.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbiff.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -150,7 +150,7 @@
                                                      <input type="text"  (ngModelChange)="domesticval()"  #bankbibbkkf="ngModel"  [pattern]="titlePattern" class="form-control"   name="Address" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticIntermediateBank" required>  
                                                      <div *ngIf="bankbibbkkf.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbibbkkf.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                     </div>
@@ -159,17 +159,19 @@
                                                     <input type="text" (ngModelChange)="domesticval()"  #bankbiengd="ngModel"  [pattern]="titlePattern" class="form-control"   name="Account" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBenficiaryBankName" required> 
                                                     <div *ngIf="bankbiengd.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbiengd.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
-                                                   <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="domesticval()"   class="form-control"   name="Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBankAccountNumber" required> 
+                                                   <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)"
+                                                   (ngModelChange)="domesticval()"   class="form-control text-end-align"   name="Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBankAccountNumber" required> 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
-                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="domesticval()"   class="form-control"   name="ABA" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticABANumber" required> 
+                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" 
+                                               (ngModelChange)="domesticval()"   class="form-control text-end-align"   name="ABA" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticABANumber" required> 
                                                 </div>
 
                                                 <div class="form-group">
@@ -213,7 +215,7 @@
                                                      <input type="text" (ngModelChange)="internationalval()" #bankbibb="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Bank Name" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankName" required> 
                                                      <div *ngIf="bankbibb.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbibb.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                     </div>
@@ -227,7 +229,7 @@
                                                     <input type="text" (ngModelChange)="internationalval()"  #bankintb="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Bank Address" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalIntermediateBank" required>
                                                     <div *ngIf="bankintb.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankintb.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -236,17 +238,17 @@
                                                      <input type="text" (ngModelChange)="internationalval()" #bankbenf="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Benficiary" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBenficiaryBankName" required>  
                                                      <div *ngIf="bankbenf.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbenf.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                     </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Account Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="internationalval()"  class="form-control"   name="Account Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required> 
+                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)"  (ngModelChange)="internationalval()"  class="form-control text-end-align"   name="Account Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required> 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
-                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="internationalval()"   class="form-control"   name="ABA Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.aba" required> 
+                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" (ngModelChange)="internationalval()"   class="form-control text-end-align"   name="ABA Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.aba" required> 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
@@ -289,7 +291,7 @@
                                                     <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel"  [pattern]="titlePattern" class="form-control"    name="Bank n" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
                                                     <div *ngIf="bankNmae.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankNmae.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -298,7 +300,7 @@
                                                    <input type="text" (ngModelChange)="achval()" #interbankNmae="ngModel"  [pattern]="titlePattern" class="form-control"   name="Intermediate b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achIntermediateBank" required>  
                                                    <div *ngIf="interbankNmae.errors" [ngClass]="'error'">
                                                     <div *ngIf="interbankNmae.errors.pattern">
-                                                      <span style="color:red">At least One Alphabet is Required.</span>
+                                                      <span class="clr-red">At least One Alphabet is Required.</span>
                                                     </div> 
                                                 </div>
                                                 </div>
@@ -307,17 +309,17 @@
                                                       <input type="text"  (ngModelChange)="achval()"  #ibenfbankNmae="ngModel"  [pattern]="titlePattern" class="form-control"   name="Benficiary b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBenficiaryBankName" required> 
                                                       <div *ngIf="ibenfbankNmae.errors" [ngClass]="'error'">
                                                         <div *ngIf="ibenfbankNmae.errors.pattern">
-                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                          <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
                                                     </div> 
                                                     </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control"  name="Account Nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  (ngModelChange)="achval()" style="text-align: end;"> 
+                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control text-end-align"  name="Account Nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  (ngModelChange)="achval()" > 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control"   name="ABA nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" required  (ngModelChange)="achval()" style="text-align: end;">
+                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control text-end-align"   name="ABA nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" required  (ngModelChange)="achval()">
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
@@ -400,7 +402,7 @@
                                                             </div>
                                                             <ng-template #noDatavailable>
                                                                 <div class="text-center">
-                                                                    <h4 style="color: #ff5663;">No History Found </h4>
+                                                                    <h4 class="no-history-found-msg">No History Found </h4>
                                                                 </div>
                                         
                                                             </ng-template>

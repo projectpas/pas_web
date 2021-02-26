@@ -450,11 +450,26 @@ margin-top: 10px;
 .m-r-5{
   margin-right:5px !important;
 }
+.m-t-30{
+  margin-top: 30px !important;
+}
+.m-t-15{
+  margin-top: 15px !important;
+}
 .width-auto{
   width: auto !important;
 }
 .text-capital{
   text-transform: capitalize !important;
+}
+.text-start{
+  text-align: start !important;
+}
+.text-end-align{
+  text-align: end !important;
+}
+.text-right{
+  text-align: right !important;
 }
 .view-active-inactive{
   text-align-last: end; 
@@ -635,4 +650,10 @@ padding-bottom: 0 !important;
 }
 .back-white{
   background: #fff !important;
+}
+.margin-right-0{
+  margin-right: 0px !important;
+}
+.legal-label-width{
+  width: 44% !important;
 }
