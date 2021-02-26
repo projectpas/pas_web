@@ -104,6 +104,11 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId));
     });
   }
+  autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count?, idList?, managementStructureId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByJobTitle?searchText=${searchText}&jobTitleId=${jobTitleId}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count, idList, managementStructureId));
+    });
+  }
 
   autoCompleteDropdownsEmployeeByMS(searchText, startWith, count?, idList?, managementStructureId?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
