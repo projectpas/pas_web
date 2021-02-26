@@ -1088,11 +1088,9 @@ this.commonfunctionHandler();
     if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
       for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
         if (!taskData.totalMinutes) {
-          console.log("totla hours",taskData.totalMinutes)
           taskData.totalMinutes = 0;
         }
         if (!taskData.totalHours) {
-          console.log("totla hours",taskData.totalHours)
           taskData.totalHours = 0;
         }
         taskData.hours = Number(`${taskData.totalHours}.${taskData.totalMinutes}`)
@@ -1180,8 +1178,6 @@ this.commonfunctionHandler();
         if (this.laborForm.hoursorClockorScan != 1) {
           this.calculateWorkingHoursandMins(value);
         }
-        // console.log("task",task)
-        // console.log("tasklist",this.taskList)
         this.taskList.forEach(t => {
           if (t.description == task) {
             this.calculateTaskHours(t);
@@ -1270,7 +1266,6 @@ this.commonfunctionHandler();
       currentIndex:any;
       currentTaks:any;
       onAddTextAreaInfo(material,taskName,index,track) {
-        console.log("chrckkc",index,track)
         this.currentIndex=index;
         this.currentTaks=taskName;
         this.textAreaInfoLabor = material;
