@@ -139,7 +139,9 @@ export class SalesCustomerApprovalsComponent {
                 this.approvers = response[1];
                 this.setApprovers(response[0])
                 this.setApproverProcessdata(response[2]);
-            }, error => {})
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     onApprovalSelected(approver, i) {
@@ -239,6 +241,7 @@ export class SalesCustomerApprovalsComponent {
                 this.isSpinnerVisible = false;
                 this.setApproverProcessdata(data);
             }, error => {
+                this.isSpinnerVisible = false;
             });
     }
 
@@ -305,6 +308,7 @@ export class SalesCustomerApprovalsComponent {
     getInternalApprovedMaxDate() {
         return new Date();
     }
+    
     getCustomerSentMinDate(intApprovedDate) {
         if (intApprovedDate) {
             return new Date(intApprovedDate);
@@ -505,14 +509,7 @@ export class SalesCustomerApprovalsComponent {
                     this.getCustomerQuotesList();
                 },
                 err => {
-                    this.alertService.showMessage(
-                        this.moduleName,
-                        `Data updating failed`,
-                        MessageSeverity.error
-                    );
                     this.isSpinnerVisible = false;
-
-                    $('#quoteVersion').modal('hide');
                 }
             )
     }

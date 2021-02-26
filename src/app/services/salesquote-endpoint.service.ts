@@ -214,9 +214,14 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.saveCustomerQuotesApprovedEndPoint(data));
       });
   }
+  
   sentForInternalApproval(data) {
-    return this.http.post<any>(`${this.configurations.baseUrl}/api/salesquote/soquoteapproval`, JSON.stringify(data), this.getRequestHeaders());
+    return this.http.post<any>(`${this.configurations.baseUrl}/api/salesquote/soquoteapproval`, JSON.stringify(data), this.getRequestHeaders())
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
+    });
   }
+
   update(salesQuote: ISalesQuoteView): Observable<ISalesOrderQuote> {
     let url: string = `${this.saleQuote}/${salesQuote.salesOrderQuote.salesOrderQuoteId}`;
     return this.http
