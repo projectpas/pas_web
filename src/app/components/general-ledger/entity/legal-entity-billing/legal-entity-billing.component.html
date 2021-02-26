@@ -1,19 +1,19 @@
 ﻿
-<div class="" role="main" style="padding: 2px 6px">
+<div class="main-padding" role="main" >
     <div>
         <div class="x_content">
             <!-- <div *ngIf="isViewMode==false"> -->
                 <div class="col-md-12 shadow-box-cstm" *ngIf="isViewMode==false">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }}  </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityName }}  </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize">{{legalEntityCode }}  </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                            <span class="span-header-red text-capital">{{legalEntityCode }}  </span>
                         </p>
                     </div>
                 </div>
@@ -86,9 +86,9 @@
                             class="btn btn-primary  exports-button" matTooltip="Download  Data" matTooltipPosition="above"
                              pButton icon="fa-download" iconPos="left" label="Export All Data" 
                              (click)="openTag(export)"></button>
-                            <button *ngIf="isViewMode==false"  type="button  exports-button" class="btn btn-primary"
+                            <button *ngIf="isViewMode==false"  type="button " class="btn btn-primary  exports-button"
                              matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" 
-                             label="Export Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                             label="Export Selection Only" (click)="dt.exportCSV({selectionOnly:true})"></button>
 
                             <ng-template #export let-c="close" let-d="dismiss">
                                 <div class="modal-header">
@@ -113,8 +113,7 @@
                             </ng-template>
                             <div class="excel-upload  excel-upload-cstm"  *ngIf="isViewMode==false">
 
-                                <button type="button" class="btn btn-primary"
-                                        style="padding: 5px 6px !important;"
+                                <button type="button" class="btn btn-primary exports-button"
                                         matTooltip="Download Sample File" matTooltipPosition="above"
                                         (click)="sampleExcelDownload()">
                                     Sample File Download
@@ -174,7 +173,8 @@
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th class="table-column-width">Flag</th>
-                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.field == 'isPrimary'" style="width: 140px;">
+                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.field == 'isPrimary'"
+                            >
                                 {{col.header}}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                             </th>
@@ -267,7 +267,7 @@
                                type="text" />
                     </ng-template>
                 </p-table>
-                <div style="margin-top: 10px;" *ngIf="isViewMode == false">
+                <div class="m-t-10" *ngIf="isViewMode == false">
                     <button type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
                     <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">Previous</button>
                 </div>
@@ -285,7 +285,7 @@
                 </div>
             </div>
 
-            <ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto">
+            <ng-template #contentHist let-c="close" let-d="dismiss" class="wauto">
                 <div class="modal-header">
                     <h4 class="modal-title">History of Action</h4>
                     <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -342,14 +342,14 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                         </p>
                     </div>
                 </div>
@@ -485,14 +485,14 @@
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                        <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                     </p>
                 </div>
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                        <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                     </p>
                 </div>
             </div>
@@ -571,7 +571,7 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
-<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss"class="wauto" data-backdrop="static">
     <div class="modal-header">
 
         <h4 class="modal-title">History of Billing Information</h4>
@@ -631,12 +631,12 @@
                     <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">{{audit.isPrimary}}</td> -->
                     <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td> -->
                    
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         <input type="checkbox" disabled [checked]="audit.isActive == true"
                           />
                     </td>
                    
-                      <td style="text-align: center;">
+                      <td class="text-center">
                         <input type="checkbox" disabled [checked]="audit.isPrimary == true"
                           />
                     </td>
@@ -644,7 +644,7 @@
                     <td>{{audit.createdBy}}</td>
                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                     <td>{{audit.updatedBy}}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
@@ -695,14 +695,14 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                    <span class="span-header-red text-capital"> {{ legalEntityName }} </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                    <span class="span-header-red text-capital"> {{ legalEntityCode }} </span>
                 </p>
             </div>
         </div><br>
