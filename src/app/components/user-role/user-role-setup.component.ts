@@ -162,7 +162,7 @@ console.log(this.sortedHierarchy)
         // if (value == true) {
        
         if (value == true) {
-            currentModule.rolePermission.permissionId = +type;
+            currentModule.rolePermission.permissionID = +type;
         }
         else {
            // currentModule.rolePermission.permissionId = 0;
@@ -311,7 +311,7 @@ console.log(this.sortedHierarchy)
     setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,value:boolean=true): void {
 
         var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-            return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionId == currentModule.rolePermission.permissionId;
+            return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == currentModule.rolePermission.permissionID;
         })[0];
 
         if (permission != undefined) {
@@ -319,8 +319,8 @@ console.log(this.sortedHierarchy)
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             var permissionIndex = this.currentUserRole.rolePermissions.indexOf(permission)
             if(value==false){
-            this.currentUserRole.rolePermissions[permissionIndex].permissionId=0;
-            this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionId!=0);
+            this.currentUserRole.rolePermissions[permissionIndex].permissionID=0;
+            this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionID!=0);
             }
             //this.updatePermission(this.currentUserRole.rolePermissions[permissionIndex], currentModule.rolePermission);
         }
@@ -337,8 +337,8 @@ console.log(this.sortedHierarchy)
         previousPermission.canAdd = latestPermission.canAdd;
         previousPermission.canUpdate = latestPermission.canUpdate;
         previousPermission.canDelete = latestPermission.canDelete;
-        if(latestPermission.permissionId==0){
-        this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionId!=0);
+        if(latestPermission.permissionID==0){
+        this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionID!=0);
         }
     }
 

@@ -2,7 +2,7 @@
  (ngSubmit)="save()" fxLayout="column" [fxLayoutGap]="isEditMode ? '1em' : '0'" autocomplete="off">
 
     <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="margin-bottom">
-       <div class="form-group col-md-4">
+       <!-- <div class="form-group col-md-4" style="visibility: hidden;">
       
         <label style="margin-right:-10%">{{'users.editor.JobTitle' | translate}}</label>
         <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>           
@@ -11,14 +11,14 @@
             formControlName="jobTitle" [readonly]="!isEditMode" />
         </mat-form-field>
     
-        </div>
+        </div> -->
         <div class="form-group col-md-4">
         <label style="margin-right:-12%">{{'users.editor.FullName' | translate}}</label>
 
         <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
             <input matInput formControlName="fullName"
             style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
-             [readonly]="!isEditMode" />
+              />
         </mat-form-field>
         </div>
     </div>
@@ -28,7 +28,7 @@
         <label style="margin-right:-10%">{{'users.editor.Email' | translate}}</label>
         
         <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
-            <input matInput style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
+            <input disabled matInput style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
              formControlName="email" [readonly]="!isEditMode" required/>
             <mat-error *ngIf="email.hasError('required')">
                 {{'users.editor.EmailRequired' | translate}}
@@ -43,7 +43,7 @@
 
         <mat-form-field class="app-validate" [floatLabel]="floatLabels" fxFlex>
             <input matInput style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;"
-             formControlName="phoneNumber" [readonly]="!isEditMode" />
+             formControlName="phoneNumber"  />
         </mat-form-field>
         </div>
     </div>
@@ -54,7 +54,7 @@
         
         <mat-form-field class="app-validate"  [floatLabel]="floatLabels" fxFlex>
 
-            <input matInput style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" 
+            <input disabled matInput style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" 
             formControlName="userName" [readonly]="!isEditMode" autocomplete="off" required/>
             <mat-error *ngIf="userName.hasError('required')">
                 {{'users.editor.UserNameRequired' | translate}}
@@ -76,7 +76,7 @@
 
     </div>
 
-    <div *ngIf="isEditMode">
+    <div *ngIf="false">
 
         <button mat-raised-button (click)="changePassword()" *ngIf="!(isChangePassword || isNewUser)" color="primary">{{'users.editor.ChangePassword' | translate}}</button>
 
@@ -120,9 +120,12 @@
 
        <div class="form-group col-md-4">
         <label  style="margin-right:-10%;margin-top:-5px">{{'users.editor.Roles' | translate}}</label>
-        <mat-form-field class="app-validate" appearance="none" [floatLabel]="floatLabels" fxFlex>
+        <li *ngFor="let role of roleAssign">
+            <span class="badge">{{role}}</span> x
+        </li>
+        <!-- <mat-form-field class="app-validate" appearance="none" [floatLabel]="floatLabels" fxFlex>
        
-         
+            
             <mat-select style="background-color: #fff !important;border:1px solid;padding: 5px !important;border-radius: 5px;" 
             formControlName="roles" [(value)]="user.roleName" multiple [attr.disabled]="!isEditMode || !canAssignRoles">
                 <mat-option *ngFor="let role of assignableRoles" [value]="role.name" >
@@ -132,7 +135,7 @@
             <mat-error *ngIf="assignedRoles.hasError('required')">
                 {{'users.editor.RoleRequired' | translate}}
             </mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
         </div>
     </div>
 
@@ -142,7 +145,7 @@
             <mat-checkbox *ngIf="isEditMode" formControlName="isEnabled">{{'users.editor.Enabled' | translate}}</mat-checkbox>
         </div>
 
-        <div>
+        <div >
             <button mat-button *ngIf="user.isLockedOut" clas="btn btn-primary" (click)="unlockUser()"
              [attr.disabled]="isSaving" color="accent"><mat-icon class="mat-button-icon">lock_open</mat-icon>{{'users.editor.Unblock' | translate}}</button>
             </div>

@@ -96,18 +96,18 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
             
         }
         else {
-            // this.accountService.getUser().subscribe(
-            //     user => {
-            //         let role=user.roleName;
-            //         this.onCurrentUserDataLoadSuccessful(user, user.roleName.map(r => new Role(r)))
-            //     },
-            //     error => {
-            //         this.onCurrentUserDataLoadFailed(error)
-            //     });
+            this.accountService.getUser().subscribe(
+                user => {
+                    let role=user.roleName;
+                    this.onCurrentUserDataLoadSuccessful(user)
+                },
+                error => {
+                    this.onCurrentUserDataLoadFailed(error)
+                });
         }
     }
 
-    private onCurrentUserDataLoadSuccessful(user: User, roles: UserRole[]) {
+    private onCurrentUserDataLoadSuccessful(user: User, roles: UserRole[]=[]) {
         this.alertService.stopLoadingMessage();
         this.userProfile.setUser(user, roles);
     }

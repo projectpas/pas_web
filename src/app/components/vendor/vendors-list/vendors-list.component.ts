@@ -19,6 +19,7 @@ import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare var $ : any;
 
 
@@ -209,15 +210,15 @@ export class VendorsListComponent implements OnInit {
     moduleNameVendor: any;
     constructor(private router: ActivatedRoute, private route: Router, private datePipe: DatePipe, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, private vendorCapesService: VendorCapabilitiesService, public commonService: CommonService) {
         
-        router.params.subscribe(async val => {
-            var checksec = await this.authService.CheckSecurity(this.authService.ModuleInfo, route.url);
-            if (!checksec) {
-                this.route.navigate(['/unauthorized-access']);
-            }
-          });
-        this.isAdd=this.authService.checkPermission('Vendor.Add');
-        this.isEdit=this.authService.checkPermission('Vendor.Edit');
-        this.isDelete=this.authService.checkPermission('Vendor.Delete');
+        // router.params.subscribe(async val => {
+        //     var checksec = await this.authService.CheckSecurity(this.authService.ModuleInfo, route.url);
+        //     if (!checksec) {
+        //         this.route.navigate(['/unauthorized-access']);
+        //     }
+        //   });
+        this.isAdd=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.Add);
+        this.isEdit=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.Update);
+        this.isDelete=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.Delete);
         this.local = this.vendorService.financeCollection;
         this.dataSource = new MatTableDataSource();
         this.vendorService.listCollection = null;

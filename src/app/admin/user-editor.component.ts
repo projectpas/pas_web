@@ -18,6 +18,7 @@ import { Role } from '../models/role.model';
 import { Permission } from '../models/permission.model';
 import { EqualValidator } from '../shared/validators/equal.validator';
 import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'user-editor',
@@ -40,6 +41,8 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
 
     userProfileForm: FormGroup;
     userSaved$ = this.onUserSaved.asObservable();
+
+    roleAssign:string[]=[];
 
     get userName() {
         return this.userProfileForm.get('userName');
@@ -93,9 +96,13 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         private alertService: AlertService,
         private translationService: AppTranslationService,
         private accountService: AccountService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private authService:AuthService
     ) {
         this.buildForm();
+        if(this.authService.currentUser!=null && this.authService.currentUser.roleName!=undefined){
+            this.roleAssign=this.authService.currentUser.roleName.split(',');
+        }
     }
 
     ngOnChanges() {
@@ -201,16 +208,16 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
     }
 
     public save() {
-        if (!this.form.submitted) {
-            // Causes validation to update.
-            this.form.onSubmit(null);
-            return;
-        }
+        // if (!this.form.submitted) {
+        //     // Causes validation to update.
+        //     this.form.onSubmit(null);
+        //     return;
+        // }
 
-        if (!this.userProfileForm.valid) {
-            this.alertService.showValidationError();
-            return;
-        }
+        // if (!this.userProfileForm.valid) {
+        //     this.alertService.showValidationError();
+        //     return;
+        // }
 
         this.isSaving = true;
         this.alertService.startLoadingMessage("Saving changes...");

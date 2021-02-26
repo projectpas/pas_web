@@ -8,6 +8,7 @@
   AfterViewInit,
   Injectable,
   HostListener,
+  AfterContentChecked,
 } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Router, NavigationStart } from '@angular/router';
@@ -139,7 +140,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.toastyConfig.showClose = true;
     this.routeActive = 'active';
     this.appTitleService.appName = this.appTitle;
+  
   }
+ 
+  
   showthis() {
     this.translationService.closeCmpny = true;
   }
@@ -1689,13 +1693,16 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       if (this.authService.currentUser != null) {
+        if(this.authService.currentUser.roleID!=undefined){
+          if(this.authService .currentUser.userName!="admin"){
         this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
           console.log(data[0]);
           this.moduleHierarchy = data[0];
           this.authService.SetMenuInfo(data[0]);
           this.dynamicMenu();
-        }
-        );
+        });
+      }
+      }
       }
 
       setTimeout(() => {
@@ -1710,6 +1717,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.subscription = this.router.events.subscribe((event) => {
+     
       if (event instanceof NavigationStart) {
         let url = (<NavigationStart>event).url;
 
@@ -1723,7 +1731,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
+  
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     this.unsubscribeNotifications();
@@ -1924,8 +1932,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   logout() {
-    this.authService.logout();
-    this.authService.redirectLogoutUser();
+    this.authService.logout();this.authService.redirectLogoutUser();
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+    
+    
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 

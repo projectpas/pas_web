@@ -7,7 +7,7 @@
 				</h4>
 			</div>
 			<div>
-				<button type="button"
+				<button type="button" *ngIf="isView"
 						class="btn-sm header-button"
 						[routerLink]="['/employeesmodule/employeepages/app-employees-list']">
 					Employee List

@@ -92,7 +92,7 @@ private defaultEmployeeDetails= new Subject<any>()
     redirectLogoutUser() {
         let redirect = this.logoutRedirectUrl ? this.logoutRedirectUrl : this.loginUrl;
         this.logoutRedirectUrl = null;
-
+        window.location.href=redirect;
         this.router.navigate([redirect]);
     }
 
@@ -238,7 +238,7 @@ private defaultEmployeeDetails= new Subject<any>()
         user.isEnabled = true;
         user.isResetPassword=decodedAccessToken.isResetPassword,
         user.roleName=decodedAccessToken.roleName;
-        user.permissionName=decodedAccessToken.permissionName;
+        user.permissionName=Array.isArray(decodedAccessToken.permissionName)?decodedAccessToken.permissionName:[decodedAccessToken.permissionName];
         user.roleID=decodedAccessToken.roleID;
         this.saveUserDetails(user, permissions, accessToken, refreshToken, accessTokenExpiry, rememberMe);
         this.getUserRolePermissionByUserId(user.id);
@@ -452,10 +452,13 @@ private defaultEmployeeDetails= new Subject<any>()
       public checkPermission(permissionName:string):boolean{
         let isAllowed:boolean = false;
         if(this.currentUser && this.currentUser.permissionName!=null){
+            
             let getData=this.currentUser.permissionName.filter(function(value){
                     return value==permissionName;
             });
             isAllowed=getData.length>0;
+        
+           
         }
         
         return isAllowed;

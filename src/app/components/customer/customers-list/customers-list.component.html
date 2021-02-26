@@ -7,7 +7,7 @@
         <h4 class="header-name">Customers List</h4>
       </div>
       <div>
-        <button
+        <button *ngIf="isAdd"
           type="button"
           class="btn-sm header-button"
           [routerLink]="['/customersmodule/customerpages/app-customer-create']"
@@ -228,7 +228,7 @@
             *ngIf="selectedColumns.length > 0"
           >
             <div *ngIf="onDeletedActionState == false">
-              <p-inputSwitch
+              <p-inputSwitch *ngIf="isEdit"
                 [(ngModel)]="rowData['isActive']"
                 name="isActive{{ rowIndex }}"
                 matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
@@ -244,7 +244,7 @@
                   ><i class="fa fa-eye"></i
                 ></a>
               </span>
-              <span
+              <span *ngIf="isEdit"
                 ><a
                   class="btn nobg"
                   (click)="edit(rowData)"
@@ -280,7 +280,7 @@
                   ><i class="fa fa fa-file-pdf-o"></i
                 ></a>
               </span>
-              <span data-toggle="modal" data-target="#delete"
+              <span data-toggle="modal" data-target="#delete" *ngIf="isDelete"
                 ><a
                   class="btn nobg"
                   (click)="delete(content1, rowData);"

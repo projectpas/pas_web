@@ -18,6 +18,8 @@ import { CommonService } from '../../../services/common.service';
 import { CustomerViewComponent } from '../../../shared/components/customer/customer-view/customer-view.component';
 import { ConfigurationService } from '../../../services/configuration.service';
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { PermissionMaster } from '../../user-role/ModuleHierarchyMaster.model';
 
 @Component({
     selector: 'app-customers-list',
@@ -181,7 +183,9 @@ export class CustomersListComponent implements OnInit {
     selectedOnly: boolean = false;
     targetData: any;
     dateObject: any = {};
-
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete: boolean = true;
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -195,6 +199,9 @@ export class CustomersListComponent implements OnInit {
         private commonService: CommonService,
         private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
+        this.isAdd=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Add);
+        this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
+        this.isDelete=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Delete);
     }
 
     ngOnInit() {

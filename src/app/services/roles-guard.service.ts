@@ -28,23 +28,24 @@ export class RolesGuardService implements CanActivate, CanActivateChild, CanLoad
                 return false;
             }
           });
+          return true;
 
-        if (hasAccess)
-        {
-            return true;
-        }
-        else
-        {
-            if (isTab != undefined && isTab)
-            {
-                this.alertService.showMessage('Unauthorised', 'You are not authorised to access this page.', MessageSeverity.error);
-            }
-            else {
-                this.router.navigate(['/unauthorized-access']);
-            }
+        // if (hasAccess)
+        // {
+        //     return true;
+        // }
+        // else
+        // {
+        //     if (isTab != undefined && isTab)
+        //     {
+        //         this.alertService.showMessage('Unauthorised', 'You are not authorised to access this page.', MessageSeverity.error);
+        //     }
+        //     else {
+        //         this.router.navigate(['/unauthorized-access']);
+        //     }
 
-            return false;
-        }
+        //     return false;
+        // }
     }
 
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

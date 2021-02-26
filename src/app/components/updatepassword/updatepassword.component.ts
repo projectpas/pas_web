@@ -55,6 +55,7 @@ export class UpdatepasswordComponent implements OnInit {
     this.alertService.startLoadingMessage();
     this.employeeService.updateEmployeePassword(password,employeeId).subscribe(res=>{
       this.alertService.stopLoadingMessage();
+      this.alertService.showMessage("Update Password", `Password Updated Successfully`, MessageSeverity.success);
       this.authService.logout();
       this.router.navigateByUrl('/Login');
     },

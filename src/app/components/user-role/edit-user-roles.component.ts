@@ -162,13 +162,66 @@ export class EditUserRolesComponent implements OnInit {
                 });
 
                 if (rolePermission != undefined && rolePermission.length > 0) {
-                    modules.rolePermission.canAdd = rolePermission[0].canAdd;
-                    modules.rolePermission.canUpdate = rolePermission[0].canUpdate;
-                    modules.rolePermission.canDelete = rolePermission[0].canDelete;
-                    modules.rolePermission.canView = rolePermission[0].canView;
-                    rolePermission[0].id = 0;
+                    for(let role of rolePermission){ 
+                    // modules.rolePermission.canAdd = role.canAdd;
+                    // modules.rolePermission.canUpdate = role.canUpdate;
+                    // modules.rolePermission.canDelete = role.canDelete;
+                    // modules.rolePermission.canView = role.canView;
+                    modules.rolePermission.permissionID=role.permissionID;
+                    switch (role.permissionID) {
+                        case 1:
+                            modules.rolePermission.canAdd = true;
+                            break;
+                        case 2:
+                            modules.rolePermission.canView= true;
+                            break;
+                        case 3:
+                             modules.rolePermission.canUpdate= true;
+                            break;
+                        case 4:
+                             modules.rolePermission.canDelete= true;
+                            break;
+                        case 5:
+                             modules.rolePermission.canAssign= true;
+                            break;
+                        case 6:
+                             modules.rolePermission.canApprove= true;
+                            break;
+                        case 7:
+                             modules.rolePermission.canUpload= true;
+                            break;
+                        case 8:
+                             modules.rolePermission.canDownload= true;
+                            break;
+                        case 9:
+                             modules.rolePermission.canReport= true;
+                            break;
+                        case 10:
+                             modules.rolePermission.canRun= true;
+                            break;
+                        case 11:
+                             modules.rolePermission.canReportView= true;
+                            break;
+                        case 12:
+                             modules.rolePermission.canReportDelete= true;
+                            break;
+                        case 13:
+                             modules.rolePermission.canPrint= true;
+                            break;
+                        default:
+                            break;
+                    }
+                    role.id = 0;
+                    this.currentUserRole.rolePermissions.push(Object.assign({}, role));
+                    this.setCorrospondingValue(modules,role.permissionID, true);
+                    }
+                    // modules.rolePermission.canAdd = rolePermission[0].canAdd;
+                    // modules.rolePermission.canUpdate = rolePermission[0].canUpdate;
+                    // modules.rolePermission.canDelete = rolePermission[0].canDelete;
+                    // modules.rolePermission.canView = rolePermission[0].canView;
+                    // rolePermission[0].id = 0;
                     
-                    this.currentUserRole.rolePermissions.push(Object.assign({}, rolePermission[0]));
+                    // this.currentUserRole.rolePermissions.push(Object.assign({}, rolePermission[0]));
                 }
                 else {
                     modules.rolePermission.canAdd = false;
@@ -182,16 +235,16 @@ export class EditUserRolesComponent implements OnInit {
     
     setPermissionByType(currentModule: ModuleHierarchyMaster, type: string, value: boolean) {
         if (value == true) {
-            currentModule.rolePermission.permissionId = +type;
+            currentModule.rolePermission.permissionID = +type;
         }
         else {
            // currentModule.rolePermission.permissionId = 0;
         }
-        this.setCorrospondingValue(currentModule, value);
+        this.setCorrospondingValue(currentModule,+type, value);
     }
 
-    setCorrospondingValue(val, value) {
-        switch (val.rolePermission.permissionId) {
+    setCorrospondingValue(val,type, value) {
+        switch (type) {
             case 1:
                 val.rolePermission.canAdd = value;
                 break;
@@ -273,7 +326,7 @@ export class EditUserRolesComponent implements OnInit {
             this.pages = [];
             this.hasPages(currentModule, type, value);
             for (let page of this.pages) {
-                this.setModuleHierarchyPermission(page,value);
+                this.setModuleHierarchyPermission(page,type,value);
             }
             if(value==true && (currentModule.parentId==null || currentModule.hasChildren)){
                 var currentRolePermission = Object.assign({}, currentModule.rolePermission);
@@ -289,15 +342,18 @@ export class EditUserRolesComponent implements OnInit {
         }
         else {
             this.setPermissionByType(currentModule, type, value);
-            this.setModuleHierarchyPermission(currentModule,value);
+            this.setModuleHierarchyPermission(currentModule,type,value);
         }
         console.log(this.currentUserRole.rolePermissions);
     }
 
-    setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,value:boolean=true): void {
+    setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,type,value:boolean=true): void {
 
+        // var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
+        //     return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == currentModule.rolePermission.permissionID;
+        // })[0];
         var permission = this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
-            return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionId == currentModule.rolePermission.permissionId;
+            return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == type;
         })[0];
 
         if (permission != undefined) {
@@ -305,8 +361,8 @@ export class EditUserRolesComponent implements OnInit {
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             var permissionIndex = this.currentUserRole.rolePermissions.indexOf(permission)
             if(value==false){
-                this.currentUserRole.rolePermissions[permissionIndex].permissionId=0;
-                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionId!=0);
+                this.currentUserRole.rolePermissions[permissionIndex].permissionID=0;
+                this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.permissionID!=0);
                 }
             //this.updatePermission(this.currentUserRole.rolePermissions[permissionIndex], currentModule.rolePermission);
         }
@@ -391,6 +447,11 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     UpdateUserRole(): void {
+
+        this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
+            x.userRoleId=this.currentUserRole.id;
+            return x;
+        })
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);

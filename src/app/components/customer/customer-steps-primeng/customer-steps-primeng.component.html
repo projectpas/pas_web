@@ -7,7 +7,7 @@
               {{ editMode ? 'Edit' : 'Create' }} Customer</h4>
       </div>
       <div>
-        <button
+        <button *ngIf="isView"
           type="button"
           class="btn-sm header-button"
           [routerLink]="['/customersmodule/customerpages/app-customers-list']"

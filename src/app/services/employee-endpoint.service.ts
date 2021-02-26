@@ -68,7 +68,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _actionsUrlEmployeeMemoUpdate: string = "/api/Employee/employeeupdatememo";
 	private readonly _addEmployeeTrainingFileUpload: string = "/api/Employee/employeeDocumentUpload";
 
-	private readonly _getEmployeeDetailsByEmpId: string = environment.baseUrl+ "/api/Employee/employeeDetailsById";
+	private readonly _getEmployeeDetailsByEmpId: string =  "/api/Employee/employeeDetailsById";
 
 	private readonly _employeeListsUrl: string = "/api/Employee/employeelist";
 
@@ -522,7 +522,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 
 	getEmployeeUpdateMemoEndpoint<T>(employeeId: number, memo: any): Observable<T> {
 		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}&memo=${memo}`;
-
+		debugger;
 		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleError(error, () => this.getEmployeeUpdateMemoEndpoint(employeeId, memo));

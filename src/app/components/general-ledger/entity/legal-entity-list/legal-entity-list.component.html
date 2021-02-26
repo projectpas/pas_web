@@ -6,7 +6,7 @@
                 <h4 class="header-name">Legal Entity List</h4>
             </div>
             <div>
-                <button type="button"
+                <button type="button" *ngIf="isAdd"
                         class="btn-sm header-button"
                         (click)="navigateTogeneralInfo()">
                     Add Legal Entity
@@ -212,12 +212,12 @@
                          <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"  (onChange)="toggleIsActive(rowData,$event)" [disabled]="rowData.isPrimary || isViewMode==true"></p-inputSwitch> 
                             <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                            <span> 
+                            <span *ngIf="isEdit"> 
                                 <a class="btn nobg"
                                    (click)="openContentEdit(rowData)" matTooltip="Edit"
                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
-                            <span>
+                            <span *ngIf="isDelete">
                                 <a class="btn nobg"
                                    (click)="openDelete(content,rowData)"
                                    matTooltip="Delete" matTooltipPosition="above">

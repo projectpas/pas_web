@@ -28,7 +28,7 @@ export class RolePermission {
     userRoleId: number;
     moduleHierarchyMasterId: number;
     reports: boolean;
-    permissionId:number;
+    permissionID:number;
     isSelect:boolean;
     canAdd: boolean;
     canView: boolean;
