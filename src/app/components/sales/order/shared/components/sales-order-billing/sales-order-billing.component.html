@@ -88,87 +88,99 @@
                                 {{ summaryColumn.header }}
                             </span>
                         </th>
-                        <th>Actions</th>
+                        <th colspan="6"></th>
+                        <th></th>
                     </tr>
-                    <ng-container *ngIf="pickTickes.length > 0">
-                        <ng-container *ngFor="let summaryPart of pickTickes;let rowIndex=index;">
+                    <ng-container *ngIf="billingList.length > 0">
+                        <ng-container *ngFor="let summaryPart of billingList; let rowIndex = index;">
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of headers"
                                         style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                                        <span>
+                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                            Item {{summaryPart[summaryColumn.field] }}
+                                        </span>
+                                        <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                     </td>
-                                    <td style="position:sticky; width:80px">
-                                        <span>
-                                            <button class="btn nobg" mat-icon-button
-                                                (click)="onSelectPartNumber(summaryPart)"
-                                                matTooltip="Add PT" matTooltipPosition="above"
-                                                style="font-weight: bold;"
-                                                [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </span>
-                                    </td>
+                                    <td colspan="6"></td>
+                                    <td></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
                                     <th style="background-color: #fff !important;"></th>
-                                    <th>Invoice Num</th>
-                                    <th>Serial Num </th>
-                                    <th>Stk Line Num</th>
-                                    <th>Qty Billed</th>
-                                    <th>Ctrl Num</th>
-                                    <th>ID Num</th>
-                                    <th colspan="2"></th>
+                                    <th>Ready?</th>
+                                    <th>Invoice Date</th>
+                                    <th>Invoice Num </th>
+                                    <th>Shipping Ref</th>
+                                    <th>Item #</th>
+                                    <th>PN</th>
+                                    <th>PN Description</th>
+                                    <th style="min-width: 120px;">Stk Line Num</th>
+                                    <th style="min-width: 120px;">Serial Num</th>
+                                    <th style="min-width: 70px;">Qty To Bill</th>
+                                    <th style="min-width: 60px;">Cond</th>
+                                    <th style="min-width: 60px;">Curr</th>
+                                    <th style="min-width: 105px;">Billing Amount</th>
                                     <th style="min-width: 120px; position: sticky !important">Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
-                                    *ngFor="let part of summaryPart.sopickticketchild; let stockIndex = index">
+                                    *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
-                                    <td>
-                                        {{ part.invoiceNo }}
+                                    <td class="table-column-width" *ngIf="bill.qtyBilled > 0">
+                                        <label style="color: #0F9D58">Billed</label>
+                                    </td>
+                                    <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
+                                        <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
+                                            (change)="checked($event,poIndex);" [(ngModel)]="bill.selected" />
                                     </td>
                                     <td>
-                                        {{ part.serialNumber }}
+                                        {{ bill.invoiceDate | date : "MM/dd/yyyy" }}
                                     </td>
                                     <td>
-                                        {{ part.stockLineNumber }}
+                                        {{ bill.invoiceNo }}
                                     </td>
                                     <td>
-                                        {{ part.qtyToBill }}
+                                        {{ bill.soShippingNum }}
                                     </td>
                                     <td>
-                                        {{ part.controlNumber }}
+                                        Item {{ bill.itemNo}}
                                     </td>
                                     <td>
-                                        {{ part.idNumber }}
+                                        {{ bill.partNumber }}
                                     </td>
-                                    <td colspan="2"></td>
+                                    <td>
+                                        {{ bill.partDescription }}
+                                    </td>
+                                    <td>
+                                        {{ bill.stockLineNumber }}
+                                    </td>
+                                    <td>
+                                        {{ bill.serialNumber }}
+                                    </td>
+                                    <td>
+                                        {{ bill.qtyToBill}}
+                                    </td>
+                                    <td>
+                                        {{ bill.condition}}
+                                    </td>
+                                    <td>
+                                        {{ bill.currencyCode}}
+                                    </td>
+                                    <td>
+                                        {{ formateCurrency(bill.totalSales) }}
+                                    </td>
                                     <td class="zui-sticky-col" style="width:107px !important">
                                         <span>
-                                            <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
-                                                (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
+                                            <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
+                                                (click)="onSelectPartNumber(bill)" matTooltip="Create Billing"
+                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                <i class="fa fa-plus"></i></button>
                                         </span>
                                         <span>
-                                            <button class="btn nobg" mat-icon-button
-                                                (click)="ConfirmPTpopup(confirm,part)" matTooltip="Confirm"
-                                                matTooltipPosition="above" style="font-weight: bold;"
-                                                [disabled]="part.isConfirmed">
-                                                <i class="fa fa-check"></i>
-                                            </button>
-                                        </span>
-                                        <span>
-                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                (click)="viewStockSelectedRow(part)" matTooltip="View Stokline">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </span>
-                                        <span>
-                                            <button class="btn nobg" mat-icon-button
-                                                (click)="pickticketItemInterfaceedit(part,pickticketieminterface)"
-                                                matTooltip="Edit" matTooltipPosition="above" style="font-weight: bold;"
-                                                [disabled]="part.isConfirmed">
+                                            <button *ngIf="bill.qtyBilled != 0" class="btn nobg" mat-icon-button
+                                                (click)="shippingEdit(bill, pickticketieminterface)" matTooltip="Edit"
+                                                matTooltipPosition="above" style="font-weight: bold;">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
                                         </span>
@@ -177,7 +189,7 @@
                             </tbody>
                         </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="pickTickes.length == 0">
+                    <ng-container *ngIf="billingList.length == 0">
                         <tbody>
                             <tr>
                                 <td colspan="48"
@@ -192,7 +204,7 @@
         </div>
         <form #billinForm="ngForm">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body" *ngIf="billingorInvoiceForm">
                             <div class="row">

@@ -5,7 +5,7 @@ import { SalesOrderBillingAndInvoicing } from '../../../../../../models/sales/sa
 import { CommonService } from '../../../../../../services/common.service';
 import { AlertService } from '../../../../../../services/alert.service';
 import { AddressModel } from '../../../../../../models/address.model';
-import { getObjectById } from '../../../../../../generic/autocomplete';
+import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../../../generic/autocomplete';
 import { CustomerService } from '../../../../../../services/customer.service';
 import { AuthService } from '../../../../../../services/auth.service';
 
@@ -51,7 +51,7 @@ export class SalesOrderBillingComponent implements OnInit {
     billCustomerSiteList = [];
     customerNamesList: Object;
     isEditBilling: any;
-    pickTickes: any[] = [];
+    billingList: any[] = [];
     partSelected: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
@@ -80,18 +80,14 @@ export class SalesOrderBillingComponent implements OnInit {
     // }
     initColumns() {
         this.headers = [
-            { field: "partNumber", header: "PN Num", width: "130px" },
-            { field: "partDescription", header: "PN Description", width: "130px" },
-            { field: "serialNumber", header: "Serial Num", width: "130px" },
-            { field: "qty", header: "Qty Ord", width: "130px" },
-            { field: "qtyBlled", header: "Qty Billed", width: "130px" },
-            { field: "qtyToBill", header: "Qty To Bill", width: "130px" },
-            { field: "quantityAvailable", header: "Qty Avail", width: "130px" },
-            { field: "status", header: "Status", width: "130px" },
-            { field: "salesOrderNumber", header: "SO Num", width: "130px" },
-            { field: "salesOrderQuoteNumber", header: "SOQ Num", width: "130px" },
-            { field: "customerName", header: "Customer Name", width: "130px" },
-            { field: "customerCode", header: "Customer Code", width: "130px" },
+            { field: "itemNo", header: "Item #", width: "100px" },
+            { field: "salesOrderNumber", header: "SO Num", width: "100px" },
+            { field: "partNumber", header: "PN", width: "100px" },
+            { field: "partDescription", header: "PN Description", width: "100px" },
+            { field: "qtyToBill", header: "Qty Shipped", width: "110px" },
+            { field: "qtyBilled", header: "Qty Billed", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;
     }
@@ -110,20 +106,23 @@ export class SalesOrderBillingComponent implements OnInit {
         // this.totalRecords = this.partsForBilling.length;
         // this.showPaginator = this.totalRecords > 0;
         this.salesOrderId = id;
-        this.onSearch();
+        this.getShippingList();
     }
 
-    onSearch() {
+    formateCurrency(amount) {
+        return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
+    }
+
+    getShippingList() {
         this.isSpinnerVisible = true;
         this.salesOrderService
-        .getBillingInvoiceList(this.salesOrderId)
-        .subscribe((response: any) => {
-            this.isSpinnerVisible = false;
-            this.pickTickes = response[0];
-            this.showPaginator = this.totalRecords > 0;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
+            .getBillingInvoiceList(this.salesOrderId)
+            .subscribe((response: any) => {
+                this.isSpinnerVisible = false;
+                this.billingList = response[0];
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     onSelectPartNumber(rowData) {
