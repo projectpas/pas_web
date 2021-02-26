@@ -16,12 +16,12 @@ import { AuthService } from '../../../../../../services/auth.service';
 })
 /** WorkOrderBilling component*/
 export class SalesOrderBillingComponent implements OnInit {
-
     isViewMode = false;
     @Input() parts: any = [];
     @Input() salesOrderId;
     @Input() salesOrder: any;
     invoiceTypeList = [];
+    revisionTypeList = [];
     currencyList = [];
     selectedColumns;
     headers = [];
@@ -55,16 +55,13 @@ export class SalesOrderBillingComponent implements OnInit {
         public alertService: AlertService,
         public customerService: CustomerService,
         public authService: AuthService) {
-
     }
+
     ngOnInit() {
         this.initColumns();
     }
 
     initColumns() {
-
-        // { field: "", header: "Ready?", width: "80px" },
-        // { field: "", header: "Actions", width: "100px" }
         this.headers = [
             { field: "invoiceDate", header: "Invoice Date", width: "100px" },
             { field: "partNumber", header: "PN", width: "130px" },
@@ -90,23 +87,8 @@ export class SalesOrderBillingComponent implements OnInit {
                     this.partsForBilling.push(part);
                 }
             });
-
         }
-        // this.isSpinnerVisible = true;
-        // this.salesOrderService.getSalesOrderBillingParts(this.salesOrderId).subscribe(result => {
-        //     this.isSpinnerVisible = false;
-        //     if (result && result.length > 0) {
-        //         this.partsForBilling = result;
-        //     } else {
-        //         this.partsForBilling = [];
-        //     }
-        // }, error => {
-        //     this.errorHandling(error);
-        // })
         this.totalRecords = this.partsForBilling.length;
-        // this.totalPages = Math.ceil(
-        //     this.totalRecords / this.pageSize
-        // );
         this.showPaginator = this.totalRecords > 0;
     }
 
@@ -124,10 +106,10 @@ export class SalesOrderBillingComponent implements OnInit {
             this.isSpinnerVisible = false;
         },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+                this.isSpinnerVisible = false;
             })
     }
+
     getBillingAndInvoicingForSelectedPart(partNumber) {
         this.isSpinnerVisible = true;
         this.selectedPartNumber = partNumber;
@@ -140,6 +122,7 @@ export class SalesOrderBillingComponent implements OnInit {
             }
             this.getCurrencyList();
             this.getInvoiceList();
+            this.getRevisionTypeList();
             this.getShipViaByCustomerId();
         }, error => {
             this.isSpinnerVisible = false;
@@ -153,8 +136,18 @@ export class SalesOrderBillingComponent implements OnInit {
             this.isSpinnerVisible = false;
         },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+                this.isSpinnerVisible = false;
+            })
+    }
+
+    getRevisionTypeList() {
+        this.isSpinnerVisible = true;
+        this.commonService.smartDropDownList('RevisionType', 'RevisionTypeId', 'Description').subscribe(res => {
+            this.revisionTypeList = res;
+            this.isSpinnerVisible = false;
+        },
+            err => {
+                this.isSpinnerVisible = false;
             })
     }
 
@@ -166,46 +159,22 @@ export class SalesOrderBillingComponent implements OnInit {
                 this.isSpinnerVisible = false;
             },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+                this.isSpinnerVisible = false;
             }
         );
     }
 
-
     moduleName: any = '';
-    errorHandling(err) {
-        this.isSpinnerVisible = false;
-        if (err['error']['errors']) {
-            err['error']['errors'].forEach(x => {
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else {
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
-
     getShipViaByCustomerId() {
         this.isSpinnerVisible = true;
         this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name')
             .subscribe(
                 (res) => {
-
                     this.isSpinnerVisible = false;
                     this.shipViaList = res;
                 },
                 err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
+                    this.isSpinnerVisible = false;
                 }
             )
     }
@@ -220,7 +189,6 @@ export class SalesOrderBillingComponent implements OnInit {
                 return {
                     label: x.siteName,
                     value: x.customerShippingAddressId
-
                 }
             });
             this.soldCustomerShippingOriginalData.forEach(
@@ -233,9 +201,8 @@ export class SalesOrderBillingComponent implements OnInit {
             )
         },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
-            })
+                this.isSpinnerVisible = false;
+            });
     }
 
     changeOfSoldSiteName(value) {
@@ -251,6 +218,7 @@ export class SalesOrderBillingComponent implements OnInit {
             this.soldCustomerAddress = new AddressModel();
         }
     }
+
     changeOfShipVia(value) {
         const data = getObjectById('shippingViaId', value, this.shipViaData);
         if (data) {
@@ -267,6 +235,7 @@ export class SalesOrderBillingComponent implements OnInit {
             this.shipCustomerAddress = new AddressModel();
         }
     }
+
     async getSiteNamesByShipCustomerId(object) {
         const { customerId } = object;
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
@@ -287,8 +256,7 @@ export class SalesOrderBillingComponent implements OnInit {
             )
         },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+                this.isSpinnerVisible = false;
             })
     }
 
@@ -312,8 +280,7 @@ export class SalesOrderBillingComponent implements OnInit {
             )
         },
             err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+                this.isSpinnerVisible = false;
             })
     }
 
@@ -352,6 +319,7 @@ export class SalesOrderBillingComponent implements OnInit {
             ? this.authService.currentUser.userName
             : "";
     }
+
     saveSalesOrderBilling() {
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId['customerId']
@@ -368,24 +336,16 @@ export class SalesOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.salesOrderPartId = this.selectedPartNumber;
         this.billingorInvoiceForm.invoiceNo = "test";
         this.salesOrderService.createBilling(this.billingorInvoiceForm).subscribe(result => {
-
         }, err => {
-            this.errorHandling(err);
         });
     }
 
     convertDate(key, data) {
-        // debugger;
-        // console.log("data checked data",key,data);
-        // if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
-        //     return moment(data[key]).format('MM-DD-YYYY');
-        // } else {
         return data[key];
-        // }
     }
+
     loadData(event) {
-
     }
 
-    updateWorkOrderBilling() {}
+    updateWorkOrderBilling() { }
 }

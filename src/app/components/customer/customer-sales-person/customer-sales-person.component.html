@@ -68,9 +68,9 @@
                 </div>
                 <div class="form-group">
                   <label>Agent</label>
-                  <p-autoComplete class="autocomp-customer-cstm" name="agentName" [(ngModel)]="salesInfo.saId"
+                  <p-autoComplete  [autoWidth]="false" class="autocomp-customer-cstm" name="agentName" [(ngModel)]="salesInfo.saId"
                     [suggestions]="agentList" field="name" [forceSelection]="true" emptyMessage="No Match Found"
-                    (completeMethod)="filterAgents($event)" (ngModelChange)="enableSave()" (onSelect)="checkSameAsSalesPerson($event)" 
+                    (completeMethod)="filterAgents($event)" (ngModelChange)="enableSave()" (onSelect)="checkSameAsSalesPerson($event,AgentConfirmation)" 
                     [size]="30" [minLength]="1" [dropdown]="true">
                   </p-autoComplete>
                   <div *ngIf="isAgentSameAsPSalesPeson" class="clr-red" >  
@@ -133,6 +133,22 @@
 
     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
     <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!salesPersonForm.valid" (click)="redirectToTab()">Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #AgentConfirmation let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" (click)="dismissAgentModel()">&times;</button>
+    <h4 class="modal-title">Confirmation</h4>
+  </div>
+  <div class="modal-body">
+    <h6 style="padding-left: 2%;">
+      "Primary Sales or Secondary Sales person Already Assigned to this Account".  Do you want to Add an Agent ?
+    </h6>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissAgentModel()">No</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!salesPersonForm.valid" (click)="saveAgentSalesInformation()">Yes</button>
   </div>
 </ng-template>
 

@@ -70,7 +70,6 @@ import { SalesOrderService } from "../services/salesorder.service";
 import { SalesOrderEndpointService } from "../services/salesorder-endpoint.service";
 import { SalesOrderAddressComponent } from "../components/sales/order/shared/components/sales-address/sales-address.component";
 import { SalesOrderApproveComponent } from "../components/sales/order/shared/components/sales-approve/sales-approve.component";
-import { SalesOrderPartNumbersComponent } from "../components/sales/order/shared/components/sales-part-number/sales-part-numbers.component";
 import { SalesCustomerApprovalsComponent } from "../components/sales/quotes/shared/components/sales-customer-approvals/sales-customer-approvals.component";
 import { SalesQuoteViewComponent } from "../components/sales/quotes/shared/components/sales-quote-view/sales-quote-view.component";
 import { SalesOrderPartNumberComponent } from "../components/sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
@@ -180,7 +179,6 @@ import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-
     SalesOrderListComponent,
     SalesOrderCreateComponent,
     SalesOrderComponent,
-    SalesOrderPartNumbersComponent,
     SalesOrderApproveComponent,
     SalesOrderAddressComponent,
     SalesOrderDocumentComponent,

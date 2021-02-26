@@ -1067,7 +1067,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     getWOChargesList(){
         this.isSpinnerVisible = true;
-        this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId).subscribe((res: any[]) => {
+        this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,false).subscribe((res: any[]) => {
             this.isSpinnerVisible = false;
             this.workOrderChargesList = res;
             for (let charge in this.workOrderChargesList) {
@@ -1108,7 +1108,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     getWOFrieghtsList(){
          // ,false,0 handle for sub work order handle both apis in end point
-        this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0).subscribe((res: any[]) => {
+        this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false).subscribe((res: any[]) => {
             this.workOrderFreightList = res;
             for (let fre in this.workOrderFreightList) {
                 if (this.workOrderFreightList[fre]['billingAmount']) {

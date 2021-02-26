@@ -1,9 +1,7 @@
-import { Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from "@angular/core";
-import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
-// import { DataTable } from "primeng/datatable";
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
 import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 import { IPartJson } from "../../../models/ipart-json";
-import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StocklineViewComponent } from '../../../../../../shared/components/stockline/stockline-view/stockline-view.component';
 import { StocklineHistoryComponent } from '../../../../../../shared/components/stockline/stockline-history/stockline-history.component';
 
@@ -20,14 +18,15 @@ export class StocklinePartDetailsComponent implements OnChanges {
   showPaginator: boolean;
   totalRecords: number;
   pageLinks: any;
-
   columns: any[];
   modal: NgbModalRef;
+
   constructor(private salesQuoteService: SalesQuoteService, private modalService: NgbModal,) {
     this.parts = [];
     this.columns = [];
     this.initColumns();
   }
+
   ngOnInit() {
     this.salesQuoteService.getSearchPartResult()
       .subscribe(data => {
@@ -36,19 +35,14 @@ export class StocklinePartDetailsComponent implements OnChanges {
         this.pageLinks = Math.ceil(
           this.totalRecords / 10
         );
-
       });
-
   }
 
-
   ngOnChanges(changes: SimpleChanges) {
-    //this.partsComponent.reset();
   }
 
   initColumns() {
     this.columns = [
-
       { field: 'selected', header: '', width: '30px', textalign: 'left' },
       { field: 'method', header: 'Method', width: '100px', textalign: 'left' },
       { field: 'partNumber', header: 'PN', width: '60px', textalign: 'left' },
@@ -64,39 +58,25 @@ export class StocklinePartDetailsComponent implements OnChanges {
       { field: 'itemGroup', header: 'Item Group', width: '80px', textalign: 'left' },
       { field: 'controlName', header: 'Control Name', width: '100px', textalign: 'left' },
       { field: 'idNumber', header: 'Id Num', width: '70px', textalign: 'left' },
-      { field: 'serialNumber', header: 'Serial Num', width: '80px', textalign: 'left' },
-      // { field: '', header: 'Actions', width: '100px', textalign: 'left' },
-
+      { field: 'serialNumber', header: 'Serial Num', width: '80px', textalign: 'left' }
     ]
   }
 
   onPaging(event) {
-
   }
+
   onChange(event, part, salesMargin) {
     let checked: boolean = event.srcElement.checked;
     this.select.emit({ checked: checked, part: part, salesMargin: salesMargin });
   }
 
   viewSelectedRow(rowData) {
-
-    console.log(rowData);
     this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
-    this.modal.result.then(() => {
-      console.log('When user closes');
-    }, () => { console.log('Backdrop click') })
-
   }
-  viewStockLineHistory(rowData) {
 
-    console.log(rowData);
+  viewStockLineHistory(rowData) {
     this.modal = this.modalService.open(StocklineHistoryComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
-    this.modal.result.then(() => {
-      console.log('When user closes');
-    }, () => { console.log('Backdrop click') })
-
   }
-
 }

@@ -210,7 +210,7 @@
 					<td class="table-column-width"
 						*ngFor="let col of columns"
 						class="ui-resizable-column"
-						pReorderableRowHandle>
+						pReorderableRowHandle (dblclick)="viewSelectedRow(viewRO,rowData)">
 						<!--data-toggle="modal"
 						  data-target="#view"
 						  (dblclick)="viewSelectedRow(rowData)"-->
@@ -255,7 +255,7 @@
 							</span>
 
 							<span *ngIf="rowData.statusId == 3 && isReceivingRolist == true" (click)="getSelectedRow(rowData)">
-								<a data-toggle="tooltip" matTooltip="Receive RO" matTooltipPosition="above" class="btn nobg" data-original-title="" edit="">
+								<a data-toggle="tooltip" matTooltip="Receive RO" matTooltipPosition="above" class="btn nobg btn-users-cstm" data-original-title="" edit="">
 									<i class=" fa fa-chevron-down"></i>
 								</a>
 							</span>
@@ -509,8 +509,8 @@
 		  {{strVendorCode}}</span>
 	  </div>
 	</div> 
-	<app-all-view [OrderId]="orderId" [PovendorId]="vendorId"
-		[OrderType]="orderType"></app-all-view>	
+	<app-all-view [OrderId]="orderId" [PovendorId]="vendorId" [isReceivingro]="isReceivingRolist"
+		[OrderType]="orderType"></app-all-view>			
 	<div class="modal-footer">
 	  <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
 	</div>  

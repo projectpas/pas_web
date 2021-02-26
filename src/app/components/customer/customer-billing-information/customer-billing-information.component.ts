@@ -395,7 +395,7 @@ export class CustomerBillingInformationComponent {
         if(this.arrayCountrylist.length == 0) {			
             this.arrayCountrylist.push(0); }
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,20,this.arrayCountrylist.join()).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value 
@@ -439,7 +439,7 @@ export class CustomerBillingInformationComponent {
         if(rowData.countryId > 0)
             this.arrayCountrylist.push(rowData.countryId);
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join()).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name','',true,20,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value 
@@ -454,7 +454,7 @@ export class CustomerBillingInformationComponent {
             //this.arrayCountrylist = [];
         })
 
-        this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName','',true,20,this.arrayShipingIdlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName','',true,20,this.arrayShipingIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.billingSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
@@ -611,7 +611,8 @@ export class CustomerBillingInformationComponent {
     getAllBillingSiteSmartDropDown(strText = ''){
 		if(this.arrayShipingIdlist.length == 0) {			
 			this.arrayShipingIdlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName',strText,true,20,this.arrayShipingIdlist.join()).subscribe(response => {
+        //this.commonService.autoSuggestionSmartDropDownList('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName',strText,true,20,this.arrayShipingIdlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+          this.commonService.autoSuggestionSmartDropDownListWtihColumn('CustomerBillingAddress', 'CustomerBillingAddressId', 'SiteName',strText, 'CustomerId', this.id, 20,this.arrayShipingIdlist.join()).subscribe(response => {
             this.billingSieListOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value

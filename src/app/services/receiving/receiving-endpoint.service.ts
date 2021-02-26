@@ -25,6 +25,7 @@ export class ReceivingEndpointService extends EndpointFactory {
     private readonly _createStockLinesUrl: string = "/api/receivingPart/CreateStockLine";
     private readonly _createStockLinesForRepairOrderUrl: string = "/api/receivingRO/CreateStockLine";
     private readonly receivingRepairOrderDataById: string = "/api/receivingro/getRepairOrderPartById";
+    private readonly receivingRODataForEditById: string = "/api/receivingro/GetReceieveROPartsForEdit";
 
 
     get getAll() { return this.configurations.baseUrl + this.getAllURL; }
@@ -38,6 +39,7 @@ export class ReceivingEndpointService extends EndpointFactory {
     get CreateStockLinesURL() { return this.configurations.baseUrl + this._createStockLinesUrl; }
     get receivingRepairOrderDataGet() { return this.configurations.baseUrl + this.receivingRepairOrderDataById; }
     get createStocklineRo() { return this.configurations.baseUrl + this._createStockLinesForRepairOrderUrl; }
+    get GetReceieveROPartsForEdit() { return this.configurations.baseUrl + this.receivingRODataForEditById; }
    
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 
@@ -187,8 +189,12 @@ export class ReceivingEndpointService extends EndpointFactory {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceieveROPartsForView/${repairOrderId}`)
     }
 
-    getReceivingROPartsForEditById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceieveROPartsForEdit/${repairOrderId}`)
+    getReceivingROPartsForEditById(repairOrderId,employeeId = 0) {
+        let url = `${this.GetReceieveROPartsForEdit}?repairOrderId=${repairOrderId}&employeeId=${employeeId !== undefined ? employeeId : '0'}`;
+        return this.http.get<any>(url,this.getRequestHeaders())
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingROPartsForEditById(repairOrderId,employeeId));
+        });        
     }
 
     updateStockLine<T>(receiveParts: any[]): Observable<T> {
@@ -258,10 +264,12 @@ export class ReceivingEndpointService extends EndpointFactory {
             });
     }
 
+    
     CreateStockLineForRepairOrder(repairOrder: any) {
         let url = `${this.createStocklineRo}/${repairOrder}`;
-        console.log(url)
-        return this.http.get<any>(url);
+        return this.http.get<any>(url).catch(error => {
+                return this.handleErrorCommon(error, () => this.CreateStockLineForRepairOrder(repairOrder));
+            });
     }
 
     deleteStockLineDraft(stockLineDraftId, quantity) {

@@ -37,7 +37,6 @@ export class AddSalesPartNumberComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.parts = [];
     this.getConditions();
     this.salesQuoteService
       .getSearchPartResult()
@@ -54,7 +53,6 @@ export class AddSalesPartNumberComponent implements OnInit {
   getConditions() {
     this.conditionService.getConditionList().subscribe(
       results => {
-        // this.allConditionInfo = results[0];
         let activeConditions = results[0].filter(x => x.isActive == true);
         if (activeConditions && activeConditions.length > 0) {
           this.allConditionInfo = activeConditions;
@@ -68,7 +66,7 @@ export class AddSalesPartNumberComponent implements OnInit {
             }
           }
         }
-        this.allConditionInfoArray = this.allConditionInfo.map((item) => ({label: item.description, value: item.conditionId}));
+        this.allConditionInfoArray = this.allConditionInfo.map((item) => ({ label: item.description, value: item.conditionId }));
       });
   }
 
@@ -78,14 +76,11 @@ export class AddSalesPartNumberComponent implements OnInit {
       case "1":
         searchType = ItemSearchType.ItemMaster;
         break;
-
       case "2":
         searchType = ItemSearchType.StockLine;
         break;
-
     }
     return searchType;
-
   }
 
   show(value: boolean): void {
@@ -114,6 +109,7 @@ export class AddSalesPartNumberComponent implements OnInit {
         this.searchType = this.getSearchType(this.query.partSearchParamters.itemSearchType);
       });
   }
+
   updateQuantiy() {
     let qtyOnHand = 0;
     let qtyAvailable = 0;
@@ -127,17 +123,7 @@ export class AddSalesPartNumberComponent implements OnInit {
   }
 
   onSearchTypeChange(type: ItemSearchType) {
-    //this.searchType = type;
   }
-
-  /*onShowModalMargin(event: any) {
-    this.showModalMargin = event.checked;
-    if (this.showMarginDetails) {
-      this.part = event.part;
-     
-      setTimeout(this.showMarginDetails, 100);
-    }
-  }*/
 
   onShowModalMargin(part: any) {
     this.select.emit(part);

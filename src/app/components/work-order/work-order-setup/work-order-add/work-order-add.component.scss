@@ -58,8 +58,33 @@ li.nav-item {
 .hidedataMain{
   display: none;
 }
+.footer-padding{
+  padding:10px !important;
+}
+.footer-button-padding{
+  padding: 6px 12px !important;
+}
+.width-100{
+  width:100% !important
+}
 .dropdown-submenu {
   position: relative;
+}
+.btn-back-wo{
+  margin: -12px 10px 10px !important;
+}
+.expand-left{
+  margin-left:20px !important;
+}
+.margin-top-2{
+  margin-top: 2px !important;
+}
+.mpn-grid{
+  background-color: white !important;margin-top: 3px!important;
+}
+.stage-align{
+  text-align: left !important;
+   width: 41px !important;
 }
 .dropdown-submenu .dropdown-menu {
   top: 0;

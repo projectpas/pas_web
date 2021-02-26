@@ -12,7 +12,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     selector: 'grd-charges',
     templateUrl: './Charges-Create.component.html',
     styleUrls: ['./Charges-Create.component.css']
-})
+}) 
 export class ChargesCreateComponent implements OnInit, OnChanges {
     vendorCollection: any[] = [];
     ccRegex: RegExp = /[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/;
@@ -41,28 +41,33 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     roNumList: any[] = [];
     deletedRowIndex:any;
     deleteRowRecord:any={};
-
+    disableUpdate:boolean=true;
     constructor(private modalService: NgbModal,private vendorservice: VendorService, 
          private alertService: AlertService, private authService: AuthService,
         private commonService: CommonService) {
     }
-
+    getActive(){
+        this.disableUpdate=false;
+      }
     ngOnInit(): void {
         this.loadAllVendors();
         if (this.isWorkOrder) {
             this.row = this.workFlow.charges[0];
             if (this.isEdit) {
                 this.workFlow.charges = [];
+                console.log("edit data",this.editData)
                 const data = {
                     ...this.editData,
+
                     vendorId: this.editData.vendorId,
                     vendorName: this.editData.vendorName, vendor: {
                         vendorId: this.editData.vendorId,
                         vendorName: this.editData.vendorName
                     }
-                }
+                } 
                 this.workFlow.charges.push(data);
                 this.reCalculate()
+                this.disableUpdate=true;
             } else {
                 this.workFlow.charges = [];
                 this.workFlow.qtySummation = 0;
@@ -70,7 +75,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 this.workFlow.totalChargesCost = 0;
 
                 this.row = this.workFlow.charges[0];
-                this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+                // this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
 
                 this.workFlow.charges = [];
                 this.addRow();
@@ -80,7 +85,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             if (this.row == undefined) {
                 this.row = {};
             } else {
-                this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+                // this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
             }
             this.row.taskId = this.workFlow.taskId;
             if (this.workFlow.charges.length > 0) {
@@ -165,7 +170,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     onChargeTypeChange(event, charge): void {
-        console.log("eveene",event, charge)
         this.isSpinnerVisible = true;
         var isTypeExist = this.workFlow.charges.filter(x => x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
         this.chargesTypes.forEach((ct) => {
@@ -270,14 +274,10 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         newRow.vendorName = "";
         newRow.workflowChargeTypeId = "0";
         newRow.isDelete = false;
-        newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+        // newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
         this.workFlow.charges.push(newRow);
 
-        if (this.workFlow.charges && this.workFlow.charges.length < 1) {
-            this.workFlow.charges.forEach(element => {
-                element.isShowDelete = false;
-            });
-        }
+    
     }
 
     // calculate row wise extended cost

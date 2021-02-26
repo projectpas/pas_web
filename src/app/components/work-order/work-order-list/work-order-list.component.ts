@@ -750,16 +750,16 @@ export class WorkOrderListComponent implements OnInit {
 
     getEquipmentByWorkOrderId(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId, 0, false).subscribe(
-                result => {
-                    this.isSpinnerVisible = false;
-                    this.workOrderAssetList = result;
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                }
-            )
+            // this.isSpinnerVisible = true;
+            // this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId, 0, false).subscribe(
+            //     result => {
+            //         this.isSpinnerVisible = false;
+            //         this.workOrderAssetList = result;
+            //     },
+            //     err => {
+            //         this.isSpinnerVisible = false;
+            //     }
+            // )
         }
     }
 
@@ -800,7 +800,7 @@ export class WorkOrderListComponent implements OnInit {
     getChargesListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId).subscribe(res => {
+            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,false).subscribe(res => {
                 this.workOrderChargesList = res;
                 this.isSpinnerVisible = false;
             },
@@ -826,7 +826,7 @@ export class WorkOrderListComponent implements OnInit {
     getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId, false, 0).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId, false, 0,false).subscribe(res => {
                 this.workOrderFreightList = res;
                 this.isSpinnerVisible = false;
             },

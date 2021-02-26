@@ -73,3 +73,33 @@ p-multiselect {
     height: 28px !important;
     line-height: 1;
 }
+.row-margin{
+    margin: 0px !important;
+}
+.view-buttons{
+    width: 100% !important;margin-bottom: 32px !important;
+}
+.view-isactive-button{
+    text-align-last: end !important; padding-right: 2% !important;
+}
+.invoice-div{
+    width: 100% !important;display: inline-flex !important;
+}
+.invoice-address-label{
+    width: 35% !important;font-weight: bold !important;
+}
+.invoice-value-div{
+    width: 50% !important;margin-bottom: 5px !important;
+}
+.check-mark{
+    pointer-events: none !important;    font-weight: 100 !important;
+}
+.phone-label{
+    width: 35% !important;font-weight: bold !important;
+}
+.phone-div{
+    margin-top: 30px !important;pointer-events: none !important;
+}
+.font-weight-100{
+    font-weight: 100 !important;
+}

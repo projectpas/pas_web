@@ -1,11 +1,5 @@
 <div class="form-group">
   <div class="card new-card">
-    <!-- <div class="row" *ngIf="!isView"> -->
-    <!-- <button data-target="#addNewCharges" data-toggle="modal" (click)="createNew()" class="btn btn-primary"
-      style="margin-left: 10px;">
-      Add Charges
-    </button> -->
-
     <div class="card-header header" *ngIf="!isView">
       <div class="row">
         <div class="col">
@@ -19,7 +13,6 @@
         </div>
       </div>
     </div>
-    <!-- </div> -->
     <div [ngClass]="(isView) ? 'pull-right' : ''">
       <div class="checkbox-cstm show_cst">
         <label style="width: auto !important;margin-top: 3px;">
@@ -148,9 +141,6 @@
             <td class="table-column-width" style="text-align: right;">
               {{charge.extendedCost | twoDecimalGlobalNumberFormatPipe}}
             </td>
-            <!-- <td>
-            {{getVendorNameById(charge.vendorId)}}
-          </td> -->
             <td class="table-column-width">
               {{charge.vendor ? charge.vendor.vendorName : ''}}
             </td>
@@ -199,12 +189,6 @@
                   </a>
                 </span>
                 <span>
-                  <!-- <a class="btn nobg"
-                   (click)="openInterShipViaHistory(contentAuditHist1,charge)"
-                   matTooltip="History" matTooltipPosition="above">
-                    <i class="fa fa-history">
-                    </i>
-                </a> -->
                   <button class="btn  nobg grey_btn_icon" style="padding:0px"
                     [disabled]="charge.salesOrderQuoteChargesId==0"
                     (click)="openInterShipViaHistory(contentAuditHist1,charge)" matTooltip="History"
@@ -219,12 +203,6 @@
                     matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                       aria-hidden="true"></i></a> </span>
                 <span>
-                  <!-- <a class="btn nobg"
-                   (click)="openInterShipViaHistory(contentAuditHist1,charge)"
-                   matTooltip="History" matTooltipPosition="above">
-                    <i class="fa fa-history">
-                    </i>
-                </a> -->
                   <button class="btn  nobg grey_btn_icon" style="padding:0px"
                     [disabled]="charge.salesOrderQuoteChargesId==0"
                     (click)="openInterShipViaHistory(contentAuditHist1,charge)" matTooltip="History"
@@ -234,17 +212,9 @@
                   </button>
                 </span>
               </div>
-
             </td>
           </tr>
         </ng-template>
-        <!-- <ng-template pTemplate="emptymessage" let-columns >
-        <tr>
-          <td [attr.colspan]="30" style="color: red; font-weight: bold; text-align: center">
-            No records found
-          </td>
-        </tr>
-      </ng-template> -->
         <ng-template pTemplate="footer">
           <tr class="footer">
             <td class="table-column-width">Total</td>
@@ -270,11 +240,6 @@
                   (blur)="chargesFlatBillingAmount = (chargesFlatBillingAmount)?formateCurrency(chargesFlatBillingAmount):'0.00'"
                   [disabled]="isView" />
               </td>
-              <!-- <td>
-              <input type="text" style="text-align: right;" pInputText pKeyFilter="money"
-                (blur)="chargesFlatBillingAmount = (chargesFlatBillingAmount)?formateCurrency(chargesFlatBillingAmount):'0.00'"
-                [(ngModel)]="chargesFlatBillingAmount" [disabled]="isView" />
-            </td> -->
             </ng-container>
             <td class="table-column-width" *ngIf="!isView">&nbsp;</td>
           </tr>
@@ -282,18 +247,13 @@
       </p-table>
     </div>
   </div>
-
   <div *ngIf="!isView" style="padding: 10px;">
     <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createChargesQuote()">
       <span *ngIf="isUpdate">Update</span>
       <span *ngIf="!isUpdate">Save</span>
     </button>
   </div>
-
 </div>
-
-
-
 <div id="addNewCharges" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
@@ -371,10 +331,6 @@
                         field="vendorName" (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
                         [dropdown]="true">
                       </p-autoComplete>
-                      <!-- <p-autoComplete [(ngModel)]="charge.vendorId" [suggestions]="vendorCollection"
-                        [forceSelection]="true" (completeMethod)="filterVendor($event)" [dropdown]="true" [size]="30"
-                        [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
-                      </p-autoComplete> -->
                     </td>
                     <td>
                       <button class="btn btn-danger nobg" [disabled]="isEdit==true"
@@ -390,7 +346,6 @@
         </div>
       </div>
       <div class="modal-footer">
-        <!-- [disabled]="!chargesCreateForm.valid" -->
         <button class="btn btn-primary pull-right " (click)="saveFreightList()"
           [disabled]="!chargesCreateForm.valid || isEnableUpdateButton">
           {{ isEdit ? 'Update' : (isQuote)?'Save':'Save' }}
@@ -421,13 +376,10 @@
     <button type="button" class="btn btn-success" (click)="delete()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
-
 </ng-template>
 <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
-
   <div class="modal-header">
     <h4 class="modal-title">Are You Sure Want to Restore?</h4>
-
     <button type="button" class="close" aria-label="Close" (click)="dismissModelAlett()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -506,7 +458,6 @@
               </label>
             </span>
           </td>
-
           <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
           <td>{{audit.createdBy}}</td>
           <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>

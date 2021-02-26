@@ -284,7 +284,6 @@ export class SalesOrderCreateComponent implements OnInit {
 
     forkJoin(this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
-      // this.employeeService.getEmployeeCommonData(this.currentUserManagementStructureId),
       this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name'),
       this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join()),
       this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
@@ -292,7 +291,6 @@ export class SalesOrderCreateComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.setJobTitles(result[1]);
-        // this.onempDataLoadSuccessful(result[2][0]);
         let settingList: any = result[5];
         if (settingList && settingList.length > 0) {
           this.soSettingsList = settingList;
@@ -303,7 +301,6 @@ export class SalesOrderCreateComponent implements OnInit {
         this.setAccountTypes(result[3]);
         this.setCreditTerms(result[4]);
         this.getDefaultContact();
-        // this.getSoInstance();
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -321,8 +318,7 @@ export class SalesOrderCreateComponent implements OnInit {
       } else {
         this.marginSummary = new MarginSummary();
       }
-    }
-    )
+    })
   }
 
   getSoInstance(initialCall = false) {
@@ -565,8 +561,6 @@ export class SalesOrderCreateComponent implements OnInit {
     this.managementStructureId = this.salesOrderObj.managementStructureId;
     this.salesQuote.priorities = this.salesOrderView.priorities;
     this.salesQuote.leadSources = this.salesOrderView.leadSources;
-    //this.salesQuote.salesQuoteTypes = this.salesOrderView.salesQuoteTypes;
-    //this.salesQuote.status = this.salesOrderView.status;
     this.status = this.salesOrderView.status && this.salesOrderView.status.length > 0 ? this.salesOrderView.status.slice(0) : [];
     this.salesQuote.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
     this.salesQuote.quoteTypeId = this.salesOrderObj.typeId;
@@ -634,11 +628,6 @@ export class SalesOrderCreateComponent implements OnInit {
     this.salesQuote.warningId = this.salesOrderObj.customerWarningId;
     this.salesQuote.memo = this.salesOrderObj.memo;
     this.salesQuote.notes = this.salesOrderObj.notes;
-    // this.getCustomerDetails();
-
-    // if (this.managementStructureComponent) {
-    //   this.managementStructureComponent.load(this.currentUserManagementStructureId);
-    // }
   }
 
   getSalesOrderInstance(salesOrderId: number, initialCall = false) {
@@ -680,6 +669,10 @@ export class SalesOrderCreateComponent implements OnInit {
     }
 
     let partList: any[] = this.salesOrderView.parts;
+
+    if (this.selectedParts.length > 0)
+      this.selectedParts = [];
+
     for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
       let partNumberObj = this.salesOrderService.marshalSOPartToView(selectedPart, this.salesOrderObj);
@@ -691,8 +684,6 @@ export class SalesOrderCreateComponent implements OnInit {
     this.managementStructureId = this.salesOrderObj.managementStructureId;
     this.salesQuote.priorities = this.salesOrderView.priorities;
     this.salesQuote.leadSources = this.salesOrderView.leadSources;
-    //this.salesQuote.salesQuoteTypes = this.salesOrderView.salesQuoteTypes;
-    //this.salesQuote.status = this.salesOrderView.status;
     this.salesQuote.salesQuoteTypes = this.salesOrderObj.typeId && this.salesOrderObj.typeId > 0 ? getValueFromArrayOfObjectById('label', 'value', this.salesOrderObj.typeId, this.soTypeList) : '';
     this.salesQuote.status = this.salesOrderObj.statusId && this.salesOrderObj.statusId > 0 ? getValueFromArrayOfObjectById('label', 'value', this.salesOrderObj.statusId, this.soStatusList) : '';
     this.salesQuote.statusId = this.salesOrderObj.statusId;
@@ -797,12 +788,10 @@ export class SalesOrderCreateComponent implements OnInit {
         }
         this.salesQuote.shippedDate = null;
         this.salesQuote.openDate = new Date();
-        this.salesQuote.statusId = 1; //soStatus[0].value;
+        this.salesQuote.statusId = 1;
         this.salesQuote.validForDays = 10;
         this.salesQuote.quoteExpiryDate = new Date();
         this.onChangeValidForDays();
-        // this.getCustomerDetails();
-        // this.getDefaultContact();
         this.salesQuote.employeeName = getObjectById(
           "value",
           this.employeeId,
@@ -810,9 +799,6 @@ export class SalesOrderCreateComponent implements OnInit {
         );
         this.salesQuote.salesOrderNumber = "Generating";
         this.getInitialDataForSO();
-        // if (this.managementStructureComponent) {
-        //   this.managementStructureComponent.load(this.currentUserManagementStructureId);
-        // }
         this.isSpinnerVisible = false;
       }, error => {
         this.isSpinnerVisible = false;
@@ -854,12 +840,12 @@ export class SalesOrderCreateComponent implements OnInit {
         this.defaultSettingPriority = settingsObject.defaultPriorityId;
       } else {
         if (this.soTypeList.length > 0) {
-          this.salesQuote.quoteTypeId = this.soTypeList[0].value; //this.salesQuote.salesQuoteTypes[0].id;
+          this.salesQuote.quoteTypeId = this.soTypeList[0].value;
         }
       }
     } else {
       if (this.soTypeList.length > 0) {
-        this.salesQuote.quoteTypeId = this.soTypeList[0].value; //this.salesQuote.salesQuoteTypes[0].id;
+        this.salesQuote.quoteTypeId = this.soTypeList[0].value;
       }
     }
   }
@@ -1140,7 +1126,6 @@ export class SalesOrderCreateComponent implements OnInit {
               MessageSeverity.success
             );
             this.getSalesOrderInstance(this.id, true);
-            //this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
             if (createNewVersion) {
               this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
             }
@@ -1169,10 +1154,6 @@ export class SalesOrderCreateComponent implements OnInit {
           this.toggle_po_header = false;
           this.id = this.salesCreateHeaderOrderId;
           if (this.salesCreateHeaderOrderId) {
-
-            // this.getSalesOrderInstance(this.salesCreateHeaderOrderId);
-            // // this.getCustomerDetails()
-            // this.isEdit = true;
             this.router.navigateByUrl(
               `salesmodule/salespages/sales-order-edit/${this.customerId}/${this.salesCreateHeaderOrderId}`
             );
@@ -1303,11 +1284,9 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
     }
     if (event.index == 3) {
-      //this.salesAddressComponent.refresh(this.salesOrderQuote)
       this.showAddresstab = true;
     }
     if (event.index == 4) {
-      //this.salesOrderFreightComponent.refresh(false);
       if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
         this.salesOrderFreightComponent.refresh(false);
       } else {
@@ -1315,7 +1294,6 @@ export class SalesOrderCreateComponent implements OnInit {
       }
     }
     if (event.index == 5) {
-      //this.salesOrderChargesComponent.refresh(false);
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderChargesComponent.refresh(false);
       } else {
@@ -1503,16 +1481,6 @@ export class SalesOrderCreateComponent implements OnInit {
     }
 
     this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
-    //let currentEmployeeId = this.salesQuote.employeeId;
-    // if (this.salesQuote.employeeId) {
-    //   let employeeObject: any = this.salesQuote.employeeId;
-    //   if (employeeObject.employeeId) {
-    //     currentEmployeeId = employeeObject.employeeId;
-    //     this.arrayEmplsit.push(employeeObject.employeeId);
-    //   }
-    // } else {
-    //   currentEmployeeId = this.employeeId;
-    // }
 
     this.isSpinnerVisible = true;
     this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {

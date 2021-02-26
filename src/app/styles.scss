@@ -462,7 +462,7 @@ a:hover {
 }
 
 .float-right {
-  float: right;
+  float: right !important;
 }
 
 .byline,
@@ -6406,11 +6406,11 @@ h6.block {
 }
 
 .m-t-10 {
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
 
 .m-t-20 {
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 
 .m-t-15 {
@@ -9373,7 +9373,7 @@ button.multiselect {
 }
 
 .float-right {
-  float: right;
+  float: right !important;
 }
 
 .blue-bg {
@@ -13600,9 +13600,9 @@ body .ui-steps .ui-steps-item .ui-menuitem-link .ui-steps-number {
   width: 100% !important;
 }
 
-.ui-table-scrollable-header-table thead tr th:last-child {
-  min-width: 250px !important;
-}
+// .ui-table-scrollable-header-table thead tr th:last-child {
+//   min-width: 250px !important;
+// }
 
 body .ui-table .ui-table-thead>tr>th {
   font-weight: 600 !important;
@@ -17148,3 +17148,13 @@ ng-multiselect-dropdown{
 .Materials_wo .adj_width2{
   width: 190px !important;
 }
+.wo_td .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.655em !important;
+  vertical-align: 0.085em !important;
+  content: "";
+  border-top: 0.6em solid !important;
+  border-right: 0.5em solid transparent !important;
+  border-bottom: 0;
+  border-left: 0.5em solid transparent !important;
+} 

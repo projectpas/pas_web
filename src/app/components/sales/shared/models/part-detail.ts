@@ -81,6 +81,7 @@ export class PartDetail {
   qtyOnHand: number;
   notes: string;
   createdBy: string;
+  itemNo:number;
   constructor() { }
 
   get QuantityToBeQuoted(): number {

@@ -8,3 +8,12 @@
 }
 
 
+
+  /* At everything bigger than mobile, make .video-container fill its parent */
+  @media (min-width: 768px) {
+    .widthAdjust {
+      height: 700px;
+      margin-left:20px;
+    }
+  }
+

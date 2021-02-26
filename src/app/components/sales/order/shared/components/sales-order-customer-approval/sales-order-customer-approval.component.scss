@@ -1,21 +1,25 @@
 ::ng-deep .ui-chkbox-label {
 
-    float:none !important;
-    margin-left: 20px  !important;
-    top: 7px  !important;
-    position: relative  !important;
-    width: auto  !important;
-  }
+  float: none !important;
+  margin-left: 20px !important;
+  top: 7px !important;
+  position: relative !important;
+  width: auto !important;
+}
 
-  ::ng-deep .ui-chkbox-label {
+::ng-deep .ui-chkbox-label {
 
-    float:none !important;
-    margin-left: 20px  !important;
-    top: 7px  !important;
-    position: relative  !important;
-    width: auto  !important;
-  }
+  float: none !important;
+  margin-left: 20px !important;
+  top: 7px !important;
+  position: relative !important;
+  width: auto !important;
+}
 
-  ::ng-deep .ui-calendar-button{
-      height: 24px !important;
-  }
+::ng-deep .ui-calendar-button {
+  height: 24px !important;
+}
+
+.th-width {
+  min-width: 40px !important;
+}

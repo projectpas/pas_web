@@ -56,9 +56,21 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList));
+  autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownContactList(textColumn, searchText, startWith, idList,masterCompanyId));
+    });
+  }
+
+  autoSuggestionSmartDropDownSelfContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,customerId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownSelfContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&customerId=${customerId !== undefined ? customerId : 0} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownSelfContactList(textColumn, searchText, startWith, idList,masterCompanyId,customerId));
+    });
+  }
+
+  autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,vendorId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList,masterCompanyId,vendorId));
     });
   }
 
@@ -71,6 +83,13 @@ export class CommonService extends EndpointFactory {
   autoCompleteSmartDropDownItemMasterList(searchText, startWith, count?, idList?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownItemMasterList?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownItemMasterList(searchText, startWith, count, idList, masterCompanyId));
+    });
+  }
+
+  
+  autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count?, idList?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsItemMasterWithStockLine?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count, idList, masterCompanyId));
     });
   }
 
@@ -89,6 +108,11 @@ export class CommonService extends EndpointFactory {
   autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count?, idList?, managementStructureId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsCertifyEmployeeByMS?searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsCertifyEmployeeByMS(searchText, startWith, count, idList, managementStructureId));
+    });
+  }
+  autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count?, idList?, managementStructureId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteDropdownsEmployeeByJobTitle?searchText=${searchText}&jobTitleId=${jobTitleId}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&managementStructureId=${managementStructureId !== undefined ? managementStructureId : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsEmployeeByJobTitle(searchText, jobTitleId, count, idList, managementStructureId));
     });
   }
 

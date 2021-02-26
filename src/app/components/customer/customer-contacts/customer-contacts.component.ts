@@ -81,6 +81,7 @@ export class CustomerContactsComponent implements OnInit {
 		{ field: 'email', header: 'Email' },
 		{ field: 'workPhone', header: 'Work Phone' },
 		{ field: 'mobilePhone', header: 'Mobile Phone' },
+		{ field: 'notes', header: 'Memo' },
 		{ field: 'fax', header: 'Fax' },
 		{ field: 'createdDate', header: 'Created Date' },
 		{ field: 'createdBy', header: 'Created By' },
@@ -260,6 +261,7 @@ export class CustomerContactsComponent implements OnInit {
 				...x,
 				createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
 				updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+				notes: x.notes ? this.parsedText(x.notes) : '',
 			}
 		});
 		contact.exportCSV();
@@ -427,7 +429,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownContactList('firstName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('firstName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -461,7 +463,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownContactList('middleName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('middleName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {
@@ -495,7 +497,7 @@ export class CustomerContactsComponent implements OnInit {
 		if (this.arrayContactlist.length == 0) {
 			this.arrayContactlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownContactList('lastName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownSelfContactList('lastName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
 
 			var endResult = [];
 			for (let resInd = 0; resInd < response.length; resInd++) {

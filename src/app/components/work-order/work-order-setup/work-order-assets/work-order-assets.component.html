@@ -4,17 +4,19 @@
     Add Tools
   </button>
 </div> -->
-<div class="header">
-  <div class="row">
-      <div class="col">
-          <h4 class="header-name">Work Order Tools list</h4>
-      </div>
-      <div>
-          <button type="button" class="btn-sm header-button " *ngIf="!isView"
-          data-target="#addNewEquipments" (click)="createNew()" data-toggle="modal">
-              Add Tools
-          </button>
-      </div>
+<div class="card">
+  <div class="header">
+    <div class="row">
+        <div class="col">
+            <h4 class="header-name">Work Order Tools list</h4>
+        </div>
+        <div>
+            <button type="button" class="btn-sm header-button " *ngIf="!isView"
+            data-target="#addNewEquipments" (click)="createNew()" data-toggle="modal">
+                Add Tools
+            </button>
+        </div>
+    </div>
   </div>
 </div>
 <div id="addNewEquipments" class="modal fade" role="dialog" data-backdrop="static">
@@ -136,25 +138,11 @@
           </tr>
           <tr>
               <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                  <input class="table-header-input-width" *ngIf="col.field !== 'openDate'
-          && col.field !== 'customerRequestDateType'
-          && col.field !== 'promisedDateType'
-          && col.field !== 'estimatedShipDateType'
-          && col.field !== 'createdDate'
-          && col.field !== 'updatedDate'
-          && col.field !== 'estimatedCompletionDateType'"  pInputText type="text"
+                  <input class="table-header-input-width" *ngIf="
+          col.field !== 'createdDate'
+          && col.field !== 'updatedDate'"  pInputText type="text"
                       (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
-                  <input type="date" *ngIf="col.field == 'openDate'" name="openDate" class="table-header-input-width"
-                      (change)="dt.filter($event.target.value, col.field, 'contains')">
-                  <input type="date" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate"
-                  class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                  <input type="date" *ngIf="col.field == 'promisedDateType'" name="promisedDate"
-                  class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                  <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate"
-                  class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                  <input type="date" *ngIf="col.field == 'estimatedCompletionDateType'"
-                      name="estimatedCompletionDate" class="table-header-input-width"
-                      (change)="dt.filter($event.target.value, col.field, 'contains')">
+
                   <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" class="table-header-input-width"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">
                   <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" class="table-header-input-width"
@@ -167,7 +155,7 @@
           let-columns="columns">
           <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
               (dblclick)="openViewOnDbl(rowData)">
-              <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+              <td *ngFor="let col of columns" class="ui-resizable-column wauto"
               pReorderableRowHandle>
                <ng-container>
                 
@@ -427,22 +415,22 @@
         </h4>
       </div>
       <div class="modal-body" *ngIf="assetRecordId">
-        <div class="form-row" style="margin-top: 10px;">
+        <div class="form-row m-t-10">
           <div class="col-md-3">
             <div class="form-group">
-              <label style="width: auto;">WO Num</label>
+              <label class="wauto">WO Num</label>
               <input class="form-control" type="text" [(ngModel)]="woNumber" name="woNumber" disabled />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label style="width: auto;">Customer</label>
+              <label class="wauto">Customer</label>
               <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" disabled />
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label style="width: 100%;">WO Open Date</label>
+              <label class="input-width-100-percent">WO Open Date</label>
               <!-- <input class="form-control" type="text" [(ngModel)]="woOperDate" name="woOperDate"
                 disabled /> -->
               <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
@@ -461,26 +449,25 @@
                   </h4> -->
                   <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
                   <div class="tableFixHead">
-              <table class="asset_tablee table table-bordered"
-                style="border: 1px solid #c8c8c8 !important; width: 100%;table-layout: fixed;">
+              <table class="asset_tablee table table-bordered tool-table">
                 <thead>
                   <tr>
-                    <th style="width:36px;"></th>
-                    <th style="text-align:center">Tool Name</th>
-                    <th style="text-align:center">Tool Id</th>
-                    <th style="text-align:center">Inventory Num</th>
-                    <th style="text-align:center">Qty Needed</th>
-                    <th style="text-align:center">Qty Seleted</th>
-                    <th style="text-align:center">Qty Available</th>
+                    <th class="width-36"></th>
+                    <th class="text-center">Tool Name</th>
+                    <th class="text-center">Tool Id</th>
+                    <th class="text-center">Inventory Num</th>
+                    <th class="text-center">Qty Needed</th>
+                    <th class="text-center">Qty Seleted</th>
+                    <th class="text-center">Qty Available</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td style="width:36px;">
+                    <td class="width-36">
                       <span>
                         <a class="collapsed ac_cs" data-toggle="collapse" href="#step2">
-                          <i class="fa fa-plus btn btn-success btn-cstm1 btn-xs1" matTooltip="Show Asset Inventory list"
-                            matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="openGrid()"></i>
+                          <i class="fa fa-plus btn btn-success btn-cstm1 btn-xs1 step2-padding" matTooltip="Show Asset Inventory list"
+                            matTooltipPosition="above"  (click)="openGrid()"></i>
                         </a>
                       </span>
                     </td>
@@ -495,13 +482,13 @@
                       <!-- {{currentRecord.inventoryNumber}} -->
                       Multiple
                     </td>
-                    <td style="    text-align: end;">
+                    <td class="text-end">
                       {{currentRecord.quantity}}
                     </td>
-                    <td style="    text-align: end;">
+                    <td class="text-end">
                       {{quantitySelected}}
                     </td>
-                    <td style="    text-align: end;">
+                    <td class="text-end">
                       <!-- {{currentRecord.qyantityAvalilable}} -->
                       {{AvailableCount}}
                     </td>
@@ -513,17 +500,17 @@
             </div>
             <div id="step2" class="panel-collapse  collapse" *ngIf="showcheckInOutlist">
               <div class="panel-body m-lr-7">
-                <form #assetCheckForm="ngForm" style="background: #fff;" >
+                <form #assetCheckForm="ngForm" class="back-white" >
                   <!-- class="table-responsive" id="workflow-attributes-block" -->
                   <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
                       <table class="table table-bordered table-border-modal1">
                       <thead>
                         <tr>
-                          <th *ngFor="let col of assetChekinCheckoutheaders" style="text-align:center">
+                          <th *ngFor="let col of assetChekinCheckoutheaders" class="text-center">
                             {{col.header}}
                           </th>
-                          <th style="width: 45px;">Actions </th>
+                          <th class="table-actions-column">Actions </th>
                         </tr>
                       </thead>
                       <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length !=0">
@@ -545,7 +532,7 @@
                           <td>{{row.serialNo}}</td>
                           <td>{{row.assetLocation}}</td>
                           <td>{{row.inventoryStatus}}</td>
-                          <td style="width: 135px;">
+                          <td class="width-135">
                             <p-autoComplete *ngIf="assetsform.assetStatus == 'checkOut'" field="label" [disabled]="!row.isChecked"
                               class="pautocomp-cstm" [(ngModel)]="row.checkOutById" name="checkInBy{{i}}"
                               [suggestions]="employeeList" (completeMethod)="filterEmployee($event)" [size]="30"
@@ -554,15 +541,15 @@
                             </p-autoComplete>
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutBy}}</div>
                           </td>
-                          <td style="width: 100px;">
+                          <td class="width-100">
                             <div  *ngIf="assetsform.assetStatus == 'checkOut'">
                               <p-calendar class="pas-clder" [(ngModel)]="row.checkOutDate" [showIcon]="true" [disabled]="!row.isChecked"
                                 name="checkOutDate{{i}}"></p-calendar>
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy'}}</div>
                           </td>
-                          <td style="width: 135px;">
-                            <div class="form-group" *ngIf="assetsform.assetStatus == 'checkIn'">
+                          <td class="width-135">
+                            <div  *ngIf="assetsform.assetStatus == 'checkIn'">
                               <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="row.checkInById" [disabled]="!row.isChecked"
                                 name="checkInBy{{i}}" [suggestions]="employeeList"
                                 (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1" [dropdown]="true"
@@ -571,16 +558,29 @@
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInBY}}</div>
                           </td>
-                          <td style="width: 100px;"> 
+                          <td class="width-100"> 
                             <div  *ngIf="assetsform.assetStatus == 'checkIn'">
                               <p-calendar class="pas-clder" [(ngModel)]="row.checkInDate" [showIcon]="true" [disabled]="!row.isChecked"
                                 name="checkInDate{{i}}"></p-calendar>
                             </div>
                             <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>
                           </td>
-                          <td> <i class="fa fa-info-circle fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" 
-                            matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(row,i)"></i></td>
                           <td>
+                             <!-- <i class="fa fa-info-circle fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" 
+                            matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(row,i)"></i> -->
+                            <div class="align_adh">
+                              <div [innerHTML]="row.notes"
+                                  matTooltipPosition="above"
+                                  [matTooltip]="parsedText(row.notes)"
+                                  class="text_editor_box input-width-100-percent"></div>
+                              <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                  data-target="#textarea-popup" matTooltip="Memo"
+                                  matTooltipPosition="above"
+                                  (click)="onAddTextAreaInfo(row.notes,i)"></i>
+                          </div>
+
+                          </td>
+                          <td class="action-icons-cstm table-column-width "> 
                             <span> 
                               <!-- data-toggle="modal" data-target="#view" -->
                               <!-- <a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#checkInOutView"   matTooltip="Asset Inventory View" matTooltipPosition="above">
@@ -588,9 +588,8 @@
                               </a> -->
                               <a
                               class="btn  boxed-float-btn nobg" matTooltip="Asset Inventory View" matTooltipPosition="above"
-                              data-toggle="modal"
-                              data-target="#checkInOutView1"
-                              (click)="viewAsstes(assets)"
+                           
+                              (click)="viewAsstesInventory(row)"
                             >
                               <i class="fa fa-eye"></i>
                             </a>
@@ -604,47 +603,72 @@
                         </tr>
                         <!-- </ng-container> -->
                       </tbody>
+                      <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length ==0">
+                        <tr>
+                          <td colspan="16" class="no-records-msg no-records-cstm">
+                              No records found
+                          </td>
+                      </tr>
+                      </tbody>
                     </table>
                     </div>
                   </div>
-
-                  <div class="text-right save-work-btn cust_ma">
+                  <div class="text-right cust_ma">
                     <!-- ; getEquipmentData.emit() -->
                     <button class="btn btn-primary btn-primary" (click)="saveAssets(workOrderCheckInCheckOutList)"
                        data-dismiss="modal" [disabled]="!assetCheckForm.valid"
                       type="submit">
                       Save
                     </button>
-                    <button type="button" class="btn btn-danger" (click)="releaseInventory()" data-dismiss="modal"
-                     >
+                    <button type="button" class="btn btn-danger" (click)="releaseInventory()" data-dismiss="modal">
                       Close
-                    </button>
+                    </button> 
                   </div>
                 </form>
 
               </div>
             </div>
-          </div>
+          </div>   
         </div>
-        
+        <!-- <div class="modal fade" id="assetInventView" role="dialog" data-backdrop="static" data-keyboard="false">
+          <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                      <h4 class="modal-title">Details of Asset Inventory</h4>
+                  </div>
+                  <div class="modal-body">
+                    <app-asset-inventory-view [assetInventoryId]="assetRecordId"></app-asset-inventory-view>
+                      <div class="editor-buttons">
+                         <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div> -->
+     
         <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
-          <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-                <h4 class="modal-title">Memo</h4>
+          <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                      <h4 class="modal-title">Edit Memo</h4>
+                  </div>
+                  <div class="modal-body">
+                      <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}"
+                      (ngModelChange)="editorgetmemo($event)" name="textAreaInfo" required>
+                  </p-editor>
+                      <div class="editor-buttons">
+                          <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
+                              (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                          <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
+                      </div>
+                  </div>
               </div>
-              <div class="modal-body">
-                  <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
-  
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
-              </div>
-            </div>
           </div>
-        </div>
+      </div>
         <div class="modal fade" id="checkInOutView" role="dialog" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
             <div class="modal-content">
@@ -684,7 +708,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
           <div class="tableFixHead">
-          <table class="table table-bordered" style="height:auto;max-height:350px !important;">
+          <table class="table table-bordered tool-history">
             <thead>
               <tr>
                 <th>	Tool Name</th>
@@ -822,7 +846,6 @@
                   <!-- {{ audit.notes }}  -->
                   <p class="p_textEditor" [innerHTML]="audit.notes"></p>
                 </td>
-                
               </tr>
             </tbody>
           </table>
@@ -839,27 +862,44 @@
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-
     <h4 class="modal-title">Are You Sure Want to Delete?</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
       <span aria-hidden="true">&times;</span>
-
-
     </button>
-
   </div>
-
   <div class="modal-body">
       <strong>
         Tool Name:
           <span class="new-label">{{currentRow.name}}</span>
       </strong>
   </div>
-
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
-
-
 </ng-template>
+<ng-template #restoreIdWo let-c="close" let-d="dismiss" data-backdrop="static">
+
+  <div class="modal-header">
+      <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <strong>
+        WO Number :
+          <span class="new-label">{{restorerecord.name}}</span>
+      </strong>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
+      <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+  </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+</div>

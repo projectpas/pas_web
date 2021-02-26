@@ -106,8 +106,8 @@ import { VendorPagesModule} from '../vendorpages/vendorpages.module';
         ViewRoComponent,
 		//POViewListComponent,
 		//POViewStockDraftListComponent,
-		ROViewListComponent,
-		ROViewStockDraftListComponent
+		//ROViewListComponent,
+		//ROViewStockDraftListComponent
 
 	],
     providers: [

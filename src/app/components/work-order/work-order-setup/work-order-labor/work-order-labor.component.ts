@@ -6,22 +6,18 @@ import { CommonService } from '../../../../services/common.service';
 import { getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
 declare var $: any;
-import { AlertService } from '../../../../services/alert.service';
-
 @Component({
   selector: 'app-work-order-labor',
   templateUrl: './work-order-labor.component.html',
   styleUrls: ['./work-order-labor.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
-/** WorkOrderMainComponent component*/
 export class WorkOrderLaborComponent implements OnInit, OnChanges {
   @Input() savedWorkOrderData;
   @Input() laborForm: WorkOrderLabor;
   @Input() workOrderWorkFlowOriginalData: any;
   @Output() saveworkOrderLabor = new EventEmitter();
-  @Input() workOrderLaborList: any;
+  @Input() workOrderLaborList: any={};
   @Input() taskList: any;
   @Input() isQuote = false;
   @Input() markupList;
@@ -64,12 +60,13 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   deletingLabourObj: any;
   taskIndexToggle: any;
   labourHeader: any;
-
+  disabledUpdatebtn:boolean=true; 
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,
     private commonService: CommonService) { }
     
   ngOnInit() {
+    this.disabledUpdatebtn=true;
     this.allEmployees = this.employeesOriginalData;
     this.dropdownSettings = {
       singleSelection: false,
@@ -83,26 +80,13 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } })
     }
-    // .toUpperCase()
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     this.laborForm.costPlusType = 'Mark Up';
     if (this.workOrderLaborList) {
- 
       this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
-      // this.laborForm.dataEnteredBy = (this.workOrderLaborList['dataEnteredBy']) ? this.workOrderLaborList['dataEnteredBy'] : this.laborForm.dataEnteredBy;
-      // this.laborForm.employeeId={value:this.laborForm.employeeId,label:this.laborForm.employeeName}
-      this.laborForm.employeeId =this.workOrderLaborList.employeeId;
-      // this.laborForm.employeeId = (this.workOrderLaborList['employeeId']) ? this.workOrderLaborList['employeeId'] : this.laborForm.employeeId;
+     this.laborForm.employeeId =this.workOrderLaborList.employeeId;
       this.laborForm.isTaskCompletedByOne = this.workOrderLaborList['isTaskCompletedByOne'];
       this.laborForm.expertiseId = (this.workOrderLaborList['expertiseId']) ? this.workOrderLaborList['expertiseId'] : this.laborForm.expertiseId;
-      // if (!this.laborForm['dataEnteredBy']) {
-        // this.laborForm.dataEnteredBy = {
-        //   employeeId: this.authService.currentEmployee.employeeId,
-        //   label: this.authService.currentEmployee.label,
-        //   name: this.authService.currentEmployee.name,
-        //   value: this.authService.currentEmployee.value
-        // };
-      // }
     }
     else {
       this.laborForm.workFloworSpecificTaskorWorkOrder = 'specificTasks';
@@ -113,7 +97,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         value: this.authService.currentUser.employeeId
       };
     }
-    this.getAllExpertiseType();
+   
     this.id = this.savedWorkOrderData.workOrderId;
     if (this.isView || this.isEdit) {
       for (let task of this.taskList) {
@@ -133,16 +117,22 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if (this.selectedPartNumber && this.selectedPartNumber.managementStructureId && !this.basicLabourDetail) {
       this.getBasicLabourData(this.selectedPartNumber.managementStructureId);
     }
+   
   }
-
+laborTaskData:any;
   ngOnChanges() {
-    this.allEmployees = this.employeesOriginalData;
-    // this.laborForm.employeeId = getObjectById('value', this.laborForm.employeeId, this.employeesOriginalData);
-    this.laborForm.dataEnteredBy = getObjectById('value', this.laborForm.dataEnteredBy, this.employeesOriginalData);
+    if(this.workOrderLaborList !=undefined){
+      this.laborTaskData=this.workOrderLaborList;
+      this.isEdit=true;
+      this.disabledUpdatebtn=true;
+    }
+    if(this.employeesOriginalData && this.employeesOriginalData.length !=0){
+      this.allEmployees = this.employeesOriginalData;
+    }
+   this.laborForm.dataEnteredBy = getObjectById('value', this.laborForm.dataEnteredBy, this.employeesOriginalData);
     if (this.taskList) {
       this.taskListForHeader = this.taskList.map(x => { return { taskId: x.taskId, description: x.description } });
     }
-    // .toUpperCase()
     if (!this.isQuote) {
       this.getEmployeeData();
     }
@@ -166,7 +156,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       }
       else {
         for (let task in this.taskListForHeader) {
-          // .toUpperCase()
           if (tData == this.taskListForHeader[task]['description']) {
             this.selectedItems = [...this.selectedItems, {
               "taskId": this.taskListForHeader[task]['taskId'],
@@ -182,7 +171,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.employeeList = this.employeesOriginalData;
         this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId']) ? this.workOrderLaborList['workFlowWorkOrderId'] : this.laborForm.workFlowWorkOrderId;
         this.laborForm.dataEnteredBy = (this.workOrderLaborList['dataEnteredBy']) ? this.workOrderLaborList['dataEnteredBy'] : this.laborForm.dataEnteredBy;
-        // this.laborForm.employeeId = (this.workOrderLaborList['employeeId']) ? this.workOrderLaborList['employeeId'] : this.laborForm.employeeId;
         this.laborForm.employeeId =this.workOrderLaborList.employeeId;
         this.laborForm.isTaskCompletedByOne = this.workOrderLaborList['isTaskCompletedByOne'];
         this.laborForm.expertiseId = (this.workOrderLaborList['expertiseId']) ? this.workOrderLaborList['expertiseId'] : this.laborForm.expertiseId;
@@ -216,6 +204,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       this.laborForm.costPlusType = this.laborForm['markupFixedPrice'];
       this.overAllMarkup = Number(this.laborForm['headerMarkupId']);
     }
+    this.getAllExpertiseType();
   }
   assignHoursToToalWorkOrder() {
     if (this.laborForm.isTaskCompletedByOne) {
@@ -386,6 +375,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.addNewTask(item.description);
       }
     }
+    this.disabledUpdatebtn=false;
   }
   onSelectAll(items: any) {
     items.forEach(x => {
@@ -396,6 +386,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         }
       }
     })
+    this.disabledUpdatebtn=false;
   }
   deleteConfirmationTask(type) {
     if (type == 'single') {
@@ -419,7 +410,11 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       })
     })
     $('#confirmationTaskDelete').modal('hide');
+    this.disabledUpdatebtn=false;
   }
+
+
+
   clearHoursData() {
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
@@ -519,27 +514,17 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       ? this.authService.currentUser.masterCompanyId
       : null;
   }
-  // getAllExpertiseType() {
-  //   this.commonService.autoCompleteDropdownsExpertiseTypes(this.currentUserMasterCompanyId).subscribe(res => {
-  //     this.expertiseTypeList = res.map(x => {
-  //       return {
-  //         label: x.expertiseType,
-  //         value: x.employeeExpertiseId
-  //       }
-  //     });
-  //   },
-  //     err => {
-  //     })
-  // }
   setEditArray:any=[];
   getAllExpertiseType(value?) {
     this.setEditArray = [];
-    if (this.isEdit == true) {
-      this.workOrderLaborList.forEach(element => {
-        
-      });
-        // this.setEditArray.push(this.workOrderGeneralInformation.employeeId ? this.workOrderGeneralInformation.employeeId.value : 0);
+    this.setEditArray.push(this.laborForm.expertiseId ? this.laborForm.expertiseId : 0);
+if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.laborList.length !=0){
+  this.laborTaskData.laborList.forEach(element => {
+    if(element.expertiseId !=0 || element.expertiseId !=null){
+      this.setEditArray.push(element.expertiseId);
     }
+  });
+}
     if (this.setEditArray.length == 0) {
         this.setEditArray.push(0);
     }
@@ -547,12 +532,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.commonService.autoCompleteDropdownsExpertiseTypes(strText, true, 20, this.setEditArray.join()).subscribe(res => {
         if (res && res.length != 0) {
           this.expertiseTypeList = res;
-          // .map(x => {
-          //   return {
-          //     label: x.expertiseType,
-          //     value: x.employeeExpertiseId
-          //   }
-          // });
         }else{
           this.expertiseTypeList =[];
         }
@@ -652,6 +631,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   }
 
   startandStop(currentRecord) {
+    this.disabledUpdatebtn=false;
     if (currentRecord.startDate === null) {
       currentRecord.startDate = new Date();
     } else if (currentRecord.endDate === null) {
@@ -659,11 +639,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }
     this.calculateWorkingHoursandMins(currentRecord)
   }
-
   resetEndDateandTime(currentRecord) {
     currentRecord.endDate = null;
   }
-
   calculateWorkingHoursandMins(currentRecord) {
     if (currentRecord.startDate && currentRecord.endDate) {
       const start = moment(currentRecord.startDate)
@@ -766,7 +744,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       hoursorClockorScan: this.laborForm.hoursorClockorScan,
       dataEnteredBy: getValueFromObjectByKey('value', this.laborForm.dataEnteredBy),
       employeeId: getValueFromObjectByKey('value', this.laborForm.employeeId),
-      masterCompanyId: 1,
+      masterCompanyId: this.authService.currentUser.masterCompanyId,
       ...excessParams,
       workOrderId: this.id,
       workFlowWorkOrderId: getValueFromObjectByKey('value', this.laborForm.workFlowWorkOrderId),
@@ -790,6 +768,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
     }
     this.saveworkOrderLabor.emit(this.saveFormdata);
+    this.disabledUpdatebtn=true;
+    this.isEdit=true;
   }
   getOverHeadCost(taskList) {
     let total = 0;
@@ -830,7 +810,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       return true;
     }
   }
-
   getTaksId(taskName) {
     for (let t of this.taskList) {
       if (t['description'] == taskName) {
@@ -889,6 +868,10 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     this.laborForm.workOrderLaborList[0][taskName][index].isDeleted = true;
     let temp = this.laborForm.workOrderLaborList[0][taskName].splice(index, 1);
     this.laborForm.workOrderLaborList[0][taskName].push(temp[0]);
+    this.disabledUpdatebtn=false;
+this.commonfunctionHandler();
+  }
+  commonfunctionHandler(){
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
         if (this.laborForm.hoursorClockorScan != 1) {
@@ -955,7 +938,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
                     mData['billingRate'] = ((mData['totalCostPerHour']) + (((mData['totalCostPerHour']) / 100) * Number(markup.label))).toFixed(2)
                     mData['billingAmount'] = formatNumberAsGlobalSettingsModule(Number(mData['billingRate']) * Number(mData.hours), 0);
                   }
-
                 }
               }
             }
@@ -966,7 +948,6 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     catch (e) {
     }
   }
-
   calculateTotalWorkHours() {
     if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'specificTasks' || this.laborForm.workFloworSpecificTaskorWorkOrder == 'workFlow') {
       this.laborForm.totalWorkHours = 0;
@@ -1211,6 +1192,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       this.laborForm.totalWorkHours = 0;
     }
     $('#confirmation').modal('hide');
+    this.disabledUpdatebtn=false;
   }
   dismissModel() {
     this.laborForm['isTaskCompletedByOne'] = !this.laborForm['isTaskCompletedByOne'];
@@ -1281,10 +1263,10 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       onAddTextAreaInfo(material,taskName,index) {
         this.currentIndex=index;
         this.currentTaks=taskName;
-        this.textAreaInfo = material;
+        this.textAreaInfoLabor = material;
         this.disableEditor=true;
     }
-    textAreaInfo: any;
+    textAreaInfoLabor: any;
     disableEditor:any=true;
     editorgetmemo(ev){
         this.disableEditor=false;
@@ -1292,12 +1274,17 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     onSaveTextAreaInfo(memo) {
         this.disableSaveForEdit=false;
         if (memo) {
-            this.textAreaInfo = memo;
+            this.textAreaInfoLabor = memo;
             this.laborForm.workOrderLaborList[0][this.currentTaks][this.currentIndex].memo = memo;
         }
-        $("#textarea-popup").modal("hide");
+        $("#textarea-popup5").modal("hide");
+        this.disabledUpdatebtn=false;
     }
     onCloseTextAreaInfo() {
-        $("#textarea-popup").modal("hide");
+        $("#textarea-popup5").modal("hide");
     }
+   checkValid(v){
+    this.disabledUpdatebtn=false;
+    }
+    
 }

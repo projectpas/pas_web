@@ -268,6 +268,10 @@ import { CommunicationService } from './shared/services/communication.service';
 import { TabViewModule } from 'primeng/tabview';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
 import { CommonDocumentsModule } from "./components/common-components/common-documents/common-documents.module";
+import{AssetInventoryViewComponent} from "./components/Asset-Management/asset-inventory-view/asset-inventory-view.component"
+import { CalendarModule } from "primeng/calendar";
+import { SafePipe } from './pipes/safe.pipe';
+import { AuditComponentComponent } from './shared/components/audit-component/audit-component.component';
 import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 //import {AllViewComponent  } from './shared/components/all-view/all-view.component';
 
@@ -299,7 +303,8 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
     AppSharedModule,
     NgbModule,
     TabViewModule,
-    CommonDocumentsModule
+    CommonDocumentsModule,
+    CalendarModule,
   ],
   declarations: [
     AppComponent,
@@ -330,8 +335,11 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
     EntityViewComponent,
     StocklineViewComponent,
     StocklineHistoryComponent,
-    RefreshAlert,    
-     UpdatepasswordComponent,
+      RefreshAlert, 
+      UpdatepasswordComponent,
+    AssetInventoryViewComponent,
+    SafePipe,
+    AuditComponentComponent
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -548,6 +556,8 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
     StocklineViewComponent,
     StocklineHistoryComponent,
     EntityViewComponent,
+    AssetInventoryViewComponent,
+    AuditComponentComponent
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],

@@ -9,10 +9,8 @@ import { ApprovalTaskEnum } from "../../../../quotes/models/approval-task-enum";
     styleUrls: ["./sales-approve.component.css"]
 })
 export class SalesOrderApproveComponent {
-
     approvers: any[];
     constructor(public salesOrderService: SalesOrderService) {
-
     }
 
     refresh(marginSummary: MarginSummary) {

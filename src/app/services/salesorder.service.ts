@@ -279,6 +279,13 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getPickTicketList(salesOrderId)
     );
   }
+
+  getBillingInvoiceList(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getBillingInvoiceList(salesOrderId)
+    );
+  }
+
   getCustomerApprovalList(salesOrderId: number): Observable<ISalesOrderCustomerApproval[][]> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getCustomerApprovalList(salesOrderId)
@@ -434,6 +441,7 @@ export class SalesOrderService {
     partNumberObj.taxAmount = selectedPart.taxAmount;
     partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.taxPercentage = selectedPart.taxPercentage;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
   marshalSOPartToView(selectedPart, salesOrderObj) {
@@ -509,6 +517,7 @@ export class SalesOrderService {
     partNumberObj.taxPercentage = selectedPart.taxPercentage;
     partNumberObj.createdBy = selectedPart.createdBy;
     partNumberObj.notes = selectedPart.notes;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
 
@@ -598,6 +607,12 @@ export class SalesOrderService {
   getShippingDataList(salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getShippingDataList(salesOrderId)
+    );
+  }
+
+  getShippingEdit(salesOrderShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getShippingEdit(salesOrderShippingId)
     );
   }
 

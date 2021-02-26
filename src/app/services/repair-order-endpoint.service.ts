@@ -234,6 +234,14 @@ export class RepairOrderEndpoint extends EndpointFactory {
     });
   }
 
+  getPartDetailsWithidForSinglePart<T>(partId): Observable<T> {
+		let endpointurl = `${this.configurations.baseUrl}/api/repairOrder/GetpartdetailsWithidForSinglePart/${partId}`;
+		return this.http.get<T>(endpointurl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getPartDetailsWithidForSinglePart<T>(partId));
+			});
+	}
+
 ////////////////////////////////////////////
  /*
   getVendorROById<T>(Id: number): Observable<T> {

@@ -45,6 +45,11 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.getROViewById(repairOrderId);
   }
 
+  getPartDetailsWithidForSinglePart(partId) {
+    return this.repairOrderEndpoint.getPartDetailsWithidForSinglePart<any>(partId);
+  }
+
+
   getROPartsViewById(repairOrderId) {
     return this.repairOrderEndpoint.getROPartsViewById(repairOrderId);
   }

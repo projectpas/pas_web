@@ -38,6 +38,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
     modal: NgbModalRef;
+    disableUpdate:boolean=true;
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
          private modalService: NgbModal,
         private alertService: AlertService) {
@@ -54,28 +55,36 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                     assetRecordId: this.editData.assetRecordId,
                     description: this.editData.assetDescription,
                     assetTypeId: this.editData.assetTypeId,
-                    name: this.editData.assetName,
+                    name: this.editData.name,
                     assetTypeName: this.editData.assetTypeName,
                     partNumber: this.editData.assetId,
+                    // partNumber: {name:this.editData.assetName,assetId:this.editData.assetId},
                     assetId: this.editData.assetId,
                     assetDescription: this.editData.description,
+                    assetIdName:this.editData.assetId
                 }
+                this.disableUpdate=true;
                 this.workFlow.equipments.push(data);
+                this.workFlow.equipments.forEach(ev=>{
+                    ev.partNumber={name:ev.name,assetId:ev.assetRecordId}
+                })
             } else {
                 this.workFlow.equipments = [];
                 this.row = this.workFlow.equipments[0];
                 this.addRow();
             }
+
         } else {
             this.row = this.workFlow.equipments[0];
             if (this.row == undefined) {
                 this.row = {};
             }
             this.row.taskId = this.workFlow.taskId;
+            this.workFlow.equipments.forEach(ev=>{
+                ev.partNumber={name:ev.assetName,assetId:ev.assetId}
+            })
         }
-        this.workFlow.equipments.forEach(ev=>{
-            ev.partNumber={name:ev.assetName,assetId:ev.assetId}
-        })
+      
         this.ptnumberlistdata('');
     }
 
@@ -179,8 +188,8 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     }
 
     updateEquipmentWorkOrder() {
-        console.log("this.workFlow",this.workFlow)
         this.updateEquipmentListForWO.emit(this.workFlow)
+        // this.disableUpdate=true;
     }
 
     checkQuantityAvailability() {
@@ -239,7 +248,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         }
         this.dismissModel();
     }
-  
+    getActive(){
+    this.disableUpdate=false;
+  }
 }
 
 

@@ -12,8 +12,33 @@
   margin: 0 auto;
 }
 .grn_clr{
-  color:green;
+  color:green !important;
 }
+.font-size-10{
+font-size: 10px !important;
+}
+.mar-left-5{
+  margin-left: 5px !important;
+}
+.mar-left-15{
+  margin-left: 15px !important;
+}
+.plus-success{
+  padding: 3px 8px !important;
+}
+.plus-danger{
+  padding: 7px 8px !important;
+}
+.btn-height{
+  height: 30px !important;
+}
+.select-all{
+  width:65px !important;
+}
+.defered-check{
+  pointer-events: none !important;margin-left: 43% !important;
+}
+
 table {
   display: block;
   overflow: scroll;

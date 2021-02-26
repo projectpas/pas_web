@@ -26,7 +26,7 @@ import { MenuItem } from 'primeng/api';
 })
 
 export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
-    @Input() isWorkOrder;
+    @Input() isWorkOrder=false;
     @Input() savedWorkOrderData;
     @Input() WorkOrderType;
     @Input() workFlowId;
@@ -256,8 +256,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 { label: 'Edit Work Flow' }
             ];
         }
-
+if(!this.isWorkOrder){
         this.sourceWorkFlow.workFlowId = +this.router.snapshot.paramMap.get("id");
+}
         this.isFixedcheck('');
         // this.loadItemClassData();
         // this.getMaterialMandatory();
@@ -290,7 +291,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             itemsShowLimit: 3,
             allowSearchFilter: false
         };
-
+console.log("dddddddd",)
         this.loadWorkFlow();
         this.getAllPercentages();
     }
@@ -2346,8 +2347,10 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         if (this.isWorkOrder) {
             this.saveWorkFlowWorkOrderData['isVersionIncrease'] = isIncrease;
             this.savedWorkFlowWorkOrderData.emit(this.saveWorkFlowWorkOrderData);
+            console.log("saved Data",this.saveWorkFlowWorkOrderData)
         }
         else {
+            console.log("saved Data",this.saveWorkFlowWorkOrderData)
             this.updateWorkFlow();
         }
     }
@@ -2637,6 +2640,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         }
 
         if (this.isWorkOrder) {
+            console.log("hello workorder")
             // responseDataForHeader
             const data = this.sourceWorkFlow;
             const excessParams = {
@@ -2668,10 +2672,12 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             }
 
             if (isSaveToWorkFlow) {
+                console.log("changes",saveWorkFlowWorkOrderData);
                 this.saveWorkFlowWorkOrderData = saveWorkFlowWorkOrderData;
                 this.showVersionUpdate()
             }
             else {
+                console.log("changes else",saveWorkFlowWorkOrderData);
                 this.savedWorkFlowWorkOrderData.emit(saveWorkFlowWorkOrderData);
             }
         }

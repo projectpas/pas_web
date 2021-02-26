@@ -1,19 +1,19 @@
 ﻿
-<div  role="main" style="padding: 2px 6px">
+<div  role="main" class="main-padding">
     <div>
         <div class="x_content">
             <div *ngIf="isViewMode == false">
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                         </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                         </p>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                   <div id="step1" class="panel-collapse collapse">
                       <div class="panel-body m-lr-7">
                           <div class="col-sm-12">
-                            <div style="text-align: right;">
+                            <div class="text-right">
                             <a *ngIf="isViewMode == false"
                                data-toggle="modal"
                                data-target="#addShippingInfo">
@@ -77,7 +77,7 @@
                                      class="form-control" 
                                      
                                      (input)="globalSearchForDomestic($event.target.value)"
-                                     placeholder=" Filter" style="height: 28px !important;">
+                                     placeholder=" Filter" >
                                     </div>
                                     <!-- (input)="domestictable.filterGlobal($event.target.value, 'contains')" -->
                                 </div>
@@ -85,8 +85,8 @@
                               <div class="row">
                                 <div class="col">
 
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary  new-table-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" (click)="openTag1(export1)" style="padding: 5px 10px !important;"></button>
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary  new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" (click)="openTag1(export1)" ></button>
+                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button>
                                 <ng-template #export1 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Are You Sure Want to Download?</h4>
@@ -109,7 +109,7 @@
                                     </div>
                                 </ng-template>
                                 <div *ngIf="isViewMode == false" class="excel-upload  excel-upload-cstm">
-                                    <button type="button" class="btn btn-primary" matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownload()" style="padding: 5px 10px !important;">Sample File Download</button>
+                                    <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownload()">Sample File Download</button>
 
                                     <input type="file" name="upload1[]" id="upload1" (change)="customShippingExcelUpload($event)" class="uploaddoc upload-file"
                                            accept=".xlsx, .xls, .csv">
@@ -124,8 +124,7 @@
                            
                                 <div class="col">
                                     <div class="">
-                                        <div class="col"
-                                             style="width: auto; float: right; padding-top: 3px;padding-right: 0px;">
+                                        <div class="col legal-shipping-radios">
                                             <div class="form-group">
                                                 <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
                                                 <div class="pull-left radio-buttons-align">
@@ -147,8 +146,8 @@
                                                         <span class="checkmark"></span>All
                                                     </label>
                                                 </div>
-                                                <div class=" pull-left checkbox-cstm" style="margin-right: 15px;">
-                                                    <label style="width: auto !important;margin-top: 3px;">
+                                                <div class=" pull-left checkbox-cstm margin-right-15">
+                                                    <label class="show-deleted-label">
                                                         <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatusForDomestic($event.target.checked)" />
                                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                         Show  Deleted List
@@ -198,7 +197,8 @@
                                 <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                     {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                 </td>
-                                <td class="action-icons-cstm table-column-width" style="width:150px !important" *ngIf="isViewMode == false" style="text-align: center">
+                                <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == false"
+                                >
                                     <div *ngIf="currentDeletedstatus==false">
     <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
@@ -242,7 +242,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td class="action-icons-cstm table-column-width" style="width:150px !important" *ngIf="isViewMode == true" style="text-align: center">
+                                <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == true">
                                     <p-inputSwitch [(ngModel)]="rowData['isActive']"  [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch> 
                                     <span data-toggle="modal" data-target="#viewShipping"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openShippinggView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
@@ -297,7 +297,7 @@
                     <div id="step2" class="panel-collapse  collapse">
                         <div class="panel-body m-lr-7">
                             <div class="col-sm-12">
-                              <div style="text-align: right;">
+                              <div class="text-right">
                         <a *ngIf="isViewMode == false"
                            data-toggle="modal"
                            data-target="#addInternationalShippingInfo">
@@ -335,7 +335,7 @@
                             <div class="row">
                                 <div class="col">
                                 <p-multiSelect *ngIf="isViewMode == false" [options]="internationalShippingHeaders" [(ngModel)]="selectedColumnsForInternationTable" [ngModelOptions]="{standalone: true}" optionLabel="header"
-                                               selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                               selectedItemsLabel="{0} columns selected" defaultLabel="Choose Columns" class="multiselect-field "></p-multiSelect>
                                             </div>
                                             <div class="col">
                                               <div
@@ -344,15 +344,16 @@
                                               >
                                     <i class="fa fa-search"></i>
                                     <input type="text" pInputText size="50" (input)="globalSearchForInternational($event.target.value)"
-                                    class="form-control"  placeholder=" Filter" style="height: 28px !important;">
+                                    class="form-control"  placeholder=" Filter">
                                     <!-- (input)="intlShippingTable.filterGlobal($event.target.value, 'contains')" -->
                                 </div>
                             </div>
                           </div>
                           <div class="row">
                             <div class="col">
-                                <button *ngIf="isViewMode == false" (click)="openTag2(export2)" type="button" class="btn btn-primary new-table-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" style="padding: 5px 10px !important;"></button>
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="intlShippingTable.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                                <button *ngIf="isViewMode == false" (click)="openTag2(export2)" type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data"></button>
+                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="intlShippingTable.exportCSV({selectionOnly:true})"
+                                ></button>
 
                                 <ng-template #export2 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
@@ -376,7 +377,8 @@
                                     </div>
                                 </ng-template>
                                 <div *ngIf="isViewMode == false" class="excel-upload  excel-upload-cstm">
-                                    <button name="intershippingdownload" id="intershippingdownload" type="button" class="btn btn-primary" matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForInternationalShipping()" style="padding: 5px 10px !important;">Sample File Download</button>
+                                    <button name="intershippingdownload" id="intershippingdownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForInternationalShipping()"
+                                    >Sample File Download</button>
 
                                     <input type="file" name="upload2[]" id="upload2" (change)="customInternationalShippingExcelUpload($event)" class="uploaddoc upload-file"
                                            accept=".xlsx, .xls, .csv">
@@ -391,34 +393,30 @@
                             
                                 <div class="col">
                                     <div class="">
-                                        <div class="col"
-                                             style="width: auto; float: right; padding-top: 3px;padding-right: 0px;">
+                                        <div class="col legal-shipping-radios">
                                             <div class="form-group">
                                                 <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
-                                                <div class="pull-left"
-                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                <div class="pull-left radio-buttons-align">
                                                     <label class="radio-cstm wauto">
             
                                                         <input type="radio" name="EmpStatus1" class="form-control" value="Active" (click)=" geListByStatusForInternational('Active')" [(ngModel)]="currentStatusForInternational">
                                                         <span class="checkmark"></span>Active
                                                     </label>
                                                 </div>
-                                                <div class="pull-left"
-                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                <div class="pull-left radio-buttons-align">
                                                     <label class="radio-cstm wauto">
                                                         <input type="radio" name="EmpStatus2" class="form-control" value="InActive" (click)=" geListByStatusForInternational('InActive')" [(ngModel)]="currentStatusForInternational">
                                                         <span class="checkmark"></span>In-active
                                                     </label>
                                                 </div>
-                                                <div class="pull-left"
-                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                <div class="pull-left radio-buttons-align">
                                                     <label class="radio-cstm wauto">
                                                         <input type="radio" name="EmpStatus3" class="form-control" value="ALL" (click)=" geListByStatusForInternational('ALL')" [(ngModel)]="currentStatusForInternational">
                                                         <span class="checkmark"></span>All
                                                     </label>
                                                 </div>
-                                                <div class=" pull-left checkbox-cstm" style="margin-right: 15px;">
-                                                    <label style="width: auto !important;margin-top: 3px;">
+                                                <div class=" pull-left checkbox-cstm margin-right-15">
+                                                    <label class="show-deleted-label">
                                                         <input type="checkbox" [(ngModel)]="currentDeletedstatusForInternational" name="cparent4" id="cparent" (click)="getDeleteListByStatusForInternational($event.target.checked)" />
                                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                         Show  Deleted List
@@ -475,7 +473,7 @@
                                     {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                 </td>
 
-                                <td class="action-icons-cstm table-column-width" style="width:150px !important" *ngIf="isViewMode == false" style="text-align: center">
+                                <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == false">
                                     <div *ngIf="currentDeletedstatusForInternational==false">
                                     <p-inputSwitch [(ngModel)]="rowData['isActive']" (onChange)="updateActiveorInActiveForIS(rowData)" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch>  
@@ -586,7 +584,7 @@
     </div>
 </div>
 
-<ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Shipping</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -625,7 +623,7 @@
     </div>
 </ng-template>
 
-<ng-template #modelEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #modelEdit let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title" *ngIf="isEditMode">Edit Country</h4>
         <h4 class="modal-title" *ngIf="!isEditMode">Add Country</h4>
@@ -685,14 +683,14 @@
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                        <span class="span-header-red text-capital "> {{legalEntityName }} </span>
                     </p>
                 </div>
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                        <span class="span-header-red text-capital "> {{legalEntityCode }} </span>
                     </p>
                 </div>
             </div>
@@ -745,14 +743,14 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                         </p>
                     </div>
                 </div>
@@ -781,8 +779,8 @@
                                 <p-autoComplete class="autocomp-customer-cstm"
                                 [(ngModel)]="domesticShippingInfo.siteName" name="siteNameDomestic" field="label" [suggestions]="sitesNamesListDomestic" (completeMethod)="filterSiteNamesDomestic($event)" [size]="30"
                                 [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}" (onSelect)="onSiteNameSelectedDomestic()" (onKeyUp)=checkfirstNameExistDomestic($event.target.value) required (ngModelChange)="enableSave()">
-                </p-autoComplete>
-                <div *ngIf="showExistMsg" class="clr-red">Already Exists</div>
+                                 </p-autoComplete>
+                               <div *ngIf="showExistMsg" class="clr-red">Already Exists</div>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -855,7 +853,8 @@
             </form>
         </div>
     </div>
-    <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static" class="popup-blur">
+    
+    <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static" class="popup-blur">
         <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
         <div class="modal-header">
             <h4 class="modal-title">History of  Ship Via  Info</h4>
@@ -887,7 +886,7 @@
                         <td [ngStyle]="{'color':  getColorCodeForShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
                             <span  [innerHTML]="audit.memo" class="text_editor_box" style="border: none;"></span>
                         </td>
-                        <td style="text-align: center;">
+                        <td class="text-center">
                             <span class="value">
                               <label class="wauto">
                                   <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
@@ -895,7 +894,7 @@
                             </span>
                           </td>
                         
-                          <td style="text-align: center;">
+                          <td class="text-center">
                             <span class="value">
                               <label class="wauto">
                                   <input type="checkbox" name="isPrimary" [checked]="audit.isPrimary== true" disabled>
@@ -906,7 +905,7 @@
                         <td>{{audit.createdBy}}</td>
                         <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                         <td>{{audit.updatedBy}}</td>
-                        <td style="text-align: center;">
+                        <td class="text-center">
                             <span class="value">
                               <label class="wauto">
                                   <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
@@ -925,8 +924,8 @@
         </div>
     </ng-template>
 </div>
-<div class="modal fade" id="addInternationalShippingInfo" role="dialog" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
+<div class="modal popup-blur" id="addInternationalShippingInfo" data-backdrop="static">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeMyModel('#addInternationalShippingInfo')">&times;</button>
@@ -935,19 +934,19 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                         </p>
                     </div>
                 </div>
             </div>
-            <form #addIShippingForm="ngForm" class="form-horizontal">
+            <form #addIShippingForm="ngForm" class="form-horizontal" autocomplete="off">
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="col-sm-12">
@@ -1002,7 +1001,7 @@
                                 <label>Amount <span class="clr-red">*</span></label>
                             </div>
                             <div class="col-sm-5">
-                                <input class="form-control" style="text-align:end" required  type="text" name="amount" [(ngModel)]="internationalShippingInfo.amount" (change)="onChangeCertDefaultCost()" (ngModelChange)="enableSave()">
+                                <input class="form-control" class="text-end-align" required  type="text" name="amount" [(ngModel)]="internationalShippingInfo.amount" (change)="onChangeCertDefaultCost()" (ngModelChange)="enableSave()">
                             </div>
                         </div>
                         <div class="col-sm-12 mb-3">
@@ -1047,14 +1046,14 @@
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                        <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                     </p>
                 </div>
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                        <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                     </p>
                 </div>
             </div>
@@ -1122,8 +1121,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-row" *ngIf="isViewMode == false">
-                        <div class="form-group" style="margin-top: 22px;margin-right:15px;">
-                            <div  style="margin-left: 0;">
+                        <div class="form-group primary-check">
+                            <div  class="margin-left-0">
                                 <label>
                                     <input type="checkbox" [disabled]="editisPrimary3==true" checked id="isPrimaryDomestic" name="isPrimaryDomestic" (ngModelChange)="enableSave2()" [(ngModel)]="shipViaDomestic.isPrimary">
                                     <!-- removed from above input [disabled]="shipViaDomestic.isPrimary"-->
@@ -1245,8 +1244,8 @@
 
                         <div class="row">
                             <div class="col">
-                                <button *ngIf="isViewMode == false" (click)="openTag3(export3)" type="button" class="btn btn-primary new-table-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data"  style="padding: 5px 10px !important;"></button>
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domesShipVia.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                                <button *ngIf="isViewMode == false" (click)="openTag3(export3)" type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data"  ></button>
+                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domesShipVia.exportCSV({selectionOnly:true})" ></button>
                                 <ng-template #export3 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Are You Sure Want to Download?</h4>
@@ -1281,7 +1280,7 @@
                                 class="form-control" 
                                 
                                 (input)="globalSearchForDomesticShipVia($event.target.value)"
-                                placeholder=" Filter" style="height: 28px !important;">
+                                placeholder=" Filter">
                                 <!-- (input)="domesShipVia.filterGlobal($event.target.value, 'contains')" -->
                             </div>
                         </div>
@@ -1294,30 +1293,27 @@
                                  style="width: auto; float: right; padding-top: 3px;">
                                 <div class="form-group">
                                     <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
-                                    <div class="pull-left"
-                                         style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
 
                                             <input type="radio" name="EmpStatus55" class="form-control" value="Active" (click)=" geListByStatusForDomesticShipVia('Active')" [(ngModel)]="currentStatusForDomesticShipVia">
                                             <span class="checkmark"></span>Active
                                         </label>
                                     </div>
-                                    <div class="pull-left"
-                                         style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="EmpStatus55" class="form-control" value="InActive" (click)=" geListByStatusForDomesticShipVia('InActive')" [(ngModel)]="currentStatusForDomesticShipVia">
                                             <span class="checkmark"></span>In-active
                                         </label>
                                     </div>
-                                    <div class="pull-left"
-                                         style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="EmpStatus55" class="form-control" value="ALL" (click)=" geListByStatusForDomesticShipVia('ALL')" [(ngModel)]="currentStatusForDomesticShipVia">
                                             <span class="checkmark"></span>All
                                         </label>
                                     </div>
-                                    <div class=" pull-left checkbox-cstm" style="margin-right: 15px;">
-                                        <label style="width: auto !important;margin-top: 3px;">
+                                    <div class=" pull-left checkbox-cstm margin-right-15">
+                                        <label class="shipping-check-label">
                                             <input type="checkbox" [(ngModel)]="currentDeletedstatusShipVia" name="cparent55" id="cparent55" (click)="getDeleteListByStatusForDomesticShipVia($event.target.checked)" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                             Show  Deleted List
@@ -1430,9 +1426,9 @@
                     </ng-template>
                     <ng-template pTemplate="summary" id="footer">
                         <label id="footer" class="footer">Total:</label>
-                        <input style="width: 5%;" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                        <input class="footer-input-width" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
                         <label id="footer" class="footer1">Pages Count:</label>
-                        <input style="width: 5%;" [ngModel]="getPageCount(domesShipVia._totalRecords,pageSize)" name="pagecount" [disabled]="true" pInputText type="text" />
+                        <input class="footer-input-width" [ngModel]="getPageCount(domesShipVia._totalRecords,pageSize)" name="pagecount" [disabled]="true" pInputText type="text" />
                     </ng-template>
                 </p-table>
                 <div class="modal-footer">
@@ -1474,7 +1470,7 @@
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>
-    <ng-template #contentAuditHistInterShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+    <ng-template #contentAuditHistInterShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
         <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
         <div class="modal-header">
             <h4 class="modal-title">History of International  Ship Via  Info</h4>
@@ -1510,7 +1506,7 @@
                            </td>
                        
                        
-                        <td style="text-align: center;">
+                        <td class="text-center">
                             <span class="value">
                               <label class="wauto">
                                   <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
@@ -1518,7 +1514,7 @@
                             </span>
                           </td>
                          
-                          <td style="text-align: center;">
+                          <td class="text-center">
                             <span class="value">
                               <label class="wauto">
                                   <input type="checkbox" name="isPrimary" [checked]="audit.isPrimary== true" disabled>
@@ -1529,7 +1525,7 @@
                         <td>{{audit.createdBy}}</td>
                         <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                         <td>{{audit.updatedBy}}</td>
-                        <td style="text-align: center;">
+                        <td class="text-center">
                             <span class="value">
                               <label class="wauto">
                                   <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
@@ -1559,14 +1555,14 @@
                 <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                            <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                            <span class="span-header-red text-capital" > {{legalEntityName }} </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                            <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                            <label class="control-label labels-font-header wauto" >Legal Entity Code: </label>
+                            <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                         </p>
                     </div>
                 </div>
@@ -1616,8 +1612,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-row" *ngIf="isViewMode == false">
-                        <div class="form-group" style="margin-top: 22px;margin-right:15px;">
-                            <div  style="margin-left: 0;">
+                        <div class="form-group primary-check">
+                            <div  class="margin-left-0">
                                 <label>
                                     <input type="checkbox" [disabled]="editisPrimary4==true"   id="isPrimaryInter" (ngModelChange)="enableSave2()" name="isPrimaryDomesticInter" [(ngModel)]="shipViaInternational.isPrimary" >
                                     <!-- removed from above input
@@ -1741,8 +1737,8 @@
 
                         <div class="row">
                             <div class="col">
-                                <button (click)="openTag4(export4)" *ngIf="isViewMode == false" type="button" class="btn btn-primary new-table-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data"  style="padding: 5px 10px !important;"></button>
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="internationShipVia.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                                <button (click)="openTag4(export4)" *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" ></button>
+                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="internationShipVia.exportCSV({selectionOnly:true})"></button>
                                 <ng-template #export4 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Are You Sure Want to Download?</h4>
@@ -1774,7 +1770,7 @@
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50" class="form-control"
                                  
-                                  placeholder=" Filter" style="height: 28px !important;"
+                                  placeholder=" Filter" 
                                   
                                   (input)="globalSearchForinternationalShipVia($event.target.value)">
                                   <!-- (input)="internationShipVia.filterGlobal($event.target.value, 'contains')" -->
@@ -1788,30 +1784,27 @@
                                          style="width: auto; float: right; padding-top: 3px;">
                                         <div class="form-group">
                                             <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
-                                            <div class="pull-left"
-                                                 style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
         
                                                     <input type="radio" name="EmpStatus5577" class="form-control" value="Active" (click)=" geListByStatusForinternationalShipVia('Active')" [(ngModel)]="currentStatusForinternationalShipVia">
                                                     <span class="checkmark"></span>Active
                                                 </label>
                                             </div>
-                                            <div class="pull-left"
-                                                 style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="EmpStatus5577" class="form-control" value="InActive" (click)=" geListByStatusForinternationalShipVia('InActive')" [(ngModel)]="currentStatusForinternationalShipVia">
                                                     <span class="checkmark"></span>In-active
                                                 </label>
                                             </div>
-                                            <div class="pull-left"
-                                                 style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="EmpStatus5577" class="form-control" value="ALL" (click)=" geListByStatusForinternationalShipVia('ALL')" [(ngModel)]="currentStatusForinternationalShipVia">
                                                     <span class="checkmark"></span>All
                                                 </label>
                                             </div>
-                                            <div class=" pull-left checkbox-cstm" style="margin-right: 15px;">
-                                                <label style="width: auto !important;margin-top: 3px;">
+                                            <div class=" pull-left checkbox-cstm margin-right-15">
+                                                <label class="show-label">
                                                     <input type="checkbox" [(ngModel)]="currentDeletedstatusinternationalShipVia" name="cparent5577" id="cparent5577" (click)="getDeleteListByStatusForinternationalShipVia($event.target.checked)" />
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     Show  Deleted List
@@ -1949,9 +1942,9 @@
                     </ng-template> -->
                     <ng-template pTemplate="summary" id="footer">
                         <label id="footer" class="footer">Total:</label>
-                        <input style="width: 5%;" [(ngModel)]="internationShipVia._totalRecords" name="totalRecords2" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                        <input class="footer-input-width" [(ngModel)]="internationShipVia._totalRecords" name="totalRecords2" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
                         <label id="footer" class="footer1">Pages Count:</label>
-                        <input style="width: 5%;" [ngModel]="getPageCount(internationShipVia._totalRecords,pageSize)" name="pagecount32" [disabled]="true" pInputText type="text" />
+                        <input class="footer-input-width" [ngModel]="getPageCount(internationShipVia._totalRecords,pageSize)" name="pagecount32" [disabled]="true" pInputText type="text" />
                     </ng-template>
                 </p-table>
                 <div class="modal-footer">
@@ -2033,8 +2026,9 @@
                     <!--<p><span class="label"><b>Shipping URL: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingURL}}</span></p>
                     <p><span class="label"><b>ShippingId: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingId}}</span></p>-->
                     <p><span class="label"  ><b>Memo: </b></span><span class="value"> 
-                        <span  [innerHTML]="sourceViewforInterShippingVia.memo"   matTooltipPosition="above" [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" class="text_editor_box"
-                        style="width: 96% !important;border: none;"></span>
+                        <span  [innerHTML]="sourceViewforInterShippingVia.memo"   matTooltipPosition="above"
+                         [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" class="text_editor_box memo-p"
+                        ></span>
                         </span></p>
                     <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforInterShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
                     <!-- <p><span class="label"><b>Primary : </b></span><span class="value"> {{sourceViewforInterShippingVia.isPrimary === true ? 'Yes' : 'No'}}</span></p> -->
@@ -2070,14 +2064,14 @@
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityName }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Name: </label>
+                        <span class="span-header-red text-capital"> {{legalEntityName }} </span>
                     </p>
                 </div>
                 <div class="col-md-6">
                     <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
+                        <label class="control-label labels-font-header wauto">Legal Entity Code: </label>
+                        <span class="span-header-red text-capital"> {{legalEntityCode }} </span>
                     </p>
                 </div>
             </div>
@@ -2097,8 +2091,10 @@
                     <!--<p><span class="label"><b>Shipping URL: </b></span><span class="value">{{sourceViewforDomesticShippingVia.shippingURL}}</span></p>
                     <p><span class="label"><b>ShippingId: </b></span><span class="value">{{sourceViewforDomesticShippingVia.shippingId}}</span></p>-->
                     <p><span class="label"><b>Memo: </b></span><span class="value">
-                        <span [innerHTML]="sourceViewforDomesticShippingVia.memo" style="border: none;"  matTooltipPosition="above" [matTooltip]="parsedText(sourceViewforDomesticShippingVia.memo)" class="text_editor_box"
-                        style="width: 96% !important;border:none;"></span>
+                        <span [innerHTML]="sourceViewforDomesticShippingVia.memo" matTooltipPosition="above"
+                         [matTooltip]="parsedText(sourceViewforDomesticShippingVia.memo)" 
+                         class="text_editor_box memo-p"
+                     ></span>
                         </span></p>
                     <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforDomesticShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
                     <!-- <p><span class="label"><b>Primary : </b></span><span class="value"> {{sourceViewforDomesticShippingVia.isPrimary === true ? 'Yes' : 'No'}}</span></p> -->
@@ -2134,14 +2130,14 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                    <span class="span-header-red text-capital"> {{ legalEntityName }} </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                    <span class="span-header-red text-capital"> {{ legalEntityCode }} </span>
                 </p>
             </div>
         </div><br>
@@ -2167,14 +2163,14 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                    <span class="span-header-red text-capital"> {{ legalEntityName }} </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                    <span class="span-header-red text-capital"> {{ legalEntityCode }} </span>
                 </p>
             </div>
         </div><br>
@@ -2190,7 +2186,7 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
-<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
     <div class="modal-header">
         <h4 class="modal-title">History of Domestic Shipping Info</h4>
@@ -2242,7 +2238,7 @@
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'stateOrProvince', audit.stateOrProvince)  ? 'black' : 'red'  }">{{audit.stateOrProvince}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'postalCode', audit.postalCode)  ? 'black' : 'red'  }">{{audit.postalCode}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'country', audit.country)  ? 'black' : 'red'  }">{{audit.country}}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
@@ -2250,7 +2246,7 @@
                         </span>
                       </td>
                     
-                      <td style="text-align: center;">
+                      <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isPrimary" [checked]="audit.isPrimary== true" disabled>
@@ -2261,7 +2257,7 @@
                     <td>{{audit.createdBy}}</td>
                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                     <td>{{audit.updatedBy}}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
@@ -2277,7 +2273,7 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
     </div>
 </ng-template>
-<ng-template #contentAuditHistInter let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHistInter let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
     <div class="modal-header">
         <h4 class="modal-title">History of International Shipping Info</h4>
@@ -2328,7 +2324,7 @@
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'expirationDate', audit.expirationDate)  ? 'black' : 'red'  }">{{audit.expirationDate | date: 'MM/dd/yyyy h:mm a'}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">{{audit.amount}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'country', audit.country)  ? 'black' : 'red'  }">{{audit.country}}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
@@ -2336,7 +2332,7 @@
                         </span>
                       </td>
                     
-                      <td style="text-align: center;">
+                      <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isPrimary" [checked]="audit.isPrimary== true" disabled>
@@ -2348,7 +2344,7 @@
                     <td>{{audit.createdBy}}</td>
                     <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                     <td>{{audit.updatedBy}}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
@@ -2400,14 +2396,14 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Name: </label>
+                    <span class="span-header-red text-capital" > {{ legalEntityName }} </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                    <label class="control-label labels-font-header wauto">Legal Entity  Code: </label>
+                    <span class="span-header-red text-capital" > {{ legalEntityCode }} </span>
                 </p>
             </div>
         </div><br>

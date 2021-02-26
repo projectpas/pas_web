@@ -126,7 +126,7 @@ export class VendorContactsComponent implements OnInit {
         { field: 'attention', header: 'Attention' },
         { field: 'mobilePhone', header: 'Mobile Phone' },
         { field: 'fullContactNo', header: 'Work Phone' },
-        { field: 'Notes', header: 'Memo' },
+        { field: 'notes', header: 'Memo' },
         //{ field: 'fax', header: 'FAX' },
         { field: 'isDefaultContact', header: 'IsPrimary' },
         { field: 'createdDate', header: 'Created Date' },
@@ -1171,8 +1171,7 @@ export class VendorContactsComponent implements OnInit {
         getAllContactFirstNameSmartDropDown(strText = '', contactName = ''){
             if(this.arrayContactlist.length == 0) {			
                 this.arrayContactlist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownContactList('firstName',strText,true,this.arrayContactlist.join()).subscribe(response => {
-    
+            this.commonService.autoSuggestionSmartDropDownVendorContactList('firstName',strText,true,this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.vendorId).subscribe(response => {    
                 var endResult = [];
                 for(let resInd = 0; resInd<response.length; resInd++){
                     let alreadyExist = false;
@@ -1203,7 +1202,7 @@ export class VendorContactsComponent implements OnInit {
         getAllContactMiddleNameSmartDropDown(strText = '', contactName = ''){
             if(this.arrayContactlist.length == 0) {			
                 this.arrayContactlist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownContactList('middleName',strText,true,this.arrayContactlist.join()).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownVendorContactList('middleName',strText,true,this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.vendorId).subscribe(response => {
                 
                 var endResult = [];
                 for(let resInd = 0; resInd<response.length; resInd++){
@@ -1235,7 +1234,7 @@ export class VendorContactsComponent implements OnInit {
         getAllContactLastNameSmartDropDown(strText = '', contactName = ''){
             if(this.arrayContactlist.length == 0) {			
                 this.arrayContactlist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownContactList('lastName',strText,true,this.arrayContactlist.join()).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownVendorContactList('lastName',strText,true,this.arrayContactlist.join(),this.currentUserMasterCompanyId,this.vendorId).subscribe(response => {
                 
                 var endResult = [];
                 for(let resInd = 0; resInd<response.length; resInd++){

@@ -78,7 +78,7 @@ export class ReceivingRoComponent implements OnInit {
     manufacturerList: DropDownData[] = [];
     ConditionList: DropDownData[] = [];
     GLAccountList: DropDownData[] = [];
-    ShippingViaList: DropDownData[];
+    ShippingViaList: DropDownData[] = [];
     ConditionId: number = 0;
     allPartGLAccountId: number;
     headerMemo: any;
@@ -288,13 +288,12 @@ export class ReceivingRoComponent implements OnInit {
         }
         this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
             true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-                const data = res.map(x => {
-                    return {
-                        Key: x.value,
-                        Value: x.label
-                    }
-                });
-                this.ShippingViaList = data;
+                for (let ship of res) {
+                    var dropdown = new DropDownData();
+                    dropdown.Key = ship.value.toLocaleString();
+                    dropdown.Value = ship.label
+                    this.ShippingViaList.push(dropdown);
+                }  
             })
     }
 
@@ -383,8 +382,8 @@ export class ReceivingRoComponent implements OnInit {
             var shippingVia = this.ShippingViaList.find(temp=> temp.Key == this.repairOrderHeaderData.shipViaId);                       
             if(!shippingVia || shippingVia == undefined) {
                 var shippingVia = new DropDownData(); 
-                shippingVia.Key = this.repairOrderHeaderData.shipViaId.toString();
-                shippingVia.Value = this.repairOrderHeaderData.shipVia.toString();
+                shippingVia.Key = this.repairOrderHeaderData.shipViaId;
+                shippingVia.Value = this.repairOrderHeaderData.shipVia;
                 this.ShippingViaList.push(shippingVia);
             }      
         });
@@ -406,7 +405,8 @@ export class ReceivingRoComponent implements OnInit {
                 parent.hasChildren = true;
                 parent.quantityToRepair = 0;
                 for (let childPart of splitParts) {
-                    //parent.stockLineCount += childPart.stockLineCount;  
+                    parent.stockLineCount += childPart.stockLineCount;                    
+                    //parent.draftedStockLineCount += childPart.draftedStockLineCount; 
                     parent.quantityRepaired += childPart.quantityRepaired;                  
                     parent.quantityRejected += childPart.quantityRejected != null ? childPart.quantityRejected : 0;
                     childPart.managementStructureId = parent.managementStructureId;
@@ -747,7 +747,7 @@ export class ReceivingRoComponent implements OnInit {
                 //siteId: this.getSiteDetailsOnEdit(part, x),
                 // certifiedBy: 0,
                 //shippingViaId: part.shipViaId ? part.shipViaId.toLocaleString() : null,
-                shippingAccount: part.shippingAccountInfo,
+                //shippingAccount: part.shippingAccountInfo,
                 repairOrderUnitCost: formatNumberAsGlobalSettingsModule(x.repairOrderUnitCost, 2),
                 repairOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2)
             }
@@ -1395,13 +1395,17 @@ export class ReceivingRoComponent implements OnInit {
             for (let sl of part.stocklineListObj) {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
+                sl.masterCompanyId = this.currentUserMasterCompanyId;
                 if (sl.tagType && sl.tagType.length > 0) {
+                    sl.tagTypeId = sl.tagType.join();                
+                    sl.tagType = sl.tagTypeId.split(',');
                     for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
                     }
                     sl.tagType = sl.tagType.join();
                 } else {
                     sl.tagType = "";
+                    sl.tagTypeId = "";
                 }
             }
             if (part.isSameDetailsForAllParts) {

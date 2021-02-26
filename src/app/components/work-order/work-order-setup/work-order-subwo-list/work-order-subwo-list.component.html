@@ -531,14 +531,14 @@
       
       
                                       <p-tabPanel>
-                                          <ng-template pTemplate="header" style="height: 36px; width: 134px;">Other Options
+                                          <ng-template pTemplate="header" class="other-options">Other Options
                                               <i (click)="showOtherOptions()" class="fa fa-caret-down" aria-hidden="true"></i>
                                                 <div class="vertical-menu-wolist" *ngIf="otherOptionShow">
-                                                    <a (click)="otherOptionSelected('freight')" style="color: #333333 !important">Freight</a>
-                                                    <a (click)="otherOptionSelected('contactGrid')" style="color: #333333 !important">Contact Grid</a>
-                                                    <a (click)="otherOptionSelected('accounting')" style="color: #333333 !important">Accounting</a>
-                                                    <a (click)="otherOptionSelected('charges')" style="color: #333333 !important">Charges</a>
-                                                    <a (click)="otherOptionSelected('exclusion')" style="color: #333333 !important">Exclusion</a>
+                                                    <a (click)="otherOptionSelected('freight')" class="communication-buttons">Freight</a>
+                                                    <a (click)="otherOptionSelected('contactGrid')" class="communication-buttons">Contact Grid</a>
+                                                    <a (click)="otherOptionSelected('accounting')" class="communication-buttons">Accounting</a>
+                                                    <a (click)="otherOptionSelected('charges')" class="communication-buttons">Charges</a>
+                                                    <a (click)="otherOptionSelected('exclusion')" class="communication-buttons">Exclusion</a>
                                                   </div>
       
                                           </ng-template>
