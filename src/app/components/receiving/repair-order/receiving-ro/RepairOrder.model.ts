@@ -190,6 +190,7 @@ export class RepairOrderPart {
     parentbuId: number = 0;
     parentDivisionId: number = 0;
     parentDeptId: number = 0;
+    quantityDrafted: number = 0;
 }
 
 export class TimeLife {
