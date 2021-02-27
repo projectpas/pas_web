@@ -1,14 +1,11 @@
 <div >
+    <!--{{isEdit}}
+  {{editWorkOrderGeneralInformation}}
+  {{workOrderTypes}}
+  {{workOrderStatusList}}
+  {{technicianOriginalList }}-->
   <div *ngIf="
-    (isEdit &&
-    editWorkOrderGeneralInformation &&
-    workOrderTypes &&
-    workOrderStatusList &&    
-    workOrderStagesList &&
-    partNumberOriginalData &&
-    jobTitles   && salesPersonOriginalList && salesAgentsOriginalList
-     && csrOriginalList && technicianOriginalList 
-     )">
+    (isEdit)">
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
       [jobTitles]="jobTitles" [workOrderStagesList]="workOrderStagesList"
@@ -19,16 +16,24 @@
      >
     </app-work-order-add>
   </div>
-  <!-- creditTerms && && technicianByExpertiseTypeList -->
-
-  <div *ngIf="
-    !(
-      isEdit &&
-      workOrderTypes &&
+  <!-- creditTerms && && technicianByExpertiseTypeList && technicianOriginalList && technicianOriginalList &&
+    editWorkOrderGeneralInformation &&
+    workOrderTypes &&
+    workOrderStatusList &&    
+    workOrderStagesList &&
+    partNumberOriginalData &&
+    jobTitles   && salesPersonOriginalList && salesAgentsOriginalList
+     && csrOriginalList 
+    
+     workOrderTypes &&
       workOrderStatusList &&      
       workOrderStagesList &&    
       partNumberOriginalData &&     
-       jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList 
+       jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList -->
+
+  <div *ngIf="
+    !(
+      isEdit     
     )">
     <!-- using add form as subworkOrder also -->
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
