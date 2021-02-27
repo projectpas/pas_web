@@ -64,7 +64,7 @@
           </div>
           <div class="col-md-3 col-offset-3 task-detail" *ngIf="!isQuote">
               <div class="form-row" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
-                <div class="form-group">
+                <div >
                   <p-radioButton  (ngModelChange)="checkValid(4)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" label="Labour hours" [value]="1"
                     [(ngModel)]="laborForm.hoursorClockorScan"  [disabled]="isView "></p-radioButton>
                   <p-radioButton (ngModelChange)="checkValid(5)" class="p-radiobutton-label-horizontal col-width p-radiobutton-cstm" name="HoursorClockorScan" [value]="2"
@@ -72,7 +72,27 @@
           
                   <p-radioButton  (ngModelChange)="checkValid(6)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" [value]="3" label="Scan"
                     [(ngModel)]="laborForm.hoursorClockorScan"  [disabled]="isView "></p-radioButton>
-                </div>
+              
+              
+<!--               
+                    <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                      <input type="radio"  (change)="checkValid(4)" value="1" name="HoursorClockorScan" class="form-check-inline"
+                          [checked]="laborForm.hoursorClockorScan" [disabled]="isView ">
+                          Labour hours
+                  </label>
+                  <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                      <input type="radio" value="2" name="HoursorClockorScan"   
+                      [checked]="laborForm.hoursorClockorScan"   (change)="checkValid(5)" [disabled]="isView ">
+                          Labour Clock In/Out
+                  </label>
+                  <label class="radio-inline"  (change)="checkValid(6)" [ngClass]="{ pointerEv: isEditMode==true}">
+                    <input type="radio" value="3" name="HoursorClockorScan"   
+                    [checked]="laborForm.hoursorClockorScan" [disabled]="isView ">
+                    Scan
+                </label> -->
+              
+              
+                  </div> 
               </div>
               <div class="col-sm-12" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId)) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
                   <div class="form-group">
@@ -387,7 +407,8 @@
                 </td>
                 <ng-container *ngIf="!isQuote">
                   <td>
-                      <input type="number" class="form-control" (ngModelChange)="checkValid(22)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView || laborForm.isTaskCompletedByOne"/>
+                      <input type="number" class="form-control" (ngModelChange)="checkValid(22)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView
+                      "/>
                   </td>
                   <td class="content-to-end">
                       {{ rec.adjustedHours }}
@@ -438,19 +459,19 @@
                   <td>
                     <input class="form-control text-right" type="text" (ngModelChange)="checkValid(27)" pInputText pKeyFilter="money" (change)="rec.billingAmount = formateCurrency(rec.billingAmount)" [(ngModel)]="rec.billingAmount" [disabled]="isView || rec.billingMethodId != 2"/> <!--class="width-unset"-->
                   </td>
-                </ng-container>
+                </ng-container> 
                 <td *ngIf="!isQuote">
                   <!-- <input type="text" class="form-control" [(ngModel)]="rec.memo" [disabled]="isView"/> -->
                   <!-- [disabled]=" isView|| laborForm.isTaskCompletedByOne" -->
                   <div class="align_adh" >
-                    <div [innerHTML]="rec.memo"
-                        matTooltipPosition="above"
+                    <div [innerHTML]="rec.memo" 
+                        matTooltipPosition="above" [ngStyle]="{'border':rec.adjustments > 0 ? '1px solid red' : 'inherent'}"
                         [matTooltip]="parsedText(rec.memo)"
                         class="text_editor_box input-width-100-percent"></div>
                     <i class="fa fa-pencil contoel_v" data-toggle="modal" [ngStyle]="{'pointerEvents':isView ? 'none' : 'inherent'}"
                         data-target="#textarea-popup5" matTooltip="Memo"
                         matTooltipPosition="above" 
-                        (click)="onAddTextAreaInfo(rec.memo,task.description,i)"></i>
+                        (click)="onAddTextAreaInfo(rec.memo,task.description,i,taskIndex)"></i>
                 </div>
                
                 </td>
@@ -615,7 +636,7 @@
           <!-- Modal content-->
           <div class="modal-content">
               <div class="modal-header">
-                  <h4 class="modal-title">Are You Sure Want to Complete Task?</h4>
+                  <h4 class="modal-title">Are You Sure Want to {{laborForm.isTaskCompletedByOne==true ? 'Complete' : 'Undo' }} Task?</h4>
                   <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                       <span aria-hidden="true">&times;</span>
                   </button>

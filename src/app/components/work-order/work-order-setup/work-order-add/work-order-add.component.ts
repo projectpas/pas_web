@@ -157,6 +157,7 @@ export class WorkOrderAddComponent implements OnInit {
     businessUnitList: any;
     divisionList: any;
     departmentList: any;
+    currentWarningMessage:any;
     managementStructure = {
         companyId: null,
         buId: null,
@@ -894,8 +895,6 @@ export class WorkOrderAddComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.workFlowtService.listCollection = res[0];
                 this.workFlowtService.enableUpdateMode = true;
-                console.log("res workflow",res)
-                console.log("res workflow",res.workflowId)
                 this.workFlowtService.currentWorkFlowId = res[0].workflowId;
                 this.editWorkFlowData = res;
             },
@@ -1334,7 +1333,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    getWorkFlowData() {
+    getWorkFlowData() { 
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
         if (this.selectedWorkFlowId != null) {
             this.isSpinnerVisible = true;
@@ -1438,12 +1437,13 @@ export class WorkOrderAddComponent implements OnInit {
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
+            // this._workflowService.currentWorkFlowId=
             this.workFlowWorkOrderId = res.workFlowWorkOrderId;
             if (this.workFlowWorkOrderId !== 0) {
                 this.isDisabledSteps = true;
             }
             this.getWorkOrderWorkFlowNos();
-            this.getWorkFlowLaborList();
+            // this.getWorkFlowLaborList();
             this.alertService.showMessage(
                 '',
                 'Work Order Work Flow Saved Succesfully',
@@ -3015,6 +3015,7 @@ export class WorkOrderAddComponent implements OnInit {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.commonService.customerWarnings(cusId, id).subscribe((res: any) => {
             if (res) {
+                this.currentWarningMessage=res.warningMessage;
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
                 if (this.isEditWorkordershowMsg == true && res.customerWarningId != 0) {

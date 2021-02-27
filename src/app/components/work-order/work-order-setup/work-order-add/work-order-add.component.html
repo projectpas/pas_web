@@ -186,6 +186,22 @@
                                                             type="text" name="WoSatus" #contactName="ngModel" disabled
                                                             [ngModel]="workOrderNumberStatus" />
                                                     </div>
+                                                    <div class="form-group memo-popup-cstm">
+                                                        <label>
+                                                            Notes <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
+                                                                matTooltipPosition="above" matTooltip="Notes"
+                                                                (click)="onAddDescription(1)"></i>
+                                                        </label>
+                                                        <span>
+                                                            <div class="form-group memo-popup-cstm mat_emo">
+                                                                <div [innerHTML]="workOrderGeneralInformation.notes"
+                                                                    [matTooltip]="parsedText(workOrderGeneralInformation.notes)"
+                                                                    matTooltipPosition="above"
+                                                                    class="form-control text_editor_box memo_cehck1">
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -248,6 +264,15 @@
                                                             disabled
                                                             [(ngModel)]="workOrderGeneralInformation.customerPhoneNo" />
                                                     </div>
+                                                    <div class="form-group ">
+                                                        <label for="workflownum">
+                                                           Warning
+                                                        </label>
+                                                        <input class="form-control" matTooltipPosition="above"
+                                                            type="text" name="warningMessag" #adminUsername="ngModel"
+                                                            disabled
+                                                            [(ngModel)]="currentWarningMessage" />
+                                                    </div>
                                                 </div>
                                                 <!-- <div class="col-md-12 max_alf">
                                                     <label for="notes">
@@ -257,24 +282,6 @@
                                                         [(ngModel)]="workOrderGeneralInformation.notes" name="notes"
                                                         [disabled]="isView"></textarea>
                                                 </div> -->
-                                                <div class="col-md-12">
-                                                    <div class="form-group memo-popup-cstm">
-                                                        <label>
-                                                            Notes <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
-                                                                matTooltipPosition="above" matTooltip="Notes"
-                                                                (click)="onAddDescription(1)"></i>
-                                                        </label>
-                                                        <span>
-                                                            <div class="form-group memo-popup-cstm mat_emo">
-                                                                <div [innerHTML]="workOrderGeneralInformation.notes"
-                                                                    [matTooltip]="parsedText(workOrderGeneralInformation.notes)"
-                                                                    matTooltipPosition="above"
-                                                                    class="form-control text_editor_box memo_cehck1">
-                                                                </div>
-                                                            </div>
-                                                        </span>
-                                                    </div>
-                                                </div>
                                             </div>
 
                                         </div>
@@ -405,8 +412,8 @@
                     </div>
                     <div>
                     </div>
-                    <div class="card new-card">
-                        <div class="card-body">
+                    <div class=" wid_cal">
+                        <div >
                     <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="!hideWOHeader">
                         <div class="tableFixHead">
                         <table class="table table-bordered mpn-list-table"
@@ -443,7 +450,7 @@
                                     <th rowspan="2">Tech Station</th>
                                     <th rowspan="2" style="display:none">Tear Down Report</th>
                                     <th colspan="2">TAT (Days)</th>
-                                    <th rowspan="2"></th>
+                                    <th rowspan="2">Action</th>
                                 </tr>
                                 <tr>
                                     <th>PMA</th>
