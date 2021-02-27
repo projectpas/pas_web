@@ -392,8 +392,8 @@ export class ReceivingRoComponent implements OnInit {
                 parent.hasChildren = true;
                 parent.quantityToRepair = 0;
                 for (let childPart of splitParts) {
-                    parent.stockLineCount += childPart.stockLineCount;                    
-                    //parent.draftedStockLineCount += childPart.draftedStockLineCount; 
+                    parent.stockLineCount += childPart.stockLineCount;       
+                    parent.quantityDrafted += childPart.quantityDrafted; 
                     parent.quantityRepaired += childPart.quantityRepaired;                  
                     parent.quantityRejected += childPart.quantityRejected != null ? childPart.quantityRejected : 0;
                     childPart.managementStructureId = parent.managementStructureId;
