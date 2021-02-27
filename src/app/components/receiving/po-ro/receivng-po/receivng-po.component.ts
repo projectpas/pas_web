@@ -1268,16 +1268,26 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     onSubmitToReceive() {
+        let allParts: PurchaseOrderPart[] = this.purchaseOrderData.purchaseOderPart.filter(x => x.quantityActuallyReceived > 0);
+        for (let part of allParts) {           
+            if (part.isSameDetailsForAllParts) {               
+                for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {                    
+                    part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
+                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";  
+                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] }; 
+                    part.stocklineListObj[i] = stockLineToCopy;
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };    
+                    part.timeLifeList[i] = timeLifeToCopy;              
+                }
+            }
+        }
         let errorMessages: string[] = this.validatePage();
         this.alertText = '';
         var index = 0;
         if (errorMessages.length > 0) {
             for(let i=0; i < errorMessages.length; i++) {
                 this.alertText = this.alertText + errorMessages[i] + "<br/>"
-            }
-            // this.isSpinnerVisible = false;
-			// this.modal = this.modalService.open('rPOAlert', { size: 'sm', backdrop: 'static', keyboard: false });												
-			// return;
+            }           
             this.alertService.showMessage(this.pageTitle, this.alertText, MessageSeverity.error);
             return;
         }
@@ -1287,8 +1297,7 @@ export class ReceivngPoComponent implements OnInit {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(this.pageTitle, 'Parts Received successfully.', MessageSeverity.success);
             this.route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`);
-            return;
-            //this.route.navigate([`/receivingmodule/receivingpages/app-edit-po?purchaseOrderId=${this.receivingService.purchaseOrderId}`]);
+            return;            
         },err=>{
           this.isSpinnerVisible = false;}
         );
@@ -1325,7 +1334,7 @@ export class ReceivngPoComponent implements OnInit {
                     item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
                     item.stocklineListObj[i].conditionId = item.conditionId;
                     item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
-                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
+                    item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined || item.isSameDetailsForAllParts ? false : item.itemMaster.isSerialized;
                     item.stocklineListObj[i].isPMA = item.itemMaster.pma;
                     item.stocklineListObj[i].isDER = item.itemMaster.der;
                     item.stocklineListObj[i].purchaseOrderExtendedCost = item.stocklineListObj[i].purchaseOrderExtendedCost == undefined ||
@@ -1432,22 +1441,28 @@ export class ReceivngPoComponent implements OnInit {
                 sl.updatedBy = this.userName;
                 sl.masterCompanyId = this.currentUserMasterCompanyId;
                
-                if (sl.tagType && sl.tagType.length > 0) {                    
-                    sl.tagTypeId = sl.tagType.join();                
-                    sl.tagType = sl.tagTypeId.split(',');
-                    for (let i = 0; i < sl.tagType.length; i++) {                        
-                        sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
-                    }                    
-                    sl.tagType = sl.tagType.join();                  
-                } else {
-                    sl.tagType = "";
-                    sl.tagTypeId = "";
-                }
+                sl.tagTypeId = "1,2,4,7,9,10,11,12,13,14";
+                sl.tagType = 'FAA,CAAC,EASA,FAA1,test,FAA/EASA,DCA,CAAV,Dual1,Mr';
+                // if (sl.tagType && sl.tagType.length > 0) {                    
+                //     sl.tagTypeId = sl.tagType.join();                
+                //     sl.tagType = sl.tagTypeId.split(',');
+                //     for (let i = 0; i < sl.tagType.length; i++) {                        
+                //         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
+                //     }                    
+                //     sl.tagType = sl.tagType.join();                  
+                // } else {
+                //     sl.tagType = "";
+                //     sl.tagTypeId = "";
+                // }
             }
-            if (part.isSameDetailsForAllParts) {
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
-                for (let slObj of part.stocklineListObj) {
-                    slObj = stockLineToCopy;
+            if (part.isSameDetailsForAllParts) {               
+                for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
+                    part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
+                    part.stocklineListObj[part.currentSERIndex].serialNumber = "";  
+                    var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] }; 
+                    part.stocklineListObj[i] = stockLineToCopy;
+                    var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };    
+                    part.timeLifeList[i] = timeLifeToCopy;              
                 }
             }
         }
@@ -1514,11 +1529,13 @@ export class ReceivngPoComponent implements OnInit {
 
     toggleSameDetailsForAllParts(part: PurchaseOrderPart): void {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
-        if (part.isSameDetailsForAllParts) {
+        if (part.isSameDetailsForAllParts) {           
+            part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided = true;
+            part.stocklineListObj[part.currentSERIndex].serialNumber = "";           
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
-                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] }; 
                 part.stocklineListObj[i] = stockLineToCopy;
-                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };                var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
+                var timeLifeToCopy = { ...part.timeLifeList[part.currentTLIndex] };    
                 part.timeLifeList[i] = timeLifeToCopy;               
             }
         }
