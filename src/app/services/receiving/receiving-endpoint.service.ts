@@ -140,18 +140,31 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     getReceivingPOHeaderById(purchaseOrderId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingpart/getPurchaseOrderHeaderById/${purchaseOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingPOHeaderById(purchaseOrderId));
+        });
     }
 
     getReceivingPOPartsForViewById(repairOrderId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivePOPartsForSummary/${repairOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingPOPartsForViewById(repairOrderId));
+        });
+        
     }
 
     getReceivingRODataById(repairOrderId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingPart/GetReceivingRepairList/${repairOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingRODataById(repairOrderId));
+        });        
     }
 
     getReceivingROHeaderById(repairOrderId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingRO/getRepairOrderHeaderById/${repairOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingROHeaderById(repairOrderId));
+        });   
     }
 
     getReceivingROPartById(repairOrderId,employeeId = 0) {                
@@ -187,6 +200,9 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     getReceivingROPartsForViewById(repairOrderId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/GetReceieveROPartsForView/${repairOrderId}`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingROPartsForViewById(repairOrderId));
+        });
     }
 
     getReceivingROPartsForEditById(repairOrderId,employeeId = 0) {
@@ -273,7 +289,10 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     deleteStockLineDraft(stockLineDraftId, quantity) {
-        return this.http.put<any>(`${this.configurations.baseUrl}/api/receivingPart/deletestocklinedraft?stockLineDraftId=${stockLineDraftId}&quantity=${quantity}`, this.getRequestHeaders());
+        return this.http.put<any>(`${this.configurations.baseUrl}/api/receivingPart/deletestocklinedraft?stockLineDraftId=${stockLineDraftId}&quantity=${quantity}`, this.getRequestHeaders())
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.deleteStockLineDraft(stockLineDraftId, quantity));
+        });;
     }
 
     getAllRecevingROEditID(repairOrderId) {
