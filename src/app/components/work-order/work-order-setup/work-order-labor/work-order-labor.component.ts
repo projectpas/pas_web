@@ -1169,10 +1169,10 @@ this.commonfunctionHandler();
     return (type == 'Hours') ? htotal.toFixed(2) : (type == 'LaborOHCost') ? formatNumberAsGlobalSettingsModule(loTotal, 0) : (type == 'LaborBurdenRate') ? formatNumberAsGlobalSettingsModule(burTotal, 0) : (type == 'CostPerHour') ? formatNumberAsGlobalSettingsModule(cpTotal, 0) : (type == 'Cost') ? formatNumberAsGlobalSettingsModule(costTotal, 0) : (type == 'BillingRate') ? formatNumberAsGlobalSettingsModule(bRTotal, 0) : formatNumberAsGlobalSettingsModule(bATotal, 0);
   }
   deleteConfirmation() {
-    Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
-      this.laborForm.workOrderLaborList[0][task] = [];
-      this.addNewTask(task);
-    })
+    // Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
+    //   this.laborForm.workOrderLaborList[0][task] = [];
+    //   this.addNewTask(task);
+    // })
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
         if (this.laborForm.hoursorClockorScan != 1) {
@@ -1208,6 +1208,11 @@ this.commonfunctionHandler();
         data => {
           if (!data.isDeleted && this.isQuote) {
             if (!data.hours || !data.directLaborOHCost) {
+              result = true;
+            }
+          }
+          if (data.adjustments>0 && !this.isQuote) {
+            if (data.memo =='' || !data.memo || data.memo ==undefined || data.memo ==null) {
               result = true;
             }
           }
@@ -1260,7 +1265,7 @@ this.commonfunctionHandler();
       }
       currentIndex:any;
       currentTaks:any;
-      onAddTextAreaInfo(material,taskName,index) {
+      onAddTextAreaInfo(material,taskName,index,track) {
         this.currentIndex=index;
         this.currentTaks=taskName;
         this.textAreaInfoLabor = material;
