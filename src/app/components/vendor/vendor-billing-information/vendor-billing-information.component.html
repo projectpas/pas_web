@@ -560,6 +560,15 @@
                                             (ngModelChange)="enableSave()" [(ngModel)]="sourceVendor.isPrimary">
                                 </div>
                             </div>
+                            <div class="col-sm-12" *ngIf="!isEditBillingInfo"> 
+                                <div class="col-sm-4">
+                                    <label> Is Same As Shipping Address </label>
+                                    </div>
+                                    <div class="col-sm-5">
+                                      <input type="checkbox" name="isShipping" 
+                                      [(ngModel)]="sourceVendor.isShipping"/>
+                                    </div>
+                            </div>
                             <div class="col-sm-12">
                                 <div class="col-sm-4">
                                     <label>Tag <span class="clr-red">*</span></label>

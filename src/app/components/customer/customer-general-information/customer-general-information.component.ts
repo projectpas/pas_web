@@ -334,7 +334,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayItemMasterlist.length == 0) {
             this.arrayItemMasterlist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.partListOriginal = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
@@ -360,8 +360,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             }
 
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -396,33 +395,37 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayIntegrationlist.length == 0) {
             this.arrayIntegrationlist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description', '', true, 100, this.arrayIntegrationlist.join()).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description', '', true, 100, this.arrayIntegrationlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.integrationOriginalList = res.map(x => {
                 return {
                     label: x.label, value: x.value
                 }
             })
-        }, error => this.saveFailedHelper(error));
+        }, error => {            
+            this.isSpinnerVisible = false;
+        });
     }
 
     async getAllCustomerTypes() {
         if (this.arrayCustomerTypelist.length == 0) {
             this.arrayCustomerTypelist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 50, this.arrayCustomerTypelist.join()).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 50, this.arrayCustomerTypelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.customertypes = res.map(x => {
                 return {
                     description: x.label, customerTypeId: x.value
                 }
             })
-        }, error => this.saveFailedHelper(error));
+        }, error => {            
+            this.isSpinnerVisible = false;
+        });
     }
 
     getAllCountries(strText = '') {
         if (this.arrayCountrylist.length == 0) {
             this.arrayCountrylist.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.arrayCountrylist.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.countryListOriginal = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value
@@ -454,7 +457,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.arrayCustlist.push(0);
         }
 
-        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join()).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             this.customerListOriginal = response.map(x => {
                 return {
@@ -477,9 +480,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     name: getObjectById('value', this.id, this.customerallListOriginal),
                 };
             }
-        }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+        }, err => {            
             this.isSpinnerVisible = false;
         });
     }
@@ -491,7 +492,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.arrayCustlist.push(0);
         }
 
-        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join()).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             this.customerListOriginal = response.map(x => {
                 return {
@@ -507,9 +508,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.customerNames = this.customerallListOriginal.reduce((acc, obj) => {
                 return acc.filter(x => x.value !== this.selectedParentId)
             }, this.customerallListOriginal)
-        }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+        }, err => {            
             this.isSpinnerVisible = false;
         });
     }
@@ -518,7 +517,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arayCustParentlist.length == 0) {
             this.arayCustParentlist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arayCustParentlist.join()).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arayCustParentlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             this.parentCustomerOriginal = response.map(x => {
                 return {
@@ -534,9 +533,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 ...this.generalInformation,
                 parentId: getObjectById('value', this.generalInformation.parentId, this.parentCustomerOriginal),
             };
-        }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+        }, err => {            
             this.isSpinnerVisible = false;
         });
     }
@@ -545,9 +542,11 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayCustomerClassificationlist.length == 0) {
             this.arrayCustomerClassificationlist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('CustomerClassification', 'CustomerClassificationId', 'Description', '', true, 200, this.arrayCustomerClassificationlist.join()).subscribe(response => {
+        await this.commonService.autoSuggestionSmartDropDownList('CustomerClassification', 'CustomerClassificationId', 'Description', '', true, 200, this.arrayCustomerClassificationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.allcustomerclassificationInfo = response;
-        }, error => this.saveFailedHelper(error));
+        }, error =>{            
+            this.isSpinnerVisible = false;
+        });
     }
 
     selectedPartForPMA(event) {
