@@ -38,9 +38,7 @@
                          </p-multiSelect>
                         </div>
                         <div class="col">
-                          <div
-                            style="width: auto !important; float: right;"
-                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            <div class="global-search-field inner-addon right-addon inline-block">
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50"
                                                class="form-control"
@@ -69,9 +67,7 @@
                     <div class="col">
                         <div class="">
                           <div
-                            class="col"
-                            style="width: 400px; float: right; padding-top: 3px;"
-                          >
+                            class="col asset-radios-width">
                             <div class="form-group">
                                 <div
                                 class="pull-left radio-buttons-align"
@@ -93,8 +89,8 @@
                                 <span class="checkmark"></span>All
                             </label>
                         </div>
-                        <div class="checkbox-cstm" style="margin-left: 0;">
-                            <label style="width: auto !important;margin-top: 3px;">
+                        <div class="checkbox-cstm pull-left checkbox-align">
+                            <label class="checkbox-label-align">
                  
                                 <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
                                 />
@@ -113,7 +109,7 @@
                                     <col *ngFor="let col of columns" class="table-column-width">
                                 </colgroup>
                             </ng-template>
-                            <ng-template pTemplate="header" let-columns style="padding-top: 1% !important">
+                            <ng-template pTemplate="header" let-columns >
                                 <tr>
                                     <ng-container *ngFor="let col of columns">
                                         <th class="text-center table-column-width"
@@ -172,13 +168,13 @@
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='calibrationRequiredNew' || col.field =='isSerializedNew'">
                                             <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
-                                                   style="margin: 0px auto; display: block;" />
+                                                   class="container-input-check" />
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='deprAmort'">
                                             <input type="checkbox" *ngIf="rowData['assetClass']=='Tangible'" disabled [checked]="rowData['isDepreciable'] == true"
-                                                   style="margin: 0px auto; display: block;" />
+                                            class="container-input-check" />
                                                    <input type="checkbox" disabled *ngIf="rowData['assetClass']=='Intangible'" [checked]="rowData['isAmortizable'] == true"
-                                                   style="margin: 0px auto; display: block;" />
+                                                   class="container-input-check" />
                                         </ng-container>
                                     </td> 
                                     
@@ -239,7 +235,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
-                                <div style="text-align: right;">
+                                <div class="text-right">
                                     <label id="footer" class="footer">Total:</label>
                                     <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText
                                            type="text" /> &nbsp;&nbsp;
@@ -307,7 +303,7 @@
                                         All
                                     </button>    
                                 </div>
-                                <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+                                <div class="col-sm-6 view-active-inactive">
                                     <button type="button" name="showIsActive" [ngClass]="assetViewList.showIsActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
                                         <span class="value">{{assetViewList.showIsActive ? 'Active' : 'In-Active'}}</span>
                                      </button> 
@@ -327,7 +323,7 @@
                                 <div class="panel-body">
                                     <div class="col-sm-6">
                                         <div>
-                                            <label class="radio-inline pointerEv" style="text-align: start;">
+                                            <label class="radio-inline pointerEv text-right">
                                                 <input type="radio" value="1" name="assetRadio" class="form-check-inline"
                                                     [checked]="assetViewList.isTangible == true"
                                                    >
@@ -339,24 +335,24 @@
                                                 Intangible
                                             </label>
 
-                                            <label class="radio-inline pointerEv" *ngIf="assetViewList.isTangible==true" style="width: 150px;">
+                                            <label class="radio-inline pointerEv depreciable-width" *ngIf="assetViewList.isTangible==true">
                                                 <input type="radio" value="1" name="assetRadio1" class="form-check-inline"
                                                     [checked]="assetViewList.isdepreciable == true"
                                                    >
                                                    Depreciable
                                             </label>
-                                            <label class="radio-inline pointerEv" *ngIf="assetViewList.isTangible==true" style="width: 120px;">
+                                            <label class="radio-inline pointerEv non-depreciable-width" *ngIf="assetViewList.isTangible==true">
                                                 <input type="radio" value="2" name="assetRadio1"
                                                     [checked]="assetViewList.isNonDepreciable == true">
                                                     Non-Depreciable
                                             </label>
-                                            <label class="radio-inline pointerEv" *ngIf="assetViewList.isIntangible==true" style="width: 150px;">
+                                            <label class="radio-inline pointerEv depreciable-width" *ngIf="assetViewList.isIntangible==true">
                                                 <input type="radio" value="1" name="assetRadio2" class="form-check-inline"
                                                     [checked]="assetViewList.isAmortizable == true"
                                                    >
                                                    Amortizable
                                             </label>
-                                            <label class="radio-inline pointerEv" *ngIf="assetViewList.isIntangible==true" style="width: 120px;">
+                                            <label class="radio-inline pointerEv non-depreciable-width" *ngIf="assetViewList.isIntangible==true">
                                                 <input type="radio" value="2" name="assetRadio2"
                                                     [checked]="assetViewList.isNonAmortizable == true">
                                                     Non-Amortizable
@@ -420,7 +416,7 @@
                                             <span class="label"><b>Asset Location:  <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetLocationName}}</span> 
                                         </p>
                                        
-                                        <div style="display: inline-flex;width: 100%;" *ngIf="assetViewList.isIntangible==false">
+                                        <div class="view-memo-div" *ngIf="assetViewList.isIntangible==false">
                                             <div style=" width: 30.2%;" class="label">
                                                 <p>
                                                     <span ><b>Memo: </b></span>
@@ -429,12 +425,12 @@
                                             <div [innerHTML]="assetViewList.memo"   matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.memo)" class="value" style="font-size: 11.4px;"></div>
                                         </div>
                                     </div>
-                                    <div class="card" style="margin-top: 6px;width: 50%;" *ngIf="assetViewList.isIntangible==true">
-                                        <div class="card-header" style="padding: 0 10px;">
-                                            <p style="margin-bottom: 0; font-size: 12px;">
+                                    <div class="card view-card" *ngIf="assetViewList.isIntangible==true">
+                                        <div class="card-header view-card-header">
+                                            <p class="view-p">
                                                 Management Structure <span class="text-danger">*</span></p>
                                         </div>
-                                        <div class="card-body" style="padding: 8px 12px 6px;">
+                                        <div class="card-body view-card-body">
                                            
                                                 <span class="form-group ">
                                                     <b> </b></span><span class="form-control ma-fd">
@@ -461,12 +457,12 @@
                                     </div>	
                                     </div> 
                                     <div class="col-sm-6">
-                                                <div class="card" style="margin-top: 6px;width: 50%;" *ngIf="assetViewList.isIntangible==false">
-                                                    <div class="card-header" style="padding: 0 10px;">
-                                                        <p style="margin-bottom: 0; font-size: 12px;">
+                                                <div class="card view-card"  *ngIf="assetViewList.isIntangible==false">
+                                                    <div class="card-header view-card-header">
+                                                        <p class="view-p">
                                                             Management Structure <span class="text-danger">*</span></p>
                                                     </div>
-                                                    <div class="card-body" style="padding: 8px 12px 6px;">
+                                                    <div class="card-body view-card-body">
                                                        
                                                             <span class="form-group ">
                                                                 <b> </b></span><span class="form-control ma-fd">
@@ -494,16 +490,16 @@
                                         <p *ngIf="assetViewList.isIntangible==false">
                                             <span class="label"><b>Asset Parent: </b></span><span class="value">{{assetViewList.assetParentName}}</span>
                                         </p>
-                                        <div *ngIf="assetViewList.isIntangible==false" style="width: 90%;">
+                                        <div *ngIf="assetViewList.isIntangible==false" class="view-asset-div">
 
-                                            <div class="card" style="margin-top: 20px;margin-bottom:4px;">
-                                                <div class="card-header" style="padding: 10px 12px;">
+                                            <div class="card view-asset-class-card">
+                                                <div class="card-header view-asset-class-header">
                                                     <p>
                                                         <span class="label"><b>Asset Class/Attribute: <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetAttributeType}}</span>
                                                         </p>
                                                 </div>
-                                                <div class="depreciation-asset-block block-bg1" style="padding-left: 2%;">
-                                                    <div class="card-body" style="padding: 12px 12px 4px;">
+                                                <div class="depreciation-asset-block block-bg1 depreciation-div">
+                                                    <div class="card-body depreciation-card-body">
                                                         </div>
                                                         <p>
                                                             <span class="label"><b>Depreciation Method: </b></span><span class="value">{{assetViewList.depreciationMethod}}</span>
@@ -543,18 +539,18 @@
                                      
                                        
                                         </div>
-                                        <div *ngIf="assetViewList.isIntangible==true" style="width: 90%;">
+                                        <div *ngIf="assetViewList.isIntangible==true" class="view-asset-div">
 
                                       
 
-                                                        <div class="card" style="margin-top: 20px;margin-bottom:4px;">
-                                                            <div class="card-header" style="padding: 10px 12px;">
+                                                        <div class="card view-asset-class-header">
+                                                            <div class="card-header view-asset-class-header">
                                                                 <p>
                                                                     <span class="label"><b>Intangible Class: <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetAttributeType}}</span>
                                                                     </p>
                                                             </div>
-                                                            <div class="depreciation-asset-block block-bg1" style="padding-left: 2%;">
-                                                                <div class="card-body" style="padding: 12px 12px 4px;">
+                                                            <div class="depreciation-asset-block block-bg1 depreciation-div">
+                                                                <div class="card-body depreciation-card-body">
                                                                     <p>
                                                                         <span class="label"><b>Depreciation Method: </b></span><span class="value">{{assetViewList.depreciationMethod}}</span>
                                                                         </p>
@@ -612,7 +608,7 @@
                             <div id="step3" class="panel-collapse collapse">
                                 <div class="panel-body">
 
-                                       <div class="form-row" style="width: 101%;background-color: #fff !important;">
+                                       <div class="form-row calibration-body">
                                     <div class="col-md-3 asset_border" >
                                         <p>
                                             <input type="checkbox" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="assetViewList.calibrationRequired">
@@ -649,7 +645,7 @@
                                                         <thead style="background:#337ab7;color:#fff">
                                                             <tr>
                                                                 <th>Type</th>
-                                                                <th colspan="2" style="text-align: center;">Tolerance</th>
+                                                                <th colspan="2" class="text-center">Tolerance</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -684,7 +680,8 @@
                                                                 <td>Memo</td>
                                                                 <td colspan="2">
                                                                     <!-- <span class="value">{{assetViewList.assetCalibrationMemo}}</span> -->
-                                                                    <div [innerHTML]="assetViewList.assetCalibrationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.assetCalibrationMemo)" class="value" style="font-size: 11.4px;"></div>
+                                                                    <div [innerHTML]="assetViewList.assetCalibrationMemo" matTooltipPosition="above"  [matTooltip]="parsedText(assetViewList.assetCalibrationMemo)" class="value"
+                                                                     style="font-size: 11.4px;"></div>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -796,7 +793,7 @@
                             </div>
                             <div id="step4" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <div class="form-row" style="width: 101%;background-color: #fff !important;">
+                                    <div class="form-row calibration-body">
                                   <div class="col-sm-3 asset_border" style="padding:6px;">
                                 
                                         <p>

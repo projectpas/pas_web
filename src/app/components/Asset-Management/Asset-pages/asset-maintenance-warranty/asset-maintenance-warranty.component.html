@@ -88,7 +88,7 @@
                                             <h5 class="heading">Maintenance</h5>
                                         </div> -->
                                         <div class="form-group">
-                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <div class="checkbox-cstm margin-left-0">
                                                 <label>
                                                     <input (ngModelChange)="getmemo($event)" type="checkbox"
                                                         [ngModelOptions]="{standalone: true}"
@@ -102,7 +102,7 @@
                                         <div class="maintenance-block"
                                             *ngIf="currentMaintenance.assetIsMaintenanceReqd">
                                             <div class="form-group">
-                                                <div class="checkbox-cstm" style="margin-left: 0;display:none;">
+                                                <div class="checkbox-cstm maintenance-margin">
                                                     <label>
                                                         <input type="checkbox"
                                                             (change)="maintannaceCheckBoxHndl(currentMaintenance.assetMaintenanceIsContract)"
@@ -138,8 +138,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div style="padding: 8px;">
-                                                <label style="    margin-top: 12px;">Default Vendor</label>
+                                            <div class="default-vendor-padidng">
+                                                <label class="default-vendor-label">Default Vendor</label>
                                                 <p-autoComplete (ngModelChange)="getmemo($event)"
                                                     class="p-autoComplete-ctsm" field="name" name="vendorName2"
                                                     [dropdown]="true" errorMessage="Records not found"
@@ -150,7 +150,7 @@
                                                     #prellRevInsp="ngModel">
                                                 </p-autoComplete>
                                             </div>
-                                            <div style="padding: 8px;">
+                                            <div class="default-vendor-padding">
                                                 <label>GL Account <span
                                                         *ngIf="currentMaintenance.assetIsMaintenanceReqd">*</span></label>
                                                 <p-autoComplete class="p-autoComplete-ctsm"
@@ -181,7 +181,7 @@
                                     </div>
                                     <div class="col-sm-3 asset_border" style="margin-left: 1%;">
                                         <div class="form-group">
-                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <div class="checkbox-cstm margin-left-0">
                                                 <label>
                                                     <input type="checkbox" [ngModelOptions]="{standalone: true}"
                                                         (ngModelChange)="getmemo($event)"
@@ -207,7 +207,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div style="padding: 8px;">
+                                            <div class="default-vendor-padding">
                                                 <label>Default Vendor</label>
                                                 <p-autoComplete (ngModelChange)="getmemo($event)"
                                                     class="p-autoComplete-ctsm" field="name" name="vendorName"
@@ -219,7 +219,7 @@
                                                     #prellRevInsp="ngModel">
                                                 </p-autoComplete>
                                             </div>
-                                            <div style="padding: 8px;">
+                                            <div class="default-vendor-padding">
                                                 <label>GL Account <span
                                                         *ngIf="currentMaintenance.isWarrantyRequired">*</span></label>
                                                 <p-autoComplete class="p-autoComplete-ctsm"
