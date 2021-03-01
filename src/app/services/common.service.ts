@@ -885,6 +885,12 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  getReportsCreadentials() {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getreportscreadentials`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getReportsCreadentials());
+    });
+  }
+
   // getAllEditID(purchaseOrderId) {
   //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
   // }
