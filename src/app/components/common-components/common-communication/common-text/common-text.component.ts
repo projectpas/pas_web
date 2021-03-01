@@ -180,7 +180,6 @@ export class TextCommonComponent implements OnInit, OnChanges {
     }
 
     contactSelected(event) {
-        console.log("ev", event);
         this.addList[0].mobile = event.workPhone;
     }
 
@@ -253,22 +252,14 @@ export class TextCommonComponent implements OnInit, OnChanges {
     edit(rowData, index) {
         this.isEdit = true;
         this.editTextData=rowData;
-        console.log("Chnages",this.editTextData)
         // this.isSpinnerVisible=true;
         this.updateDisabledText=true;
-        if (this.type == 1) {
-            this.customerContact = {
-                'contactId': rowData.customerContactId,
-                'firstName': rowData.customerContact
-            };
-            // this.customerContacts('');
-        } else {
-            this.customerContact = {
-                'contactId': rowData.customerContactId,
-                //'firstName': rowData.vendorContact
-                'firstName': rowData.customerContact
-            }
-        }
+        
+        this.customerContact = {
+            'contactId': rowData.customerContactId,
+            'firstName': rowData.customerContact
+        };
+        // this.customerContacts('');
         this.getAllEmployees('');
      
         

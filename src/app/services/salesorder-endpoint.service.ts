@@ -73,6 +73,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly salesorderBillingSave: string = environment.baseUrl + "/api/SalesOrder/createbillinginvoicing";
   private readonly salesorderShippingSave: string = environment.baseUrl + "/api/SalesOrder/createsalesordershipping";
   private readonly salesorderBillingGet: string = environment.baseUrl + "/api/SalesOrder/billinginvoicingdetailsbysopartId";
+  private readonly salesorderBillingByShipping: string = environment.baseUrl + "/api/SalesOrder/billinginvoicingdetailsbyshippingId";
   private readonly salesorderShippingGet: string = environment.baseUrl + "/api/SalesOrder/salesordershippingdetails";
   private readonly getSalesOrderSetting: string = environment.baseUrl + "/api/SOSettings/getlist"
   private readonly saveSalesOrderSettigns: string = environment.baseUrl + "/api/SOSettings/save";
@@ -216,6 +217,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<SalesOrderBillingAndInvoicing>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getSalesOrderBilling(salesOrderId, partId));
+      });
+  }
+
+  getSalesOrderBillingByShipping(salesOrderId: number, partId,salesOrderShippingId:number): Observable<SalesOrderBillingAndInvoicing> {
+    const URL = `${this.salesorderBillingByShipping}?salesOrderId=${salesOrderId}&salesOrderPartId=${partId}&salesOrderShippingId=${salesOrderShippingId}`;
+    return this.http
+      .get<SalesOrderBillingAndInvoicing>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId));
       });
   }
 

@@ -126,9 +126,9 @@ export class SalesOrderBillingComponent implements OnInit {
     }
 
     onSelectPartNumber(rowData) {
-        if (rowData.salesOrderPartId != 0) {
+        if (rowData.salesOrderPartId != 0 && rowData.salesOrderShippingId != 0) {
             this.partSelected = true;
-            this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId);
+            this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId,rowData.salesOrderShippingId);
         }
     }
 
@@ -143,13 +143,18 @@ export class SalesOrderBillingComponent implements OnInit {
         })
     }
 
-    getBillingAndInvoicingForSelectedPart(partNumber) {
+    getBillingAndInvoicingForSelectedPart(partNumber,salesOrderShippingId) {
         this.isSpinnerVisible = true;
         this.selectedPartNumber = partNumber;
-        this.salesOrderService.getSalesOrderBilling(this.salesOrderId, partNumber).subscribe(result => {
+        //this.salesOrderService.getSalesOrderBilling(this.salesOrderId, partNumber,salesOrderShippingId).subscribe(result => {
+        this.salesOrderService.getSalesOrderBillingByShipping(this.salesOrderId, partNumber,salesOrderShippingId).subscribe(result => {
             this.isSpinnerVisible = false;
             if (result) {
                 this.billingorInvoiceForm = result;
+                this.billingorInvoiceForm.shipDate = new Date(result.shipDate);
+                this.billingorInvoiceForm.openDate = new Date(result.openDate);
+                this.billingorInvoiceForm.printDate = new Date();
+                this.billingorInvoiceForm.invoiceDate = new Date();
             } else {
                 this.billingorInvoiceForm = new SalesOrderBillingAndInvoicing();
             }
@@ -166,6 +171,7 @@ export class SalesOrderBillingComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.commonService.smartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description').subscribe(res => {
             this.invoiceTypeList = res;
+            this.billingorInvoiceForm.invoiceTypeId = res[5].value;
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;

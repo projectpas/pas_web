@@ -244,7 +244,7 @@
                                     <div class="form-group ">
                                         <label> Customer Ref </label>
                                         <input type="text" class="form-control wo-input" name="customerRef"
-                                            #customerRef="ngModel" disabled [(ngModel)]="salesOrder.customerRef"
+                                            #customerRef="ngModel" disabled [(ngModel)]="billingorInvoiceForm.customerRef"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>
@@ -253,16 +253,26 @@
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> Invoice Date <span class="clr-red">*</span></label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
+                                        <!-- <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
                                             #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
-                                            [disabled]="isViewMode" required></p-calendar>
+                                            [disabled]="isViewMode" required></p-calendar> -->
+                                            <p-calendar
+                                                [showIcon]="true"
+                                                class="calender-cstm"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                name="invoiceDate"
+                                                #invoiceDate="ngModel"
+                                                [(ngModel)]="billingorInvoiceForm.invoiceDate"
+                                                [disabled]="isViewMode" appendTo="body"
+                                                required
+                                            ></p-calendar>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> SO Open Date </label>
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="woOpenDate"
-                                            #woOpenDate="ngModel" [disabled]=true [(ngModel)]="salesOrder.openDate"
+                                            #woOpenDate="ngModel" [disabled]=true [(ngModel)]="billingorInvoiceForm.openDate"
                                             [disabled]="isViewMode">
                                         </p-calendar>
                                     </div>
@@ -281,9 +291,12 @@
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> Sales Person </label>
+                                        <!-- <input type="text" class="form-control wo-input" name="salesPerson"
+                                            #salesPerson="ngModel" disabled
+                                            [(ngModel)]="salesOrder.salesPersonName.name" [disabled]="isViewMode" /> -->
                                         <input type="text" class="form-control wo-input" name="salesPerson"
                                             #salesPerson="ngModel" disabled
-                                            [(ngModel)]="salesOrder.salesPersonName.name" [disabled]="isViewMode" />
+                                            [(ngModel)]="billingorInvoiceForm.salesPerson" [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
@@ -338,7 +351,7 @@
                                     <div class="form-group ">
                                         <label>Credit Terms </label>
                                         <input type="text" class="form-control wo-input" name="creditTerms"
-                                            #creditTerms="ngModel" disabled [(ngModel)]="salesOrder.creditLimit"
+                                            #creditTerms="ngModel" disabled [(ngModel)]="billingorInvoiceForm.creditTerm"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>

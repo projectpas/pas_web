@@ -197,37 +197,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     this.PickTicketDetails = rowData;
   }
 
-  memoPopupContent: any;
-  onClickMemo() {
-    this.memoPopupContent = this.PickTicketDetails.memo;
-  }
-
-  onClickPopupSave() {
-    this.PickTicketDetails.memo = this.memoPopupContent;
-    this.memoPopupContent = '';
-    $('#memo-popup-pt').modal("hide");
-    this.disabledMemo = true;
-  }
-
   disabledMemo: boolean = false;
-  enableSaveMemo() {
-    this.disabledMemo = false;
-  }
-
-  closeMemoModel() {
-    $('#memo-popup-pt').modal("hide");
-    this.disabledMemo = true;
-  }
-
-  parsedText(text) {
-    if (text) {
-      const dom = new DOMParser().parseFromString(
-        '<!doctype html><body>' + text,
-        'text/html');
-      const decodedString = dom.body.textContent;
-      return decodedString;
-    }
-  }
 
   closeMyModel(type) {
     $(type).modal("hide");
@@ -237,28 +207,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     return this.authService.currentUser
       ? this.authService.currentUser.employeeId
       : "";
-  }
-
-  updatePickTicket() {
-    const data = {
-      ...this.PickTicketDetails,
-      IsActive: true,
-      CreatedBy: this.userName,
-      UpdatedBy: this.userName,
-      pickedById: this.employeeId,
-      confirmedById: this.employeeId
-    }
-    this.salesOrderService.updatePickTicket(data).subscribe(response => {
-      this.alertService.showMessage(
-        'Success',
-        `Updated Pick Ticket Sucessfully`,
-        MessageSeverity.success
-      );
-      $('#editpickticket').modal("hide");
-      this.onSearch();
-    }, err => {
-      this.isSpinnerVisible = false;
-    })
   }
 
   enableSave() {
