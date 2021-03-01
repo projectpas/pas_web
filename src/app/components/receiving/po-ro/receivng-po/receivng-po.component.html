@@ -534,8 +534,11 @@
                                                             <div class="checkbox-cstm" style="margin-top: 4px">
                                                                 <label style="width: 200px;">
                                                                     <!--*ngIf="part.itemMaster.isSerialized"-->
-                                                                    <input type="checkbox" class="form-control"
-                                                                           (change)="toggleSameDetailsForAllParts(part)">
+                                                                    
+                                                                    <input *ngIf="part.isSameDetailsForAllParts" type="checkbox" class="form-control"
+                                                                           (change)="toggleSameDetailsForAllParts(part)" checked>
+                                                                    <input *ngIf="!part.isSameDetailsForAllParts" type="checkbox" class="form-control"
+                                                                           (change)="toggleSameDetailsForAllParts(part)" >
                                                                     <span class="cr">
                                                                         <i class="cr-icon pi pi-check"></i>
                                                                     </span> Same
@@ -1024,11 +1027,11 @@
                                             <br />
                                             <section>
                                                 <h4 class="add-details-heading" style="text-align: left;"
-                                                    *ngIf="part.itemMaster.isSerialized">
+                                                    *ngIf="part.itemMaster.isSerialized && !part.isSameDetailsForAllParts">
                                                     Serialized
                                                 </h4>
                                                 <div class="pull-right" style="margin-top: 19px;margin-right: 85px;"
-                                                     *ngIf="part.itemMaster.isSerialized">
+                                                     *ngIf="part.itemMaster.isSerialized && !part.isSameDetailsForAllParts">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                        (click)="moveStockLinePage('stockline', part.currentSERIndex - 1, part)"></i>
                                                     <input [value]="part.currentSERIndex + 1" type="text" pInputText
@@ -1043,7 +1046,7 @@
                                                         {{part.stocklineListObj.length}} Pages
                                                     </p>
                                                 </div>
-                                                <div class="form-row" *ngIf="part.itemMaster.isSerialized">
+                                                <div class="form-row" *ngIf="part.itemMaster.isSerialized && !part.isSameDetailsForAllParts">
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label>Serial Num</label>
@@ -1075,7 +1078,7 @@
                                                     {{ part.timeLifeList.length }}
                                                 </h3>
                                                 <div class="pull-right" style="margin-top: -37px;margin-right: 85px;"
-                                                     *ngIf="part.itemMaster.isTimeLife">
+                                                     *ngIf="part.itemMaster.isTimeLife && !part.isSameDetailsForAllParts">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                        (click)="moveStockLinePage('timelife', part.currentTLIndex - 1, part)"></i>
                                                     <input [value]="part.currentTLIndex + 1" type="text" pInputText

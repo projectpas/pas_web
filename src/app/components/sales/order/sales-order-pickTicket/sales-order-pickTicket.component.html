@@ -453,7 +453,7 @@
                                             <td>
                                                 <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
                                                     class="image" /> -->
-                                                <img src="{{part.partBarcode}}" alt="barcode" class="image" />
+                                                <img src="{{part.partBarcode}}" alt="barcode" width="98%" />
                                             </td>
                                             <td> PN Description: {{part.partDescription}}</td>
                                             <td>Site: {{part.siteName}}</td>
@@ -512,7 +512,7 @@
                                 </p>
                                 <p>
                                     <span class="label">
-                                        <b>Customer Code: </b>
+                                        <b>Date: </b>
                                     </span><span class="value">
                                         {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
                                     </span>
