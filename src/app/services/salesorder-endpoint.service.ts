@@ -663,13 +663,13 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getPickTicketPrint(salesOrderId: number, soPickTicketId: number): Observable<any> {
+  getPickTicketPrint(salesOrderId: number,salesOrderPartId:number,soPickTicketId: number): Observable<any> {
     //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
-    const URL = `${this.getSalesOrdePickTicketPrint}?salesOrderId=${salesOrderId}&soPickTicketId=${soPickTicketId}`;
+    const URL = `${this.getSalesOrdePickTicketPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soPickTicketId=${soPickTicketId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId, soPickTicketId));
+        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId,salesOrderPartId,soPickTicketId));
       });
   }
 

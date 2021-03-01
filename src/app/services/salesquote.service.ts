@@ -494,6 +494,7 @@ export class SalesQuoteService {
     partNumberObj.notes = selectedPart.notes;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.customerReference = selectedPart.customerRef;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
 
@@ -579,6 +580,7 @@ export class SalesQuoteService {
     partNumberObj.taxType = selectedPart.taxType;
     partNumberObj.taxAmount = selectedPart.taxAmount;
     partNumberObj.taxPercentage = selectedPart.taxPercentage;
+    partNumberObj.itemNo = selectedPart.itemNo;
     return partNumberObj;
   }
 
