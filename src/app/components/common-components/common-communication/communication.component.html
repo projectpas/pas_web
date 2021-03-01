@@ -20,7 +20,7 @@
         <app-common-phone [isView]="isViewMode" [type]="type"  [moduleId]="moduleId" [commonContactId]="idForContact" [referenceId]="referenceId"></app-common-phone>
        </div>
        <div *ngIf="textStyle">
-        <app-common-text [isView]="isViewMode" [moduleId]="moduleId" [referenceId]="referenceId"></app-common-text>
+        <app-common-text [isView]="isViewMode" [type]="type" [commonContactId]="idForContact" [moduleId]="moduleId" [referenceId]="referenceId"></app-common-text>
        </div>
     </div>
 </div>

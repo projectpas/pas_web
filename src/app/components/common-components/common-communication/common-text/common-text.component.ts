@@ -27,6 +27,8 @@ export class TextCommonComponent implements OnInit, OnChanges {
     @Input() subWorkOrderDetails;
     @Input() isSubWorkOrder: any = false;
     @Input() subWOPartNoId;
+    @Input() type: any;
+    @Input() commonContactId: any;
     isEdit: any;
     lazyLoadEventData: any;
     disableSaveMemo: boolean = true;
@@ -89,16 +91,97 @@ export class TextCommonComponent implements OnInit, OnChanges {
         // }
         // this.getAllEmployees('');
         // this.getAllTextList();
+        if (this.type == 1) {
+            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
+            this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' })
+        } else {
+            this.selectedColumns.unshift({ field: 'vendorContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'vendorContact', header: 'Customer Contact' })
+        }
     }
 
     ngOnChanges(): void {
         this.getAllTextList();
         if(this.isView==false){
             this.getAllEmployees();
+            if (this.type == 1) {
+                this.customerContacts('');
+            } else {
+                this.vendorContacts('');
+            }
 
         }
         this.referenceId = this.referenceId;
         this.moduleId = this.moduleId;
+    }
+
+    setEditArray: any = [];
+    ContactList: any = [];
+    cusContactList: any;
+    customerContact: any;
+    customerContacts(value) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.setEditArray.push(this.customerContact.customerContactId ? this.customerContact.customerContactId : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        // 190
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
+            this.ContactList = res.map(x => {
+                return {
+                    ...x,
+                    contactId: x.contactId,
+                    firstName: x.customerContactName
+                }
+            });
+            this.cusContactList = this.ContactList;
+        }, err => {
+        });
+    }
+    vendorContacts(value) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.setEditArray.push();
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        // 376
+        this.commonService.autoDropListVendorContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
+            this.ContactList = res.map(x => {
+                return {
+                    ...x,
+                    contactId: x.contactId,
+                    firstName: x.vendoreContactName
+                }
+            });
+            this.cusContactList = this.ContactList;
+
+        }, err => {
+        });
+    }
+
+    filterCustomerContact(event): void {
+        if (this.type == 1) {
+            if (event.query !== undefined && event.query !== null) {
+                this.customerContacts(event.query);
+            } else {
+                this.customerContacts('');
+            }
+        } else {
+            if (event.query !== undefined && event.query !== null) {
+                this.vendorContacts(event.query);
+            } else {
+                this.vendorContacts('');
+            }
+        }
+    }
+
+    contactSelected(event) {
+        console.log("ev", event);
+        this.addList[0].mobile = event.workPhone;
     }
 
     dismissModel() {
@@ -137,6 +220,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
     onClickPopupSave() {
         this.addList[0].notes = this.memoPopupContent;
         this.memoPopupContent = '';
+        this.updateDisabledText=false;
         $('#text-memo-popup').modal("hide");
     }
     closeMemoModel() {
@@ -146,6 +230,17 @@ export class TextCommonComponent implements OnInit, OnChanges {
         this.isEdit=false;
         this.addList = [];
         this.addList.push({ mobile: '', contactId: this.authService.currentEmployee, notes: '' })
+        if (this.ContactList.length > 0) {
+            this.ContactList.forEach(
+                (cc) => {
+                    // if (cc.isDefaultContact) {
+                    this.customerContact = cc;
+                    this.addList[0].mobile = cc.workPhone.trim();
+                    // }
+                    return;
+                }
+            )
+        }
     }
     patternMobilevalidationWithSpl(event: any) {
         const pattern = /[0-9\+\-()\ ]/;
@@ -161,6 +256,19 @@ export class TextCommonComponent implements OnInit, OnChanges {
         console.log("Chnages",this.editTextData)
         // this.isSpinnerVisible=true;
         this.updateDisabledText=true;
+        if (this.type == 1) {
+            this.customerContact = {
+                'contactId': rowData.customerContactId,
+                'firstName': rowData.customerContact
+            };
+            // this.customerContacts('');
+        } else {
+            this.customerContact = {
+                'contactId': rowData.customerContactId,
+                //'firstName': rowData.vendorContact
+                'firstName': rowData.customerContact
+            }
+        }
         this.getAllEmployees('');
      
         
@@ -226,6 +334,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
             this.communicationService.updateCommonText(payload[0])
                 .subscribe(
                     (res) => {
+                        this.updateDisabledText = true;
                         this.isSpinnerVisible = false;
                         this.getAllTextList();
                         this.isEdit = false;
@@ -249,6 +358,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
         }
         $('#addNewText').modal('hide');
         this.addList = [];
+        this.customerContact = null;
     }
 
     formData(data) {
@@ -258,6 +368,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
                 "Mobile": x.mobile,
                 "Notes": x.notes,
                 "ContactById": this.getEmpId(x.contactId),
+                "customerContactId": this.type == 1 ? this.customerContact.contactId : this.customerContact.contactId,
                 "WorkOrderPartNo": this.partNo,
                 "ModuleId": this.moduleId,
                 "ReferenceId": this.referenceId,
@@ -283,7 +394,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
             return null;
         }
     }
-    updateDisabledText:boolean=true;
+    updateDisabledText:boolean=false;
     setvaliDate(){
         this.updateDisabledText=false;
     }
