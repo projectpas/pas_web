@@ -5,7 +5,7 @@ import { SalesOrderService } from "../../../../services/salesorder.service";
 import { SalesOrderPickTicketView } from "../../../../models/sales/SalesOrderPickTicketView";
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
-import { environment } from "../../../../../environments/environment.dev";
+import { environment } from "../../../../../environments/environment";
 
 @Component({
     selector: "app-sales-order-pickTicket",
@@ -36,7 +36,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
     }
 
     getSalesPickTicketView() {
-        this.salesOrderService.getPickTicketPrint(this.salesOrderId, this.soPickTicketId).subscribe(res => {
+        this.salesOrderService.getPickTicketPrint(this.salesOrderId,this.salesOrderPartId,this.soPickTicketId).subscribe(res => {
             this.salesOrderoView = res[0];
             this.salesOrder = res[0].soPickTicketViewModel;
             this.parts = res[0].soPickTicketPartViewModel;
@@ -70,7 +70,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
             <head>
               <title>Print tab</title>
               <style>
-              table { width: 1000px;overflow: auto !important;}        
+              table { font-size:12px !important}        
   table thead { background: #808080;}    
   table thead tr{background: #0d57b0 !important;}  
   table, thead, td {
@@ -84,17 +84,18 @@ table, thead, th {
   table thead tr th {background: #0d57b0 !important;padding: 5px!important;color: #fff;letter-spacing: 0.3px; font-size: 10px;text-transform: capitalize; z-index: 1;} 
   table tbody{   overflow-y: auto; max-height: 500px;  }
   table tbody tr td{ background: #fff; padding: 2px;line-height: 22px;color: #333;
-   font-size: 11.5px !important; letter-spacing: 0.1px;}
+    font-size: 11.5px !important;max-width:100%; letter-spacing: 0.1px;}
   h4{padding: 5px; display: inline-block; font-size: 14px; font-weight: 600; width: 100%; margin: 0;}
   
   hr{margin-top: 10px; margin-bottom: 10px;border: 0;border-top: 1px solid #e0e0e0; height: 0; box-sizing: content-box;}
   
   .first-block-name{margin-right: 20px} 
-  .first-block-sold-to {position: relative;min-height: 1px;height:155px;float: left;padding-right: 2px; border: 1px solid black;background: #fff;width: 100%; padding-left: 2px;}
-  .first-block-ship-to {position: relative;min-height: 1px;height:155px;padding-right: 2px; border: 1px solid black;background: #fff;width: 100%; padding-left: 2px;}
+  .first-block-sold-to {position: relative;min-height: 200px;height:auto;float: left;padding-right: 2px; border: 1px solid black;background: #fff;width: 100%; padding-left: 2px;}
+  .first-block-ship-to {position: relative;min-height: 200px;height:auto;padding-right: 2px; border: 1px solid black;background: #fff;width: 100%; padding-left: 2px;}
+
   .first-block-sold {position: relative; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;width: 50%;}
   .first-block-ship {position: relative; min-height: 1px; float: right;padding-right: 2px; padding-left: 2px;width: 48%;}
-  .address-block {position: relative;min-height: 1px;float: left;padding-right: 2px;border: 1px solid black; padding-left: 2px;}
+  .address-block {position: relative;min-height: 200px;height:auto;float: left;padding-right: 2px;border: 1px solid black; padding-left: 2px;}
   .first-block-address{margin-right: 20px;text-align: left}
   
 
@@ -103,7 +104,7 @@ table, thead, th {
   .second-block-label{position: relative; min-height: 1px;float: left;padding-right: 2px;padding-left: 2px;width: 38.33333333%;text-transform: capitalize;margin-bottom: 0;text-align: left; }
   .clear{clear: both;}
   .form-div{top: 6px; position: relative;font-weight: normal; margin-top: 10px;}
-  .image{border: 1px solid #ccc; padding: 5px; width:100%;}
+  .image{border: 1px solid #ccc; padding: 5px; max-width:90%;display:block;}
   .logo-block { margin: auto; text-align: center }
   .pdf-block { width: 800px; margin: auto; border: 1px solid #ccc;padding: 25px 15px; } 
                             

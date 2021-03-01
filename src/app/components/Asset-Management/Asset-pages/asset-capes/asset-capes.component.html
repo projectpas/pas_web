@@ -58,7 +58,7 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" (click)="dismissModelWithAlert()">×</button>
                             <h4 class="modal-title">Add Capability</h4>
-                            <div class="form-row" style="width: 100%;">
+                            <div class="form-row input-width-100-percent">
                                 <div class="col-md-12 shadow-box-cstm">
                                 <div class="col-md-3">
                                     <label class="fs12">Asset ID : </label>
@@ -82,7 +82,7 @@
                         </div>
                       
                         
-                        <div class="modal-body" style="padding: 12px;">
+                        <div class="modal-body padding-12">
                             <form #genForm="ngForm" [formGroup]="capabilitiesForm">
                                 <div formArrayName="mfgForm">
                                     <div class="form-row">
@@ -119,8 +119,8 @@
                                                 <span class="popup-plusicon-cstm-caps text-left">
                                                     Model
                                                     <input type="checkbox" [(ngModel)]="modelUnknown"
-                                                           [ngModelOptions]="{standalone: true}" style="width: 20px !important;    position: relative;
-                                                           top: 2px; margin-left: 7px; "
+                                                           [ngModelOptions]="{standalone: true}" 
+                                                           class="model-input"
                                                            (change)="resetAircraftModelsorDashNumbers($event,1);"> Unknown
                                                 </span>
                                                 <p-multiSelect *ngIf="!modelUnknown" [maxSelectedLabels]="2"
@@ -139,8 +139,7 @@
                                                 <span class="popup-plusicon-cstm-caps text-left">
                                                     Dash Number
                                                     <input type="checkbox" [(ngModel)]="dashNumberUnknown"
-                                                           style="width: 20px !important; margin-left: 7px;  position: relative;
-                                                           top: 2px; "
+                                                           class="model-input"
                                                            [ngModelOptions]="{standalone: true}" 
                                                            (change)="resetAircraftModelsorDashNumbers($event,2);">
                                                     Unknown
@@ -160,7 +159,7 @@
 
                                         <div class="col-md-1">
                                             <!-- (!modelUnknown && !capabilityForm.selectedAircraftModelTypes)||(!dashNumberUnknown && !capabilityForm.selectedDashNumbers)|| -->
-                                            <button style="margin-top: 20px;" type="button" class="btn btn-primary"
+                                            <button type="button" class="btn btn-primary m-t-20"
                                                     (click)="mapAircraftInformation(capabilityForm)"
                                                     [disabled]="disableCapesSave || !capabilityForm.selectedPartId || !capabilityForm.selectedAircraftTypes  || !capabilityForm.CapabilityTypeId "
                                                     >
@@ -175,7 +174,7 @@
                                                  [paginator]="true">
                                             <ng-template pTemplate="header" let-columns>
                                                 <tr>
-                                                    <th *ngFor="let col of columns" style="width:200px">
+                                                    <th *ngFor="let col of columns" class="table-column-width">
                                                         {{col.header}} <span *ngIf="col.star==true" class="clr-red">*</span>
                                                     </th>
                                                 </tr>
@@ -183,7 +182,7 @@
                                             <ng-template pTemplate="body" let-i="rowIndex" let-rowData
                                                          let-columns="columns">
                                                 <tr>
-                                                    <td *ngFor="let col of columns">
+                                                    <td class="table-column-width" *ngFor="let col of columns">
                                                         <!-- {{rowData[col.field]}} -->
                                                         {{
                                                             col.field == 'createdDate'
@@ -197,15 +196,15 @@
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage" let-columns>
                                                 <tr>
-                                                    <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                                                    <td colspan="12" class="no-records-cstm no-records-msg">
                                                         No records found
                                                     </td>
                                                 </tr>
                                             </ng-template>
                                             <ng-template pTemplate="summary" id="footer"> 
-                                                <div style="text-align: right;">
+                                                <div class="text-right">
                                                     <label id="footer" class="footer">Total:</label>
-                                                    <input style="width: 5% !important;"  [ngModelOptions]="{standalone: true}"  [(ngModel)]="totalRecords1" disabled pInputText
+                                                    <input style="width:5% !important"  [ngModelOptions]="{standalone: true}"  [(ngModel)]="totalRecords1" disabled pInputText
                                                            type="text" /> &nbsp;&nbsp;
                                                     <label id="footer" class="footer1">Pages Count:</label>
                                                     <input style="width: 5% !important;margin-right: 12px;"  [ngModelOptions]="{standalone: true}"  [(ngModel)]="totalPages1" disabled pInputText
@@ -314,14 +313,13 @@
                                                 <span class="popup-plusicon-cstm-caps text-left">
                                                     Model
                                                     <input type="checkbox" [(ngModel)]="modelUnknown"
-                                                           [ngModelOptions]="{standalone: true}" style="width: 20px !important;position: relative;
-                                                           top: 2px; 
-                                                           margin-left: 7px; "
+                                                           [ngModelOptions]="{standalone: true}" 
+                                                           class="model-input"
                                                            (change)="resetAircraftModelsorDashNumbers($event,1)"> Unknown
                                                 </span>
                                                 <select *ngIf="!modelUnknown" [(ngModel)]="aircraftDataEdit.aircraftModelId" (ngModelChange)="getmemo2($event)" (change)="aircraftModalChange_1($event,aircraftTypeId,'')"
                                                         [ngModelOptions]="{standalone: true}" id="aircraftDashlId"
-                                                        style="width: 150px !important;">
+                                                        class="width-150">
                                                         <option value="">--Select--</option>
                                                     <option *ngFor="let m of capabilityForm.selectedAircraftDataModels" [ngValue]="m.value">
                                                         {{m.label}}
@@ -336,15 +334,14 @@
                                                 <span class="popup-plusicon-cstm-caps text-left">
                                                     Dash Number
                                                     <input type="checkbox" [(ngModel)]="dashNumberUnknown"
-                                                           style="width: 20px !important; margin-left: 7px; position: relative;
-                                                           top: 2px; "
+                                                          class="model-input"
                                                            [ngModelOptions]="{standalone: true}"
                                                            (change)="resetAircraftModelsorDashNumbers($event,2)">
                                                     Unknown
                                                 </span>
                                                 <select  *ngIf=" !modelUnknown && !dashNumberUnknown" [(ngModel)]="aircraftDataEdit.aircraftDashNumberId" (ngModelChange)="getmemo2($event)"
                                                         [ngModelOptions]="{standalone: true}"
-                                                        style="width: 150px !important;">
+                                                        class="width-150">
                                                     <option value="">--Select--</option>
                                                     <option *ngFor="let m of search_AircraftDashNumberList" [ngValue]="m.value">
                                                         {{m.label}}
@@ -357,7 +354,7 @@
                                       
 
                                         <div class="col-md-1">
-                                            <button style="margin-top: 20px;" type="button" class="btn btn-primary"
+                                            <button type="button" class="btn btn-primary m-t-20"
                                                     (click)="saveCapabilities(capabilityForm,'edit')" [disabled]="disableSaveForEdit">
                                                 Update
                                             </button> 
@@ -379,20 +376,20 @@
                 <div class="modal-body">
                    
                     <div class="form-row" >
-                        <div class="col-md-3" style="margin-right: 0px !important;">
+                        <div class="col-md-3 margin-right-0">
                             <label class="fs12">Part Number: </label>
                             <span class="new-label"> {{assetServices.CapeslistCollection.partNumber}}</span>
                         </div>
-                        <div class="col-md-4" style="margin-right: 0px !important;">
+                        <div class="col-md-4 margin-right-0">
                             <label class="fs12"> Capability Type  : </label>
                             <span class="new-label"> {{assetServices.CapeslistCollection.captypedescription}}</span>
 
                         </div>
-                        <div class="col-md-2" style="margin-right: 0px !important;">
+                        <div class="col-md-2 margin-right-0" >
                             <label class="fs12">Model : </label>
                             <span class="new-label"> {{assetServices.CapeslistCollection.modelname}}</span> 
                         </div>
-                        <div class="col-md-2" style="margin-right: 0px !important;">
+                        <div class="col-md-2 margin-right-0">
                             <label class="fs12">Dash Number : </label>
                             <span class="new-label"> {{assetServices.CapeslistCollection.dashnumber}}</span> 
                         </div>
@@ -409,7 +406,7 @@
         <!-- <hr> -->
     <!-- </div> -->
     <div class="card" style="border: none;">
-        <div class="card-body" *ngIf="isView==false" style="padding: 0px !important;">
+        <div class="card-body padding-0" *ngIf="isView==false">
             <div class="col-md-3">
                 <label class="fs12">Asset ID : </label>
                 <span class="span-header-red"> {{local?.assetId}}</span>
@@ -461,15 +458,12 @@
                 <div class="row" *ngIf="isView==false">
                     <div class="col">
                     <p-multiSelect [maxSelectedLabels]="2" [options]="cols" optionLabel="header"
-                                   [(ngModel)]="selectedColumns" [style]="{minWidth: '200px'}" style="float:left"
+                                   [(ngModel)]="selectedColumns" class="multiselect-field"
                                    selectedItemsLabel="{0} columns selected" defaultLabel="Choose Columns">
                     </p-multiSelect>
                 </div>
                 <div class="col">
-                  <div
-                    style="width: auto !important; float: right;"
-                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                  >
+                    <div class="global-search-field inner-addon right-addon inline-block">
                         <i class="fa fa-search"></i>
                         <input type="text" pInputText size="50" 
                         class="form-control"
@@ -480,15 +474,15 @@
                       </div>
                       <div class="row" >
                         <div class="col">
-                    <button  *ngIf="isView==false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
-                            pButton icon="fa-download" iconPos="left" style="padding: 5px 12px !important;" label="Export All Data"
+                    <button  *ngIf="isView==false" type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
+                            pButton icon="fa-download" iconPos="left"  label="Export All Data"
                             
                             data-toggle="modal" 
                             (click)="selectedOnly = false; targetData = dt;"
                              data-target="#downloadConfirmation"></button>
                              <!-- (click)="exportCSV(dt)" -->
-                    <button  *ngIf="isView==false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
-                            matTooltipPosition="above" style="padding: 5px 12px !important;"
+                    <button  *ngIf="isView==false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+                            matTooltipPosition="above"
                             pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                             (click)="dt.exportCSV({selectionOnly:true})"></button>
                     <!-- <div  *ngIf="isView==false" class="excel-upload  excel-upload-cstm">
@@ -511,30 +505,28 @@
                     <div class="col"  >
                         <div class="">
                           <div
-                            class="col"
-                            style="width: 370px; float: right; padding-top: 3px;"
-                          >
+                            class="col radios-width">
                             <div class="form-group">
-                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <div class="pull-left radio-buttons-align">
                                     <label class="radio-cstm wauto">
                                         <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="getCapesListByStatus('Active')" [checked]="currentstatus2=='Active'">
                                         <span class="checkmark"></span>Active
                                     </label>
                                 </div>
-                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <div class="pull-left radio-buttons-align">
                                     <label class="radio-cstm wauto">
                                         <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="getCapesListByStatus('InActive')" [checked]="currentstatus2=='InActive'">
                                         <span class="checkmark"></span>In-Active
                                     </label>
                                 </div>
-                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <div class="pull-left radio-buttons-align">
                                     <label class="radio-cstm wauto">
                                         <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)="getCapesListByStatus('ALL')" [checked]="currentstatus2=='ALL'">
                                         <span class="checkmark"></span>All
                                     </label>
                                 </div>
-                                <div class="checkbox-cstm" style="margin-left: 0;">
-                                    <label style="width: auto !important;margin-top: 3px;">
+                                <div class="checkbox-cstm margin-left-0">
+                                    <label class="show-deleted-label">
                                         <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         Show  Deleted List 
@@ -559,36 +551,36 @@
 
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns"  style="width:140px"/>
+                    <col *ngFor="let col of columns" class="table-column-width" />
                 </colgroup>
             </ng-template>
 
             <ng-template pTemplate="header" let-columns>
                 <tr>
 
-                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                    <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                         {{ col.header }} <span *ngIf="col.star==true" class="clr-red" >*</span>
                         <p-sortIcon [field]="col.field"></p-sortIcon> 
                     </th>
-                    <th style="width:150px;position: sticky;">Actions</th>
+                    <th class="table-actions-column">Actions</th>
                 </tr>
                 <tr>
 
-                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input style="width:100%!important;" pInputText type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input class="table-header-input-width" pInputText type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                (input)="dt.filter($event.target.value, col.field,'contains')" />
                                
-                               <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                               <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                                name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+<input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
             (change)="dateFilterForTable($event.target.value,col.field)" />
                     </th>
-                    <th style="width:150px;position: sticky"></th>
+                    <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-assetCapes let-rowIndex="rowIndex">
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle>
-                    <td *ngFor="let col of columns" class="ui-resizable-column"
+                    <td *ngFor="let col of columns" class="ui-resizable-column table-column-width"
                         pReorderableRowHandle>
                         <!-- {{rowData[col.field]}} -->
 
@@ -601,7 +593,7 @@
                           }}
                     </td>
 
-                    <td class="action-icons-cstm" style="width:150px">
+                    <td class="action-icons-cstm table-column-width">
                         <div *ngIf="currentDeletedstatus==false">
     <!-- <p-inputSwitch [disabled]="isView==false" *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off"
                                            (onChange)="toggleActiveStatus(rowData)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -652,13 +644,13 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns>
                 <tr>
-                    <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                    <td colspan="12" class="no-records-msg no-records-cstm">
                         No records found
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer"> 
-                <div style="text-align: right;">
+                <div class="text-right">
                     <label id="footer" class="footer">Total:</label>
                     <input style="width: 5% !important;" [(ngModel)]="totalRecords" [disabled]="true" pInputText
                            type="text" /> &nbsp;&nbsp;
@@ -708,20 +700,20 @@
     </div>
     <div class="modal-body">
         <div class="form-row" >
-            <div class="col-md-3" style="margin-right: 0px !important;">
+            <div class="col-md-3 margin-right-0">
                 <label class="fs12" >Part Number: </label>
                 <span class="new-label"> {{restorerecord.partNumber}}</span>
             </div>
-            <div class="col-md-4" style="margin-right: 0px !important;">
+            <div class="col-md-4 margin-right-0">
                 <label class="fs12"> Capability Type  : </label>
                 <span class="new-label"> {{restorerecord.captypedescription}}</span>
 
             </div>
-            <div class="col-md-2" style="margin-right: 0px !important;">
+            <div class="col-md-2 margin-right-0">
                 <label class="fs12">Model : </label>
                 <span class="new-label"> {{restorerecord.modelname}}</span> 
             </div>
-            <div class="col-md-2" style="margin-right: 0px !important;">
+            <div class="col-md-2 margin-right-0">
                 <label class="fs12">Dash Number : </label>
                 <span class="new-label"> {{restorerecord.dashnumber}}</span> 
             </div>
@@ -817,11 +809,11 @@
                                 </td>
                                 <td>
                                     <input type="checkbox" disabled [checked]="audit.isActive == true"
-                                    style="margin: 0px auto; display: block;" />  
+                                   class="check-active" />  
                                 </td>
                                 <td>
                                     <input type="checkbox" disabled [checked]="audit.isDeleted == true"
-                                    style="margin: 0px auto; display: block;" />  
+                                   class="check-active" />  
                                 </td>
                                 <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
                                 <td>{{audit.createdBy}}</td>
@@ -835,7 +827,7 @@
                     <ng-template #noDatavailable>
                         <div class="text-center">
                             <!--<img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;">-->
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
 
                     </ng-template>

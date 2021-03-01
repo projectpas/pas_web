@@ -157,6 +157,7 @@ export class WorkOrderAddComponent implements OnInit {
     businessUnitList: any;
     divisionList: any;
     departmentList: any;
+    currentWarningMessage:any;
     managementStructure = {
         companyId: null,
         buId: null,
@@ -3014,6 +3015,7 @@ export class WorkOrderAddComponent implements OnInit {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.commonService.customerWarnings(cusId, id).subscribe((res: any) => {
             if (res) {
+                this.currentWarningMessage=res.warningMessage;
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
                 if (this.isEditWorkordershowMsg == true && res.customerWarningId != 0) {

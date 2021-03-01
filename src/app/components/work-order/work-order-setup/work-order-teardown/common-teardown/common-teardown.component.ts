@@ -637,81 +637,78 @@ export class CommonTeardownComponent implements OnInit {
                 this.saveTearDownData.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId;
             this.saveTearDownData.workOrderId = this.subWorkOrderDetails.workOrderId;
         }
-        // if (form.validation) {
-        // alert("service success")
-
-        // }
-        // console.log("tear down saved data",this.saveTearDownData)
+        var issave= true;
+       
         if (this.saveTearDownData.isRemovalReasons == true && (this.saveTearDownData.workOrderRemovalReasons.memo == '' || this.saveTearDownData.workOrderRemovalReasons.reasonId == 0)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 1")
-            return this.validator();
+            issave = this.validator();
         } else if (this.saveTearDownData.isPmaDerBulletins == true && (this.saveTearDownData.workOrderPmaDerBulletins.airworthinessDirecetives == '' || this.saveTearDownData.workOrderPmaDerBulletins.mandatoryService == '' || this.saveTearDownData.workOrderPmaDerBulletins.requestedService == '' || this.saveTearDownData.workOrderPmaDerBulletins.serviceLetters == '' || this.saveTearDownData.workOrderPmaDerBulletins.pmaParts == '' || this.saveTearDownData.workOrderPmaDerBulletins.derRepairs == '')) {
             this.checkMandatoryFields = true;
-            // console.log("alert 2")
-            return this.validator();
-        } else if (this.saveTearDownData.isPreliinaryReview == true && (this.saveTearDownData.workOrderPreliinaryReview.memo == '' || this.saveTearDownData.workOrderPreliinaryReview.reasonId == 0 || this.saveTearDownData.workOrderPreliinaryReview.inspectorId == 0)) {
+            issave = this.validator();
+        } else if (this.saveTearDownData.isPreliinaryReview == true && (this.saveTearDownData.workOrderPreliinaryReview.memo == '' || this.saveTearDownData.workOrderPreliinaryReview.reasonId == 0 || this.saveTearDownData.workOrderPreliinaryReview.inspectorId == 0 || this.saveTearDownData.workOrderPreliinaryReview.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 3")
-            return this.validator();
-        } else if (this.saveTearDownData.isPreAssmentResults == true && (this.saveTearDownData.workOrderPreAssmentResults.memo == '' || this.saveTearDownData.workOrderPreAssmentResults.reasonId == 0 || this.saveTearDownData.workOrderPreAssmentResults.technicianId == 0 || this.saveTearDownData.workOrderPreAssmentResults.inspectorId == 0)) {
+            issave = this.validator();
+        } else if (this.saveTearDownData.isPreAssmentResults == true && (this.saveTearDownData.workOrderPreAssmentResults.memo == '' || this.saveTearDownData.workOrderPreAssmentResults.reasonId == 0 || this.saveTearDownData.workOrderPreAssmentResults.technicianId == 0 || this.saveTearDownData.workOrderPreAssmentResults.inspectorId == 0 || this.saveTearDownData.workOrderPreAssmentResults.technicianId == undefined || this.saveTearDownData.workOrderPreAssmentResults.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 4")
-            return this.validator();
-        } else if (this.saveTearDownData.isDiscovery == true && (this.saveTearDownData.workOrderDiscovery.memo == '' || this.saveTearDownData.workOrderDiscovery.reasonId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == 0 || this.saveTearDownData.workOrderDiscovery.inspectorId == 0)) {
+            issave = this.validator();
+        } else if (this.saveTearDownData.isDiscovery == true && (this.saveTearDownData.workOrderDiscovery.memo == '' || this.saveTearDownData.workOrderDiscovery.reasonId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == 0 || this.saveTearDownData.workOrderDiscovery.inspectorId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == undefined || this.saveTearDownData.workOrderDiscovery.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 5")
-            return this.validator();
-        } else if (this.saveTearDownData.isPreAssemblyInspection == true && (this.saveTearDownData.workOrderPreAssemblyInspection.memo == '' || this.saveTearDownData.workOrderPreAssemblyInspection.reasonId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == 0)) {
-            // console.log("alert 6")
+            issave = this.validator();
+            //return this.validator();
+        } else if (this.saveTearDownData.isPreAssemblyInspection == true && (this.saveTearDownData.workOrderPreAssemblyInspection.memo == '' || this.saveTearDownData.workOrderPreAssemblyInspection.reasonId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == undefined || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
-            return this.validator();
+            issave = this.validator();
         }
-        else if (this.saveTearDownData.isWorkPerformed == true && (this.saveTearDownData.workOrderWorkPerformed.memo == '' || this.saveTearDownData.workOrderWorkPerformed.reasonId == 0 || this.saveTearDownData.workOrderWorkPerformed.technicianId == 0 || this.saveTearDownData.workOrderWorkPerformed.inspectorId == 0)) {
-            // this.checkMandatoryFields=true;
-            // console.log("alert 7")
-            return this.validator();
+        else if (this.saveTearDownData.isWorkPerformed == true && (this.saveTearDownData.workOrderWorkPerformed.memo == '' || this.saveTearDownData.workOrderWorkPerformed.reasonId == 0 || this.saveTearDownData.workOrderWorkPerformed.technicianId == 0 || this.saveTearDownData.workOrderWorkPerformed.inspectorId == 0 || this.saveTearDownData.workOrderWorkPerformed.technicianId == undefined || this.saveTearDownData.workOrderWorkPerformed.inspectorId == undefined)) {
+            issave = this.validator();
         } else if (this.saveTearDownData.isTestDataUsed == true && (this.saveTearDownData.workOrderTestDataUsed.memo == '' || this.saveTearDownData.workOrderTestDataUsed.reasonId == 0)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 8")
-            return this.validator();
+            issave = this.validator();
         } else if (this.saveTearDownData.isBulletinsModification == true && (this.saveTearDownData.workOrderBulletinsModification.memo == '' || this.saveTearDownData.workOrderBulletinsModification.reasonId == 0)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 9")
-            return this.validator();
-        } else if (this.saveTearDownData.isFinalTest == true && (this.saveTearDownData.workOrderFinalTest.memo == '' || this.saveTearDownData.workOrderFinalTest.reasonId == 0 || this.saveTearDownData.workOrderFinalTest.technicianId == 0 || this.saveTearDownData.workOrderFinalTest.inspectorId == 0)) {
+            issave = this.validator();
+        } else if (this.saveTearDownData.isFinalTest == true && (this.saveTearDownData.workOrderFinalTest.memo == '' || this.saveTearDownData.workOrderFinalTest.reasonId == 0 || this.saveTearDownData.workOrderFinalTest.technicianId == 0 || this.saveTearDownData.workOrderFinalTest.inspectorId == 0 || this.saveTearDownData.workOrderFinalTest.technicianId == undefined || this.saveTearDownData.workOrderFinalTest.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 10")
-            return this.validator();
+            issave = this.validator();
         } else if (this.saveTearDownData.isFinalInspection == true && (this.saveTearDownData.workOrderFinalInspection.memo == '' || this.saveTearDownData.workOrderFinalInspection.reasonId == 0)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 11")
-            return this.validator();
+            issave = this.validator();
         } else if (this.saveTearDownData.isAdditionalComments == true && (this.saveTearDownData.workOrderAdditionalComments.memo == '' || this.saveTearDownData.workOrderAdditionalComments.reasonId == 0)) {
             this.checkMandatoryFields = true;
-            // console.log("alert 12")
-            return this.validator();
+            issave = this.validator();
         }
-        this.isSpinnerVisible = true;
-        this.workOrderService.createworkOrderTearDownData(data, this.isSubWorkOrder).subscribe(res => {
-            this.saveTearDownData = res;
-            this.isSpinnerVisible = false;
-            this.showViewTemplate = true;
+
+        if(issave)
+        {
+            this.isSpinnerVisible = true;
+            this.workOrderService.createworkOrderTearDownData(data, this.isSubWorkOrder).subscribe(res => {
+                this.saveTearDownData = res;
+                this.isSpinnerVisible = false;
+                this.showViewTemplate = true;
+                this.assignDatatoFields(this.saveTearDownData);
+                this.alertService.showMessage(
+                    '', ' WorkOrder TearDown saved Successfully',
+                    MessageSeverity.success
+                );
+            }, err => {
+                this.isSpinnerVisible = false;
+            })
+        }else
+        {
             this.assignDatatoFields(this.saveTearDownData);
-            this.alertService.showMessage(
-                '', ' WorkOrder TearDown saved Successfully',
-                MessageSeverity.success
-            );
-        }, err => {
-            this.isSpinnerVisible = false;
-        })
+        }
+       
     }
     validator() {
         this.alertService.showMessage(
             'Alert', ' Please Add Mandatory Fields',
             MessageSeverity.success
         );
-        return;
+        return false;
+    }
+    closeViewdiv()
+    {
+        this.isView = false;
     }
 
     assignDatatoFields(data) {
@@ -753,7 +750,6 @@ export class CommonTeardownComponent implements OnInit {
                 data.workOrderFinalInspection.inspectorId = getObjectById('employeeId', data.workOrderFinalInspection.inspectorId, this.inspectorsOriginalList);
             }
             if (data.workOrderPreliinaryReview != null) {
-                //data.workOrderPreliinaryReview.inspector = 'reddt123-67 reddt123';
                 data.workOrderPreliinaryReview.inspectorId = getObjectById('employeeId', data.workOrderPreliinaryReview.inspectorId, this.inspectorsOriginalList);
             }
             this.saveTearDownData = data;

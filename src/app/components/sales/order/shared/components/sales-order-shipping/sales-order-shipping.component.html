@@ -500,9 +500,9 @@
                                             name="soldName" [disabled]="isView" required disabled /> -->
                                         <p-autoComplete field="userName" [(ngModel)]="shippingHeader.soldToName"
                                             name="soldToName" errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="getSiteNamesBySoldCustomerId($event)"
-                                            [suggestions]="customerNamesList"
-                                            (completeMethod)="filterCustomerName($event)"
+                                            (onSelect)="onBillToSelected($event)"
+                                            [suggestions]="userBillingList"
+                                            (completeMethod)="filterCustomerNameSold($event)"
                                             (onKeyUp)="clearAddress('SoldTo', $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
                                             class="p-autoComplete-ctsm" [disabled]="isView">
@@ -512,25 +512,34 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="shippingHeader.soldToName" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createBillingSiteName" (click)="onClickBillSiteName('Add')"></a></span>
+                                            <span *ngIf="shippingHeader.soldToName" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createBillingSiteName1" (click)="onClickBillSiteName('Add')"></a></span>
                                         </label>
                                     </div>
                                     <!-- <span style="margin-left:0px;cursor:pointer;">
                                         <a class="btn nobg"
                                         matTooltipPosition="above" matTooltip="Edit Site Name"
                                         *ngIf="shippingHeader.soldToSiteId > 0"
-                                        data-toggle="modal" data-target="#createBillingSiteName"
+                                        data-toggle="modal" data-target="#createBillingSiteName1"
                                         (click)="onClickBillSiteName('Edit', sourcePoApproval)">
                                         <i class="fa fa-pencil" ></i>
                                         </a>
                                     </span> -->
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.soldToSiteId"
+                                        <!-- <select [(ngModel)]="shippingHeader.soldToSiteId"
                                             (change)="setSoldToAddresses()" [disabled]="isView" name="soldToSite"
                                             required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList"
                                                 [value]="site.customerBillingAddressId">
+                                                {{site.siteName}}
+                                            </option>
+                                        </select> -->
+                                        <select [(ngModel)]="shippingHeader.soldToSiteId"
+                                            (change)="setSoldToAddresses()" [disabled]="isView" name="soldToSite"
+                                            required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of soldCustomerSiteList"
+                                                [value]="site.siteID">
                                                 {{site.siteName}}
                                             </option>
                                         </select>
@@ -619,7 +628,7 @@
                                     <div class="col-md-8">
                                         <p-autoComplete field="userName" [(ngModel)]="shippingHeader.shipToCustomerId"
                                             name="shipToName" errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                            (onSelect)="onShipToSelected($event)"
                                             [suggestions]="customerNamesList"
                                             (completeMethod)="filterCustomerName($event)"
                                             (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
@@ -631,15 +640,21 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="shippingHeader.shipToCustomerId" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createPOSiteName" (click)="onClickShipSiteName('Add')"></a></span>
+                                            <span *ngIf="shippingHeader.shipToCustomerId" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createPOSiteName1" (click)="onClickShipSiteName('Add')"></a></span>
                                         </label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
+                                        <!-- <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
                                             [disabled]="isView" name="shipToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of shipCustomerSiteList"
                                                 [value]="site.customerDomensticShippingId">{{site.siteName}}</option>
+                                        </select> -->
+                                        <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
+                                            [disabled]="isView" name="shipToSite" required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of shipCustomerSiteList"
+                                                [value]="site.siteID">{{site.siteName}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -846,7 +861,7 @@
                         <div class="card card-stock">
                             <div class="card-body">
                                 <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
-                                    (click)="save()">Save</button>
+                                    (click)="save()" [disabled]="!shippingForm.valid">Save</button>
                             </div>
                         </div>
                     </div>
@@ -870,7 +885,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="createBillingSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="createBillingSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog partsList-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -951,7 +966,7 @@
 </div>
 
 
-<div class="modal fade" id="createPOSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="createPOSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog partsList-modal">
         <div class="modal-content">
             <div class="modal-header">
