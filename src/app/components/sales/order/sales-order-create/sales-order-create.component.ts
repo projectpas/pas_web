@@ -1307,7 +1307,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderShippingComponent.refresh(this.selectedParts);
     }
     if (event.index == 8) {
-      this.salesOrderBillingComponent.refresh(this.selectedParts);
+      this.salesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
     }
     if (event.index == 10) {
       this.salesOrderAnalysisComponent.refresh(this.id);

@@ -3,11 +3,12 @@ import { fadeInOut } from '../../../../../../services/animations';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { SalesOrderBillingAndInvoicing } from '../../../../../../models/sales/salesOrderBillingAndInvoicing';
 import { CommonService } from '../../../../../../services/common.service';
-import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
+import { AlertService } from '../../../../../../services/alert.service';
 import { AddressModel } from '../../../../../../models/address.model';
-import { getObjectById } from '../../../../../../generic/autocomplete';
+import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../../../generic/autocomplete';
 import { CustomerService } from '../../../../../../services/customer.service';
 import { AuthService } from '../../../../../../services/auth.service';
+
 @Component({
     selector: 'app-sales-order-billing',
     templateUrl: './sales-order-billing.component.html',
@@ -25,6 +26,7 @@ export class SalesOrderBillingComponent implements OnInit {
     currencyList = [];
     selectedColumns;
     headers = [];
+    billingChildHeader = [];
     shipViaList = [];
     selectedPartNumber = 0;
     isSpinnerVisible = false;
@@ -49,6 +51,8 @@ export class SalesOrderBillingComponent implements OnInit {
     billCustomerSiteList = [];
     customerNamesList: Object;
     isEditBilling: any;
+    billingList: any[] = [];
+    partSelected: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public commonService: CommonService,
@@ -61,39 +65,69 @@ export class SalesOrderBillingComponent implements OnInit {
         this.initColumns();
     }
 
+    // initColumns() {
+    //     this.headers = [
+    //         { field: "invoiceDate", header: "Invoice Date", width: "100px" },
+    //         { field: "partNumber", header: "PN", width: "130px" },
+    //         { field: "partDescription", header: "PN Description", width: "150px" },
+    //         { field: "stockLineNumber", header: "Stk Line Num", width: "120px" },
+    //         { field: "serialNumber", header: "Ser Num", width: "100px" },
+    //         { field: "conditionDescription", header: "Cond", width: "100px" },
+    //         { field: "currencyDescription", header: "Curr", width: "100px" },
+    //         { field: "totalSales", header: "Billing Amount", width: "120px" },
+    //     ];
+    //     this.selectedColumns = this.headers;
+    // }
     initColumns() {
         this.headers = [
-            { field: "invoiceDate", header: "Invoice Date", width: "100px" },
-            { field: "partNumber", header: "PN", width: "130px" },
-            { field: "partDescription", header: "PN Description", width: "150px" },
-            { field: "stockLineNumber", header: "Stk Line Num", width: "120px" },
-            { field: "serialNumber", header: "Ser Num", width: "100px" },
-            { field: "conditionDescription", header: "Cond", width: "100px" },
-            { field: "currencyDescription", header: "Curr", width: "100px" },
-            { field: "totalSales", header: "Billing Amount", width: "120px" },
+            { field: "itemNo", header: "Item #", width: "100px" },
+            { field: "salesOrderNumber", header: "SO Num", width: "100px" },
+            { field: "partNumber", header: "PN", width: "100px" },
+            { field: "partDescription", header: "PN Description", width: "100px" },
+            { field: "qtyToBill", header: "Qty Shipped", width: "110px" },
+            { field: "qtyBilled", header: "Qty Billed", width: "90px" },
+            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;
     }
 
-    refresh(parts) {
-        this.initColumns();
-        let savedParts = [];
-        let partsForBilling = [];
-        this.partsForBilling = [];
-        this.parts = parts;
-        if (this.parts && this.parts.length > 0) {
-            this.parts.forEach(part => {
-                if (part.salesOrderPartId) {
-                    this.partsForBilling.push(part);
-                }
+    refresh(id) {
+        //this.initColumns();
+        // this.partsForBilling = [];
+        // this.parts = parts;
+        // if (this.parts && this.parts.length > 0) {
+        //     this.parts.forEach(part => {
+        //         if (part.salesOrderPartId) {
+        //             this.partsForBilling.push(part);
+        //         }
+        //     });
+        // }
+        // this.totalRecords = this.partsForBilling.length;
+        // this.showPaginator = this.totalRecords > 0;
+        this.salesOrderId = id;
+        this.getShippingList();
+    }
+
+    formateCurrency(amount) {
+        return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
+    }
+
+    getShippingList() {
+        this.isSpinnerVisible = true;
+        this.salesOrderService
+            .getBillingInvoiceList(this.salesOrderId)
+            .subscribe((response: any) => {
+                this.isSpinnerVisible = false;
+                this.billingList = response[0];
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-        }
-        this.totalRecords = this.partsForBilling.length;
-        this.showPaginator = this.totalRecords > 0;
     }
 
     onSelectPartNumber(rowData) {
         if (rowData.salesOrderPartId != 0) {
+            this.partSelected = true;
             this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId);
         }
     }
@@ -104,10 +138,9 @@ export class SalesOrderBillingComponent implements OnInit {
         this.commonService.getCustomerNameandCode(value, 1).subscribe(res => {
             this.customerNamesList = res;
             this.isSpinnerVisible = false;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     getBillingAndInvoicingForSelectedPart(partNumber) {
@@ -134,10 +167,9 @@ export class SalesOrderBillingComponent implements OnInit {
         this.commonService.smartDropDownList('InvoiceType', 'InvoiceTypeId', 'Description').subscribe(res => {
             this.invoiceTypeList = res;
             this.isSpinnerVisible = false;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     getRevisionTypeList() {
@@ -145,10 +177,9 @@ export class SalesOrderBillingComponent implements OnInit {
         this.commonService.smartDropDownList('RevisionType', 'RevisionTypeId', 'Description').subscribe(res => {
             this.revisionTypeList = res;
             this.isSpinnerVisible = false;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     getCurrencyList() {
@@ -157,8 +188,7 @@ export class SalesOrderBillingComponent implements OnInit {
             results => {
                 this.currencyList = results
                 this.isSpinnerVisible = false;
-            },
-            err => {
+            }, err => {
                 this.isSpinnerVisible = false;
             }
         );
@@ -172,8 +202,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 (res) => {
                     this.isSpinnerVisible = false;
                     this.shipViaList = res;
-                },
-                err => {
+                }, err => {
                     this.isSpinnerVisible = false;
                 }
             )
@@ -199,10 +228,9 @@ export class SalesOrderBillingComponent implements OnInit {
                     }
                 }
             )
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            });
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     changeOfSoldSiteName(value) {
@@ -254,10 +282,9 @@ export class SalesOrderBillingComponent implements OnInit {
                     }
                 }
             )
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     async getSiteNamesByBillCustomerId(object) {
@@ -278,10 +305,9 @@ export class SalesOrderBillingComponent implements OnInit {
                     }
                 }
             )
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
+        }, err => {
+            this.isSpinnerVisible = false;
+        })
     }
 
     changeOfShipSiteName(value) {
