@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Asset Description</label>
-                                    <textarea class="text-item" style="height: 50px !important;resize: none"
+                                    <textarea class="text-item" style="height: 50px !important;resize: none !important;"
                                         [ngModelOptions]="{standalone: true}" (ngModelChange)="getmemo($event)"
                                         [(ngModel)]="currentAsset.description"></textarea>
                                 </div>
@@ -139,13 +139,13 @@
                                     <div *ngIf="showExistMsgForAsset" class="clr-red">Asset Parent and Alternate Asset can't be same</div>
                                 </div>
                                 <div>
-                                    <div class="card" style="margin-top: 20px;">
-                                        <div class="card-header" style="padding: 10px 12px;">
-                                            <h5 style="margin-bottom: 0; font-size: 12px;">
+                                    <div class="card management-structure-card">
+                                        <div class="card-header management-structure-card-header">
+                                            <h5 class="management-structure-header">
                                                 Management Structure<span class="clr-red">*</span>
                                             </h5>
                                         </div>
-                                        <div class="card-body" style="padding: 12px 12px 4px;">
+                                        <div class="card-body structure-card-body">
                                             <div class="form-group">
                                                 <p-dropdown  [showClear]="true" class="p-dropdown-100"  (onChange)="selectedLegalEntity(currentAsset.companyId);" required  (ngModelChange)="getmemo($event)"  [options]="maincompanylist" filter="true" [(ngModel)]="currentAsset.companyId" name="companyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                             </div>
@@ -167,7 +167,7 @@
                                     <div class="form-group">
                                         <label>
                                             Acquisition Type <span class="clr-red">*</span> <span
-                                                style="margin-left:3px;cursor:pointer;">
+                                                class="acquisition-type">
                                             </span>
                                         </label>
                                     
@@ -234,7 +234,7 @@
                                         
                                         <div class="form-group">
                                             <label>
-                                                Asset Location  <span class="clr-red">*</span><span style="margin-left:3px;cursor:pointer;">
+                                                Asset Location  <span class="clr-red">*</span><span class="acquisition-type">
                                                 </span>
                                             </label>
                                          
@@ -256,12 +256,12 @@
                                     </div>
 
                                 </div>
-                                <div class="card" style="margin-top: 20px;"
+                                <div class="card intangible-card"
                                     *ngIf="currentAsset && currentAsset.isIntangible">
                                     <div>
                                         <div *ngIf="currentAsset && currentAsset.isIntangible" class="intangible-block">
 
-                                            <div class="card-header" style="padding: 10px 12px;">
+                                            <div class="card-header intangible-card-header">
                                                 <div class="form-group">
                                                     <label>Intangible Class <span class="clr-red">*</span></label>
                                                    
@@ -274,7 +274,7 @@
                                             class="intangible-block block-bg2">
                                             <div class="form-group">
                                             </div>
-                                            <div class="card-body" style="padding: 12px 12px 4px;">
+                                            <div class="card-body depreciation-card-body">
                                                 <div class="form-group">
                                                     <label>Depreciation Method </label>
                                                     <input disabled class="form-control" type="text"
@@ -352,16 +352,16 @@
                                     <div *ngIf="showExistMsgForAssetParent" class="clr-red">Asset Parent and Alternate Asset can't be same</div>
                                 </div>
                                 <div>
-                                    <div class="card" style="margin-top: 20px;">
-                                        <div class="card-header" style="padding: 10px 12px;">
+                                    <div class="card intangible-card">
+                                        <div class="card-header intangible-card-header">
                                             <div class="form-group">
                                                 <label>Asset Class/Attribute <span class="clr-red">*</span></label>
                                     
                                                 <p-dropdown  [showClear]="true" class="p-dropdown-100" (input)="onFilterTangible($event)" (onChange)="showItemEdit(currentAsset.tangibleClassId)"  (ngModelChange)="getmemo($event)" required [options]="allAssetTypeInfo" filter="true" [(ngModel)]="currentAsset.tangibleClassId" name="tangibleClassId" [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                             </div>
                                         </div>
-                                        <div class="depreciation-asset-block block-bg1">
-                                            <div class="card-body" style="padding: 12px 12px 4px;">
+                                        <div class="depreciation-asset-block block-bg1 ">
+                                            <div class="card-body depreciation-card-body">
                                                 <div class="form-group">
                                                     <label>Depreciation Method</label>
                                                     <input class="form-control" type="text" disabled=""
@@ -442,7 +442,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12" style="margin-bottom: 20px;padding-right: 16px;">
+                <div class="col-md-12 asset-buttons-div">
                     <div class="margintop">
                         <button
                         *ngIf="currentAsset && currentAsset.isTangible != true && isEditMode==true"          
