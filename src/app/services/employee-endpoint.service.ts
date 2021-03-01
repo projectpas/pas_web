@@ -521,11 +521,12 @@ export class EmployeeEndpoint extends EndpointFactory {
 
 
 	getEmployeeUpdateMemoEndpoint<T>(employeeId: number, memo: any): Observable<T> {
-		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}&memo=${memo}`;
+		//let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}&memo=${memo}`;
+		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}`;
 		debugger;
-		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+		return this.http.put<T>(endpointUrl,JSON.stringify(memo), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeUpdateMemoEndpoint(employeeId, memo));
+				return this.handleErrorCommon(error, () => this.getEmployeeUpdateMemoEndpoint(employeeId, memo));
 			});
 
 	}

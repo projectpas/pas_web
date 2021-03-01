@@ -66,6 +66,7 @@ export class UserRolesSetupComponent implements OnInit {
     }
 
     sortModules(): void {
+        this.sortedHierarchy = [];
         var parentModules = this.moduleHierarchy.filter(function (module) {
             return module.parentId == null;
         });
@@ -101,7 +102,7 @@ console.log(this.sortedHierarchy)
             currentModule.hasChildren = true;
             for (let module of modules) {
                 module.level = currentModule.level + 1;
-                module.visible = false;
+                module.visible = true;
                 module.parentId = currentModule.id;
                 module.rolePermission = new RolePermission();
                 this.resetRolePermission(module.rolePermission);
@@ -203,7 +204,7 @@ console.log(this.sortedHierarchy)
     }
 
     setCorrospondingValue(val, value) {
-        switch (val.rolePermission.permissionId) {
+        switch (val.rolePermission.permissionID) {
             case 1:
                 val.rolePermission.canAdd = value;
                 break;
