@@ -396,8 +396,6 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
 
   getTotalTaskUnitCost(tData) {
     let total = 0;
-    debugger;
-    console.log("ext cost",tData)
     if (tData) {
      
       tData.forEach(
