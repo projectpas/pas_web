@@ -687,8 +687,22 @@ export class SalesOrderShippingComponent {
             });
     }
 
-    checked(event, poindex) {
-        this.shippingList[0].soshippingchildviewlist[0].selected = true;
+    checked(evt, ship) {
+        ship.selected = evt.target.checked;
+        this.checkIsChecked();
+    }
+
+    disableCreateShippingBtn: boolean = true;
+
+    checkIsChecked() {
+        this.shippingList.forEach(a => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (ele.selected)
+                    this.disableCreateShippingBtn = false;
+                else
+                    this.disableCreateShippingBtn = true;
+            });
+        });
     }
 
     setOriginToAddress(value) {

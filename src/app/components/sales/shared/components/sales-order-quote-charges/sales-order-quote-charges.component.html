@@ -280,9 +280,9 @@
                     <th rowspan="2">Type<span class="clr-red">*</span></th>
                     <th rowspan="2">Description</th>
                     <th rowspan="2">Qty<span class="clr-red">*</span></th>
-                    <th rowspan="2">Ref Num</th>
                     <th rowspan="2">Unit Cost<span class="clr-red">*</span></th>
                     <th rowspan="2">Extended Cost<span class="clr-red">*</span></th>
+                    <th rowspan="2">Ref</th>
                     <th rowspan="2">Vendor Name</th>
                     <th rowspan="2">Actions</th>
                   </tr>
@@ -309,10 +309,6 @@
                         [(ngModel)]="charge.quantity" (ngModelChange)="enableUpdate()" name="qty_{{i}}" required />
                     </td>
                     <td>
-                      <input type="text" pInputText maxlength="15" class="form-control" value="{{ charge.refNum }}"
-                        [(ngModel)]="charge.refNum" (ngModelChange)="enableUpdate()" name="refNum_{{i}}" />
-                    </td>
-                    <td>
                       <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
                         value="{{ charge.unitCost }}" (change)="calculateExtendedCost(charge)"
                         [(ngModel)]="charge.unitCost" (ngModelChange)="enableUpdate()" name="unitCost_{{i}}" required
@@ -323,6 +319,10 @@
                         value="{{ charge.extendedCost }}" [(ngModel)]="charge.extendedCost"
                         (ngModelChange)="enableUpdate()" (change)="calculateExtendedCostSummation()" name="exd_{{i}}"
                         required disabled maxlength="15" />
+                    </td>
+                    <td>
+                      <input type="text" pInputText maxlength="15" class="form-control" value="{{ charge.refNum }}"
+                        [(ngModel)]="charge.refNum" (ngModelChange)="enableUpdate()" name="refNum_{{i}}" />
                     </td>
                     <td>
                       <p-autoComplete class="autocomp-customer-cstm" name="vendorName" [(ngModel)]="charge.vendor"
