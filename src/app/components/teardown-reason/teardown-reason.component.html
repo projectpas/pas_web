@@ -14,15 +14,15 @@
                             </a>
                         </div> -->
                         <div class="card new-card">
-                            <div class="card-header bg-primary new-card-header">
+                            <div class="card-header header">
                               <div class="row">
                                 <div class="col">
-                                  <h4 class="new-card-heading">Teardown Reason</h4>
+                                  <h4 class="header-name">Teardown Reason</h4>
                                 </div>
                                 <div>
                                   <button
                                     type="button"
-                                    class="btn-sm new-btn-primary"
+                                    class="btn-sm header-button"
                                     data-target="#add" data-toggle="modal"
                                     (click)="resetForm()"
                                   >
@@ -31,7 +31,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="card-body new-card-body">
+                            <div class="card-body header-body">
                         
                         <p-table #dt 
                         class="rpo-table-cstm rro-table-cstm" 
@@ -53,7 +53,7 @@
                                 <div class="row">
                                     <div class="col">
                                     <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
-                                        [(ngModel)]="selectedColumns" [style]="{minWidth: '200px'}" style="float:left"
+                                        [(ngModel)]="selectedColumns" class="multiselect-field"
                                         (onChange)="columnsChanges()"></p-multiSelect>
 
                                     </div>
@@ -65,21 +65,20 @@
                                             <div class="form-group">
                                               <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
                                               <div
-                                                class="pull-left"
-                                                style="margin-top: 4px; margin-right: 15px;"
+                                                class="pull-left radio-buttons-align"
                                               >
                                               <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="getListByStatus('Active')" [(ngModel)]="currentstatus">
                                                 <span class="checkmark"></span>Active
                                             </label>
                                         </div>
-                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="getListByStatus('InActive')" [(ngModel)]="currentstatus">
                                                 <span class="checkmark"></span>In-Active
                                             </label>
                                         </div>
-                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="ALL" 
                                                 (click)="getListByStatus('ALL')" [(ngModel)]="currentstatus">
@@ -103,14 +102,14 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                    <button type="button" class="btn btn-primary new-table-button" matTooltip="Download  Data"  style="padding: 5px 12px !important;" matTooltipPosition="above"
+                                    <button type="button" class="btn btn-primary exports-button" matTooltip="Download  Data"  style="padding: 5px 12px !important;" matTooltipPosition="above"
                                          pButton icon="fa-download" iconPos="left"
                                         label="Export Data" (click)="dt.exportCSV()"></button>
-                                    <button type="button" class="btn btn-primary new-table-button"  style="padding: 5px 12px !important;"  matTooltip="Download Selected" matTooltipPosition="above"
+                                    <button type="button" class="btn btn-primary exports-button"  style="padding: 5px 12px !important;"  matTooltip="Download Selected" matTooltipPosition="above"
                                          pButton icon="fa-download" iconPos="left"
                                         label="Export Selection Only"
                                         (click)="dt.exportCSV({selectionOnly:true})"></button>
-                                    <div class="excel-upload  excel-upload-cstm">
+                                    <!-- <div class="excel-upload  excel-upload-cstm">
 
                                         <input type="file" name="upload[]" id="upload"
                                             (change)="customExcelUpload($event)" class="uploaddoc upload-file"
@@ -123,7 +122,7 @@
                                         &nbsp; &nbsp;
                                         <button class="btn btn-primary" matTooltipPosition="above"  style="padding: 5px 12px !important;"  matTooltip="Sample File download" (click)="sampleExcelDownload()">Sample File
                                             Download</button>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     </div>
                                               
@@ -131,31 +130,31 @@
 
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th style="width:120px" *ngFor="let col of columns" pResizableColumn
+                                    <th class="table-column-width" *ngFor="let col of columns" pResizableColumn
                                         pReorderableColumn [pSortableColumn]="col.field">
                                         {{col.header}}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th style="width:200px;position:sticky" *ngIf="selectedColumns.length> 0"> Actions
+                                    <th class="table-column-width" style="position:sticky" *ngIf="selectedColumns.length> 0"> Actions
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                        <input style="width:100%;" pInputText type="text"
+                                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input class="table-header-input-width" pInputText type="text"
                                             (input)="dt.filter($event.target.value, col.field,'contains')">
                                     </th>
-                                    <th style="width:200px;position:sticky"></th>
+                                    <th class="table-column-width"style="position:sticky"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle>
-                                    <td style="width:120px" *ngFor="let col of columns" class="ui-resizable-column"
+                                    <td *ngFor="let col of columns" class="ui-resizable-column table-column-width"
                                         pReorderableRowHandle data-toggle="modal" data-target="#view"
                                         (dblclick)="viewSelectedRow(rowData)">
                                         {{col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?
                                         (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
                                     </td>
-                                    <td class="action-icons-cstm" style="width:200px" *ngIf="selectedColumns.length> 0">
+                                    <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length> 0">
                                         <div *ngIf="currentDeletedstatus==false">
                                      
                                         <!--<p-inputSwitch [(ngModel)]="rowData['isActive']" matTooltip="Update" name="isActive{{rowIndex}}"
