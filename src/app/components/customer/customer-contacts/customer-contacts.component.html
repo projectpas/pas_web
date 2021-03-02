@@ -638,18 +638,20 @@
                     (ngModelChange)="enableSave()"
                     name="firstName" 
                     field="firstName" 
-                    (onKeyUp)=" checkfirstNameExist($event.target.value)"
-                    (onChange)=" checkfirstNameExist($event.target.value)"  
-                    (onSelect)="selectedFirstnameName()"                             
+                                               
                     [suggestions]="firstNamesList"
                     (completeMethod)="filterFirstNames($event)"                     
                     [size]="30" [minLength]="1" 
                     [dropdown]="true"
                     [inputStyle]="{ width: '100%' }" required>
                   </p-autoComplete>
-                  <div *ngIf="isfirstNameAlreadyExists" class="clr-red">
+                  <!-- 
+                    (onKeyUp)=" checkfirstNameExist($event.target.value)"
+                    (onChange)=" checkfirstNameExist($event.target.value)"  
+                    (onSelect)="selectedFirstnameName()"  
+                    <div *ngIf="isfirstNameAlreadyExists" class="clr-red">
                   Entry Already Exists
-                 </div>
+                 </div> -->
                 </div>
               </div>
               <div class="form-group">
@@ -659,16 +661,17 @@
                     [(ngModel)]="contactInformation.middleName"
                     (ngModelChange)="enableSave()" 
                     name="middleName" 
-                    (onKeyUp)="checkmiddleNameExist($event.target.value)"
-                    (onChange)="checkmiddleNameExist($event.target.value)"  
-                    (onSelect)="selectedmiddleNameName()"                     
+                                      
                     [suggestions]="middleNamesList" field="middleName"
                     (completeMethod)="filterMiddleNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
                     [inputStyle]="{ width: '100%' }">
                   </p-autoComplete>
+                  <!-- (onKeyUp)="checkmiddleNameExist($event.target.value)"
+                  (onChange)="checkmiddleNameExist($event.target.value)"  
+                  (onSelect)="selectedmiddleNameName()"  
                   <div *ngIf="ismiddleNameAlreadyExists" class="clr-red">
                     Entry Already Exists
-                   </div>
+                   </div> -->
                 </div>
 
               </div>
@@ -679,18 +682,19 @@
                     [(ngModel)]="contactInformation.lastName"
                     (ngModelChange)="enableSave()" 
                     name="lastName" 
-                    (onKeyUp)="checklastNameExist($event.target.value)"
-                    (onChange)="checklastNameExist($event.target.value)"  
-                    (onSelect)="selectedlastNameName()" 
+                   
                     [suggestions]="lastNamesList" 
                     field="lastName"
                     (completeMethod)="filterLastNames($event)" 
                     [size]="30" [minLength]="1" [dropdown]="true"
                     [inputStyle]="{ width: '100%' }" required>
                   </p-autoComplete>
+                  <!-- (onKeyUp)="checklastNameExist($event.target.value)"
+                  (onChange)="checklastNameExist($event.target.value)"  
+                  (onSelect)="selectedlastNameName()" 
                   <div *ngIf="islastNameAlreadyExists" class="clr-red">
                     Entry Already Exists
-                   </div>
+                   </div> -->
                 </div>
               </div>
               <div class="form-group">

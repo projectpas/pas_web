@@ -382,6 +382,7 @@
                   [suggestions]="billingSieList"                     
                   emptyMessage="No Match Found" 
                   field="siteName" 
+                  (onSelect)="checkBillingSiteNameSelect()"
                   (onKeyUp)="checkSiteNameExist($event.target.value)"
                   (onChange)="checkSiteNameExist($event.target.value)"                  
                   (completeMethod)="filterBillingSite($event);" 

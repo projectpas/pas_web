@@ -114,11 +114,10 @@
                   </div>
 
                   <div class="col-md-2">
-                    <!-- *ngIf="showAllowNettingOfAPAR == true" -->
-                    <div class="form-group" style="margin-top: 15px;">
+                    <div class="form-group" style="margin-top: 15px;"  *ngIf="showAllowNettingOfAPAR == true">
                       <span class="checkbox-cstm">
                         <label>
-                          <input type="checkbox" [disabled]="!showAllowNettingOfAPAR" name="allowNettingOfAPAR" [(ngModel)]="
+                          <input type="checkbox" name="allowNettingOfAPAR" (ngModelChange)="enableSave()" [(ngModel)]="
                               savedGeneralInformationData.allowNettingOfAPAR
                             " />
                           <span class="cr"><i class="cr-icon pi pi-check"></i></span>

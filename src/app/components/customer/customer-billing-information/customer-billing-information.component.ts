@@ -142,6 +142,19 @@ export class CustomerBillingInformationComponent {
     closeDeleteModal() {
         $("#downloadBilling").modal("hide");
     }
+
+    checkBillingSiteNameSelect() {    
+        if(this.isEditMode  != editValueAssignByCondition('siteName', this.billingInfo.siteName))
+        {
+            this.isSiteNameAlreadyExists = true;
+            this.disableSaveSiteName = true;
+        }
+        else
+        {
+            this.isSiteNameAlreadyExists = false;
+            this.disableSaveSiteName = false;
+        }
+    }
     
     exportCSV(dt){
         dt._value = dt._value.map(x => {
