@@ -5,7 +5,7 @@ import { WorkOrderService } from '../../../services/work-order/work-order.servic
 import { AddressModel } from '../../../models/address.model';
 import {AlertService, MessageSeverity} from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
-import { editValueAssignByCondition } from '../../../generic/autocomplete';
+import { editValueAssignByCondition,getObjectById } from '../../../generic/autocomplete';
 @Component({
     selector: 'app-shipping',
     templateUrl: './shipping.component.html',
@@ -23,6 +23,11 @@ export class ShippingComponent implements OnInit {
     expirationDate: any;
     quoteDueDate: any;
     customerNamesList: any;
+    id: number;
+    customerListOriginal: any;
+    customerallListOriginal: any;;
+    arrayCustlist: any[] = [];
+    customerNames: { customerId: any; name: any; }[];
     soldCustomerAddress: any = new AddressModel();
     shipCustomerAddress: any = new AddressModel();
     shippingHeader: any = {
@@ -56,14 +61,16 @@ export class ShippingComponent implements OnInit {
         this.getCountriesList();
         this.getSiteName();
         this.getShippingData();
-        this.getCustomerNameList();
+        //this.getCustomerNameList();
+        this.loadcustomerData('');
         if (this.workOrderGeneralInformation) {
             this.shippingHeader['soldToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
             this.shippingHeader['shipToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
-            if(!this.shippingHeader.shipToCustomerId){
-                this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
-                this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']);
-            }
+            // if(!this.shippingHeader.shipToCustomerId){
+            //     debugger;
+            //     this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
+            //     this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']);
+            // }
             //this.shippingHeader['originName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
             this.shippingHeader['customerId'] = this.workOrderGeneralInformation['customerDetails']['customerId'];
         }
@@ -128,7 +135,9 @@ if(this.managementStructureId !=undefined){
                         this.siteList.forEach(
                             x => {
                                 if(x.isPrimary){
-                                    this.shippingHeader.soldToSiteId = x.customerShippingAddressId;
+                                    //this.shippingHeader.soldToSiteId = x.customerShippingAddressId;
+                                    this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
+                                    
                                     this.setSoldToAddress();
                                 }
                             }
@@ -153,7 +162,8 @@ if(this.managementStructureId !=undefined){
     }
     setShipToAddress() {
         this.shipCustomerSiteList.forEach(site => {
-            if (site.customerShippingAddressId == this.shippingHeader.shipToSiteId) {
+            //if (site.customerShippingAddressId == this.shippingHeader.shipToSiteId) {
+                if (site.customerDomensticShippingId == this.shippingHeader.shipToSiteId) {
                 this.shippingHeader['shipToAddress1'] = site.address1;
                 this.shippingHeader['shipToAddress2'] = site.address2;
                 this.shippingHeader['shipToCity'] = site.city;
@@ -201,7 +211,7 @@ if(this.managementStructureId !=undefined){
     }
     setSoldToAddress() {
         this.siteList.forEach(site => {
-            if (site.customerShippingAddressId == this.shippingHeader.soldToSiteId) {
+            if (site.customerDomensticShippingId == this.shippingHeader.soldToSiteId) {
                 this.shippingHeader['soldToAddress1'] = site.address1;
                 this.shippingHeader['soldToAddress2'] = site.address2;
                 this.shippingHeader['soldToCity'] = site.city;
@@ -240,6 +250,31 @@ if(this.managementStructureId !=undefined){
             this.errorHandling(err);
         })
     }
+    async loadcustomerEditData(strText = '') {
+        if (this.id > 0)
+            this.arrayCustlist.push(this.id);
+        if (this.arrayCustlist.length == 0) {
+            this.arrayCustlist.push(0);
+        }
+
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+
+            this.customerNamesList = response.map(x => {
+                return {
+                    customerName: x.label, customerId: x.value
+                }
+            })
+
+        }, err => {            
+            this.isSpinnerVisible = false;
+        });
+    }
+
+    filterCustomerNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.loadcustomerData(event.query);
+        }
+    }
     async  getSiteNamesByShipCustomerId(object) {
         console.log("object",object);
         this.clearShipToAddress();
@@ -250,7 +285,7 @@ if(this.managementStructureId !=undefined){
             this.shipCustomerShippingOriginalData.forEach(
                 x => {
                     if(x.isPrimary){
-                        this.shippingHeader.shipToSiteId = x.customerShippingAddressId;
+                        this.shippingHeader.shipToSiteId = x.customerDomensticShippingId;
                         this.setShipToAddress();
                     }
                 }
@@ -281,6 +316,7 @@ if(this.managementStructureId !=undefined){
                             this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
                             this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
                             this.shippingHeader['shipToCustomerId'] = { customerId: res.shipToCustomerId, customerName: res.shipToCustomer };
+                            this.id= res.shipToCustomerId
 
                         }
                     }
@@ -299,8 +335,37 @@ if(this.managementStructureId !=undefined){
             this.errorHandling(err);
         });
     }
+    async loadcustomerData(strText = '') {
+        if (this.id > 0)
+            this.arrayCustlist.push(this.id);
+        if (this.arrayCustlist.length == 0) {
+            this.arrayCustlist.push(0);
+        }
+
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+
+            this.customerNamesList = response.map(x => {
+                return {
+                    customerName: x.label, customerId: x.value
+                }
+            })
+
+            // if (this.id > 0) 
+            // {
+            //     this.shippingHeader['shipToCustomerId'] = getObjectById('value', this.id, this.customerallListOriginal)
+            // }
+        }, err => {            
+            this.isSpinnerVisible = false;
+        });
+    }
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
 
     save() {
+
         this.shippingHeader['workOrderId'] = this.workOrderGeneralInformation['workOrderId'];
         this.shippingHeader['workOrderPartNoId'] = this.workOrderPartNumberId;
         this.shippingHeader['masterCompanyId'] = this.workOrderGeneralInformation['masterCompanyId'];
