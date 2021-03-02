@@ -494,7 +494,8 @@
                   <span>
                     <div class="form-group memo-popup-cstm mat_emo">
                       <div [innerHTML]="documentInformation.docMemo ? documentInformation.docMemo.trim() : ''"
-                        [matTooltip]="parsedText(documentInformation.docMemo)" class="form-control" style="width: 109%;"
+                        [matTooltip]="parsedText(documentInformation.docMemo)" class="form-control" 
+                        style="width: 109%;line-height:1.5 !important"
                         class="text_editor_box"></div>
                     </div>
                   </span>

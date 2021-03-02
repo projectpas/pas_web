@@ -1,11 +1,14 @@
 <div style="z-index: 1;width: 100% !important;" *ngIf="!isEdit">
   <span class="cat-heading cat4">Add Charges<i (click)="addRow()" class="fa fa-plus"></i></span>
 </div>
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
-  style="height:380px;">
-
+<!-- <div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
+  style="height:380px;"> -->
+ 
   <form #chargesCreateForm="ngForm">
-    <table class="table table-bordered table-fixed workflow-table-charges  workflowTable-class">
+    <div class="table-responsive table-overflow header-table-width table-height">
+      <div class="tableFixHead">
+    <table class="table table-bordered lastcol-fix">
+      <thead>
       <tr>
         <th *ngIf="!isWorkFlow"><label>Task <span class="clr-red">*</span></label></th>
         <th><label>Charge Type <span class="clr-red">*</span></label></th>
@@ -15,11 +18,13 @@
         <th *ngIf="isWorkOrder || isQuote"><label>Ref Num</label></th>
         <th><label>Unit Cost<span class="clr-red">*</span> </label></th>
         <th><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
-        <th><label>Vendor Name</label></th>
+        <th style="z-index:1"><label>Vendor Name</label></th>
         <th *ngIf="!isQuote && !isEdit">
           <label style="text-align: left;">Actions </label>
         </th>
       </tr>
+      </thead>
+      <tbody>
       <tr class="charge-tr" [hidden]="charge.isDelete" *ngFor="let charge of workFlow.charges; let i = index">
         <td *ngIf="!isWorkFlow">
           <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
@@ -72,7 +77,7 @@
         <td>
           <p-autoComplete [(ngModel)]="charge.vendor" (ngModelChange)="getActive()" [suggestions]="vendorCollection" [forceSelection]="true"
             (completeMethod)="filterVendor($event)" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
-            [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
+           [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
           </p-autoComplete>
         </td>
         <!-- [disabled]="!charge.isShowDelete"  -->
@@ -99,9 +104,13 @@
         <!-- <td>&nbsp;</td>
         <td *ngIf="!isQuote || !isEdit">&nbsp;</td> -->
       </tr>
+      </tbody>
     </table>
-  </form>
+  </div>
 </div>
+  </form>
+
+
 <div *ngIf="isWorkOrder && !isEdit" style="float:right">
   <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="saveChargesWorkOrder()"
     style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="!chargesCreateForm.valid">

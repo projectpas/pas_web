@@ -15,9 +15,9 @@
       <thead>
         <tr>
           <th *ngIf="!isWorkFlow">Task<span class="clr-red">*</span></th>
-          <th>PN<span class="clr-red">*</span></th>
+          <th style="z-index:1">PN<span class="clr-red">*</span></th>
           <th style="min-width: 90px;">Description<span class="clr-red">*</span></th>
-          <th>Cond<span class="clr-red">*</span></th>
+          <th style="z-index:1">Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
           <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
           <th>Qty<span class="clr-red">*</span></th>
@@ -27,7 +27,7 @@
           <th>Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Deferred</th>
-          <th>Memo</th>
+          <th style="z-index:1">Memo</th>
           <th>Actions</th>
         </tr>
       </thead>
