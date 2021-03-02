@@ -450,7 +450,8 @@
 
                 <div class="col-sm-12">
 
-
+                    <p><span class="label"><b>Customer Contact<span class="clr-red">*</span> : </b></span><span
+                        class="value">{{viewdata.customerContact}}</span></p>
                     <p><span class="label"><b>Mobile<span class="clr-red">*</span> : </b></span><span
                             class="value">{{viewdata.mobile}}</span></p>
                     <p><span class="label"><b>Contacted by<span class="clr-red">*</span> : </b></span><span
@@ -563,6 +564,7 @@
                     <table class="table table-bordered header-table-width">
                         <thead>
                             <tr>
+                                <th>Customer Contact</th>
                                 <th>Mobile</th>
                                 <th>Contacted By</th>
                                 <th>Notes</th>
@@ -575,6 +577,9 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let audit of documentauditHisory; let i = index;">
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerContact', audit.customerContact)  ? 'black' : 'red'  }">
+                                    {{audit.customerContact}}</td>
                                 <td
                                     [ngStyle]="{'color':  getColorCodeForHistory(i, 'mobile', audit.mobile)  ? 'black' : 'red'  }">
                                     {{audit.mobile}}</td>

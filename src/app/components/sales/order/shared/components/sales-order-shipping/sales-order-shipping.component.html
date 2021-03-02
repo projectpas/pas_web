@@ -344,14 +344,26 @@
                                     <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">Weight</label>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-3">
                                         <input type="number" class="input-field-value" pKeyFilter="num" pInputText
                                             maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
                                             id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
                                     </div>
+                                    <div class="col-md-2">
+                                        <label class="sale-order-shipping-lable" style="margin-left: 40px;">UOM <span style="color: red;"
+                                                *ngIf="shippingHeader.shipWeight">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                            [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
+                                            [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
+                                            [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
+                                        </p-dropdown>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">UOM <span style="color: red;"
                                                 *ngIf="shippingHeader.shipWeight">*</span>
                                         </label>
@@ -362,13 +374,13 @@
                                             [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
                                         </p-dropdown>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">Dimension (L, W, H)</label>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-3">
                                         <span class="display-flex inline-block">
                                             <input type="number" name="exportLength" class="input-field-value"
                                                 pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
@@ -381,9 +393,23 @@
                                                 [(ngModel)]="shippingHeader.shipSizeHeight" />
                                         </span>
                                     </div>
+                                    <div class="col-md-2">
+                                        <label class="sale-order-shipping-lable" style="margin-left: 40px;">
+                                            UOM <span style="color: red;"
+                                                *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                            [(ngModel)]="shippingHeader.shipSizeUnitOfMeasureId"
+                                            name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
+                                            placeholder="Select" [showClear]="true"
+                                            [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
+                                            (onChange)="btnChange()"></p-dropdown>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">
                                             UOM <span style="color: red;"
                                                 *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
@@ -396,7 +422,7 @@
                                             placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
                                             (onChange)="btnChange()"></p-dropdown>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -860,8 +886,10 @@
                     <div class="col-md-12">
                         <div class="card card-stock">
                             <div class="card-body">
+                                <!-- <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
+                                    (click)="save()" [disabled]="!shippingForm.valid">Save</button> -->
                                 <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
-                                    (click)="save()" [disabled]="!shippingForm.valid">Save</button>
+                                    (click)="save()" [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
                             </div>
                         </div>
                     </div>

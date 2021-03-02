@@ -17,6 +17,7 @@ export class SalesOrderBillingAndInvoicing {
     gateStatus: string;
     soldToCustomerId: number;
     soldToSiteId: number;
+    soldToCustomerName: string;
     shipToCustomerId: number;
     shipToSiteId: number;
     shipToAttention: string;
@@ -38,6 +39,8 @@ export class SalesOrderBillingAndInvoicing {
     salesPerson:string;
     customerRef:string;
     openDate: Date;
+    typeId:number;
+    salesOrderType:string;
 }
 // {
 //     soBillingInvoicingId: 0;

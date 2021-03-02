@@ -36,7 +36,7 @@
                                             Item {{ rowIndex + 1 }}
                                         </span> -->
                                         <span *ngIf="summaryColumn.field == 'itemNo'">
-                                            Item {{summaryPart[summaryColumn.field] }}
+                                            Line {{summaryPart[summaryColumn.field] }}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}

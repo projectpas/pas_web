@@ -580,7 +580,7 @@
                             </p-tabPanel>
                             <p-tabPanel header="Billing/Invoicing">
                                 <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
-                                    [salesOrder]="salesQuote">
+                                [customerDetails]="customerDetails" [salesOrder]="salesQuote">
                                 </app-sales-order-billing>
                             </p-tabPanel>
                             <p-tabPanel header="Document">
