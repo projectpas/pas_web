@@ -42,10 +42,6 @@
                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                                 data-toggle="modal"
                                 (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
-
-                            <!-- <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
-                                iconPos="left" style="padding: 5px 12px !important;" label="Export Data"
-                                matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()"></button> -->
                             <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download"
                                 iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                                 matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
@@ -628,17 +624,9 @@
                                     </div>
                                 </div>
                             </p-accordionTab>
-
-
-
-
                         </p-accordion>
-
-
-
                     </p-tabPanel>
                     <p-tabPanel header="Tools">
-
                         <div class="equipment-tab-content" *ngIf="workOrderAssetList">
                             <div class="x_panel">
                                 <div class="tab-content">
@@ -675,17 +663,11 @@
                                 <br />
                             </div>
                         </div>
-
-
                     </p-tabPanel>
-
-
                     <p-tabPanel header="Quote">
-
                         <div class="h-300">
                             <h3>No Data Found</h3>
                         </div>
-
                     </p-tabPanel>
                     <p-tabPanel header="Main Component">
                         <div class="h-300">
@@ -843,8 +825,6 @@
                                 [workOrderExclusionsList]="workOrderExclusionsList" [taskList]="taskList"
                                 (refreshData)="getExclusionListByWorkOrderId(0, 0)" [isView]="isView">
                             </app-work-order-exclusions>
-
-
                         </div>
                         <div *ngIf="selectedOtherSubTask === 'freight'">
                             <app-work-order-freight [freightForm]="freight"
@@ -853,24 +833,10 @@
                             </app-work-order-freight>
                         </div>
                     </p-tabPanel>
-
-
-
-
-
-
-
-
-
-
-
-
-
                 </p-tabView>
             </div>
         </div>
     </div>
-
 </div>
 
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
