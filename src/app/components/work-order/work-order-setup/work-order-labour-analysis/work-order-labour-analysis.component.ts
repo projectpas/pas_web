@@ -8,7 +8,7 @@ declare var $ : any;
     templateUrl: './work-order-labour-analysis.component.html',
     styleUrls: ['./work-order-labour-analysis.component.css']
 })
-/** WorkOrderMainComponent component*/
+/** WorkOrderMainComponent component*/ 
 export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     @Input() savedWorkOrderData;
     @Input() selectedPartNumber: any = {};

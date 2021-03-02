@@ -3,7 +3,7 @@
 }
 .flot-r{
   float: right !important;
-  color: grey;
+  color: grey !important;
   margin: 0px;
   padding: 0px !important;
 }

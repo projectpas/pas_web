@@ -4,7 +4,7 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
-
+declare var $ : any;
 @Component({
     selector: 'app-work-order-analysis',
     templateUrl: './work-order-analysis.component.html',
@@ -122,5 +122,8 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
             val = new Intl.NumberFormat(this.global_lang, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val)
             return val;
         }
+    }
+    closeModal() {
+        $("#downloadConfirmation").modal("hide");
     }
 }
