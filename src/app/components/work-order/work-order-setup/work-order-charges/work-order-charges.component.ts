@@ -396,17 +396,22 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
 
   getTotalTaskUnitCost(tData) {
     let total = 0;
+    debugger;
+    console.log("ext cost",tData)
     if (tData) {
+     
       tData.forEach(
         (material) => {
-          if (material.extendedCost && !material.isDeleted) {
-            total += Number(material.extendedCost.toString().split(',').join(''));
+          if (material.extendedCost) {
+            total +=parseFloat(material.extendedCost)
+            // total +=   parseFloat(material.extendedCost.toString().replace(/\,/g, ''));
+            // total += Number(material.extendedCost.toString().split(',').join(''));
           }
         }
       )
-    }
-    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0';
-    return newTotal + '.00';
+    } 
+    const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 0) : '0.00';
+    return total.toFixed(2);
   }
   getTotalBillingRate() {
     let total = 0;

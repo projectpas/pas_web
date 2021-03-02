@@ -516,7 +516,11 @@ export class WorkOrderAddComponent implements OnInit {
             this.getAllCustomerContact(this.workOrderGeneralInformation.customerDetails.customerId, 'edit');
             // }
             this.workOrderId = data.workOrderId;
+            console.log("modify fun",this.workOrderGeneralInformation.partNumbers[0])
             if (this.workOrderGeneralInformation.partNumbers[0].workflowId == null) {
+                // if(this.workOrderGeneralInformation.isSinglePN){
+                    this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
+                // }
                 this.gridTabChange('materialList');
             }
             this.isRecCustomer = data.isRecCustomer;
@@ -738,7 +742,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     clearautoCompleteInput(currentRecord, field) {
         // currentRecord[field] = null;
-    }
+    } 
 
     getMaterialListHandle() {
         if (this.isSubWorkOrder == true) {
@@ -768,7 +772,8 @@ export class WorkOrderAddComponent implements OnInit {
         if (value != 'communication') {
             this.selectedCommunicationTab = '';
         }
-        if (value === 'materialList') {
+        console.log("value",value)
+        if (value == 'materialList') {
             if (this.isSubWorkOrder == true) {
                 this.getMaterialListByWorkOrderIdForSubWO();
             } else {
@@ -1078,6 +1083,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.workFlowWorkOrderId = result.workFlowWorkOrderId;
             this.workScope = result.partNumbers[0].workScope;
             this.showGridMenu = true;
+
             this.getWorkFlowTabsData();
             if (this.workFlowId != null) {
                 this.isWorkOrder = true;
@@ -1434,7 +1440,12 @@ export class WorkOrderAddComponent implements OnInit {
             workFlowDataObject.subWOPartNoId = this.subWOPartNoId;
         }
         delete workFlowDataObject.customerName;
-        this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => {
+        if (workFlowDataObject.equipments && workFlowDataObject.equipments.length != 0) {
+            workFlowDataObject.equipments.forEach(element => {
+                element.partNumber=element.partNumber.name
+            });
+        }
+        this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
             // this._workflowService.currentWorkFlowId=
@@ -1554,6 +1565,7 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1584,6 +1596,7 @@ export class WorkOrderAddComponent implements OnInit {
                     MandatorySupplementalId :x.materialMandatoriesId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1618,6 +1631,7 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1646,6 +1660,7 @@ export class WorkOrderAddComponent implements OnInit {
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -2095,6 +2110,7 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     getMaterialListByWorkOrderId() {
+        console.log("workFlowWorkOrderId,",this.workFlowWorkOrderId,this.workOrderId)
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
             this.isSpinnerVisible = true;

@@ -136,14 +136,14 @@ export class WorkOrderSmartComponent implements OnInit {
     getAllExpertiseType() {
         this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
             this.expertiseTypeList = res.map(x => {
-                if (x.expertiseType == 'Technician') {
+                if (x.expertiseType == 'Technician'  || x.expertiseType == 'TECHNICIAN') {
                     this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                     return;
                 }
             });
         })
     }
-    getExpertiseEmployeeByExpertiseId(value) {
+    getExpertiseEmployeeByExpertiseId(value) { 
         
         this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
             this.technicianByExpertiseTypeList = res;
