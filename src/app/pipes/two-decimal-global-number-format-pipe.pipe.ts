@@ -40,3 +40,23 @@ export class TwoDecimalGlobalNumberFormatPipe extends DecimalPipe{
 
      }
 }
+
+@Pipe({ name: 'fiveDecimalGlobalNumberFormatPipe', pure: true })
+export class FiveDecimalGlobalNumberFormatPipe extends DecimalPipe{
+    transform(value: any, digitsInfo: string = "1.5-5"): any {
+             if (!value)  return super.transform(0, digitsInfo, localId);
+
+        var globalObject = JSON.parse(localStorage.getItem('global_settings'));
+        var localId = 'en-US';
+        if(globalObject){
+            localId = globalObject.cultureName;
+        }         
+        // let tempValue = value.toString().replace(",", "");
+        let tempValue = Number(value.toString().replace(/[^0-9.-]+/g, ""));
+    //    return new Intl.NumberFormat(localId, {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2}).format(parseFloat(tempValue));
+
+       const str = super.transform(tempValue, digitsInfo, localId);
+       return str;
+
+     }
+}

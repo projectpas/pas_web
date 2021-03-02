@@ -478,14 +478,14 @@ export class CustomerSalesPersonComponent implements OnInit {
         const CSRid = getValueByFieldFromArrayofObject('jobTitle', 'CSR', this.jobTitles);
         const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'Sales', this.jobTitles);
         const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'Agents', this.jobTitles);
-
-        if(CSRid[0].jobTitleId > 0)
+        
+        if(CSRid[0])
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
         
-        if(Salesid[0].jobTitleId > 0)
+        if(Salesid[0])
             this.arayJobTitleIds.push(Salesid[0].jobTitleId);
 
-        if(Agentsid[0].jobTitleId > 0)
+        if(Agentsid[0])
             this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
 
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
@@ -516,7 +516,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 this.arayJobTitleIds = [];
             }
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false})
     }
 }
 

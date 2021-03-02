@@ -818,11 +818,22 @@
               </div>
               <div class="col-sm-5">
                 <div class="inner-addon right-addon inline-block" style="width: 100%">
-                  <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.firstName"
-                    (ngModelChange)="enableSave()" name="firstName" field="firstName" [suggestions]="firstNamesList"
-                    (completeMethod)="filterFirstNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                  <p-autoComplete class="autocomp-customer-cstm" 
+                    [(ngModel)]="sourceVendor.firstName"
+                    (ngModelChange)="enableSave()" 
+                    name="firstName" 
+                    field="firstName" 
+                    (onKeyUp)=" checkfirstNameExist($event.target.value)"
+                    (onChange)=" checkfirstNameExist($event.target.value)"  
+                    (onSelect)="selectedFirstnameName()"  
+                    [suggestions]="firstNamesList"
+                    (completeMethod)="filterFirstNames($event)" 
+                    [size]="30" [minLength]="1" [dropdown]="true"
                     [inputStyle]="{ width: '100%' }" required>
                   </p-autoComplete>
+                  <div *ngIf="isfirstNameAlreadyExists" class="clr-red">
+                    Entry Already Exists
+                   </div>
                 </div>
               </div>
             </div>
@@ -832,11 +843,21 @@
               </div>
               <div class="col-sm-5">
                 <div class="inner-addon right-addon inline-block" style="width: 100%">
-                  <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.middleName"
-                    (ngModelChange)="enableSave()" name="middleName" [suggestions]="middleNamesList" field="middleName"
+                  <p-autoComplete class="autocomp-customer-cstm" 
+                  [(ngModel)]="sourceVendor.middleName"
+                    (ngModelChange)="enableSave()" 
+                    name="middleName" 
+                    (onKeyUp)="checkmiddleNameExist($event.target.value)"
+                    (onChange)="checkmiddleNameExist($event.target.value)"  
+                    (onSelect)="selectedmiddleNameName()"  
+                    [suggestions]="middleNamesList" 
+                    field="middleName"
                     (completeMethod)="filterMiddleNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
                     [inputStyle]="{ width: '100%' }">
                   </p-autoComplete>
+                  <div *ngIf="ismiddleNameAlreadyExists" class="clr-red">
+                    Entry Already Exists
+                   </div>
                 </div>
               </div>
             </div>
@@ -846,11 +867,21 @@
               </div>
               <div class="col-sm-5">
                 <div class="inner-addon right-addon inline-block" style="width: 100%">
-                  <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.lastName"
-                    (ngModelChange)="enableSave()" name="lastName" [suggestions]="lastNamesList" field="lastName"
+                  <p-autoComplete class="autocomp-customer-cstm" 
+                    [(ngModel)]="sourceVendor.lastName"
+                    (ngModelChange)="enableSave()" 
+                    name="lastName" 
+                    (onKeyUp)="checklastNameExist($event.target.value)"
+                    (onChange)="checklastNameExist($event.target.value)"  
+                    (onSelect)="selectedlastNameName()" 
+                    [suggestions]="lastNamesList" 
+                    field="lastName"
                     (completeMethod)="filterLastNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
                     [inputStyle]="{ width: '100%' }" required>
                   </p-autoComplete>
+                  <div *ngIf="islastNameAlreadyExists" class="clr-red">
+                    Entry Already Exists
+                   </div>
                 </div>
               </div>
             </div>

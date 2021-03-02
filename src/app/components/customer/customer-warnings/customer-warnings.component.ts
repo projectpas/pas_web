@@ -389,7 +389,7 @@ export class CustomerWarningsComponent implements OnInit {
 
 			this.customerService.saveCustomerwarnings(warningsData).subscribe(res => {
 				this.customerWarningData = res;
-				this.warningMessages = res.warningsData;
+				this.warningMessages = res.warningsData;				
 				this.customerWarningsId = res.customerWarningsId;
 				if (!this.warningsUpdateBoolean) {
 					this.alertService.showMessage(
@@ -405,10 +405,11 @@ export class CustomerWarningsComponent implements OnInit {
 						MessageSeverity.success
 					);
 				}
+				this.initWarningData();
 				this.warningsUpdateBoolean = true;
 				this.isSpinnerVisible = false;
-				this.disableSave = true;
-				this.formdata.reset();
+				this.disableSave = true;				
+				//this.formdata.reset();
 			}, error => this.saveFailedHelper(error))
 	}
 
@@ -422,7 +423,7 @@ export class CustomerWarningsComponent implements OnInit {
 
 	nextClick(nextOrPrevious) {
 		this.nextOrPreviousTab = nextOrPrevious;
-		if (this.formdata.form.dirty) {
+		if (!this.disableSave == true) {
 			let content = this.tabRedirectConfirmationModal;
 			this.modal = this.modalService.open(content, { size: 'sm' });
 		}
