@@ -34,6 +34,10 @@ export class SalesOrderBillingAndInvoicing {
     billToCustomerId: number;
     billToSiteId: number;
     employeeName: string;
+    salesPersonId:number;
+    salesPerson:string;
+    customerRef:string;
+    openDate: Date;
 }
 // {
 //     soBillingInvoicingId: 0;
