@@ -73,9 +73,9 @@
                                         You are attempting to export {{targetData.totalRecords}} of records. 
                                     </span> 
                                 </strong>
-                            </div>
+                            </div> 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+                                <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):targetData.exportCSV(); closeModal();">Confirm</button>
                                 <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
                             </div>
                         </div>
