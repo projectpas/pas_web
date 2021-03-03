@@ -30,11 +30,11 @@ export class ATAMainEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getATAMainEndpoint<T>(): Observable<T> {
-
-        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+    getATAMainEndpoint<T>(id?): Observable<T> {
+        let endpointUrl = `${this.actionsUrl}/${id !== undefined ? id : 1}`;
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getATAMainEndpoint());
+                return this.handleErrorCommon(error, () => this.getATAMainEndpoint(id));
             });
     }
 
@@ -42,14 +42,14 @@ export class ATAMainEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.actionsUrlAll, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllATAMainEndpoint());
+                return this.handleErrorCommon(error, () => this.getAllATAMainEndpoint());
             });
     }
     getNewATAMainEndpoint<T>(userObject: any): Observable<T> {
 
         return this.http.post<T>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewATAMainEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewATAMainEndpoint(userObject));
             });
     }
         getHistoryATAMainEndpoint<T>(ataChapterId: number): Observable<T> {
@@ -57,7 +57,7 @@ export class ATAMainEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getHistoryATAMainEndpoint(ataChapterId));
+                return this.handleErrorCommon(error, () => this.getHistoryATAMainEndpoint(ataChapterId));
             });
     }
 
@@ -66,7 +66,7 @@ export class ATAMainEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditATAMainEndpoint(ataChapterId));
+                return this.handleErrorCommon(error, () => this.getEditATAMainEndpoint(ataChapterId));
             });
     }
 
@@ -75,7 +75,7 @@ export class ATAMainEndpoint extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateATAMainEndpoint(roleObject, ataChapterId));
+                return this.handleErrorCommon(error, () => this.getUpdateATAMainEndpoint(roleObject, ataChapterId));
             });
     }
 
@@ -84,7 +84,7 @@ export class ATAMainEndpoint extends EndpointFactory {
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeleteATAMainEndpoint(ataChapterId));
+                return this.handleErrorCommon(error, () => this.getDeleteATAMainEndpoint(ataChapterId));
             });
     }
 
@@ -94,7 +94,7 @@ export class ATAMainEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAtaChapterAuditById(ataChapterId));
+                return this.handleErrorCommon(error, () => this.getAtaChapterAuditById(ataChapterId));
             });
     }
 
@@ -102,7 +102,7 @@ export class ATAMainEndpoint extends EndpointFactory {
         let endpointUrl = `${this.getATAUrl}/${Chid}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getATASubByID(Chid));
+                return this.handleErrorCommon(error, () => this.getATASubByID(Chid));
             });
     }
 
@@ -110,23 +110,29 @@ export class ATAMainEndpoint extends EndpointFactory {
         let endpointUrl = `${this.getMultiATAUrl}/${Chapterids}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getMultiATASubByID(Chapterids));
+                return this.handleErrorCommon(error, () => this.getMultiATASubByID(Chapterids));
             });
     }
     getMultiAirCraftSubDesc<T>(AircraftTypeids: string): Observable<T> {
         let endpointUrl = `${this.getMultiAircraftUrl}/${AircraftTypeids}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getMultiAirCraftSubDesc(AircraftTypeids));
+                return this.handleErrorCommon(error, () => this.getMultiAirCraftSubDesc(AircraftTypeids));
             });
     }
     
     ataChapterCustomUpload(file) {
         return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}`, file)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.ataChapterCustomUpload(file));
+        });
 
     }
     getATAMainDropdownList(){
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ATAMain/getdropdownlist`)
+        .catch(error => {
+            return this.handleErrorCommon(error, () => this.getATAMainDropdownList());
+        });
     }
    
 }

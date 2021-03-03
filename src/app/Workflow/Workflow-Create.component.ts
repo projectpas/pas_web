@@ -24,8 +24,8 @@ import { MenuItem } from 'primeng/api';
     templateUrl: './workflow-Create.component.html',
     styleUrls: ['./workflow-Create.component.css']
 })
-
-export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
+ 
+export class WorkflowCreateTestComponent implements OnInit, OnDestroy { 
     @Input() isWorkOrder=false;
     @Input() savedWorkOrderData;
     @Input() WorkOrderType;
@@ -2491,6 +2491,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
                         }
+                        material.partNumber=material.partNumber.partName;
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }
@@ -2601,11 +2602,14 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         this.sourceWorkFlow.expertise.push(expert);
                     }
                 }
+                console.log("part material",workflow.materialList)
                 if (workflow.materialList != undefined) {
                     for (let material of workflow.materialList) {
                         material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                         material.workflowId = workflow.workflowId;
                         material.taskId = workflow.taskId;
+                        material.partNumber= (typeof material.partNumber == 'string') ? material.partNumber:   material.partNumber.partName;
+                       console.log("material",material)
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }
@@ -2665,7 +2669,12 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 equipments: data.equipments.map(x => { return { ...x, workflowEquipmentListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 exclusions: data.exclusions.map(x => { return { ...x, workflowExclusionId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 expertise: data.expertise.map(x => { return { ...x, workflowExpertiseListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                materialList: data.materialList.map(x => { return { ...x, workflowMaterialListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                materialList: data.materialList.map(x => { return {
+                     ...x, workflowMaterialListId: 0,
+                      workOrderId: this.savedWorkOrderData.workOrderId,
+                    //   partNumber:x.partNumber.partName,
+                      partNumber: (typeof x.partNumber == 'string') ? x.partNumber:   x.partNumber.partName,
+                      ...excessParams } }),
                 measurements: data.measurements.map(x => { return { ...x, workflowMeasurementId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 publication: data.publication.map(x => { return { ...x, Id: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } })
             }

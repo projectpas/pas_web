@@ -338,7 +338,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             isDeleted: false,
             contactById: this.contactBy.employeeId,
             emailType: this.emailType,
-            customerContactId: this.type == 1 ? this.customerContact.customerContactId : this.customerContact.vendorContactId,
+            customerContactId: this.type == 1 ? this.customerContact.contactId : this.customerContact.vendorContactId,
             Type: this.type
         }
         for (var key in data) {

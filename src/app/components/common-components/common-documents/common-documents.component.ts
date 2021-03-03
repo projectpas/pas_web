@@ -329,7 +329,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
         this.memoPopupContent = '';
         $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
-        //this.disableSave = false;
+        this.disableSave = false;
     }
 
     closeMemoModel() {

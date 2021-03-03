@@ -86,6 +86,10 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.getSalesOrderBilling(salesOrderId, partId);
   }
 
+  getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId) {
+    return this.salesOrderEndPointSevice.getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId);
+  }
+
   getSalesOrderBillingParts(salesOrderId) {
     return this.salesOrderEndPointSevice.getSalesOrderBillingParts(salesOrderId);
   }

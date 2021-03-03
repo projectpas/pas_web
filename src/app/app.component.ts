@@ -1250,6 +1250,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink:
                     '/workordersettingsmodule/workordersettings/app-wo-quote-settings-list',
                 },
+                // {
+                //   label: 'Teardown Reason',
+                //   routerLink: '/singlepages/singlepages/app-teardown-reason',
+                // },
               ],
             }
           ],
@@ -1316,8 +1320,22 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 { label: 'Contract List', routerLink: '/#' },
                 { label: 'Contract Setup', routerLink: '/#' },
+                // {
+                //   label: 'Reasons',
+                //   routerLink: '/singlepages/singlepages/app-reason',
+                // },
+                // {
+                //   label: 'Teardown Reason',
+                //   routerLink: '/singlepages/singlepages/app-teardown-reason',
+                // },
+                // { label: 'Findings', routerLink: '/#' },
+                // {
+                //   label: 'Work Performed',
+                //   routerLink: '/singlepages/singlepages/app-work-performed',
+                // },
               ],
             },
+           
           ],
         ],
       },

@@ -221,16 +221,31 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   getAllPartsToDisableOrNot() {
-    let disableEdit = true;
+    var result = false;
     if (this.salesOrderCustomerApprovalListView && this.salesOrderCustomerApprovalListView.length > 0) {
       this.salesOrderCustomerApprovalListView.forEach(
         (x) => {
-          if (x.actionStatus != "Approved")
-            return false;
+          if (x.actionStatus != 'Approved') {
+            if (x.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+              result = true;
+            } else if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+              if (this.approvers && this.approvers.length > 0) {
+                let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId && approver.isExceeded == false);
+                if (approverFound) {
+                  result = true;
+                }
+              }
+            } else if (x.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+              result = true;
+            } else if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+              result = true;
+            }
+          }
         }
       )
     }
-    return disableEdit;
+
+    return result;
   }
 
   getCustomerApprovalList() {

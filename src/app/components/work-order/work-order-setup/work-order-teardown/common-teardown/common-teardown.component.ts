@@ -9,12 +9,13 @@ import { AuthService } from '../../../../../services/auth.service';
 import { TearDown } from '../../../../../models/work-order-teardown.model';
 import { editValueAssignByCondition, getObjectById, getValueByFieldFromArrayofObject } from '../../../../../generic/autocomplete';
 import { CommonService } from '../../../../../services/common.service';
-// import { validateRecordExistsOrNot, selectedValueValidate, getValueFromObjectByKey, getObjectById, getObjectByValue, editValueAssignByCondition, getValueFromArrayOfObjectById, getValueByFieldFromArrayofObject } from '../../../../../../../generic/autocomplete';
+
 @Component({
     selector: 'app-common-teardown',
     templateUrl: 'common-teardown.component.html',
     styleUrls: ['common-teardown.component.scss']
 })
+
 export class CommonTeardownComponent implements OnInit {
     private onDestroy$: Subject<void> = new Subject<void>();
     startDate = new Date();
@@ -56,24 +57,23 @@ export class CommonTeardownComponent implements OnInit {
     woSettingsTeardownsList: any = [];
     arrayInsectorlist:any[] = [];
     arrayTechnicianlist:any[] = [];
+    technicianList: any = [];
+    inspectionList: any = [];
+    TearDownReasons: any;
+
     constructor(private workOrderService: WorkOrderService, private authService: AuthService,
         private alertService: AlertService, private commonService: CommonService,) {
     }
 
     ngOnInit(): void {
-        
-        this.getTeardownServicesList();
-        this.getReasonsByChecked();
-
         // this.getTearDownReasons();
         //this.getTechnicianList();
        // this.getInspectiorsList();
-       
+        this.getTeardownServicesList();
+        this.getReasonsByChecked();
         this.getTearDownListFromWOSettings();
-        // console.log("viewData",this.getsaveTearDownData)
         if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != undefined && this.getsaveTearDownData != null && this.getsaveTearDownData != '') {
             this.showViewTemplate = true;
-            // console.log("view in ngonInt",this.showViewTemplate);
         }
     }
 
@@ -102,6 +102,7 @@ export class CommonTeardownComponent implements OnInit {
         )
         return result;
     }
+
     getReasonsByChecked() {
         if (this.getsaveTearDownData) {
             if (this.getsaveTearDownData.isRemovalReasons) {
@@ -130,20 +131,13 @@ export class CommonTeardownComponent implements OnInit {
             } if (this.getsaveTearDownData.isAdditionalComments) {
                 this.worOrderTearDownReasonListById(12);
             } 
-            // {
-            //     this.worOrderTearDownReasonListById(1);
-            // }
         }
     }
+
     ngOnChanges(changes: SimpleChanges) {
-        // console.log(this.workOrderGeneralInformation)
-        // console.log("chnages",changes);
-        //this.technicianList = this.technicianOriginalList;
-        //this.inspectionList = this.inspectorsOriginalList;  
         if (this.getsaveTearDownData && this.getsaveTearDownData.length != 0 && this.getsaveTearDownData != null) {
             this.showViewTemplate = true;
           var iscall= false;  
-        
 
         const TechnicianId = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
         if (TechnicianId !== undefined) 
@@ -159,8 +153,7 @@ export class CommonTeardownComponent implements OnInit {
                     }else
                     {
                         this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId);
-                    }
-                    
+                    }                    
                 }
                 if(this.getsaveTearDownData.workOrderDiscovery.technicianId != null && this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null)
                 {
@@ -223,8 +216,7 @@ export class CommonTeardownComponent implements OnInit {
                     }else
                     { 
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId);
-                    }
-                   
+                    }                  
                 }
                 if(this.getsaveTearDownData.workOrderDiscovery.inspectorId != null)	
                 {
@@ -234,8 +226,7 @@ export class CommonTeardownComponent implements OnInit {
                      }else
                      { 
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderDiscovery.inspectorId );
-                     }
- 
+                     } 
                 }
                 if(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId != null )	
                 {
@@ -308,6 +299,7 @@ export class CommonTeardownComponent implements OnInit {
             this.showViewTemplate = false;
         }
     }
+
     ngOnDestroy(): void {
     }
 
@@ -325,6 +317,7 @@ export class CommonTeardownComponent implements OnInit {
         $('#stepadd11').collapse('show');
         $('#stepadd12').collapse('show');
     }
+
     CloseAllCustomerDetailsModelEdit() {
         $('#stepadd1').collapse('hide');
         $('#stepadd2').collapse('hide');
@@ -340,59 +333,44 @@ export class CommonTeardownComponent implements OnInit {
         $('#stepadd12').collapse('hide');
     }
 
-    // getInspectiorsList() {
-    //     const id = getValueByFieldFromArrayofObject('jobTitle', 'Inspector', this.jobTitles);
-    //     if (id !== undefined) {
-    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-    //             this.inspectorsOriginalList = res;
-    //             // console.log("inspector", res);
-    //         })
-    //     }
-    // }
-    // getTechnicianList() {
-    //     const id = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
-    //     if (id !== undefined) {
-    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-    //             this.technicianOriginalList = res;
-    //             // console.log("Technician", res);
-    //         })
-    //     }
-    // }
     async autoCompleteDropdownsEmployeeByJobTitleInspector(serachtext:string) {
-
         const id = getValueByFieldFromArrayofObject('jobTitle', 'Inspector', this.jobTitles);
         if (id !== undefined) 
         {
-            // if(this.arrayInsectorlist.length == 0) {			
-            //     this.arrayInsectorlist.push(0); 
-            // }	
+            if(this.arrayInsectorlist.length == 0) {			
+                this.arrayInsectorlist.push(0); 
+            }	
                 await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId).subscribe(res => {
                     this.inspectorsOriginalList = res; 
                     this.inspectionList = this.inspectorsOriginalList;           
                 }, error => error => this.saveFailedHelper(error))
-        }
-		
-	}
+        }		
+    }
+    
     async autoCompleteDropdownsEmployeeByJobTitleTechnician(serachtext:string) {
-
         const id = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
         if (id !== undefined) 
         {
-            // if(this.arrayTechnicianlist.length == 0) {			
-            //     this.arrayTechnicianlist.push(0); 
-            // }	
+            if(this.arrayTechnicianlist.length == 0) {			
+                this.arrayTechnicianlist.push(0); 
+            }	
                 await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId).subscribe(res => {
                     this.technicianOriginalList = res; 
                     this.technicianList = this.technicianOriginalList;           
                 }, error => error => this.saveFailedHelper(error))
-        }
-		
-	}
+        }		
+    }
+    
     get currentUserManagementStructureId(): number {
         return this.authService.currentUser
           ? this.authService.currentUser.managementStructureId
           : null;
-      }
+    }
+
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
     private saveFailedHelper(error: any) {
         this.alertService.stopLoadingMessage();
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
@@ -406,7 +384,6 @@ export class CommonTeardownComponent implements OnInit {
     // }
     getTeardownServicesList() {
         this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name').subscribe(res => {
-            // console.log("tearodown types list",res);
             this.teadownTypesList = res.map(x => {
                 return {
                     ...x,
@@ -414,15 +391,15 @@ export class CommonTeardownComponent implements OnInit {
                     name: x.label
                 }
             });
-            //   console.log("this.teardownList",this.teadownTypesList);
         })
     }
-    worOrderTearDownReasonListById(id) {
 
+    worOrderTearDownReasonListById(id) {
         this.workOrderService.worOrderTearDownReasonListById(id).subscribe(res => {
             this.deStructureReasonsData(id, res);
         })
     }
+
     deStructureReasonsData(id, data) {
         const dataForReasons = data.map(x => {
             return {
@@ -455,46 +432,26 @@ export class CommonTeardownComponent implements OnInit {
             this.additionalComments = dataForReasons
         }
     }
-    get userName(): string {
-        return this.authService.currentUser ? this.authService.currentUser.userName : "";
-    }
+    
     getUpdatedvalue(event) {
     }
+
     onSelectedTechnician(object) {
     }
-    technicianList: any = [];
-    inspectionList: any = [];
-    // filterTWTechnician(event) {
-    //     this.technicianList = this.technicianOriginalList;
-    //     if (event.query !== undefined && event.query !== null) {
-    //         const technician = [...this.technicianOriginalList.filter(x => {
-    //             return x.name.toLowerCase().includes(event.query.toLowerCase())
-    //         })]
-    //         this.technicianList = technician;
-    //     }
-    // }
+
     filterTWTechnician(event) {
         if (event.query !== undefined && event.query !== null) {
             this.autoCompleteDropdownsEmployeeByJobTitleTechnician(event.query);
         }
     }
+
     filterTWInspections(event) {
         if (event.query !== undefined && event.query !== null) {
             this.autoCompleteDropdownsEmployeeByJobTitleInspector(event.query);
         }
     }
-    // filterTWInspections(event) {
-    //     this.inspectionList = this.inspectorsOriginalList;
-    //     if (event.query !== undefined && event.query !== null) {
-    //         const technician1 = [...this.inspectorsOriginalList.filter(x => {
-    //             return x.name.toLowerCase().includes(event.query.toLowerCase())
-    //         })]
-    //         this.inspectionList = technician1;
-    //     }
-    // }
-    TearDownReasons: any;
+    
     selectedReason(value, type) {
-        // console.log("value",value)
         if (value != 0) {
             this.workOrderService.getteardownreasonbyidData(value).subscribe(res => {
                 this.TearDownReasons = res;
@@ -526,20 +483,19 @@ export class CommonTeardownComponent implements OnInit {
             })
         }
     }
+
     tearDownView() {
         this.isView = true;
         this.workFlowWorkOrderId = this.workFlowWorkOrderId
-        // console.log("this is true",this.workFlowWorkOrderId);
     }
+
     checkValue(event, source, type) {
-        // console.log("event check value",event,source, type);
         if (event.target.checked && type != 2) {
             this.worOrderTearDownReasonListById(type);
         }
         if (type == 1) {
             source.reasonId = 0;
             source.memo = '';
-            // this.saveTearDownData.isRemovalReasons=true;
         } else if (type == 2) {
             source.airworthinessDirecetives = '';
             source.mandatoryService = '';
@@ -560,7 +516,6 @@ export class CommonTeardownComponent implements OnInit {
             source.inspectorId = 0;
             source.technicianDate = new Date();
         } else if (type == 5) {
-
             source.reasonId = 0;
             source.memo = '';
             source.technicianId = 0;
@@ -607,8 +562,8 @@ export class CommonTeardownComponent implements OnInit {
             source.memo = '';
         }
     }
+
     createTearDownData(form: NgForm) {
-        // console.log("save form",form.valid);
         this.saveTearDownData = {
             ...this.saveTearDownData,
             workOrderId: this.workOrderId,
@@ -616,7 +571,6 @@ export class CommonTeardownComponent implements OnInit {
             updatedDate: this.updatedDate,
             createdBy: this.userName,
             updatedBy: this.userName,
-
         }
         this.saveTearDownData.workOrderPreAssmentResults.technicianId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreAssmentResults.technicianId);
         this.saveTearDownData.workOrderPreAssmentResults.inspectorId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreAssmentResults.inspectorId);
@@ -632,13 +586,11 @@ export class CommonTeardownComponent implements OnInit {
         this.saveTearDownData.workOrderPreliinaryReview.inspectorId = editValueAssignByCondition('employeeId', this.saveTearDownData.workOrderPreliinaryReview.inspectorId);
         const data = this.saveTearDownData;
         if (this.isSubWorkOrder == true) {
-            //  console.log("sub Data",this.subWorkOrderDetails)
             this.saveTearDownData.subWOPartNoId = this.subWOPartNoId,
                 this.saveTearDownData.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId;
             this.saveTearDownData.workOrderId = this.subWorkOrderDetails.workOrderId;
         }
-        var issave= true;
-       
+        var issave= true;       
         if (this.saveTearDownData.isRemovalReasons == true && (this.saveTearDownData.workOrderRemovalReasons.memo == '' || this.saveTearDownData.workOrderRemovalReasons.reasonId == 0)) {
             this.checkMandatoryFields = true;
             issave = this.validator();
@@ -654,7 +606,6 @@ export class CommonTeardownComponent implements OnInit {
         } else if (this.saveTearDownData.isDiscovery == true && (this.saveTearDownData.workOrderDiscovery.memo == '' || this.saveTearDownData.workOrderDiscovery.reasonId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == 0 || this.saveTearDownData.workOrderDiscovery.inspectorId == 0 || this.saveTearDownData.workOrderDiscovery.technicianId == undefined || this.saveTearDownData.workOrderDiscovery.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
             issave = this.validator();
-            //return this.validator();
         } else if (this.saveTearDownData.isPreAssemblyInspection == true && (this.saveTearDownData.workOrderPreAssemblyInspection.memo == '' || this.saveTearDownData.workOrderPreAssemblyInspection.reasonId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == 0 || this.saveTearDownData.workOrderPreAssemblyInspection.technicianId == undefined || this.saveTearDownData.workOrderPreAssemblyInspection.inspectorId == undefined)) {
             this.checkMandatoryFields = true;
             issave = this.validator();
@@ -696,24 +647,24 @@ export class CommonTeardownComponent implements OnInit {
         }else
         {
             this.assignDatatoFields(this.saveTearDownData);
-        }
-       
+        }       
     }
+
     validator() {
         this.alertService.showMessage(
             'Alert', ' Please Add Mandatory Fields',
-            MessageSeverity.success
+            MessageSeverity.warn
         );
         return false;
     }
+
     closeViewdiv()
     {
         this.isView = false;
     }
 
     assignDatatoFields(data) {
-        if (data) {
-            
+        if (data) {            
             data.workOrderPreliinaryReview.inspectorDate = data.workOrderPreliinaryReview.inspectorDate ? new Date(data.workOrderPreliinaryReview.inspectorDate) : null;
             data.workOrderPreAssmentResults.technicianDate = data.workOrderPreAssmentResults.technicianDate ? new Date(data.workOrderPreAssmentResults.technicianDate) : null;
             data.workOrderPreAssmentResults.inspectorDate = data.workOrderPreAssmentResults.inspectorDate ? new Date(data.workOrderPreAssmentResults.inspectorDate) : null;

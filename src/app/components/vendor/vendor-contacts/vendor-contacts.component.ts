@@ -76,6 +76,8 @@ export class VendorContactsComponent implements OnInit {
     fax: any;
     sourceVendorforView: any = {};
     selectedFirstName: any;
+    selectedLastName:any;
+	selectedMiddleName:any;
     disablesaveForFirstname: boolean;
     disablesaveForlastname: boolean;
     disablesaveForMiddlename: boolean;
@@ -470,7 +472,10 @@ export class VendorContactsComponent implements OnInit {
 		this.getAllContactFirstNameSmartDropDown('', row.firstName);
 		this.getAllContactMiddleNameSmartDropDown('', row.middleName);
         this.getAllContactLastNameSmartDropDown('', row.lastName);
-
+        this.selectedFirstName = row.firstName
+		this.selectedMiddleName = row.middleName
+        this.selectedLastName = row.lastName
+        
         if(row.contactTagId > 0)
         {
             this.arrayTagNamelist.push(row.contactTagId);
@@ -722,6 +727,9 @@ export class VendorContactsComponent implements OnInit {
 
     onAddContactInfo() {
         this.sourceVendor = {};
+        this.isfirstNameAlreadyExists = false;
+        this.islastNameAlreadyExists = false;
+        this.ismiddleNameAlreadyExists = false;
         this.isEditContactInfo = false;
     }
 
@@ -1315,4 +1323,105 @@ export class VendorContactsComponent implements OnInit {
         enableSaveATA() {
             this.disableSaveATA = false;
         }
+
+    isfirstNameAlreadyExists: boolean = false;
+	checkfirstNameExist(value) {
+       // this.changeName = true;
+        this.isfirstNameAlreadyExists = false;
+        this.disablesaveForFirstname = false;
+        if (value != this.selectedFirstName) {
+            // if (this.vendorListOriginal != undefined && this.contactsListOriginal != null) {
+                for (let i = 0; i < this.firstNamesList.length; i++) {
+                    if (this.sourceVendor.firstName == this.firstNamesList[i].firstName || value == this.firstNamesList[i].firstName) {
+                        this.isfirstNameAlreadyExists = true;
+                        //this.disablesaveForFirstname = true;
+                        this.disableSave = true;
+                        return;
+                    }
+                }
+            //}
+        }
+	}
+
+	selectedFirstnameName() {	
+        
+		const firstName = editValueAssignByCondition('firstName', this.sourceVendor.firstName);		
+        if (firstName == this.selectedFirstName){
+			this.isfirstNameAlreadyExists = false;
+            if(this.isEditContactInfo)
+            this.disableSave = false;
+			//this.disablesaveForFirstname = false;
+		}
+        else{
+			this.isfirstNameAlreadyExists = true;
+            if(this.isEditContactInfo)
+            this.disableSave = true;
+			//this.disablesaveForFirstname = true;
+		}			
+    }
+    
+    ismiddleNameAlreadyExists: boolean = false;
+	checkmiddleNameExist(value) {
+       // this.changeName = true;
+        this.ismiddleNameAlreadyExists = false;
+        //this.disableSaveMiddleName = false;
+        if (value != this.selectedMiddleName) {
+            //if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
+                for (let i = 0; i < this.middleNamesList.length; i++) {
+                    if (this.sourceVendor.middleName == this.middleNamesList[i].middleName || value == this.middleNamesList[i].middleName) {
+                        this.ismiddleNameAlreadyExists = true;
+                        //this.disableSaveMiddleName = true;
+                        this.disableSave = true;
+                        return;
+                    }
+                }
+            }
+        //}
+	}
+
+	selectedmiddleNameName() {				
+		const middleName = editValueAssignByCondition('middleName', this.sourceVendor.middleName);		
+        if (middleName == this.selectedFirstName){
+			this.ismiddleNameAlreadyExists = false;
+			if(this.isEditContactInfo)
+			this.disableSave = false;
+		}
+        else{
+			this.ismiddleNameAlreadyExists = true;
+			if(this.isEditContactInfo)
+			this.disableSave = true;
+		}			
+    }
+    
+    islastNameAlreadyExists: boolean = false;
+	checklastNameExist(value) {
+       // this.changeName = true;
+        this.islastNameAlreadyExists = false;
+        //this.disableSaveLastName = false;
+        if (value != this.selectedLastName) {
+            //if (this.contactsListOriginal != undefined && this.contactsListOriginal != null) {
+                for (let i = 0; i < this.lastNamesList.length; i++) {
+                    if (this.sourceVendor.lastName == this.lastNamesList[i].lastName || value == this.lastNamesList[i].lastName) {
+                        this.islastNameAlreadyExists = true;
+                        this.disableSave = true;
+                        return;
+                    }
+                }
+            //}
+        }
+	}
+
+	selectedlastNameName() {				
+		const lastName = editValueAssignByCondition('lastName', this.sourceVendor.lastName);		
+        if (lastName == this.selectedLastName){
+			this.islastNameAlreadyExists = false;
+			if(this.isEditContactInfo)
+			this.disableSave = false;
+		}
+        else{
+			this.islastNameAlreadyExists = true;
+			if(this.isEditContactInfo)
+			this.disableSave = true;
+		}			
+    }
 }

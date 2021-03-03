@@ -2,7 +2,7 @@
 <div class="card">
     <div class="card-body p-t-0">
         <div class="row">
-            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+            <!-- <div class="col-md-3" style="padding-left:25px; padding-top:5px">
                 <div class="form-group">
                     <label>SO Num <span class="clr-red">*</span></label>
                     <input type="text" class="form-control" name="salesOrderNumber"
@@ -16,11 +16,11 @@
                     <input type="text" class="form-control" [(ngModel)]="salesOrder.salesOrderQuoteNumber"
                         name="salesOrderQuoteNumber" [disabled]="true" />
                 </div>
-            </div>
-            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+            </div> -->
+            <div class="col-md-12" style="padding-left:25px; padding-top:5px;">
                 <label></label>
                 <div class="form-group">
-                    <button type="submit" class="btn  submit-btn btn btn-primary">Invoice</button>
+                    <button type="submit" style="margin-right: 65px;margin-bottom: 9px;float:right" class="btn  submit-btn btn btn-primary">Invoice</button>
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
                                 {{ summaryColumn.header }}
                             </span>
                         </th>
-                        <th colspan="6"></th>
+                        <th colspan="7"></th>
                         <th></th>
                     </tr>
                     <ng-container *ngIf="billingList.length > 0">
@@ -97,14 +97,14 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of headers"
                                         style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                        <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
                                             Item {{summaryPart[summaryColumn.field] }}
-                                        </span>
+                                        </span> -->
                                         <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                     </td>
-                                    <td colspan="6"></td>
+                                    <td colspan="7"></td>
                                     <td></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
@@ -113,7 +113,7 @@
                                     <th>Invoice Date</th>
                                     <th>Invoice Num </th>
                                     <th>Shipping Ref</th>
-                                    <th>Item #</th>
+                                    <th>Line #</th>
                                     <th>PN</th>
                                     <th>PN Description</th>
                                     <th style="min-width: 120px;">Stk Line Num</th>
@@ -144,7 +144,7 @@
                                         {{ bill.soShippingNum }}
                                     </td>
                                     <td>
-                                        Item {{ bill.itemNo}}
+                                        Line {{ bill.itemNo}}
                                     </td>
                                     <td>
                                         {{ bill.partNumber }}
@@ -222,12 +222,15 @@
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> REV Type </label>
-                                        <p-dropdown [options]="revisionTypeList" name="revisionType"
+                                        <!-- <p-dropdown [options]="revisionTypeList" name="revisionType"
                                             #revisionType="ngModel" placeholder="Select"
                                             class="p-dropdown-custom-md-Header"
                                             [(ngModel)]="billingorInvoiceForm.revisionTypeId" [disabled]="isViewMode"
                                             required>
-                                        </p-dropdown>
+                                        </p-dropdown> -->
+                                        <input type="text" class="form-control wo-input" name="salesOrderType"
+                                            #salesOrderType="ngModel" disabled [(ngModel)]="billingorInvoiceForm.salesOrderType"
+                                            [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
@@ -244,7 +247,7 @@
                                     <div class="form-group ">
                                         <label> Customer Ref </label>
                                         <input type="text" class="form-control wo-input" name="customerRef"
-                                            #customerRef="ngModel" disabled [(ngModel)]="salesOrder.customerRef"
+                                            #customerRef="ngModel" disabled [(ngModel)]="billingorInvoiceForm.customerRef"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>
@@ -253,23 +256,34 @@
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> Invoice Date <span class="clr-red">*</span></label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
+                                        <!-- <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
                                             #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
-                                            [disabled]="isViewMode" required></p-calendar>
+                                            [disabled]="isViewMode" required></p-calendar> -->
+                                            <p-calendar
+                                                [showIcon]="true"
+                                                class="calender-cstm"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                name="invoiceDate"
+                                                #invoiceDate="ngModel"
+                                                [(ngModel)]="billingorInvoiceForm.invoiceDate"
+                                                [disabled]="isViewMode" appendTo="body"
+                                                showTime="true" hourFormat="24"
+                                                required
+                                            ></p-calendar>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> SO Open Date </label>
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="woOpenDate"
-                                            #woOpenDate="ngModel" [disabled]=true [(ngModel)]="salesOrder.openDate"
+                                            #woOpenDate="ngModel" [disabled]=true [(ngModel)]="billingorInvoiceForm.openDate"
                                             [disabled]="isViewMode">
                                         </p-calendar>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> Time <span class="clr-red">*</span></label>
                                         <p-calendar name="invoiceTime" class="billInvoiceTime" #invoiceTime="ngModel"
@@ -277,22 +291,33 @@
                                             showTime="true" hourFormat="24" [disabled]="isViewMode" required>
                                         </p-calendar>
                                     </div>
+                                </div> -->
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Print Date </label>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" name="printDate"
+                                            #printDate="ngModel" [(ngModel)]="billingorInvoiceForm.printDate"
+                                            [disabled]="isViewMode"></p-calendar>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> Sales Person </label>
+                                        <!-- <input type="text" class="form-control wo-input" name="salesPerson"
+                                            #salesPerson="ngModel" disabled
+                                            [(ngModel)]="salesOrder.salesPersonName.name" [disabled]="isViewMode" /> -->
                                         <input type="text" class="form-control wo-input" name="salesPerson"
                                             #salesPerson="ngModel" disabled
-                                            [(ngModel)]="salesOrder.salesPersonName.name" [disabled]="isViewMode" />
+                                            [(ngModel)]="billingorInvoiceForm.salesPerson" [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
-                                        <label> Print Date </label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="printDate"
-                                            #printDate="ngModel" [(ngModel)]="billingorInvoiceForm.printDate"
+                                        <label> Ship Date </label>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" name="shipDate"
+                                            #shipDate="ngModel" [(ngModel)]="billingorInvoiceForm.shipDate"
                                             [disabled]="isViewMode"></p-calendar>
                                     </div>
                                 </div>
@@ -310,10 +335,10 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
-                                        <label> Ship Date </label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="shipDate"
-                                            #shipDate="ngModel" [(ngModel)]="billingorInvoiceForm.shipDate"
-                                            [disabled]="isViewMode"></p-calendar>
+                                        <label> No of Pieces </label>
+                                        <input type="number" class="form-control wo-input" name="noofPieces"
+                                            #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
+                                            [disabled]="isViewMode" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -328,9 +353,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
-                                        <label> No of Pieces </label>
-                                        <input type="number" class="form-control wo-input" name="noofPieces"
-                                            #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
+                                        <label for="employee">Employee </label>
+                                        <input type="text" class="form-control wo-input" name="employee"
+                                            #employee="ngModel" disabled [(ngModel)]="billingorInvoiceForm.employeeName"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>
@@ -338,20 +363,12 @@
                                     <div class="form-group ">
                                         <label>Credit Terms </label>
                                         <input type="text" class="form-control wo-input" name="creditTerms"
-                                            #creditTerms="ngModel" disabled [(ngModel)]="salesOrder.creditLimit"
+                                            #creditTerms="ngModel" disabled [(ngModel)]="billingorInvoiceForm.creditTerm"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label for="employee">Employee </label>
-                                        <input type="text" class="form-control wo-input" name="employee"
-                                            #employee="ngModel" disabled [(ngModel)]="billingorInvoiceForm.employeeName"
-                                            [disabled]="isViewMode" />
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label>Stage Code </label>
@@ -373,7 +390,7 @@
                                     <div class="form-group ">
                                         <label>Customer
                                         </label><span class="clr-red">*</span>
-                                        <p-autoComplete field="customerName"
+                                        <!-- <p-autoComplete field="customerName"
                                             [(ngModel)]="billingorInvoiceForm.soldToCustomerId" name="soldcustomerName"
                                             errorMessage="Records not found" [forceSelection]="true"
                                             (onSelect)="getSiteNamesBySoldCustomerId($event)"
@@ -382,7 +399,9 @@
                                             (onKeyUp)="clearAddress('SoldTo' , $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
                                             class="p-autoComplete-ctsm" [disabled]="isViewMode">
-                                        </p-autoComplete>
+                                        </p-autoComplete> -->
+                                        <input type="text" class="form-control wo-input" name="soldToCustomerName"
+                                            #soldToCustomerName="ngModel" [(ngModel)]="billingorInvoiceForm.soldToCustomerName" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -390,12 +409,12 @@
                                     <div class="form-group ">
                                         <label>Customer
                                         </label><span class="clr-red">*</span>
-                                        <p-autoComplete field="customerName"
+                                        <p-autoComplete field="userName"
                                             [(ngModel)]="billingorInvoiceForm.billToCustomerId" name="billcustomerName"
                                             errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="getSiteNamesByBillCustomerId($event)"
-                                            [suggestions]="customerNamesList"
-                                            (completeMethod)="filterCustomerName($event)"
+                                            (onSelect)="onBillToSelected($event)"
+                                            [suggestions]="userBillingList"
+                                            (completeMethod)="filterCustomerNameBill($event)"
                                             (onKeyUp)="clearAddress('BillTo' , $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
                                             class="p-autoComplete-ctsm" [disabled]="isViewMode">
@@ -407,12 +426,12 @@
                                     <div class="form-group ">
                                         <label>Customer
                                         </label><span class="clr-red">*</span>
-                                        <p-autoComplete field="customerName"
+                                        <p-autoComplete field="userName"
                                             [(ngModel)]="billingorInvoiceForm.shipToCustomerId" name="shipcustomerName"
                                             errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="getSiteNamesByShipCustomerId($event)"
-                                            [suggestions]="customerNamesList"
-                                            (completeMethod)="filterCustomerName($event)"
+                                            (onSelect)="onShipToSelected($event)"
+                                            [suggestions]="userShipingList"
+                                            (completeMethod)="filterCustomerShip($event)"
                                             (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
                                             class="p-autoComplete-ctsm" [disabled]="isViewMode">
@@ -421,7 +440,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="credit">Site Name</label><span class="clr-red">*</span>
                                         <p-dropdown placeholder="Select Site Name" name="scope" #scope="ngModel"
@@ -431,37 +450,60 @@
                                             required>
                                         </p-dropdown>
                                     </div>
-                                </div>
+                                </div>-->
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 1 </label>
+                                            <input type="text" class="form-control wo-input" name="soldAddress1"
+                                                #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1" disabled />
+                                        </div>
+                                    </div>
+                                
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="credit">Site Name</label><span class="clr-red">*</span>
-                                        <p-dropdown placeholder="Select Site Name" name="scope1bill"
+                                        <!-- <p-dropdown placeholder="Select Site Name" name="scope1bill"
                                             #scope1bill="ngModel" [options]="billCustomerSiteList"
                                             class="p-dropdown-custom-md-Header"
                                             (onChange)="changeOfBillSiteName($event.value)"
                                             [(ngModel)]="billingorInvoiceForm.billToSiteId" [disabled]="isViewMode"
                                             required>
-                                        </p-dropdown>
+                                        </p-dropdown> -->
+                                        <select [(ngModel)]="billingorInvoiceForm.billToSiteId"
+                                            (change)="setSoldToAddresses()" [disabled]="isViewMode" name="billToSite"
+                                            required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of billCustomerSiteList"
+                                                [value]="site.siteID">
+                                                {{site.siteName}}
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="credit">Site Name</label><span class="clr-red">*</span>
-                                        <p-dropdown placeholder="Select Site Name" name="scope1" #scope1="ngModel"
+                                        <!-- <p-dropdown placeholder="Select Site Name" name="scope1" #scope1="ngModel"
                                             [options]="shipCustomerSiteList" class="p-dropdown-custom-md-Header"
                                             (onChange)="changeOfShipSiteName($event.value)"
                                             [(ngModel)]="billingorInvoiceForm.shipToSiteId" [disabled]="isViewMode"
                                             required>
-                                        </p-dropdown>
+                                        </p-dropdown> -->
+                                        <select [(ngModel)]="billingorInvoiceForm.shipToSiteId" (change)="setShipToAddress()"
+                                            [disabled]="isViewMode" name="shipToSite" required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of shipCustomerSiteList"
+                                                [value]="site.siteID">{{site.siteName}}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group ">
-                                        <label>Address 1 </label>
-                                        <input type="text" class="form-control wo-input" name="soldAddress1"
-                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1" disabled />
+                                        <label>Address 2 </label>
+                                        <input type="text" class="form-control wo-input" name="soldAddress2"
+                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line2" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -482,9 +524,9 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group ">
-                                        <label>Address 2 </label>
-                                        <input type="text" class="form-control wo-input" name="soldAddress2"
-                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line2" disabled />
+                                        <label>City </label>
+                                        <input type="text" class="form-control wo-input" name="soldCity"
+                                            #soldCity="ngModel" [(ngModel)]="soldCustomerAddress.city" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -505,9 +547,10 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group ">
-                                        <label>City </label>
-                                        <input type="text" class="form-control wo-input" name="soldCity"
-                                            #soldCity="ngModel" [(ngModel)]="soldCustomerAddress.city" disabled />
+                                        <label>StateOrProvince </label>
+                                        <input type="text" class="form-control wo-input" name="soldstateOrProvince"
+                                            #soldstateOrProvince="ngModel"
+                                            [(ngModel)]="soldCustomerAddress.stateOrProvince" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -528,10 +571,10 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group ">
-                                        <label>StateOrProvince </label>
-                                        <input type="text" class="form-control wo-input" name="soldstateOrProvince"
-                                            #soldstateOrProvince="ngModel"
-                                            [(ngModel)]="soldCustomerAddress.stateOrProvince" disabled />
+                                        <label>Postal Code </label>
+                                        <input type="number" class="form-control wo-input" name="soldpostalCode"
+                                            #soldpostalCode="ngModel" [(ngModel)]="soldCustomerAddress.postalCode"
+                                            disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -554,10 +597,9 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group ">
-                                        <label>Postal Code </label>
-                                        <input type="number" class="form-control wo-input" name="soldpostalCode"
-                                            #soldpostalCode="ngModel" [(ngModel)]="soldCustomerAddress.postalCode"
-                                            disabled />
+                                        <label>Country </label>
+                                        <input type="text" class="form-control wo-input" name="soldcountry"
+                                            #soldcountry="ngModel" [(ngModel)]="soldCustomerAddress.country" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -579,11 +621,6 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Country </label>
-                                        <input type="text" class="form-control wo-input" name="soldcountry"
-                                            #soldcountry="ngModel" [(ngModel)]="soldCustomerAddress.country" disabled />
-                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group ">

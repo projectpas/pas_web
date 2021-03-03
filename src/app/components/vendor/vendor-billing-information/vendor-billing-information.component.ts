@@ -437,9 +437,14 @@ export class VendorBillingInformationComponent {
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
-    editItemAndCloseModel() {
+    editItemAndCloseModel() {        
         this.isSpinnerVisible = true;
         this.isSaving = true;
+        if(!this.sourceVendor.countryId){
+            this.isSpinnerVisible = false;
+            this.alertService.showMessage("Error", `Please Select Country`, MessageSeverity.error);
+            return false;
+        }
         if (!(this.sourceVendor.siteName && this.sourceVendor.address1 && this.sourceVendor.city &&
             this.sourceVendor.stateOrProvince && this.sourceVendor.postalCode && this.sourceVendor.countryId
         )) {
@@ -456,7 +461,7 @@ export class VendorBillingInformationComponent {
                 this.sourceVendor.isPrimary= this.sourceVendor.isPrimary ? this.sourceVendor.isPrimary :false;
                 this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
                 this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
-                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);               
                 this.vendorService.createNewBillinginfo(this.sourceVendor).subscribe(data => {
                     this.localCollection = data;
                     this.isSaving = false;
@@ -464,6 +469,7 @@ export class VendorBillingInformationComponent {
                     this.sourceVendor = {};
                     this.alertService.showMessage("Success", `Biiling Info was added successfully`, MessageSeverity.success);                    
                     this.isSpinnerVisible = false;
+                    $('#addBillingInfo').modal('hide');
                 }, error => {this.isSaving = false; this.isSpinnerVisible = false})
             }
             else {
@@ -480,10 +486,11 @@ export class VendorBillingInformationComponent {
                     this.sourceVendor = {};
                     this.alertService.showMessage("Success", `Biiling Info was Updated successfully`, MessageSeverity.success);
                     this.isSpinnerVisible = false;
+                    $('#addBillingInfo').modal('hide');
                 }, error => {this.isSaving = false; this.isSpinnerVisible = false;})
             }
         }
-        $('#addBillingInfo').modal('hide');
+        
     }
 
     previousClick() {

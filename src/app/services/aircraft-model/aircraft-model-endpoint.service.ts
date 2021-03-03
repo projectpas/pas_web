@@ -39,13 +39,12 @@ export class AircraftModelEndpointService extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getAllAircraftModel<T>(): Observable<T> {
-        let endpointUrl = this.getAll;
-
+    getAllAircraftModel<T>(id?): Observable<T> {
+        let endpointUrl = `${this.getAll}/${id}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getAllAircraftModel());
-            });
+                return this.handleErrorCommon(error, () => this.getAllAircraftModel(id));
+        });
     }
 
     getAircraftModelById<T>(aircraftModelId: number): Observable<T> {
@@ -121,13 +120,12 @@ export class AircraftModelEndpointService extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getAircraftModelsRecords(paginationOption));
             });
     }
-    getLandingPageList<T>(): Observable<T> {
+    getLandingPageList<T>(id?): Observable<T> {
         let endpointUrl = this.getLandingPage;
-
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getLandingPageList());
-            });
+                return this.handleErrorCommon(error, () => this.getLandingPageList(id));
+        });
     }
 
 }

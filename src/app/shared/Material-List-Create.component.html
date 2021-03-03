@@ -15,9 +15,9 @@
       <thead>
         <tr>
           <th *ngIf="!isWorkFlow">Task<span class="clr-red">*</span></th>
-          <th>PN<span class="clr-red">*</span></th>
+          <th style="z-index:1">PN<span class="clr-red">*</span></th>
           <th style="min-width: 90px;">Description<span class="clr-red">*</span></th>
-          <th>Cond<span class="clr-red">*</span></th>
+          <th style="z-index:1">Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
           <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
           <th>Qty<span class="clr-red">*</span></th>
@@ -27,7 +27,7 @@
           <th>Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Deferred</th>
-          <th>Memo</th>
+          <th style="z-index:1">Memo</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -35,25 +35,24 @@
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <select class="form-control custom-select wf-pub-id qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
+            <select class="form-control" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
               name="task_{{ i }}" required (change)="onTaskChange(material)">
               <option value="">Select </option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{
                 task.description
                 }}</option>
             </select>
+            <!-- <p-dropdown placeholder="Select Task"  (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen{{ i }}" [options]="taskList"
+            class="p-dropdown-custom-md" [(ngModel)]="material.taskId">
+          </p-dropdown> -->
           </td>
           <td>
             <div style="display:inline-flex">
-              <p-autoComplete (onSelect)="onPartSelect($event, material,i)" [suggestions]="partCollection"
-                (onClear)="clearautoCompleteInput(material, 'partNumber' )"
-                (keyup)="getPartnumbers($event.target.value)" (completeMethod)="filterpartItems($event)" [size]="30"
-                appendTo='body' [baseZIndex]="9999"  [(ngModel)]="material.partNumber" [minLength]="1" [dropdown]="true" class="workflow-measurement-select"
-                name="partnum_{{ i }}" required (ngModelChange)="getActive()">
-                <ng-template let-partName pTemplate="part">
-                  <div class="ui-helper-clearfix">{{ partName }}</div>
-                </ng-template>
-              </p-autoComplete>
+           <p-autoComplete (ngModelChange)="getActive()" (onSelect)="onPartSelect($event, material,i)"  class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
+              errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage="No Records Found"
+              (completeMethod)="filterpartItems($event)"  [size]="30" [minLength]="1" [forceSelection]="true"
+              [(ngModel)]="material.partNumber"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >
+          </p-autoComplete> 
               <div *ngIf="material.partNumber !== null && material.partNumber !== '' ">
                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View" tooltipPosition="bottom" title=""
                   class="btn  nobg" data-original-title="View" (click)="openView(material)" class="view_content">

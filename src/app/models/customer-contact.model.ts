@@ -19,6 +19,7 @@ export class CustomerContactModel {
         this.fax = '';
         this.notes = '';
         this.isDefaultContact = false;
+        this.contactTagId = 0
     }
 
     tag: string;
@@ -37,7 +38,7 @@ export class CustomerContactModel {
     fax: string;
     notes: string;
     isDefaultContact: boolean
-
+    contactTagId:number
 
 
 

@@ -1322,7 +1322,9 @@ export class SalesQuoteCreateComponent implements OnInit {
         if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
           if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
             selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-            selectedPart.promisedDate < this.salesQuote.openDate) {
+            selectedPart.promisedDate < this.salesQuote.openDate ||
+            selectedPart.customerRequestDate > this.salesQuote.openDate ||
+            selectedPart.promisedDate > this.salesQuote.openDate) {
             invalidDate = true;
           }
           if (selectedPart.promisedDate < selectedPart.customerRequestDate) {
