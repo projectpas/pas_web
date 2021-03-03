@@ -1,16 +1,17 @@
 ﻿import { Component, OnInit, ViewChild, Input, OnChanges, ElementRef, ViewEncapsulation } from '@angular/core';
-import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 declare var $ : any;
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
-import { SalesQuoteService } from '../../../../services/salesquote.service';
 import { DBkeys } from '../../../../services/db-Keys';
 import { CommonService } from '../../../../services/common.service';
 import { AuthService } from '../../../../services/auth.service';
 import { emailPattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { SalesQuoteService } from '../../../../services/salesquote.service';
+
 @Component({
     selector: 'app-common-email',
     templateUrl: './common-email.component.html',
@@ -52,11 +53,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         { field: 'toEmail', header: 'To Email' },
         { field: 'subject', header: 'Subject' },
         { field: 'contactBy', header: 'Contacted By' },
-        { field: 'contactDate', header: 'Contact Date' },
-        // { field: 'createdDate', header: 'Created Date' },
-        // { field: 'createdBy', header: 'Created By' },
-        // { field: 'updatedDate', header: 'Updated Date' },
-        // { field: 'updatedBy', header: 'Updated By' }
+        { field: 'contactDate', header: 'Contact Date' }
     ]
     selectedColumns = this.headers;
     addList: any = [];
@@ -73,30 +70,13 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     moduleName: any = "Communication";
     isSpinnerVisible: boolean = false;
     deletingRecord: any;
-    constructor(private activeModal: NgbActiveModal,
-        private communicationService: CommunicationService,
+    constructor(private communicationService: CommunicationService,
         private commonService: CommonService, private datePipe: DatePipe,
-        private authService: AuthService, private modalService: NgbModal, private salesQuoteService: SalesQuoteService, private alertService: AlertService, private configurations: ConfigurationService) { }
+        private authService: AuthService, private modalService: NgbModal, 
+        private alertService: AlertService, private configurations: ConfigurationService,
+        private salesOrderQuoteService: SalesQuoteService) { }
 
     ngOnInit(): void {
-        // if (this.isSubWorkOrder == true) {
-        //     this.customerDetails = this.subWorkOrderDetails;
-        //     this.partNo = this.subWOPartNoId;
-        // } else {
-        //     this.partNo = this.selectedPartNumber.workOrderPartNumberId
-
-        //     if (this.salesQuoteId) {
-        //         this.customerDetails = {
-        //             customerName: this.customerInfoFromSalesQuote.customerName,
-        //             customerCode: this.customerInfoFromSalesQuote.customerCode
-        //         }
-        //     } else {
-        //         this.customerDetails = {
-        //             customerName: this.savedWorkOrderData.customerId.customerName,
-        //             customerCode: this.savedWorkOrderData.customerId.customerCode
-        //         }
-        //     }
-        // }
         if (this.type == 1) {
             this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
         } else {
@@ -114,9 +94,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.moduleId = this.moduleId;
         this.referenceId = this.referenceId;
     }
+
     dismissModel() {
         this.modal.close();
     }
+
     filterCustomerContact(event): void {
         if (this.type == 1) {
             if (event.query !== undefined && event.query !== null) {
@@ -132,6 +114,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             }
         }
     }
+
     setEditArray: any = [];
     customerContacts(value) {
         this.setEditArray = [];
@@ -149,6 +132,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         }, err => {
         });
     }
+
     vendorContacts(value) {
         this.setEditArray = [];
         this.setEditArray.push(0);
@@ -165,6 +149,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         }, err => {
         });
     }
+
     loadData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;;
@@ -172,13 +157,13 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.pageSize = event.rows;
         event.first = pageIndex;
     }
+
     addMemo() {
         this.isEditMode = false;
         this.formData = new FormData();
         if (this.ContactList.length > 0) {
             this.ContactList.forEach(
                 (cc) => {
-                    console.log("cc", cc);
                     this.customerContact = cc;
                     this.contactSelected(cc)
                     return;
@@ -189,7 +174,18 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.cc = '';
         this.emailBody = '';
         this.contactBy = this.authService.currentEmployee;
-        this.subject = '';
+        if (this.CurrentModuleName == "SalesQuote") {
+            this.salesOrderQuoteService.getSalesQuote(this.referenceId).subscribe(data => {
+                if (data) {
+                    let quote = data && data.length ? data[0] : null;
+                    this.subject = quote.salesOrderQuote.customerName + ', Sales Quote Number: ' + quote.salesOrderQuote.salesOrderQuoteNumber;
+                }
+            });
+        }
+        else {
+            this.subject = '';
+        }
+        
         this.emailTypes.forEach(
             (x) => {
                 if (x.label == 'Manual') {
@@ -200,13 +196,15 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.fileUploadInput.clear();
         this.addList.push({ memoId: '', memo: '' })
     }
+
     contactSelected(event) {
-        console.log("even", event)
         this.toEmail = event.email ? event.email : '';
     }
+    
     showDeleteConfirmation(rowData) {
         this.deletingRecord = rowData;
     }
+    
     delete(rowData) {
         this.isSpinnerVisible = true;
         this.communicationService.deleteCommonEmailList(rowData.emailId, this.userName).subscribe(() => {

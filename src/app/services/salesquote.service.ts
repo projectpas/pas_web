@@ -1,18 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Router, NavigationExtras } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
 import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
-
-import { ShelfEndpoint } from "./shelf-endpoint.service";
-import { AuthService } from "./auth.service";
-import { User } from "../models/user.model";
 import { Role } from "../models/role.model";
-import { Shelf } from "../models/shelf.model";
-import { AuditHistory } from "../models/audithistory.model";
 import { SalesQuoteEndpointService } from "./salesquote-endpoint.service";
 import { ISalesQuote } from "../models/sales/ISalesQuote.model";
 import { ISalesQuoteView } from "../models/sales/ISalesQuoteView";
@@ -20,25 +12,19 @@ import { VerifySalesQuoteModel } from "../components/sales/quotes/models/verify-
 import { ISalesOrderQuote } from "../models/sales/ISalesOrderQuote";
 import { ISalesSearchParameters } from "../models/sales/ISalesSearchParameters";
 import { ISalesQuoteListView } from "../models/sales/ISalesQuoteListView";
-import { SalesOrderQuote } from "../models/sales/SalesOrderQuote";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { IPartJson } from "../components/sales/shared/models/ipart-json";
 import { PartDetail } from "../components/sales/shared/models/part-detail";
-import { ISalesOrderQuoteApproverList } from "../models/sales/ISalesOrderQuoteApproverList";
-import { SalesOrderQuoteApproverList } from "../models/sales/SalesOrderQuoteApproverList";
 import { SalesOrderConversionCritera } from "../components/sales/quotes/models/sales-order-conversion-criteria";
-import { SalesOrder } from "../models/sales/SalesOrder.model";
 import { SalesOrderView } from "../models/sales/SalesOrderView";
-import { BehaviorSubject, ReplaySubject } from "rxjs";
-import { MarginSummary } from "../models/sales/MarginSummaryForSalesorder";
+import { BehaviorSubject } from "rxjs";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
 import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { SalesOrderQuotePart } from "../models/sales/SalesOrderQuotePart";
 import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
 import { WorkOrderType } from "../models/work-order-type.model";
-
-
+import { SalesOrderQuote } from "../models/sales/SalesOrderQuote";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -71,7 +57,7 @@ export class SalesQuoteService {
 
 
   constructor(private salesQuoteEndPointSevice: SalesQuoteEndpointService) {
-    this.salesOrderQuote = new SalesOrderQuote();
+    //this.salesOrderQuote = new SalesOrderQuote();
     // this.salesOrderView = new SalesOrderView();
     // this.approvers = [];
 
@@ -224,7 +210,7 @@ export class SalesQuoteService {
       this.salesQuoteEndPointSevice.saveCustomerQuotesApprovedEndPoint(data)
     );
   }
-  
+
   sentForInternalApproval(data) {
     return this.salesQuoteEndPointSevice.sentForInternalApproval(data);
   }
@@ -402,7 +388,7 @@ export class SalesQuoteService {
       marginSummary.sales = sales;
       marginSummary.misc = parseFloat(marginSummary.misc == undefined || marginSummary.misc === '' ? 0 : marginSummary.misc.toString().replace(/\,/g, ''));;
       marginSummary.productCost = productCost ? productCost : 0;
-      marginSummary.netSales = marginSummary ? this.getNetSalesAmount(marginSummary): 0;
+      marginSummary.netSales = marginSummary ? this.getNetSalesAmount(marginSummary) : 0;
       marginSummary.marginAmount = marginSummary ? this.getMarginAmount(marginSummary) : 0;
       marginSummary.marginPercentage = marginSummary ? this.getMarginPercentage(marginSummary) : 0;
     }
@@ -539,11 +525,11 @@ export class SalesQuoteService {
     partNumberObj.uom = selectedPart.uomName;
     partNumberObj.pmaStatus = selectedPart.stockType;
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
+    partNumberObj.qtyOnHand = selectedPart.qtyOnHand;
     // if (selectedPart.isOEM) partNumberObj.pmaStatus = "OEM";
     // if (selectedPart.isPMA) partNumberObj.pmaStatus = "PMA";
     // if (selectedPart.isDER) partNumberObj.pmaStatus = "DER";
-    partNumberObj.salesOrderQuotePartId =
-      selectedPart.salesOrderQuotePartId;
+    partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
     partNumberObj.salesPricePerUnit = selectedPart.unitSalePrice;
     partNumberObj.salesPriceExtended = selectedPart.salesBeforeDiscount;
     partNumberObj.salesDiscount = selectedPart.discount;

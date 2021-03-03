@@ -939,36 +939,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
       this.salesOrderQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
-      this.salesOrderQuote.shipToUserTypeId = this.salesOrderQuoteObj.shipToUserTypeId;
-      this.salesOrderQuote.shipToUserId = this.salesOrderQuoteObj.shipToUserId;
-      this.salesOrderQuote.shipToAddressId = this.salesOrderQuoteObj.shipToAddressId;
-      this.salesOrderQuote.shipViaId = this.salesOrderQuoteObj.shipViaId;
-      this.salesOrderQuote.billToContactId = this.salesOrderQuoteObj.billToContactId;
-      this.salesOrderQuote.shipToContactId = this.salesOrderQuoteObj.shipToContactId;
-      this.salesOrderQuote.shipToSiteName = this.salesOrderQuoteObj.shipToSiteName;
-      this.salesOrderQuote.shipToAddress1 = this.salesOrderQuoteObj.shipToAddress1;
-      this.salesOrderQuote.shipToAddress2 = this.salesOrderQuoteObj.shipToAddress2;
-      this.salesOrderQuote.shipToCity = this.salesOrderQuoteObj.shipToCity;
-      this.salesOrderQuote.shipToState = this.salesOrderQuoteObj.shipToState;
-      this.salesOrderQuote.shipToPostalCode = this.salesOrderQuoteObj.shipToPostalCode;
-      this.salesOrderQuote.shipToCountry = this.salesOrderQuoteObj.shipToCountry;
-      this.salesOrderQuote.shipViaName = this.salesOrderQuoteObj.shipViaName;
-      this.salesOrderQuote.shipViaShippingAccountInfo = this.salesOrderQuoteObj.shipViaShippingAccountInfo;
-      this.salesOrderQuote.shippingId = this.salesOrderQuoteObj.shippingId;
-      this.salesOrderQuote.shippingURL = this.salesOrderQuoteObj.shippingURL;
-      this.salesOrderQuote.shipViaMemo = this.salesOrderQuoteObj.shipViaMemo;
-      this.salesOrderQuote.shipViaShippingURL = this.salesOrderQuoteObj.shipViaShippingURL;
-      this.salesOrderQuote.billToUserTypeId = this.salesOrderQuoteObj.billToUserTypeId;
-      this.salesOrderQuote.billToUserId = this.salesOrderQuoteObj.billToUserId;
-      this.salesOrderQuote.billToAddressId = this.salesOrderQuoteObj.billToAddressId;
-      this.salesOrderQuote.billToSiteName = this.salesOrderQuoteObj.billToSiteName;
-      this.salesOrderQuote.billToAddress1 = this.salesOrderQuoteObj.billToAddress1;
-      this.salesOrderQuote.billToAddress2 = this.salesOrderQuoteObj.billToAddress2;
-      this.salesOrderQuote.billToCity = this.salesOrderQuoteObj.billToCity;
-      this.salesOrderQuote.billToState = this.salesOrderQuoteObj.billToState;
-      this.salesOrderQuote.billToPostalCode = this.salesOrderQuoteObj.billToPostalCode;
-      this.salesOrderQuote.billToCountry = this.salesOrderQuoteObj.billToCountry;
-      this.salesOrderQuote.billToMemo = this.salesOrderQuoteObj.billToMemo;
       this.salesOrderQuote.salesOrderQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
       this.salesQuote.probabilityId = this.salesOrderQuoteObj.probabilityId;
       this.salesQuote.leadSourceId = this.salesOrderQuoteObj.leadSourceId;
@@ -1067,6 +1037,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       Difference_In_Time / (1000 * 3600 * 24)
     );
     this.salesQuote.validForDays = Difference_In_Days;
+    this.enableUpdateButton = false;
   }
 
   onChangeOpenDate() {
@@ -1159,25 +1130,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       haveError = true;
     }
 
-    if (submitType == false) {
-      if (!this.salesOrderQuote.shipToSiteName) {
-        this.errorMessages.push("Please select Ship To SiteName");
-        haveError = true;
-      }
-      if (!this.salesOrderQuote.shipToContactId) {
-        this.errorMessages.push("Please select Ship To Contact");
-        haveError = true;
-      }
-      if (!this.salesOrderQuote.billToSiteName) {
-        this.errorMessages.push("Please select Bill To SiteName");
-        haveError = true;
-      }
-      if (!this.salesOrderQuote.billToContactId) {
-        this.errorMessages.push("Please select Bill To Contact");
-        haveError = true;
-      }
-    }
-
     if (haveError) {
       let content = this.errorMessagePop;
       this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
@@ -1223,30 +1175,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         "value",
         this.salesQuote.employeeId
       );
-      this.salesOrderQuote.billToContactName = editValueAssignByCondition(
-        "firstName",
-        this.salesOrderQuote.billToContactId
-      );
-      this.salesOrderQuote.billToContactId = editValueAssignByCondition(
-        "contactId",
-        this.salesOrderQuote.billToContactId
-      );
-      this.salesOrderQuote.shipToContactName = editValueAssignByCondition(
-        "firstName",
-        this.salesOrderQuote.shipToContactId
-      );
-      this.salesOrderQuote.shipToContactId = editValueAssignByCondition(
-        "contactId",
-        this.salesOrderQuote.shipToContactId
-      );
-      this.salesOrderQuote.shipToUserId = editValueAssignByCondition(
-        "value",
-        this.salesOrderQuote.shipToUserId
-      );
-      this.salesOrderQuote.billToUserId = editValueAssignByCondition(
-        "value",
-        this.salesOrderQuote.billToUserId
-      );
+
       this.salesOrderQuote.leadSourceId = this.salesQuote.leadSourceId;
       if (this.salesQuote.approvedDate)
         if (this.id) {
