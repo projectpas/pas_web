@@ -249,7 +249,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             if (this.row == undefined) {
                 this.row = {};
             }
-            this.row.taskId = this.workFlow.taskId;
+            this.row.taskId = this.workFlow.taskId ? this.workFlow.taskId :"";
             this.workFlow.materialList.map((x, index) => {
                 this.getPNDetails(x);
             })

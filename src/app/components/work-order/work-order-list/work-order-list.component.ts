@@ -1,6 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-import { PageHeaderComponent } from '../../../shared/page-header.component';
 declare var $: any;
 import { WorkOrderService } from '../../../services/work-order/work-order.service';
 import { Table } from 'primeng/table';
@@ -410,9 +409,9 @@ export class WorkOrderListComponent implements OnInit {
             this.workOrderData = res['results'].map(x => {
                 return {
                     ...x,
-                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
-                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
-                    openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy') : '',
+                    createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                    openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy') : '',  
                 }
             });
 

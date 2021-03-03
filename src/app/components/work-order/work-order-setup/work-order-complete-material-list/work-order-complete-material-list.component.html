@@ -48,7 +48,7 @@
             <tr>
                 <th class="table-column-width"></th>
                 <!-- [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" -->
-                <th class="table-column-width" *ngFor="let col of columns" >
+                <th class="table-column-width" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
                     {{col.header}} 
                 </th>
                 <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
@@ -67,7 +67,7 @@
                      <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false"
                       class="fa fa-minus btn-danger plus-danger"  matTooltip="Show stock line details" 
                       matTooltipPosition="above"  (click)="removeRollUpList(rowData,i)"></i>   
-                </td>
+                </td> 
                 <td class="table-column-width" *ngFor="let col of columns">
                     <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " class="m-0 p-0"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
                     <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" class="m-0 p-0 text-right"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>

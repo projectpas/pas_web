@@ -1195,10 +1195,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   routerLink:
                     '/workordersettingsmodule/workordersettings/app-wo-quote-settings-list',
                 },
-                {
-                  label: 'Teardown Reason',
-                  routerLink: '/singlepages/singlepages/app-teardown-reason',
-                },
+                // {
+                //   label: 'Teardown Reason',
+                //   routerLink: '/singlepages/singlepages/app-teardown-reason',
+                // },
               ],
             }
           ],
