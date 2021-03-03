@@ -15,9 +15,9 @@ import { AircraftModel } from "../../models/aircraft-model.model";
 export class AircraftModelService {
   constructor(private aircraftModelEndpoint: AircraftModelEndpointService) { }
 
-  getAll() {
+  getAll(id?) {
     return Observable.forkJoin(
-      this.aircraftModelEndpoint.getAllAircraftModel<AircraftModel[]>()
+      this.aircraftModelEndpoint.getAllAircraftModel<AircraftModel[]>(id)
     );
   }
 
@@ -68,9 +68,9 @@ export class AircraftModelService {
       )
     );
   }
-  getLandingPageList() {
+  getLandingPageList(id?) {
     return Observable.forkJoin(
-      this.aircraftModelEndpoint.getLandingPageList<AircraftModel[]>()
+      this.aircraftModelEndpoint.getLandingPageList<AircraftModel[]>(id)
     );
   }
 }

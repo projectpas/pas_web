@@ -30,11 +30,11 @@ export class ATAMainEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getATAMainEndpoint<T>(): Observable<T> {
-
-        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+    getATAMainEndpoint<T>(id?): Observable<T> {
+        let endpointUrl = `${this.actionsUrl}/${id !== undefined ? id : 1}`;
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getATAMainEndpoint());
+                return this.handleErrorCommon(error, () => this.getATAMainEndpoint(id));
             });
     }
 

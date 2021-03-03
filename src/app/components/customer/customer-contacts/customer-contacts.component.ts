@@ -758,7 +758,7 @@ export class CustomerContactsComponent implements OnInit {
 					this.refreshCustomerContactMapped.emit(this.id);
 					this.isSpinnerVisible = false;
 				},
-				error => this.saveFailedHelper(error));
+				error => {this.isSpinnerVisible = false;});
 		}
 
 		this.modal.close();
@@ -941,7 +941,7 @@ export class CustomerContactsComponent implements OnInit {
 						this.isDeleteMode = false;
 					}
 				},
-				error => this.saveFailedHelper(error));
+				error => {this.isSpinnerVisible = false;});
 		}
 
 		this.modal.close();
@@ -952,7 +952,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.customerService.getCustomerContactAuditDetails(rowData.customerContactId, rowData.customerId).subscribe(res => {
 			this.auditHistory = res;
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false;})
 	}
 
 	getColorCodeForHistory(i, field, value) {
@@ -1192,7 +1192,7 @@ export class CustomerContactsComponent implements OnInit {
 					MessageSeverity.success
 				);
 				this.isSpinnerVisible = false;
-			}, error => this.saveFailedHelper(error))
+			}, error => {this.isSpinnerVisible = false;})
 		}
 	}
 
@@ -1210,7 +1210,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.customerService.getCustomerContactATAAuditDetails(rowData.customerContactATAMappingId).subscribe(res => {
 			this.auditHistory1 = res;
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false;})
 	}
 
 	getColorCodeForHistoryATA(i, field, value) {
@@ -1274,7 +1274,7 @@ export class CustomerContactsComponent implements OnInit {
 
 	getAllATAChapter() {
 		this.isSpinnerVisible = true;
-		this.atamain.getAtaMainList().subscribe(res => {
+		this.atamain.getAtaMainList(this.currentUserMasterCompanyId).subscribe(res => {
 			const responseData = res[0];
 			// used to get the complete object in the value 
 			this.add_ataChapterList = responseData.map(x => {
@@ -1299,7 +1299,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error));
+		}, error => {this.isSpinnerVisible = false;});
 	}
 
 	arrayTagNamelist:any[] = [];  

@@ -10,9 +10,9 @@ import { AircraftDashNumber } from '../../models/dashnumber.model';
 export class DashNumberService {
   constructor(private dashNumberEndpoint: DashNumberEndpointService) { }
 
-  getAll() {
+  getAll(masterCompanyId?) {
     return Observable.forkJoin(
-      this.dashNumberEndpoint.getAllDashNumbers<any>()
+      this.dashNumberEndpoint.getAllDashNumbers<any>(masterCompanyId)
     );
   }
 
