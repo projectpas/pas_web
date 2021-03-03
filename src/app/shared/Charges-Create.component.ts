@@ -68,7 +68,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 this.workFlow.charges.push(data);
                 this.reCalculate()
                 this.disableUpdate=true;
-            } else {
+            } else { 
                 this.workFlow.charges = [];
                 this.workFlow.qtySummation = 0;
                 this.workFlow.extendedCostSummation = 0;

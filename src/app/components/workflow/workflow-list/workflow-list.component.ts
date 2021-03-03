@@ -507,7 +507,6 @@ export class WorkflowListComponent implements OnInit {
         this.MaterialCost = 0.00;
         this.TotalCharges = 0.00;
         this.TotalExpertiseCost = 0.00;
-
         for (let charges of this.sourceWorkFlow.charges) {
             this.TotalCharges += charges.extendedCost != undefined ? charges.extendedCost : 0.00;
         }
@@ -519,7 +518,7 @@ export class WorkflowListComponent implements OnInit {
             {
                 const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
                 const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
-                this.MaterialCost = formatNumberAsGlobalSettingsModule(val, 2);
+                this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
             }
         }
 
@@ -591,7 +590,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.directions.length > 0) { 
+        if (this.sourceWorkFlow && this.sourceWorkFlow.directions && this.sourceWorkFlow.directions.length > 0) { 
             for (var item of this.sourceWorkFlow.directions) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -603,7 +602,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.equipments.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.equipments && this.sourceWorkFlow.equipments.length > 0) {
             for (var item of this.sourceWorkFlow.equipments) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -615,7 +614,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.exclusions.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.exclusions && this.sourceWorkFlow.exclusions.length > 0) {
             for (var item of this.sourceWorkFlow.exclusions) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -627,7 +626,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.expertise.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.expertise && this.sourceWorkFlow.expertise.length > 0) {
             for (var item of this.sourceWorkFlow.expertise) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -639,7 +638,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.materialList.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.materialList && this.sourceWorkFlow.materialList.length > 0) {
             for (var item of this.sourceWorkFlow.materialList) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -651,7 +650,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.measurements.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.measurements && this.sourceWorkFlow.measurements.length > 0) {
             for (var item of this.sourceWorkFlow.measurements) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -663,7 +662,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.publication.length > 0) {
+        if (this.sourceWorkFlow.publication && this.sourceWorkFlow.publication && this.sourceWorkFlow.publication.length > 0) {
             for (var item of this.sourceWorkFlow.publication) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
