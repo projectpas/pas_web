@@ -1,8 +1,9 @@
-<div class="fixed-table-container-inner table-responsive cat4-table" style="height:380px;">
-    <div style="position: absolute; width: 100%; z-index: 1;">
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="height:380px;">
+    <div class="header-div">
         <span class="cat-heading cat4">Add Expertise <i (click)="addRow()" class="fa fa-plus"></i></span>
     </div>
-    <table class="table table-bordered table-fixed workflow-table-expertise workflowTable-class" style="margin-top:31px;">
+    <table class="table table-bordered table-fixed workflow-table-expertise workflowTable-class margin-top-31">
+        <thead>
         <tr>
             <th><label>Expertise Type<span class="clr-red">*</span></label></th>
             <th><label>Estimated Hours </label></th>
@@ -13,6 +14,8 @@
             <th><label>Direct Labor and OH Cost</label></th>
             <th><label>Action </label></th>
         </tr>
+    </thead>
+    <tbody>
         <tr class="expertise-tr" [hidden]="expert.isDelete" *ngFor="let expert of workFlow.expertise;let i = index">
             <td>
                 <select id="ddlExpertiesType" class="form-control wf-pub-id full-width"
@@ -50,7 +53,7 @@
             <td class="text-right">
                 {{expert.laborOverheadCost}}
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
                 <button class="btn btn-danger nobg" (click)="openDelete(content,expert,i)" >
                     <i class="fa fa-trash"></i>
                 </button>
@@ -68,6 +71,7 @@
             <td class="text-right"><b>{{ workFlow.totalExpertiseCost }}</b></td>
             <td>&nbsp;</td>
         </tr>
+        </tbody>
     </table>
 </div>
 <ng-template #content let-c="close" let-d="dismiss">

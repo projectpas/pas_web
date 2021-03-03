@@ -4,6 +4,38 @@
 .workflow-table-exclusion tr th:first-child {
     padding: 0 10px !important;
 }
+.fixed-column-table {
+    max-width: 100%;
+    max-height: 500px;
+    overflow: scroll;
+    position: relative;
+    padding: 0;
+}
+.fixed-column-table table {
+    position: relative;
+    border-collapse: collapse;
+}
+.fixed-column-table thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: -1px;
+    background: #0d57b0;
+}
+.column-r1-fixed thead th:last-child {
+    right: 0;
+    z-index: 1;
+    text-align: center;
+    margin: auto;
+}
+.column-r1-fixed tbody td:last-child {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    background: #FFF;
+    border-right: 1px solid #CCC;
+    padding-left: 5px;
+    text-align: center;
+}
 .cat-heading {
     position: absolute;
     width: 100%;
@@ -13,4 +45,19 @@
 }
 .ci_cls{
     margin-top: 6px;
+}
+.header-div{
+    width: 100% !important;z-index: 1 !important;
+}
+.min-width-90{
+    min-width: 90px !important;
+}
+.width-180{
+    width: 180px !important;
+}
+.min-width-145{
+    min-width: 145px !important;
+}
+.textarea-memo-div{
+    width: 120px !important;margin-bottom: 0 !important;display: inline-flex !important;padding-top: 3px !important;
 }

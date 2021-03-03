@@ -18,3 +18,9 @@ label {
 .workflow-table-equip th {
     width: 120px !important;
 }
+.overflow-hidden{
+    overflow: hidden !important;
+}
+.float-right{
+    float:right !important;
+}
