@@ -653,7 +653,7 @@ export class CommonTeardownComponent implements OnInit {
     validator() {
         this.alertService.showMessage(
             'Alert', ' Please Add Mandatory Fields',
-            MessageSeverity.success
+            MessageSeverity.warn
         );
         return false;
     }

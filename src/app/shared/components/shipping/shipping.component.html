@@ -1,8 +1,28 @@
 ﻿<div class="card align-center" >
     <div class="card-body">
         <form #shippingForm="ngForm">
+            <div class="card-body" style="padding-top: 5px; padding-bottom: 0px;">
+                <div class="form-row body-alignment">
+                 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>WO Num </label>
+                            <div *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
+                                <input class="form-control" type="text" [(ngModel)]="workOrderGeneralInformation.workOrderNum" name="woNum" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Shipment</label>
+                            <input class="form-control" type="number" [(ngModel)]="shippingHeader.shipment" name="shipment" [disabled]="isView" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card card-stock">
                         <div class="card-body">
                             <div class="form-group col-md-12">
@@ -63,38 +83,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="col-md-3">
-                    <div class="card card-stock">
-                        <div class="card-header">
-                            <h5>Manufacturer</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Manufacturer</label>
-                                <select [(ngModel)]="stockLineForm.manufacturerId" name="manufacturerId">
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let manufacturer of allManufacturerInfo" [ngValue]="manufacturer.value">{{manufacturer.label}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Mfg. Lot Num</label>
-                                <input class="form-control" type="text" name="manufacturerLotNumber" [(ngModel)]="stockLineForm.manufacturerLotNumber">
-                            </div>
-                            <div class="form-group">
-                                <label>Mfg. Batch Num</label>
-                                <input class="form-control" type="text" name="manufacturingBatchNumber" [(ngModel)]="stockLineForm.manufacturingBatchNumber">
-                            </div>
-                            <div class="form-group">
-                                <label>Mfg. Date</label>
-                                <p-calendar class="workflow-clder" [showIcon]="true" [maxDate]="minDateValue" name="manufacturingDate" [(ngModel)]="stockLineForm.manufacturingDate"></p-calendar>
-                            </div>
-                        </div>
-                    </div>
-                    </div> -->
-
-
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card card-stock">
                         <div class="card-body">
                             <div class="form-group col-md-12">
@@ -146,53 +135,6 @@
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="number" [(ngModel)]="shippingHeader.weight" name="weight" [disabled]="isView" required />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card card-stock">
-                        <div class="card-body">
-                            <!-- <div class="form-group col-12">
-                                <div class="col-6">
-                                    <label>SO Num</label>
-                                </div>
-                                <div class="col-6" *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
-                                    <input class="form-control" type="text" [(ngModel)]="workOrderGeneralInformation.workOrderNum" name="soNum" disabled/>
-                                </div>
-                            </div>
-                            <div class="form-group col-12">
-                                <div class="col-6">
-                                    <label>RO Num</label>
-                                </div>
-                                <div class="col-6" *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
-                                    <input class="form-control" type="text" [(ngModel)]="workOrderGeneralInformation.workOrderNum" name="roNum" readonly/>
-                                </div>
-                            </div>
-                            <div class="form-group col-12">
-                                <div class="col-6">
-                                    <label>PO Num</label>
-                                </div>
-                                <div class="col-6" *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
-                                    <input class="form-control" type="text" [(ngModel)]="workOrderGeneralInformation.workOrderNum" name="poNum" readonly/>
-                                </div>
-                            </div> -->
-                            <div class="form-group col-md-12">
-                                <div class="col-md-4">
-                                    <label>WO Num</label>
-                                </div>
-                                <div class="col-md-8" *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
-                                    <input class="form-control" type="text" [(ngModel)]="workOrderGeneralInformation.workOrderNum" name="woNum" disabled />
-                                </div>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <div class="col-md-4">
-                                    <label>Shipment</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input class="form-control" type="number" [(ngModel)]="shippingHeader.shipment" name="shipment" [disabled]="isView" />
                                 </div>
                             </div>
                         </div>
@@ -324,7 +266,7 @@
                                     <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
                                             [disabled]="isView" name="soldToSite" required>
                                         <option value="">Select</option>
-                                        <option *ngFor="let site of siteList" [value]="site.customerShippingAddressId">
+                                        <option *ngFor="let site of siteList" [value]="site.customerDomensticShippingId">
                                             {{site.siteName}}
                                         </option>
                                     </select>
@@ -421,7 +363,7 @@
                                                     [forceSelection]="true"
                                                     (onSelect)="getSiteNamesByShipCustomerId($event)"
                                                     [suggestions]="customerNamesList"
-                                                    (completeMethod)="filterCustomerName($event)"
+                                                    (completeMethod)="filterCustomerNames($event)"
                                                     (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
                                                     [size]="30"
                                                     [minLength]="1"
@@ -441,7 +383,7 @@
                                     <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
                                             [disabled]="isView" name="shipToSite" required>
                                         <option value="">Select</option>
-                                        <option *ngFor="let site of shipCustomerSiteList" [value]="site.customerShippingAddressId">{{site.siteName}}</option>
+                                        <option *ngFor="let site of shipCustomerSiteList" [value]="site.customerDomensticShippingId">{{site.siteName}}</option>
                                     </select>
                                 </div>
                             </div>
