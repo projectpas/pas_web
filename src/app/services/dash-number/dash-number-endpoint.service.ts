@@ -41,13 +41,12 @@ export class DashNumberEndpointService extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getAllDashNumbers<T>(): Observable<T> {
-        let endpointUrl = this.getAllURL;
-
+    getAllDashNumbers<T>(masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getAllURL}/${masterCompanyId!==undefined ? masterCompanyId : 1}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getAllDashNumbers());
-            });
+                return this.handleErrorCommon(error, () => this.getAllDashNumbers(masterCompanyId));
+        });
     }
 
     getDashNumberById<T>(dashNumberId: number): Observable<T> {

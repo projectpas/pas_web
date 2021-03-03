@@ -114,8 +114,8 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <label class="fs12" style="width: 100%;">Aircraft </label>
-                  <p-dropdown [options]="manufacturerData" placeholder="Select" name="searchAircraft"
-                    class="p-dropdown-cus-aircraft" [(ngModel)]="selectAircraftManfacturer" [showClear]="true"
+                  <p-dropdown [options]="manufacturerData" placeholder="-- Select --" name="searchAircraft" filter="true"
+                   [ngModelOptions]="{ standalone: true }" class="p-dropdown-cus-fullwidth" [(ngModel)]="selectAircraftManfacturer" [showClear]="true"
                     (onChange)="getAircraftModelByManfacturerType($event.value)"></p-dropdown>
                 </div>
               </div> 

@@ -29,14 +29,14 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
 
         return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getATASubChapter1Endpoint());
+                return this.handleErrorCommon(error, () => this.getATASubChapter1Endpoint());
             });
     }
     getNewATASubChapter1Endpoint<T>(userObject: any): Observable<T> {
 
         return this.http.post<T>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewATASubChapter1Endpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewATASubChapter1Endpoint(userObject));
             });
     }
 
@@ -45,7 +45,7 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getHistoryATASubChapter1Endpoint(ataSubChapterId));
+                return this.handleErrorCommon(error, () => this.getHistoryATASubChapter1Endpoint(ataSubChapterId));
             });
     }
 
@@ -54,7 +54,7 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditATASubChapter1Endpoint(ataSubChapterId));
+                return this.handleErrorCommon(error, () => this.getEditATASubChapter1Endpoint(ataSubChapterId));
             });
     }
 
@@ -63,7 +63,7 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateATASubChapter1Endpoint(roleObject, ataSubChapterId));
+                return this.handleErrorCommon(error, () => this.getUpdateATASubChapter1Endpoint(roleObject, ataSubChapterId));
             });
     }
 
@@ -72,7 +72,7 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeleteATASubChapter1Endpoint(ataSubChapterId));
+                return this.handleErrorCommon(error, () => this.getDeleteATASubChapter1Endpoint(ataSubChapterId));
             });
     }
 
@@ -82,7 +82,7 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getATASubChapterAuditById(ataSubChapterId));
+                return this.handleErrorCommon(error, () => this.getATASubChapterAuditById(ataSubChapterId));
             });
     }
 
@@ -90,14 +90,14 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
         let endpointUrl = `${this.getSubChaptersListById}/${ataChapterId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAtaSubChaptersListByAtaChapterId(ataChapterId));
+                return this.handleErrorCommon(error, () => this.getAtaSubChaptersListByAtaChapterId(ataChapterId));
             });
     }
     getAtaSubChaptersList<T>(): Observable<T> {
         let endpointUrl = `${this.getSubChaptersList}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAtaSubChaptersList());
+                return this.handleErrorCommon(error, () => this.getAtaSubChaptersList());
             });
     }
 }

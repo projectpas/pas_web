@@ -234,19 +234,31 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
     if (this.editMode) {
       this.id = this.editGeneralInformationData.customerId;
-      this.customerGeneralInformation = this.editGeneralInformationData;
+      this.customerGeneralInformation = this.editGeneralInformationData;      
       this.savedGeneralInformationData = this.editGeneralInformationData;
       this.customerCode = this.editGeneralInformationData.customerCode;
       this.customerName = this.editGeneralInformationData.name;
+     
+      if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+        this.showAllowNettingOfAPAR = true;
+      } else {
+        this.showAllowNettingOfAPAR = false;
+      }
 
     } else {
       this.savedGeneralInformationData.allowPartialBilling = true;
       this.savedGeneralInformationData.allowProformaBilling = true;      
-      this.customerGeneralInformation = this.savedGeneralInformationData;
+      this.customerGeneralInformation = this.savedGeneralInformationData;      
       this.id = this.savedGeneralInformationData.customerId;
       this.customerCode = this.savedGeneralInformationData.customerCode;
       this.customerName = this.savedGeneralInformationData.name;
       this.getDefaultCurrency();
+      
+      if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+        this.showAllowNettingOfAPAR = true;
+      } else {
+        this.showAllowNettingOfAPAR = false;
+      }
     }
     
   }
@@ -272,7 +284,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
               if (this.id) {
                 this.toGetDocumentsListNew(this.id);
-                this.getFinanceInfoByCustomerId();
+                //this.getFinanceInfoByCustomerId();
               }
 
               this.savedGeneralInformationData = {
@@ -290,20 +302,11 @@ export class CustomerFinancialInformationComponent implements OnInit {
     {
       this.isSpinnerVisible = true;
       this.customerService.getFinanceInfoByCustomerId(this.id).subscribe(res => {
+        
         if(res)
         {
           this.editModeFinance = true;
           this.savedGeneralInformationData = res;
-
-          if (
-            this.customerGeneralInformation.isCustomerAlsoVendor == true &&
-            this.customerGeneralInformation.type == 'Customer'
-          ) {
-            this.showAllowNettingOfAPAR = true;
-          } else {
-            this.showAllowNettingOfAPAR = false;
-          }
-
           this.savedGeneralInformationData = {
             ...this.savedGeneralInformationData,
             creditTermsId: getObjectById(

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SpinnerComponent } from './shared/spinner/spinner.component'
 import { TwoDecimalGlobalNumberFormatPipe } from './pipes/two-decimal-global-number-format-pipe.pipe';
 import { GlobalNumberFormat } from './pipes/Global-Number-Format';
+import { FiveDecimalGlobalNumberFormatPipe } from './pipes/two-decimal-global-number-format-pipe.pipe';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { GlobalNumberFormat } from './pipes/Global-Number-Format';
         AppModalSpinnerComponent,
         SpinnerComponent,
         TwoDecimalGlobalNumberFormatPipe,
-        GlobalNumberFormat
+        GlobalNumberFormat,
+        FiveDecimalGlobalNumberFormatPipe
     ],
     exports: [
         CommonModule,
@@ -23,7 +25,8 @@ import { GlobalNumberFormat } from './pipes/Global-Number-Format';
         AppModalSpinnerComponent,
         SpinnerComponent,
         TwoDecimalGlobalNumberFormatPipe,
-        GlobalNumberFormat
+        GlobalNumberFormat,
+        FiveDecimalGlobalNumberFormatPipe
     ]
 })
 export class AppSharedModule { }

@@ -476,38 +476,46 @@ export class CustomerSalesPersonComponent implements OnInit {
 
         this.isSpinnerVisible = true;
         const CSRid = getValueByFieldFromArrayofObject('jobTitle', 'CSR', this.jobTitles);
-        const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'Sales', this.jobTitles);
-        const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'Agents', this.jobTitles);
-
-        if(CSRid[0].jobTitleId > 0)
+        const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'SALES', this.jobTitles);
+        const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'AGENT', this.jobTitles);
+        
+        if(CSRid[0] && CSRid[0].jobTitleId && CSRid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
         
-        if(Salesid[0].jobTitleId > 0)
+        if(Salesid[0] && Salesid[0].jobTitleId && Salesid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Salesid[0].jobTitleId);
 
-        if(Agentsid[0].jobTitleId > 0)
+        if(Agentsid[0] && Salesid[0].jobTitleId && Salesid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
 
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
             if(res)
             {
+                if( CSRid[0] && CSRid[0].jobTitleId && CSRid[0].jobTitleId > 0)
+                {
                 this.csrOriginalList = res.filter(x => {
                     if (CSRid[0].jobTitleId == x.jobTitleId) {
                         return x;
                     }
-                })
-
+                })}
+                
+                if( Agentsid[0] && Agentsid[0].jobTitleId && Agentsid[0].jobTitleId > 0)
+                {
                 this.agentsOriginalList = res.filter(x => {
                     if (Agentsid[0].jobTitleId == x.jobTitleId) {
                         return x;
                     }
                 })
+                }
 
+                if( Salesid[0] && Salesid[0].jobTitleId && Salesid[0].jobTitleId > 0)
+                {
                 this.salesPersonOriginalList = res.filter(x => {
                     if (Salesid[0].jobTitleId == x.jobTitleId) {
                         return x;
                     }
                 })
+                }
 
                 if (this.id) {
                     this.getSalesInfoByCustomerId(this.id)
@@ -516,7 +524,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 this.arayJobTitleIds = [];
             }
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false})
     }
 }
 

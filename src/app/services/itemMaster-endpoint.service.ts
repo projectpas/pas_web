@@ -238,11 +238,11 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getAircraftmodels<T>(): Observable<T> {
-
-        return this.http.get<T>(this.getAircraftUrl, this.getRequestHeaders())
+    getAircraftmodels<T>(id?): Observable<T> {
+        let url = `${this.getAircraftUrl}/${id!==undefined ? id : 1}`;
+        return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getitemMasterEndpoint());
+                return this.handleErrorCommon(error, () => this.getAircraftmodels(id));
             });
     }
 

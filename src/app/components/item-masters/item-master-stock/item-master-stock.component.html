@@ -1722,7 +1722,7 @@
                                             <!-- FX Rate -->
                                             <td>
                                                 <input type="text" 
-                                                 class="input-field-value text-right input-width-100-percent" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
+                                                 class="input-field-value text-right input-width-100-percent" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | fiveDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
 
                                             </td>
                                             <!-- Vendor List Price -->
@@ -1766,7 +1766,7 @@
                                             <!-- FX Rate -->
                                             <td>
 
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | fiveDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
                                             </td>
                                             <!-- Flat Price Amount -->
                                             <td>

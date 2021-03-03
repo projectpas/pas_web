@@ -599,6 +599,11 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.itemMasterIdPMA = 0;
                     this.disableAddPMA = false;
                     this.isSpinnerVisible = false;
+                    this.alertService.showMessage(
+                        'Success',
+                        `Please Click on Save/Update to store in Database`,
+                        MessageSeverity.success
+                    );
                 }
                 else {
                     this.itemMasterIdPMA = 0;
@@ -606,7 +611,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.isSpinnerVisible = false;
                 }
 
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false})
         }
     }
 
@@ -713,13 +718,18 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.itemMasterIdDER = 0;
                     this.disableAddDER = false;
                     this.isSpinnerVisible = false;
+                    this.alertService.showMessage(
+                        'Success',
+                        `Please Click on Save/Update to store in Database`,
+                        MessageSeverity.success
+                    );
                 }
                 else {
                     this.itemMasterIdDER = 0;
                     this.disableAddDER = false;
                     this.isSpinnerVisible = false;
                 }
-            }, error => this.saveFailedHelper(error))
+            }, error => { this.isSpinnerVisible = false})
         }
     }
 
@@ -1138,6 +1148,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
             }, 500)
         }
     }
+
+    ngOnDestroy() {		
+		if (this.formdata.form.dirty) {
+            let content = this.tabRedirectConfirmationModal;
+            this.modal = this.modalService.open(content, { size: "sm" });
+        }
+	}
 
     redirectToTabWithoutSave() {
         this.dismissModel();

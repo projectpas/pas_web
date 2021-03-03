@@ -84,6 +84,7 @@ export class CustomerBillingInformationComponent {
     changeName: boolean = false;
     isSiteNameAlreadyExists: boolean = false;
     disableSaveSiteName: boolean;
+    selectedSitename : any
 
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
@@ -142,6 +143,19 @@ export class CustomerBillingInformationComponent {
     closeDeleteModal() {
         $("#downloadBilling").modal("hide");
     }
+
+    checkBillingSiteNameSelect() {    
+        if(this.isEditMode  != editValueAssignByCondition('siteName', this.billingInfo.siteName))
+        {
+            this.isSiteNameAlreadyExists = true;
+            this.disableSaveSiteName = true;
+        }
+        else
+        {
+            this.isSiteNameAlreadyExists = false;
+            this.disableSaveSiteName = false;
+        }
+    }    
     
     exportCSV(dt){
         dt._value = dt._value.map(x => {
@@ -347,6 +361,7 @@ export class CustomerBillingInformationComponent {
 
     addBillingIfo() {
         this.isEditMode = false;
+        this.isSiteNameAlreadyExists = false;
         this.arrayCountrylist = [];
         this.billingInfo = new CustomerBillingAddressModel();
     }
@@ -429,7 +444,8 @@ export class CustomerBillingInformationComponent {
         this.billingInfo = { 
             ...rowData
         };
-
+        this.selectedSitename = rowData.siteName
+        this.isSiteNameAlreadyExists = false;
         if(rowData.customerBillingAddressId > 0) {			
             this.arrayShipingIdlist.push(rowData.customerBillingAddressId); }
 
@@ -630,9 +646,9 @@ export class CustomerBillingInformationComponent {
         this.changeName = true;
         this.isSiteNameAlreadyExists = false;
         this.disableSaveSiteName = false;
-        if (value != this.billingInfoOriginal.siteName) {
-            for (let i = 0; i < this.billingSieListOriginal.length; i++) {
-                if (this.billingInfo.siteName == this.billingSieListOriginal[i].siteName || value == this.billingSieListOriginal[i].siteName) {
+        if (value != this.selectedSitename) {
+            for (let i = 0; i < this.billingSieList.length; i++) {
+                if (this.billingInfo.siteName == this.billingSieList[i].siteName || value == this.billingSieList[i].siteName) {
                     this.isSiteNameAlreadyExists = true;
                     this.disableSaveSiteName = true;
                     return;
@@ -640,4 +656,18 @@ export class CustomerBillingInformationComponent {
             }
         }
     }
+
+    selectedsiteNameData() {       			
+		const siteName = editValueAssignByCondition('siteName', this.billingInfo.siteName);		
+        if (siteName == this.selectedSitename){
+			this.isSiteNameAlreadyExists = false;
+			if(this.isEditMode)
+			this.disableSaveSiteName = false;
+		}
+        else{
+			this.isSiteNameAlreadyExists = true;
+			if(this.isEditMode)
+			this.disableSaveSiteName = true;
+		}			
+    }    
 }

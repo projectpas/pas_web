@@ -145,6 +145,7 @@ export class CustomerShippingInformationComponent implements OnInit {
     currentDate = new Date();
     shipViaDropdownList: any;
     isprimarydata: any;
+    selectedSitename:any;
     isprimarydomesticdata: any;
     isprimaryInternationaldata: any;
     isprimarydomesticshipdata: any;
@@ -576,8 +577,9 @@ export class CustomerShippingInformationComponent implements OnInit {
 
         this.isprimarydomesticdata=rowData.isPrimary
         this.isEditDomestic = true;
+        this.isSiteNameAlreadyExists = false;
         this.domesticShippingInfo = rowData;
-
+        this.selectedSitename = rowData.siteName;
         if(rowData.customerDomensticShippingId > 0) {
             this.arrayDomesricShipIdlist.push(rowData.customerDomensticShippingId); }
 
@@ -624,6 +626,7 @@ export class CustomerShippingInformationComponent implements OnInit {
     }
 
     addDomesticShipping() {
+        this.isSiteNameAlreadyExists = false;
         this.isEditDomestic = false;
         this.domesticShippingInfo = new CustomerShippingModel();
     }
@@ -1403,7 +1406,7 @@ export class CustomerShippingInformationComponent implements OnInit {
             this.getAllDomesticSiteSmartDropDown(event.query); }
       }
 
-    selectedDomessticSite(event){}
+    //selectedDomessticSite(event){}     
 
     getAllDomesticSiteSmartDropDown(strText = ''){
 		if(this.arrayDomesricShipIdlist.length == 0) {
@@ -1427,9 +1430,9 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.changeName = true;
         this.isSiteNameAlreadyExists = false;
         this.disableSaveSiteName = false;
-        if (value != this.domesticShippingOriginalInfo.siteName) {
-            for (let i = 0; i < this.domesticSieListOriginal.length; i++) {
-                if (this.domesticShippingOriginalInfo.siteName == this.domesticSieListOriginal[i].siteName || value == this.domesticSieListOriginal[i].siteName) {
+        if (value != this.selectedSitename) {
+            for (let i = 0; i < this.domesticSieList.length; i++) {
+                if (this.domesticShippingOriginalInfo.siteName == this.domesticSieList[i].siteName || value == this.domesticSieList[i].siteName) {
                     this.isSiteNameAlreadyExists = true;
                     this.disableSaveSiteName = true;
                     return;
@@ -1437,4 +1440,20 @@ export class CustomerShippingInformationComponent implements OnInit {
             }
         }
     }
+
+    selectedDomessticSite() {       			
+		const siteName = editValueAssignByCondition('siteName', this.domesticShippingInfo.siteName);		
+        if (siteName == this.selectedSitename){
+			this.isSiteNameAlreadyExists = false;
+			if(this.isEditDomestic)
+			this.disableSaveSiteName = false;
+		}
+        else{
+			this.isSiteNameAlreadyExists = true;
+			if(this.isEditDomestic)
+			this.disableSaveSiteName = true;
+		}			
+    } 
+
+
 }

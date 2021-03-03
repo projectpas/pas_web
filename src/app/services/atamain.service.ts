@@ -37,9 +37,9 @@ export class AtaMainService {
     private authService: AuthService,
     private ataMainEndpoint: ATAMainEndpoint) { }
 
-  getAtaMainList() {
+  getAtaMainList(id?) {
     return Observable.forkJoin(
-      this.ataMainEndpoint.getATAMainEndpoint<ATAChapter[]>());
+      this.ataMainEndpoint.getATAMainEndpoint<ATAChapter[]>(id));
   }
     getAllAtaMainList() {
         return Observable.forkJoin(

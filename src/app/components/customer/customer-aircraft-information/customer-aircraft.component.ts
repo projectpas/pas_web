@@ -36,7 +36,7 @@ export class CustomerAircraftComponent implements OnInit {
     manufacturerData: { value: any; label: any; }[];
     search_AircraftModelList: any = [];
     search_AircraftDashNumberList: any;
-    selectAircraftManfacturer: any = '';
+    selectAircraftManfacturer: any 
     selectedAircraftModel = [];
     selectedDashNumbers = [];
     selectedmemo: any = '';
@@ -202,18 +202,18 @@ export class CustomerAircraftComponent implements OnInit {
     }
 
     getAllAircraftManfacturer() {
-        this.itemser.getAircraft().subscribe(res => {
+        this.itemser.getAircraft(this.currentUserMasterCompanyId).subscribe(res => {
             this.manufacturerData = res[0].map(x => {
                 return {
                     value: x.aircraftTypeId, label: x.description
                 }
             })
-        });
+        },error => {});
     }
 
     // get all Aircraft Models
     getAllAircraftModels() {
-        this.aircraftModelService.getAll().subscribe(models => {
+        this.aircraftModelService.getAll(this.currentUserMasterCompanyId).subscribe(models => {
             const responseValue = models[0];
             const aircraftModelList = responseValue.map(models => {
                 return {
@@ -223,7 +223,7 @@ export class CustomerAircraftComponent implements OnInit {
             });
             this.search_AircraftModelList = aircraftModelList;
             this.add_AircraftModelList = aircraftModelList;
-        },error => this.saveFailedHelper(error));
+        },error =>{this.isSpinnerVisible = false});
     }
     viewAircraftdbldisplay(data) {
         this.viewAircraftData = data;
@@ -232,7 +232,7 @@ export class CustomerAircraftComponent implements OnInit {
 
     // get all dashnumber
     getAllDashNumbers() {
-        this.Dashnumservice.getAll().subscribe(dashnumbers => {
+        this.Dashnumservice.getAll(this.currentUserMasterCompanyId).subscribe(dashnumbers => {
             const responseData = dashnumbers[0];
             const dashNumberList = responseData.map(dashnumbers => {
                 return {
@@ -242,7 +242,7 @@ export class CustomerAircraftComponent implements OnInit {
             });
             this.search_AircraftDashNumberList = dashNumberList;
             this.add_AircraftDashNumberList = dashNumberList;
-        },error => this.saveFailedHelper(error));
+        },error => {this.isSpinnerVisible = false});
     }
     editAirCraft(rowData) {
         this.editAirCraftData = { ...rowData };
@@ -272,7 +272,8 @@ export class CustomerAircraftComponent implements OnInit {
     }
 
     async getAircraftModelByManfacturerType(id) {
-        this.selectAircraftManfacturer = String(id);
+        
+        //this.selectAircraftManfacturer = String(id);
         // construct url from array
         await this.searchByFieldUrlCreateforAircraftInformation();
         // reset the dropdowns
@@ -290,7 +291,7 @@ export class CustomerAircraftComponent implements OnInit {
                             value: models.aircraftModelId
                         };
                     });
-                },error => this.saveFailedHelper(error));
+                },error => {this.isSpinnerVisible = false});
         } else {
             this.getAllAircraftModels();
             this.getAllDashNumbers();
@@ -313,7 +314,7 @@ export class CustomerAircraftComponent implements OnInit {
                         value: dashnumbers.dashNumberId
                     };
                 });
-            },error => this.saveFailedHelper(error));
+            },error => {this.isSpinnerVisible = false});
         }
     }
 
@@ -321,23 +322,19 @@ export class CustomerAircraftComponent implements OnInit {
     async searchAircraftInformation() {
         await this.searchByFieldUrlCreateforAircraftInformation();
         this.searchAircraftParams = '';
-
         // checks where multi select is empty or not and calls the service
         if (
             this.aircraftManfacturerIdsUrl !== '' &&
             this.aircraftModelsIdUrl !== '' &&
             this.dashNumberIdUrl !== ''
         ) {
-
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}&AircraftModelId=${this.aircraftModelsIdUrl}&DashNumberId=${this.dashNumberIdUrl}`;
         }
         else if (
             this.aircraftManfacturerIdsUrl !== '' &&
             this.aircraftModelsIdUrl !== '' &&
             this.dashNumberIdUrl !== ''
-
         ) {
-
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}&AircraftModelId=${this.aircraftModelsIdUrl}&DashNumberId=${this.dashNumberIdUrl}`;
         }
         // search only by manfacturer and Model and  publicationId
@@ -347,7 +344,6 @@ export class CustomerAircraftComponent implements OnInit {
         ) {
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}&AircraftModelId=${this.aircraftModelsIdUrl}`;
         }
-
         else if (
             this.aircraftManfacturerIdsUrl !== '' &&
             this.dashNumberIdUrl !== ''
@@ -359,42 +355,32 @@ export class CustomerAircraftComponent implements OnInit {
             this.dashNumberIdUrl !== ''
         ) {
             this.searchAircraftParams = `AircraftModelId=${this.aircraftModelsIdUrl}&DashNumberId=${this.dashNumberIdUrl}`;
-        }
-        
+        }        
         else if (this.aircraftManfacturerIdsUrl !== '') {
-
-
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}`;
         }
         // search only by model and publicationId
         else if (this.aircraftModelsIdUrl !== '') {
-
             this.searchAircraftParams = `AircraftModelId=${this.aircraftModelsIdUrl}`;
         }
         // search only by dashNumber and publicationId
         else if (this.dashNumberIdUrl !== '') {
-
             this.searchAircraftParams = `DashNumberId=${this.dashNumberIdUrl}`;
         }
-
-
         if (this.selectedmemo !== '') {
             this.searchAircraftParams = `${this.searchAircraftParams}&memo=${this.selectedmemo}`
         } else {
             this.searchAircraftParams = this.searchAircraftParams;
         }
-
-
-
         this.customerService.searchAirMappedByMultiTypeIDModelIDDashIDByCustomerId(this.id, this.searchAircraftParams).subscribe(res => {
             this.aircraftListDataValues = res;
             if (this.aircraftListDataValues.length > 0) {
                 this.totalRecords = this.aircraftListDataValues.length;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             }
-        },error => this.saveFailedHelper(error));
-
+        },error => {this.isSpinnerVisible = false;});
     }
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
@@ -624,7 +610,7 @@ export class CustomerAircraftComponent implements OnInit {
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
                 }
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false;})
         }
     }
     
@@ -736,7 +722,7 @@ export class CustomerAircraftComponent implements OnInit {
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
                 }
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false;})
         }
         this.isSpinnerVisible = false;
     }
