@@ -7,6 +7,7 @@ declare var $ : any;
   templateUrl: './teardown-overview.component.html',
   styleUrls: ['./teardown-overview.component.scss']
 })
+
 export class TeardownOverviewComponent implements OnInit {
   description:any;
     @Input() workFlowWorkOrderId1;
@@ -27,20 +28,20 @@ export class TeardownOverviewComponent implements OnInit {
       isFinalTest:false,
       isFinalInspection:false,
       isAdditionalComments:false
-      }
+    }
+
     constructor(private workOrderService: WorkOrderService,) {}  
+
     ngOnInit() {
       if(this.workFlowWorkOrderId1){
         this.getTearDownData();
-        console.log("hello check it once")
       }
     } 
+
     ngOnChanges(changes: SimpleChanges) {
-      console.log("hell",this.workFlowWorkOrderId1)
-      // if(this.workFlowWorkOrderId1){
         this.getTearDownData();
-      // }
      }
+
     ExpandAllCustomerDetailsModel() {
       $('#step1').collapse('show');
       $('#step2').collapse('show');
@@ -55,6 +56,7 @@ export class TeardownOverviewComponent implements OnInit {
       $('#step11').collapse('show');
       $('#step12').collapse('show');
   }
+
   CloseAllCustomerDetailsModel() {
       $('#step1').collapse('hide');
       $('#step2').collapse('hide');
@@ -69,24 +71,21 @@ export class TeardownOverviewComponent implements OnInit {
       $('#step11').collapse('hide');
       $('#step12').collapse('hide');
   } 
-    getTearDownData(){
+
+  getTearDownData(){
       if(this.workFlowWorkOrderId1){
         if(this.isSubWorkOrder==true){
-this.workFlowWorkOrderId1=this.subWOPartNoId;
-        }else{
-
+          this.workFlowWorkOrderId1=this.subWOPartNoId;
         }
         this.isSpinnerVisible=true;
-      this.workOrderService.getworkOrderTearDownViewData(this.workFlowWorkOrderId1,this.isSubWorkOrder).subscribe(res => {
+        this.workOrderService.getworkOrderTearDownViewData(this.workFlowWorkOrderId1,this.isSubWorkOrder).subscribe(res => {
        
        if(res !=null){
-
          this.saveTearDownData=res;
         }else{
           this.saveTearDownData= this.newSaveTearDownData;
         } 
         this.isSpinnerVisible = false;
-        // console.log("hello response",res);
       }, err => {
         this.isSpinnerVisible = false;
     })

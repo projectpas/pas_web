@@ -86,6 +86,10 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.getSalesOrderBilling(salesOrderId, partId);
   }
 
+  getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId) {
+    return this.salesOrderEndPointSevice.getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId);
+  }
+
   getSalesOrderBillingParts(salesOrderId) {
     return this.salesOrderEndPointSevice.getSalesOrderBillingParts(salesOrderId);
   }
@@ -592,9 +596,9 @@ export class SalesOrderService {
     );
   }
 
-  getPickTicketPrint(salesOrderId: number,soPickTicketId: number): Observable<any> {
+  getPickTicketPrint(salesOrderId: number,salesOrderPartId:number,soPickTicketId: number): Observable<any> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.getPickTicketPrint(salesOrderId,soPickTicketId)
+      this.salesOrderEndPointSevice.getPickTicketPrint(salesOrderId,salesOrderPartId,soPickTicketId)
     );
   }
 

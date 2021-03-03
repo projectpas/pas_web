@@ -182,7 +182,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="summary" id="footer">
-        <label id="footer" class="footer">Total:</label>
+        <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
         <input class="footer-input-width" [(ngModel)]="documents._totalRecords" name="no'of records" [disabled]="true"
           pInputText type="text" />
         &nbsp;&nbsp;
@@ -494,7 +494,8 @@
                   <span>
                     <div class="form-group memo-popup-cstm mat_emo">
                       <div [innerHTML]="documentInformation.docMemo ? documentInformation.docMemo.trim() : ''"
-                        [matTooltip]="parsedText(documentInformation.docMemo)" class="form-control" style="width: 109%;"
+                        [matTooltip]="parsedText(documentInformation.docMemo)" class="form-control" 
+                        style="width: 109%;line-height:1.5 !important"
                         class="text_editor_box"></div>
                     </div>
                   </span>

@@ -5,9 +5,9 @@
       <table class="table table-bordered header-table-width">
         <thead>
           <tr class="pad_workflo">
-            <th>
+            <th class="approver-th-align th-width">
               <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall"
-                [disabled]="isView" /> Select All
+                [disabled]="isView || !getAllPartsToDisableOrNot()" />
             </th>
             <th *ngFor="let header of columns">{{header.header}}</th>
           </tr>
@@ -170,7 +170,7 @@
     </div>
   </div>
   <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
-    style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+    style="margin-top: 10px; margin-bottom: 10px;" [disabled]="!getAllPartsToDisableOrNot()">Submit</button>
 </div>
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" style="max-width: 400px !important;">

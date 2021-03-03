@@ -92,7 +92,7 @@
                             <div class="form-row">
                                 <div class="col-sm-3 asset_border">
                                     <div class="form-group">
-                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <div class="checkbox-cstm margin-left-0">
                                             <label>
                                                 <input type="checkbox" (change)="calibrationMethod()" (ngModelChange)="setvaliDate($event)" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.calibrationRequired">
                                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -120,7 +120,7 @@
 
                                         </div>
                                      
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             <label class="mr-tp-10">Default Vendor</label>
                                             <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="vendorName" [dropdown]="true"
                                             errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
@@ -149,7 +149,7 @@
                                             </div>
                                         </div>
                                        
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             
                                             <label class="mr-tp-10">GL Account <span class="clr-red" *ngIf="currentCalibration.calibrationRequired">*</span></label>
                             <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="Inspector1" [dropdown]="true"
@@ -163,8 +163,8 @@
                                         <div class="form-group">
                                             <label>Calibration Memo</label>
                                           <div class="align_adh">
-                                                        <div [innerHTML]="currentCalibration.calibrationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentCalibration.calibrationMemo)" class="text_editor_box"
-                                                            style="width: 96% !important;"></div>
+                                                        <div [innerHTML]="currentCalibration.calibrationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentCalibration.calibrationMemo)" 
+                                                        class="text_editor_box memo-div-96"></div>
                                                         <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                                             data-target="#textarea-popup" matTooltip="Memo"
                                                             matTooltipPosition="above"
@@ -220,8 +220,9 @@
                                                         <td>Memo</td>
                                                         <td colspan="2">
                                                           <div class="align_adh">
-                                                                        <div [innerHTML]="currentCalibration.assetCalibrationMemo"  matTooltipPosition="above" [matTooltip]="parsedText(currentCalibration.assetCalibrationMemo)" class="text_editor_box"
-                                                                            style="width: 96% !important;"></div>
+                                                                        <div [innerHTML]="currentCalibration.assetCalibrationMemo"  matTooltipPosition="above" 
+                                                                        [matTooltip]="parsedText(currentCalibration.assetCalibrationMemo)"
+                                                                         class="text_editor_box memo-div-96"></div>
                                                                         <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                                                             data-target="#textarea-popup" matTooltip="Memo"
                                                                             matTooltipPosition="above"
@@ -237,7 +238,7 @@
 
                                 <div class="col-sm-3 asset_border">
                                     <div class="form-group">
-                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <div class="checkbox-cstm margin-left-0">
                                             <label>
                                                 <input (change)="ceretificationMethod()" (ngModelChange)="setvaliDate($event)" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.certificationRequired">
                                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -265,7 +266,7 @@
 
                                         </div>
                                      
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             <label class="mr-tp-10">Default Vendor</label>
                                             <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="vendorName2" [dropdown]="true"
                                             errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
@@ -291,7 +292,7 @@
 
                                         </div>
                                       
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-panding">
                                             <label class="mr-tp-10">GL Account <span class="clr-red" *ngIf="currentCalibration.certificationRequired">*</span></label>
                             <p-autoComplete  (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="Inspector2" [dropdown]="true"
                             errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
@@ -306,8 +307,9 @@
                                             <!-- <textarea (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
                                                       [(ngModel)]="currentCalibration.certificationMemo"></textarea> -->
                                                       <div class="align_adh">
-                                                        <div [innerHTML]="currentCalibration.certificationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentCalibration.certificationMemo)" class="text_editor_box"
-                                                            style="width: 96% !important;"></div>
+                                                        <div [innerHTML]="currentCalibration.certificationMemo"  matTooltipPosition="above"  
+                                                        [matTooltip]="parsedText(currentCalibration.certificationMemo)" 
+                                                        class="text_editor_box memo-div-96"></div>
                                                         <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                                             data-target="#textarea-popup" matTooltip="Memo"
                                                             matTooltipPosition="above"
@@ -321,7 +323,7 @@
                                 </div>
                                 <div class="col-sm-3 asset_border">
                                     <div class="form-group">
-                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <div class="checkbox-cstm margin-left-0">
                                             <label>
                                                 <input (ngModelChange)="setvaliDate($event)" (change)="inspectionMethod()" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.inspectionRequired">
                                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -349,7 +351,7 @@
 
                                         </div>
 
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             <label class="mr-tp-10">Default Vendor</label>
                                             <p-autoComplete (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="vendorName3" [dropdown]="true"
                                             errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
@@ -373,7 +375,7 @@
                                             </div>
                                         </div>
                                      
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             <label class="mr-tp-10">GL Account <span *ngIf="currentCalibration.inspectionRequired">*</span></label>
                             <p-autoComplete (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="Inspector3" [dropdown]="true"
                             errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
@@ -388,8 +390,9 @@
                                             <!-- <textarea  (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
                                                       [(ngModel)]="currentCalibration.inspectionMemo"></textarea> -->
                                                       <div class="align_adh">
-                                                        <div [innerHTML]="currentCalibration.inspectionMemo"  matTooltipPosition="above" [matTooltip]="parsedText(currentCalibration.inspectionMemo)" class="text_editor_box"
-                                                            style="width: 96% !important;"></div>
+                                                        <div [innerHTML]="currentCalibration.inspectionMemo"  matTooltipPosition="above"
+                                                         [matTooltip]="parsedText(currentCalibration.inspectionMemo)"
+                                                          class="text_editor_box memo-div-96"></div>
                                                         <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                                             data-target="#textarea-popup" matTooltip="Memo"
                                                             matTooltipPosition="above"
@@ -402,7 +405,7 @@
                                 </div>
                                 <div class="col-sm-3 asset_border">
                                     <div class="form-group">
-                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <div class="checkbox-cstm margin-left-0">
                                             <label>
                                                 <input (ngModelChange)="setvaliDate($event)" (change)="verificationMethod()" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.verificationRequired">
                                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -430,7 +433,7 @@
 
                                         </div>
 
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             <label class="mr-tp-10">Default Vendor</label>
                                             <p-autoComplete  (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="vendorName4" [dropdown]="true"
                                             errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
@@ -453,7 +456,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div style="padding: 8px;">
+                                        <div class="default-vendor-padding">
                                             <label class="mr-tp-10">GL Account <span *ngIf="currentCalibration.verificationRequired">*</span></label>
                             <p-autoComplete  (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="Inspector4" [dropdown]="true"
                             errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
@@ -468,8 +471,9 @@
                                             <!-- <textarea (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
                                                       [(ngModel)]="currentCalibration.verificationMemo"></textarea> -->
                                                       <div class="align_adh">
-                                                        <div [innerHTML]="currentCalibration.verificationMemo"  matTooltipPosition="above" [matTooltip]="parsedText(currentCalibration.verificationMemo)" class="text_editor_box"
-                                                            style="width: 96% !important;"></div>
+                                                        <div [innerHTML]="currentCalibration.verificationMemo"  matTooltipPosition="above"
+                                                         [matTooltip]="parsedText(currentCalibration.verificationMemo)" 
+                                                         class="text_editor_box memo-div-96"></div>
                                                         <i class="fa fa-pencil contoel_v" data-toggle="modal"
                                                             data-target="#textarea-popup" matTooltip="Memo"
                                                             matTooltipPosition="above"

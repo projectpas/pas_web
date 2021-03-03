@@ -197,7 +197,7 @@
                                 (click)="edit(rowData, rowIndex)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                           
                             <span *ngIf="deletedStatusInfo==false  && !isView" ><a class="btn nobg btn-delete-cstm" (click)="showDeletePhoneConfirmation(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                            <span *ngIf="deletedStatusInfo==true && !isView"><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                            <span *ngIf="deletedStatusInfo==true && !isView"><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                             <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg" 
                                 (click)="openHistory(rowData)"
                                  matTooltip="History"  matTooltipPosition="above">

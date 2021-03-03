@@ -1,7 +1,7 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
         <div class="row">
-            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+            <!-- <div class="col-md-3" style="padding-left:25px; padding-top:5px">
                 <div class="form-group">
                     <label>SO Num <span class="clr-red">*</span></label>
                     <input type="text" class="form-control" name="salesOrderNumber"
@@ -15,17 +15,17 @@
                     <input type="text" class="form-control" [(ngModel)]="salesOrder.salesOrderQuoteNumber"
                         name="salesOrderQuoteNumber" [disabled]="true" />
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="col-md-3" style="padding-left:25px; padding-top:5px">
                 <label></label>
                 <div class="form-group">
                     <button type="submit" class="btn submit-btn btn btn-primary">Sales Order</button>
                 </div>
             </div> -->
-            <div class="col-md-6" style="padding-left:25px; padding-top:5px">
+            <div class="col-md-12" style="padding-left:25px; padding-top:5px">
                 <label style="width: 100%;"></label>
                 <div class="form-group" style="float: right; margin-right: 10px;">
-                    <button type="submit" class="btn  submit-btn btn btn-primary">Create Shipping</button>
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Create Shipping</button>
                 </div>
             </div>
         </div>
@@ -157,7 +157,7 @@
                                     </td>
                                     <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
                                         <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox"
-                                            (change)="checked($event,poIndex);" [(ngModel)]="ship.selected" />
+                                            (change)="checked($event, ship);" [(ngModel)]="ship.selected" />
                                     </td>
                                     <td>
                                         {{ ship.shipDate | date : "MM/dd/yyyy" }}
@@ -197,7 +197,7 @@
                                         <span>
                                             <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
                                             <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
                                             matTooltipPosition="above" style="font-weight: bold;">
@@ -344,14 +344,26 @@
                                     <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">Weight</label>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-3">
                                         <input type="number" class="input-field-value" pKeyFilter="num" pInputText
                                             maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
                                             id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
                                     </div>
+                                    <div class="col-md-2">
+                                        <label class="sale-order-shipping-lable" style="margin-left: 40px;">UOM <span style="color: red;"
+                                                *ngIf="shippingHeader.shipWeight">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                            [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
+                                            [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
+                                            [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
+                                        </p-dropdown>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">UOM <span style="color: red;"
                                                 *ngIf="shippingHeader.shipWeight">*</span>
                                         </label>
@@ -362,13 +374,13 @@
                                             [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
                                         </p-dropdown>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">Dimension (L, W, H)</label>
                                     </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-3">
                                         <span class="display-flex inline-block">
                                             <input type="number" name="exportLength" class="input-field-value"
                                                 pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
@@ -381,9 +393,23 @@
                                                 [(ngModel)]="shippingHeader.shipSizeHeight" />
                                         </span>
                                     </div>
+                                    <div class="col-md-2">
+                                        <label class="sale-order-shipping-lable" style="margin-left: 40px;">
+                                            UOM <span style="color: red;"
+                                                *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                            [(ngModel)]="shippingHeader.shipSizeUnitOfMeasureId"
+                                            name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
+                                            placeholder="Select" [showClear]="true"
+                                            [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
+                                            (onChange)="btnChange()"></p-dropdown>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <label class="sale-order-shipping-lable">
                                             UOM <span style="color: red;"
                                                 *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
@@ -396,7 +422,7 @@
                                             placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
                                             (onChange)="btnChange()"></p-dropdown>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -500,9 +526,9 @@
                                             name="soldName" [disabled]="isView" required disabled /> -->
                                         <p-autoComplete field="userName" [(ngModel)]="shippingHeader.soldToName"
                                             name="soldToName" errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="getSiteNamesBySoldCustomerId($event)"
-                                            [suggestions]="customerNamesList"
-                                            (completeMethod)="filterCustomerName($event)"
+                                            (onSelect)="onBillToSelected($event)"
+                                            [suggestions]="userBillingList"
+                                            (completeMethod)="filterCustomerNameSold($event)"
                                             (onKeyUp)="clearAddress('SoldTo', $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
                                             class="p-autoComplete-ctsm" [disabled]="isView">
@@ -512,25 +538,34 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="shippingHeader.soldToName" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createBillingSiteName" (click)="onClickBillSiteName('Add')"></a></span>
+                                            <span *ngIf="shippingHeader.soldToName" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createBillingSiteName1" (click)="onClickBillSiteName('Add')"></a></span>
                                         </label>
                                     </div>
                                     <!-- <span style="margin-left:0px;cursor:pointer;">
                                         <a class="btn nobg"
                                         matTooltipPosition="above" matTooltip="Edit Site Name"
                                         *ngIf="shippingHeader.soldToSiteId > 0"
-                                        data-toggle="modal" data-target="#createBillingSiteName"
+                                        data-toggle="modal" data-target="#createBillingSiteName1"
                                         (click)="onClickBillSiteName('Edit', sourcePoApproval)">
                                         <i class="fa fa-pencil" ></i>
                                         </a>
                                     </span> -->
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.soldToSiteId"
+                                        <!-- <select [(ngModel)]="shippingHeader.soldToSiteId"
                                             (change)="setSoldToAddresses()" [disabled]="isView" name="soldToSite"
                                             required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of soldCustomerSiteList"
                                                 [value]="site.customerBillingAddressId">
+                                                {{site.siteName}}
+                                            </option>
+                                        </select> -->
+                                        <select [(ngModel)]="shippingHeader.soldToSiteId"
+                                            (change)="setSoldToAddresses()" [disabled]="isView" name="soldToSite"
+                                            required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of soldCustomerSiteList"
+                                                [value]="site.siteID">
                                                 {{site.siteName}}
                                             </option>
                                         </select>
@@ -619,7 +654,7 @@
                                     <div class="col-md-8">
                                         <p-autoComplete field="userName" [(ngModel)]="shippingHeader.shipToCustomerId"
                                             name="shipToName" errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                            (onSelect)="onShipToSelected($event)"
                                             [suggestions]="customerNamesList"
                                             (completeMethod)="filterCustomerName($event)"
                                             (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
@@ -631,15 +666,21 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="shippingHeader.shipToCustomerId" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createPOSiteName" (click)="onClickShipSiteName('Add')"></a></span>
+                                            <span *ngIf="shippingHeader.shipToCustomerId" style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createPOSiteName1" (click)="onClickShipSiteName('Add')"></a></span>
                                         </label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
+                                        <!-- <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
                                             [disabled]="isView" name="shipToSite" required>
                                             <option value="">Select</option>
                                             <option *ngFor="let site of shipCustomerSiteList"
                                                 [value]="site.customerDomensticShippingId">{{site.siteName}}</option>
+                                        </select> -->
+                                        <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
+                                            [disabled]="isView" name="shipToSite" required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of shipCustomerSiteList"
+                                                [value]="site.siteID">{{site.siteName}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -845,8 +886,10 @@
                     <div class="col-md-12">
                         <div class="card card-stock">
                             <div class="card-body">
+                                <!-- <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
+                                    (click)="save()" [disabled]="!shippingForm.valid">Save</button> -->
                                 <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
-                                    (click)="save()">Save</button>
+                                    (click)="save()" [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
                             </div>
                         </div>
                     </div>
@@ -870,7 +913,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="createBillingSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="createBillingSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog partsList-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -951,7 +994,7 @@
 </div>
 
 
-<div class="modal fade" id="createPOSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="createPOSiteName1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog partsList-modal">
         <div class="modal-content">
             <div class="modal-header">

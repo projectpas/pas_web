@@ -516,7 +516,11 @@ export class WorkOrderAddComponent implements OnInit {
             this.getAllCustomerContact(this.workOrderGeneralInformation.customerDetails.customerId, 'edit');
             // }
             this.workOrderId = data.workOrderId;
+            console.log("modify fun",this.workOrderGeneralInformation.partNumbers[0])
             if (this.workOrderGeneralInformation.partNumbers[0].workflowId == null) {
+                // if(this.workOrderGeneralInformation.isSinglePN){
+                    this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
+                // }
                 this.gridTabChange('materialList');
             }
             this.isRecCustomer = data.isRecCustomer;
@@ -738,7 +742,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     clearautoCompleteInput(currentRecord, field) {
         // currentRecord[field] = null;
-    }
+    } 
 
     getMaterialListHandle() {
         if (this.isSubWorkOrder == true) {
@@ -768,7 +772,8 @@ export class WorkOrderAddComponent implements OnInit {
         if (value != 'communication') {
             this.selectedCommunicationTab = '';
         }
-        if (value === 'materialList') {
+        console.log("value",value)
+        if (value == 'materialList') {
             if (this.isSubWorkOrder == true) {
                 this.getMaterialListByWorkOrderIdForSubWO();
             } else {
@@ -1078,6 +1083,7 @@ export class WorkOrderAddComponent implements OnInit {
             this.workFlowWorkOrderId = result.workFlowWorkOrderId;
             this.workScope = result.partNumbers[0].workScope;
             this.showGridMenu = true;
+
             this.getWorkFlowTabsData();
             if (this.workFlowId != null) {
                 this.isWorkOrder = true;
@@ -1137,8 +1143,8 @@ export class WorkOrderAddComponent implements OnInit {
         currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined) ? currentRecord.workOrderScopeId :object.workOderScopeId;
         this.getWorkFlowByPNandScope(null,currentRecord,'onload');
         currentRecord.description = object.partDescription
-        currentRecord.isPMA = object.pma === null ? false : object.pma;
-        currentRecord.isDER = object.der === null ? false : object.der;
+        currentRecord.isPMA = object.pma == null ? false : object.pma;
+        currentRecord.isDER = object.der == null ? false : object.der;
         currentRecord.isMPNContract = object.isMPNContract === null ? false : object.isMPNContract;
         currentRecord.revisedPartNo = object.revisedPartNo;
         currentRecord.serialNumber = object.serialNumber;
@@ -1434,7 +1440,12 @@ export class WorkOrderAddComponent implements OnInit {
             workFlowDataObject.subWOPartNoId = this.subWOPartNoId;
         }
         delete workFlowDataObject.customerName;
-        this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => {
+        if (workFlowDataObject.equipments && workFlowDataObject.equipments.length != 0) {
+            workFlowDataObject.equipments.forEach(element => {
+                element.partNumber=element.partNumber.name
+            });
+        }
+        this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
             // this._workflowService.currentWorkFlowId=
@@ -1477,7 +1488,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.handleError(err);
                 this.isSpinnerVisible = false;
             })
-    }
+    } 
 
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
@@ -1554,6 +1565,7 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1584,6 +1596,7 @@ export class WorkOrderAddComponent implements OnInit {
                     MandatorySupplementalId :x.materialMandatoriesId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1618,6 +1631,7 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1646,6 +1660,7 @@ export class WorkOrderAddComponent implements OnInit {
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
+                    partNumber: x.partNumber.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -2095,6 +2110,7 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     getMaterialListByWorkOrderId() {
+        console.log("workFlowWorkOrderId,",this.workFlowWorkOrderId,this.workOrderId)
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
             this.isSpinnerVisible = true;
@@ -2113,7 +2129,7 @@ export class WorkOrderAddComponent implements OnInit {
                     });
                     this.workOrderMaterialList = res;
                     this.workOrderMaterialList.forEach(element => {
-                      
+                        element.currency=element.currency ? formatNumberAsGlobalSettingsModule(element.currency, 2) : '0.00';
                        element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
                        element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
                     }); 
@@ -2562,14 +2578,37 @@ export class WorkOrderAddComponent implements OnInit {
 
     filterTechnician(event) {
         this.technicianList = this.technicianByExpertiseTypeList;
-        if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
-        if (event.query !== undefined && event.query !== null) {
-            const technician = [...this.technicianByExpertiseTypeList.filter(x => {
-                return x.name.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.technicianList = technician;
+        if(this.technicianByExpertiseTypeList != undefined && this.technicianByExpertiseTypeList != '')
+        {
+            if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
+                if (event.query !== undefined && event.query !== null) {
+                    const technician = [...this.technicianByExpertiseTypeList.filter(x => {
+                        return x.name.toLowerCase().includes(event.query.toLowerCase())
+                    })]
+                    this.technicianList = technician;
+                }
+            }
         }
-    }
+        else{
+            this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => { 
+                res.map(x => {
+                  if(x.expertiseType.toLowerCase() =='technician' || x.expertiseType =='Technician' || x.expertiseType =='TECHNICIAN'){
+                    this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId).subscribe(res => {
+                        this.technicianByExpertiseTypeList = res;
+                        this.technicianList = this.technicianByExpertiseTypeList;
+                        if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
+                            if (event.query !== undefined && event.query !== null) {
+                                const technician = [...this.technicianByExpertiseTypeList.filter(x => {
+                                    return x.name.toLowerCase().includes(event.query.toLowerCase())
+                                })]
+                                this.technicianList = technician;
+                            }
+                        }
+                        })
+                  }
+                });
+              })
+        }        
     }
 
     saveWorkOrderBilling(object) {

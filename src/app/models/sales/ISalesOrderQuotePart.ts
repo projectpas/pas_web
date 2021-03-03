@@ -49,4 +49,5 @@ export interface ISalesOrderQuotePart {
   idNumber: string;
   qtyAvailable: number;
   customerReference: string;
+  itemNo:number;
 }

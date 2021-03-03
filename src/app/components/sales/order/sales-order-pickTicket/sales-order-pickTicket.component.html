@@ -267,8 +267,7 @@
                                 <div class="col-sm-12 address-block">
                                     <div class="col-sm-12 first-block-name"><img class="logo" src="{{this.endPointURL + this.management.logo}}" height="30px" width="100px"/></div>
 
-                                    <br /><br />
-                                    <br /><br />
+                                    
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label"><b>Tagline :</b></label>
                                         <label class="col-sm-4 first-block-label" style="width:30%" disabled>{{this.management.companyName}}</label>
@@ -310,7 +309,7 @@
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label"> Date & time</label>
                                     <!-- <input type="text" placeholder="" value="{{todayDate| date:'medium' }}" disabled /> -->
-                                    <label class="col-sm-6 second-block-label" disabled>{{todayDate| date:'medium' }}</label>
+                                    <label class="col-sm-6 second-block-label" disabled>{{this.salesOrder.ptCreatedDate | date:'medium' }}</label>
                                 </div>
                                 <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
@@ -343,7 +342,7 @@
                                     <label class="col-sm-4 second-block-label" style="width:30%" disabled>1 of 1</label>
                                 </div>
                             </div>
-                            <div class="col-sm-12" style="margin-top:5%">
+                            <div class="col-sm-12" style="margin-top:2%">
                                 <div class="first-block-sold col-sm-6">
                                     <label><b>Sold To:</b></label>
                                     <div class="first-block-sold-to">
@@ -443,7 +442,7 @@
                                             <td> Priority: {{part.priorityName}} </td>
                                             <td>Qty OH: {{part.quantityOnHand}}</td>
                                             <td>Qty Avl: {{part.qtyAvailable}}</td>
-                                            <td>Qty to Pick: 3</td>
+                                            <td>Qty to Pick: {{part.qtyToPick}}</td>
                                             <td>Qty Picked: {{part.qtyShipped}}</td>
 
 
@@ -453,7 +452,7 @@
                                             <td>
                                                 <!-- <img src="C:\Users\DELL\Desktop\so\barcode.png" alt="barcode"
                                                     class="image" /> -->
-                                                <img src="{{part.partBarcode}}" alt="barcode" class="image" />
+                                                <img src="{{part.partBarcode}}" alt="barcode" width="98%" />
                                             </td>
                                             <td> PN Description: {{part.partDescription}}</td>
                                             <td>Site: {{part.siteName}}</td>
@@ -512,7 +511,7 @@
                                 </p>
                                 <p>
                                     <span class="label">
-                                        <b>Customer Code: </b>
+                                        <b>Date: </b>
                                     </span><span class="value">
                                         {{this.salesOrder.pickedDate | date : "MM/dd/yyyy"}}
                                     </span>

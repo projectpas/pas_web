@@ -51,26 +51,34 @@
         <div class="row">
           <div class="col">
               <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
-              pButton icon="fa-download" iconPos="left" label="Export Data" (click)="woAnalysis.exportCSV()"
+              pButton icon="fa-download" iconPos="left" label="Export Data" data-toggle="modal"  data-target="#downloadConfirmation" (click)="selectedOnly = false; targetData = woAnalysis;" 
               ></button>
               <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
               (click)="woAnalysis.exportCSV({ selectionOnly: true })"></button>
 
-              <!-- <div class="excel-upload excel-upload-cstm">
-              <button type="button" class="btn btn-primary" matTooltip="Download Sample File"
-                  matTooltipPosition="above" (click)="sampleExcelDownload()" style="padding: 5px 10px !important;">
-                  Sample File Download
-              </button>
-
-              <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
-                  class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
-              <label for="upload">
-                  <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
-                  <i class="fa fa-upload"></i>
-                  </span>
-              </label>
-              </div> -->
+         
+              <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header text-st">
+                            <button type="button" class="close flot-r" (click)="closeModal()">&times;</button>
+                            <h4 class="modal-title ">Are You Sure Want to Download?</h4>
+                        </div>
+                        <div class="modal-body text-st" *ngIf="targetData">
+                            <strong>
+                                <span>
+                                    You are attempting to export {{targetData.totalRecords}} of records. 
+                                </span> 
+                            </strong>
+                        </div> 
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):targetData.exportCSV(); closeModal();">Confirm</button>
+                            <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
               </div>
           </div>
       </ng-template>
@@ -123,7 +131,7 @@
         </tr>
     </ng-template>
       <ng-template pTemplate="summary" id="footer">
-          <label id="footer" class="footer">Total:</label>
+          <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
           <input class="footer-input-width"
                   [(ngModel)]="woAnalysis._totalRecords"
                   [disabled]="true"

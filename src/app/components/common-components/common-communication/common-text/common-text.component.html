@@ -166,7 +166,7 @@
                             data-target="#deleteRowConfirmation"><a class="btn nobg btn-delete-cstm"
                                 (click)="deletingRecord = rowData;" matTooltip="Delete" matTooltipPosition="above"><i
                                     class="fa fa-trash"></i></a> </span>
-                        <span *ngIf="deletedStatusInfo==true && !isView"><a class="btn nobg"
+                        <span *ngIf="deletedStatusInfo==true && !isView"><a class="btn nobg btn-users-cstm"
                                 (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
                                 matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                         <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
@@ -287,15 +287,28 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="col-md-12"><span *ngIf="type==1">Customer</span><span *ngIf="type==2">Vendor</span> Contact <span class="clr-red">*</span></label>
+                                <p-autoComplete field="firstName"
+                                [(ngModel)]="customerContact" required
+                                name="cusContact" #cusContact="ngModel"
+                                errorMessage="Records not found" [forceSelection]="true"
+                                [dropdown]="true" [suggestions]="cusContactList"
+                                (completeMethod)="filterCustomerContact($event)" (ngModelChange)="setvaliDate()"
+                                [size]="30" [minLength]="1" [dropdown]="true"
+                                (onSelect)="contactSelected($event)" 
+                                class="p-autoComplete-ctsm">
+                                </p-autoComplete>
+                            </div>
+                            <div class="form-group">
                                 <label>Phone <span class="clr-red">*</span></label>
-                                <!-- <input class="form-control" type="number" [(ngModel)] = "addList[0].mobile" maxlength="20" name="phoneNo" required/> -->
+                                <input class="form-control" type="number" [(ngModel)] = "addList[0].mobile" (ngModelChange)="setvaliDate()" maxlength="20" name="phoneNo" required disabled/>
 
-                                <input type="text" id="phone" name="phoneNo" [pattern]="phonePattern"
+                                <!-- <input type="text" id="phone" name="phoneNo" [pattern]="phonePattern"
                                     (ngModelChange)="setvaliDate()" #phoneNumberNg="ngModel" 
                                     class="form-control text-end"
                                     minlength="6"  maxlength="10"
                                     (keypress)="patternMobilevalidationWithSpl($event)" [(ngModel)]="addList[0].mobile"
-                                    required />
+                                    required disabled/> -->
 
                             </div>
                             <div class="form-group">
@@ -324,7 +337,7 @@
                                 <div class="col-sm-6">
                                     <span>
                                         <div class="form-group memo-popup-cstm mat_emo">
-                                            <div (ngModelChange)="enableSave()" [innerHTML]=" addList[0].notes"
+                                            <div (ngModelChange)="setvaliDate()" [innerHTML]=" addList[0].notes"
                                                 [matTooltip]="parsedText(addList[0].notes)" matTooltipPosition="above"
                                                 class="form-control" style="width: 99%;" class="text_editor_box"></div>
                                         </div>
@@ -332,7 +345,7 @@
                                 </div>
                                 <div class="col-sm-1">
                                     <span>
-                                        <a class="btn nobg" data-toggle="modal" (ngModelChange)="enableSave()"
+                                        <a class="btn nobg" data-toggle="modal" (ngModelChange)="setvaliDate()"
                                             data-target="#text-memo-popup" (click)="onClickMemo()"
                                             matTooltip="Add Notes" matTooltipPosition="above">
                                             <i style="color: #337ab7" class="fa fa-pencil"></i>
@@ -437,7 +450,8 @@
 
                 <div class="col-sm-12">
 
-
+                    <p><span class="label"><b>Customer Contact<span class="clr-red">*</span> : </b></span><span
+                        class="value">{{viewdata.customerContact}}</span></p>
                     <p><span class="label"><b>Mobile<span class="clr-red">*</span> : </b></span><span
                             class="value">{{viewdata.mobile}}</span></p>
                     <p><span class="label"><b>Contacted by<span class="clr-red">*</span> : </b></span><span
@@ -550,6 +564,7 @@
                     <table class="table table-bordered header-table-width">
                         <thead>
                             <tr>
+                                <th>Customer Contact</th>
                                 <th>Mobile</th>
                                 <th>Contacted By</th>
                                 <th>Notes</th>
@@ -562,6 +577,9 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let audit of documentauditHisory; let i = index;">
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerContact', audit.customerContact)  ? 'black' : 'red'  }">
+                                    {{audit.customerContact}}</td>
                                 <td
                                     [ngStyle]="{'color':  getColorCodeForHistory(i, 'mobile', audit.mobile)  ? 'black' : 'red'  }">
                                     {{audit.mobile}}</td>
