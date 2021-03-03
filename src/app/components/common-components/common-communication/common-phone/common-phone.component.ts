@@ -247,6 +247,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         })
     }
     dismissModelRestore() {
+        //$("#restoreId").modal("hide");
         this.modal.close();
     }
     getDeleteListByStatus(value) {
@@ -377,18 +378,19 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
             "ModuleId": this.moduleId,
             "ReferenceId": this.referenceId,
             "MasterCompanyId": this.authService.currentUser.masterCompanyId,
-            "CreatedBy": "admin",
-            "UpdatedBy": "admin",
-            "CreatedDate": "2019-12-31T04:30:28.21",
-            "UpdatedDate": "2019-12-31T04:30:28.21",
+            "CreatedBy": this.userName,
+            "UpdatedBy": this.userName,
+            "CreatedDate": new Date(),
+            "UpdatedDate": new Date(),
             "IsActive": true,
             "IsDeleted": false,
             "Phonetype": this.type
             //vendor 2
         }
-
         if (this.isEdit) {
             toData['communicationPhoneId'] = data[0].communicationPhoneId;
+            toData["CreatedBy"] = data[0].createdBy;
+            toData["CreatedDate"] = data[0].createdDate;
         }
         return [toData];
     }
