@@ -13,8 +13,8 @@
                     </div>
                     <div>
                         <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
-                            matTooltip="SO List" [routerLink]="['/salesmodule/salespages/sales-order-list']">
-                            SO List
+                            matTooltip="Sales Order List" [routerLink]="['/salesmodule/salespages/sales-order-list']">
+                            Sales Order List
                         </button>
                     </div>
                 </div>
@@ -123,7 +123,8 @@
                                                 <p-calendar name="openDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="salesQuote.openDate" [showIcon]="true" id="openDate"
-                                                    #openDate="ngModel" required (onSelect)="onChangeOpenDate()">
+                                                    #openDate="ngModel" required [disabled]="true"
+                                                    (onSelect)="onChangeOpenDate()">
                                                 </p-calendar>
                                                 <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
@@ -249,7 +250,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group" style="padding-top:24px;">
-                                                <label>AR Balance </label>
+                                                <label style="width: 62px;">AR Balance </label><i class="fa fa-info-circle fa-lg"
+                                                    matTooltipPosition="above" matTooltip="AR Bal before this Sales Order"></i>
                                                 <input type="text" class="form-control" style="text-align:right;"
                                                     name="balanceDue"
                                                     [ngModel]="salesQuote.balanceDue | twoDecimalGlobalNumberFormatPipe"

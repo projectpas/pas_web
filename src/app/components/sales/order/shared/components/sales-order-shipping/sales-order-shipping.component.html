@@ -1,7 +1,7 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
         <div class="row">
-            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+            <!-- <div class="col-md-3" style="padding-left:25px; padding-top:5px">
                 <div class="form-group">
                     <label>SO Num <span class="clr-red">*</span></label>
                     <input type="text" class="form-control" name="salesOrderNumber"
@@ -15,17 +15,17 @@
                     <input type="text" class="form-control" [(ngModel)]="salesOrder.salesOrderQuoteNumber"
                         name="salesOrderQuoteNumber" [disabled]="true" />
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="col-md-3" style="padding-left:25px; padding-top:5px">
                 <label></label>
                 <div class="form-group">
                     <button type="submit" class="btn submit-btn btn btn-primary">Sales Order</button>
                 </div>
             </div> -->
-            <div class="col-md-6" style="padding-left:25px; padding-top:5px">
+            <div class="col-md-12" style="padding-left:25px; padding-top:5px">
                 <label style="width: 100%;"></label>
                 <div class="form-group" style="float: right; margin-right: 10px;">
-                    <button type="submit" class="btn  submit-btn btn btn-primary">Create Shipping</button>
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Create Shipping</button>
                 </div>
             </div>
         </div>
@@ -157,7 +157,7 @@
                                     </td>
                                     <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
                                         <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox"
-                                            (change)="checked($event,poIndex);" [(ngModel)]="ship.selected" />
+                                            (change)="checked($event, ship);" [(ngModel)]="ship.selected" />
                                     </td>
                                     <td>
                                         {{ ship.shipDate | date : "MM/dd/yyyy" }}
@@ -197,7 +197,7 @@
                                         <span>
                                             <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
                                             <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
                                             matTooltipPosition="above" style="font-weight: bold;">

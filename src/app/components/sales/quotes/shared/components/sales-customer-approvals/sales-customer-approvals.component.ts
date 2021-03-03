@@ -13,7 +13,7 @@ import { SalesOrderQuote } from "../../../../../../models/sales/SalesOrderQuote"
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerService } from "../../../../../../services/customer.service";
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
-declare var $ : any;
+declare var $: any;
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
 import { CommonService } from "../../../../../../services/common.service";
 import { forkJoin } from "rxjs/observable/forkJoin";
@@ -81,7 +81,7 @@ export class SalesCustomerApprovalsComponent {
     partModal: NgbModalRef;
     salesQuoteId: number;
     statusListForApproval = [];
-    @ViewChild("customerApprovalConfirmationModal",{static:false})
+    @ViewChild("customerApprovalConfirmationModal", { static: false })
     public customerApprovalConfirmationModal: ElementRef;
     disableSubmitButtonForCustomerApproval: boolean = false;
     Total: any[];
@@ -308,7 +308,7 @@ export class SalesCustomerApprovalsComponent {
     getInternalApprovedMaxDate() {
         return new Date();
     }
-    
+
     getCustomerSentMinDate(intApprovedDate) {
         if (intApprovedDate) {
             return new Date(intApprovedDate);
@@ -333,16 +333,31 @@ export class SalesCustomerApprovalsComponent {
     }
 
     getAllPartsToDisableOrNot() {
-        let disableEdit = true;
+        var result = false;
         if (this.quotesList && this.quotesList.length > 0) {
             this.quotesList.forEach(
                 (x) => {
-                    if (x.actionStatus != "Approved")
-                        return false;
+                    if (x.actionStatus != 'Approved') {
+                        if (x.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+                            result = true;
+                        } else if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+                            if (this.approvers && this.approvers.length > 0) {
+                                let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId && approver.isExceeded == false);
+                                if (approverFound) {
+                                    result = true;
+                                }
+                            }
+                        } else if (x.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+                            result = true;
+                        } else if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+                            result = true;
+                        }
+                    }
                 }
             )
         }
-        return disableEdit;
+
+        return result;
     }
 
     viewSelectedRow(content, row) {
@@ -402,7 +417,7 @@ export class SalesCustomerApprovalsComponent {
     canDisplayInDropDown(status: any) {
         return status.displayInDropdown && (status.id === ApprovalStatusEnum.Pending || status.id === ApprovalStatusEnum.WaitingForApproval);
     }
-    
+
     saveApprovalProcess() {
         let openEmail = false;
         if (this.approvers && this.approvers.length > 0) {

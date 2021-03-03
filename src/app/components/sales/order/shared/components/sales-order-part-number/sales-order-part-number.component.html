@@ -120,29 +120,29 @@
                                     <th>PN Description </th>
                                     <th colspan="2">Stk Line Num</th>
                                     <th colspan="2">Ser Num</th>
-                                    <th>Cond<span class="clr-red">*</span></th>
                                     <th>Stk Type</th>
-                                    <th>Alt/Equiv</th>
-                                    <th>Qty Back Ord</th>
+                                    <th>Cond<span class="clr-red">*</span></th>
+                                    <th>Priority<span class="clr-red">*</span></th>
                                     <th>Cust Req Date<span class="clr-red">*</span></th>
                                     <th>Cust PRMSD Date<span class="clr-red">*</span></th>
                                     <th>Est Ship Date<span class="clr-red">*</span></th>
-                                    <th>Priority<span class="clr-red">*</span></th>
+                                    <th>Qty Ord<span class="clr-red">*</span></th>
+                                    <th>Qty Resvd<span class="clr-red">*</span></th>
+                                    <th style="min-width: 60px;">Qty Avail </th>
+                                    <th style="min-width: 80px;">Qty On Hand</th>
+                                    <th>Qty Back Ord</th>
+                                    <th>Qty to Ship</th>
+                                    <th>Alt/Equiv</th>
                                     <th>Status </th>
                                     <th>Qte Num</th>
                                     <th>Qte Ver</th>
                                     <th>Qte Date</th>
-                                    <th>Qty Ord<span class="clr-red">*</span></th>
-                                    <th>Qty Resvd<span class="clr-red">*</span></th>
-                                    <th>Qty to Ship</th>
                                     <th>Qty Invoiced</th>
                                     <th>Invoice Num</th>
                                     <th style="min-width: 100px;">Invoice Date </th>
                                     <th style="min-width: 84px;">Qty Prev Shpd</th>
                                     <th style="min-width: 100px;">Last Ship Date </th>
                                     <th style="min-width: 90px;">Ship Ref</th>
-                                    <th style="min-width: 60px;">Qty Avail </th>
-                                    <th style="min-width: 80px;">Qty On Hand</th>
                                     <th style="min-width: 60px;">Unit Cost </th>
                                     <th style="min-width: 70px;">Markup % </th>
                                     <th style="min-width: 103px;">Markup Amt/Unit </th>
@@ -182,16 +182,13 @@
                                         {{ part.serialNumber }}
                                     </td>
                                     <td>
-                                        {{ part.conditionDescription }}
-                                    </td>
-                                    <td>
                                         {{ part.pmaStatus }}
                                     </td>
                                     <td>
-                                        {{  part.altOrEqType }}
+                                        {{ part.conditionDescription }}
                                     </td>
-                                    <td class="text-right">
-                                        {{  part.qtyBackOrder | globalNmberFormat }}
+                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                        {{  part.priorityName }}
                                     </td>
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
@@ -245,8 +242,26 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
-                                        {{  part.priorityName }}
+                                    <td class="text-right">
+                                        {{ part.quantityFromThis | globalNmberFormat  }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyReserved | globalNmberFormat }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyAvailable | globalNmberFormat }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyOnHand | globalNmberFormat }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{  part.qtyBackOrder | globalNmberFormat }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyToShip | globalNmberFormat }}
+                                    </td>
+                                    <td>
+                                        {{  part.altOrEqType }}
                                     </td>
                                     <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
                                         <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
@@ -269,15 +284,6 @@
                                         {{ part.quoteDate | date : "MM/dd/yyyy"}}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.quantityFromThis | globalNmberFormat  }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.qtyReserved | globalNmberFormat }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.qtyToShip | globalNmberFormat }}
-                                    </td>
-                                    <td class="text-right">
                                         {{ part.qtyInvoiced | globalNmberFormat }}
                                     </td>
                                     <td>
@@ -294,12 +300,6 @@
                                     </td>
                                     <td>
                                         {{ part.shipReference }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.qtyAvailable | globalNmberFormat }}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.qtyOnHand | globalNmberFormat }}
                                     </td>
                                     <td class="text-right">
                                         {{ part.unitCostPerUnit | twoDecimalGlobalNumberFormatPipe}}

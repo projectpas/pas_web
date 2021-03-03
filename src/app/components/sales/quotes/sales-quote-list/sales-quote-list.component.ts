@@ -126,7 +126,7 @@ export class SalesQuoteListComponent implements OnInit {
             { field: "salesOrderQuoteNumber", header: "Quote Num", width: "120px" },
             { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
             { field: "quoteDate", header: "Quote Date", width: "130px" },
-            { field: "status", header: "Status", width: "100px" },
+            { field: "status", header: "Qte Status", width: "100px" },
             { field: "salesOrderNumber", header: "SO Num", width: "120px" },
             { field: "partNumberType", header: "PN", width: "130px" },
             { field: "partDescriptionType", header: "PN Description", width: "180px" },
