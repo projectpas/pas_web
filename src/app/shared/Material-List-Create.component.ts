@@ -609,9 +609,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         else {
             newRow['materialMandatoriesName'] = 'Mandatory';
         }
-        console.log("material list",this.workFlow.materialList)
         this.workFlow.materialList.push(newRow);
-        console.log("material list",this.workFlow.materialList)
     }
  
     calculateExtendedCost(material): void {

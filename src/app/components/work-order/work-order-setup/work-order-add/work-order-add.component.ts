@@ -2578,14 +2578,37 @@ export class WorkOrderAddComponent implements OnInit {
 
     filterTechnician(event) {
         this.technicianList = this.technicianByExpertiseTypeList;
-        if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
-        if (event.query !== undefined && event.query !== null) {
-            const technician = [...this.technicianByExpertiseTypeList.filter(x => {
-                return x.name.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.technicianList = technician;
+        if(this.technicianByExpertiseTypeList != undefined && this.technicianByExpertiseTypeList != '')
+        {
+            if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
+                if (event.query !== undefined && event.query !== null) {
+                    const technician = [...this.technicianByExpertiseTypeList.filter(x => {
+                        return x.name.toLowerCase().includes(event.query.toLowerCase())
+                    })]
+                    this.technicianList = technician;
+                }
+            }
         }
-    }
+        else{
+            this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => { 
+                res.map(x => {
+                  if(x.expertiseType.toLowerCase() =='technician' || x.expertiseType =='Technician' || x.expertiseType =='TECHNICIAN'){
+                    this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId).subscribe(res => {
+                        this.technicianByExpertiseTypeList = res;
+                        this.technicianList = this.technicianByExpertiseTypeList;
+                        if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
+                            if (event.query !== undefined && event.query !== null) {
+                                const technician = [...this.technicianByExpertiseTypeList.filter(x => {
+                                    return x.name.toLowerCase().includes(event.query.toLowerCase())
+                                })]
+                                this.technicianList = technician;
+                            }
+                        }
+                        })
+                  }
+                });
+              })
+        }        
     }
 
     saveWorkOrderBilling(object) {
