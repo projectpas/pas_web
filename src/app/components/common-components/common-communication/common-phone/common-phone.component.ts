@@ -469,7 +469,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
 
         this.communicationService.getCOmmonPhoneHistory(rowData.communicationPhoneId, this.type).subscribe(
             results => {
-                this.documentauditHisory = results;
+                this.documentauditHisory = results.reverse();
             }, err => {
                 this.errorMessageHandler();
             });

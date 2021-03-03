@@ -984,15 +984,16 @@
                     (click)="gridTabChange('tearDown')">Tear Down</a>
             </li>
             <li class="nav-item dropdown">
+                <!-- (click)="gridTabChange('otherOptions')" -->
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                     aria-expanded="false" [ngClass]="{active : gridActiveTab === 'otherOptions'}"
-                    (click)="gridTabChange('otherOptions')">Other Options</a>
+                    >Other Options</a>
                 <div class="dropdown-menu">
 
-                    <a class="dropdown-item" (click)="otherOptionTabSelected('freight')">Freight</a>
+                    <a class="dropdown-item" (click)="otherOptionTabSelected('freight');gridTabChange('otherOptions')">Freight</a>
                     <!--<a class="dropdown-item" (click)="otherOptionTabSelected('contactGrid')">Contact Grid</a>-->
                     <!--<a class="dropdown-item" (click)="otherOptionTabSelected('accounting')">Accounting</a>-->
-                    <a class="dropdown-item" (click)="otherOptionTabSelected('charges')">Charges</a>
+                    <a class="dropdown-item" (click)="otherOptionTabSelected('charges');gridTabChange('otherOptions')">Charges</a>
                     <!-- <a class="dropdown-item" (click)="otherOptionTabSelected('exclusions')">Exclusion </a> -->
                 </div>
             </li>

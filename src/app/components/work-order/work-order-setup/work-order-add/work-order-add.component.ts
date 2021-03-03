@@ -1143,8 +1143,8 @@ export class WorkOrderAddComponent implements OnInit {
         currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined) ? currentRecord.workOrderScopeId :object.workOderScopeId;
         this.getWorkFlowByPNandScope(null,currentRecord,'onload');
         currentRecord.description = object.partDescription
-        currentRecord.isPMA = object.pma === null ? false : object.pma;
-        currentRecord.isDER = object.der === null ? false : object.der;
+        currentRecord.isPMA = object.pma == null ? false : object.pma;
+        currentRecord.isDER = object.der == null ? false : object.der;
         currentRecord.isMPNContract = object.isMPNContract === null ? false : object.isMPNContract;
         currentRecord.revisedPartNo = object.revisedPartNo;
         currentRecord.serialNumber = object.serialNumber;
@@ -1488,7 +1488,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.handleError(err);
                 this.isSpinnerVisible = false;
             })
-    }
+    } 
 
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
@@ -2129,7 +2129,7 @@ export class WorkOrderAddComponent implements OnInit {
                     });
                     this.workOrderMaterialList = res;
                     this.workOrderMaterialList.forEach(element => {
-                      
+                        element.currency=element.currency ? formatNumberAsGlobalSettingsModule(element.currency, 2) : '0.00';
                        element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
                        element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
                     }); 
