@@ -161,7 +161,7 @@
                                 [size]="30"
                                 [minLength]="1"
                                 [dropdown]="true"                                
-                                required
+                                required autocomplete="off"
                               >
                               </p-autoComplete>
                               <div
@@ -245,7 +245,7 @@
                                   (ngModelChange)="enableSave()"
                                   [minLength]="1"
                                   [dropdown]="true"
-                                  required
+                                  required autocomplete="off"
                                 >
                                 </p-autoComplete>
                                 <!--customerParentName-->
@@ -279,7 +279,7 @@
                                         (keypress)="patternMobilevalidationWithSpl($event)"
                                         [(ngModel)]="generalInformation.customerPhone"
                                         (ngModelChange)="enableSave()"                              
-                                        required
+                                        required autocomplete="off"
                                       />
                                     </div>
                                   </td>
@@ -294,7 +294,7 @@
                                           generalInformation.customerPhone == ''
                                         "
                                         [(ngModel)]="generalInformation.customerPhoneExt"
-                                        (ngModelChange)="enableSave()"
+                                        (ngModelChange)="enableSave()" autocomplete="off"
                                       />
                                     </div>
                                   </td>
@@ -321,7 +321,7 @@
                               pKeyFilter="email"
                               mask="email"
                               [(ngModel)]="generalInformation.email"
-                              (ngModelChange)="enableSave()"
+                              (ngModelChange)="enableSave()" autocomplete="off"
                               required
                             />
                             <div *ngIf="userEmail.errors" [ngClass]="'error'">
@@ -341,7 +341,7 @@
                               #url="ngModel"
                               [pattern]="urlPattern"
                               name="customerURL"
-                              [(ngModel)]="generalInformation.customerURL"
+                              [(ngModel)]="generalInformation.customerURL" autocomplete="off"
                               (ngModelChange)="enableSave()"
                             />
                             <div *ngIf="url.errors" [ngClass]="'error'">
@@ -361,7 +361,7 @@
                               type="text"
                               id="cmaddress1"
                               name="cmaddress1"
-                              [(ngModel)]="generalInformation.address1"
+                              [(ngModel)]="generalInformation.address1" autocomplete="off"
                               (ngModelChange)="enableSave()"
                               required
                             />
@@ -373,7 +373,7 @@
                               type="text"
                               id="cmaddress2"
                               name="cmaddress2"
-                              [(ngModel)]="generalInformation.address2"
+                              [(ngModel)]="generalInformation.address2" autocomplete="off"
                               (ngModelChange)="enableSave()"
                             />
                           </div>
@@ -384,7 +384,7 @@
                               type="text"
                               id="cmaddress3"
                               name="cmaddress3"
-                              [(ngModel)]="generalInformation.address3"
+                              [(ngModel)]="generalInformation.address3" autocomplete="off"
                               (ngModelChange)="enableSave()"
                             />
                           </div>
@@ -395,7 +395,7 @@
                               type="text"
                               id="cscity"
                               name="cscity"
-                              [(ngModel)]="generalInformation.city"
+                              [(ngModel)]="generalInformation.city" autocomplete="off"
                               (ngModelChange)="enableSave()"
                               required
                             />
@@ -410,7 +410,7 @@
                               type="text"
                               name="stateOrProvince"
                               [(ngModel)]="generalInformation.stateOrProvince"
-                              (ngModelChange)="enableSave()"
+                              (ngModelChange)="enableSave()" autocomplete="off"
                               required
                             />
                           </div>
@@ -420,7 +420,7 @@
                               class="form-control"
                               type="text"
                               name="postalCode"                              
-                              [(ngModel)]="generalInformation.postalCode"
+                              [(ngModel)]="generalInformation.postalCode" autocomplete="off"
                               (ngModelChange)="enableSave()"
                               required
                             />                         
@@ -443,7 +443,7 @@
                                 [size]="30"
                                 [minLength]="1"
                                 [dropdown]="true"
-                                [forceSelection]="true"
+                                [forceSelection]="true" autocomplete="off"
                                 required
                               >
                               </p-autoComplete>
@@ -457,7 +457,7 @@
                                   name="isAddressForBilling"
                                   (ngModelChange)="enableSave()"
                                   [(ngModel)]="
-                                    generalInformation.isAddressForBilling
+                                    generalInformation.isAddressForBilling 
                                   "
                                 />
                                 <span class="cr"
@@ -525,7 +525,7 @@
                                 type="text"
                                 name="contactRef"
                                 [(ngModel)]="generalInformation.contractReference"
-                                (ngModelChange)="enableSave()"
+                                (ngModelChange)="enableSave()" autocomplete="off"
                               />
                             </div>
                           </div>
@@ -649,7 +649,7 @@
                                       (completeMethod)="filterpartListForPMA($event)" 
                                       (onSelect)="selectedPMAParts($event)"
                                       [size]="30" [minLength]="1" [dropdown]="true"
-                                      [inputStyle]="{ width: '100%' }" >
+                                      [inputStyle]="{ width: '100%' }" autocomplete="off">
                                     </p-autoComplete>
                                   </div>
                                 </div>

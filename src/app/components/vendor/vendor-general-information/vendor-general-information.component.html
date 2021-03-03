@@ -131,10 +131,10 @@
                                             <td>
                                                 <input class="form-control" type="text" minlength="6" maxlength="14" style="width: 98%;" [pattern]="phonePattern" #vendorPhone="ngModel" 
                                                    (keypress)="patternMobilevalidationWithSpl($event)" (ngModelChange)="enableSave()" name="vendorPhone" (keyup)="checkVendorExists('vendorPhone', $event.target.value)"
-                                                   [(ngModel)]="sourceVendor.vendorPhone" required />
+                                                   [(ngModel)]="sourceVendor.vendorPhone" required autocomplete="off"/>
                                             </td>
                                             <td>
-                                                <input type="text" pKeyFilter="pint" name="phoneExt" pInputText maxlength="14" (ngModelChange)="enableSave()"
+                                                <input type="text" pKeyFilter="pint" name="phoneExt" pInputText maxlength="14" (ngModelChange)="enableSave()" autocomplete="off"
                                                    [(ngModel)]="sourceVendor.vendorPhoneExt"  [disabled]="sourceVendor.vendorPhone == '' || sourceVendor.vendorPhone == undefined "/>
                                             </td>
                                         </tr>
@@ -164,7 +164,7 @@
                                         <span class="clr-red">*</span>
                                     </label>
                                     <input class="form-control" type="email" email name="vendorEmailId" #vendorEmail="ngModel" (keyup)="checkVendorExists('vendorEmail', $event.target.value)"
-                                           [pattern]="emailPattern" [(ngModel)]="sourceVendor.vendorEmail" (ngModelChange)="enableSave()" required />
+                                           [pattern]="emailPattern" autocomplete="off" [(ngModel)]="sourceVendor.vendorEmail" (ngModelChange)="enableSave()" required />
                                     <div *ngIf="vendorEmail.errors" [ngClass]="'error'">
                                         <div *ngIf="vendorEmail.errors.pattern">
                                             <span class="clr-red">User Email not valid</span>
@@ -178,7 +178,7 @@
                                     <label for="vendorname">
                                         URL to Vendor site
                                     </label>
-                                    <input class="form-control" type="text" [pattern]="urlPattern"
+                                    <input class="form-control" type="text" [pattern]="urlPattern" autocomplete="off"
                                            [ngModelOptions]="{ standalone: true }" [(ngModel)]="sourceVendor.vendorURL" #url="ngModel" (ngModelChange)="enableSave()"
                                            (input)="convertUrlToLowerCase($event)" />
                                     <div *ngIf="url.errors" [ngClass]="'error'">
@@ -195,14 +195,14 @@
                                         <span class="clr-red">*</span>
                                     </label>
                                     <input class="form-control" type="text" id="vmaddress1" name="address1" (ngModelChange)="enableSave()"
-                                           [(ngModel)]="sourceVendor.address1" required />
+                                           [(ngModel)]="sourceVendor.address1" required autocomplete="off"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="address2">
                                         Address Line 2
                                     </label>
                                     <input class="form-control" type="text" id="vmaddress2" name="address2" (ngModelChange)="enableSave()"
-                                           [(ngModel)]="sourceVendor.address2" />
+                                           [(ngModel)]="sourceVendor.address2" autocomplete="off"/>
                                 </div>
 
                                 <div class="form-group" style="display:none">
@@ -210,7 +210,7 @@
                                         Address Line 3
                                     </label>
                                     <input class="form-control" type="text" id="vmaddress3" name="address3" (ngModelChange)="enableSave()"
-                                           [(ngModel)]="sourceVendor.address3" />
+                                           [(ngModel)]="sourceVendor.address3" autocomplete="off"/>
                                 </div>
 
                                 <div class="form-group">
@@ -219,7 +219,7 @@
                                         <span class="clr-red">*</span>
                                     </label>
                                     <input class="form-control" type="text" id="vmcity" name="vmcity" [(ngModel)]="sourceVendor.city" (ngModelChange)="enableSave()"
-                                           required />
+                                           required autocomplete="off"/>
                                 </div>
                                 <div class="form-group">
                                     Primary State/Province
@@ -227,7 +227,7 @@
                                         <span class="clr-red">*</span>
                                     </label>
                                     <input class="form-control" type="text" id="vmstate" name="vmstate" (ngModelChange)="enableSave()"
-                                           [(ngModel)]="sourceVendor.stateOrProvince" required />
+                                           [(ngModel)]="sourceVendor.stateOrProvince" required autocomplete="off"/>
                                 </div>
 
                                 <div class="form-group">
@@ -236,7 +236,7 @@
                                         <span class="clr-red">*</span>
                                     </label>
                                     <input class="form-control" type="text" id="vmpostal" name="vmpostal" (ngModelChange)="enableSave()"
-                                           [(ngModel)]="sourceVendor.postalCode" required />
+                                           [(ngModel)]="sourceVendor.postalCode" required autocomplete="off"/>
                                 </div>
 
                                 <div class="form-group">
@@ -247,7 +247,7 @@
                                     <p-autoComplete field="nice_name" class="pautocomp-cstm" (onSelect)="onCountrieselected($event)" (ngModelChange)="enableSave()"
                                                     (onKeyUp)="eventCountryHandler($event)" [(ngModel)]="sourceVendor.countryId" name="country" 
                                                     [forceSelection]="true" [suggestions]="countrycollection" (completeMethod)="filtercountry($event)"
-                                                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                                                    [size]="30" [minLength]="1" [dropdown]="true" required autocomplete="off">
                                         
                                     </p-autoComplete>
                                     <div *ngIf="disablesave" class="clr-red">
@@ -314,7 +314,7 @@
                                                 Contract Ref
                                             </label>
                                             <input class="form-control" type="text" name="vendorContractReference" (ngModelChange)="enableSave()"
-                                                   [(ngModel)]="sourceVendor.vendorContractReference" />
+                                                   [(ngModel)]="sourceVendor.vendorContractReference" autocomplete="off"/>
                                         </div>
 
                                         <div class="form-group" style="margin-top: 15px; margin-bottom: 8px;">
@@ -342,7 +342,7 @@
                                                 License
                                             </label>
                                             <input class="form-control" type="text" name="licenseNumber" (ngModelChange)="enableSave()"
-                                                   [(ngModel)]="sourceVendor.licenseNumber" />
+                                                   [(ngModel)]="sourceVendor.licenseNumber" autocomplete="off"/>
                                         </div>
                                         
                                     </div>
