@@ -12,6 +12,9 @@
     width: 1150px;
 }
 
+.table-height{
+    max-height: 300px !important;
+  }
 .grd-width-quote{
     width: 1150px;
 }

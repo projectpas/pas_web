@@ -342,30 +342,35 @@
           </span>
         </div>
         <div class="tab-content">
-          <div class="table-responsive table-overflow table-height">
+         
             <form #frieghtsCreateForm="ngForm">
-              <table class="table table-bordered ">
+              <div class="table-responsive table-overflow headertable-width table-height">
+              <div class="tableFixHead">
+              <table class="table table-bordered lastcol-fix">
                 <thead>
                   <tr>
                     <th rowspan="2">Task *</th>
                     <!-- <th>Carrier *</th> -->
-                    <th rowspan="2">Ship Via *</th>
+                    <th rowspan="2" style="z-index:1">Ship Via *</th>
                     <!-- <th>Dimensions *</th> -->
                     <th rowspan="2">Weight</th>
-                    <th rowspan="2">UOM</th>
-                    <th colspan="3">Dimensions</th>
-                    <th rowspan="2">UOM</th>
-                    <th rowspan="2">Currency</th>
+                    <th rowspan="2" style="z-index:1">UOM</th>
+                    <th colspan="3" style="z-index:1">Dimensions</th>
+                    <th rowspan="2" style="z-index:1">UOM</th>
+                    <th rowspan="2" style="z-index:1">Currency</th>
                     <th rowspan="2">Amount *</th>
                     <!-- <th>Fixed Freight</th>
                     <th *ngIf="!isQuote">Fixed Amount</th> -->
-                    <th rowspan="2">Memo</th>
-                    <th *ngIf="!isQuote || !isEdit" rowspan="2">Actions </th>
+                    <th rowspan="2" style="z-index:1">Memo</th>
+                    <th *ngIf="!isQuote || !isEdit" rowspan="2" style="z-index:1">Actions </th>
                   </tr>
                   <tr>
-                    <th>L</th>
-                    <th>H</th>
-                    <th>W</th>
+                    <th style=" position: sticky;
+                    top: 0;">L</th>
+                    <th style="position: sticky;
+                    top: 0;">H</th>
+                    <th style="position: sticky;
+                    top: 0;">W</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -454,6 +459,8 @@
                   </tr>
                 </tbody>
               </table>
+              </div>
+            </div>
             </form>
             <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
               data-keyboard="false">
@@ -479,7 +486,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          
         </div>
       </div>
       <div class="modal-footer">

@@ -49,7 +49,7 @@ select.select-read-only {
   background-color: transparent !important;
 }
 .table-height{
-  height: 300px !important;
+  max-height: 300px !important;
 }
 .pencil-position{
   position: relative !important;top: 6px !important;

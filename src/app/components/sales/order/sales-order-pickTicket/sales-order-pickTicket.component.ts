@@ -126,7 +126,7 @@ table, thead, th {
     margin-bottom: 0;
     text-align: left;
 }
-.logo{margin-top: 10px;}
+.logo{margin-top: 10px;padding-bottom:20px}
 .sold-block-div{margin: 2px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
 .ship-block-div{margin: 2px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
 .parttable th{background: #0d57b0 !important;color: #fff !important;-webkit-print-color-adjust: exact; }
