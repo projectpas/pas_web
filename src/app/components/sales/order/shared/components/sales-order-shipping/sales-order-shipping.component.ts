@@ -79,6 +79,7 @@ export class SalesOrderShippingComponent {
     currQtyToShip: number;
     salesOrderPartId:number;
     ModuleID:Number;
+    isEditModeAdd:boolean=false;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -638,6 +639,7 @@ export class SalesOrderShippingComponent {
             .subscribe(
                 (res: any) => {
                     this.isSpinnerVisible = false;
+                    this.isEditModeAdd = false;
                     //this.getEditSiteData(res.shipToCustomerId);
                     // this.shippingHeader = res;
                     // this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
@@ -912,6 +914,7 @@ export class SalesOrderShippingComponent {
         this.salesOrderService
           .getShippingEdit(salesOrderShippingId)
           .subscribe((response: any) => {
+            this.isEditModeAdd = true;
             this.isSpinnerVisible = false;
             this.shippingHeader = response[0];
             this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
