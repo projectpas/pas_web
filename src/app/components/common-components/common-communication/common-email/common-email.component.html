@@ -135,12 +135,12 @@
                         <!-- <button class="btn btn-danger nobg" (click)="addList.splice(i, 1)">
                                 <i class="fa fa-trash"></i>
                             </button> -->
-                        <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
-                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
-                                <i class="fa fa-history"></i></a></span>
                         <span *ngIf="deletedStatusInfo==true && !isView">
                             <a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
                                 matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
+                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
+                                <i class="fa fa-history"></i></a></span>
                     </td>
                 </tr>
             </ng-template>
@@ -287,7 +287,7 @@
                                 <td>
                             <tr *ngFor="let x of audit.attachmentDetails">
                                 <a [ngStyle]="{'color':  getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }"
-                                    class="filelink" (click)="downloadFile(x)"> {{x.fileName}} <span
+                                    class="filelink" (click)="downloadFileUpload(x.link)"> {{x.fileName}} <span
                                         *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
                             </tr>
                             </td>
@@ -600,7 +600,7 @@
                         <span class="label" style="float: left;"><strong> Email Content: </strong></span>
                         <span class="value" [innerHTML]="emailViewData.emailBody"></span>
                     </p>
-                    <div>
+                    <!-- <div>
                         <label class="label attachments-label-width">Attachments:</label>
                         <ul style="list-style: none;">
                             <li *ngFor="let attachment of emailViewData.attachmentDetails">
@@ -609,7 +609,89 @@
                                     {{ attachment.link }}</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
+                    <div class="mt-3">
+                        <label class="label attachments-label-width">Attachments:</label>
+                        <p-table
+                          #dtatt
+                          class="table-responsive ptable-cus-pma"
+                          [paginator]="attachmentDetails.length > 0"
+                          [value]="attachmentDetails"
+                          [rows]="3"
+                          [columns]="sourceViewforListColumns"
+                        >
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <th *ngFor="let col of columns">
+                                {{ col.header }}
+                              </th>
+                              <th>
+                                Download
+                              </th>
+                            </tr>
+                            <tr>
+                              <th
+                                style="width:auto"
+                                *ngFor="let col of columns"
+                                [ngSwitch]="col.field"
+                              >
+                                <input
+                                  style="width:100%;" class="incorn_border"
+                                  pInputText
+                                  type="text"
+                                  (input)="
+                                  dtatt.filter($event.target.value, col.field, 'contains')
+                                  "
+                                />
+                              </th>
+                              <th></th>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="body"
+                            let-part
+                            let-rowData
+                            let-columns="columns"
+                            let-i="rowIndex"
+                          >
+                            <tr>
+                              <td *ngFor="let col of columns">
+                                <ng-container *ngIf="col.field == 'fileName'">
+                                  {{ part[col.field] }}
+                                </ng-container>
+                              </td>
+                              <td class="text_c">
+                                <button *ngIf="part.attachmentId!=0"
+                                  (click)="downloadFileUpload(part.link)"
+                                  matTooltip="Download"  matTooltipPosition="above"
+                                  class="downld"
+                                  ><span><i class="fa fa-download"></i></span
+                                ></button>
+                                <button *ngIf="part.attachmentId==0" 
+                               
+                                matTooltip="Download will be enabled after Save Records"  matTooltipPosition="above"
+                                class="downld"
+                                ><span><i class="fa fa-download"></i></span
+                              ></button>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="emptymessage"
+                            let-columns
+                            *ngIf="attachmentDetails.length == 0"
+                          >
+                            <tr>
+                              <td
+                                [attr.colspan]="2"
+                                style="color: red; font-weight: bold; text-align: center"
+                              >
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
