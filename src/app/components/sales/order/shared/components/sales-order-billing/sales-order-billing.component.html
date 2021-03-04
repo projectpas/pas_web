@@ -115,7 +115,7 @@
                                     <th>Shipping Ref</th>
                                     <th>Line #</th>
                                     <th>PN</th>
-                                    <th>PN Description</th>
+                                    <th style="min-width: 210px;">PN Description</th>
                                     <th style="min-width: 120px;">Stk Line Num</th>
                                     <th style="min-width: 120px;">Serial Num</th>
                                     <th style="min-width: 70px;">Qty To Bill</th>
@@ -132,7 +132,7 @@
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
-                                            (change)="checked($event,poIndex);" [(ngModel)]="bill.selected" />
+                                            (change)="checked($event, bill);" [(ngModel)]="bill.selected" />
                                     </td>
                                     <td>
                                         {{ bill.invoiceDate | date : "MM/dd/yyyy" }}
@@ -174,7 +174,7 @@
                                         <span>
                                             <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
                                                 (click)="onSelectPartNumber(bill)" matTooltip="Create Billing"
-                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!bill.selected">
                                                 <i class="fa fa-plus"></i></button>
                                         </span>
                                         <span>
@@ -229,8 +229,8 @@
                                             required>
                                         </p-dropdown> -->
                                         <input type="text" class="form-control wo-input" name="salesOrderType"
-                                            #salesOrderType="ngModel" disabled [(ngModel)]="billingorInvoiceForm.salesOrderType"
-                                            [disabled]="isViewMode" />
+                                            #salesOrderType="ngModel" disabled
+                                            [(ngModel)]="billingorInvoiceForm.salesOrderType" [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
@@ -247,8 +247,8 @@
                                     <div class="form-group ">
                                         <label> Customer Ref </label>
                                         <input type="text" class="form-control wo-input" name="customerRef"
-                                            #customerRef="ngModel" disabled [(ngModel)]="billingorInvoiceForm.customerRef"
-                                            [disabled]="isViewMode" />
+                                            #customerRef="ngModel" disabled
+                                            [(ngModel)]="billingorInvoiceForm.customerRef" [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
@@ -259,25 +259,19 @@
                                         <!-- <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
                                             #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
                                             [disabled]="isViewMode" required></p-calendar> -->
-                                            <p-calendar
-                                                [showIcon]="true"
-                                                class="calender-cstm"
-                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                name="invoiceDate"
-                                                #invoiceDate="ngModel"
-                                                [(ngModel)]="billingorInvoiceForm.invoiceDate"
-                                                [disabled]="isViewMode" appendTo="body"
-                                                showTime="true" hourFormat="24"
-                                                required
-                                            ></p-calendar>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" [yearNavigator]="true"
+                                            [monthNavigator]="true" yearRange="1900:2100" name="invoiceDate"
+                                            #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
+                                            [disabled]="isViewMode" appendTo="body" showTime="true" hourFormat="24"
+                                            required></p-calendar>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> SO Open Date </label>
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="woOpenDate"
-                                            #woOpenDate="ngModel" [disabled]=true [(ngModel)]="billingorInvoiceForm.openDate"
-                                            [disabled]="isViewMode">
+                                            #woOpenDate="ngModel" [disabled]=true
+                                            [(ngModel)]="billingorInvoiceForm.openDate" [disabled]="isViewMode">
                                         </p-calendar>
                                     </div>
                                 </div>
@@ -363,8 +357,8 @@
                                     <div class="form-group ">
                                         <label>Credit Terms </label>
                                         <input type="text" class="form-control wo-input" name="creditTerms"
-                                            #creditTerms="ngModel" disabled [(ngModel)]="billingorInvoiceForm.creditTerm"
-                                            [disabled]="isViewMode" />
+                                            #creditTerms="ngModel" disabled
+                                            [(ngModel)]="billingorInvoiceForm.creditTerm" [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
@@ -401,7 +395,8 @@
                                             class="p-autoComplete-ctsm" [disabled]="isViewMode">
                                         </p-autoComplete> -->
                                         <input type="text" class="form-control wo-input" name="soldToCustomerName"
-                                            #soldToCustomerName="ngModel" [(ngModel)]="billingorInvoiceForm.soldToCustomerName" disabled />
+                                            #soldToCustomerName="ngModel"
+                                            [(ngModel)]="billingorInvoiceForm.soldToCustomerName" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -412,8 +407,7 @@
                                         <p-autoComplete field="userName"
                                             [(ngModel)]="billingorInvoiceForm.billToCustomerId" name="billcustomerName"
                                             errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="onBillToSelected($event)"
-                                            [suggestions]="userBillingList"
+                                            (onSelect)="onBillToSelected($event)" [suggestions]="userBillingList"
                                             (completeMethod)="filterCustomerNameBill($event)"
                                             (onKeyUp)="clearAddress('BillTo' , $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
@@ -429,8 +423,7 @@
                                         <p-autoComplete field="userName"
                                             [(ngModel)]="billingorInvoiceForm.shipToCustomerId" name="shipcustomerName"
                                             errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="onShipToSelected($event)"
-                                            [suggestions]="userShipingList"
+                                            (onSelect)="onShipToSelected($event)" [suggestions]="userShipingList"
                                             (completeMethod)="filterCustomerShip($event)"
                                             (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
                                             [minLength]="1" #customerName="ngModel" required [dropdown]="true"
@@ -451,14 +444,14 @@
                                         </p-dropdown>
                                     </div>
                                 </div>-->
-                                    <div class="col-md-4">
-                                        <div class="form-group ">
-                                            <label>Address 1 </label>
-                                            <input type="text" class="form-control wo-input" name="soldAddress1"
-                                                #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1" disabled />
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 1 </label>
+                                        <input type="text" class="form-control wo-input" name="soldAddress1"
+                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1" disabled />
                                     </div>
-                                
+                                </div>
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="credit">Site Name</label><span class="clr-red">*</span>
@@ -473,8 +466,7 @@
                                             (change)="setSoldToAddresses()" [disabled]="isViewMode" name="billToSite"
                                             required>
                                             <option value="">Select</option>
-                                            <option *ngFor="let site of billCustomerSiteList"
-                                                [value]="site.siteID">
+                                            <option *ngFor="let site of billCustomerSiteList" [value]="site.siteID">
                                                 {{site.siteName}}
                                             </option>
                                         </select>
@@ -489,11 +481,12 @@
                                             [(ngModel)]="billingorInvoiceForm.shipToSiteId" [disabled]="isViewMode"
                                             required>
                                         </p-dropdown> -->
-                                        <select [(ngModel)]="billingorInvoiceForm.shipToSiteId" (change)="setShipToAddress()"
-                                            [disabled]="isViewMode" name="shipToSite" required>
+                                        <select [(ngModel)]="billingorInvoiceForm.shipToSiteId"
+                                            (change)="setShipToAddress()" [disabled]="isViewMode" name="shipToSite"
+                                            required>
                                             <option value="">Select</option>
-                                            <option *ngFor="let site of shipCustomerSiteList"
-                                                [value]="site.siteID">{{site.siteName}}</option>
+                                            <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">
+                                                {{site.siteName}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -923,8 +916,8 @@
                 </div> -->
             </div>
             <div style="float: right;" *ngIf="!isViewMode">
-                <button class="btn btn-primary pull-right" *ngIf="!isEditBilling"
-                    (click)="saveSalesOrderBilling()">Save</button>
+                <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
+                    (click)="saveSalesOrderBilling()">Generate Invoice</button>
                 <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
                     (click)="updateWorkOrderBilling()">Update</button>
             </div>

@@ -22,7 +22,7 @@
                                 {{ summaryColumn.header }}
                             </ng-container>
                         </th>
-                        <th colspan="16"></th>
+                        <th colspan="17"></th>
                         <th *ngIf="isViewMode == false" style="position: sticky !important; min-width: 100px">Actions
                         </th>
                     </tr>
@@ -36,7 +36,7 @@
                                             Item {{ rowIndex + 1 }}
                                         </span> -->
                                         <span *ngIf="summaryColumn.field == 'itemNo'">
-                                            Line {{summaryPart[summaryColumn.field] }}
+                                            {{summaryPart[summaryColumn.field] }}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
@@ -45,6 +45,8 @@
                                             && summaryColumn.field != 'quantityRequested'
                                             && summaryColumn.field != 'quantityToBeQuoted'
                                             && summaryColumn.field != 'quantityAlreadyQuoted'
+                                            && summaryColumn.field != 'quantityAvailable'
+                                            && summaryColumn.field != 'quantityOnHand'
                                             && summaryColumn.field != 'fixRate'
                                             && summaryColumn.field != 'grossSalePrice'
                                             && summaryColumn.field != 'salesDiscountExtended'
@@ -60,7 +62,9 @@
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'quantityRequested'
                                             || summaryColumn.field == 'quantityToBeQuoted'
-                                            || summaryColumn.field == 'quantityAlreadyQuoted'">
+                                            || summaryColumn.field == 'quantityAlreadyQuoted'
+                                            || summaryColumn.field == 'quantityAvailable'
+                                            || summaryColumn.field == 'quantityOnHand'">
                                             {{summaryPart[summaryColumn.field] | globalNmberFormat}}
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'grossSalePrice'
@@ -76,7 +80,7 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="16" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="17" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" class="center">
                                         <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
                                             matTooltip="View Stock Line" matTooltipPosition="above"
@@ -103,25 +107,26 @@
                                     <th style="background-color: #fff !important;"></th>
                                     <th>PN</th>
                                     <th>PN Description</th>
-                                    <th colspan="2">Stk Line Num</th>
-                                    <th colspan="2">Ser Num</th>
-                                    <th>Cond</th>
                                     <th>Priority<span class="clr-red">*</span></th>
+                                    <th colspan="2">Cust Req Date<span class="clr-red">*</span></th>
+                                    <th colspan="2">Cust Prmsd Date<span class="clr-red">*</span></th>
+                                    <th colspan="2">Est Ship Date<span class="clr-red">*</span></th>
+                                    <th>Cond</th>
+                                    <th colspan="2">Stk Line Num</th>
+                                    <th>Ser Num</th>
                                     <th>Quote Date</th>
-                                    <th>Qty Available<span class="clr-red">*</span></th>
-                                    <th>Qty Quoted<span class="clr-red">*</span></th>
-                                    <th>Qty Prev Quoted</th>
-                                    <th>Cust Request Date<span class="clr-red">*</span></th>
-                                    <th>Cust Promised Date<span class="clr-red">*</span></th>
-                                    <th>Est.Ship Date<span class="clr-red">*</span></th>
+                                    <th>Qty Avail<span class="clr-red">*</span></th>
+                                    <th>Qty on Hand<span class="clr-red">*</span></th>
+                                    <th>Qty Qted<span class="clr-red">*</span></th>
+                                    <th>Qty Prev Qted</th>
                                     <th>Status</th>
                                     <th>Unit Cost</th>
                                     <th>MarkUp %</th>
                                     <th>MarkUp Amt/Unit</th>
-                                    <th>Gross Price/Unit</th>
-                                    <th>Disc. %</th>
-                                    <th>Disc. Amt/Unit</th>
-                                    <th>MarkUp Amt</th>
+                                    <th style="min-width: 94px;">Gross Price/Unit</th>
+                                    <th style="min-width: 62px;">Disc. %</th>
+                                    <th style="min-width: 90px;">Disc. Amt/Unit</th>
+                                    <th style="min-width: 80px;">MarkUp Amt</th>
                                     <th style="min-width: 92px !important;">Gross Sales Amt</th>
                                     <th style="min-width: 60px !important;">Disc. Amt</th>
                                     <th style="min-width: 85px !important;">Net Sales Amt</th>
@@ -149,42 +154,13 @@
                                     <td>
                                         {{ part.description }}
                                     </td>
-                                    <td colspan="2">
-                                        {{ part.stockLineNumber }}
-                                    </td>
-                                    <td colspan="2">
-                                        {{ part.serialNumber }}
-                                    </td>
-                                    <td>
-                                        {{ part.conditionDescription }}
-                                    </td>
-                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
-                                            #priorityId="ngModel" (change)="onEditPartDetails()">
-                                            <option *ngFor="let p of priorities" [ngValue]="p.priorityId">
-                                                {{ p.description }}
-                                            </option>
-                                        </select>
-                                    </td>
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{ part.priorityName }}
                                     </td>
-                                    <td>
-                                        {{ salesQuote.openDate | date: "MM/dd/yyyy"}}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.qtyAvailable | globalNmberFormat}}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.quantityToBeQuoted | globalNmberFormat}}
-                                    </td>
-                                    <td class="text-right">
-                                        {{ part.quantityAlreadyQuoted | globalNmberFormat}}
-                                    </td>
-                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
                                     </td>
-                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
                                         <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
                                             class="pas-clder" [showIcon]="true" appendTo="body"
                                             name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
@@ -199,10 +175,10 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.promisedDate | date: "MM/dd/yyyy"}}
                                     </td>
-                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
                                         <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
                                             class="pas-clder" [showIcon]="true" appendTo="body" name="promisedDate"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -216,10 +192,10 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                    <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.estimatedShipDate | date: "MM/dd/yyyy" }}
                                     </td>
-                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                    <td colspan="2" *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
                                         <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
                                             class="pas-clder" [showIcon]="true" appendTo="body" name="estimatedShipDate"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -232,6 +208,38 @@
                                                 <small>Estimated Ship Date is required </small>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        {{ part.conditionDescription }}
+                                    </td>
+                                    <td colspan="2">
+                                        {{ part.stockLineNumber }}
+                                    </td>
+                                    <td>
+                                        {{ part.serialNumber }}
+                                    </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
+                                            #priorityId="ngModel" (change)="onEditPartDetails()">
+                                            <option *ngFor="let p of priorities" [ngValue]="p.priorityId">
+                                                {{ p.description }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        {{ salesQuote.openDate | date: "MM/dd/yyyy"}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyAvailable | globalNmberFormat}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyOnHand| globalNmberFormat}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.quantityToBeQuoted | globalNmberFormat}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.quantityAlreadyQuoted | globalNmberFormat}}
                                     </td>
                                     <td *ngIf="isViewMode == false" class="text-left">
                                         {{ salesQuote.statusName }}

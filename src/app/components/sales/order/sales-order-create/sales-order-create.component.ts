@@ -585,36 +585,6 @@ export class SalesOrderCreateComponent implements OnInit {
     );
 
     this.salesOrderQuote.managementStructureId = this.salesOrderObj.managementStructureId;
-    this.salesOrderQuote.shipToUserTypeId = this.salesOrderObj.shipToUserTypeId;
-    this.salesOrderQuote.shipToUserId = this.salesOrderObj.shipToUserId;
-    this.salesOrderQuote.shipToAddressId = this.salesOrderObj.shipToAddressId;
-    this.salesOrderQuote.shipViaId = this.salesOrderObj.shipViaId;
-    this.salesOrderQuote.billToContactId = this.salesOrderObj.billToContactId;
-    this.salesOrderQuote.shipToContactId = this.salesOrderObj.shipToContactId;
-    this.salesOrderQuote.shipToSiteName = this.salesOrderObj.shipToSiteName;
-    this.salesOrderQuote.shipToAddress1 = this.salesOrderObj.shipToAddress1;
-    this.salesOrderQuote.shipToAddress2 = this.salesOrderObj.shipToAddress2;
-    this.salesOrderQuote.shipToCity = this.salesOrderObj.shipToCity;
-    this.salesOrderQuote.shipToState = this.salesOrderObj.shipToState;
-    this.salesOrderQuote.shipToPostalCode = this.salesOrderObj.shipToPostalCode;
-    this.salesOrderQuote.shipToCountry = this.salesOrderObj.shipToCountry;
-    this.salesOrderQuote.shipViaName = this.salesOrderObj.shipViaName;
-    this.salesOrderQuote.shipViaShippingAccountInfo = this.salesOrderObj.shipViaShippingAccountInfo;
-    this.salesOrderQuote.shippingId = this.salesOrderObj.shippingId;
-    this.salesOrderQuote.shippingURL = this.salesOrderObj.shippingURL;
-    this.salesOrderQuote.shipViaMemo = this.salesOrderObj.shipViaMemo;
-    this.salesOrderQuote.shipViaShippingURL = this.salesOrderObj.shipViaShippingURL;
-    this.salesOrderQuote.billToUserTypeId = this.salesOrderObj.billToUserTypeId;
-    this.salesOrderQuote.billToUserId = this.salesOrderObj.billToUserId;
-    this.salesOrderQuote.billToAddressId = this.salesOrderObj.billToAddressId;
-    this.salesOrderQuote.billToSiteName = this.salesOrderObj.billToSiteName;
-    this.salesOrderQuote.billToAddress1 = this.salesOrderObj.billToAddress1;
-    this.salesOrderQuote.billToAddress2 = this.salesOrderObj.billToAddress2;
-    this.salesOrderQuote.billToCity = this.salesOrderObj.billToCity;
-    this.salesOrderQuote.billToState = this.salesOrderObj.billToState;
-    this.salesOrderQuote.billToPostalCode = this.salesOrderObj.billToPostalCode;
-    this.salesOrderQuote.billToCountry = this.salesOrderObj.billToCountry;
-    this.salesOrderQuote.billToMemo = this.salesOrderObj.billToMemo;
     this.salesOrderQuote.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
     this.salesQuote.creditLimit = this.salesOrderObj.creditLimit;
     this.salesQuote.creditLimitTermsId = this.salesOrderObj.creditTermId;
@@ -716,36 +686,6 @@ export class SalesOrderCreateComponent implements OnInit {
       this.allEmployeeList
     );
     this.salesOrderQuote.managementStructureId = this.salesOrderObj.managementStructureId;
-    this.salesOrderQuote.shipToUserTypeId = this.salesOrderObj.shipToUserTypeId;
-    this.salesOrderQuote.shipToUserId = this.salesOrderObj.shipToUserId;
-    this.salesOrderQuote.shipToAddressId = this.salesOrderObj.shipToAddressId;
-    this.salesOrderQuote.shipViaId = this.salesOrderObj.shipViaId;
-    this.salesOrderQuote.billToContactId = this.salesOrderObj.billToContactId;
-    this.salesOrderQuote.shipToContactId = this.salesOrderObj.shipToContactId;
-    this.salesOrderQuote.shipToSiteName = this.salesOrderObj.shipToSiteName;
-    this.salesOrderQuote.shipToAddress1 = this.salesOrderObj.shipToAddress1;
-    this.salesOrderQuote.shipToAddress2 = this.salesOrderObj.shipToAddress2;
-    this.salesOrderQuote.shipToCity = this.salesOrderObj.shipToCity;
-    this.salesOrderQuote.shipToState = this.salesOrderObj.shipToState;
-    this.salesOrderQuote.shipToPostalCode = this.salesOrderObj.shipToPostalCode;
-    this.salesOrderQuote.shipToCountry = this.salesOrderObj.shipToCountry;
-    this.salesOrderQuote.shipViaName = this.salesOrderObj.shipViaName;
-    this.salesOrderQuote.shipViaShippingAccountInfo = this.salesOrderObj.shipViaShippingAccountInfo;
-    this.salesOrderQuote.shippingId = this.salesOrderObj.shippingId;
-    this.salesOrderQuote.shippingURL = this.salesOrderObj.shippingURL;
-    this.salesOrderQuote.shipViaMemo = this.salesOrderObj.shipViaMemo;
-    this.salesOrderQuote.shipViaShippingURL = this.salesOrderObj.shipViaShippingURL;
-    this.salesOrderQuote.billToUserTypeId = this.salesOrderObj.billToUserTypeId;
-    this.salesOrderQuote.billToUserId = this.salesOrderObj.billToUserId;
-    this.salesOrderQuote.billToAddressId = this.salesOrderObj.billToAddressId;
-    this.salesOrderQuote.billToSiteName = this.salesOrderObj.billToSiteName;
-    this.salesOrderQuote.billToAddress1 = this.salesOrderObj.billToAddress1;
-    this.salesOrderQuote.billToAddress2 = this.salesOrderObj.billToAddress2;
-    this.salesOrderQuote.billToCity = this.salesOrderObj.billToCity;
-    this.salesOrderQuote.billToState = this.salesOrderObj.billToState;
-    this.salesOrderQuote.billToPostalCode = this.salesOrderObj.billToPostalCode;
-    this.salesOrderQuote.billToCountry = this.salesOrderObj.billToCountry;
-    this.salesOrderQuote.billToMemo = this.salesOrderObj.billToMemo;
     this.salesOrderQuote.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
     this.salesQuote.creditLimit = this.salesOrderObj.creditLimit;
     this.salesQuote.creditLimitTermsId = this.salesOrderObj.creditTermId;
@@ -908,24 +848,6 @@ export class SalesOrderCreateComponent implements OnInit {
       this.errorMessages.push("Please select employee");
       haveError = true;
     }
-    if (this.isCreateModeHeader) {
-      if (!this.salesOrderQuote.shipToSiteName) {
-        this.errorMessages.push("Please select Ship To SiteName");
-        haveError = true;
-      }
-      if (!this.salesOrderQuote.shipToContactId) {
-        this.errorMessages.push("Please select Ship To Contact");
-        haveError = true;
-      }
-      if (!this.salesOrderQuote.billToSiteName) {
-        this.errorMessages.push("Please select Bill To SiteName");
-        haveError = true;
-      }
-      if (!this.salesOrderQuote.billToContactId) {
-        this.errorMessages.push("Please select Bill To Contact");
-        haveError = true;
-      }
-    }
 
     if (haveError) {
       let content = this.errorMessagePop;
@@ -991,62 +913,12 @@ export class SalesOrderCreateComponent implements OnInit {
         "value",
         this.salesQuote.employeeId
       );
-      this.salesOrder.billToContactName = editValueAssignByCondition(
-        "firstName",
-        this.salesOrderQuote.billToContactId
-      );
-      this.salesOrder.billToContactId = editValueAssignByCondition(
-        "contactId",
-        this.salesOrderQuote.billToContactId
-      );
-      this.salesOrder.shipToContactName = editValueAssignByCondition(
-        "firstName",
-        this.salesOrderQuote.shipToContactId
-      );
-      this.salesOrder.shipToContactId = editValueAssignByCondition(
-        "contactId",
-        this.salesOrderQuote.shipToContactId
-      );
-      this.salesOrder.shipToUserId = editValueAssignByCondition(
-        "value",
-        this.salesOrderQuote.shipToUserId
-      );
-      this.salesOrder.billToUserId = editValueAssignByCondition(
-        "value",
-        this.salesOrderQuote.billToUserId
-      );
 
       if (this.id) {
         this.salesOrder.statusId = this.salesQuote.statusId;
         this.salesOrder.statusChangeDate = null;
       }
 
-      this.salesOrder.shipToUserTypeId = this.salesOrderQuote.shipToUserTypeId;
-      this.salesOrder.shipToAddressId = this.salesOrderQuote.shipToAddressId;
-      this.salesOrder.shipViaId = this.salesOrderQuote.shipViaId;
-      this.salesOrder.shipToSiteName = this.salesOrderQuote.shipToSiteName;
-      this.salesOrder.shipToAddress1 = this.salesOrderQuote.shipToAddress1;
-      this.salesOrder.shipToAddress2 = this.salesOrderQuote.shipToAddress2;
-      this.salesOrder.shipToCity = this.salesOrderQuote.shipToCity;
-      this.salesOrder.shipToState = this.salesOrderQuote.shipToState;
-      this.salesOrder.shipToPostalCode = this.salesOrderQuote.shipToPostalCode;
-      this.salesOrder.shipToCountry = this.salesOrderQuote.shipToCountry;
-      this.salesOrder.shipViaName = this.salesOrderQuote.shipViaName;
-      this.salesOrder.shipViaShippingAccountInfo = this.salesOrderQuote.shipViaShippingAccountInfo;
-      this.salesOrder.shippingId = this.salesOrderQuote.shippingId;
-      this.salesOrder.shippingURL = this.salesOrderQuote.shippingURL;
-      this.salesOrder.shipViaMemo = this.salesOrderQuote.shipViaMemo;
-      this.salesOrder.shipViaShippingURL = this.salesOrderQuote.shipViaShippingURL;
-      this.salesOrder.billToUserTypeId = this.salesOrderQuote.billToUserTypeId;
-      this.salesOrder.billToAddressId = this.salesOrderQuote.billToAddressId;
-      this.salesOrder.billToSiteName = this.salesOrderQuote.billToSiteName;
-      this.salesOrder.billToAddress1 = this.salesOrderQuote.billToAddress1;
-      this.salesOrder.billToAddress2 = this.salesOrderQuote.billToAddress2;
-      this.salesOrder.billToCity = this.salesOrderQuote.billToCity;
-      this.salesOrder.billToState = this.salesOrderQuote.billToState;
-      this.salesOrder.billToPostalCode = this.salesOrderQuote.billToPostalCode;
-      this.salesOrder.billToCountry = this.salesOrderQuote.billToCountry;
-      this.salesOrder.billToMemo = this.salesOrderQuote.billToMemo;
       this.salesOrderQuote.salesOrderQuoteId = null;
       this.salesOrder.memo = this.salesQuote.memo;
       this.salesOrder.notes = this.salesQuote.notes;
