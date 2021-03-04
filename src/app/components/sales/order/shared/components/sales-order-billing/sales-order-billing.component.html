@@ -174,7 +174,8 @@
                                         <span>
                                             <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
                                                 (click)="onSelectPartNumber(bill)" matTooltip="Create Billing"
-                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!bill.selected">
+                                                matTooltipPosition="above" style="font-weight: bold;"
+                                                [disabled]="!bill.selected">
                                                 <i class="fa fa-plus"></i></button>
                                         </span>
                                         <span>
@@ -307,12 +308,20 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> Ship Date </label>
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="shipDate"
                                             #shipDate="ngModel" [(ngModel)]="billingorInvoiceForm.shipDate"
                                             [disabled]="isViewMode"></p-calendar>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> No of Pieces </label>
+                                        <input type="number" class="form-control wo-input" name="noofPieces"
+                                            #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
+                                            [disabled]="isViewMode" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -329,9 +338,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
-                                        <label> No of Pieces </label>
-                                        <input type="number" class="form-control wo-input" name="noofPieces"
-                                            #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
+                                        <label for="employee">Employee </label>
+                                        <input type="text" class="form-control wo-input" name="employee"
+                                            #employee="ngModel" disabled [(ngModel)]="billingorInvoiceForm.employeeName"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>
@@ -347,14 +356,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
-                                        <label for="employee">Employee </label>
-                                        <input type="text" class="form-control wo-input" name="employee"
-                                            #employee="ngModel" disabled [(ngModel)]="billingorInvoiceForm.employeeName"
-                                            [disabled]="isViewMode" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
                                         <label>Credit Terms </label>
                                         <input type="text" class="form-control wo-input" name="creditTerms"
                                             #creditTerms="ngModel" disabled
@@ -362,7 +363,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label>Stage Code </label>
@@ -371,7 +372,7 @@
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

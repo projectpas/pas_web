@@ -89,6 +89,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly confirmpickticketUrl = environment.baseUrl + "/api/salesorder/confirmpt";
   private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/salesorder/getpickticketedit"
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
+  private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(
@@ -220,12 +221,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getSalesOrderBillingByShipping(salesOrderId: number, partId,salesOrderShippingId:number): Observable<SalesOrderBillingAndInvoicing> {
+  getSalesOrderBillingByShipping(salesOrderId: number, partId, salesOrderShippingId: number): Observable<SalesOrderBillingAndInvoicing> {
     const URL = `${this.salesorderBillingByShipping}?salesOrderId=${salesOrderId}&salesOrderPartId=${partId}&salesOrderShippingId=${salesOrderShippingId}`;
     return this.http
       .get<SalesOrderBillingAndInvoicing>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId));
+        return this.handleErrorCommon(error, () => this.getSalesOrderBillingByShipping(salesOrderId, partId, salesOrderShippingId));
       });
   }
 
@@ -673,13 +674,13 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getPickTicketPrint(salesOrderId: number,salesOrderPartId:number,soPickTicketId: number): Observable<any> {
+  getPickTicketPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
     //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
     const URL = `${this.getSalesOrdePickTicketPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soPickTicketId=${soPickTicketId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId,salesOrderPartId,soPickTicketId));
+        return this.handleErrorCommon(error, () => this.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId));
       });
   }
 
@@ -707,6 +708,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getShippingEdit(salesOrderShippingId));
+      });
+  }
+
+  getShippingLabelPrint(salesOrderId: number, salesOrderPartId: number, soShippingId: number): Observable<any> {
+    const URL = `${this.getShipingLabelForPrintPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soShippingId=${soShippingId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId));
       });
   }
   //end nitin

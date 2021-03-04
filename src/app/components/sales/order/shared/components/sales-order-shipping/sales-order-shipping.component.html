@@ -199,17 +199,17 @@
                                     <!-- <td colspan="2"></td> -->
                                     <td class="zui-sticky-col" style="width:107px !important">
                                         <span>
+                                            <a class="btn nobg" matTooltip="Print Shipping Label" matTooltipPosition="above"
+                                              (click)="printShippingLabel(ship);"><i class="fa fa-print"></i></a>
+                                          </span>
+                                        <span>
                                             <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
                                                 matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
-                                            <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
-                                            matTooltipPosition="above" style="font-weight: bold;">
-                                            <i class="fa fa-check"></i>
-                                          </button> -->
                                         </span>
                                         <span>
-                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
+                                            <button [hidden]="true" class="btn nobg" mat-icon-button
                                                 (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
                                                 matTooltipPosition="above" style="font-weight: bold;">
                                                 <i class="fa fa-pencil"></i>
