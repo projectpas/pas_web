@@ -1,5 +1,4 @@
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
-style="overflow: hidden;">
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed overflow-hidden">
   <div >
     <span class="cat-heading cat4" *ngIf="!isEdit">Add {{ isWorkOrder ? moduleName : ' Tool'
       }}<i (click)="addRow()" class="fa fa-plus"></i></span>
@@ -49,7 +48,7 @@ style="overflow: hidden;">
           <input type="text" (ngModelChange)="getActive()" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
-        <td  style="text-align: center;" *ngIf="!isEdit">
+        <td  class="text-center" *ngIf="!isEdit">
           <button class="btn btn-danger nobg" (click)="openDelete(content,eqp,i)">
             <i class="fa fa-trash"></i>
           </button>
@@ -60,7 +59,7 @@ style="overflow: hidden;">
     </div>
     </div>
   </form>
-  <div *ngIf="isWorkOrder && !isEdit" style="float:right">
+  <div *ngIf="isWorkOrder && !isEdit" class="float-right">
     <button *ngIf="isWorkOrder" type="button" class="btn btn-primary btn-primary" data-dismiss="modal"
       (click)="saveEquipmentWorkOrder()"
       [disabled]="!toolsCreateForm.valid|| checkQuantityAvailability()">
@@ -71,14 +70,12 @@ style="overflow: hidden;">
       Close
     </button>
   </div>
-  <div *ngIf="isWorkOrder && isEdit" style="float:right">
-    <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateEquipmentWorkOrder()"
-      style="padding: 6px 12px !important; margin-top: 10px;"
+  <div *ngIf="isWorkOrder && isEdit" class="float-right">
+    <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="updateEquipmentWorkOrder()"
       [disabled]="!toolsCreateForm.valid || checkQuantityAvailability() || disableUpdate">
       Update
     </button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal"
-      style="padding: 6px 12px !important;margin-top: 10px;">
+    <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal">
       Close
     </button>
   </div>

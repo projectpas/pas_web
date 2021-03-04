@@ -35,7 +35,7 @@
                                 {{ dropdown.publicationId}}</option>
                         </select>
                         <a *ngIf="publ.publicationId !== '0' && publ.publicationId !== '' && publ.publicationId !== undefined"
-                            (click)="viewPublicationDetails(publ)" style="margin-top: 4px; margin-left: 4px;">
+                            (click)="viewPublicationDetails(publ)" class="view-icon">
                             <i class="fa fa-eye view_icon_adjust"></i>
                         </a>
                     </div>
@@ -207,7 +207,7 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <h4 class="panel-title" style="padding-left: 10px;">Attachment
+                                                    <h4 class="panel-title attachment-padding-10">Attachment
                                                         Details:</h4>
                                                     <div class="col-sm-6">
                                                         <p-table #dt class="rpo-table-cstm rro-table-cstm ptable-th-bg"
@@ -221,12 +221,12 @@
                                                                         {{ col.header }}
                                                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                                                     </th>
-                                                                    <th style="width: 200px;">File(s)</th>
+                                                                    <th class="width-200">File(s)</th>
                                                                 </tr>
                                                                 <tr>
                                                                     <th *ngFor="let col of columns"
                                                                         [ngSwitch]="col.field">
-                                                                        <input style="width:100%;" pInputText
+                                                                        <input class="table-header-input-width" pInputText
                                                                             type="text" (input)="
                                                                         dt.filter($event.target.value, col.field, 'contains')
                                                                         " />
@@ -238,7 +238,7 @@
                                                                 let-columns="columns" let-rowIndex="rowIndex">
                                                                 <tr>
                                                                     <td *ngFor="let col of columns"
-                                                                        style="text-align: center;">
+                                                                        class="text-center">
                                                                         {{ rowData[col.field] }}
                                                                     </td>
                                                                     <td>
@@ -247,8 +247,7 @@
                                                                             <a (click)="downloadFileUpload(fileItem)"
                                                                                 matTooltip="Download"
                                                                                 matTooltipPosition="above"
-                                                                                class="filelink"
-                                                                                style="padding-right: 5px;">{{fileItem.fileName}}</a>
+                                                                                class="filelink padding-right-5">{{fileItem.fileName}}</a>
 
                                                                         </ng-container>
                                                                     </td>
@@ -259,19 +258,19 @@
                                                                 *ngIf="attachmentList.length == 0">
                                                                 <tr>
                                                                     <td [attr.colspan]="2"
-                                                                        style="color: red; font-weight: bold; text-align: center">
+                                                                       class="no-records-cstm no-records-msg">
                                                                         No records found
                                                                     </td>
                                                                 </tr>
                                                             </ng-template>
                                                             <ng-template pTemplate="summary" id="footer">
                                                                 <label id="footer" class="footer">Total:</label>
-                                                                <input style="width: 5%;" [(ngModel)]="dt._totalRecords"
+                                                                <input class="footer-input-width" [(ngModel)]="dt._totalRecords"
                                                                     [disabled]="true" pInputText type="text" />
                                                                 &nbsp;&nbsp;
                                                                 <label id="footer" class="footer1">Pages Count:</label>
 
-                                                                <input style="width: 5%;" [ngModel]="
+                                                                <input class="footer-input-width" [ngModel]="
                               getPageCount(dt._totalRecords, attachmentsPageSize)
                             " [disabled]="true" pInputText type="text" />
                                                             </ng-template>
@@ -301,7 +300,7 @@
                                                     [rowsPerPageOptions]="[10, 20, 50, 100]">
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <th style="padding: 8px 5px !important;"
+                                                            <th class="th-padding"
                                                                 *ngFor="let col of columns"
                                                                 [pSortableColumn]="col.field">
                                                                 {{ col.header }}
@@ -310,7 +309,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                                                <input style="width:100%;" pInputText type="text"
+                                                                <input class="table-header-input-width" pInputText type="text"
                                                                     (input)="
                                                                   pnTable.filter($event.target.value, col.field, 'contains')
                                                                   " />
@@ -329,19 +328,19 @@
                                                         *ngIf="pnMappingList.length == 0">
                                                         <tr>
                                                             <td [attr.colspan]="4"
-                                                                style="color: red; font-weight: bold; text-align: center">
+                                                               class="no-records-msg no-records-cstm">
                                                                 No records found
                                                             </td>
                                                         </tr>
                                                     </ng-template>
                                                     <ng-template pTemplate="summary" id="footer">
                                                         <label id="footer" class="footer">Total:</label>
-                                                        <input style="width: 5%;" [(ngModel)]="pnTable._totalRecords"
+                                                        <input class="footer-input-width" [(ngModel)]="pnTable._totalRecords"
                                                             [disabled]="true" pInputText type="text" />
                                                         &nbsp;&nbsp;
                                                         <label id="footer" class="footer1">Pages Count:</label>
 
-                                                        <input style="width: 5%;" [ngModel]="
+                                                        <input class="footer-input-width" [ngModel]="
                               getPageCount(pnTable._totalRecords, pnMappingPageSize)
                             " [disabled]="true" pInputText type="text" />
                                                     </ng-template>
@@ -368,7 +367,7 @@
                                                     [rowsPerPageOptions]="[10, 20, 50, 100]">
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <th style="padding: 8px 5px !important;"
+                                                            <th class="th-padding"
                                                                 *ngFor="let col of columns"
                                                                 [pSortableColumn]="col.field">
                                                                 {{ col.header }}
@@ -377,7 +376,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                                                <input style="width:100%;" pInputText type="text"
+                                                                <input class="table-header-input-width" pInputText type="text"
                                                                     (input)="
                                                                     aircraftTable.filter($event.target.value, col.field, 'contains')
                                                                     " />
@@ -396,20 +395,20 @@
                                                         *ngIf="aircraftList.length == 0">
                                                         <tr>
                                                             <td [attr.colspan]="3"
-                                                                style="color: red; font-weight: bold; text-align: center">
+                                                                class="no-records-cstm no-records-msg">
                                                                 No records found
                                                             </td>
                                                         </tr>
                                                     </ng-template>
                                                     <ng-template pTemplate="summary" id="footer">
                                                         <label id="footer" class="footer">Total:</label>
-                                                        <input style="width: 5%;"
+                                                        <input class="footer-input-width"
                                                             [(ngModel)]="aircraftTable._totalRecords" [disabled]="true"
                                                             pInputText type="text" />
                                                         &nbsp;&nbsp;
                                                         <label id="footer" class="footer1">Pages Count:</label>
 
-                                                        <input style="width: 5%;" [ngModel]="
+                                                        <input class="footer-input-width" [ngModel]="
                                                                 getPageCount(aircraftTable._totalRecords, aircraftPageSize)
                                                               " [disabled]="true" pInputText type="text" />
                                                     </ng-template>
@@ -435,7 +434,7 @@
                                                     [rowsPerPageOptions]="[10, 20, 50, 100]">
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <th style="padding: 8px 5px !important;"
+                                                            <th class="th-padding"
                                                                 *ngFor="let col of columns"
                                                                 [pSortableColumn]="col.field">
                                                                 {{ col.header }}
@@ -445,7 +444,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                                                <input style="width:100%;" pInputText type="text"
+                                                                <input class="table-header-input-width" pInputText type="text"
                                                                     (input)="
                                                                     ataTable.filter($event.target.value, col.field, 'contains')
                                                                     " />
@@ -464,19 +463,19 @@
                                                         *ngIf="ataList.length == 0">
                                                         <tr>
                                                             <td [attr.colspan]="2"
-                                                                style="color: red; font-weight: bold; text-align: center">
+                                                               class="no-records-msg no-records-cstm">
                                                                 No records found
                                                             </td>
                                                         </tr>
                                                     </ng-template>
                                                     <ng-template pTemplate="summary" id="footer">
                                                         <label id="footer" class="footer">Total:</label>
-                                                        <input style="width: 5%;" [(ngModel)]="ataTable._totalRecords"
+                                                        <input class="footer-input-width" [(ngModel)]="ataTable._totalRecords"
                                                             [disabled]="true" pInputText type="text" />
                                                         &nbsp;&nbsp;
                                                         <label id="footer" class="footer1">Pages Count:</label>
 
-                                                        <input style="width: 5%;" [ngModel]="
+                                                        <input class="footer-input-width" [ngModel]="
                                                                 getPageCount(ataTable._totalRecords, ataPageSize)
                                                               " [disabled]="true" pInputText type="text" />
                                                     </ng-template>

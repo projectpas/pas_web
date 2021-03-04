@@ -7,7 +7,39 @@
 	color: white;
 }
 
-
+.margin-bottom-0{
+	margin-bottom: 0px !important;
+}
+.margin-top-8{
+	margin-top:8px !important;
+}
+.ber-padding{
+	padding-right: 65px !important;
+}
+.ber-card-body{
+	padding: 10px 3px !important;
+}
+.cost-label-width{
+	width:68px !important;
+}
+.cost-replace-label{
+	margin-left: -16px !important ;width: 84px !important;
+}
+.workflow-cost-div{
+	max-width: 12.499999995% !important;
+}
+.text-end{
+	text-align:end !important;
+}
+.text-left{
+	text-align: left !important;
+}
+.text-start{
+	text-align:start !important;
+}
+.confirmation-p{
+	text-align:start !important;font-size: 13px !important;
+}
 
 /*--Default CSS--*/
 * {

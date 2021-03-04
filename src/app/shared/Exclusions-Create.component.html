@@ -1,25 +1,28 @@
 <div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
   style="height:380px;">
   <div *ngIf="!isEdit">
-    <span class="cat-heading cat4" style="width: 100% !important;z-index: 1;">Add Exclusions <i (click)="addRow()"
+    <span class="cat-heading cat4 header-div">Add Exclusions <i (click)="addRow()"
         class="fa fa-plus"></i></span>
   </div>
   <form #exclusionsCreateForm="ngForm">
     <table class="table table-bordered table-fixed workflow-table-exclusion workflowTable-class">
+     <thead>
       <tr>
         <th *ngIf="!isWorkFlow"><label>Task*</label></th>
-        <th ><label>EPN<span class="clr-red">*</span></label></th>
-        <th><label style="min-width: 90px;"> Description</label></th>
+        <th style="z-index: 1;"><label>EPN<span class="clr-red">*</span></label></th>
+        <th><label class="min-width-90"> Description</label></th>
         <th> <label>Condition<span class="clr-red">*</span></label></th>
         <th> <label> Item Classification</label></th>
-        <th><label style="min-width: 90px;"> Stock Type</label></th>
+        <th><label class="min-width-90"> Stock Type</label></th>
         <th><label>Qty </label></th>
         <th><label>Unit Cost</label></th>
-        <th><label style="min-width: 90px;">Extended Cost </label></th>
-        <th><label style="min-width: 145px;">Estimated % Occurance</label></th>
+        <th><label class="min-width-90">Extended Cost </label></th>
+        <th><label class="min-width-145">Estimated % Occurance</label></th>
         <th><label>Memo</label></th>
         <th><label>Action </label></th>
       </tr>
+      </thead>
+      <tbody>
       <tr [hidden]="exclusion.isDelete" *ngFor="let exclusion of workFlow.exclusions; let i = index">
        <td *ngIf="!isWorkFlow" class="vd_cls">
           <select class="form-control wf-pub-id full-width" [(ngModel)]="exclusion.taskId" name="task_{{i}}" required
@@ -28,7 +31,7 @@
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
           </select>
         </td>
-        <td style="width: 180px;">
+        <td class="width-180">
           <p-autoComplete appendTo="body" [(ngModel)]="exclusion.partName" [suggestions]="partCollection"
             (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
            class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
@@ -80,14 +83,13 @@
           </select>
         </td>
         <td >
-       <div class="form-group memo-popup-cstm mat_emo"
-            style="width: 120px;margin-bottom: 0;display: inline-flex;padding-top: 3px;">
+       <div class="form-group memo-popup-cstm mat_emo textarea-memo-div">
           <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>
             <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
               matTooltip="Memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(exclusion,i)"></i>
           </div>
         </td>
-        <td style="text-align: center;">
+        <td class="text-center">
           <button type="button" class="btn btn-danger nobg buton_back_bordernon" (click)="openDelete(content,exclusion,i)">
             <i class="fa fa-trash"></i>
           </button>
@@ -109,6 +111,7 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
+      </tbody>
     </table>
   </form>
   <ng-template #content let-c="close" let-d="dismiss">
@@ -169,24 +172,23 @@
     </div>
   </div>
 </div>
-<div *ngIf="(isWorkOrder && !isEdit) || (isQuote && !isEdit)" style="float:right">
-  <button class="btn btn-primary btn-primary" (click)="saveExclusionsWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="!exclusionsCreateForm.valid">
+<div *ngIf="(isWorkOrder && !isEdit) || (isQuote && !isEdit)" class="float-right">
+  <button class="btn btn-primary btn-primary m-t-10" (click)="saveExclusionsWorkOrder()" [disabled]="!exclusionsCreateForm.valid">
     {{isQuote?'Add':'Save'}}
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"
-    style="padding: 6px 12px !important;margin-top: 10px;" (click)="close();">
+  <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal"
+    (click)="close();">
     Close
   </button>
 </div>
 
-<div *ngIf="(isWorkOrder && isEdit) || (isQuote && isEdit)" style="float:right">
-  <button *ngIf="isWorkOrder || isQuote" class="btn btn-primary btn-primary" (click)="updateExclusionsWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="!exclusionsCreateForm.valid">
+<div *ngIf="(isWorkOrder && isEdit) || (isQuote && isEdit)" class="float-right">
+  <button *ngIf="isWorkOrder || isQuote" class="btn btn-primary m-t-10" (click)="updateExclusionsWorkOrder()"
+     [disabled]="!exclusionsCreateForm.valid">
     Update
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close();"
-    style="padding: 6px 12px !important;margin-top: 10px;">
+  <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal" (click)="close();"
+  >
     Close
   </button>
 </div>
