@@ -910,6 +910,11 @@ export class WorkOrderEndpointService extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getSiteByCustomerId(customerId));
             });    
         }
+        getShippingBillSiteByCustomerId(customerId){
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/Customer/cusshippingbillAddressGet/${customerId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getShippingBillSiteByCustomerId(customerId));
+            });    
+        }
 
         saveWorkOrderShipping(data){
             return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/createworkordershipping`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
@@ -1220,6 +1225,14 @@ reserveSubWoAltPartData(data){
             
         });
        }
+      }
+      getShippingDataList(WorkOrderId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId));
+          });
       }
 
 
