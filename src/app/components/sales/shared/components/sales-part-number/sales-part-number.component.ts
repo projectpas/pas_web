@@ -222,28 +222,30 @@ export class SalesPartNumberComponent {
 
     this.summaryColumns = [
       // { field: 'count', header: 'Item #', width: '50px', textalign: 'center' },
-      { field: 'itemNo', header: 'Line #', width: '50px', textalign: 'center' },
+      { field: 'itemNo', header: 'Line #', width: '42px', textalign: 'center' },
       { field: 'partNumber', header: 'PN',  width: "140px" },
       { field: 'partDescription', header: 'PN Description', width: '200px' },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },
       { field: 'conditionDescription', header: 'Cond', width: "70px" },
       { field: 'quantityRequested', header: 'Qty Req', width: "60px" },
-      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "70px" },
-      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Quoted', width: "75px" },
+      { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "84px" },
+      { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "84px" },
+      { field: 'quantityAvailable', header: 'Qty Avail', width: "75px" },
+      { field: 'quantityOnHand', header: 'Qty on Hand', width: "75px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "80px" },
       { field: 'uom', header: 'UOM', width: "58px" },
       { field: 'customerRef', header: 'Cust Ref', width: "120px" },
-      { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "120px" },
-      { field: 'salesDiscountExtended', header: 'Disc Amt', width: "120px" },
+      { field: 'grossSalePrice', header: 'Gross Sale Amt', width: "90px" },
+      { field: 'salesDiscountExtended', header: 'Disc Amt', width: "90px" },
       { field: 'netSalesPriceExtended', header: 'Net Sale Amt', width: "84px" },
-      { field: 'misc', header: 'Misc', width: "70px" },
-      { field: 'freight', header: 'Freight', width: "80px" },
-      { field: 'taxAmount', header: 'Tax Amt', width: "80px" },
+      { field: 'misc', header: 'Misc', width: "79px" },
+      { field: 'freight', header: 'Freight', width: "84px" },
+      { field: 'taxAmount', header: 'Tax Amt', width: "84px" },
       { field: 'totalSales', header: 'Total', width: "95px" },
       { field: 'unitCostExtended', header: 'Extended Cost', width: "90px" },
-      { field: 'marginAmountExtended', header: 'Prod Margin', width: "80px" },
-      { field: 'marginPercentageExtended', header: 'Prod Margin%', width: "90px" }
+      { field: 'marginAmountExtended', header: 'Prod Margin', width: "103px" },
+      { field: 'marginPercentageExtended', header: 'Prod Margin%', width: "102px" }
     ]
     // if (!this.isViewMode) {
     //   // { header: "Notes", width: "100px" },
@@ -348,6 +350,7 @@ export class SalesPartNumberComponent {
           this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.serialNumber = this.selectedPart.serialNumber;
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
+          this.part.qtyOnHand = this.selectedPart.qtyOnHand;
           // if (this.selectedPart.itemClassification) {
           //   this.part.masterCompanyId = this.selectedPart.itemClassification.masterCompanyId;
           // } else {
@@ -808,6 +811,8 @@ export class SalesPartNumberComponent {
     uniquePart.conditionId = parts[0].conditionId;
     uniquePart.marginPercentageExtended = (uniquePart.marginPercentageExtended) / parts.length;
     uniquePart.itemNo = parts[0].itemNo;
+    uniquePart.quantityAvailable = parts[0].qtyAvailable;
+    uniquePart.quantityOnHand = parts[0].qtyOnHand;
     this.countItemNo = parts[0].itemNo;
     return uniquePart;
   }

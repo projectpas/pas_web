@@ -837,4 +837,22 @@ export class SalesOrderBillingComponent implements OnInit {
             }
         });
     }
+
+    checked(evt, ship) {
+        ship.selected = evt.target.checked;
+        this.checkIsChecked();
+    }
+
+    disableCreateInvoiceBtn: boolean = true;
+
+    checkIsChecked() {
+        this.billingList.forEach(a => {
+            a.salesOrderBillingInvoiceChild.forEach(ele => {
+                if (ele.selected)
+                    this.disableCreateInvoiceBtn = false;
+                else
+                    this.disableCreateInvoiceBtn = true;
+            });
+        });
+    }
 }

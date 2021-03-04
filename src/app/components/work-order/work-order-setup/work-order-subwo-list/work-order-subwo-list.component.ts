@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { CopyConsiderationsForSalesQuote } from 'src/app/components/sales/quotes/models/copy-considerations-for-sales-quote';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 declare var $ : any;
 
@@ -30,7 +29,11 @@ export class SubWorkOrderListComponent implements OnInit {
         // { field: 'workScope', header: 'Work Scope' },
         { field: 'openDate', header: 'Open Date' },
         // { field: 'needDate', header: 'NeedDate' },
-        // { field: 'stage', header: 'Stage' },
+        // { field: 'stage', header: 'Stage' }, 
+        { field: "createdDate", header: "Created Date", width: "130px" },
+        { field: "createdBy", header: "CreatedBy", width: "130px" },
+        { field: "updatedDate", header: "Updated Date", width: "130px" },
+        { field: "updatedBy", header: "UpdatedBy", width: "130px" }
 
     ]
     subWorkOrderHeader: any;

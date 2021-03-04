@@ -35,7 +35,8 @@ export class TextCommonComponent implements OnInit, OnChanges {
     pageSize: number = 10;
      memoPopupContent: any;
     pageIndex: number = 0;
-    selectedOnly: boolean = false;
+    //selectedOnly: boolean = false;
+    selectedOnly: any;
     targetData: any;
     totalRecords: number = 0;
     totalPages: number;
@@ -348,7 +349,6 @@ export class TextCommonComponent implements OnInit, OnChanges {
     }
 
     formData(data) {
-
         return data.map((x) => {
             let toData = {
                 "Mobile": x.mobile,
@@ -359,15 +359,17 @@ export class TextCommonComponent implements OnInit, OnChanges {
                 "ModuleId": this.moduleId,
                 "ReferenceId": this.referenceId,
                 "MasterCompanyId": this.authService.currentUser.masterCompanyId,
-                "CreatedBy": "admin",
-                "UpdatedBy": "admin",
-                "CreatedDate": "2019-12-31T04:30:28.21",
-                "UpdatedDate": "2019-12-31T04:30:28.21",
+                "CreatedBy": this.userName,
+                "UpdatedBy": this.userName,
+                "CreatedDate": new Date(),
+                "UpdatedDate": new Date(),
                 "IsActive": true,
                 "IsDeleted": false
             }
             if (this.isEdit) {
                 toData['communicationTextId'] = x.communicationTextId;
+                toData["CreatedBy"] = x.createdBy;
+                toData["CreatedDate"] = x.createdDate;
             }
             return toData;
         })

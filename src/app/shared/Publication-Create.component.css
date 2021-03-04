@@ -105,3 +105,18 @@ select:disabled {
     padding-left: 5px;
     text-align: center;
 }
+.view-icon{
+    margin-top: 4px !important; margin-left: 4px !important;
+}
+.attachment-padding-10{
+    padding-left: 10px !important;
+}
+.padding-right-5{
+    padding-right: 5px !important;
+}
+.width-200{
+    width: 200px !important;
+}
+.th-padding{
+    padding: 8px 5px !important;
+}
