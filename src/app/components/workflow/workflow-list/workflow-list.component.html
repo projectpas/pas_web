@@ -1449,10 +1449,100 @@
                                         <td>{{publication.verifiedBy}}</td>
                                         <td>{{publication.verifiedDate}}</td>
                                         <td>{{publication.status ? 'Active': 'In Active' }}</td>
-                                        <td><a href="{{publication.attachmentURL}}" class="img-responsive" alt="">View</a></td>
+                                        <!-- <td><a href="{{publication.attachmentURL}}" class="img-responsive" alt="">View</a></td> -->
+                                        <td>
+                                            <button class="btn btn-danger nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <ng-template #content let-c="close" let-d="dismiss">
+                                <div class="modal-header">        
+                                    <h4 class="modal-title">Documnet Details</h4>
+                                    <button type="button" class="close" aria-label="Close" (click)="dismissModelView()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>      
+                                </div>
+                                <div class="modal-body">
+                                    <p-table
+                                    #dt
+                                    class="table-responsive ptable-cus-pma"
+                                    [paginator]="documentList.length > 0"
+                                    [value]="documentList"
+                                    [rows]="3"
+                                    [columns]="sourceViewforDocumentListColumns"
+                                  >
+                                    <ng-template pTemplate="header" let-columns>
+                                      <tr>
+                                        <th *ngFor="let col of columns">
+                                          {{ col.header }}
+                                        </th>
+                                        <th>
+                                          Download
+                                        </th>
+                                      </tr>
+                                      <tr>
+                                        <th
+                                         class="table-column-width"
+                                          *ngFor="let col of columns"
+                                          [ngSwitch]="col.field"
+                                        >
+                                          <input
+                                           class="incorn_border table-header-input-width"
+                                            pInputText
+                                            type="text"
+                                            (input)="
+                                              dt.filter($event.target.value, col.field, 'contains')
+                                            "
+                                          />
+                                        </th>
+                                        <th></th>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template
+                                      pTemplate="body"
+                                      let-part
+                                      let-rowData
+                                      let-columns="columns"
+                                      let-i="rowIndex"
+                                    >
+                                      <tr>
+                                        <td *ngFor="let col of columns">
+                                          <ng-container *ngIf="col.field == 'fileName'">
+                                            {{ part[col.field] }}
+                                          </ng-container>
+                                        </td>
+                                        <td class="text_c text-center">
+                                          <button 
+                                            (click)="downloadFile(part)"
+                                            matTooltip="Download"  matTooltipPosition="above"
+                                            class="downld download-button"
+                                            ><span><i class="fa fa-download"></i></span
+                                          ></button>
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                    <ng-template
+                                      pTemplate="emptymessage"
+                                      let-columns
+                                    >
+                                      <tr>
+                                        <td
+                                          [attr.colspan]="2"
+                                          class="no-records-msg no-records-cstm"
+                                        >
+                                          No records found
+                                        </td>
+                                      </tr>
+                                    </ng-template>
+                                  </p-table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" (click)="dismissModelView()">Close</button>
+                                </div>
+                              </ng-template>
                             </div>
                         </div>
                     </div>
