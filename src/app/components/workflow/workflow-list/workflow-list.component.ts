@@ -434,7 +434,6 @@ export class WorkflowListComponent implements OnInit {
                 this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
 //                if(this.sourceWorkFlow &&  this.sourceWorkFlow.expertise && this.sourceWorkFlow.expertise.length !=0){
-// console.log("test cons",this.sourceWorkFlow)
 //                 this.sourceWorkFlow.expertise.forEach(element => {
 //                      return  element.estimatedHours=  formatNumberAsGlobalSettingsModule(element.estimatedHours, 2);
 //                 });
@@ -528,12 +527,9 @@ export class WorkflowListComponent implements OnInit {
                 this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
             }
         }
-        debugger;
-        console.log(" this.sourceWorkFlow.expertise",  this.sourceWorkFlow.expertiset)
         for (let expertise of this.sourceWorkFlow.expertise) {
             this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
-            console.log("expertise", this.TotalExpertiseCost)
-        }
+       }
         this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
         const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const val0 = ((MaterialCost / 100) *  this.sourceWorkFlow.percentageOfMaterial) + MaterialCost;
@@ -584,7 +580,6 @@ export class WorkflowListComponent implements OnInit {
 
     private getUniqueTask(): any[] {
         var tasks = [];
-console.log("hello ")
         var taskIds = [];
         if (this.sourceWorkFlow && this.sourceWorkFlow.charges && this.sourceWorkFlow.charges.length > 0) {
   
@@ -753,7 +748,6 @@ console.log("hello ")
             var totalDirectLaborCost = 0;
             var totalOHCost = 0;
             var totalDirectLabourAndOHCost = 0;
-
             task.expertise = this.sourceWorkFlow.expertise.filter(x => {
                 if (x.taskId == task.Id) {
                     // totalEstimatedHours += x.estimatedHours == undefined && x.estimatedHours == '' ? 0 : x.estimatedHours;
@@ -771,8 +765,7 @@ console.log("hello ")
                 return x.taskId == task.Id;
             });
         
-            
-           task.expertiseTotalEstimatedHours=totalEstimatedHours;
+      task.expertiseTotalEstimatedHours=totalEstimatedHours;
            task.expertiseTotalDirectLaborCost=totalDirectLaborCost;
            task.expertiseTotalOHCost=totalOHCost;
            task.expertiseTotalDirectLabourAndOHCost=totalDirectLabourAndOHCost;
@@ -780,7 +773,7 @@ console.log("hello ")
             // task.expertiseTotalEstimatedHours = task.expertiseTotalEstimatedHours?  formatNumberAsGlobalSettingsModule( task.expertiseTotalEstimatedHours, 2) :0.00;
             // task.expertiseTotalDirectLaborCost = task.expertiseTotalDirectLaborCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLaborCost, 2) : 0.00;
             // task.expertiseTotalOHCost = totalOHCost ? formatNumberAsGlobalSettingsModule(totalOHCost, 2) : null;
-            // task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
+            task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
             var materialTotalQty = 0;
             var materialTotalExtendedCost = 0;
             var materialTotalPrice = 0;
@@ -813,7 +806,6 @@ console.log("hello ")
 
 
         }
-  console.log("added all tasks",this.addedTasks);
              // modify the taks keys
      this.addedTasks.forEach(element => {
         if(element.charges){
@@ -839,14 +831,18 @@ console.log("hello ")
 
 
 if(element.expertise){
-element.expertise.forEach(x => {
-        x.laborDirectRate= x.laborDirectRate ? formatNumberAsGlobalSettingsModule(x.laborDirectRate, 2) : null,
-        x.directLaborRate= x.directLaborRate ? formatNumberAsGlobalSettingsModule(x.directLaborRate, 2) : null,
-        x.overheadBurden= x.overheadBurden ? formatNumberAsGlobalSettingsModule(x.overheadBurden, 2) : null,
-        x.overheadCost= x.overheadCost ? formatNumberAsGlobalSettingsModule(x.overheadCost, 2) : null,
-        x.laborOverheadCost= x.laborOverheadCost ? formatNumberAsGlobalSettingsModule(x.laborOverheadCost, 2) : null,
-        x.estimatedHours=x.estimatedHours ? formatNumberAsGlobalSettingsModule(x.estimatedHours, 2) : null
+
+    
+setTimeout(() => {
+    element.expertise.forEach(x => {
+        x.laborDirectRate= x.laborDirectRate ? formatNumberAsGlobalSettingsModule(x.laborDirectRate, 2) : 0.00,
+        x.directLaborRate= x.directLaborRate ? formatNumberAsGlobalSettingsModule(x.directLaborRate, 2) : 0.00,
+        x.overheadBurden= x.overheadBurden ? formatNumberAsGlobalSettingsModule(x.overheadBurden, 2) : 0.00,
+        x.overheadCost= x.overheadCost ? formatNumberAsGlobalSettingsModule(x.overheadCost, 2) : 0.00,
+        x.laborOverheadCost= x.laborOverheadCost ? formatNumberAsGlobalSettingsModule(x.laborOverheadCost, 2) : 0.00,
+        x.estimatedHours=x.estimatedHours ? formatNumberAsGlobalSettingsModule(x.estimatedHours, 2) : 0.00
 });
+}, 1200);
 }
 if(element.exclusions){
     element.exclusions.forEach(x => {
