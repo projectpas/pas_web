@@ -109,12 +109,19 @@
                             data-target="#deleteRowConfirmation"><a class="btn nobg btn-delete-cstm"
                                 (click)="showDeleteConfirmation(rowData)" matTooltip="Delete"
                                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                        <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
-                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
-                                <i class="fa fa-history"></i></a></span>
+                        <!-- <button class="btn btn-danger nobg" > (click)="data.splice(i, 1)"
+                                <a href="#" data-toggle="modal" data-target="#viewEmail" (click)="emailView(rowData)">
+                            <i _ngcontent-c313="" class="fa fa-eye view_icon_adjust"></i></a>
+                        </button> -->
+                        <!-- <button class="btn btn-danger nobg" (click)="addList.splice(i, 1)">
+                                <i class="fa fa-trash"></i>
+                            </button> -->
                         <span *ngIf="deletedStatusInfo==true && !isView">
                             <a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
                                 matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
+                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
+                                <i class="fa fa-history"></i></a></span>
                     </td>
                 </tr>
             </ng-template>
@@ -167,92 +174,92 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                    <div class="tableFixHead">
-                        <table class="table table-bordered header-table-width">
-                            <thead>
-                                <tr>
-                                    <th>Email Type</th>
-                                    <th>To Email</th>
-                                    <th>CC </th>
-                                    <th>BCC </th>
-                                    <th>Subject</th>
-                                    <th>Contacted By</th>
-                                    <th>Contact Date</th>
-                                    <th><span *ngIf="type==1">Customer</span> <span *ngIf="type==2">Vendor</span>
-                                        Contact
-                                    </th>
-                                    <th>Email Content</th>
-                                    <th>File Name</th>
-                                    <th>Created Date</th>
-                                    <th>Created By</th>
-                                    <th> Updated Date</th>
-                                    <th>Updated By</th>
-                                    <th>Is Deleted</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let audit of documentauditHisory; let i = index;">
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'emailType', audit.emailType)  ? 'black' : 'red'  }">
-                                        {{audit.emailType}}</td>
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'toEmail', audit.toEmail)  ? 'black' : 'red'  }">
-                                        {{audit.toEmail}}</td>
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'cc', audit.cc)  ? 'black' : 'red'  }">
-                                        {{audit.cc}}</td>
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'bcc', audit.bcc)  ? 'black' : 'red'  }">
-                                        {{audit.bcc}}</td>
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'subject', audit.subject)  ? 'black' : 'red'  }">
-                                        {{audit.subject}}</td>
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactBy', audit.contactBy)  ? 'black' : 'red'  }">
-                                        {{audit.contactBy}}</td>
-                                    <td
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactDate', audit.contactDate)  ? 'black' : 'red'  }">
-                                        {{audit.contactDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                    <td *ngIf="type==1"
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerContact', audit.customerContact)  ? 'black' : 'red'  }">
-                                        {{audit.customerContact}}</td>
-                                    <td *ngIf="type==2"
-                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorContact', audit.vendorContact)  ? 'black' : 'red'  }">
-                                        {{audit.vendorContact}}</td>
-                                    <td
-                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'emailBody', audit.emailBody)  ? 'black' : 'red'  }">
-                                        <p [innerHTML]="audit.emailBody"></p>
-                                    </td>
-                                    <td>
-                                <tr *ngFor="let x of audit.attachmentDetails">
-                                    <a [ngStyle]="{'color':  getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }"
-                                        class="filelink" (click)="downloadFile(x)"> {{x.fileName}} <span
-                                            *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
-                                </tr>
+                   <div class="tableFixHead">
+                    <table class="table table-bordered header-table-width">
+                        <thead>
+                            <tr>
+                                <th>Email Type</th>
+                                <th>To Email</th>
+                                <th>CC </th>
+                                <th>BCC </th>
+                                <th>Subject</th>
+                                <th>Contacted By</th>
+                                <th>Contact Date</th>
+                                <th><span *ngIf="type==1">Customer</span> <span *ngIf="type==2">Vendor</span> Contact
+                                </th>
+                                <th>Email Content</th>
+                                <th>File Name</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th> Updated Date</th>
+                                <th>Updated By</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let audit of documentauditHisory; let i = index;">
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'emailType', audit.emailType)  ? 'black' : 'red'  }">
+                                    {{audit.emailType}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'toEmail', audit.toEmail)  ? 'black' : 'red'  }">
+                                    {{audit.toEmail}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'cc', audit.cc)  ? 'black' : 'red'  }">
+                                    {{audit.cc}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'bcc', audit.bcc)  ? 'black' : 'red'  }">
+                                    {{audit.bcc}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'subject', audit.subject)  ? 'black' : 'red'  }">
+                                    {{audit.subject}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactBy', audit.contactBy)  ? 'black' : 'red'  }">
+                                    {{audit.contactBy}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactDate', audit.contactDate)  ? 'black' : 'red'  }">
+                                    {{audit.contactDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+
+                                <td *ngIf="type==1"
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerContact', audit.customerContact)  ? 'black' : 'red'  }">
+                                    {{audit.customerContact}}</td>
+                                <td *ngIf="type==2"
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorContact', audit.vendorContact)  ? 'black' : 'red'  }">
+                                    {{audit.vendorContact}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'emailBody', audit.emailBody)  ? 'black' : 'red'  }">
+                                    <p [innerHTML]="audit.emailBody"></p>
                                 </td>
-                                <td
-                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
-                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                <td
-                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
-                                    {{audit.createdBy}}</td>
-                                <td
-                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
-                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                <td
-                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
-                                    {{audit.updatedBy}}</td>
-                                <td class="text-center">
-                                    <span class="value">
-                                        <label class="wauto">
-                                            <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true"
-                                                disabled>
-                                        </label>
-                                    </span>
-                                </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                <td>
+                            <tr *ngFor="let x of audit.attachmentDetails">
+                                <a [ngStyle]="{'color':  getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }"
+                                    class="filelink" (click)="downloadFileUpload(x.link)"> {{x.fileName}} <span
+                                        *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
+                            </tr>
+                            </td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                {{audit.createdBy}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                            <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                {{audit.updatedBy}}</td>
+                            <td class="text-center">
+                                <span class="value">
+                                    <label class="wauto">
+                                        <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true"
+                                            disabled>
+                                    </label>
+                                </span>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -472,7 +479,7 @@
                         <span class="label" style="float: left;"><strong> Email Content: </strong></span>
                         <span class="value" [innerHTML]="emailViewData.emailBody"></span>
                     </p>
-                    <div>
+                    <!-- <div>
                         <label class="label attachments-label-width">Attachments:</label>
                         <ul style="list-style: none;">
                             <li *ngFor="let attachment of emailViewData.attachmentDetails">
@@ -481,7 +488,89 @@
                                     {{ attachment.link }}</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
+                    <div class="mt-3">
+                        <label class="label attachments-label-width">Attachments:</label>
+                        <p-table
+                          #dtatt
+                          class="table-responsive ptable-cus-pma"
+                          [paginator]="attachmentDetails.length > 0"
+                          [value]="attachmentDetails"
+                          [rows]="3"
+                          [columns]="sourceViewforListColumns"
+                        >
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <th *ngFor="let col of columns">
+                                {{ col.header }}
+                              </th>
+                              <th>
+                                Download
+                              </th>
+                            </tr>
+                            <tr>
+                              <th
+                                style="width:auto"
+                                *ngFor="let col of columns"
+                                [ngSwitch]="col.field"
+                              >
+                                <input
+                                  style="width:100%;" class="incorn_border"
+                                  pInputText
+                                  type="text"
+                                  (input)="
+                                  dtatt.filter($event.target.value, col.field, 'contains')
+                                  "
+                                />
+                              </th>
+                              <th></th>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="body"
+                            let-part
+                            let-rowData
+                            let-columns="columns"
+                            let-i="rowIndex"
+                          >
+                            <tr>
+                              <td *ngFor="let col of columns">
+                                <ng-container *ngIf="col.field == 'fileName'">
+                                  {{ part[col.field] }}
+                                </ng-container>
+                              </td>
+                              <td class="text_c">
+                                <button *ngIf="part.attachmentId!=0"
+                                  (click)="downloadFileUpload(part.link)"
+                                  matTooltip="Download"  matTooltipPosition="above"
+                                  class="downld"
+                                  ><span><i class="fa fa-download"></i></span
+                                ></button>
+                                <button *ngIf="part.attachmentId==0" 
+                               
+                                matTooltip="Download will be enabled after Save Records"  matTooltipPosition="above"
+                                class="downld"
+                                ><span><i class="fa fa-download"></i></span
+                              ></button>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="emptymessage"
+                            let-columns
+                            *ngIf="attachmentDetails.length == 0"
+                          >
+                            <tr>
+                              <td
+                                [attr.colspan]="2"
+                                style="color: red; font-weight: bold; text-align: center"
+                              >
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

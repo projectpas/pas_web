@@ -338,9 +338,9 @@ export class WorkOrderListComponent implements OnInit {
         } else if (key === 'estimatedCompletionDateType' && data[key]) {
             return data['estimatedCompletionDateType'] !== 'Multiple' ? moment(data['estimatedCompletionDate']).format('MM/DD/YYYY') : data['estimatedCompletionDateType'];
         } else if (key === 'createdDate' && data[key]) {
-            return moment(data['createdDate']).format('MM/DD/YYYY h:m:a');
+            return moment(data['createdDate']).format('MM/DD/YYYY h:m a');
         } else if (key === 'updatedDate' && data[key]) {
-            return moment(data['updatedDate']).format('MM/DD/YYYY h:m:a');
+            return moment(data['updatedDate']).format('MM/DD/YYYY h:m a');
         } else {
             return data[key];
         }

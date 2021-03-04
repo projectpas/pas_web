@@ -1,15 +1,18 @@
-<div class="fixed-table-container-inner table-responsive cat4-table" style="height:380px;">
-  <div style="position: absolute; width: 100%; z-index: 1;">
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="height:380px;">
+  <div class="header-div">
     <span class="cat-heading cat4">Add Directions<i (click)="addRow()" class="fa fa-plus"></i></span>
   </div>
-  <table class="table table-bordered table-fixed workflow-table-direc workflowTable-class" style="margin-top:31px;">
+  <table class="table table-bordered table-fixed workflow-table-direc workflowTable-class margin-top-31">
+    <thead class="thead-light">
     <tr>
       <th><label>Action<span class="clr-red">*</span></label></th>
       <th><label>Description </label></th>
       <th><label>Sequence</label></th>
-      <th><label>Memo</label></th>
+      <th style="z-index: 1;"><label>Memo</label></th>
       <th><label>Action</label></th>
     </tr>
+    </thead>
+    <tbody>
     <tr [hidden]="direction.isDelete" *ngFor="let direction of workFlow.directions; let i = index">
       <td>
         <input type="text" value="{{ direction.action }}" [(ngModel)]="direction.action" class="form-control"
@@ -19,26 +22,27 @@
         <input type="text" pInputText value="{{ direction.description }}" [(ngModel)]="direction.description"
           class="form-control" />
       </td>
-      <td class="text-center" style="width: 100px;">
+      <td class="text-center td-width-100">
         <input type="text" maxlength="10" pInputText pKeyFilter="pnum"
           (focusout)="checkDuplicateSequence($event, direction)" value="{{ direction.sequence }}" maxlength="5"
-          [(ngModel)]="direction.sequence" class="form-control text-right" style="width: 100px;" />
+          [(ngModel)]="direction.sequence" class="form-control text-right td-width-100" />
       </td>
-      <td style="width: 280px;">
-        <div class="form-group notes-popup-cstm mat_emo"
-          style="width: 280px;  display: inline-flex;   margin-bottom: 0;">
-          <div [innerHTML]="direction.memo" class="text_editor_box" style="width: 280px;"></div>
-          <i class=" fa fa-pencil" data-toggle="modal" style="position: relative;top: 6px; color: royalblue !important; margin-left: 5px;"
+      <td class="td-width-280">
+        <div class="form-group notes-popup-cstm mat_emo memo-pencil-div">
+          <div [innerHTML]="direction.memo" class="text_editor_box td-width-280"></div>
+          <i class=" fa fa-pencil memo-pencil" data-toggle="modal"
+          
             data-target="#textarea-popupMemo" matTooltip="Memo" matTooltipPosition="above"
             (click)="onAddTextAreaInfo(direction,i)"></i>
         </div>
       </td>
-      <td style="text-align: center;">
+      <td class="text-center">
         <button class="btn btn-danger nobg" (click)="openDelete(content,direction,i)">
           <i class="fa fa-trash"></i>
         </button>
       </td>
     </tr>
+    </tbody>
   </table>
 </div>
 

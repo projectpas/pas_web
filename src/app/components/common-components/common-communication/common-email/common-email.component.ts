@@ -70,7 +70,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     moduleName: any = "Communication";
     isSpinnerVisible: boolean = false;
     deletingRecord: any;
-    constructor(private communicationService: CommunicationService,
+    sourceViewforListColumns = [
+        { field: 'fileName', header: 'File Name' },
+    ]
+    constructor(private activeModal: NgbActiveModal,
+        private communicationService: CommunicationService,
         private commonService: CommonService, private datePipe: DatePipe,
         private authService: AuthService, private modalService: NgbModal, 
         private alertService: AlertService, private configurations: ConfigurationService,
@@ -89,6 +93,11 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         if (this.isView == false) {
             this.getAllEmployees('');
             this.getAllEmailType('');
+            if (this.type == 1) {
+                this.customerContacts('');
+            } else {
+                this.vendorContacts('');
+            }
         }
         this.getAllEmail();
         this.moduleId = this.moduleId;
@@ -249,7 +258,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         }
     }
     triggerMailSalesQuote() {
-        this.formData = new FormData();
+        //this.formData = new FormData();
         if (this.cc == undefined) {
             this.cc = ""
         }
@@ -276,7 +285,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             contactById: this.contactBy.employeeId,
             emailType: this.emailType,
             Type: this.type,
-            customerContact: this.type == 1 ? this.customerContact.contactId : this.customerContact.contactId,
+            customerContactId: this.type == 1 ? this.customerContact.contactId : this.customerContact.contactId,
         }
         for (var key in data) {
             this.formData.append(key, data[key]);
@@ -364,6 +373,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
             }
         )
     }
+    attachmentDetails=[];
     emailView(data) {
         this.isSpinnerVisible = true;
         this.communicationService.getEmailDataByEmailId(data.emailId)
@@ -371,6 +381,8 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                 (res) => {
                     this.isSpinnerVisible = false;
                     this.emailViewData = res;
+                    this.attachmentDetails = res.attachmentDetails;
+                    console.log("res ", res);;
                 }, err => {
                     this.errorMessageHandler();
                 }
@@ -503,7 +515,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type)
             .subscribe(
                 (res: any[]) => {
-
+                    console.log("res" , res);
                     this.isSpinnerVisible = false;
                     if (res && res.length != 0) {
                         this.data = res.map(x => {

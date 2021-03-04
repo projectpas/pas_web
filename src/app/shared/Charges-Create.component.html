@@ -20,27 +20,34 @@
         <th><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
         <th style="z-index:1"><label>Vendor Name</label></th>
         <th *ngIf="!isQuote && !isEdit">
-          <label style="text-align: left;">Actions </label>
+          <label class="text-left">Actions </label>
         </th>
       </tr>
       </thead>
       <tbody>
       <tr class="charge-tr" [hidden]="charge.isDelete" *ngFor="let charge of workFlow.charges; let i = index">
         <td *ngIf="!isWorkFlow">
-          <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
+          <!-- <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
             (change)="onTaskChange(charge)">
             <option value="">--Select--</option>
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
-          </select>
+          </select> -->
+
+          <p-dropdown placeholder="--Select--" required (ngModelChange)="getActive()" optionLabel="description" [showClear]="true" filter="true" name="dimen{{ i }}" [options]="taskList"
+          class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="charge.taskId">
+        </p-dropdown> 
         </td>
         <td>
-          <select class="form-control full-width" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
-            [(ngModel)]="charge.workflowChargeTypeId" style="border-radius: 4px;" name="type_{{i}}" required>
+          <select class="form-control full-width border-radius-4" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
+            [(ngModel)]="charge.workflowChargeTypeId" name="type_{{i}}" required>
             <option [value]="0">--Select--</option>
             <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
               ctype.chargeType
             }}</option>
           </select>
+          <!-- <p-dropdown placeholder="--Select--" id="dllChargesType"   (ngModelChange)="getActive()" optionLabel="chargeType" [showClear]="true" filter="true" name="type_{{i}}" [options]="chargesTypes"
+          class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="charge.workflowChargeTypeId" required>
+        </p-dropdown>  -->
         </td>
         <td *ngIf="isWorkOrder || isQuote">
           <input type="text" pInputText pKeyFilter="money1" (ngModelChange)="getActive()" class="form-control" [disabled]="true"
@@ -76,12 +83,12 @@
         </td>
         <td>
           <p-autoComplete [(ngModel)]="charge.vendor" (ngModelChange)="getActive()" [suggestions]="vendorCollection" [forceSelection]="true"
-            (completeMethod)="filterVendor($event)" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
+            (completeMethod)="filterVendor($event)" appendTo='body' [baseZIndex]="9999" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
            [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
           </p-autoComplete>
         </td>
         <!-- [disabled]="!charge.isShowDelete"  -->
-        <td *ngIf="!isQuote &&  !isEdit" style="text-align: center;">
+        <td *ngIf="!isQuote &&  !isEdit" class="text-center">
           <button class="btn btn-danger nobg"  (click)="openDelete(content,charge,i)">
             <i class="fa fa-trash"></i>
           </button>
@@ -111,24 +118,22 @@
   </form>
 
 
-<div *ngIf="isWorkOrder && !isEdit" style="float:right">
-  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="saveChargesWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="!chargesCreateForm.valid">
+<div *ngIf="isWorkOrder && !isEdit" class="float-right">
+  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="saveChargesWorkOrder()" [disabled]="!chargesCreateForm.valid">
     {{ isQuote ? 'Add' : 'Save' }}
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"
-    style="padding: 6px 12px !important;margin-top: 10px;" (click)="close()">
+  <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal" (click)="close()">
     Close
   </button>
 </div>
 
-<div *ngIf="isWorkOrder && isEdit" style="float:right">
-  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateChargesWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="disableUpdate">
+<div *ngIf="isWorkOrder && isEdit" class="float-right">
+  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="updateChargesWorkOrder()"
+     [disabled]="disableUpdate">
     Update
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"
-    style="padding: 6px 12px !important;margin-top: 10px;" (click)="close()">
+  <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal"
+     (click)="close()">
     Close
   </button>
 </div>

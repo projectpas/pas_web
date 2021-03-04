@@ -207,8 +207,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
             "ModuleId": this.moduleId,
             "ReferenceId": this.referenceId,
             "MasterCompanyId": this.authService.currentUser.masterCompanyId,
-            "CreatedBy": "admin",
-            "UpdatedBy": "admin",
+            "CreatedBy": this.userName,
+            "UpdatedBy": this.userName,
             "CreatedDate": new Date(),
             "UpdatedDate": new Date(),
             "IsActive": true,
@@ -217,6 +217,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
         }
         if (this.isEdit) {
             returnData["MemoId"] = data.memoId;
+            returnData["CreatedBy"] = data.createdBy;
+            returnData["CreatedDate"] = data.createdDate;
         }
         return returnData;
     }

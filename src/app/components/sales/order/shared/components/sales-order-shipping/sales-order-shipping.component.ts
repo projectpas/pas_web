@@ -106,12 +106,12 @@ export class SalesOrderShippingComponent {
         // this.selectedColumns = this.headers;
 
         this.headers = [
-            { field: "itemNo", header: "Item #", width: "100px" },
+            //{ field: "itemNo", header: "Item #", width: "100px" },
             { field: "salesOrderNumber", header: "SO Num", width: "100px" },
             { field: "partNumber", header: "PN", width: "100px" },
             { field: "partDescription", header: "PN Description", width: "100px" },
-            { field: "qtyToShip", header: "Qty Picked", width: "110px" },
-            { field: "qtyShipped", header: "Qty Shipped", width: "90px" },
+            { field: "qtyToShip", header: "Qty Picked", width: "65px" },
+            { field: "qtyShipped", header: "Qty Shipped", width: "65px" },
             { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
             { field: "status", header: "Status", width: "90px" },
         ];
