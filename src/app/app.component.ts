@@ -1721,6 +1721,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         });
       }
       }
+      else{
+        this.megaMenuItems=[];
+      }
       }
 
       setTimeout(() => {

@@ -390,9 +390,9 @@ export class EditUserRolesComponent implements OnInit {
         if (modules != undefined && modules.length > 0) {
             for (let module of modules) {
                 this.setPermissionByType(module, type, checkedValue);
-                if (module.isPage) {
+                //if (module.isPage) {
                     this.pages.push(module);
-                }
+                //}
                 this.hasPages(module, type, checkedValue);
             }
         }

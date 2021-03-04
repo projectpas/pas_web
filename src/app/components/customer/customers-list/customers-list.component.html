@@ -299,7 +299,7 @@
                 matTooltipPosition="above"
                 (onChange)="changeStatus(rowData)"
               ></p-inputSwitch>
-              <span
+              <span 
                 ><a
                   class="btn nobg"
                   (click)="viewSelectedRow(rowData)"
@@ -308,7 +308,7 @@
                   ><i class="fa fa-eye"></i
                 ></a>
               </span>
-              <span
+              <span *ngIf="isEdit"
                 ><a
                   class="btn nobg btn-users-cstm"
                   (click)="restore(restorePopupId, rowData)"
