@@ -375,7 +375,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
     }
 
     showAlternateParts(event) {
-        debugger;
         if (event == true) {
             this.parts = [...this.onlyParts, ...this.altParts]
         } else {

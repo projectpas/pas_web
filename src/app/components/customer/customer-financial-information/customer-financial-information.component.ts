@@ -284,7 +284,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
               if (this.id) {
                 this.toGetDocumentsListNew(this.id);
-                //this.getFinanceInfoByCustomerId();
+                this.getFinanceInfoByCustomerId();
               }
 
               this.savedGeneralInformationData = {

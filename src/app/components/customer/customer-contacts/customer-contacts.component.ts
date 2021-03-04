@@ -176,13 +176,15 @@ export class CustomerContactsComponent implements OnInit {
 		private configurations: ConfigurationService,
 		private commonService: CommonService,
 		private atamain: AtaMainService,
+		private _actRoute: ActivatedRoute,
 		private datePipe: DatePipe
 	) {
 		this.stopmulticlicks = false;
 	}
 
 	ngOnInit() {
-
+		this.id = this._actRoute.snapshot.params['id'];	
+		
 		if (this.editMode) {
 			this.id = this.editGeneralInformationData.customerId;
 			this.customerCode = this.editGeneralInformationData.customerCode;
@@ -700,7 +702,9 @@ export class CustomerContactsComponent implements OnInit {
 				this.loaderForContacts = false;
 				this.geListByStatus(this.status ? this.status : this.currentstatus);
 				this.isSpinnerVisible = false;
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => {
+				this.loaderForContacts = false;
+				this.isSpinnerVisible = false;})
 		}
 	}
 

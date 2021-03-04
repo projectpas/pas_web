@@ -303,31 +303,31 @@
                             class="fa fa-pencil"></i></a>
                       </span>
                     </td>
-                    <td>
+                    <td style="text-align: center;">
                       <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel"
-                        [(ngModel)]="f.weight" class="form-control w50" />
+                        [(ngModel)]="f.weight" class="form-control w50" (onChange)="weightChange()" />
                     </td>
-                    <td>
+                    <td style="text-align: center;">
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()"
                         (input)="onFilterUom($event.target.value)" name="unitOfMeasureId{{ i }}"
                         [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
-                        [(ngModel)]="f.uomId" filter="true">
+                        [(ngModel)]="f.uomId" filter="true" [required]="f.weight > 0">
                       </p-dropdown>
                     </td>
-                    <td><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
+                    <td style="text-align: center;"><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
                         [(ngModel)]="f.length" #length="ngModel" class="form-control w50" /></td>
-                    <td><input type="number" (ngModelChange)="enableUpdate()" name="height{{ i }}" #height="ngModel"
+                    <td style="text-align: center;"><input type="number" (ngModelChange)="enableUpdate()" name="height{{ i }}" #height="ngModel"
                         [(ngModel)]="f.height" class="form-control w50" /></td>
-                    <td><input type="number" (ngModelChange)="enableUpdate()" name="width{{ i }}" #width="ngModel"
+                    <td style="text-align: center;"><input type="number" (ngModelChange)="enableUpdate()" name="width{{ i }}" #width="ngModel"
                         [(ngModel)]="f.width" class="form-control w50" /></td>
-                    <td>
+                    <td style="text-align: center;">
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" filter="true"
                         (input)="onFilterUom($event.target.value)" name="dimensionUOMId{{ i }}"
                         [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
-                        [(ngModel)]="f.dimensionUOMId">
+                        [(ngModel)]="f.dimensionUOMId" [required]="f.length > 0 || f.height > 0 || f.width > 0">
                       </p-dropdown>
                     </td>
-                    <td>
+                    <td style="text-align: center;">
                       <p-dropdown placeholder="Select " (ngModelChange)="enableUpdate()" name="currencyId{{ i }}"
                         [options]="currencyList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
                         [(ngModel)]="f.currencyId" filter="true" (input)="onFilterCurrency($event.target.value)">

@@ -1115,7 +1115,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.workOrderFreightList[fre]['billingAmount'] = Number(this.workOrderFreightList[fre]['billingAmount'].toString().split(',').join('')).toFixed(2);
                 }
             }
-        })
+        }) 
     }
 
     isEmptyObj(data){

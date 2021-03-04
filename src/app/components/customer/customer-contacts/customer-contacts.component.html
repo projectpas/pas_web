@@ -616,7 +616,7 @@
                     <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="contactInformation.tag"
                       (ngModelChange)="enableSave()" name="tag" field="tagName" [suggestions]="tagNamesList"
                       (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                      [inputStyle]="{ width: '100%' }" [forceSelection]="true" required>
+                      [inputStyle]="{ width: '100%' }" [forceSelection]="true" required autocomplete="off">
                     </p-autoComplete>
                   </div>
               </div>
@@ -643,7 +643,7 @@
                     (completeMethod)="filterFirstNames($event)"                     
                     [size]="30" [minLength]="1" 
                     [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" required>
+                    [inputStyle]="{ width: '100%' }" required autocomplete="off">
                   </p-autoComplete>
                   <!-- 
                     (onKeyUp)=" checkfirstNameExist($event.target.value)"
@@ -664,7 +664,7 @@
                                       
                     [suggestions]="middleNamesList" field="middleName"
                     (completeMethod)="filterMiddleNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }">
+                    [inputStyle]="{ width: '100%' }" autocomplete="off">
                   </p-autoComplete>
                   <!-- (onKeyUp)="checkmiddleNameExist($event.target.value)"
                   (onChange)="checkmiddleNameExist($event.target.value)"  
@@ -687,7 +687,7 @@
                     field="lastName"
                     (completeMethod)="filterLastNames($event)" 
                     [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" required>
+                    [inputStyle]="{ width: '100%' }" required autocomplete="off">
                   </p-autoComplete>
                   <!-- (onKeyUp)="checklastNameExist($event.target.value)"
                   (onChange)="checklastNameExist($event.target.value)"  
@@ -725,11 +725,11 @@
                   <input class="form-control" type="text" required name="workPhone" #workPhone="ngModel" [pattern]="phonePattern"
                     [(ngModel)]="contactInformation.workPhone" (ngModelChange)="enableSave()"
                     style="width: calc(62% - 63px) !important;" (keypress)="patternMobilevalidationWithSpl($event)"
-                    minlength="6" maxlength="14" />
+                    minlength="6" maxlength="14" autocomplete="off"/>
                   ext
                   <input class="form-control" type="text" name="workPhoneExtn"
                     [disabled]="contactInformation.workPhone == ''" [(ngModel)]="contactInformation.workPhoneExtn"
-                    (ngModelChange)="enableSave()" style="width: calc(43% - 63px) !important;" />
+                    (ngModelChange)="enableSave()" style="width: calc(43% - 63px) !important;" autocomplete="off"/>
                 </div>
               </div>
               <div class="form-group">
@@ -756,7 +756,8 @@
               <div class="form-group">
                 <label>Website</label>
                 <input class="form-control" type="text" name="websiteURL" #url="ngModel"
-                  [(ngModel)]="contactInformation.websiteURL" (ngModelChange)="enableSave()" [pattern]="urlPattern" />
+                  [(ngModel)]="contactInformation.websiteURL" (ngModelChange)="enableSave()" 
+                  [pattern]="urlPattern" autocomplete="off"/>
                 <div *ngIf="url.errors" [ngClass]="'error'">
                   <div *ngIf="url.errors.pattern">
                     <span style="color:red">URL not valid</span>
@@ -766,8 +767,9 @@
               <div class="form-group">
                 <label>Mobile Phone</label>
                 <input class="form-control" type="text" name="mobilePhone" [(ngModel)]="contactInformation.mobilePhone" [pattern]="mobilePattern" 
-                  (ngModelChange)="enableSave()" (keypress)="patternMobilevalidationWithSpl($event)" minlength="10" #mobilePhone="ngModel"
-                  maxlength="14" />
+                  (ngModelChange)="enableSave()" (keypress)="patternMobilevalidationWithSpl($event)"
+                   minlength="10" #mobilePhone="ngModel"
+                  maxlength="14" autocomplete="off"/>
               </div>
               <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
                 <div *ngIf="mobilePhone.errors.pattern">
@@ -778,7 +780,7 @@
                 <label>Alternate Phone</label>
                 <input class="form-control" type="text" autocomplete="off" name="alternatePhone" #alternatePhone="ngModel" [pattern]="phonePattern"
                   [(ngModel)]="contactInformation.alternatePhone" (ngModelChange)="enableSave()"
-                  (keypress)="patternMobilevalidationWithSpl($event)" minlength="6" maxlength="14" />
+                  (keypress)="patternMobilevalidationWithSpl($event)" minlength="6" maxlength="14" autocomplete="off"/>
               </div>
               <div *ngIf="alternatePhone.errors" [ngClass]="'error'">
                 <div *ngIf="alternatePhone.errors.pattern">
@@ -788,7 +790,7 @@
               <div class="form-group">
                 <label>Fax</label>
                 <input class="form-control" pKeyFilter="pint" type="text" name="fax" #fax="ngModel" [pattern]="phonePattern"
-                  [(ngModel)]="contactInformation.fax" (ngModelChange)="enableSave()" minlength="6" maxlength="14" />
+                  [(ngModel)]="contactInformation.fax" (ngModelChange)="enableSave()" minlength="6" maxlength="14" autocomplete="off"/>
               </div>
               <div *ngIf="fax.errors" [ngClass]="'error'">
                 <div *ngIf="fax.errors.pattern">
@@ -839,7 +841,7 @@
                 <label>Email <span class="clr-red">*</span></label>
                 <input class="form-control" email type="text" name="email" [pattern]="emailPattern" autocomplete="off"
                   #contactEmail="ngModel" [(ngModel)]="contactInformation.email" (ngModelChange)="enableSave()"
-                  required />
+                  required  />
                 <div *ngIf="contactEmail.errors" [ngClass]="'error'">
                   <div *ngIf="contactEmail.errors.pattern">
                     <span style="color:red">Contact Email not valid</span>
