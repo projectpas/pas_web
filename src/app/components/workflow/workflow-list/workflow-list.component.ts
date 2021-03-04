@@ -113,6 +113,7 @@ export class WorkflowListComponent implements OnInit {
     sourceViewforDocumentListColumns = [
         { field: 'fileName', header: 'File Name' },
     ]
+    totalExpertiseCostsum: any;
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
@@ -432,6 +433,12 @@ export class WorkflowListComponent implements OnInit {
 
                 this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
+//                if(this.sourceWorkFlow &&  this.sourceWorkFlow.expertise && this.sourceWorkFlow.expertise.length !=0){
+// console.log("test cons",this.sourceWorkFlow)
+//                 this.sourceWorkFlow.expertise.forEach(element => {
+//                      return  element.estimatedHours=  formatNumberAsGlobalSettingsModule(element.estimatedHours, 2);
+//                 });
+//             }
                 // this.loadcustomerData();
                 // this.loadCurrencyData();
                 this.calculateTotalWorkFlowCost();
@@ -521,9 +528,11 @@ export class WorkflowListComponent implements OnInit {
                 this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
             }
         }
-
+        debugger;
+        console.log(" this.sourceWorkFlow.expertise",  this.sourceWorkFlow.expertiset)
         for (let expertise of this.sourceWorkFlow.expertise) {
             this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
+            console.log("expertise", this.TotalExpertiseCost)
         }
         this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
         const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
@@ -542,7 +551,7 @@ export class WorkflowListComponent implements OnInit {
         const val2= ((TotalCharges / 100) * this.sourceWorkFlow.percentageOfCharges) + TotalCharges;
         this.TotalCharges = formatNumberAsGlobalSettingsModule(val2, 2);
 
-        this.sourceWorkFlow.percentageOfOthers
+        // this.sourceWorkFlow.percentageOfOthers
 
         this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers == -1 || this.sourceWorkFlow.percentageOfOthers == "-1" ? 0 : this.sourceWorkFlow.percentageOfOthers;
         this.sourceWorkFlow.otherCost=this.sourceWorkFlow.otherCost? this.sourceWorkFlow.otherCost :0.00;
@@ -575,7 +584,7 @@ export class WorkflowListComponent implements OnInit {
 
     private getUniqueTask(): any[] {
         var tasks = [];
-
+console.log("hello ")
         var taskIds = [];
         if (this.sourceWorkFlow && this.sourceWorkFlow.charges && this.sourceWorkFlow.charges.length > 0) {
   
@@ -662,7 +671,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.publication && this.sourceWorkFlow.publication && this.sourceWorkFlow.publication.length > 0) {
+        if (this.sourceWorkFlow && this.sourceWorkFlow.publication && this.sourceWorkFlow.publication.length > 0) {
             for (var item of this.sourceWorkFlow.publication) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -740,28 +749,38 @@ export class WorkflowListComponent implements OnInit {
             task.exclusionextendedQty = extendedQty ? formatNumberAsGlobalSettingsModule(extendedQty, 2) : null;
 
 
-            var totalEstimatedHours = 0;
+            var totalEstimatedHours = 0.00;
             var totalDirectLaborCost = 0;
             var totalOHCost = 0;
             var totalDirectLabourAndOHCost = 0;
 
             task.expertise = this.sourceWorkFlow.expertise.filter(x => {
                 if (x.taskId == task.Id) {
-                    totalEstimatedHours += x.estimatedHours == undefined && x.estimatedHours == '' ? 0 : x.estimatedHours;
+                    // totalEstimatedHours += x.estimatedHours == undefined && x.estimatedHours == '' ? 0 : x.estimatedHours;
+
+                // this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
+                // this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
+                // const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
+                    totalEstimatedHours += x.estimatedHours;
                     totalDirectLaborCost += x.directLaborRate == undefined && x.directLaborRate == '' ? 0 : x.directLaborRate;
                     totalOHCost += x.overheadCost == undefined && x.overheadCost == '' ? 0 : x.overheadCost;
                     totalDirectLabourAndOHCost += x.laborOverheadCost == undefined && x.laborOverheadCost == '' ? 0 : x.laborOverheadCost;
+                 
+               
                 }
                 return x.taskId == task.Id;
             });
+        
+            
+           task.expertiseTotalEstimatedHours=totalEstimatedHours;
+           task.expertiseTotalDirectLaborCost=totalDirectLaborCost;
+           task.expertiseTotalOHCost=totalOHCost;
+           task.expertiseTotalDirectLabourAndOHCost=totalDirectLabourAndOHCost;
 
-            task.expertiseTotalEstimatedHours = totalEstimatedHours;
-            task.expertiseTotalDirectLaborCost = totalDirectLaborCost ? formatNumberAsGlobalSettingsModule(totalDirectLaborCost, 2) : null;
-            task.expertiseTotalOHCost = totalOHCost ? formatNumberAsGlobalSettingsModule(totalOHCost, 2) : null;
-            task.expertiseTotalDirectLabourAndOHCost = totalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(totalDirectLabourAndOHCost, 2) : null;
-
-
-
+            // task.expertiseTotalEstimatedHours = task.expertiseTotalEstimatedHours?  formatNumberAsGlobalSettingsModule( task.expertiseTotalEstimatedHours, 2) :0.00;
+            // task.expertiseTotalDirectLaborCost = task.expertiseTotalDirectLaborCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLaborCost, 2) : 0.00;
+            // task.expertiseTotalOHCost = totalOHCost ? formatNumberAsGlobalSettingsModule(totalOHCost, 2) : null;
+            // task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
             var materialTotalQty = 0;
             var materialTotalExtendedCost = 0;
             var materialTotalPrice = 0;
@@ -794,6 +813,7 @@ export class WorkflowListComponent implements OnInit {
 
 
         }
+  console.log("added all tasks",this.addedTasks);
              // modify the taks keys
      this.addedTasks.forEach(element => {
         if(element.charges){
@@ -816,13 +836,16 @@ export class WorkflowListComponent implements OnInit {
 
 });
         }
+
+
 if(element.expertise){
 element.expertise.forEach(x => {
         x.laborDirectRate= x.laborDirectRate ? formatNumberAsGlobalSettingsModule(x.laborDirectRate, 2) : null,
         x.directLaborRate= x.directLaborRate ? formatNumberAsGlobalSettingsModule(x.directLaborRate, 2) : null,
         x.overheadBurden= x.overheadBurden ? formatNumberAsGlobalSettingsModule(x.overheadBurden, 2) : null,
         x.overheadCost= x.overheadCost ? formatNumberAsGlobalSettingsModule(x.overheadCost, 2) : null,
-        x.laborOverheadCost= x.laborOverheadCost ? formatNumberAsGlobalSettingsModule(x.laborOverheadCost, 2) : null
+        x.laborOverheadCost= x.laborOverheadCost ? formatNumberAsGlobalSettingsModule(x.laborOverheadCost, 2) : null,
+        x.estimatedHours=x.estimatedHours ? formatNumberAsGlobalSettingsModule(x.estimatedHours, 2) : null
 });
 }
 if(element.exclusions){
