@@ -9,6 +9,7 @@ declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Params, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-customer-ata',
@@ -85,14 +86,16 @@ export class CustomerATAInformationComponent implements OnInit {
         private modalService: NgbModal,
         private datePipe: DatePipe,
         private activeModal: NgbActiveModal,
+        private router: ActivatedRoute
     ) {
         this.stopmulticlicks = false;
+        this.id = this.router.snapshot.params['id'];
     }
 
     ngOnInit() {
 
         if (this.editMode) {
-            this.id = this.editGeneralInformationData.customerId;
+            //this.id = this.editGeneralInformationData.customerId;
             this.customerCode = this.editGeneralInformationData.customerCode;
             this.customerName = this.editGeneralInformationData.name;
             //this.getOriginalATASubchapterList();
@@ -100,14 +103,14 @@ export class CustomerATAInformationComponent implements OnInit {
         } else {
             //this.getMappedATAByCustomerId();
             if (this.customerDataFromExternalComponents) {
-                this.id = this.customerDataFromExternalComponents.customerId;
+                //this.id = this.customerDataFromExternalComponents.customerId;
                 this.customerCode = this.customerDataFromExternalComponents.customerCode;
                 this.customerName = this.customerDataFromExternalComponents.name;
                 this.isViewMode = true;
             }
             else{
 
-                this.id = this.savedGeneralInformationData.customerId;
+                //this.id = this.savedGeneralInformationData.customerId;
                 this.customerCode = this.savedGeneralInformationData.customerCode;
                 this.customerName = this.savedGeneralInformationData.name;
                 this.isViewMode = false;

@@ -110,11 +110,12 @@ export class CustomerAircraftComponent implements OnInit {
         private cd: ChangeDetectorRef
     ) {
         this.stopmulticlicks = false;
+        this.id = this.route.snapshot.params['id'];
     }
     ngOnInit() {
 
         if (this.editMode) {
-            this.id = this.editGeneralInformationData.customerId;
+            //this.id = this.editGeneralInformationData.customerId;
             this.customerCode = this.editGeneralInformationData.customerCode;
             this.customerName = this.editGeneralInformationData.name;
             //this.getAircraftMappedDataByCustomerId();
@@ -123,13 +124,13 @@ export class CustomerAircraftComponent implements OnInit {
         } else {
             //this.getAircraftMappedDataByCustomerId();
             if (this.customerDataFromExternalComponents) {
-                this.id = this.customerDataFromExternalComponents.customerId;
+                //this.id = this.customerDataFromExternalComponents.customerId;
                 this.customerCode = this.customerDataFromExternalComponents.customerCode;
                 this.customerName = this.customerDataFromExternalComponents.name;
 
                 this.isViewMode = true;
             } else {
-                this.id = this.savedGeneralInformationData.customerId;
+                //this.id = this.savedGeneralInformationData.customerId;
                 this.customerCode = this.savedGeneralInformationData.customerCode;
                 this.customerName = this.savedGeneralInformationData.name;
                 this.isViewMode = false;

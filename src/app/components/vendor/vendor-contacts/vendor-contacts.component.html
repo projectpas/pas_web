@@ -795,7 +795,7 @@
               </div>
               <div class="col-sm-5">
                 <input class="form-control" type="text" name="attention" (ngModelChange)="enableSave()"
-                  [(ngModel)]="sourceVendor.attention" />
+                  [(ngModel)]="sourceVendor.attention" value="" autocomplete="new-password"/>
               </div>
             </div>
             <div class="col-sm-12">
@@ -823,11 +823,10 @@
                     (ngModelChange)="enableSave()" 
                     name="firstName" 
                     field="firstName" 
-                     
                     [suggestions]="firstNamesList"
                     (completeMethod)="filterFirstNames($event)" 
                     [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" required>
+                    [inputStyle]="{ width: '100%' }" required value="" autocomplete="new-password">
                   </p-autoComplete>
                   <!-- (onKeyUp)=" checkfirstNameExist($event.target.value)"
                     (onChange)=" checkfirstNameExist($event.target.value)"  
@@ -847,12 +846,11 @@
                   <p-autoComplete class="autocomp-customer-cstm" 
                   [(ngModel)]="sourceVendor.middleName"
                     (ngModelChange)="enableSave()" 
-                    name="middleName" 
-                    
+                    name="middleName"
                     [suggestions]="middleNamesList" 
                     field="middleName"
                     (completeMethod)="filterMiddleNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }">
+                    [inputStyle]="{ width: '100%' }" value="" autocomplete="new-password">
                   </p-autoComplete>
 
                   <!-- (onKeyUp)="checkmiddleNameExist($event.target.value)"
@@ -877,7 +875,7 @@
                     [suggestions]="lastNamesList" 
                     field="lastName"
                     (completeMethod)="filterLastNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" required>
+                    [inputStyle]="{ width: '100%' }" required value="" autocomplete="new-password">
                   </p-autoComplete>
 
                   <!-- (onKeyUp)="checklastNameExist($event.target.value)"
@@ -909,7 +907,7 @@
               </div>
               <div class="col-sm-5">
                 <input class="form-control" type="text" name="contactTitle" (ngModelChange)="enableSave()"
-                  [(ngModel)]="sourceVendor.contactTitle" />
+                  [(ngModel)]="sourceVendor.contactTitle" value="" autocomplete="new-password"/>
               </div>
             </div>
             <div class="col-sm-12">
@@ -920,10 +918,10 @@
                 <div>
                   <input class="form-control" type="text" minlength="6" maxlength="14" [pattern]="phonePattern"
                     (keypress)="patternMobilevalidationWithSpl($event)" (ngModelChange)="enableSave()" name="workPhone" #workPhone="ngModel"
-                    [(ngModel)]="sourceVendor.workPhone" style="width: calc(100% - 63px) !important;" required />
+                    [(ngModel)]="sourceVendor.workPhone" style="width: calc(100% - 63px) !important;" required value="" autocomplete="new-password"/>
                   -
                   <input class="form-control w50" type="text" pKeyFilter="pint" name="workPhoneExtn" (ngModelChange)="enableSave()"
-                    [(ngModel)]="sourceVendor.workPhoneExtn" maxlength="15" />
+                    [(ngModel)]="sourceVendor.workPhoneExtn" maxlength="15" value="" autocomplete="new-password"/>
                 </div>
                 <div *ngIf="workPhone.errors" [ngClass]="'error'">
                   <div *ngIf="workPhone.errors.pattern">
@@ -953,7 +951,7 @@
               <div class="col-sm-5">
                 <input class="form-control" type="text" minlength="10" maxlength="14" [pattern]="mobilePattern" (ngModelChange)="enableSave()"
                   (keypress)="patternMobilevalidationWithSpl($event)" name="mobilePhone" #mobilePhone="ngModel"
-                  [(ngModel)]="sourceVendor.mobilePhone" />
+                  [(ngModel)]="sourceVendor.mobilePhone" value="" autocomplete="new-password"/>
                   <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
                     <div *ngIf="mobilePhone.errors.pattern">
                       <span class="clr-red">Please enter atleast 10 digits</span>
@@ -968,7 +966,7 @@
               <div class="col-sm-5">
                 <input class="form-control" type="text" minlength="6" maxlength="14" (ngModelChange)="enableSave()" [pattern]="phonePattern"
                   (keypress)="patternMobilevalidationWithSpl($event)" name="alternatePhone" #alternatePhone="ngModel"
-                  [(ngModel)]="sourceVendor.alternatePhone" />
+                  [(ngModel)]="sourceVendor.alternatePhone" value="" autocomplete="new-password"/>
                   <div *ngIf="alternatePhone.errors" [ngClass]="'error'">
                     <div *ngIf="alternatePhone.errors.pattern">
                       <span class="clr-red">Please enter atleast 6 digits</span>
@@ -982,7 +980,8 @@
               </div>
               <div class="col-sm-5">
                 <input class="form-control" type="text" minlength="6" maxlength="14" (ngModelChange)="enableSave()" [pattern]="phonePattern"
-                  (keypress)="patternMobilevalidationWithSpl($event)" name="fax" #fax="ngModel" [(ngModel)]="sourceVendor.fax" />
+                  (keypress)="patternMobilevalidationWithSpl($event)" name="fax" #fax="ngModel" 
+                  [(ngModel)]="sourceVendor.fax" value="" autocomplete="new-password"/>
                   <div *ngIf="fax.errors" [ngClass]="'error'">
                     <div *ngIf="fax.errors.pattern">
                       <span class="clr-red">Please enter atleast 6 digits</span>
