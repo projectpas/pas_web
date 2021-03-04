@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, Input, OnChanges, ElementRef, ViewEncapsulation } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $ : any;
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
