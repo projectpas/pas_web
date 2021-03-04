@@ -299,6 +299,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.addRow();
         }
     }
+    onFilterTask(value){
+        
+    }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
@@ -877,4 +880,5 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getActive() {
         this.disableUpdateButton = false;
     }
+    
 } 

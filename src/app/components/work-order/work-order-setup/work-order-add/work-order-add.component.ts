@@ -1565,7 +1565,8 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
-                    partNumber: x.partNumber.partName
+                    partNumber: x.partNumber.partName,
+                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
                 }
             })
             this.isSpinnerVisible = true;
@@ -1596,7 +1597,8 @@ export class WorkOrderAddComponent implements OnInit {
                     MandatorySupplementalId :x.materialMandatoriesId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
-                    partNumber: x.partNumber.partName
+                    partNumber: x.partNumber.partName,
+                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
                 }
             })
             this.isSpinnerVisible = true;
@@ -1857,7 +1859,8 @@ export class WorkOrderAddComponent implements OnInit {
                     workOrderId: this.subWorkOrderDetails.workOrderId,
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     subWOPartNoId: this.subWOPartNoId,
-                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId
+                    subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
+                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
                 }
             })
             this.isSpinnerVisible = true;
@@ -1883,7 +1886,8 @@ export class WorkOrderAddComponent implements OnInit {
                     isActive: true,
                     createdBy: this.userName,
                     updatedBy: this.userName,
-                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId
+                    workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
+                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
                 }
             })
             this.isSpinnerVisible = true;

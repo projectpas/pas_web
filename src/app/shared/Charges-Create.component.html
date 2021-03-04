@@ -27,11 +27,15 @@
       <tbody>
       <tr class="charge-tr" [hidden]="charge.isDelete" *ngFor="let charge of workFlow.charges; let i = index">
         <td *ngIf="!isWorkFlow">
-          <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
+          <!-- <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
             (change)="onTaskChange(charge)">
             <option value="">--Select--</option>
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
-          </select>
+          </select> -->
+
+          <p-dropdown placeholder="--Select--" required (ngModelChange)="getActive()" optionLabel="description" [showClear]="true" filter="true" name="dimen{{ i }}" [options]="taskList"
+          class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="charge.taskId">
+        </p-dropdown> 
         </td>
         <td>
           <select class="form-control full-width border-radius-4" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
@@ -41,6 +45,9 @@
               ctype.chargeType
             }}</option>
           </select>
+          <!-- <p-dropdown placeholder="--Select--" id="dllChargesType"   (ngModelChange)="getActive()" optionLabel="chargeType" [showClear]="true" filter="true" name="type_{{i}}" [options]="chargesTypes"
+          class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="charge.workflowChargeTypeId" required>
+        </p-dropdown>  -->
         </td>
         <td *ngIf="isWorkOrder || isQuote">
           <input type="text" pInputText pKeyFilter="money1" (ngModelChange)="getActive()" class="form-control" [disabled]="true"
@@ -76,7 +83,7 @@
         </td>
         <td>
           <p-autoComplete [(ngModel)]="charge.vendor" (ngModelChange)="getActive()" [suggestions]="vendorCollection" [forceSelection]="true"
-            (completeMethod)="filterVendor($event)" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
+            (completeMethod)="filterVendor($event)" appendTo='body' [baseZIndex]="9999" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
            [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
           </p-autoComplete>
         </td>

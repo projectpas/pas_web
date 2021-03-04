@@ -1264,9 +1264,12 @@ this.commonfunctionHandler();
     }
       }
       currentIndex:any;
+      taskIndex:any;
       currentTaks:any;
       onAddTextAreaInfo(material,taskName,index,track) {
         this.currentIndex=index;
+        this.taskIndex=track;
+        console.log("index,trek",index,track)
         this.currentTaks=taskName;
         this.textAreaInfoLabor = material;
         this.disableEditor=true;
