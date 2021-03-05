@@ -147,10 +147,16 @@ export class CustomerATAInformationComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
+
     // get all subchapters
     getAllATASubChapter() {
         this.isSpinnerVisible = true;
-        this.atasubchapter1service.getAtaSubChapter1List().subscribe(res => {
+        this.atasubchapter1service.getAtaSubChapter1List(this.currentUserMasterCompanyId).subscribe(res => {
             const ataSubChapter = res[0].map(x => {
                 return {
                     label: `${x.ataSubChapterCode}-${x.description}`,
@@ -160,7 +166,7 @@ export class CustomerATAInformationComponent implements OnInit {
             // making copy for the subchapters in both add and seach 
             this.search_ataSubChapterList = ataSubChapter;
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false;})
     }
 
     getOriginalATASubchapterList() {
@@ -170,7 +176,7 @@ export class CustomerATAInformationComponent implements OnInit {
             this.originalATASubchapterData = responseData;
             this.getMappedATAByCustomerId();
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false;})
 
     }
 
@@ -248,7 +254,7 @@ export class CustomerATAInformationComponent implements OnInit {
                         value: x.ataSubChapterId
                         };
                     });
-                },error => this.saveFailedHelper(error));
+                },error => {this.isSpinnerVisible = false;})
                 this.isSpinnerVisible = false;
 
         } else {
@@ -265,7 +271,7 @@ export class CustomerATAInformationComponent implements OnInit {
                     label: x.firstName + " " + x.lastName, value: x.contactId
                 }
             })
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false;})
 
     }
 
@@ -319,7 +325,7 @@ export class CustomerATAInformationComponent implements OnInit {
                 this.ataSubchapterIdUrl = '';
                 this.ataChapterIdUrl = '';
                 this.isSpinnerVisible = false;
-            },error => this.saveFailedHelper(error));
+            },error => {this.isSpinnerVisible = false;})
     }
 
     pageIndexChange(event) {
@@ -355,7 +361,7 @@ export class CustomerATAInformationComponent implements OnInit {
 
             this.customerService.deleteATAMappedByContactId(airCraftingMappingId).subscribe(
                 response => this.saveCompleted(this.sourceCustomer),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false;})
         }
         this.modal.close();
     }
@@ -395,7 +401,7 @@ export class CustomerATAInformationComponent implements OnInit {
         this.customerService.getCustomerContactATAAuditDetails(rowData.customerContactATAMappingId).subscribe(res => {
             this.auditHistory1 = res;
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false;})
     }
     getColorCodeForHistoryATA(i, field, value) {
         const data = this.auditHistory1;

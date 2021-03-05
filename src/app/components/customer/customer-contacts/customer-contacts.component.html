@@ -381,11 +381,11 @@
             <tbody style="overflow-x: scroll !important;" *ngIf="auditHistory.length > 0">
               <tr *ngFor="let audit of auditHistory; let i = index">
                 <td [ngStyle]="{
-                    color: getColorCodeForHistory(i, 'tag', audit.tag)
+                    color: getColorCodeForHistory(i, 'tagName', audit.tagName)
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.tag }}
+                  {{ audit.tagName }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'prefix', audit.prefix)

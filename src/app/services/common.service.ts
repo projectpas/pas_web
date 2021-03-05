@@ -74,6 +74,13 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  autoSuggestionSmartDropDownVendorCheckPaymentList(textColumn, searchText, startWith, idList?,masterCompanyId?,vendorId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorCheckPaymentList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownVendorCheckPaymentList(textColumn, searchText, startWith, idList,masterCompanyId,vendorId));
+    });
+  }
+
+
   autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownEmployeeList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'} &masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}  `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList, masterCompanyId));

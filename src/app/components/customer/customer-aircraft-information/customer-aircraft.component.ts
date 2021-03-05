@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemMasterService } from '../../../services/itemMaster.service';
-import { fadeInOut } from '../../../services/animations';
-
 import { DashNumberService } from '../../../services/dash-number/dash-number.service';
 import { AircraftModelService } from '../../../services/aircraft-model/aircraft-model.service';
 import { CustomerService } from '../../../services/customer.service';
@@ -11,8 +9,7 @@ import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { DatePipe } from '@angular/common';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { error } from '@angular/compiler/src/util';
-import { HttpErrorResponse } from '@angular/common/http';
+
 declare var $ : any;
 import { Table } from 'primeng/table';
 @Component({
@@ -404,7 +401,7 @@ export class CustomerAircraftComponent implements OnInit {
                     }
                 });
 
-            },error => this.saveFailedHelper(error));
+            },error => {this.isSpinnerVisible = false});
             this.add_SelectedModel = [];
             this.add_SelectedDashNumber = [];
         }
@@ -428,7 +425,7 @@ export class CustomerAircraftComponent implements OnInit {
                 }
             }); 
 
-        },error => this.saveFailedHelper(error));
+        },error => {this.isSpinnerVisible = false});
     }
 
     selectedDashnumbervalue(value) {
@@ -532,7 +529,7 @@ export class CustomerAircraftComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => { this.isSpinnerVisible = false;})
         $("#editAirCraftDetails").modal("hide");
         this.disableSave = true;
         this.isSpinnerVisible = false;
@@ -566,21 +563,18 @@ export class CustomerAircraftComponent implements OnInit {
                 DashNumberId: obj.DashNumber === 'Unknown' ? null : obj.DashNumberId,
                 AircraftModelId: obj.AircraftModel === 'Unknown' ? null : obj.AircraftModelId,
                 CustomerId: this.id,
-                MasterCompanyId: 1,
+                MasterCompanyId: this.currentUserMasterCompanyId,
                 createdBy: this.userName,
                 updatedBy: this.userName,
                 IsDeleted: false,
-
             }
         })
         this.customerService.postCustomerAircrafts(data).subscribe(res => {
-
             this.alertService.showMessage(
                 'Success',
                 'Mapped Aircraft Inventory Successfully',
                 MessageSeverity.success
             );
-
             this.inventoryData = []
             this.add_SelectedAircraftId = undefined;
             this.add_SelectedModel = [];
@@ -621,7 +615,7 @@ export class CustomerAircraftComponent implements OnInit {
         this.customerService.getMappedAirCraftDetailsAudit(customerAircraftMappingId).subscribe(res => {
             this.aircraftauditHisory = res;
             this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error));
+        }, error => { this.isSpinnerVisible = false;});
     }
     
     openAircraftView(data) {
@@ -659,10 +653,9 @@ export class CustomerAircraftComponent implements OnInit {
         this.isSpinnerVisible = true;
         let airCraftingMappingId = this.airCraftMappingId;
         if (airCraftingMappingId > 0) {
-
             this.customerService.deleteAircraftInvetoryById(airCraftingMappingId).subscribe(
                 response => this.saveCompleted(this.sourceCustomer),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false});
         }
         this.modal.close();
         this.isSpinnerVisible = false;
@@ -743,7 +736,9 @@ export class CustomerAircraftComponent implements OnInit {
                 this.getDeleteListByStatus(true);
                 this.alertService.showMessage("Success", `Restored Successfully`, MessageSeverity.success)
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false;
+                         this.modal.close();
+                    })
                 this.modal.close();
         }
         this.isSpinnerVisible = false;

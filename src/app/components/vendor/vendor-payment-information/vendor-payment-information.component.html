@@ -950,6 +950,7 @@
                                     field="siteName" 
                                     (onKeyUp)="checkSiteNameExist($event.target.value)"
                                     (onChange)="checkSiteNameExist($event.target.value)"
+                                    (onSelect)="checkBillingSiteNameSelect()"
                                     (completeMethod)="filterSite($event);" 
                                     (ngModelChange)="enableSave()" 
                                     [size]="30" [minLength]="1" [dropdown]="true" required value="" autocomplete="new-password">
@@ -1031,12 +1032,12 @@
                 <div class="modal-footer">
                     <button type="button" *ngIf="sourceVendor.checkPaymentId == undefined"
                         class="btn btn-primary pull-right" (click)="saveCheckPaymentInfo()"
-                        [disabled]="!addPaymentForm.valid" data-dismiss="modal">Save</button>
+                        [disabled]="!addPaymentForm.valid || disableSaveSiteName" data-dismiss="modal">Save</button>
                         <!-- [disabled]="!addPaymentForm.valid || disableSavePaymentCountry" -->
                     <button type="button"
                         *ngIf="sourceVendor.checkPaymentId != undefined && sourceVendor.checkPaymentId !=0"
                         class="btn btn-primary pull-right" (click)="saveCheckPaymentInfo()"
-                        [disabled]="!addPaymentForm.valid  || disableSave" data-dismiss="modal">Update</button>
+                        [disabled]="!addPaymentForm.valid  || disableSave || disableSaveSiteName" data-dismiss="modal">Update</button>
                         <!-- [disabled]="!addPaymentForm.valid  || disableSave || disableSavePaymentCountry" -->
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>

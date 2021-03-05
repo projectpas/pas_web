@@ -11,6 +11,7 @@ declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import { Params, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-customer-billing-information',
@@ -88,25 +89,30 @@ export class CustomerBillingInformationComponent {
 
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
-        private activeModal: NgbActiveModal, private datePipe: DatePipe, private commonService: CommonService, ) {
-    }
+        private activeModal: NgbActiveModal,
+        private datePipe: DatePipe, 
+        private commonService: CommonService,
+        private router: ActivatedRoute ) 
+        {
+            this.id = this.router.snapshot.params['id'];
+        }
 
     ngOnInit(): void {
 
         if (this.editMode) {
-            this.id = this.editGeneralInformationData.customerId;
+            //this.id = this.editGeneralInformationData.customerId;
             this.customerCode = this.editGeneralInformationData.customerCode;
             this.customerName = this.editGeneralInformationData.name;
             this.isViewMode = false;
 
         } else {
             if (this.customerDataFromExternalComponents) {
-                this.id = this.customerDataFromExternalComponents.customerId;
+                //this.id = this.customerDataFromExternalComponents.customerId;
                 this.customerCode = this.customerDataFromExternalComponents.customerCode;
                 this.customerName = this.customerDataFromExternalComponents.name;
                 this.isViewMode = true;
             } else {
-                this.id = this.savedGeneralInformationData.customerId;
+                //this.id = this.savedGeneralInformationData.customerId;
                 this.customerCode = this.savedGeneralInformationData.customerCode;
                 this.customerName = this.savedGeneralInformationData.name;
                 this.isViewMode = false;
@@ -362,6 +368,7 @@ export class CustomerBillingInformationComponent {
     addBillingIfo() {
         this.isEditMode = false;
         this.isSiteNameAlreadyExists = false;
+        this.selectedSitename = "";
         this.arrayCountrylist = [];
         this.billingInfo = new CustomerBillingAddressModel();
     }
@@ -642,7 +649,7 @@ export class CustomerBillingInformationComponent {
 		});
     }
 
-    checkSiteNameExist(value) {
+    checkSiteNameExist(value) {       
         this.changeName = true;
         this.isSiteNameAlreadyExists = false;
         this.disableSaveSiteName = false;
