@@ -1,4 +1,157 @@
-﻿<div class="card align-center" >
+﻿
+<div class="card">
+    <div class="card-body p-t-0">
+        <div class="row">
+            <div class="col-md-12" style="padding-left:25px; padding-top:5px">
+                <label style="width: 100%;"></label>
+                <div class="form-group" style="float: right; margin-right: 10px;">
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Perform Shipping</button>
+                </div>
+            </div>
+        </div>
+
+        <div [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+            style="min-height: 130px !important;">
+            <div class="tableFixHead">
+                <table class="table table-bordered" id="so-table">
+                    <tr class="header-table-width" style="font-size: 10px">
+                        <th *ngFor="let summaryColumn of headers">
+                            <span>
+                                {{ summaryColumn.header }}
+                            </span>
+                        </th>
+                        <!-- <th colspan="26"></th> -->
+                        <!-- <th>Actions</th> -->
+                        <th colspan="7"></th>
+                        <th></th>
+                    </tr>
+                    <ng-container *ngIf="shippingList.length > 0">
+                        <ng-container *ngFor="let summaryPart of shippingList; let rowIndex = index;">
+                            <tbody>
+                                <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                                    <td *ngFor="let summaryColumn of headers"
+                                        style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                        <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
+                                            Item {{summaryPart[summaryColumn.field] }}
+                                        </span> -->
+                                        <span *ngIf="summaryColumn.field != 'itemNo'">
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                    </td>
+                                    <td colspan="7"></td>
+                                    <td></td>
+                                    <!-- <td style="position:sticky; width:80px">
+                                  <span>
+                                      <button class="btn nobg" mat-icon-button (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
+                                              matTooltipPosition="above" style="font-weight: bold;"
+                                              [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
+                                              <i class="fa fa-plus"></i>
+                                      </button>
+                                  </span>
+                              </td> -->
+                                </tr>
+                                <tr class="child-header splitship-head child-header-back">
+                                    <th style="background-color: #fff !important;"></th>
+                                    <th>Ready?</th>
+                                    <th>Ship Date</th>
+                                    <th>Shipping Num </th>
+                                    <th>AWB</th>
+                                    <th>Pick Ticket Ref</th>
+                                    <th>Line #</th>
+                                    <th style="min-width: 120px;">PN</th>
+                                    <th>PN Description</th>
+                                    <th style="min-width: 120px;">Stk Line Num</th>
+                                    <th style="min-width: 120px;">Serial Num</th>
+                                    <th style="min-width: 70px;">Qty To Ship</th>
+                                    <th style="min-width: 100px;">Customs Value</th>
+                                    <th style="min-width: 120px;">Commodity Code</th>
+                                    <!-- <th colspan="2"></th> -->
+                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                </tr>
+                                <tr class="child-data splitship-child child-data-back"
+                                    *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
+                                    <td></td>
+                                    <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
+                                        <label style="color: #0F9D58">Shipped</label>
+                                    </td>
+                                    <td class="table-column-width" *ngIf="ship.qtyShipped == 0">
+                                        <input id="{{poIndex}}" name="ship.selected{{poIndex}}" type="checkbox"
+                                            (change)="checked($event, ship);" [(ngModel)]="ship.selected" />
+                                    </td>
+                                    <td>
+                                        {{ ship.shipDate | date : "MM/dd/yyyy" }}
+                                    </td>
+                                    <td>
+                                        {{ ship.soShippingNum }}
+                                    </td>
+                                    <td>
+                                        {{ ship.airwayBill }}
+                                    </td>
+                                    <td>
+                                        {{ ship.soPickTicketNumber }}
+                                    </td>
+                                    <td>
+                                        Line {{ ship.itemNo}}
+                                    </td>
+                                    <td>
+                                        {{ ship.partNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.partDescription }}
+                                    </td>
+                                    <td>
+                                        {{ ship.stockLineNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.serialNumber }}
+                                    </td>
+                                    <td>
+                                        {{ ship.qtyToShip}}
+                                    </td>
+                                    <td>
+                                        {{ ship.customsValue }}
+                                    </td>
+                                    <td>
+                                        {{ ship.commodityCode }}
+                                    </td>
+                                    <!-- <td colspan="2"></td> -->
+                                    <td class="zui-sticky-col" style="width:107px !important">
+                                        <!-- <span>
+                                            <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
+                                                (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
+                                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
+                                                <i class="fa fa-plus"></i></button>
+                                        </span>
+                                        <span>
+                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
+                                                (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                        </span> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="shippingList.length == 0">
+                        <tbody>
+                            <tr>
+                                <td colspan="48"
+                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    No records found
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ng-container>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card align-center" >
     <div class="card-body">
         <form #shippingForm="ngForm">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 0px;">
@@ -27,7 +180,7 @@
                         <div class="card-body">
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label class="workorder-label">Shipping Order Num</label>
+                                    <label class="work-order-shipping-lable">Shipping Order Num</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.woShippingNum"
@@ -36,7 +189,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Status<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">Status<span class="clr-red">*</span></label>
                                 </div>
                                 <div class="col-md-8">
                                     <select [(ngModel)]="shippingHeader.woShippingStatusId" name="status" required [disabled]="isView">
@@ -49,7 +202,7 @@
 
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Open Date <span class="clr-red">*</span> </label>
+                                    <label class="work-order-shipping-lable">Open Date <span class="clr-red">*</span> </label>
                                 </div>
                                 <div class="col-md-8">
                                     <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()"
@@ -58,7 +211,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Customer</label>
+                                    <label class="work-order-shipping-lable">Customer</label>
                                 </div>
                                 <div class="col-md-8" *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
                                     <input class="form-control" (change)="calculateExpiryDate()" type="text" [(ngModel)]="workOrderGeneralInformation.customerDetails.customerName" name="customer" disabled />
@@ -66,7 +219,7 @@
                             </div>
                             <div class="form-group col-md-12" *ngIf="workOrderGeneralInformation && workOrderGeneralInformation.customerDetails">
                                 <div class="col-md-4">
-                                    <label>Cus Code</label>
+                                    <label class="work-order-shipping-lable">Cus Code</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" [(ngModel)]="workOrderGeneralInformation.customerDetails.customerCode" name="customerCode" disabled />
@@ -74,7 +227,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Cert Num</label>
+                                    <label class="work-order-shipping-lable">Cert Num</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="number" [(ngModel)]="validFor" name="certNum" disabled />
@@ -88,7 +241,7 @@
                         <div class="card-body">
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Ship Via <span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">Ship Via <span class="clr-red">*</span></label>
                                 </div>
                                 <div class="col-md-8">
                                     <select [(ngModel)]="shippingHeader.shipviaId" [disabled]="isView" name="shipVia" required>
@@ -99,7 +252,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Ship Date<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">Ship Date<span class="clr-red">*</span></label>
                                 </div>
                                 <div class="col-md-8">
                                     <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="shippingHeader.shipDate" name="shipDate" [disabled]="isView" required></p-calendar>
@@ -107,7 +260,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Airway Bill<span class="clr-red">*</span> </label>
+                                    <label class="work-order-shipping-lable">Airway Bill<span class="clr-red">*</span> </label>
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.airwayBill" name="airwayBill" [disabled]="isView" required />
@@ -115,7 +268,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label class="workorder-label">House Airway Bill<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">House Airway Bill<span class="clr-red">*</span></label>
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.houseAirwayBill" name="houseAirwayBill" [disabled]="isView" required />
@@ -123,7 +276,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Tracking #<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">Tracking #<span class="clr-red">*</span></label>
                                 </div>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" [(ngModel)]="shippingHeader.trackingNum" name="trackingNum" [disabled]="isView" required />
@@ -131,10 +284,58 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-4">
-                                    <label>Weight<span class="clr-red">*</span></label>
+                                    <label class="work-order-shipping-lable">Weight</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input class="form-control" type="number" [(ngModel)]="shippingHeader.weight" name="weight" [disabled]="isView" required />
+                                <div class="col-md-3">
+                                    <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                        maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
+                                        id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="work-order-shipping-lable" style="margin-left: 40px;">UOM <span style="color: red;"
+                                            *ngIf="shippingHeader.shipWeight">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                        [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
+                                        [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
+                                        [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-4">
+                                    <label class="work-order-shipping-lable">Dimension (L, W, H)</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="display-flex inline-block">
+                                        <input type="number" name="exportLength" class="input-field-value"
+                                            pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                            [(ngModel)]="shippingHeader.shipSizeLength" />&nbsp;
+                                        <input type="number" name="exportWidth" class="input-field-value" pInputText
+                                            pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                            [(ngModel)]="shippingHeader.shipSizeWidth" />&nbsp;
+                                        <input type="number" name="exportHeight" class="input-field-value"
+                                            pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                            [(ngModel)]="shippingHeader.shipSizeHeight" />
+                                    </span>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="work-order-shipping-lable" style="margin-left: 40px;">
+                                        UOM <span style="color: red;"
+                                            *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                        [(ngModel)]="shippingHeader.shipSizeUnitOfMeasureId"
+                                        name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
+                                        placeholder="Select" [showClear]="true"
+                                        [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
+                                        (onChange)="btnChange()"></p-dropdown>
                                 </div>
                             </div>
                         </div>
