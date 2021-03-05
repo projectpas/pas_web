@@ -380,11 +380,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getEmployeeList(this.workOrderId);
             this.getTaskList();
             this.getMarkup();
-            this.loadCurrency();
+            this.loadCurrency('');
             this.getCondition();
             this.getUnitOfMeasure();
             this.getAllEmailType();
-            this.getAllWorkOrderStatus();
+            this.getAllWorkOrderStatus('');
         }
     }
 
@@ -396,15 +396,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description').subscribe(res => {
-            this.quoteStatusList = res;
-         },
-         err => {
-             // this.isSpinnerVisible = false;
-             this.errorHandling(err);
-         })
-    }
+
 
     deleteMemoConfirmation(mainIndex, subIndex){
         this.mainIndex = mainIndex;
@@ -2013,12 +2005,7 @@ this.creditTerms=res.creditTerm;
             )
     }
 
-    loadCurrency() {
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
-            results => this.currencyList = results,
-            error => { this.errorHandling(error)}
-        );
-    }
+
 
     markupChanged(matData, type) {
         try {
@@ -3044,4 +3031,71 @@ this.creditTerms=res.creditTerm;
     parseToInt(str : any) {
         return Number(str);
     }
+
+
+    //new code from here
+
+     
+    // getAllWorkOrderStatus(): void {
+    //     this.commonService.smartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description').subscribe(res => {
+    //         this.quoteStatusList = res;
+    //      },
+    //      err => {
+    //          this.errorHandling(err);
+    //      })
+    // }
+    upDateDisabeldbutton:any;
+    getActive(){
+        this.upDateDisabeldbutton=false;
+    }
+    onFilterTangible(value) {
+        this.getAllWorkOrderStatus(value);
+    }
+    setEditArray:any=[];
+    getAllWorkOrderStatus(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
+
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.quoteStatusList = res;
+            }
+        })
+    }
+
+
+
+    // loadCurrency() {
+    //     this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
+    //         results => this.currencyList = results,
+    //         error => { this.errorHandling(error)}
+    //     );
+    // } 
+
+    onFilterCurrency(value) {
+        this.loadCurrency(value);
+    }
+
+    loadCurrency(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
+
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.currencyList = res;
+            }
+        })
+    }
+
+
 }

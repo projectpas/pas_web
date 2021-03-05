@@ -8,9 +8,9 @@
             <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">Create Work Order Quote</li>
         </ol>
     </nav>
-
+ 
     <div class="card new-card">
-        <div class="card-header bg-primary">
+        <!-- <div class="card-header bg-primary">
             <div class="row">
               <div class="col">
                 <h4 class="new-card-heading">
@@ -25,8 +25,22 @@
                 </button>
               </div>
             </div>
-          </div>
-
+          </div> -->
+          <div class="card-header header ">
+            <div class="row">
+                <div class="col">
+                  <h4  class="header-name">
+                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
+            </div>
+            <div>
+                <button type="button"
+                  class="btn-sm header-button pull-right"
+                  [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote-list']" >
+                  Work Order Quote List  </button>
+                  
+                </div>
+           </div>
+        </div>
     <div class="card-body new-card-body">
         <div class="form-row">
             <div class="col-md-3"> 
@@ -72,22 +86,28 @@
                                 [disabled]="isView"></p-calendar>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label> Quote Status <span class="clr-red">*</span></label>
                     <select [(ngModel)]="quoteForm.expirationDateStatus" required name="ExpDateStatus" [disabled]="isView">
                         <option *ngFor="let status of quoteStatusList" [value]="status.value">{{status.label}}</option>
                     </select>
+                </div> -->
+                <div class="form-group">
+                    <label> Quote Status <span class="clr-red">*</span></label>
+        
+                    <p-dropdown  [showClear]="true" [disabled]="isView" class="p-dropdown-100" (input)="onFilterTangible($event)" (ngModelChange)="getActive($event)" required [options]="quoteStatusList" filter="true" [(ngModel)]="quoteForm.expirationDateStatus"  name="ExpDateStatus" [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                 </div>
-
                 <div class="form-group ">
                     <label for="Currency">
                         Currency
                         <span class="clr-red">*</span>
                     </label>
-                    <select [(ngModel)]="currency" name="Currency" required [disabled]="isView" *ngIf="!isQuoteListView">
+                    <!-- <select [(ngModel)]="currency" name="Currency" required [disabled]="isView" *ngIf="!isQuoteListView">
                         <option value="">Select Currency</option>
                         <option *ngFor="let cur of currencyList" [value]="cur.value">{{cur.label}}</option>
-                    </select>
+                    </select> -->
+
+                    <p-dropdown  [showClear]="true" *ngIf="!isQuoteListView" [disabled]="isView" class="p-dropdown-100" (input)="onFilterCurrency($event)" (ngModelChange)="getActive($event)" required [options]="currencyList" filter="true" [(ngModel)]="currency"  name="Currency" [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                     <input class="form-control" type="text" [(ngModel)]="currency" name="Currency" *ngIf="isQuoteListView" [disabled]="isView" />
                 </div>
 

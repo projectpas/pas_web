@@ -378,7 +378,7 @@
                     <td>
                       <select class="form-control width-100" (ngModelChange)="getActive()" [(ngModel)]="f.taskId" [disabled]="isView" name="task_{{i}}"
                        >
-                        <option value="">Select</option>
+                        <option value="">Select</option> 
                         <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
                       </select>
                     </td>
@@ -388,7 +388,7 @@
                       </p-dropdown>
                     </td> -->
                     <td>
-                      <p-dropdown placeholder="Select Site Name"  (ngModelChange)="getActive()" name="shipVia{{ i }}" #shipVia="ngModel"
+                      <p-dropdown placeholder="Select Site Name"  appendTo="body" (ngModelChange)="getActive()" name="shipVia{{ i }}" #shipVia="ngModel"
                         [options]="shipViaList" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                       </p-dropdown>
                     </td>
@@ -407,7 +407,7 @@
                         class="form-control w50" />
                     </td>
                     <td>
-                      <p-dropdown placeholder="Select UOM"  (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
+                      <p-dropdown placeholder="Select UOM" appendTo="body" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                       </p-dropdown>
                     </td>
