@@ -11,6 +11,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { CommonService } from '../../../services/common.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { any } from 'underscore';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-customer-sales-person',
@@ -78,8 +79,11 @@ export class CustomerSalesPersonComponent implements OnInit {
         private authService: AuthService,
         private alertService: AlertService,
         private localStorage: LocalStoreManager,
-        private modalService: NgbModal
-    ) {}
+        private modalService: NgbModal,
+        private router: ActivatedRoute
+    ) {
+        this.id = this.router.snapshot.params['id'];
+    }
 
     ngOnInit() {
         if (this.editMode) {
@@ -89,7 +93,7 @@ export class CustomerSalesPersonComponent implements OnInit {
 
         } else {
             this.savedGeneralInformationDataOriginal = this.savedGeneralInformationData;
-            this.id = this.savedGeneralInformationData.customerId;
+            //this.id = this.savedGeneralInformationData.customerId;
             this.customerCode = this.savedGeneralInformationData.customerCode;
             this.customerName = this.savedGeneralInformationData.name;
         }
