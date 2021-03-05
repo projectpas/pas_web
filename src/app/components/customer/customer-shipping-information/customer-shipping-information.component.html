@@ -1,22 +1,22 @@
-﻿<div class="right_col" role="main" style="padding: 2px 6px">
-  <div style="">
+﻿<div class="right_col shipping-main-padding" role="main">
+  <div>
     <div class="x_content">
       <div *ngIf="isViewMode == false">
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -35,10 +35,10 @@
             <div id="step1" class="panel-collapse collapse">
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
-                      <div style="text-align: right;">
+                      <div class="text-right">
                         <a *ngIf="isViewMode == false" 
                           data-toggle="modal" data-target="#addShippingInfo">
-                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
+                          <button type="button" class="btn-sm header-button add-shipping-button"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
                             Add Domestic Shipping Information
                           </button>
                         </a>              
@@ -82,8 +82,7 @@
                             </div>
                             <div class="row">
                               <div class="col">
-                              <div class="col"
-                                style="width: 370px; float: right; padding-top: 3px;"
+                              <div class="col shipping-radios"
                               >
                                 <div class="form-group">
                                   <div
@@ -97,8 +96,8 @@
                               <div class="pull-left radio-buttons-align">
                                   <p-radioButton class="custom_set" name="groupname" value="ALL" label="All" (click)="geListByStatusDomsetic('ALL')" [(ngModel)]="currentstatus1"></p-radioButton>
                               </div>
-                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 4px;">
+                              <div class="checkbox-cstm shipping-check-div">
+                                <label class="shipping-check-label">
                                       <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"  (click)="getDeleteListByStatusDomestic($event.target.checked)"
                                         />
                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -113,8 +112,8 @@
                           </ng-template>
 
                           <ng-template pTemplate="caption" *ngIf="isViewMode == true">
-                            <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
-                              <label style="width: auto !important;margin-top: 3px;">
+                            <div class="checkbox-cstm show-deleted-check-div">
+                              <label class="show-deleted-label">
                                 <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"  (click)="getDeleteListByStatusDomestic($event.target.checked)"
                                   />
                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -171,7 +170,7 @@
                                     : rowData[col.field]
                                 }}
                               </td>
-                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == false">
                                   <div *ngIf="currentDeletedstatus1==false">
                                   <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
@@ -262,10 +261,10 @@
             <div id="step2" class="panel-collapse  collapse">
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
-                      <div style="text-align: right;">
+                      <div class="text-right">
                         <a *ngIf="isViewMode == false" 
                          data-toggle="modal" data-target="#addInternationalShippingInfo">
-                          <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
+                          <button type="button"  class="btn-sm header-button add-shipping-button"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
                             Add International Shipping Information
                           </button>
                         </a>              
@@ -314,9 +313,7 @@
                             </div>
                             <div class="row">
                               <div class="col">
-                              <div class="col"
-                                style="width: 370px; float: right; padding-top: 3px;"
-                              >
+                              <div class="col shipping-radios">
                                    <div class="form-group">
                                      <div
                                        class="pull-left radio-buttons-align"
@@ -338,8 +335,8 @@
                                       <span class="checkmark"></span>All
                                   </label>
                               </div>
-                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 4px;">
+                              <div class="checkbox-cstm shipping-check-div">
+                                <label class="shipping-check-label">
                                       <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"  (click)="getDeleteListByStatusIntern($event.target.checked)"
                                         />
                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -353,8 +350,8 @@
                           </ng-template>
 
                           <ng-template pTemplate="caption" *ngIf="isViewMode == true">
-                            <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
-                              <label style="width: auto !important;margin-top: 3px;">
+                            <div class="checkbox-cstm show-deleted-check-div">
+                              <label class="show-deleted-label">
                                 <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"  (click)="getDeleteListByStatusIntern($event.target.checked)"
                                   />
                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -421,7 +418,7 @@
                               </td>
                               </ng-container>
                               
-                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == false" >
                                 
                                 <div *ngIf="currentDeletedstatus2==false">
                                 <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
@@ -465,7 +462,7 @@
                                   <span ><a class="btn nobg" (click)="restore2(restoreId2,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
-                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true" style="text-align: center">
+                              <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == true">
                                 <span data-toggle="modal" data-target="#viewInter">
                                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                     (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
@@ -548,18 +545,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -684,7 +681,7 @@
                     }}
                   </td>
                   <td class="table-column-width" *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                   
@@ -734,18 +731,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -864,7 +861,7 @@
     </div>
   </div>
 
-  <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static"
+  <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static"
     class="popup-blur">
     <div class="modal-header">
       <h4 class="modal-title">History of Domestic Ship Via</h4>
@@ -874,27 +871,27 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Site Name:
+            <label class="control-label labels-font-header wauto">Site Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ DomesticSiteName }}
             </span>
           </p>
@@ -950,14 +947,14 @@
               }">
             <p [innerHTML]="audit.memo"></p>
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
                 </label>
               </span>
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
@@ -980,7 +977,7 @@
               }">
               {{ audit.updatedBy }}
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
@@ -1014,18 +1011,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -1142,18 +1139,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -1272,7 +1269,7 @@
                       }}
                     </td>
                     <td class="table-column-width" *ngIf="col.field == 'memo'">
-                      <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                      <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
                   </td>
                   </ng-container>
                     
@@ -1280,18 +1277,18 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingViaData.length == 0">
                   <tr>
-                    <td colspan="4" style="color: red; font-weight: bold; text-align: center">
+                    <td colspan="4" class="no-records-cstm no-records-msg">
                       No records found
                     </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="summary" id="footer">
                   <label id="footer" class="footer">Total:</label>
-                  <input style="width: 5%;" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
+                  <input class="footer-input-width" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
                     name="interTotalRecords" pInputText type="text" />
                   &nbsp;&nbsp;
                   <label id="footer" class="footer1">Pages Count:</label>
-                  <input style="width: 5%;" [ngModel]="
+                  <input class="footer-input-width" [ngModel]="
                       getPageCount(internationShipVia._totalRecords, pageSize)
                     " [disabled]="true" name="interTotalPages" pInputText type="text" />
                 </ng-template>
@@ -1323,27 +1320,27 @@
             <div class="col-md-12 shadow-box-cstm">
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                  <label class="control-label labels-font-header wauto">Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerName }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                  <label class="control-label labels-font-header wauto">Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerCode }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Site Name:
+                  <label class="control-label labels-font-header wauto">Site Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ DomesticSiteName }}
                   </span>
                 </p>
@@ -1446,9 +1443,9 @@
             </div>
         </div>
 
-          <div style="text-align: right !important; padding-right: 15px;">
-            <div class="checkbox-cstm" style="margin-left: 0;">
-              <label style="width: auto ">
+          <div class="show-deleted-div">
+            <div class="checkbox-cstm margin-left-0">
+              <label class="wauto">
                 <input type="checkbox" [(ngModel)]="currentDeletedstatusShipVia" name="currentDeletedstatusShipVia" id="currentDeletedstatusShipVia"  (click)="getDomesticShipViaListByStatus($event.target.checked)"/>
                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                 <b> Show Deleted List  </b> 
@@ -1523,7 +1520,7 @@
                   }}
                 </td>
                 <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
@@ -1557,7 +1554,7 @@
                     <span><a class="btn nobg" 
                       (click)="openShipViaHistory(contentAuditHistShipVia, rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                        <span ><a class="btn nobg" (click)="restoreShipVia(restoreShipViaPopUp,rowData);" matTooltip="Restore Record"  
+                        <span ><a class="btn nobg btn-users-cstm" (click)="restoreShipVia(restoreShipViaPopUp,rowData);" matTooltip="Restore Record"  
                           matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                   </div>
             </td>
@@ -1577,18 +1574,18 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="demosticShippingViaData.length == 0">
               <tr>
-                <td colspan="5" style="color: red; font-weight: bold; text-align: center">
+                <td colspan="5" class="no-records-msg no-records-cstm">
                   No records found
                 </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
               <label id="footer" class="footer">Total:</label>
-              <input style="width: 5%;" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
+              <input class="footer-input-width" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
                 pInputText type="text" />
               &nbsp;&nbsp;
               <label id="footer" class="footer1">Pages Count:</label>
-              <input style="width: 5%;" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
+              <input class="footer-input-width" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
                 [disabled]="true" pInputText type="text" />
             </ng-template>
           </p-table>
@@ -1611,18 +1608,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -1653,18 +1650,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -1695,18 +1692,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -1728,7 +1725,7 @@
         </button>
       </div>
     </ng-template>
-    <ng-template #contentAuditHistInterShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+    <ng-template #contentAuditHistInterShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
       <div class="modal-header">
         <h4 class="modal-title">History of International Ship Via Info</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -1737,27 +1734,27 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
           </div>
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Export License:
+              <label class="control-label labels-font-header wauto">Export License:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ InternationalExportLicName }}
               </span>
             </p>
@@ -1813,14 +1810,14 @@
                 }">
               <p [innerHTML]="audit.memo"></p>
             </td>
-              <td style="text-align: center;">
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                       <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
                   </label>
                 </span>
               </td>
-              <td style="text-align: center;">
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                       <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
@@ -1843,7 +1840,7 @@
                 }">
                 {{ audit.updatedBy }}
               </td>
-              <td style="text-align: center;">
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                       <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
@@ -1877,18 +1874,18 @@
             <div class="col-md-12 shadow-box-cstm">
               <div class="col-md-6">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                  <label class="control-label labels-font-header wauto">Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerName }}
                   </span>
                 </p>
               </div>
               <div class="col-md-6">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                  <label class="control-label labels-font-header wauto">Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerCode }}
                   </span>
                 </p>
@@ -1952,27 +1949,27 @@
             <div class="col-md-12 shadow-box-cstm">
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                  <label class="control-label labels-font-header wauto">Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerName }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                  <label class="control-label labels-font-header wauto">Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerCode }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Export License:
+                  <label class="control-label labels-font-header wauto">Export License:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ InternationalExportLicName }}
                   </span>
                 </p>
@@ -1981,8 +1978,8 @@
           </div>
           <div class="modal-body">
             <div class="form-row" *ngIf="isViewMode == false">
-              <div class="form-group" style="margin-top: 22px;margin-right:15px;">
-                <div class="checkbox-cstm" style="margin-left: 0;">
+              <div class="form-group primary-div">
+                <div class="checkbox-cstm margin-left-0">
                   <label>
                     <input type="checkbox" checked id="isPrimaryInter" name="isPrimaryDomesticInter" (ngModelChange)="enableSaveShipViaInternational()"
                       [(ngModel)]="shipViaInternational.isPrimary" [disabled]="shipViaInternational.isPrimary && isprimaryIntShipiviadata && isEditInternationalShipVia"/>
@@ -2073,8 +2070,8 @@
             </div>
           </div>
           <div style="text-align: right !important; padding-right: 15px;">
-            <div class="checkbox-cstm" style="margin-left: 0;">
-              <label style="width: auto ">
+            <div class="checkbox-cstm margin-left-0">
+              <label class="wauto">
                 <input type="checkbox" [(ngModel)]="currentDeletedstatusIntShipVia" name="currentDeletedstatusIntShipVia" id="currentDeletedstatusIntShipVia"  (click)="getInternationalShipViaListByStatus($event.target.checked)"/>
                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                 <b> Show Deleted List  </b> 
@@ -2146,7 +2143,7 @@
                   }}
                 </td>
                 <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
                 </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
@@ -2184,7 +2181,7 @@
                     <span><a class="btn nobg"
                       (click)="openInterShipViaHistory(contentAuditHistInterShipVia,rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                        <span ><a class="btn nobg" (click)="restoreIternationalShipVia(restoreShipIntViaPopUp,rowData);" matTooltip="Restore Record"  
+                        <span ><a class="btn nobg btn-users-cstm " (click)="restoreIternationalShipVia(restoreShipIntViaPopUp,rowData);" matTooltip="Restore Record"  
                           matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                     </div>
                 </td>
@@ -2219,18 +2216,18 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingViaData.length == 0">
               <tr>
-                <td colspan="5" style="color: red; font-weight: bold; text-align: center">
+                <td colspan="5" class="no-records-cstm no-records-msg">
                   No records found
                 </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
               <label id="footer" class="footer">Total:</label>
-              <input style="width: 5%;" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
+              <input class="footer-input-width" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
                 name="interTotalRecords" pInputText type="text" />
               &nbsp;&nbsp;
               <label id="footer" class="footer1">Pages Count:</label>
-              <input style="width: 5%;" [ngModel]="
+              <input class="footer-input-width" [ngModel]="
                   getPageCount(internationShipVia._totalRecords, pageSize)
                 " [disabled]="true" name="interTotalPages" pInputText type="text" />
             </ng-template>
@@ -2252,18 +2249,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -2300,18 +2297,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -2374,18 +2371,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -2443,18 +2440,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2486,18 +2483,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2522,7 +2519,7 @@
     </div>
   </ng-template>
 
-  <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+  <ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
       <h4 class="modal-title">History of Domestic Shipping Info</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -2531,18 +2528,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2625,14 +2622,14 @@
               }">
               {{ audit.country }}
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
                 </label>
               </span>
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
@@ -2655,7 +2652,7 @@
               }">
               {{ audit.updatedBy }}
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
@@ -2674,7 +2671,7 @@
     </div>
   </ng-template>
 
-  <ng-template #contentAuditHistInter let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+  <ng-template #contentAuditHistInter let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
       <h4 class="modal-title">History of International Shipping Info</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -2683,18 +2680,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2786,14 +2783,14 @@
               {{ audit.countryName }}
             </td>
 
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
                 </label>
               </span>
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
@@ -2816,7 +2813,7 @@
               }">
               {{ audit.updatedBy }}
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <span class="value">
                 <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
@@ -2846,18 +2843,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -2889,18 +2886,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2929,18 +2926,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2968,20 +2965,20 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Customer Name:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize;">
+                    <span class="span-header-red text-capital">
                         {{ customerName }}
                     </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Customer Code:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize;">
+                    <span class="span-header-red text-capital">
                         {{ customerCode }}
                     </span>
                 </p>

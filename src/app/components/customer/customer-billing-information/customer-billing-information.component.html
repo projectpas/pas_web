@@ -1,21 +1,21 @@
-﻿<div class="right_col" role="main" style="padding: 2px 6px">
+﻿<div class="right_col billing-padding" role="main">
   <div>
     <div class="x_content">
       <div class="col-md-12 shadow-box-cstm" *ngIf="isViewMode == false">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -133,7 +133,7 @@
               <div class="col-sm-8"></div>
               <div class="col-sm-4">
                 <div class="checkbox-cstm pull-right checkbox-align">
-                  <label class="checkbox-label-align" style="width:120px !important">
+                  <label class="checkbox-label-align show-deleted-width">
                     <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"/>
                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                       Show Deleted List 
@@ -214,7 +214,7 @@
                   </span>
                   <span><a class="btn nobg" (click)="getCustomerBillingHistory(contentAuditHist, rowData)"
                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                  <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                  <span ><a class="btn nobg btn-users-cstm" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                 </div>
               </td>
               <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
@@ -244,7 +244,7 @@
               type="text" />
           </ng-template>
         </p-table>
-        <div style="margin-top: 10px;" *ngIf="isViewMode == false">
+        <div class="m-t-10" *ngIf="isViewMode == false">
           <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
             Next
           </button>
@@ -270,7 +270,7 @@
           </div>
         </div>
       </div>
-      <ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto">
+      <ng-template #contentHist let-c="close" let-d="dismiss" class="wauto">
         <div class="modal-header">
           <h4 class="modal-title">History of Action</h4>
           <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -324,18 +324,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -514,18 +514,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -605,18 +605,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -638,7 +638,7 @@
     </button>
   </div>
 </ng-template>
-<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
   <div class="modal-header">
     <h4 class="modal-title">History of Billing Information</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -648,18 +648,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-4">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-4">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -744,14 +744,14 @@
             }">
             {{ audit.country }}
           </td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                   <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
               </label>
             </span>
           </td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                   <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
@@ -774,7 +774,7 @@
             }">
             {{ audit.updatedBy }}
           </td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                   <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
@@ -804,18 +804,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -846,18 +846,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -899,20 +899,20 @@
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Customer Name:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize;">
+                    <span class="span-header-red text-capital">
                         {{ customerName }}
                     </span>
                 </p>
             </div>
             <div class="col-md-6">
                 <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
+                    <label class="control-label labels-font-header wauto">
                         Customer Code:
                     </label>
-                    <span class="span-header-red" style="text-transform: capitalize;">
+                    <span class="span-header-red text-capital">
                         {{ customerCode }}
                     </span>
                 </p>
