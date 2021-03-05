@@ -86,8 +86,8 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.getSalesOrderBilling(salesOrderId, partId);
   }
 
-  getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId) {
-    return this.salesOrderEndPointSevice.getSalesOrderBillingByShipping(salesOrderId, partId,salesOrderShippingId);
+  getSalesOrderBillingByShipping(salesOrderId, partId, salesOrderShippingId) {
+    return this.salesOrderEndPointSevice.getSalesOrderBillingByShipping(salesOrderId, partId, salesOrderShippingId);
   }
 
   getSalesOrderBillingParts(salesOrderId) {
@@ -140,7 +140,7 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.search(salesQuoteSearchParameters)
     );
   }
-  
+
   getTotalCharges() {
     return this.totalCharges;
   }
@@ -304,15 +304,15 @@ export class SalesOrderService {
   sentForInternalApproval(data) {
     return this.salesOrderEndPointSevice.sentForInternalApproval(data);
   }
-  close(salesOrderId: number,updatedBy:string): Observable<boolean[]> {
+  close(salesOrderId: number, updatedBy: string): Observable<boolean[]> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.close(salesOrderId,updatedBy)
+      this.salesOrderEndPointSevice.close(salesOrderId, updatedBy)
     );
   }
 
-  cancel(salesOrderId: number,updatedBy:string): Observable<boolean[]> {
+  cancel(salesOrderId: number, updatedBy: string): Observable<boolean[]> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.cancel(salesOrderId,updatedBy)
+      this.salesOrderEndPointSevice.cancel(salesOrderId, updatedBy)
     );
   }
 
@@ -578,9 +578,9 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.getpickticketHistory(pickticketid)
   }
 
-  getStockLineforPickTicket(itemMasterId: number, conditionId: number,salesOrderId :number): Observable<any> {
+  getStockLineforPickTicket(itemMasterId: number, conditionId: number, salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.getStockLineforPickTicket(itemMasterId, conditionId,salesOrderId)
+      this.salesOrderEndPointSevice.getStockLineforPickTicket(itemMasterId, conditionId, salesOrderId)
     );
   }
 
@@ -590,21 +590,21 @@ export class SalesOrderService {
     );
   }
 
-  confirmPickTicket(pickticketId: number,confirmById:string): Observable<boolean[]> {
+  confirmPickTicket(pickticketId: number, confirmById: string): Observable<boolean[]> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.confirmPickTicket(pickticketId,confirmById)
+      this.salesOrderEndPointSevice.confirmPickTicket(pickticketId, confirmById)
     );
   }
 
-  getPickTicketPrint(salesOrderId: number,salesOrderPartId:number,soPickTicketId: number): Observable<any> {
+  getPickTicketPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.getPickTicketPrint(salesOrderId,salesOrderPartId,soPickTicketId)
+      this.salesOrderEndPointSevice.getPickTicketPrint(salesOrderId, salesOrderPartId, soPickTicketId)
     );
   }
 
-  getPickTicketEdit(soPickTicketId: number,salesOrderId: number,salesOrderPartId: number): Observable<any> {
+  getPickTicketEdit(soPickTicketId: number, salesOrderId: number, salesOrderPartId: number): Observable<any> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.getPickTicketEdit(soPickTicketId,salesOrderId,salesOrderPartId)
+      this.salesOrderEndPointSevice.getPickTicketEdit(soPickTicketId, salesOrderId, salesOrderPartId)
     );
   }
 
@@ -617,6 +617,12 @@ export class SalesOrderService {
   getShippingEdit(salesOrderShippingId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getShippingEdit(salesOrderShippingId)
+    );
+  }
+
+  getShippingLabelPrint(salesOrderId: number, salesOrderPartId: number, soShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId)
     );
   }
 

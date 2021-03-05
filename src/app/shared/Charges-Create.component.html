@@ -20,7 +20,7 @@
         <th><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
         <th style="z-index:1"><label>Vendor Name</label></th>
         <th *ngIf="!isQuote && !isEdit">
-          <label style="text-align: left;">Actions </label>
+          <label class="text-left">Actions </label>
         </th>
       </tr>
       </thead>
@@ -38,8 +38,8 @@
         </p-dropdown> 
         </td>
         <td>
-          <select class="form-control full-width" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
-            [(ngModel)]="charge.workflowChargeTypeId" style="border-radius: 4px;" name="type_{{i}}" required>
+          <select class="form-control full-width border-radius-4" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
+            [(ngModel)]="charge.workflowChargeTypeId" name="type_{{i}}" required>
             <option [value]="0">--Select--</option>
             <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
               ctype.chargeType
@@ -88,7 +88,7 @@
           </p-autoComplete>
         </td>
         <!-- [disabled]="!charge.isShowDelete"  -->
-        <td *ngIf="!isQuote &&  !isEdit" style="text-align: center;">
+        <td *ngIf="!isQuote &&  !isEdit" class="text-center">
           <button class="btn btn-danger nobg"  (click)="openDelete(content,charge,i)">
             <i class="fa fa-trash"></i>
           </button>
@@ -118,24 +118,22 @@
   </form>
 
 
-<div *ngIf="isWorkOrder && !isEdit" style="float:right">
-  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="saveChargesWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="!chargesCreateForm.valid">
+<div *ngIf="isWorkOrder && !isEdit" class="float-right">
+  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="saveChargesWorkOrder()" [disabled]="!chargesCreateForm.valid">
     {{ isQuote ? 'Add' : 'Save' }}
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"
-    style="padding: 6px 12px !important;margin-top: 10px;" (click)="close()">
+  <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal" (click)="close()">
     Close
   </button>
 </div>
 
-<div *ngIf="isWorkOrder && isEdit" style="float:right">
-  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateChargesWorkOrder()"
-    style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="disableUpdate">
+<div *ngIf="isWorkOrder && isEdit" class="float-right">
+  <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="updateChargesWorkOrder()"
+     [disabled]="disableUpdate">
     Update
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal"
-    style="padding: 6px 12px !important;margin-top: 10px;" (click)="close()">
+  <button type="button" class="btn btn-danger m-t-10" data-dismiss="modal"
+     (click)="close()">
     Close
   </button>
 </div>

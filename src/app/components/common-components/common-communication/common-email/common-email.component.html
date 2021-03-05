@@ -1,11 +1,4 @@
 ﻿<div class="card new-card">
-    <!-- <div class="col-md-12">
-        <h4 class="po-head-sm">
-            Communication - Email
-            <a href="#" data-toggle="modal" data-target="#addNewMemo" (click)="addMemo()" *ngIf="!isView">
-                <i class="fa fa-plus-circle fa-lg"></i></a>
-        </h4>
-    </div> -->
     <div class="card-header header">
         <div class="row">
             <div class="col">
@@ -24,7 +17,6 @@
             [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
             selectionMode="multiple" [metaKeySelection]="true" [lazy]="false" [resizableColumns]="true"
             [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true" scrollHeight="450px">
-            <!--(onLazyLoad)="loadData($event)"-->
             <ng-template pTemplate="caption">
                 <div class="row">
                     <div class="col">
@@ -86,10 +78,6 @@
                     </th>
                 </tr>
                 <tr>
-                    <!-- <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input class="table-header-input-width" pInputText type="text" class="incorn_border" (input)="
-                            dt.filter($event.target.value, col.field, 'contains')" />
-                </th> -->
                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                         <input class="incorn_border table-header-input-width" *ngIf="col.field != 'contactDate'"
                             pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
@@ -105,8 +93,6 @@
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column"
                         pReorderableRowHandle>
-                        <!-- {{rowData[col.field]}} -->
-                        <!-- <td *ngIf="col.field !='SERIAL_NO' && col.field!='description'"> -->
                         {{
                             col.field == 'createdDate'
                               ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
@@ -114,13 +100,8 @@
                               ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                               : rowData[col.field] 
                           }}
-                        <!-- </td> -->
                     </td>
                     <td class="action-icons-cstm table-column-width">
-                        <!-- <button class="btn-edit ptable-wo-btns" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
-                            (click)="editEmail(rowData)" matTooltip="Edit">
-                                <mat-icon>edit</mat-icon>
-                            </button> -->
                         <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#viewEmail"
                                 (click)="emailView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
@@ -135,30 +116,15 @@
                         <!-- <button class="btn btn-danger nobg" (click)="addList.splice(i, 1)">
                                 <i class="fa fa-trash"></i>
                             </button> -->
-                        <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
-                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
-                                <i class="fa fa-history"></i></a></span>
                         <span *ngIf="deletedStatusInfo==true && !isView">
                             <a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"
                                 matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        <span data-target="#contentHistDocs" data-toggle="modal"><a class="btn nobg"
+                                (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above">
+                                <i class="fa fa-history"></i></a></span>
                     </td>
                 </tr>
             </ng-template>
-            <!-- <ng-template pTemplate="summary" id="footer">
-                <label id="footer" class="footer">No'of records:</label>
-                <input style="width: 5%;"
-                        [(ngModel)]="totalRecords"
-                        [disabled]="true"
-                        pInputText
-                        type="text" />
-                &nbsp;&nbsp;
-                <label id="footer" class="footer1">Pages Count:</label>
-                <input style="width: 5%;"
-                        [(ngModel)]="totalPages"
-                        [disabled]="true"
-                        pInputText
-                        type="text" />
-            </ng-template> -->
             <ng-template pTemplate="emptymessage" let-columns *ngIf="data.length == 0">
                 <tr>
                     <td colspan="7" class="no-records-cstm no-records-msg">
@@ -207,26 +173,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- <div class="col-md-12 shadow-box-cstm">
-                    <div class="col-md-4">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header"
-                             style="width: auto;">Legal Entity Name: </label>
-                            <span class="span-header-red"
-                             style="text-transform: capitalize"> {{legalEntityName }}
-                             </span>
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header"
-                             style="width: auto;">Company Code: </label>
-                            <span class="span-header-red" 
-                            style="text-transform: capitalize"> {{legalEntityCode }} 
-                        </span>
-                        </p>
-                    </div>
-                </div> -->
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                    <div class="tableFixHead">
                     <table class="table table-bordered header-table-width">
@@ -287,7 +233,7 @@
                                 <td>
                             <tr *ngFor="let x of audit.attachmentDetails">
                                 <a [ngStyle]="{'color':  getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }"
-                                    class="filelink" (click)="downloadFile(x)"> {{x.fileName}} <span
+                                    class="filelink" (click)="downloadFileUpload(x.link)"> {{x.fileName}} <span
                                         *ngIf="audit.attachmentDetails && audit.attachmentDetails.length>0">,</span></a>
                             </tr>
                             </td>
@@ -347,31 +293,10 @@
 </div>
 <div id="addNewMemo" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog" style="margin-top:0%;">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add Email</h4>
-                <!-- <div class="col-md-12 shadow-box-cstm">
-                    <div class="col-md-6">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-                            </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
-                                {{customerDetails.customerName}}
-                            </span>
-                        </p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-                            </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
-                                {{customerDetails.customerCode}}
-                            </span>
-                        </p>
-                    </div>
-                </div> -->
             </div>
             <form #attachDocForm="ngForm" class="form-horizontal" ngNativeValidate>
                 <div class="modal-body">
@@ -410,10 +335,6 @@
                             <div class="col-md-6">
                                 <div class="form-group col-md-12">
                                     <label class="col-md-12">Contacted By <span class="clr-red">*</span></label>
-                                    <!-- <select [(ngModel)]="contactBy" class="form-control" name="createdBy" required>
-                                    <option value="">Select</option>
-                                    <option *ngFor="let employee of employeeList" [value]="employee.employeeId">{{employee.firstName}}</option>
-                                </select> -->
                                     <p-autoComplete field="name" [(ngModel)]="contactBy" required name="employees"
                                         #employees="ngModel" errorMessage="Records not found" [forceSelection]="true"
                                         [dropdown]="true" [suggestions]="employeeList"
@@ -432,7 +353,7 @@
                                         #ccEmail="ngModel" [(ngModel)]="cc" multiple="true">
                                     <div *ngIf="ccEmail.errors" [ngClass]="'error'">
                                         <div *ngIf="ccEmail.errors.pattern">
-                                            <span class="clr-red">Email  not valid</span>
+                                            <span class="clr-red">Email not valid</span>
                                         </div>
                                     </div>
                                 </div>
@@ -463,7 +384,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- || checkValidEmails() -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary editor-buttons-margin"
                         (click)="send(attachDocForm.valid)"
@@ -493,7 +413,6 @@
 </div>
 <div id="deleteRowConfirmation" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-sm">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
@@ -517,90 +436,50 @@
 </div>
 <div id="viewEmail" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-sm">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title"> Email Details</h4>
-                <!-- <div class="col-md-12 shadow-box-cstm">
-                    <div class="col-md-6">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-                            </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
-                                {{customerDetails.customerName}}
-                            </span>
-                        </p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="fs12">
-                            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-                            </label>
-                            <span class="span-header-red" style="text-transform: capitalize">
-                                {{customerDetails.customerCode}}
-                            </span>
-                        </p>
-                    </div>
-                </div> -->
             </div>
             <div class="modal-body">
                 <div class="col-sm-12">
                     <p>
                         <span class="label"><strong> Email Type <span class="clr-red">*</span> : </strong></span><span
-                            class="value">{{
-                            emailViewData.emailType
-                          }}</span>
+                            class="value">{{ emailViewData.emailType }}</span>
                     </p>
                     <p>
                         <span class="label"><strong>To Email <span class="clr-red">*</span> : </strong></span><span
-                            class="value">{{
-                            emailViewData.toEmail
-                          }}</span>
+                            class="value">{{ emailViewData.toEmail }}</span>
                     </p>
                     <p>
-                        <span class="label"><strong> CC: </strong></span><span class="value">{{
-                                emailViewData.cc
-                            }}</span>
+                        <span class="label"><strong> CC: </strong></span><span class="value">{{ emailViewData.cc }}</span>
                     </p>
                     <p>
-                        <span class="label"><strong> BCC: </strong></span><span class="value">{{
-                                emailViewData.bcc
-                            }}</span>
+                        <span class="label"><strong> BCC: </strong></span><span class="value">{{ emailViewData.bcc }}</span>
                     </p>
                     <p>
                         <span class="label"><strong>Subject <span class="clr-red">*</span>: </strong></span><span
-                            class="value">{{
-                                emailViewData.subject
-                            }}</span>
+                            class="value">{{ emailViewData.subject }}</span>
                     </p>
                     <p>
                         <span class="label"><strong> Contacted By <span class="clr-red">*</span>: </strong></span><span
-                            class="value">{{
-                                emailViewData.contactBy
-                            }}</span>
+                            class="value">{{ emailViewData.contactBy }}</span>
                     </p>
                     <p>
-                        <span class="label"><strong> Contact Date: </strong></span><span class="value">{{
-                                emailViewData.contactDate | date: 'MM/dd/yyyy h:mm a '
-                            }}</span>
+                        <span class="label"><strong> Contact Date: </strong></span><span class="value">{{ emailViewData.contactDate | date: 'MM/dd/yyyy h:mm a ' }}</span>
                     </p>
                     <p>
                         <span class="label"><strong> <span *ngIf="type==1">Customer</span><span
                                     *ngIf="type==2">Vendor</span> Contact : </strong></span><span class="value">
-                            <span *ngIf="type==1"> {{
-                                emailViewData.customerContact   
-                            }}</span>
-                            <span *ngIf="type==2"> {{
-                                emailViewData.vendorContact   
-                            }} </span>
+                            <span *ngIf="type==1"> {{ emailViewData.customerContact }}</span>
+                            <span *ngIf="type==2"> {{ emailViewData.vendorContact }} </span>
                         </span>
                     </p>
-                    <!-- <hr> -->
                     <p class="email-content">
                         <span class="label" style="float: left;"><strong> Email Content: </strong></span>
                         <span class="value" [innerHTML]="emailViewData.emailBody"></span>
                     </p>
-                    <div>
+                    <!-- <div>
                         <label class="label attachments-label-width">Attachments:</label>
                         <ul style="list-style: none;">
                             <li *ngFor="let attachment of emailViewData.attachmentDetails">
@@ -609,7 +488,89 @@
                                     {{ attachment.link }}</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
+                    <div class="mt-3">
+                        <label class="label attachments-label-width">Attachments:</label>
+                        <p-table
+                          #dtatt
+                          class="table-responsive ptable-cus-pma"
+                          [paginator]="attachmentDetails.length > 0"
+                          [value]="attachmentDetails"
+                          [rows]="3"
+                          [columns]="sourceViewforListColumns"
+                        >
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <th *ngFor="let col of columns">
+                                {{ col.header }}
+                              </th>
+                              <th>
+                                Download
+                              </th>
+                            </tr>
+                            <tr>
+                              <th
+                                style="width:auto"
+                                *ngFor="let col of columns"
+                                [ngSwitch]="col.field"
+                              >
+                                <input
+                                  style="width:100%;" class="incorn_border"
+                                  pInputText
+                                  type="text"
+                                  (input)="
+                                  dtatt.filter($event.target.value, col.field, 'contains')
+                                  "
+                                />
+                              </th>
+                              <th></th>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="body"
+                            let-part
+                            let-rowData
+                            let-columns="columns"
+                            let-i="rowIndex"
+                          >
+                            <tr>
+                              <td *ngFor="let col of columns">
+                                <ng-container *ngIf="col.field == 'fileName'">
+                                  {{ part[col.field] }}
+                                </ng-container>
+                              </td>
+                              <td class="text_c">
+                                <button *ngIf="part.attachmentId!=0"
+                                  (click)="downloadFileUpload(part.link)"
+                                  matTooltip="Download"  matTooltipPosition="above"
+                                  class="downld"
+                                  ><span><i class="fa fa-download"></i></span
+                                ></button>
+                                <button *ngIf="part.attachmentId==0" 
+                               
+                                matTooltip="Download will be enabled after Save Records"  matTooltipPosition="above"
+                                class="downld"
+                                ><span><i class="fa fa-download"></i></span
+                              ></button>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="emptymessage"
+                            let-columns
+                            *ngIf="attachmentDetails.length == 0"
+                          >
+                            <tr>
+                              <td
+                                [attr.colspan]="2"
+                                style="color: red; font-weight: bold; text-align: center"
+                              >
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -628,8 +589,7 @@
             Are you sure you want to send this Quote to Customer?
         </h6>
         <a style="padding:0px" class="filelink btn btn-link" (click)="downloadFileUpload(pdfPath)" target="_blank"
-            download>Preview
-            Quote</a>
+            download>Preview Quote</a>
         <!-- <a href="{{pdfPath}}" class="btn btn-link" target="_blank" >Preview Quote</a> -->
     </div>
     <div class="modal-footer">

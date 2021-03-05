@@ -191,7 +191,7 @@ export class SalesOrderPartNumberComponent {
     }
 
     this.summaryColumns = [
-      { field: 'itemNo', header: 'Line #', width: '50px', textalign: 'center' },
+      { field: 'itemNo', header: 'Line #', width: '43px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: "140px" },
       { field: 'partDescription', header: 'PN Description', width: "200px" },
       { field: 'pmaStatus', header: 'Stk Type', width: "70px" },

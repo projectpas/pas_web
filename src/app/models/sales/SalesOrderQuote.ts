@@ -32,40 +32,6 @@ export class SalesOrderQuote implements ISalesOrderQuote {
     customerWarningId: number;
     memo: string | null;
     notes: string | null;
-    shipToSiteName: string;
-    shipToAddress1: string;
-    shipToAddress2: string;
-    shipToAddress3: string;
-    shipToCity: string;
-    shipToState: string;
-    shipToPostalCode: string;
-    shipToCountry: string;
-    shipToContactId: number;
-    shipToContactName: string;
-    shipViaId: number;
-    shipViaName: string;
-    shipViaShippingAccountInfo: string;
-    shippingId: string;
-    shippingURL: string;
-    shipViaMemo: string;
-    shipViaShippingURL: string;
-    billToSiteName: string;
-    billToAddress1: string;
-    billToAddress2: string;
-    billToAddress3: string;
-    billToCity: string;
-    billToState: string;
-    billToPostalCode: string;
-    billToCountry: string;
-    billToContactId: number;
-    billToContactName: string;
-    billToMemo: string;
-    shipToUserTypeId: number;
-    shipToUserId: number;
-    shipToAddressId: number;
-    billToUserTypeId: number;
-    billToUserId: number;
-    billToAddressId: number;
     masterCompanyId: number;
     createdBy: string;
     createdOn: string;
@@ -81,10 +47,9 @@ export class SalesOrderQuote implements ISalesOrderQuote {
     qtyToBeQuoted: number;
     status: string;
     isApproved: boolean;
-    shipToCountryId: number;
-    billToCountryId: number
     buId: number;
     divisionId: number;
     departmentId: number;
+    customerName: string;
     constructor() { }
 }

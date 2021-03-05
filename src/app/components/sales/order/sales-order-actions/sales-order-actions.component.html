@@ -1,11 +1,11 @@
 <div class="sales-order-actions">
-    <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.ViewQuote)"
+    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.ViewQuote)"
         *ngIf="controlSettings && controlSettings.showViewQuote">
         View Quote
     </button>
     <p-splitButton label="Payment" styleClass="btn btn-primary" [model]="paymentItems">
     </p-splitButton>
-    <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.NewSalesOrder)">New SO</button>
+    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.NewSalesOrder)">New SO</button>
     <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Print"
         styleClass="btn btn-primary" [model]="printItems">
     </p-splitButton>
@@ -14,9 +14,9 @@
     </p-splitButton>
     <!-- <p-splitButton label="Communication" styleClass="btn btn-primary" [model]="communicationItems">
     </p-splitButton> -->
-    <button type="button" class="btn btn-primary"
+    <button type="button" class="btn btn-primary btnAction"
         (click)="onClick(salesOrderActionType.CancelSalesOrder)">Cancel</button>
-    <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.CloseSalesOrder)">
+    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.CloseSalesOrder)">
         Close
         SO
     </button>

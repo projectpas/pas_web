@@ -656,6 +656,7 @@ export class VendorBillingInformationComponent {
     onAddBillingInfo() {
         this.sourceVendor = {};
         this.isEditBillingInfo = false;
+        this.editSiteName = '' ;
         this.isSiteNameAlreadyExists = false;
         this.getAllSiteSmartDropDown();
     }

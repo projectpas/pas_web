@@ -25,7 +25,7 @@
             <div class="col-md-12" style="padding-left:25px; padding-top:5px">
                 <label style="width: 100%;"></label>
                 <div class="form-group" style="float: right; margin-right: 10px;">
-                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Create Shipping</button>
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateShippingBtn">Perform Shipping</button>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
                         </th>
                         <!-- <th colspan="26"></th> -->
                         <!-- <th>Actions</th> -->
-                        <th colspan="5"></th>
+                        <th colspan="7"></th>
                         <th></th>
                     </tr>
                     <ng-container *ngIf="shippingList.length > 0">
@@ -113,14 +113,14 @@
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of headers"
                                         style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                                        <span *ngIf="summaryColumn.field == 'itemNo'">
+                                        <!-- <span *ngIf="summaryColumn.field == 'itemNo'">
                                             Item {{summaryPart[summaryColumn.field] }}
-                                        </span>
+                                        </span> -->
                                         <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
                                     </td>
-                                    <td colspan="5"></td>
+                                    <td colspan="7"></td>
                                     <td></td>
                                     <!-- <td style="position:sticky; width:80px">
                                   <span>
@@ -137,9 +137,10 @@
                                     <th>Ready?</th>
                                     <th>Ship Date</th>
                                     <th>Shipping Num </th>
+                                    <th>AWB</th>
                                     <th>Pick Ticket Ref</th>
-                                    <th>Item #</th>
-                                    <th>PN</th>
+                                    <th>Line #</th>
+                                    <th style="min-width: 120px;">PN</th>
                                     <th>PN Description</th>
                                     <th style="min-width: 120px;">Stk Line Num</th>
                                     <th style="min-width: 120px;">Serial Num</th>
@@ -166,10 +167,13 @@
                                         {{ ship.soShippingNum }}
                                     </td>
                                     <td>
+                                        {{ ship.airwayBill }}
+                                    </td>
+                                    <td>
                                         {{ ship.soPickTicketNumber }}
                                     </td>
                                     <td>
-                                        Item {{ ship.itemNo}}
+                                        Line {{ ship.itemNo}}
                                     </td>
                                     <td>
                                         {{ ship.partNumber }}
@@ -195,17 +199,17 @@
                                     <!-- <td colspan="2"></td> -->
                                     <td class="zui-sticky-col" style="width:107px !important">
                                         <span>
+                                            <a class="btn nobg" matTooltip="Print Shipping Label" matTooltipPosition="above"
+                                              (click)="printShippingLabel(ship);"><i class="fa fa-print"></i></a>
+                                          </span>
+                                        <span>
                                             <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
-                                                (click)="onSelectPartNumber(ship)" matTooltip="Create Shipping"
+                                                (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
                                                 matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
-                                            <!-- <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,ship)" matTooltip="Confirm"
-                                            matTooltipPosition="above" style="font-weight: bold;">
-                                            <i class="fa fa-check"></i>
-                                          </button> -->
                                         </span>
                                         <span>
-                                            <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
+                                            <button [hidden]="true" class="btn nobg" mat-icon-button
                                                 (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
                                                 matTooltipPosition="above" style="font-weight: bold;">
                                                 <i class="fa fa-pencil"></i>

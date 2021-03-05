@@ -16,14 +16,14 @@
         <tr>
           <th *ngIf="!isWorkFlow">Task<span class="clr-red">*</span></th>
           <th style="z-index:1">PN<span class="clr-red">*</span></th>
-          <th style="min-width: 90px;">Description<span class="clr-red">*</span></th>
+          <th class="min-width-90">Description<span class="clr-red">*</span></th>
           <th style="z-index:1">Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
-          <th style="min-width: 90px;" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
+          <th class="min-width-90" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
           <th>Qty<span class="clr-red">*</span></th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
-          <th style="min-width: 90px;">Stk Type</th>
+          <th class="min-width-90">Stk Type</th>
           <th>Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th>Deferred</th>
@@ -61,7 +61,7 @@
               </div>
             </div>
           </td>
-          <td style="min-width: 150px;">
+          <td class="min-width-150">
             {{ material.partDescription }}
           </td>
           <td>
@@ -71,8 +71,8 @@
             </p-dropdown>
           </td>
           <td>
-            <select class="form-control wf-pub-id full-width qtyWidth" (ngModelChange)="getActive()" [(ngModel)]="material.materialMandatoriesId"
-              (change)="onSelectMaterialManditory(material)" style="margin:auto;" name="mandi_{{ i }}">
+            <select class="form-control wf-pub-id full-width qtyWidth mauto" (ngModelChange)="getActive()" [(ngModel)]="material.materialMandatoriesId"
+              (change)="onSelectMaterialManditory(material)"  name="mandi_{{ i }}">
               <option value="0">--select--</option>
               <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.materialMandatoriesId }}">
                 {{mandatory.materialMandatoriesName}}
@@ -89,33 +89,34 @@
             </select>
           </td>
           <td>
-            <input type="text" pInputText pKeyFilter="pnum" (ngModelChange)="getActive()" class="form-control w100 text-right"
-             style="width:100% !important" value="{{ material.quantity }}" (keyup)="
+            <input type="text" pInputText pKeyFilter="pnum" (ngModelChange)="getActive()"
+             class="form-control w100 text-right input-width-100-percent"
+             value="{{ material.quantity }}" (keyup)="
                 calculateQtySummation();
                 calculateExtendedCost(material);
                 calculateExtendedPrice(material)
               " [(ngModel)]="material.quantity" maxlength="15" name="qty_{{ i }}" required />
           </td>
-          <td style="min-width: 115px;">
+          <td class="min-width-115">
             {{material.itemClassification}}
           </td>
-          <td style="min-width: 50px;">
+          <td class="min-width-50">
             {{material.unitOfMeasure}}
           </td>
           <td>
             {{material.stockType}}
           </td>
           <td>
-            <input type="text" (ngModelChange)="getActive()" class="form-control w100 text-right " pInputText pKeyFilter="money"
+            <input type="text" (ngModelChange)="getActive()" class="form-control w100 text-right input-width-100-percent" pInputText pKeyFilter="money"
               value="{{ material.unitCost }}" (change)="calculateExtendedCost(material)" [(ngModel)]="material.unitCost"
-             style="width:100% !important" name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
+              name="unitcost_{{ i }}" [required]="!isWorkOrder" maxlength="15" />
           </td>
           <td>
-            <input type="text" class="form-control w100 text-right" pInputText pKeyFilter="money"
+            <input type="text" class="form-control w100 text-right input-width-100-percent" pInputText pKeyFilter="money"
               [disabled]="true" value="{{ material.extendedCost }}" [(ngModel)]="material.extendedCost"
-             style="width:100% !important" name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
+             name="extCost_{{ i }}" maxlength="15" [required]="!isWorkOrder" />
           </td>
-          <td style="width:30px;text-align: center;">
+          <td class="pms-check-td">
             <div class="custom-checkbox-box">
               <input class="filled-in" id="PMS" (ngModelChange)="getActive()" type="checkbox" value="{{ material.isDeferred }}"
                 [(ngModel)]="material.isDeferred" name="isDef_{{ i }}" />
@@ -184,7 +185,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="isWorkOrder && !isEdit" style="float:right">
+  <div *ngIf="isWorkOrder && !isEdit" class="float-right">
     <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="saveMaterialsWorkOrder()"
      
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
@@ -194,14 +195,14 @@
       >Close</button>
   </div>
 
-  <div *ngIf="isQuote" style="float:right">
+  <div *ngIf="isQuote" class="float-right">
     <button class="btn btn-primary" (click)="saveMaterialsWorkOrder()"
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
       Add
     </button>
   </div>
 
-  <div *ngIf="isWorkOrder && isEdit" style="float:right">
+  <div *ngIf="isWorkOrder && isEdit" class="float-right">
     <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="updateMaterialsWorkOrder()"
       [disabled]="!materialCreateForm.valid || checkQuantityAvailability() || disableUpdateButton">
       Update
