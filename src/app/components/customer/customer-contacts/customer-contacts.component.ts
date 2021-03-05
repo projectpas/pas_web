@@ -175,16 +175,17 @@ export class CustomerContactsComponent implements OnInit {
 		private masterComapnyService: MasterComapnyService,
 		private configurations: ConfigurationService,
 		private commonService: CommonService,
-		private atamain: AtaMainService,
+		private atamain: AtaMainService,		
 		private datePipe: DatePipe
 	) {
 		this.stopmulticlicks = false;
+		this.id = this.router.snapshot.params['id'];
 	}
 
-	ngOnInit() {
-
+	ngOnInit() {		
+		
 		if (this.editMode) {
-			this.id = this.editGeneralInformationData.customerId;
+			//this.id = this.editGeneralInformationData.customerId;
 			this.customerCode = this.editGeneralInformationData.customerCode;
 			this.customerName = this.editGeneralInformationData.name;
 			this.isViewMode = false;
@@ -193,15 +194,14 @@ export class CustomerContactsComponent implements OnInit {
 		} else {
 
 			if (this.customerDataFromExternalComponents) {
-				this.id = this.customerDataFromExternalComponents.customerId;
+				//this.id = this.customerDataFromExternalComponents.customerId;
 				this.customerCode = this.customerDataFromExternalComponents.customerCode;
 				this.customerName = this.customerDataFromExternalComponents.name;
 
 				//this.getAllCustomerContact();
 				this.isViewMode = true;
 			} else {
-
-				this.id = this.savedGeneralInformationData.customerId;
+				//this.id = this.savedGeneralInformationData.customerId;
 				this.customerCode = this.savedGeneralInformationData.customerCode;
 				this.customerName = this.savedGeneralInformationData.name;
 				//this.getAllCustomerContact();
@@ -364,7 +364,7 @@ export class CustomerContactsComponent implements OnInit {
 			this.getAllCustomerContact();
 			this.alertService.showMessage("Success", `Updated Successfully`, MessageSeverity.success);
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false})
 	}
 
 	restoreATA(content, rowData) {
@@ -385,7 +385,7 @@ export class CustomerContactsComponent implements OnInit {
 					this.isSpinnerVisible = false;
 					this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
 				},
-				error => this.saveFailedHelper(error));
+				error => {this.isSpinnerVisible = false})
 		}
 
 		this.modal.close();
@@ -457,7 +457,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error));
+		}, error => {this.isSpinnerVisible = false})
 	}
 
 	getAllContactMiddleNameSmartDropDown(strText = '', contactName = '') {
@@ -491,7 +491,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error));
+		}, error => {this.isSpinnerVisible = false})
 	}
 
 	getAllContactLastNameSmartDropDown(strText = '', contactName = '') {
@@ -525,7 +525,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error));
+		}, error => {this.isSpinnerVisible = false})
 	}
 
 	filterFirstNames(event) {
@@ -700,7 +700,9 @@ export class CustomerContactsComponent implements OnInit {
 				this.loaderForContacts = false;
 				this.geListByStatus(this.status ? this.status : this.currentstatus);
 				this.isSpinnerVisible = false;
-			}, error => {this.isSpinnerVisible = false;})
+			}, error => {
+				this.loaderForContacts = false;
+				this.isSpinnerVisible = false;})
 		}
 	}
 

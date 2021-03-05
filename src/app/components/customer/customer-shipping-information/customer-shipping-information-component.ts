@@ -11,6 +11,8 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $ : any;
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
     selector: 'app-customer-shipping-information',
     templateUrl: './customer-shipping-information.component.html',
@@ -165,21 +167,24 @@ export class CustomerShippingInformationComponent implements OnInit {
     constructor(private customerService: CustomerService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService,
-    ) { }
+        private router: ActivatedRoute
+    ) { 
+        this.id = this.router.snapshot.params['id'];
+    }
     ngOnInit() {
         if (this.editMode) {
-            this.id = this.editGeneralInformationData.customerId;
+            //this.id = this.editGeneralInformationData.customerId;
              this.customerCode = this.editGeneralInformationData.customerCode;
             this.customerName = this.editGeneralInformationData.name;
             this.isViewMode = false;
         } else {
             if (this.customerDataFromExternalComponents) {
-                this.id = this.customerDataFromExternalComponents.customerId;
+                //this.id = this.customerDataFromExternalComponents.customerId;
                 this.customerCode = this.customerDataFromExternalComponents.customerCode;
                 this.customerName = this.customerDataFromExternalComponents.name;
                 this.isViewMode = true;
             } else {
-                this.id = this.savedGeneralInformationData.customerId;
+                //this.id = this.savedGeneralInformationData.customerId;
                 this.customerCode = this.savedGeneralInformationData.customerCode;
                 this.customerName = this.savedGeneralInformationData.name;
                 this.isViewMode = false;
@@ -627,6 +632,7 @@ export class CustomerShippingInformationComponent implements OnInit {
 
     addDomesticShipping() {
         this.isSiteNameAlreadyExists = false;
+        this.selectedSitename = "";
         this.isEditDomestic = false;
         this.domesticShippingInfo = new CustomerShippingModel();
     }

@@ -1,0 +1,144 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+</div>
+<div class="modal-content pdf-block " style="width:90%" id="soShippingLabel">
+    <div class="modal-body">
+        <div class="clear"></div>
+        <form id="" name="" action="#" method="post" onsubmit="return false;">
+            <div class="image">
+                <div style="padding: 0; margin: 0;">
+                    <div>
+                        <form id="" class="form-div" name="" action="#" method="post" onsubmit="return false;">
+                            <div class="pick-ticket-header" style="margin-bottom: 15px;">
+                                <h4>Service Class:</h4>
+                            </div>
+                            <div class="first-block">
+                                <div class="col-sm-4 first-block-4">
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label"><b>Cust Ref:</b></label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.customerRef}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Ship Date:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipDate | date:'medium'}}</label>
+                                    </div><br />
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label"><b>Origin:</b></label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Company:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.originCompanyName}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Address1:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.originAddress1}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">City:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.originCity}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">State/Prov, Postal Code:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.originState}},
+                                            {{this.salesOrderShipping.originPostalCode}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Country:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.originCountry}}</label>
+                                    </div><br />
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label"><b>Ship To:</b></label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Company:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipToComanyName}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Site:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipToSiteName}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Address1:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipToAddress1}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">City:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipToCity}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">State/Prov,Postal Code:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipToState}},
+                                            {{this.salesOrderShipping.shipToPostalCode}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Country:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                            disabled>{{this.salesOrderShipping.shipToCountry}}</label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Phone:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                    </div>
+                                    <div class="col-sm-12 first-block-name">
+                                        <label class="col-sm-3 first-block-label">Attn:</label>
+                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                    </div><br />
+                                    <img src="{{this.salesOrderShipping.shippingLabelBarcode}}" alt="barcode" width="98%" />
+                                </div>
+                            </div>
+                            <div class="second-block">
+                                <div class="second-block-div">
+                                    <label class="col-sm-4 second-block-label">SO Num</label>
+                                    <label class="col-sm-4 first-block-label" style="width:30%"
+                                        disabled>{{this.salesOrderShipping.salesOrderNumber}}</label>
+                                </div>
+                                <br />
+                                <div class="col-sm-12 second-block-div">
+                                    <label>Weight
+                                        <!-- <input type="text" class="input-field-border" value="" disabled />-->
+                                        <label class="col-sm-4 first-block-label input-field-border"
+                                            disabled>{{this.salesOrderShipping.weight}}</label>
+                                        UOM</label>
+                                        <label class="col-sm-4 first-block-label input-field-border"
+                                            disabled>{{this.salesOrderShipping.uom}}</label>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="clear"></div>
+                            <hr />
+                            <div class="clear"></div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div style="height:100px"> &nbsp;</div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">No</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+</div>
+<!-- </div> -->
+<!-- </div> -->
+
+<!-- </body> -->
+<!-- </html> -->

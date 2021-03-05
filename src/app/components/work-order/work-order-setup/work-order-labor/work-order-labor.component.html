@@ -65,32 +65,38 @@
           <div class="col-md-3 col-offset-3 task-detail" *ngIf="!isQuote">
               <div class="form-row" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
                 <div >
-                  <p-radioButton  (ngModelChange)="checkValid(4)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" label="Labour hours" [value]="1"
+                  <!-- <p-radioButton  (ngModelChange)="checkValid(4)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" label="Labour hours" [value]="1"
                     [(ngModel)]="laborForm.hoursorClockorScan"  [disabled]="isView "></p-radioButton>
                   <p-radioButton (ngModelChange)="checkValid(5)" class="p-radiobutton-label-horizontal col-width p-radiobutton-cstm" name="HoursorClockorScan" [value]="2"
                     label="Labour Clock In/Out" [(ngModel)]="laborForm.hoursorClockorScan"  [disabled]="isView "></p-radioButton>
           
                   <p-radioButton  (ngModelChange)="checkValid(6)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" [value]="3" label="Scan"
                     [(ngModel)]="laborForm.hoursorClockorScan"  [disabled]="isView "></p-radioButton>
-              
-              
-<!--               
-                    <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
-                      <input type="radio"  (change)="checkValid(4)" value="1" name="HoursorClockorScan" class="form-check-inline"
-                          [checked]="laborForm.hoursorClockorScan" [disabled]="isView ">
-                          Labour hours
-                  </label>
-                  <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
-                      <input type="radio" value="2" name="HoursorClockorScan"   
-                      [checked]="laborForm.hoursorClockorScan"   (change)="checkValid(5)" [disabled]="isView ">
-                          Labour Clock In/Out
-                  </label>
-                  <label class="radio-inline"  (change)="checkValid(6)" [ngClass]="{ pointerEv: isEditMode==true}">
-                    <input type="radio" value="3" name="HoursorClockorScan"   
-                    [checked]="laborForm.hoursorClockorScan" [disabled]="isView ">
+               -->
+
+                    <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                    matTooltip="Single MPN">
+                    <input type="radio"  (change)="headerMaintanance()" (ngModelChange)="checkValid(4)" [value]=1 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
+                        class="radio_adjust"
+                        [(ngModel)]="laborForm.hoursorClockorScan">
+                        Labour hours
+                </label>
+                <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                    matTooltip="Multiple MPN">
+                    <input type="radio" (change)="headerMaintanance()" (ngModelChange)="checkValid(5)" [value]=2 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
+                        class="radio_adjust"
+                        [(ngModel)]="laborForm.hoursorClockorScan" 
+                        >
+                        Labour Clock In/Out
+                </label>
+                <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                matTooltip="Multiple MPN">
+                <input type="radio" (change)="headerMaintanance()" (ngModelChange)="checkValid(6)" [value]=3 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
+                    class="radio_adjust"
+                    [(ngModel)]="laborForm.hoursorClockorScan"
+                    >
                     Scan
-                </label> -->
-              
+            </label>
               
                   </div> 
               </div>

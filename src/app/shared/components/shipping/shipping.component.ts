@@ -5,7 +5,10 @@ import { WorkOrderService } from '../../../services/work-order/work-order.servic
 import { AddressModel } from '../../../models/address.model';
 import {AlertService, MessageSeverity} from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
-import { editValueAssignByCondition,getObjectById } from '../../../generic/autocomplete';
+import { editValueAssignByCondition,getObjectById,getObjectByValue,getValueFromObjectByKey } from '../../../generic/autocomplete';
+import { AddressTypeEnum } from '../../../shared/components/address-component/Address-type-enum';
+import { AppModuleEnum } from '../../../enum/appmodule.enum';
+
 @Component({
     selector: 'app-shipping',
     templateUrl: './shipping.component.html',
@@ -24,6 +27,7 @@ export class ShippingComponent implements OnInit {
     quoteDueDate: any;
     customerNamesList: any;
     id: number;
+    CustomerId: number;
     customerListOriginal: any;
     customerallListOriginal: any;;
     arrayCustlist: any[] = [];
@@ -52,21 +56,51 @@ export class ShippingComponent implements OnInit {
     siteList: any = [];
     moduleName: any = 'Shipping';
     isSpinnerVisible: boolean = false;
+    allWeightUnitOfMeasureInfo: any = [];
+    shipUsertype:number = 0; 
+    workOrderId:number=0;
+    soldCustomerSiteList = [];
+    soldCustomerShippingOriginalData: any[];
+    billingSieListOriginal: any[];
+    billToSite: any;
+    shippingSieListOriginal: any[];
+    shipToSite: any;
+    headers = [];
+    selectedColumns;
     constructor(public customerService: CustomerService, private commonService: CommonService,
         private workorderService: WorkOrderService, private alertService: AlertService, private authService: AuthService) {
     }
     ngOnInit(): void {
+        debugger;
       console.log("general info",this.workOrderGeneralInformation);
+      if (this.workOrderGeneralInformation)
+      {
+          this.workOrderId =this.workOrderGeneralInformation.workOrderId; 
+          this.CustomerId=this.workOrderGeneralInformation['customerDetails']['customerId']
+
+          //this.getAddressById(this.workOrderId);
+      }
+      this.initColumns();
         this.getShipVia();
         this.getCountriesList();
         this.getSiteName();
+        //this.setBillToSelectedSite(0)
         this.getShippingData();
         //this.getCustomerNameList();
         this.loadcustomerData('');
+        this.getUnitOfMeasure();
+
+        if (this.workOrderGeneralInformation)
+        {
+            this.workOrderId =this.workOrderGeneralInformation.workOrderId; 
+            this.CustomerId=this.workOrderGeneralInformation.customerId; 
+  
+            //this.getAddressById(this.workOrderId);
+        }
         if (this.workOrderGeneralInformation) {
             this.shippingHeader['soldToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
             this.shippingHeader['shipToName'] = this.workOrderGeneralInformation['customerDetails']['customerName'];
-            // if(!this.shippingHeader.shipToCustomerId){
+            // if(this.shippingHeader.shipToCustomerId == undefined || this.shippingHeader.shipToCustomerId == 0){
             //     debugger;
             //     this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
             //     this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']);
@@ -75,20 +109,59 @@ export class ShippingComponent implements OnInit {
             this.shippingHeader['customerId'] = this.workOrderGeneralInformation['customerDetails']['customerId'];
         }
     }
-    ngOnChanges(changes: SimpleChanges) {
-if(this.managementStructureId !=undefined){
-    this.getOriginSiteNames();
-}
-// this.getShipVia();
-// this.getCountriesList();
-// this.getSiteName();
-// this.getShippingData();
-// this.getCustomerNameList();
+    ngOnChanges(changes: SimpleChanges) 
+    {
+            if(this.managementStructureId !=undefined){
+                this.getOriginSiteNames();
+            }
+
     }
-    // orignSiteNameEvent(value){
-    //     console.log("value",value);
-    //     this.setOriginToAddress();
-    // }
+
+    initColumns() {
+
+        this.headers = [
+            //{ field: "itemNo", header: "Item #", width: "100px" },
+            { field: "WorkOrderNumber", header: "WO Num", width: "100px" },
+            { field: "partNumber", header: "PN", width: "100px" },
+            { field: "partDescription", header: "PN Description", width: "100px" },
+            { field: "qtyToShip", header: "Qty Picked", width: "65px" },
+            { field: "qtyShipped", header: "Qty Shipped", width: "65px" },
+            { field: "qtyRemaining", header: "Qty Remaining", width: "90px" },
+            { field: "status", header: "Status", width: "90px" },
+        ];
+        this.selectedColumns = this.headers;
+    }
+    shippingList: any[] = [];
+
+    getShippingList() {
+        this.isSpinnerVisible = true;
+        this.workorderService
+            .getShippingDataList(this.workOrderId)
+            .subscribe((response: any) => {
+                this.isSpinnerVisible = false;
+                this.shippingList = response[0];
+                //this.showPaginator = this.totalRecords > 0;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
+    checked(evt, ship) {
+        ship.selected = evt.target.checked;
+        this.checkIsChecked();
+    }
+
+    disableCreateShippingBtn: boolean = true;
+
+    checkIsChecked() {
+        this.shippingList.forEach(a => {
+            a.soshippingchildviewlist.forEach(ele => {
+                if (ele.selected)
+                    this.disableCreateShippingBtn = false;
+                else
+                    this.disableCreateShippingBtn = true;
+            });
+        });
+    }
     getOriginSiteNames(){
         // managementStructureId
         this.orignSiteNames=[];
@@ -126,8 +199,25 @@ if(this.managementStructureId !=undefined){
                 }
             )
     }
+    getUnitOfMeasure() {
+        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName').subscribe((res) => {
+            this.allWeightUnitOfMeasureInfo = res;
+        }, err => {
+        });
+    }
+    btnChange() {
+        const isExportWeight = this.shippingHeader.shipWeight ? (this.shippingHeader.shipWeightUnit ? 1 : 0) : 1;
+        const isEExportSize = this.shippingHeader.shipSizeLength || this.shippingHeader.shipSizeWidth || this.shippingHeader.shipSizeHeight ? (this.shippingHeader.shipSizeUnitOfMeasureId ? 1 : 0) : 1;
+
+        if (this.shippingHeader.exportECCN && isExportWeight && isEExportSize) {
+            //this.updateBtnExp = false;
+        }
+        else {
+            //this.updateBtnExp = true;
+        }
+    }
     getSiteName() {
-        this.workorderService.getSiteByCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'])
+        this.workorderService.getShippingBillSiteByCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'])
             .subscribe(
                 res => {
                     this.siteList = res;
@@ -135,7 +225,6 @@ if(this.managementStructureId !=undefined){
                         this.siteList.forEach(
                             x => {
                                 if(x.isPrimary){
-                                    //this.shippingHeader.soldToSiteId = x.customerShippingAddressId;
                                     this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
                                     
                                     this.setSoldToAddress();
@@ -302,6 +391,36 @@ if(this.managementStructureId !=undefined){
             this.shipCustomerAddress = new AddressModel();
         }
     }
+    clearSoldToAddress() {
+        this.soldCustomerSiteList = [];
+        this.shippingHeader['soldToAddress1'] = "";
+        this.shippingHeader['soldToAddress2'] = "";
+        this.shippingHeader['soldToCity'] = "";
+        this.shippingHeader['soldToState'] = "";
+        this.shippingHeader['soldToZip'] = "";
+        this.shippingHeader['soldToCountryId'] = "";
+        this.shippingHeader['soldToSiteName'] = "";
+        this.shippingHeader['soldToCountryName'] = "";
+        this.shippingHeader['soldToCountryId'] = "";
+    }
+    setSoldToAddresses() {
+        this.soldCustomerSiteList.forEach(site => {
+            //if (site.customerDomensticShippingId == Number(this.shippingHeader.soldToSiteId)) {
+            //if (site.customerBillingAddressId == Number(this.shippingHeader.soldToSiteId)) {  
+            if (site.siteID == Number(this.shippingHeader.soldToSiteId)) {
+                this.shippingHeader['soldToAddress1'] = site.address1;
+                this.shippingHeader['soldToAddress2'] = site.address2;
+                this.shippingHeader['soldToCity'] = site.city;
+                this.shippingHeader['soldToState'] = site.stateOrProvince;
+                this.shippingHeader['soldToZip'] = site.postalCode;
+                this.shippingHeader['soldToCountryId'] = site.countryId;
+                this.shippingHeader['soldToSiteName'] = site.siteName;
+                //this.shippingHeader['soldToCountryName'] = site.countryName;
+                this.shippingHeader['soldToCountryName'] = site.country;
+                this.shippingHeader['soldToCountryId'] = site.countryId;
+            }
+        });
+    }
     getShippingData() {
         this.isSpinnerVisible = true;
         this.workorderService.getShippingForWorkOrderPart(this.workOrderPartNumberId)
@@ -318,6 +437,11 @@ if(this.managementStructureId !=undefined){
                             this.shippingHeader['shipToCustomerId'] = { customerId: res.shipToCustomerId, customerName: res.shipToCustomer };
                             this.id= res.shipToCustomerId
 
+                        }
+                        else
+                        {
+                             this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
+                             this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']);
                         }
                     }
                 },

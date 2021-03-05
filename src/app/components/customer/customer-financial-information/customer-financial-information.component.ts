@@ -44,6 +44,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { Params, ActivatedRoute } from '@angular/router';
 declare var $ : any;
 @Component({
   selector: 'app-customer-financial-information',
@@ -223,8 +224,11 @@ export class CustomerFinancialInformationComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private configurations: ConfigurationService,
     public creditTermService: CreditTermsService,
-    private localStorage: LocalStoreManager
-  ) {}
+    private localStorage: LocalStoreManager,
+    private router: ActivatedRoute
+  ) {
+      this.id = this.router.snapshot.params['id'];
+  }
   taxtypesList = [];
 
   ngOnInit(): void {
@@ -233,7 +237,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.savedGeneralInformationData.markUpPercentageId = 0;    
 
     if (this.editMode) {
-      this.id = this.editGeneralInformationData.customerId;
+      //this.id = this.editGeneralInformationData.customerId;
       this.customerGeneralInformation = this.editGeneralInformationData;      
       this.savedGeneralInformationData = this.editGeneralInformationData;
       this.customerCode = this.editGeneralInformationData.customerCode;
@@ -249,7 +253,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.savedGeneralInformationData.allowPartialBilling = true;
       this.savedGeneralInformationData.allowProformaBilling = true;      
       this.customerGeneralInformation = this.savedGeneralInformationData;      
-      this.id = this.savedGeneralInformationData.customerId;
+      //this.id = this.savedGeneralInformationData.customerId;
       this.customerCode = this.savedGeneralInformationData.customerCode;
       this.customerName = this.savedGeneralInformationData.name;
       this.getDefaultCurrency();
@@ -284,7 +288,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
               if (this.id) {
                 this.toGetDocumentsListNew(this.id);
-                //this.getFinanceInfoByCustomerId();
+                this.getFinanceInfoByCustomerId();
               }
 
               this.savedGeneralInformationData = {

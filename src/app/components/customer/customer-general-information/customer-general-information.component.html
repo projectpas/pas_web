@@ -39,7 +39,7 @@
           <div >
             <div class="x_content">
               <div class="clear"></div>
-              <form #generalInfoForm="ngForm" class="form-horizontal">
+              <form #generalInfoForm="ngForm" class="form-horizontal" autocomplete="off">
                 <div class="col-md-12 col-sm-12 col-12">
                   <div class="tab-content">
                     <div class="tab-pane active" id="home">
@@ -160,7 +160,7 @@
                                 [size]="30"
                                 [minLength]="1"
                                 [dropdown]="true"                                
-                                required
+                                required value="" autocomplete="new-password"
                               >
                               </p-autoComplete>
                               <div
@@ -189,7 +189,7 @@
                               type="text"
                               name="doingBuinessAsName"
                               [(ngModel)]="generalInformation.doingBuinessAsName"
-                              (ngModelChange)="enableSave()"
+                              (ngModelChange)="enableSave()" value="" autocomplete="new-password"
                             />
                           </div>
                           <div class="form-group m-t-15">
@@ -244,7 +244,7 @@
                                   (ngModelChange)="enableSave()"
                                   [minLength]="1"
                                   [dropdown]="true"
-                                  required
+                                  required value="" autocomplete="new-password"
                                 >
                                 </p-autoComplete>
                                 <!--customerParentName-->
@@ -278,7 +278,7 @@
                                         (keypress)="patternMobilevalidationWithSpl($event)"
                                         [(ngModel)]="generalInformation.customerPhone"
                                         (ngModelChange)="enableSave()"                              
-                                        required
+                                        required value="" autocomplete="new-password"
                                       />
                                     </div>
                                   </td>
@@ -293,7 +293,7 @@
                                           generalInformation.customerPhone == ''
                                         "
                                         [(ngModel)]="generalInformation.customerPhoneExt"
-                                        (ngModelChange)="enableSave()"
+                                        (ngModelChange)="enableSave()" value="" autocomplete="new-password"
                                       />
                                     </div>
                                   </td>
@@ -320,7 +320,7 @@
                               pKeyFilter="email"
                               mask="email"
                               [(ngModel)]="generalInformation.email"
-                              (ngModelChange)="enableSave()"
+                              (ngModelChange)="enableSave()" autocomplete="off"
                               required
                             />
                             <div *ngIf="userEmail.errors" [ngClass]="'error'">
@@ -340,7 +340,7 @@
                               #url="ngModel"
                               [pattern]="urlPattern"
                               name="customerURL"
-                              [(ngModel)]="generalInformation.customerURL"
+                              [(ngModel)]="generalInformation.customerURL" value="" autocomplete="new-password"
                               (ngModelChange)="enableSave()"
                             />
                             <div *ngIf="url.errors" [ngClass]="'error'">
@@ -360,7 +360,7 @@
                               type="text"
                               id="cmaddress1"
                               name="cmaddress1"
-                              [(ngModel)]="generalInformation.address1"
+                              [(ngModel)]="generalInformation.address1" value="" autocomplete="new-password"
                               (ngModelChange)="enableSave()"
                               required
                             />
@@ -372,7 +372,7 @@
                               type="text"
                               id="cmaddress2"
                               name="cmaddress2"
-                              [(ngModel)]="generalInformation.address2"
+                              [(ngModel)]="generalInformation.address2" value="" autocomplete="new-password"
                               (ngModelChange)="enableSave()"
                             />
                           </div>
@@ -383,7 +383,7 @@
                               type="text"
                               id="cmaddress3"
                               name="cmaddress3"
-                              [(ngModel)]="generalInformation.address3"
+                              [(ngModel)]="generalInformation.address3"  value="" autocomplete="new-password"
                               (ngModelChange)="enableSave()"
                             />
                           </div>
@@ -394,7 +394,7 @@
                               type="text"
                               id="cscity"
                               name="cscity"
-                              [(ngModel)]="generalInformation.city"
+                              [(ngModel)]="generalInformation.city"  value="" autocomplete="new-password"
                               (ngModelChange)="enableSave()"
                               required
                             />
@@ -409,7 +409,7 @@
                               type="text"
                               name="stateOrProvince"
                               [(ngModel)]="generalInformation.stateOrProvince"
-                              (ngModelChange)="enableSave()"
+                              (ngModelChange)="enableSave()"  value="" autocomplete="new-password"
                               required
                             />
                           </div>
@@ -419,7 +419,7 @@
                               class="form-control"
                               type="text"
                               name="postalCode"                              
-                              [(ngModel)]="generalInformation.postalCode"
+                              [(ngModel)]="generalInformation.postalCode"  value="" autocomplete="new-password"
                               (ngModelChange)="enableSave()"
                               required
                             />                         
@@ -442,7 +442,7 @@
                                 [size]="30"
                                 [minLength]="1"
                                 [dropdown]="true"
-                                [forceSelection]="true"
+                                [forceSelection]="true"  value="" autocomplete="new-password"
                                 required
                               >
                               </p-autoComplete>
@@ -456,7 +456,7 @@
                                   name="isAddressForBilling"
                                   (ngModelChange)="enableSave()"
                                   [(ngModel)]="
-                                    generalInformation.isAddressForBilling
+                                    generalInformation.isAddressForBilling 
                                   "
                                 />
                                 <span class="cr"
@@ -524,7 +524,7 @@
                                 type="text"
                                 name="contactRef"
                                 [(ngModel)]="generalInformation.contractReference"
-                                (ngModelChange)="enableSave()"
+                                (ngModelChange)="enableSave()" autocomplete="off"
                               />
                             </div>
                           </div>
@@ -648,7 +648,7 @@
                                       (completeMethod)="filterpartListForPMA($event)" 
                                       (onSelect)="selectedPMAParts($event)"
                                       [size]="30" [minLength]="1" [dropdown]="true"
-                                      [inputStyle]="{ width: '100%' }" >
+                                      [inputStyle]="{ width: '100%' }" autocomplete="off">
                                     </p-autoComplete>
                                   </div>
                                 </div>
