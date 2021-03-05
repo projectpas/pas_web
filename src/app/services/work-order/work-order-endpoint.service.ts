@@ -371,10 +371,14 @@ export class WorkOrderEndpointService extends EndpointFactory {
     } 
 
     getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workordermateriallist?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId));
+          });
     }
     getSubWorkOrderMaterialList(subWOPartNoId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subworkordermateriallist?subWOPartNoId=${subWOPartNoId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subworkordermateriallist?subWOPartNoId=${subWOPartNoId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getSubWorkOrderMaterialList(subWOPartNoId));
+          });
     }
     deleteWorkOrderMaterialList(workOrderMaterialsId, updatedBy) {
         return this.http.get(`${this.configurations.baseUrl}/api/workorder/deleteworkordermaterial?workOrderMaterialsId=${workOrderMaterialsId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
@@ -910,6 +914,11 @@ export class WorkOrderEndpointService extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getSiteByCustomerId(customerId));
             });    
         }
+        getShippingBillSiteByCustomerId(customerId){
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/Customer/cusshippingbillAddressGet/${customerId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getShippingBillSiteByCustomerId(customerId));
+            });    
+        }
 
         saveWorkOrderShipping(data){
             return this.http.post<any>(`${this.configurations.baseUrl}/api/workorder/createworkordershipping`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
@@ -1220,6 +1229,14 @@ reserveSubWoAltPartData(data){
             
         });
        }
+      }
+      getShippingDataList(WorkOrderId: number): Observable<any> {
+        const URL = `${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`;
+        return this.http
+          .get<any>(URL, this.getRequestHeaders())
+          .catch(error => {
+            return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId));
+          });
       }
 
 

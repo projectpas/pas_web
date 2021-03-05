@@ -516,7 +516,6 @@ export class WorkOrderAddComponent implements OnInit {
             this.getAllCustomerContact(this.workOrderGeneralInformation.customerDetails.customerId, 'edit');
             // }
             this.workOrderId = data.workOrderId;
-            console.log("modify fun",this.workOrderGeneralInformation.partNumbers[0])
             if (this.workOrderGeneralInformation.partNumbers[0].workflowId == null) {
                 // if(this.workOrderGeneralInformation.isSinglePN){
                     this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
@@ -772,7 +771,6 @@ export class WorkOrderAddComponent implements OnInit {
         if (value != 'communication') {
             this.selectedCommunicationTab = '';
         }
-        console.log("value",value)
         if (value == 'materialList') {
             if (this.isSubWorkOrder == true) {
                 this.getMaterialListByWorkOrderIdForSubWO();
@@ -2114,7 +2112,6 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     getMaterialListByWorkOrderId() {
-        console.log("workFlowWorkOrderId,",this.workFlowWorkOrderId,this.workOrderId)
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
             this.isSpinnerVisible = true;
@@ -2189,7 +2186,9 @@ export class WorkOrderAddComponent implements OnInit {
             }
         }
     }
-
+    refreshLabor(value){
+        // this.getWorkFlowLaborList();
+    }
     getWorkFlowLaborList() {
         this.clearLaborList();
         if ((this.workFlowWorkOrderId !== 0 || this.workFlowWorkOrderId !== undefined) && this.workOrderId) {

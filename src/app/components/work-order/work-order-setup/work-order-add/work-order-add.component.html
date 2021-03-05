@@ -86,7 +86,7 @@
                                     <!-- <div class="clear"></div>
                                     <hr class="hr_mrt"> -->
                                     <div class="col-md-12 row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-3"> 
                                             <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents : isEdit && !isRecCustomer}"
                                                 matTooltip="Single MPN">
                                                 <input type="radio" [value]=true name="type" #type="ngModel"
@@ -1038,7 +1038,7 @@
                     [employeesOriginalData]="employeesOriginalData" [workOrderLaborList]="workOrderLaborList"
                     [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [selectedPartNumber]="selectedPartNumber" [savedWorkOrderData]="savedWorkOrderData"
-                    (saveworkOrderLabor)="saveworkOrderLabor($event)" [workFlowId]="workFlowId" [isView]="isView || isViewForApprovedPart">
+                    (saveworkOrderLabor)="saveworkOrderLabor($event)" (refreshLabor)="refreshLabor($event)" [workFlowId]="workFlowId" [isView]="isView || isViewForApprovedPart">
                 </app-work-order-labor>  
             </div> 
             <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">

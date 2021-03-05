@@ -381,11 +381,11 @@
             <tbody style="overflow-x: scroll !important;" *ngIf="auditHistory.length > 0">
               <tr *ngFor="let audit of auditHistory; let i = index">
                 <td [ngStyle]="{
-                    color: getColorCodeForHistory(i, 'tag', audit.tag)
+                    color: getColorCodeForHistory(i, 'tagName', audit.tagName)
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.tag }}
+                  {{ audit.tagName }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'prefix', audit.prefix)
@@ -637,13 +637,12 @@
                     [(ngModel)]="contactInformation.firstName"
                     (ngModelChange)="enableSave()"
                     name="firstName" 
-                    field="firstName" 
-                                               
+                    field="firstName"                                                
                     [suggestions]="firstNamesList"
                     (completeMethod)="filterFirstNames($event)"                     
                     [size]="30" [minLength]="1" 
                     [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" required autocomplete="off">
+                    [inputStyle]="{ width: '100%' }" required value="" autocomplete="new-password">
                   </p-autoComplete>
                   <!-- 
                     (onKeyUp)=" checkfirstNameExist($event.target.value)"
@@ -661,10 +660,10 @@
                     [(ngModel)]="contactInformation.middleName"
                     (ngModelChange)="enableSave()" 
                     name="middleName" 
-                                      
                     [suggestions]="middleNamesList" field="middleName"
-                    (completeMethod)="filterMiddleNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" autocomplete="off">
+                    (completeMethod)="filterMiddleNames($event)" 
+                    [size]="30" [minLength]="1" [dropdown]="true"
+                    [inputStyle]="{ width: '100%' }" value="" autocomplete="new-password">
                   </p-autoComplete>
                   <!-- (onKeyUp)="checkmiddleNameExist($event.target.value)"
                   (onChange)="checkmiddleNameExist($event.target.value)"  
@@ -681,14 +680,13 @@
                   <p-autoComplete class="autocomp-customer-cstm" 
                     [(ngModel)]="contactInformation.lastName"
                     (ngModelChange)="enableSave()" 
-                    name="lastName" 
-                   
-                    [suggestions]="lastNamesList" 
+                    name="lastName"
                     field="lastName"
+                    [suggestions]="lastNamesList"                     
                     (completeMethod)="filterLastNames($event)" 
                     [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" required autocomplete="off">
-                  </p-autoComplete>
+                    [inputStyle]="{ width: '100%' }" required value="" autocomplete="new-password">
+                  </p-autoComplete> 
                   <!-- (onKeyUp)="checklastNameExist($event.target.value)"
                   (onChange)="checklastNameExist($event.target.value)"  
                   (onSelect)="selectedlastNameName()" 
@@ -710,7 +708,7 @@
               <div class="form-group">
                 <label>Title</label> 
                 <input class="form-control" type="text" name="contactTitle"  #contactTitle="ngModel"
-                   [(ngModel)]="contactInformation.contactTitle" (ngModelChange)="enableSave()" />
+                   [(ngModel)]="contactInformation.contactTitle" (ngModelChange)="enableSave()" value="" autocomplete="new-password"/>
                 <div *ngIf="contactTitle.errors" [ngClass]="'error'">
                     <div *ngIf="contactTitle.errors.pattern">
                       <span style="color:red">At least One Alphabet is Required.</span>
@@ -725,11 +723,12 @@
                   <input class="form-control" type="text" required name="workPhone" #workPhone="ngModel" [pattern]="phonePattern"
                     [(ngModel)]="contactInformation.workPhone" (ngModelChange)="enableSave()"
                     style="width: calc(62% - 63px) !important;" (keypress)="patternMobilevalidationWithSpl($event)"
-                    minlength="6" maxlength="14" autocomplete="off"/>
+                    minlength="6" maxlength="14" value="" autocomplete="new-password"/>
                   ext
                   <input class="form-control" type="text" name="workPhoneExtn"
                     [disabled]="contactInformation.workPhone == ''" [(ngModel)]="contactInformation.workPhoneExtn"
-                    (ngModelChange)="enableSave()" style="width: calc(43% - 63px) !important;" autocomplete="off"/>
+                    (ngModelChange)="enableSave()" style="width: calc(43% - 63px) !important;" 
+                    value="" autocomplete="new-password"/>
                 </div>
               </div>
               <div class="form-group">
@@ -757,7 +756,7 @@
                 <label>Website</label>
                 <input class="form-control" type="text" name="websiteURL" #url="ngModel"
                   [(ngModel)]="contactInformation.websiteURL" (ngModelChange)="enableSave()" 
-                  [pattern]="urlPattern" autocomplete="off"/>
+                  [pattern]="urlPattern" value="" autocomplete="new-password"/>
                 <div *ngIf="url.errors" [ngClass]="'error'">
                   <div *ngIf="url.errors.pattern">
                     <span style="color:red">URL not valid</span>
@@ -769,7 +768,7 @@
                 <input class="form-control" type="text" name="mobilePhone" [(ngModel)]="contactInformation.mobilePhone" [pattern]="mobilePattern" 
                   (ngModelChange)="enableSave()" (keypress)="patternMobilevalidationWithSpl($event)"
                    minlength="10" #mobilePhone="ngModel"
-                  maxlength="14" autocomplete="off"/>
+                  maxlength="14" value="" autocomplete="new-password"/>
               </div>
               <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
                 <div *ngIf="mobilePhone.errors.pattern">
@@ -780,7 +779,8 @@
                 <label>Alternate Phone</label>
                 <input class="form-control" type="text" autocomplete="off" name="alternatePhone" #alternatePhone="ngModel" [pattern]="phonePattern"
                   [(ngModel)]="contactInformation.alternatePhone" (ngModelChange)="enableSave()"
-                  (keypress)="patternMobilevalidationWithSpl($event)" minlength="6" maxlength="14" autocomplete="off"/>
+                  (keypress)="patternMobilevalidationWithSpl($event)" minlength="6" maxlength="14" 
+                  value="" autocomplete="new-password"/>
               </div>
               <div *ngIf="alternatePhone.errors" [ngClass]="'error'">
                 <div *ngIf="alternatePhone.errors.pattern">
@@ -790,7 +790,8 @@
               <div class="form-group">
                 <label>Fax</label>
                 <input class="form-control" pKeyFilter="pint" type="text" name="fax" #fax="ngModel" [pattern]="phonePattern"
-                  [(ngModel)]="contactInformation.fax" (ngModelChange)="enableSave()" minlength="6" maxlength="14" autocomplete="off"/>
+                  [(ngModel)]="contactInformation.fax" (ngModelChange)="enableSave()" minlength="6" maxlength="14" 
+                  value="" autocomplete="new-password"/>
               </div>
               <div *ngIf="fax.errors" [ngClass]="'error'">
                 <div *ngIf="fax.errors.pattern">
@@ -839,9 +840,9 @@
 
               <div class="form-group">
                 <label>Email <span class="clr-red">*</span></label>
-                <input class="form-control" email type="text" name="email" [pattern]="emailPattern" autocomplete="off"
+                <input class="form-control" email type="text" name="email" [pattern]="emailPattern" 
                   #contactEmail="ngModel" [(ngModel)]="contactInformation.email" (ngModelChange)="enableSave()"
-                  required  />
+                  required/>
                 <div *ngIf="contactEmail.errors" [ngClass]="'error'">
                   <div *ngIf="contactEmail.errors.pattern">
                     <span style="color:red">Contact Email not valid</span>
