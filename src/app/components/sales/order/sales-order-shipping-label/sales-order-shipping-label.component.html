@@ -4,7 +4,6 @@
 </div>
 <div class="modal-content pdf-block " style="width:90%" id="soShippingLabel">
     <div class="modal-body">
-        <div class="clear"></div>
         <form id="" name="" action="#" method="post" onsubmit="return false;">
             <div class="image">
                 <div style="padding: 0; margin: 0;">
@@ -14,113 +13,132 @@
                                 <h4>Service Class:</h4>
                             </div>
                             <div class="first-block">
-                                <div class="col-sm-4 first-block-4">
+                                <!-- <div class="col-sm-4 first-block-4"> -->
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label"><b>Cust Ref:</b></label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label"
                                             disabled>{{this.salesOrderShipping.customerRef}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Ship Date:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label"
                                             disabled>{{this.salesOrderShipping.shipDate | date:'medium'}}</label>
-                                    </div><br />
-                                    <div class="col-sm-12 first-block-name">
+                                    </div>
+                                    <div class="col-sm-12 first-block-name" style="margin-top:15px">
                                         <label class="col-sm-3 first-block-label"><b>Origin:</b></label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-8 first-block-label"  disabled></label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Company:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.originCompanyName}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Address1:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.originAddress1}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">City:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.originCity}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">State/Prov, Postal Code:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.originState}},
                                             {{this.salesOrderShipping.originPostalCode}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Country:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.originCountry}}</label>
-                                    </div><br />
-                                    <div class="col-sm-12 first-block-name">
+                                    </div>
+                                    <div class="col-sm-12 first-block-name" style="margin-top:15px">
                                         <label class="col-sm-3 first-block-label"><b>Ship To:</b></label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-8 first-block-label"  disabled></label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Company:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.shipToComanyName}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Site:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.shipToSiteName}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Address1:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.shipToAddress1}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">City:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.shipToCity}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">State/Prov,Postal Code:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.shipToState}},
                                             {{this.salesOrderShipping.shipToPostalCode}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Country:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%"
+                                        <label class="col-sm-8 first-block-label" 
                                             disabled>{{this.salesOrderShipping.shipToCountry}}</label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Phone:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
+                                        <label class="col-sm-8 first-block-label"  disabled></label>
                                     </div>
                                     <div class="col-sm-12 first-block-name">
                                         <label class="col-sm-3 first-block-label">Attn:</label>
-                                        <label class="col-sm-4 first-block-label" style="width:30%" disabled></label>
-                                    </div><br />
-                                    <img src="{{this.salesOrderShipping.shippingLabelBarcode}}" alt="barcode" width="98%" />
-                                </div>
+                                        <label class="col-sm-8 first-block-label"  disabled></label>
+                                    </div>
+                                   
+                                    <img src="{{this.salesOrderShipping.shippingLabelBarcode}}" style="height:100px;width:60%"
+                                     alt="barcode" class="image" />
+                         
+                                    <!-- </div> -->
                             </div>
                             <div class="second-block">
-                                <div class="second-block-div">
+                                <!-- <div class="second-block-div">
                                     <label class="col-sm-4 second-block-label">SO Num</label>
                                     <label class="col-sm-4 first-block-label" style="width:30%"
                                         disabled>{{this.salesOrderShipping.salesOrderNumber}}</label>
+                                </div> -->
+                                <div class="form-group second-block-div">
+                                    <label class="col-sm-4 second-block-label">SO Num</label>
+                                    <input type="text" class="form-control" name="salesOrderNumber"
+                                     [(ngModel)]="this.salesOrderShipping.salesOrderNumber" disabled>
                                 </div>
                                 <br />
                                 <div class="col-sm-12 second-block-div">
-                                    <label>Weight
-                                        <!-- <input type="text" class="input-field-border" value="" disabled />-->
+                                    <!-- <label>Weight
                                         <label class="col-sm-4 first-block-label input-field-border"
                                             disabled>{{this.salesOrderShipping.weight}}</label>
                                         UOM</label>
                                         <label class="col-sm-4 first-block-label input-field-border"
-                                            disabled>{{this.salesOrderShipping.uom}}</label>
+                                            disabled>{{this.salesOrderShipping.uom}}</label> -->
+                                            <label class="col-sm-2">Weight</label>
+                                                <input class="col-sm-3 first-block-label input-field-border"
+                                                name="weight"
+                                     [(ngModel)]="this.salesOrderShipping.weight"
+                                                    disabled />
+                                               
+                                               <label class="col-sm-2">UOM </label>
+                                                <input class="col-sm-3 first-block-label input-field-border"
+                                                name="uom"
+                                                [(ngModel)]="this.salesOrderShipping.uom"
+                                                    disabled />
+                                                   
                                 </div>
                                 <br />
                             </div>
                             <div class="clear"></div>
-                            <hr />
+                           
                             <div class="clear"></div>
 
                         </form>
@@ -130,7 +148,7 @@
         </form>
     </div>
 
-    <div style="height:100px"> &nbsp;</div>
+    <!-- <div style="height:100px"> &nbsp;</div> -->
 
 </div>
 <div class="modal-footer">
