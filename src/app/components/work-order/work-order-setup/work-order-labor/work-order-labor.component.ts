@@ -12,11 +12,12 @@ declare var $: any;
   styleUrls: ['./work-order-labor.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class WorkOrderLaborComponent implements OnInit, OnChanges {
+export class WorkOrderLaborComponent implements OnInit, OnChanges { 
   @Input() savedWorkOrderData;
-  @Input() laborForm: WorkOrderLabor;
+  @Input() laborForm: WorkOrderLabor; 
   @Input() workOrderWorkFlowOriginalData: any;
   @Output() saveworkOrderLabor = new EventEmitter();
+  @Output() refreshLabor = new EventEmitter(); 
   @Input() workOrderLaborList: any={};
   @Input() taskList: any;
   @Input() isQuote = false;
@@ -64,7 +65,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,
     private commonService: CommonService) { }
-    
+ 
   ngOnInit() {
     this.disabledUpdatebtn=true;
     this.allEmployees = this.employeesOriginalData;
@@ -1294,5 +1295,7 @@ this.commonfunctionHandler();
    checkValid(v){
     this.disabledUpdatebtn=false;
     }
-    
+    headerMaintanance(){
+      // this.refreshLabor.emit(true);
+    }
 }
