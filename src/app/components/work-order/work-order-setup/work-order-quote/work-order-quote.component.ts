@@ -495,6 +495,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
+                    this.upDateDisabeldbutton=true;
                 },
                 err => {
                     this.errorHandling(err);
@@ -597,6 +598,7 @@ this.creditTerms=res.creditTerm;
                             (res: any) => {
                                 
                                 if (res) {
+                                    this.upDateDisabeldbutton=true;
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
@@ -1155,6 +1157,7 @@ this.creditTerms=res.creditTerm;
             this.workOrderService.getWorkFlowDetails(data.workFlowId)
                 .subscribe(
                     res => {
+                        this.upDateDisabeldbutton=true;
                         this.materialListQuotation = res['materialList'];
                         if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                             for (let charge in this.materialListQuotation) {
@@ -3032,22 +3035,6 @@ this.creditTerms=res.creditTerm;
         return Number(str);
     }
 
-
-    //new code from here
-
-     
-    // getAllWorkOrderStatus(): void {
-    //     this.commonService.smartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description').subscribe(res => {
-    //         this.quoteStatusList = res;
-    //      },
-    //      err => {
-    //          this.errorHandling(err);
-    //      })
-    // }
-    upDateDisabeldbutton:any;
-    getActive(){
-        this.upDateDisabeldbutton=false;
-    }
     onFilterTangible(value) {
         this.getAllWorkOrderStatus(value);
     }
@@ -3056,7 +3043,6 @@ this.creditTerms=res.creditTerm;
         this.setEditArray = [];
         if (this.isEditMode == true) {
             this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
-
         } else {
             this.setEditArray.push(0);
         }
@@ -3067,25 +3053,13 @@ this.creditTerms=res.creditTerm;
             }
         })
     }
-
-
-
-    // loadCurrency() {
-    //     this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
-    //         results => this.currencyList = results,
-    //         error => { this.errorHandling(error)}
-    //     );
-    // } 
-
     onFilterCurrency(value) {
         this.loadCurrency(value);
     }
-
     loadCurrency(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
             this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
-
         } else {
             this.setEditArray.push(0);
         }
@@ -3096,6 +3070,33 @@ this.creditTerms=res.creditTerm;
             }
         })
     }
+    upDateDisabeldbutton:any;
+    getValid(){
+        this.upDateDisabeldbutton=false;
+    }
+    disableForMemo:boolean=false;
+    tempMemo:any;
+    onAddDescription(value) {
+        this.disableForMemo = true;
+        this.type = value;
+        this.tempMemo = "";
+            this.tempMemo = this.memo;
+    }
+    onSaveDescription() {
+            this.memo = this.tempMemo;
 
-
+        this.upDateDisabeldbutton = false;
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    memoValidate() {
+        this.disableForMemo = false;
+    }
 }

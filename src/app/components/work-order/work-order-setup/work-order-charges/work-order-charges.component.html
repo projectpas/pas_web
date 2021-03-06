@@ -27,7 +27,7 @@
       </div>
       <div class="modal-body">
         <!-- && addNewCharges -->
-        <div *ngIf="!isEdit ">
+        <div *ngIf="!isEdit "> 
           <grd-charges [workFlow]="workFlowObject" [isWorkOrder]="isWorkOrder" [isQuote]="isQuote"
             [markupList]="markupList" [taskList]="taskList" (saveChargesListForWO)="saveChargesList($event)">
           </grd-charges>
