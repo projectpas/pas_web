@@ -1,108 +1,5 @@
 <div class="card new-card">
   <div class="card-body header-body">
-    <!-- <p-table #dt [value]="pickTickes" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
-      paginator="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
-      selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
-      (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
-      <ng-template pTemplate="caption">
-        <div class="row">
-          <div style="margin-left: 12px;">
-            <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" optionLabel="header"
-              selectedItemsLabel="{0} columns selected" class="multiselect-field" defaultLabel="Choose Columns">
-            </p-multiSelect>
-          </div>
-          <div class="col">
-            <div class="global-search-field inner-addon right-addon inline-block">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
-              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
-              (click)="dt.exportCSV()"></button>
-            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
-              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
-              (click)="dt.exportCSV({ selectionOnly: true })"></button>
-          </div>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th [ngStyle]="{'width': col.width}" class="table-column-width" *ngFor="let col of columns" pResizableColumn
-            pReorderableColumn [pSortableColumn]="col.field">
-            {{ col.header }}
-            <p-sortIcon [field]="col.field"></p-sortIcon>
-          </th>
-          <th style="width:200px;position:sticky" class="table-actions-column">
-            Actions
-          </th>
-        </tr>
-        <tr>
-          <th [ngStyle]="{'width': col.width}" class="table-column-width" *ngFor="let col of columns"
-            [ngSwitch]="col.field">
-            <ng-container>
-              <input *ngIf="col.field !== 'soPickTicketDate'" style="width:100%;" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')">
-              <input type="date" *ngIf="col.field == 'soPickTicketDate'" name="soPickTicketDate"
-                class="table-header-input-width" (change)="dt.filter($event.target.value, col.field, 'contains')">
-            </ng-container>
-          </th>
-          <th class="table-actions-column"></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded" let-columns="columns">
-        <tr [pSelectableRow]="rowData" pReorderableRowHandle>
-          <td [ngStyle]="{'width': col.width}" *ngFor="let col of columns" class="ui-resizable-column"
-            pReorderableRowHandle>
-            <span *ngIf="col.field == 'soPickTicketDate'" class="float-right">
-              {{convertDate(col.field , rowData)}}
-            </span>
-            <span *ngIf="col.field != 'soPickTicketDate'">
-              {{rowData[col.field]}}
-            </span>
-          </td>
-          <td class="action-icons-cstm table-column-width">
-            <div>
-              <span>
-                <a class="btn nobg" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-              </span> -->
-    <!-- <span>
-                <a (click)="openOrderToEdit(rowData)" matTooltip="Edit" class="btn nobg" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
-              </span> -->
-    <!-- <span data-toggle="modal"
-                data-target="#editpickticket">
-                <a class="btn nobg" 
-                (click)="openEdit(rowData)" matTooltip="Edit" 
-                matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-              <span>
-                <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(rowData);"><i
-                    class="fa fa-print"></i></a>
-              </span>
-              <span data-toggle="modal" data-target="#pickticketHistory">
-                <a class="btn nobg btn-hist-cstm" (click)="getpickticketHistory(rowData)"
-                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-              </span>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns *ngIf="pickTickes.length == 0">
-        <tr>
-          <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
-            No records found
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary" id="footer">
-        <label id="footer" class="footer">Total:</label>
-        <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
-        &nbsp;&nbsp;
-        <label id="footer" class="footer1">Pages Count:</label>
-        <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
-      </ng-template>
-    </p-table> -->
-
     <div
       [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
       style="min-height: 130px !important;">
@@ -114,7 +11,6 @@
                 {{ summaryColumn.header }}
               </span>
             </th>
-            <!-- <th colspan="26"></th> -->
             <th>Actions</th>
           </tr>
           <ng-container *ngIf="pickTickes.length > 0">
@@ -127,14 +23,8 @@
                       {{summaryPart[summaryColumn.field]}}
                     </span>
                   </td>
-                  <!-- <td colspan="26" style="background-color: #EAF2C5 !important;"></td> -->
-                  <!-- data-toggle="modal" data-target="#pickticketieminterface" -->
                   <td style="position:sticky; width:80px">
                     <span>
-                      <!-- <a class="btn nobg" (click)="pickticketItemInterface(summaryPart,pickticketieminterface)"
-                                              matTooltip="Add PT" matTooltipPosition="above" [class.disabled]="summaryPart.qtyToShip >= summaryPart.qty" [ngClass]="{'btn_disabled': summaryPart.qtyToShip >= summaryPart.qty}">
-                                              <i class="fa fa-plus"></i>
-                                          </a> -->
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
                         matTooltipPosition="above" style="font-weight: bold;"
@@ -142,24 +32,6 @@
                         <i class="fa fa-plus"></i>
                       </button>
                     </span>
-                    <!-- pickticketItemInterface(summaryPart.itemMasterId,summaryPart.conditionId,summaryPart.salesOrderId,summaryPart.salesOrderPartId,pickticketieminterface)" -->
-                    <!-- <button type="submit" class="btn submit-btn btn btn-primary"
-                                            (click)="pickticketItemInterface(summaryPart.itemMasterId,summaryPart.conditionId,summaryPart.salesOrderId,summaryPart.salesOrderPartId,rowIndex)">Pick Item</button> -->
-                    <!-- <span>
-                                          <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
-                                              matTooltip="View Stock Line" matTooltipPosition="above">
-                                              <i class="fa fa-eye"></i>
-                                          </a>
-                                      </span>
-                                      <span>
-                                          <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                              [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                              class="btn nobg"
-                                              (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
-                                              matTooltip="Delete" matTooltipPosition="above">
-                                              <i class="fa fa-trash"></i>
-                                          </a>
-                                      </span> -->
                   </td>
                 </tr>
                 <tr class="child-header splitship-head child-header-back">
@@ -213,18 +85,10 @@
                   <td colspan="2"></td>
                   <td class="zui-sticky-col" style="width:107px !important">
                     <span>
-                      <!-- <a [class.disabled]="isEditDisabled(salesQuote, part)"
-                                                [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
-                                                class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit"
-                                                matTooltipPosition="above">
-                                                <i class="fa fa-pencil"></i>
-                                            </a> -->
                       <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
                         (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
                     </span>
                     <span>
-                      <!-- <a class="btn nobg" (click)="ConfirmPTpopup(confirm,part)" matTooltip="Confirm" matTooltipPosition="above"><i
-                                            class="fa fa-print"></i></a> -->
                       <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)"
                         matTooltip="Confirm" matTooltipPosition="above" style="font-weight: bold;"
                         [disabled]="part.isConfirmed">
@@ -232,18 +96,12 @@
                       </button>
                     </span>
                     <span>
-                      <!-- <a class="btn nobg" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> -->
                       <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                         (click)="viewStockSelectedRow(part)" matTooltip="View Stockline">
                         <i class="fa fa-eye"></i>
                       </a>
                     </span>
-                    <!-- data-toggle="modal" 
-                                          data-target="#pickticketieminterface" -->
                     <span>
-                      <!-- <a class="btn nobg" 
-                                                (click)="pickticketItemInterfaceedit(part.soPickTicketId)" matTooltip="Edit" 
-                                                matTooltipPosition="above"><i class="fa fa-pencil"></i></a> -->
                       <button class="btn nobg" mat-icon-button
                         (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
                         matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
@@ -285,7 +143,6 @@
 </div>
 <div id="pickticketHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xl">
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" (click)="closepickticketHistoryModal()">&times;</button>
@@ -380,11 +237,7 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="modal fade" id="pickticketieminterface" role="dialog"  data-backdrop="static"> -->
 <ng-template #pickticketieminterface let-c="close" let-d="dismiss">
-  <!-- <div class="modal-dialog modal-lg">
-    <div class="modal-content"> -->
       <div class="modal-header">
         <button type="button" class="close font_chck" (click)="dismissModel()">
           &times;
