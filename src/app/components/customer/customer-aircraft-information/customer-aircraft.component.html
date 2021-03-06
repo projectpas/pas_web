@@ -1,19 +1,19 @@
-<div style="padding: 2px 6px;">
+<div class="aircraft-padding">
   <div class="col-md-12 shadow-box-cstm" *ngIf="isViewMode == false">
     <div class="col-md-4">
       <p class="fs12">
-        <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+        <label class="control-label labels-font-header wauto">Customer Name:
         </label>
-        <span class="span-header-red" style="text-transform: capitalize">
+        <span class="span-header-red text-capital">
           {{ customerName }}
         </span>
       </p>
     </div>
     <div class="col-md-4">
       <p class="fs12">
-        <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+        <label class="control-label labels-font-header wauto">Customer Code:
         </label>
-        <span class="span-header-red" style="text-transform: capitalize">
+        <span class="span-header-red text-capital">
           {{ customerCode }}
         </span>
       </p>
@@ -96,24 +96,24 @@
           </div>
           <div class="col-md-4">
             <div class="checkbox-cstm pull-right checkbox-align">
-              <label class="checkbox-label-align" style="width:120px !important">
+              <label class="checkbox-label-align width-120">
                   <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="aircraftDeletedList" (change)="getDeleteListByStatus($event.target.checked)" />
-                  <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
-                    <p style="font-weight: bold;"> Show Deleted List </p>  
+                  <span class="cr m-t-5"><i class="cr-icon pi pi-check"></i></span>
+                    <p class="font-bold"> Show Deleted List </p>  
                 </label>
             </div>
           </div> 
       </div>
       <div class="row" *ngIf="showAdvancedSearchCard == true && isViewMode == false">
-        <div class="col" style="margin-top: 10px !important;">
+        <div class="col m-t-10">
           <div class="advance-search-card" >
-            <div class="form-row" style="padding: 0 5px;">
+            <div class="form-row advance-search">
               <div class="col-md-1">
-                <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                <h4 class="f-s-14 search-label">Search :</h4>
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <label class="fs12" style="width: 100%;">Aircraft </label>
+                  <label class="fs12 input-width-100-percent">Aircraft </label>
                   <p-dropdown [options]="manufacturerData" placeholder="-- Select --" name="searchAircraft" filter="true"
                    [ngModelOptions]="{ standalone: true }" class="p-dropdown-cus-fullwidth" [(ngModel)]="selectAircraftManfacturer" [showClear]="true"
                     (onChange)="getAircraftModelByManfacturerType($event.value)"></p-dropdown>
@@ -137,7 +137,7 @@
                     [selectionLimit]="30"></p-multiSelect>
                 </div>
               </div>
-              <div class="col-md-1" style="padding-top: 20px !important;">
+              <div class="col-md-1 padding-top-20">
                 <div class="form-group">
                   <button class="btn btn-primary mtop20" (click)="searchAircraftInformation()" matTooltip="Search"
                     matTooltipPosition="above">
@@ -209,7 +209,7 @@
             <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg"
                 (click)="getCustomerAircraftHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i
                   class="fa fa-history"></i></a></span>
-                  <span ><a class="btn nobg" (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                  <span ><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
           </div>          
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == true">
@@ -241,7 +241,7 @@
     </ng-template>
   </p-table>
 
-  <div style="margin-top: 10px;" *ngIf="isViewMode == false">
+  <div class="m-t-10" *ngIf="isViewMode == false">
     <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
       [disabled]="stopmulticlicks">
       Next
@@ -280,18 +280,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -313,10 +313,10 @@
 
       <div class="col-md-4">
         <div class="form-group">
-          <label class="popup-plusicon-cstm" style="width: 150px !important">
+          <label class="popup-plusicon-cstm width-150">
             Model
-            <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown" (ngModelChange)="enableSaveAdd()" style="width: 20px !important;
-                              margin-left: 7px; " (change)="resetAircraftModelsorDashNumbers()" />
+            <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown" (ngModelChange)="enableSaveAdd()" 
+            class="model-input" (change)="resetAircraftModelsorDashNumbers()" />
             Unknown
           </label>
 
@@ -328,10 +328,10 @@
       </div>
       <div class="col-md-3" *ngIf="!modelUnknown">
         <div class="form-group">
-          <label class="popup-plusicon-cstm" style="width: 190px !important">
+          <label class="popup-plusicon-cstm width-190">
             Dash Number
-            <input type="checkbox" name="unknownDashNumber" (ngModelChange)="enableSaveAdd()" [(ngModel)]="dashNumberUnknown" style="width: 20px !important;
-                        margin-left: 7px; " (change)="resetAircraftModelsorDashNumbers()" />
+            <input type="checkbox" name="unknownDashNumber" (ngModelChange)="enableSaveAdd()" [(ngModel)]="dashNumberUnknown"
+            class="model-input" (change)="resetAircraftModelsorDashNumbers()" />
             Unknown
           </label>
 
@@ -342,7 +342,8 @@
         </div>
       </div>
       <div class="col-md-2">
-        <button style="margin-top: 20px;" type="button" [disabled]="disableSaveAdd" class="btn btn-primary" (click)="mapAircraftInventory()">
+        <button type="button" [disabled]="disableSaveAdd" class="btn btn-primary m-t-20"
+         (click)="mapAircraftInventory()">
           Add
         </button>
       </div>
@@ -358,7 +359,7 @@
               <th *ngFor="let col of columns">
                 {{ col.header }}
               </th>
-              <th style="width: 80px;">Inventory <span style="color:red" >*</span></th>
+              <th class="width-80">Inventory <span class="clr-red" >*</span></th>
               <!-- <th>Memo</th> -->
             </tr>
           </ng-template>
@@ -367,7 +368,7 @@
               <td *ngFor="let col of columns; let i = index">
                 {{ rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
               </td>
-              <td style="width: 80px;">
+              <td class="width-80">
                 <input minlength="1" maxlength="7"  type="number" onKeyPress="if(this.value.length==7) return false;"  class="form-control input-value" [(ngModel)]="rowData.Inventory"
                   (keyup)="inventoryValidation($event, 'fromadd')" name="Inventory{{ row_no }}" [required]="true"
                   />
@@ -425,18 +426,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -445,15 +446,15 @@
         <div class="col-sm-12 font-padding">
           <div class="col-sm-4">
             Aircraft:
-            <span style="color:red">{{ editAirCraftData.aircraftType }}</span>
+            <span class="clr-red">{{ editAirCraftData.aircraftType }}</span>
           </div>
           <div class="col-sm-4">
             Model:
-            <span style="color:red">{{editAirCraftData.aircraftModel == 'Unknown' ? '' : editAirCraftData.aircraftModel }}</span>
+            <span class="clr-red">{{editAirCraftData.aircraftModel == 'Unknown' ? '' : editAirCraftData.aircraftModel }}</span>
           </div>
           <div class="col-sm-4">
             Dash Number:
-            <span style="color:red">{{editAirCraftData.dashNumber == 'Unknown' ? '' : editAirCraftData.dashNumber }} </span>
+            <span class="clr-red">{{editAirCraftData.dashNumber == 'Unknown' ? '' : editAirCraftData.dashNumber }} </span>
           </div>
         </div>
       </div>
@@ -471,7 +472,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary pull-right submit-btn" style="text-align:center"
+          <button type="button" class="btn btn-primary pull-right submit-btn text-center"
             (click)="updateCustomerAircraft()" [disabled]="
               disableSave || !editAirCraftData.inventory || !ccForm.valid
             ">
@@ -497,18 +498,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -529,7 +530,7 @@
             <span class="label"><b>Dash Numbers: </b></span><span class="value">{{viewAircraftData.dashNumber == 'Unknown' ? '' : viewAircraftData.dashNumber }}</span>
           </p>
           <p>
-            <span class="label"><b>Inventory <span style="color:red">*</span>: </b></span><span
+            <span class="label"><b>Inventory <span class="clr-red">*</span>: </b></span><span
               class="value">{{ viewAircraftData.inventory }}</span>
           </p>
 
@@ -554,18 +555,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -599,18 +600,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -693,7 +694,7 @@
                 }">
                 {{ audit.updatedBy }}
               </td>
-              <td style="background-color: #fff !important;"><p style="width: 50px; text-align: center;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+              <td class="background-white"><p class="width-50 text-center"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
             </tr>
           </table>
           </div>
@@ -720,20 +721,20 @@
       <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
               <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">
+                  <label class="control-label labels-font-header wauto">
                       Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                       {{ customerName }}
                   </span>
               </p>
           </div>
           <div class="col-md-6">
               <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">
+                  <label class="control-label labels-font-header wauto">
                       Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                       {{ customerCode }}
                   </span>
               </p>

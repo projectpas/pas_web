@@ -108,7 +108,7 @@ export class SalesShippingLabelComponent implements OnInit {
                 float: left;
                 padding-right: 2px;
                 padding-left: 2px;
-                width: 38.33333333%;
+               
                 text-transform: capitalize;
                 margin-bottom: 0;
                 text-align: left;
@@ -196,6 +196,8 @@ export class SalesShippingLabelComponent implements OnInit {
               .image {
                 border: 1px solid #ccc;
                 padding: 5px;
+                margin-top:20px;
+                margin-bottom:10px;
               }
               
               .mtop20 {
