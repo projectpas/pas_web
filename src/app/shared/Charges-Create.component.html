@@ -5,7 +5,7 @@
   style="height:380px;"> -->
  
   <form #chargesCreateForm="ngForm">
-    <div class="table-responsive table-overflow header-table-width table-height">
+    <div class="table-responsive table-overflow header-table-width">
       <div class="tableFixHead">
     <table class="table table-bordered lastcol-fix">
       <thead>
@@ -38,7 +38,7 @@
         </p-dropdown> 
         </td>
         <td>
-          <select class="form-control full-width border-radius-4" id="dllChargesType" (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
+          <select class="form-control full-width border-radius-4" id="dllChargesType" ppendTo='body' (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"
             [(ngModel)]="charge.workflowChargeTypeId" name="type_{{i}}" required>
             <option [value]="0">--Select--</option>
             <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
