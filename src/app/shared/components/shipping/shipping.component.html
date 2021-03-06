@@ -44,8 +44,8 @@
                                   <span>
                                       <button class="btn nobg" mat-icon-button (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
                                               matTooltipPosition="above" style="font-weight: bold;"
-                                              [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
-                                              <i class="fa fa-plus"></i>
+                                              <i class="fa fa-plus"></i>                                              [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
+
                                       </button>
                                   </span>
                               </td> -->
@@ -69,7 +69,7 @@
                                     <th style="min-width: 120px; position: sticky !important">Actions</th>
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back"
-                                    *ngFor="let ship of summaryPart.soshippingchildviewlist; let poIndex = index">
+                                    *ngFor="let ship of summaryPart.woshippingchildviewlist; let poIndex = index">
                                     <td></td>
                                     <td class="table-column-width" *ngIf="ship.qtyShipped > 0">
                                         <label style="color: #0F9D58">Shipped</label>
@@ -82,13 +82,13 @@
                                         {{ ship.shipDate | date : "MM/dd/yyyy" }}
                                     </td>
                                     <td>
-                                        {{ ship.soShippingNum }}
+                                        {{ ship.woShippingNum }}
                                     </td>
                                     <td>
                                         {{ ship.airwayBill }}
                                     </td>
                                     <td>
-                                        {{ ship.soPickTicketNumber }}
+                                        {{ ship.woPickTicketNumber }}
                                     </td>
                                     <td>
                                         Line {{ ship.itemNo}}
@@ -467,7 +467,7 @@
                                     <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
                                             [disabled]="isView" name="soldToSite" required>
                                         <option value="">Select</option>
-                                        <option *ngFor="let site of siteList" [value]="site.customerDomensticShippingId">
+                                        <option *ngFor="let site of siteList" [value]="site.siteID">
                                             {{site.siteName}}
                                         </option>
                                     </select>
@@ -562,7 +562,7 @@
                                                     name="shipToName"
                                                     errorMessage="Records not found"
                                                     [forceSelection]="true"
-                                                    (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                                    (onSelect)="onselectcustomergetsite($event)"
                                                     [suggestions]="customerNamesList"
                                                     (completeMethod)="filterCustomerNames($event)"
                                                     (onKeyUp)="clearAddress('ShipTo', $event.target.value)"
@@ -584,7 +584,7 @@
                                     <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
                                             [disabled]="isView" name="shipToSite" required>
                                         <option value="">Select</option>
-                                        <option *ngFor="let site of shipCustomerSiteList" [value]="site.customerDomensticShippingId">{{site.siteName}}</option>
+                                        <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">{{site.siteName}}</option>
                                     </select>
                                 </div>
                             </div>

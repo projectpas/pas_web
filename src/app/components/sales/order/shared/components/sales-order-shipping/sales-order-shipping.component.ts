@@ -686,7 +686,7 @@ export class SalesOrderShippingComponent {
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.shippingList = response[0];
-                //this.showPaginator = this.totalRecords > 0;
+                this.checkIsChecked();
             }, error => {
                 this.isSpinnerVisible = false;
             });

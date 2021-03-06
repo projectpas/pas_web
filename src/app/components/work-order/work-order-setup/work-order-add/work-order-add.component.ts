@@ -3457,16 +3457,6 @@ export class WorkOrderAddComponent implements OnInit {
         const strText = '';
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
             this.conditionList = res;
-            // const conditionId = res.find(x => x.label.includes('As Removed'));
-            // this.workOrderGeneralInformation = {
-            //     ...this.workOrderGeneralInformation,
-            //     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
-            //         return {
-            //             ...x,
-            //             conditionId: conditionId !== undefined ? conditionId.value : null
-            //         }
-            //     })
-            // }
         })
     }
 
