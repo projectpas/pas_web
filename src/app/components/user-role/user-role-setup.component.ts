@@ -433,14 +433,7 @@ console.log(this.sortedHierarchy)
                 this.pages = [];
             },
             error => {
-                var message = '';
-                if (error.error.constructor == Array) {
-                    message = error.error[0].errorMessage;
-                }
-                else {
-                    message = error.error.Message;
-                }
-                this.alertService.showMessage('User Role', message, MessageSeverity.error);
+                this.alertService.showMessage('User Role', error, MessageSeverity.error);
             }
         );
 
