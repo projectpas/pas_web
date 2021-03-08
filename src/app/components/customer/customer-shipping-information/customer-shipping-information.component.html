@@ -1375,9 +1375,11 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <label>Shipping Account Info <span class="clr-red"></span></label>
-                  <input class="form-control" type="text" name="shippingAccountinfo" (ngModelChange)="enableSaveShipViaDomestic()"
-                    [(ngModel)]="shipViaDomestic.shippingAccountInfo" />
+                  <label>Shipping Account Infos <span class="clr-red"></span></label>
+                  <input class="form-control" type="text"  
+                  (ngModelChange)="enableSaveShipViaDomestic()"
+                  [ngModelOptions]="{standalone: true}"
+                  [(ngModel)]="shipViaDomestic.shippingAccountInfo" />
                 </div>
               </div>
               <div class="col-md-2">
@@ -1386,6 +1388,8 @@
                   <div class="align_adh">
                       <div [innerHTML]="shipViaDomestic.memo" 
                       [(ngModel)]="shipViaDomestic.memo"
+                      [ngModelOptions]="{standalone: true}"
+                      name="memo1" ngDefaultControl 
                         matTooltipPosition="above"
                         [matTooltip]="parsedText(shipViaDomestic.memo)" class="text_editor_box"
                           style="width: 96% !important;"></div>

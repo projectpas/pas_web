@@ -171,7 +171,7 @@ export class CustomerATAInformationComponent implements OnInit {
 
     getOriginalATASubchapterList() {
         this.isSpinnerVisible = true;
-        this.atasubchapter1service.getAtaSubChapter1List().subscribe(res => {
+        this.atasubchapter1service.getAtaSubChapter1List(this.currentUserMasterCompanyId).subscribe(res => {
             const responseData = res[0];
             this.originalATASubchapterData = responseData;
             this.getMappedATAByCustomerId();

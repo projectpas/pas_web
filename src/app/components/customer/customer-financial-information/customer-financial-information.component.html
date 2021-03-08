@@ -325,7 +325,7 @@
                                       Tax Type
                                     </label>
                                     <select style="width:75% !important;" name="taxType" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxType">
-                                      <option value="">-- Select --</option>
+                                      <option value="0">-- Select --</option>
                                       <option *ngFor="let Percentlist of taxTypeList" [ngValue]="Percentlist.value">
                                         {{ Percentlist.label }}
                                       </option>
@@ -339,7 +339,7 @@
                                     Tax Rate
                                   </label>
                                   <select style="width:75% !important;" name="taxRates" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxRates">
-                                    <option value="">-- Select --</option>
+                                    <option value="0">-- Select --</option>
                                     <option *ngFor="let Percentlist of taxRatesList" [ngValue]="Percentlist.value">
                                       {{ Percentlist.label }}
                                     </option>

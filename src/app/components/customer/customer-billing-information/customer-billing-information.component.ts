@@ -284,7 +284,7 @@ export class CustomerBillingInformationComponent {
             this.getBillingDataById();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => { this.isSpinnerVisible = false;})
     }
 
     enableSave() {
@@ -347,7 +347,7 @@ export class CustomerBillingInformationComponent {
                     MessageSeverity.success
                 );
                 this.getBillingDataById();
-            },error => this.saveFailedHelper(error))
+            },error =>  {this.isSpinnerVisible = false;})
         } else {
             // update shipping 
             this.customerService.updateBillinginfo(data).subscribe(() => {
@@ -359,7 +359,7 @@ export class CustomerBillingInformationComponent {
                     MessageSeverity.success
                 );
                 this.getBillingDataById();
-            },error => this.saveFailedHelper(error))
+            },error =>{this.isSpinnerVisible = false})
         }
         $("#addBillingInfo").modal("hide");
         this.disableSave = true;
@@ -493,8 +493,7 @@ export class CustomerBillingInformationComponent {
             this.billingInfoOriginal = this.billingInfo;
             //this.arrayShipingIdlist = [];
             },err => {
-            const errorLog = err;
-            this.saveFailedHelper(errorLog);		
+                this.isSpinnerVisible = false;           		
         });
 
         //this.billingSieList = [...this.billingSieListOriginal];
@@ -513,10 +512,9 @@ export class CustomerBillingInformationComponent {
     getCustomerBillingHistory(content, row) {
         const { customerBillingAddressId } = row;
         this.alertService.startLoadingMessage();
-
         this.customerService.getCustomerBillingHistory(this.id, customerBillingAddressId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false;});
     }
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -546,7 +544,7 @@ export class CustomerBillingInformationComponent {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible = false;})
     }
 
     dismissModel() {
@@ -554,14 +552,11 @@ export class CustomerBillingInformationComponent {
     }
 
     deleteBillingInfo(content, rowData) {
-
         if (!rowData.isPrimary) {
             this.selectedRowForDelete = rowData;
             this.isDeleteMode = true;
-
             this.customerBillingAddressId = rowData.customerBillingAddressId
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            
+            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });            
         } else {
             $('#deleteoopsBilling').modal('show');
         }
@@ -573,13 +568,11 @@ export class CustomerBillingInformationComponent {
             updatedBy: this.userName,
             customerBillingAddressId: this.customerBillingAddressId,
             masterCompanyId: this.currentUserMasterCompanyId,
-        }
-        
+        }        
         if (this.customerBillingAddressId > 0) {
-
             this.customerService.deleteBillinginfo(obj).subscribe(
                 response => this.saveCompleted(this.sourceCustomer),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false;})
         }
         this.modal.close();
     }
@@ -622,7 +615,7 @@ export class CustomerBillingInformationComponent {
                     `Successfully Uploaded  `,
                     MessageSeverity.success
                 );
-            },error => this.saveFailedHelper(error))
+            },error => {this.isSpinnerVisible = false;})
         }
     }
 
@@ -644,8 +637,7 @@ export class CustomerBillingInformationComponent {
             this.billingSieList = [...this.billingSieListOriginal];
             this.arrayShipingIdlist = [];
 		},err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);		
+            this.isSpinnerVisible = false;	
 		});
     }
 

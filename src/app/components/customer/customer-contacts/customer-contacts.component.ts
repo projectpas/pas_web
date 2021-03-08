@@ -895,7 +895,7 @@ export class CustomerContactsComponent implements OnInit {
 			const responseData = res[0];
 			this.originalATASubchapterData = responseData;
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false})
 	}
 
 	async getATACustomerContactMapped() {
