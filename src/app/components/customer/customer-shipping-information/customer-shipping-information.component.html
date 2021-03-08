@@ -1,22 +1,22 @@
-﻿<div class="right_col" role="main" style="padding: 2px 6px">
-  <div style="">
+﻿<div class="right_col shipping-main-padding" role="main">
+  <div>
     <div class="x_content">
       <div *ngIf="isViewMode == false">
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-4">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -24,62 +24,71 @@
         </div>
       </div>
       <div class="panel-group mt-2" id="accordion">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" href="#step1" aria-expanded="false">Domestic Shipping Info</a>
-              <!-- <a class="" data-toggle="collapse" href="#step1">Domestic Shipping Info</a> -->
-            </h4>
-          </div>
-          <!-- <div id="step1" class="panel-collapse collapse in show"> -->
-          <div id="step1" class="panel-collapse collapse">
-            <div class="panel-body m-lr-7">
-              <div class="col-sm-12">
-                <div style="text-align: right;">
-                  <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addShippingInfo">
-                    <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"
-                      matTooltip="Add Domestic Shipping Information" matTooltipPosition="above"
-                      (click)="addDomesticShipping();">
-                      Add Domestic Shipping Information
-                    </button>
-                  </a>
-                </div>
-                <div class="card-body header-body">
-                  <p-table #domestictable class="rpo-table-cstm rro-table-cstm" [value]="domesticShippingData"
-                    [(selection)]="selectedrowsFromDomestic" [rows]="pageSizeForDomestic" [paginator]="true"
-                    [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumnsForDomesticTable"
-                    selectionMode="multiple" [metaKeySelection]="true" [resizableColumns]="true"
-                    (onPage)="pageIndexChangeForDomestic($event)" [reorderableColumns]="true">
-                    <ng-template pTemplate="caption" *ngIf="isViewMode == false">
-                      <div class="row">
-                        <div class="col">
-                          <p-multiSelect [options]="domesticShippingHeaders"
-                            [(ngModel)]="selectedColumnsForDomesticTable" name="domesticShiipingTable"
-                            optionLabel="header" selectedItemsLabel="{0} columns selected" defaultLabel="Choose Columns"
-                            class="multiselect-field"></p-multiSelect>
-                        </div>
-                        <div class="col">
-                          <div class="global-search-field inner-addon right-addon inline-block">
-                            <i class="fa fa-search"></i>
-                            <input type="text" pInputText size="50" class="form-control" (input)="
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">                    
+                    <a class="collapsed" data-toggle="collapse" href="#step1" aria-expanded="false">Domestic Shipping Info</a>
+                    <!-- <a class="" data-toggle="collapse" href="#step1">Domestic Shipping Info</a> -->
+                </h4>
+            </div>
+            <!-- <div id="step1" class="panel-collapse collapse in show"> -->
+            <div id="step1" class="panel-collapse collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                      <div class="text-right">
+                        <a *ngIf="isViewMode == false" 
+                          data-toggle="modal" data-target="#addShippingInfo">
+                          <button type="button" class="btn-sm header-button add-shipping-button"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
+                            Add Domestic Shipping Information
+                          </button>
+                        </a>              
+                      </div>
+                      <div class="card-body header-body">
+                        <p-table #domestictable class="rpo-table-cstm rro-table-cstm" 
+                        [value]="domesticShippingData"
+                          [(selection)]="selectedrowsFromDomestic" 
+                          [rows]="pageSizeForDomestic" 
+                          [paginator]="true" [pageLinks]="3"
+                          [rowsPerPageOptions]="[10, 20, 50, 100]" 
+                          [columns]="selectedColumnsForDomesticTable"
+                          selectionMode="multiple" 
+                          [metaKeySelection]="true"
+                          [resizableColumns]="true" 
+                          (onPage)="pageIndexChangeForDomestic($event)" [reorderableColumns]="true">
+                          <ng-template pTemplate="caption" *ngIf="isViewMode == false">
+                            <div class="row">
+                              <div class="col">
+                              <p-multiSelect [options]="domesticShippingHeaders" [(ngModel)]="selectedColumnsForDomesticTable"
+                                name="domesticShiipingTable" optionLabel="header" selectedItemsLabel="{0} columns selected"
+                              defaultLabel="Choose Columns"  class="multiselect-field"></p-multiSelect>
+                              </div>
+                              <div class="col">
+                                <div					
+                                class="global-search-field inner-addon right-addon inline-block"
+                                >  
+                                <i class="fa fa-search"></i>
+                                <input type="text" pInputText size="50"
+                                 class="form-control" (input)="
                                     domestictable.filterGlobal(
                                       $event.target.value,
                                       'contains'
                                     )
-                                  " placeholder=" Filter" />
-                          </div>
-                        </div>
-                        <div class="excel-upload  excel-upload-cstm">
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col">
-                          <div class="col" style="width: 370px; float: right; padding-top: 3px;">
-                            <div class="form-group">
-                              <div class="pull-left radio-buttons-align">
-                                <p-radioButton class="custom_set" name="groupname" value="Active" label="Active"
-                                  (click)="geListByStatusDomsetic('Active')" [(ngModel)]="currentstatus1">
-                                </p-radioButton>
+                                  " placeholder=" Filter" 
+                                  />
+                              </div>
+                              </div>
+                              <div class="excel-upload  excel-upload-cstm">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                              <div class="col shipping-radios"
+                              >
+                                <div class="form-group">
+                                  <div
+                                    class="pull-left radio-buttons-align"
+                                  >
+                                  <p-radioButton class="custom_set" name="groupname" value="Active" label="Active"(click)="geListByStatusDomsetic('Active')" [(ngModel)]="currentstatus1"></p-radioButton>
                               </div>
                               <div class="pull-left radio-buttons-align">
                                 <p-radioButton class="custom_set" name="groupname" value="InActive" label="In-active"
@@ -90,47 +99,49 @@
                                 <p-radioButton class="custom_set" name="groupname" value="ALL" label="All"
                                   (click)="geListByStatusDomsetic('ALL')" [(ngModel)]="currentstatus1"></p-radioButton>
                               </div>
-                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 4px;">
-                                  <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"
-                                    (click)="getDeleteListByStatusDomestic($event.target.checked)" />
-                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                  Show Deleted List
-                                </label>
-                              </div>
+                              <div class="checkbox-cstm shipping-check-div">
+                                <label class="shipping-check-label">
+                                      <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"  (click)="getDeleteListByStatusDomestic($event.target.checked)"
+                                        />
+                                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                      Show Deleted List 
+                                    </label>
+                                  </div>
+                                  </div>
+            
                             </div>
-
-                          </div>
                         </div>
                       </div>
                     </ng-template>
 
-                    <ng-template pTemplate="caption" *ngIf="isViewMode == true">
-                      <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
-                        <label style="width: auto !important;margin-top: 3px;">
-                          <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"
-                            (click)="getDeleteListByStatusDomestic($event.target.checked)" />
-                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                          Show Deleted List
-                        </label>
-                      </div>
-                    </ng-template>
-
-                    <ng-template pTemplate="header" let-columns>
-                      <tr>
-                        <th class="table-column-width">Flag</th>
-                        <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                          [pSortableColumn]="col.field" [hidden]="col.header == 'IsPrimary'">
-                          {{ col.header }}
-                          <p-sortIcon [field]="col.field"></p-sortIcon>
-                        </th>
-                        <th class="table-actions-column">Actions</th>
-                      </tr>
-                      <tr>
-                        <th class="table-column-width"></th>
-                        <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
-                          [ngSwitch]="col.field">
-                          <input class="table-header-input-width" pInputText type="text" (input)="
+                          <ng-template pTemplate="caption" *ngIf="isViewMode == true">
+                            <div class="checkbox-cstm show-deleted-check-div">
+                              <label class="show-deleted-label">
+                                <input type="checkbox" [(ngModel)]="currentDeletedstatus1" name="cparent" id="cparent"  (click)="getDeleteListByStatusDomestic($event.target.checked)"
+                                  />
+                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                Show Deleted List 
+                              </label>
+                            </div>
+                          </ng-template>
+            
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <th class="table-column-width">Flag</th>
+                              <th class="table-column-width" *ngFor="let col of columns" pResizableColumn
+                               pReorderableColumn [pSortableColumn]="col.field"
+                                [hidden]="col.header == 'IsPrimary'">
+                                {{ col.header }}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                              </th>
+                              <th class="table-actions-column">Actions</th>
+                            </tr>
+                            <tr>
+                              <th class="table-column-width"></th>
+                              <th class="table-column-width" *ngFor="let col of columns"
+                               [hidden]="col.field == 'isPrimary'"
+                                [ngSwitch]="col.field">
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     domestictable.filter(
                                       $event.target.value,
                                       col.field,
@@ -162,153 +173,159 @@
                                     ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                     : rowData[col.field]
                                 }}
-                        </td>
-                        <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false"
-                          style="text-align: center">
-                          <div *ngIf="currentDeletedstatus1==false">
-                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true"
-                              name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                              matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)">
-                            </p-inputSwitch>
-
-                            <span data-toggle="modal" data-target="#viewShipping">
-                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
-                                  class="fa fa-eye"></i></a>
-                            </span>
-
-                            <span data-toggle="modal" data-target="#addShippingInfo"><a class="btn nobg"
-                                (click)="openEditDomestic(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
-                                  class="fa fa-pencil"></i></a> </span>
-                            <span><a class="btn nobg"
-                                (click)="deleteDomesticShipping(deleteContent, rowData);domestictable.reset()"
-                                matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                            <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via"
-                              matTooltipPosition="above" data-original-title="View Shipping Via Information"
-                              style="padding: 0;">
-                              <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal"
-                                (click)="selectedDomesticForShipVia(rowData)"></i>
-                            </button>
-                            <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
-                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                          </div>
-                          <div *ngIf="currentDeletedstatus1==true">
-                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true"
-                              name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                              matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)">
-                            </p-inputSwitch>
-
-                            <span data-toggle="modal" data-target="#viewShipping">
-                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
-                                  class="fa fa-eye"></i></a>
-                            </span>
-                            <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
-                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                            <span><a class="btn nobg" (click)="restore1(restoreId1,rowData);"
-                                matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
-                                  aria-hidden="true"></i></a> </span>
-                          </div>
-                        </td>
-                        <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
-                          <span data-toggle="modal" data-target="#viewShipping">
-                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                              (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
-                                class="fa fa-eye"></i></a>
-                          </span>
-                          <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via"
-                            matTooltipPosition="above" data-original-title="View Shipping Via Information"
-                            style="padding: 0;">
-                            <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal"
-                              (click)="selectedDomesticForShipVia(rowData)"></i>
-                          </button>
-
-                          <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
-                              matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                        </td>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage" let-columns *ngIf="domesticShippingData?.length == 0">
-                      <tr>
-                        <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
-                          No records found
-                        </td>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="summary" id="footer">
-                      <label id="footer" class="footer">Total:</label>
-                      <input class="footer-input-width" [(ngModel)]="domestictable._totalRecords" [disabled]="true"
-                        pInputText type="text" />
-                      &nbsp;&nbsp;
-                      <label id="footer" class="footer1">Pages Count:</label>
-
-                      <input class="footer-input-width" [ngModel]="
+                              </td>
+                              <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == false">
+                                  <div *ngIf="currentDeletedstatus1==false">
+                                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                  matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
+            
+                                <span data-toggle="modal" data-target="#viewShipping">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                      class="fa fa-eye"></i></a>
+                                </span>
+            
+                                <span data-toggle="modal" data-target="#addShippingInfo"><a class="btn nobg"
+                                    (click)="openEditDomestic(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+                                      class="fa fa-pencil"></i></a> </span>
+                                <span><a class="btn nobg"
+                                    (click)="deleteDomesticShipping(deleteContent, rowData);domestictable.reset()"
+                                    matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via"
+                                  matTooltipPosition="above" data-original-title="View Shipping Via Information"
+                                  style="padding: 0;">
+                                  <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal"
+                                    (click)="selectedDomesticForShipVia(rowData)"></i>
+                                </button>
+                                <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
+                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                              </div>
+                                <div *ngIf="currentDeletedstatus1==true">
+                                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                  matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
+            
+                                <span data-toggle="modal" data-target="#viewShipping">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                      class="fa fa-eye"></i></a>
+                                </span>
+                                <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
+                                  matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                  <span ><a class="btn nobg" (click)="restore1(restoreId1,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                  </div>
+                              </td>
+                              <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
+                                <span data-toggle="modal" data-target="#viewShipping">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                      class="fa fa-eye"></i></a>
+                                </span>
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via"
+                                  matTooltipPosition="above" data-original-title="View Shipping Via Information"
+                                  style="padding: 0;">
+                                  <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal"
+                                    (click)="selectedDomesticForShipVia(rowData)"></i>
+                                </button>
+            
+                                <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
+                                  matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage" let-columns *ngIf="domesticShippingData?.length == 0">
+                            <tr>
+                              <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]="domestictable._totalRecords" [disabled]="true" pInputText
+                              type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+            
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(domestictable._totalRecords, pageSize)
                               " [disabled]="true" pInputText type="text" />
-                    </ng-template>
-                  </p-table>
+                          </ng-template>
+                        </p-table>
+                      </div>
+                    </div>
                 </div>
-              </div>
             </div>
           </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" href="#step2">International Shipping Info</a>
-            </h4>
-          </div>
-          <div id="step2" class="panel-collapse  collapse">
-            <div class="panel-body m-lr-7">
-              <div class="col-sm-12">
-                <div style="text-align: right;">
-                  <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addInternationalShippingInfo">
-                    <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"
-                      matTooltip="Add International Shipping Information" matTooltipPosition="above"
-                      (click)="addInternationalShipping();">
-                      Add International Shipping Information
-                    </button>
-                  </a>
-                </div>
-                <div class="card-body header-body">
-                  <p-table #intlShippingTable class="rpo-table-cstm rro-table-cstm" [value]="internationalShippingData"
-                    [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
-                    [columns]="selectedColumnsForInternationTable" selectionMode="multiple" [metaKeySelection]="true"
-                    [(selection)]="selectedrowsFromInternational" [resizableColumns]="true" [reorderableColumns]="true"
-                    (onPage)="pageIndexChangeForInt($event)" [rows]="pageSizeForInt">
-                    <ng-template pTemplate="caption" *ngIf="isViewMode == false">
-                      <div class="row">
-                        <div class="col">
-                          <p-multiSelect [options]="internationalShippingHeaders"
-                            [(ngModel)]="selectedColumnsForInternationTable" [ngModelOptions]="{ standalone: true }"
-                            optionLabel="header" selectedItemsLabel="{0} columns selected" class="multiselect-field"
-                            defaultLabel="Choose Columns">
-                          </p-multiSelect>
-                        </div>
-                        <div class="col">
-                          <div class="global-search-field inner-addon right-addon inline-block">
-                            <i class="fa fa-search"></i>
-                            <input type="text" pInputText size="50" class="form-control" (input)="
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step2">International Shipping Info</a>
+                </h4>
+            </div>
+            <div id="step2" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                      <div class="text-right">
+                        <a *ngIf="isViewMode == false" 
+                         data-toggle="modal" data-target="#addInternationalShippingInfo">
+                          <button type="button"  class="btn-sm header-button add-shipping-button"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
+                            Add International Shipping Information
+                          </button>
+                        </a>              
+                      </div>
+                      <div class="card-body header-body">
+                        <p-table #intlShippingTable class="rpo-table-cstm rro-table-cstm" 
+                        [value]="internationalShippingData" 
+                        [paginator]="true"
+                          [pageLinks]="3" 
+                          [rowsPerPageOptions]="[10, 20, 50, 100]" 
+                          [columns]="selectedColumnsForInternationTable"
+                          selectionMode="multiple"
+                          [metaKeySelection]="true"
+                          [(selection)]="selectedrowsFromInternational" 
+                          [resizableColumns]="true"
+                          [reorderableColumns]="true" 
+                          (onPage)="pageIndexChangeForInt($event)" 
+                          [rows]="pageSizeForInt">
+                          <ng-template pTemplate="caption" *ngIf="isViewMode == false">
+                            <div class="row">
+                              <div class="col">
+                              <p-multiSelect [options]="internationalShippingHeaders"
+                                [(ngModel)]="selectedColumnsForInternationTable" [ngModelOptions]="{ standalone: true }"
+                                optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                class="multiselect-field"
+                                defaultLabel="Choose Columns"
+                                >
+                              </p-multiSelect>
+                            </div>
+                            <div class="col">
+                              <div					
+                              class="global-search-field inner-addon right-addon inline-block"
+                              >  
+                                <i class="fa fa-search"></i>
+                                <input type="text" pInputText size="50"
+                                 class="form-control" (input)="
                                     intlShippingTable.filterGlobal(
                                       $event.target.value,
                                       'contains'
                                     )
-                                  " placeholder=" Filter" />
-                          </div>
-                        </div>
-                        <div class="excel-upload  excel-upload-cstm">
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col">
-                          <div class="col" style="width: 370px; float: right; padding-top: 3px;">
-                            <div class="form-group">
-                              <div class="pull-left radio-buttons-align">
-                                <label class="radio-cstm wauto">
-                                  <input type="radio" name="shipstatus" class="form-control" value="Active"
-                                    (click)="geListByStatusInternational('Active')" [(ngModel)]="currentstatus2">
-                                  <span class="checkmark"></span>Active
-                                </label>
+                                  " placeholder=" Filter"  />
+                              </div>
+                              </div>
+                              <div class="excel-upload  excel-upload-cstm">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                              <div class="col shipping-radios">
+                                   <div class="form-group">
+                                     <div
+                                       class="pull-left radio-buttons-align"
+                                     >
+                                     <label class="radio-cstm wauto">
+                                      <input type="radio" name="shipstatus" class="form-control" value="Active" (click)="geListByStatusInternational('Active')" [(ngModel)]="currentstatus2">
+                                      <span class="checkmark"></span>Active
+                                  </label>
                               </div>
                               <div class="pull-left radio-buttons-align">
                                 <label class="radio-cstm wauto">
@@ -324,48 +341,48 @@
                                   <span class="checkmark"></span>All
                                 </label>
                               </div>
-                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 4px;">
-                                  <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"
-                                    (click)="getDeleteListByStatusIntern($event.target.checked)" />
-                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                  Show Deleted List
-                                </label>
-                              </div>
-                            </div>
+                              <div class="checkbox-cstm shipping-check-div">
+                                <label class="shipping-check-label">
+                                      <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"  (click)="getDeleteListByStatusIntern($event.target.checked)"
+                                        />
+                                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                      Show Deleted List 
+                                    </label>
+                                  </div>
+                                  </div>
                           </div>
                         </div>
                       </div>
                     </ng-template>
 
-                    <ng-template pTemplate="caption" *ngIf="isViewMode == true">
-                      <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
-                        <label style="width: auto !important;margin-top: 3px;">
-                          <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"
-                            (click)="getDeleteListByStatusIntern($event.target.checked)" />
-                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                          Show Deleted List
-                        </label>
-                      </div>
-                    </ng-template>
-
-                    <ng-template pTemplate="header" let-columns>
-                      <tr>
-                        <th class="table-column-width">Flag</th>
-                        <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'"
-                          pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                          {{ col.header }}
-                          <p-sortIcon [field]="col.field"></p-sortIcon>
-                        </th>
-                        <th class="table-actions-column" *ngIf="selectedColumnsForInternationTable.length > 0">
-                          Actions
-                        </th>
-                      </tr>
-                      <tr>
-                        <th class="table-column-width"></th>
-                        <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
-                          [ngSwitch]="col.field">
-                          <input class="table-header-input-width" pInputText type="text" (input)="
+                          <ng-template pTemplate="caption" *ngIf="isViewMode == true">
+                            <div class="checkbox-cstm show-deleted-check-div">
+                              <label class="show-deleted-label">
+                                <input type="checkbox" [(ngModel)]="currentDeletedstatus2" name="cparent" id="cparent"  (click)="getDeleteListByStatusIntern($event.target.checked)"
+                                  />
+                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                Show Deleted List 
+                              </label>
+                            </div>
+                          </ng-template>
+            
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <th class="table-column-width">Flag</th>
+                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
+                                pReorderableColumn [pSortableColumn]="col.field">
+                                {{ col.header }}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                              </th>
+                              <th class="table-actions-column" *ngIf="selectedColumnsForInternationTable.length > 0">
+                                Actions
+                              </th>
+                            </tr>
+                            <tr>
+                              <th class="table-column-width"></th>
+                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
+                                [ngSwitch]="col.field">
+                                <input class="table-header-input-width" pInputText type="text" (input)="
                                     intlShippingTable.filter(
                                       $event.target.value,
                                       col.field,
@@ -402,97 +419,87 @@
                                     ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                     : rowData[col.field]
                                 }}
-                          </td>
-                          <td class="table-column-width" *ngIf="col.field == 'amount'"
-                            [hidden]="col.field == 'isPrimary'">
-                            <p class="m-0 p-0 text-right"> {{ rowData[col.field] }}</p>
-                          </td>
-                        </ng-container>
-
-                        <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false"
-                          style="text-align: center">
-
-                          <div *ngIf="currentDeletedstatus2==false">
-                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true"
-                              name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                              matTooltipPosition="above" (onChange)="updateActiveorInActiveForIS(rowData)">
-                            </p-inputSwitch>
-
-                            <span data-toggle="modal" data-target="#viewInter">
-                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
-                                  class="fa fa-eye"></i></a>
-                            </span>
-
-                            <span data-toggle="modal" data-target="#addInternationalShippingInfo"><a class="btn nobg"
-                                (click)="openEditIntenational(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
-                                  class="fa fa-pencil"></i></a> </span>
-
-                            <span><a class="btn nobg"
-                                (click)="deleteInternationalShipping(deleteContent1, rowData);intlShippingTable.reset()"
-                                matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-
-                            <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via "
-                              matTooltipPosition="above" data-original-title="View Shipping Via Info"
-                              style="padding: 0;">
-                              <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
-                                (click)="selectedInternationalShipForShipVia(rowData)"></i>
-                            </button>
-
-
-                            <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
-                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                          </div>
-                          <div *ngIf="currentDeletedstatus2==true">
-                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true"
-                              name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                              matTooltipPosition="above" (onChange)="updateActiveorInActiveForIS(rowData)">
-                            </p-inputSwitch>
-
-                            <span data-toggle="modal" data-target="#viewInter">
-                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
-                                  class="fa fa-eye"></i></a>
-                            </span>
-                            <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
-                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                            <span><a class="btn nobg" (click)="restore2(restoreId2,rowData);"
-                                matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
-                                  aria-hidden="true"></i></a> </span>
-                          </div>
-                        </td>
-                        <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true"
-                          style="text-align: center">
-                          <span data-toggle="modal" data-target="#viewInter">
-                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                              (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
-                                class="fa fa-eye"></i></a>
-                          </span>
-                          <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via "
-                            matTooltipPosition="above" data-original-title="View Shipping Via Info">
-                            <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
-                              (click)="selectedInternationalShipForShipVia(rowData)"></i>
-                          </button>
-                          <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
-                              matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                        </td>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingData?.length == 0">
-                      <tr>
-                        <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
-                          No records found
-                        </td>
-                      </tr>
-                    </ng-template>
-                    <ng-template pTemplate="summary" id="footer">
-                      <label id="footer" class="footer">Total:</label>
-                      <input class="footer-input-width" [(ngModel)]="intlShippingTable._totalRecords" [disabled]="true"
-                        pInputText type="text" />
-                      &nbsp;&nbsp;
-                      <label id="footer" class="footer1">Pages Count:</label>
-
-                      <input class="footer-input-width" [ngModel]="
+                              </td>
+                              <td class="table-column-width" *ngIf="col.field == 'amount'" [hidden]="col.field == 'isPrimary'">
+                                <p class="m-0 p-0 text-right"> {{ rowData[col.field] }}</p>
+                              </td>
+                              </ng-container>
+                              
+                              <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == false" >
+                                
+                                <div *ngIf="currentDeletedstatus2==false">
+                                <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                matTooltipPosition="above" (onChange)="updateActiveorInActiveForIS(rowData)"></p-inputSwitch> 
+            
+                                <span data-toggle="modal" data-target="#viewInter">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                      class="fa fa-eye"></i></a>
+                                </span>
+            
+                                <span data-toggle="modal" data-target="#addInternationalShippingInfo"><a class="btn nobg"
+                                    (click)="openEditIntenational(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+                                      class="fa fa-pencil"></i></a> </span>
+            
+                                <span><a class="btn nobg"
+                                    (click)="deleteInternationalShipping(deleteContent1, rowData);intlShippingTable.reset()"
+                                    matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+            
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via "
+                                  matTooltipPosition="above" data-original-title="View Shipping Via Info" style="padding: 0;">
+                                  <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
+                                    (click)="selectedInternationalShipForShipVia(rowData)"></i>
+                                </button>
+            
+            
+                                <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
+                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                </div>
+                                <div *ngIf="currentDeletedstatus2==true">
+                                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                  matTooltipPosition="above" (onChange)="updateActiveorInActiveForIS(rowData)"></p-inputSwitch> 
+              
+                                  <span data-toggle="modal" data-target="#viewInter">
+                                    <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                      (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                        class="fa fa-eye"></i></a>
+                                  </span>
+                                  <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
+                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                  <span ><a class="btn nobg" (click)="restore2(restoreId2,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                  </div>
+                              </td>
+                              <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == true">
+                                <span data-toggle="modal" data-target="#viewInter">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                      class="fa fa-eye"></i></a>
+                                </span>
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via "
+                                  matTooltipPosition="above" data-original-title="View Shipping Via Info">
+                                  <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
+                                    (click)="selectedInternationalShipForShipVia(rowData)"></i>
+                                </button>
+                                <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
+                                  matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingData?.length == 0">
+                            <tr>
+                              <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]="intlShippingTable._totalRecords" [disabled]="true" pInputText
+                              type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+            
+                            <input class="footer-input-width" [ngModel]="
                                 getPageCount(intlShippingTable._totalRecords, pageSize)
                               " [disabled]="true" pInputText type="text" />
                     </ng-template>
@@ -521,49 +528,49 @@
       </div>
     </div>
 
-    <div class="modal fade success-msg" id="success-popup" role="dialog" data-backdrop="static">
-      <div class="modal-dialog modal-sm popup-timeout">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="btn btn-primary-cstm" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-            <h4><i class="fa fa-check"></i>&nbsp; You Added Successfully !</h4>
-          </div>
+  <div class="modal fade success-msg" id="success-popup" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm popup-timeout">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn btn-primary-cstm" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4><i class="fa fa-check"></i>&nbsp; You Added Successfully !</h4>
         </div>
       </div>
     </div>
-    <!-- The Modal -->
-    <div class="modal popup-blur" id="viewShipping" data-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">Details of Domestic Shipping Info</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              &times;
-            </button>
-            <div class="col-md-12 shadow-box-cstm">
-              <div class="col-md-6">
-                <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-                  </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
-                    {{ customerName }}
-                  </span>
-                </p>
-              </div>
-              <div class="col-md-6">
-                <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-                  </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
-                    {{ customerCode }}
-                  </span>
-                </p>
-              </div>
+  </div>
+  <!-- The Modal -->
+  <div class="modal popup-blur" id="viewShipping" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Details of Domestic Shipping Info</h4>
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+              <p class="fs12">
+                <label class="control-label labels-font-header wauto">Customer Name:
+                </label>
+                <span class="span-header-red text-capital">
+                  {{ customerName }}
+                </span>
+              </p>
             </div>
-          </div>
+            <div class="col-md-6">
+              <p class="fs12">
+                <label class="control-label labels-font-header wauto">Customer Code:
+                </label>
+                <span class="span-header-red text-capital">
+                  {{ customerCode }}
+                </span>
+              </p>
+            </div>
+          </div> 
+        </div>
 
           <!-- Modal body -->
           <div class="modal-body" *ngIf="sourceViewforShipping">
@@ -671,43 +678,43 @@
                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                         : rowData[col.field]
                     }}
-                        </td>
-                        <td class="table-column-width" *ngIf="col.field == 'memo'">
-                          <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
-                        </td>
-                      </ng-container>
-
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="emptymessage" let-columns *ngIf="demosticShippingViaData.length == 0">
-                    <tr>
-                      <td colspan="4" class="no-records-cstm no-records-msg">
-                        No records found
-                      </td>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="summary" id="footer">
-                    <label id="footer" class="footer">Total:</label>
-                    <input class="footer-input-width" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords"
-                      [disabled]="true" pInputText type="text" />
-                    &nbsp;&nbsp;
-                    <label id="footer" class="footer1">Pages Count:</label>
-                    <input class="footer-input-width" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)"
-                      name="pagecount" [disabled]="true" pInputText type="text" />
-                  </ng-template>
-                </p-table>
-              </div>
+                  </td>
+                  <td class="table-column-width" *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                </td>
+                </ng-container>
+                  
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" let-columns *ngIf="demosticShippingViaData.length == 0">
+                <tr>
+                  <td colspan="4" class="no-records-cstm no-records-msg">
+                    No records found
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input class="footer-input-width" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
+                  pInputText type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input class="footer-input-width" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
+                  [disabled]="true" pInputText type="text" />
+              </ng-template>
+            </p-table>
             </div>
           </div>
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">
-              Close
-            </button>
-          </div>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Close
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- Domestic Shipping Add -->
     <div class="modal fade" id="addShippingInfo" role="dialog" data-backdrop="static">
@@ -873,7 +880,7 @@
     </div>
   </div>
 
-  <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static"
+  <ng-template #contentAuditHistShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static"
     class="popup-blur">
     <div class="modal-header">
       <h4 class="modal-title">History of Domestic Ship Via</h4>
@@ -883,27 +890,27 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Site Name:
+            <label class="control-label labels-font-header wauto">Site Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ DomesticSiteName }}
             </span>
           </p>
@@ -956,18 +963,18 @@
                   ? 'black'
                   : 'red'
               }">
-                <p [innerHTML]="audit.memo"></p>
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+            <p [innerHTML]="audit.memo"></p>
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
-                  </label>
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+                </label>
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
                   </label>
                 </span>
@@ -986,11 +993,11 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.updatedBy }}
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+              {{ audit.updatedBy }}
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
                   </label>
                 </span>
@@ -1022,18 +1029,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -1149,18 +1156,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -1271,28 +1278,28 @@
                           ? (rowData[col.field] | date: 'MM/dd/yyyy')
                           : rowData[col.field]
                       }}
-                      </td>
-                      <td class="table-column-width" *ngIf="col.field == 'memo'">
-                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
-                      </td>
-                    </ng-container>
-
+                    </td>
+                    <td class="table-column-width" *ngIf="col.field == 'memo'">
+                      <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                  </td>
+                  </ng-container>
+                    
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingViaData.length == 0">
                   <tr>
-                    <td colspan="4" style="color: red; font-weight: bold; text-align: center">
+                    <td colspan="4" class="no-records-cstm no-records-msg">
                       No records found
                     </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="summary" id="footer">
                   <label id="footer" class="footer">Total:</label>
-                  <input style="width: 5%;" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
+                  <input class="footer-input-width" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
                     name="interTotalRecords" pInputText type="text" />
                   &nbsp;&nbsp;
                   <label id="footer" class="footer1">Pages Count:</label>
-                  <input style="width: 5%;" [ngModel]="
+                  <input class="footer-input-width" [ngModel]="
                       getPageCount(internationShipVia._totalRecords, pageSize)
                     " [disabled]="true" name="interTotalPages" pInputText type="text" />
                 </ng-template>
@@ -1324,27 +1331,27 @@
             <div class="col-md-12 shadow-box-cstm">
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                  <label class="control-label labels-font-header wauto">Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerName }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                  <label class="control-label labels-font-header wauto">Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerCode }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Site Name:
+                  <label class="control-label labels-font-header wauto">Site Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ DomesticSiteName }}
                   </span>
                 </p>
@@ -1445,11 +1452,10 @@
             </div>
           </div>
 
-          <div style="text-align: right !important; padding-right: 15px;">
-            <div class="checkbox-cstm" style="margin-left: 0;">
-              <label style="width: auto ">
-                <input type="checkbox" [(ngModel)]="currentDeletedstatusShipVia" name="currentDeletedstatusShipVia"
-                  id="currentDeletedstatusShipVia" (click)="getDomesticShipViaListByStatus($event.target.checked)" />
+          <div class="show-deleted-div">
+            <div class="checkbox-cstm margin-left-0">
+              <label class="wauto">
+                <input type="checkbox" [(ngModel)]="currentDeletedstatusShipVia" name="currentDeletedstatusShipVia" id="currentDeletedstatusShipVia"  (click)="getDomesticShipViaListByStatus($event.target.checked)"/>
                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                 <b> Show Deleted List </b>
               </label>
@@ -1512,10 +1518,10 @@
                       ? (rowData[col.field] | date: 'MM/dd/yyyy')
                       : rowData[col.field]
                   }}
-                  </td>
-                  <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
-                  </td>
+                </td>
+                <td *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
                   <div *ngIf="!currentDeletedstatusShipVia">
@@ -1545,9 +1551,8 @@
                     </span>
                     <span><a class="btn nobg" (click)="openShipViaHistory(contentAuditHistShipVia, rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                    <span><a class="btn nobg" (click)="restoreShipVia(restoreShipViaPopUp,rowData);"
-                        matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
-                          aria-hidden="true"></i></a> </span>
+                        <span ><a class="btn nobg btn-users-cstm" (click)="restoreShipVia(restoreShipViaPopUp,rowData);" matTooltip="Restore Record"  
+                          matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                   </div>
                 </td>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == true">
@@ -1566,18 +1571,18 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="demosticShippingViaData.length == 0">
               <tr>
-                <td colspan="5" style="color: red; font-weight: bold; text-align: center">
+                <td colspan="5" class="no-records-msg no-records-cstm">
                   No records found
                 </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
               <label id="footer" class="footer">Total:</label>
-              <input style="width: 5%;" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
+              <input class="footer-input-width" [(ngModel)]="domesShipVia._totalRecords" name="totalRecords" [disabled]="true"
                 pInputText type="text" />
               &nbsp;&nbsp;
               <label id="footer" class="footer1">Pages Count:</label>
-              <input style="width: 5%;" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
+              <input class="footer-input-width" [ngModel]="getPageCount(domesShipVia._totalRecords, pageSize)" name="pagecount"
                 [disabled]="true" pInputText type="text" />
             </ng-template>
           </p-table>
@@ -1591,172 +1596,172 @@
     </form>
   </div>
 
-  <ng-template #deleteContent2 let-c="close" let-d="dismiss" data-backdrop="static">
-    <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="col-md-12 shadow-box-cstm">
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerName }}
-            </span>
-          </p>
-        </div>
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerCode }}
-            </span>
-          </p>
-        </div>
+    <ng-template #deleteContent2 let-c="close" let-d="dismiss" data-backdrop="static">
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Name:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Code:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div> 
       </div>
-    </div>
-    <div class="modal-body">
-      <strong>
-        Ship Via:
-        <span class="new-label">{{ selectedRowForDeleteVia }}</span>
-      </strong>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel2()">
-        Yes
-      </button>
-      <button type="button" class="btn btn-danger" (click)="dismissModel()">
-        No
-      </button>
-    </div>
-  </ng-template>
-  <ng-template #restoreShipViaPopUp let-c="close" let-d="dismiss" data-backdrop="static">
-    <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Restore?</h4>
-      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="col-md-12 shadow-box-cstm">
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerName }}
-            </span>
-          </p>
-        </div>
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerCode }}
-            </span>
-          </p>
-        </div>
+      <div class="modal-body">
+        <strong>
+          Ship Via:
+          <span class="new-label">{{ selectedRowForDeleteVia }}</span>
+        </strong>
       </div>
-    </div>
-    <div class="modal-body">
-      <strong>
-        Ship Via:
-        <span class="new-label">{{ selectedRowForRestoreShipVia }}</span>
-      </strong>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="restoreItemAndCloseModel()">
-        Yes
-      </button>
-      <button type="button" class="btn btn-danger" (click)="dismissModel()">
-        No
-      </button>
-    </div>
-  </ng-template>
-  <ng-template #restoreShipIntViaPopUp let-c="close" let-d="dismiss" data-backdrop="static">
-    <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Restore?</h4>
-      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="col-md-12 shadow-box-cstm">
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerName }}
-            </span>
-          </p>
-        </div>
-        <div class="col-md-6">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerCode }}
-            </span>
-          </p>
-        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel2()">
+          Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+          No
+        </button>
       </div>
-    </div>
-    <div class="modal-body">
-      <strong>
-        Ship Via:
-        <span class="new-label">{{ selectedRowForRestoreIntShipVia }}</span>
-      </strong>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="restoreIternationalItemAndCloseModel()">
-        Yes
-      </button>
-      <button type="button" class="btn btn-danger" (click)="dismissModel()">
-        No
-      </button>
-    </div>
-  </ng-template>
-  <ng-template #contentAuditHistInterShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
-    <div class="modal-header">
-      <h4 class="modal-title">History of International Ship Via Info</h4>
-      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="col-md-12 shadow-box-cstm">
-        <div class="col-md-4">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerName }}
-            </span>
-          </p>
-        </div>
-        <div class="col-md-4">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ customerCode }}
-            </span>
-          </p>
-        </div>
-        <div class="col-md-4">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Export License:
-            </label>
-            <span class="span-header-red" style="text-transform: capitalize">
-              {{ InternationalExportLicName }}
-            </span>
-          </p>
-        </div>
+    </ng-template>
+    <ng-template #restoreShipViaPopUp let-c="close" let-d="dismiss" data-backdrop="static">
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Name:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Code:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div> 
       </div>
-    </div>
-    <div class="modal-body">
-      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-        <div class="tableFixHead">
-          <table class="table table-bordered header-table-width">
+      <div class="modal-body">
+        <strong>
+          Ship Via:
+          <span class="new-label">{{ selectedRowForRestoreShipVia }}</span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="restoreItemAndCloseModel()">
+          Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+          No
+        </button>
+      </div>
+    </ng-template>
+    <ng-template #restoreShipIntViaPopUp let-c="close" let-d="dismiss" data-backdrop="static">
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Name:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Code:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div> 
+      </div>
+      <div class="modal-body">
+        <strong>
+          Ship Via:
+          <span class="new-label">{{ selectedRowForRestoreIntShipVia }}</span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="restoreIternationalItemAndCloseModel()">
+          Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+          No
+        </button>
+      </div>
+    </ng-template>
+    <ng-template #contentAuditHistInterShipVia let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
+      <div class="modal-header">
+        <h4 class="modal-title">History of International Ship Via Info</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-4">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Name:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Customer Code:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p class="fs12">
+              <label class="control-label labels-font-header wauto">Export License:
+              </label>
+              <span class="span-header-red text-capital">
+                {{ InternationalExportLicName }}
+              </span>
+            </p>
+          </div>
+        </div> 
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width">
             <thead>
               <tr>
                 <th>Ship Via</th>
@@ -1799,16 +1804,16 @@
                     ? 'black'
                     : 'red'
                 }">
-                <p [innerHTML]="audit.memo"></p>
-              </td>
-              <td style="text-align: center;">
+              <p [innerHTML]="audit.memo"></p>
+            </td>
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
                   </label>
                 </span>
               </td>
-              <td style="text-align: center;">
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
@@ -1831,7 +1836,7 @@
                 }">
                 {{ audit.updatedBy }}
               </td>
-              <td style="text-align: center;">
+              <td class="text-center">
                 <span class="value">
                   <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
@@ -1865,18 +1870,18 @@
             <div class="col-md-12 shadow-box-cstm">
               <div class="col-md-6">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                  <label class="control-label labels-font-header wauto">Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerName }}
                   </span>
                 </p>
               </div>
               <div class="col-md-6">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                  <label class="control-label labels-font-header wauto">Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerCode }}
                   </span>
                 </p>
@@ -1940,27 +1945,27 @@
             <div class="col-md-12 shadow-box-cstm">
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                  <label class="control-label labels-font-header wauto">Customer Name:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerName }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                  <label class="control-label labels-font-header wauto">Customer Code:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ customerCode }}
                   </span>
                 </p>
               </div>
               <div class="col-md-4">
                 <p class="fs12">
-                  <label class="control-label labels-font-header" style="width: auto;">Export License:
+                  <label class="control-label labels-font-header wauto">Export License:
                   </label>
-                  <span class="span-header-red" style="text-transform: capitalize">
+                  <span class="span-header-red text-capital">
                     {{ InternationalExportLicName }}
                   </span>
                 </p>
@@ -1969,8 +1974,8 @@
           </div>
           <div class="modal-body">
             <div class="form-row" *ngIf="isViewMode == false">
-              <div class="form-group" style="margin-top: 22px;margin-right:15px;">
-                <div class="checkbox-cstm" style="margin-left: 0;">
+              <div class="form-group primary-div">
+                <div class="checkbox-cstm margin-left-0">
                   <label>
                     <input type="checkbox" checked id="isPrimaryInter" name="isPrimaryDomesticInter"
                       (ngModelChange)="enableSaveShipViaInternational()" [(ngModel)]="shipViaInternational.isPrimary"
@@ -2063,11 +2068,9 @@
             </div>
           </div>
           <div style="text-align: right !important; padding-right: 15px;">
-            <div class="checkbox-cstm" style="margin-left: 0;">
-              <label style="width: auto ">
-                <input type="checkbox" [(ngModel)]="currentDeletedstatusIntShipVia"
-                  name="currentDeletedstatusIntShipVia" id="currentDeletedstatusIntShipVia"
-                  (click)="getInternationalShipViaListByStatus($event.target.checked)" />
+            <div class="checkbox-cstm margin-left-0">
+              <label class="wauto">
+                <input type="checkbox" [(ngModel)]="currentDeletedstatusIntShipVia" name="currentDeletedstatusIntShipVia" id="currentDeletedstatusIntShipVia"  (click)="getInternationalShipViaListByStatus($event.target.checked)"/>
                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                 <b> Show Deleted List </b>
               </label>
@@ -2129,10 +2132,10 @@
                       ? (rowData[col.field] | date: 'MM/dd/yyyy')
                       : rowData[col.field]
                   }}
-                  </td>
-                  <td *ngIf="col.field == 'memo'">
-                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
-                  </td>
+                </td>
+                <td *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="rowData[col.field]"></p>
+                </td>
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
                   <div *ngIf="currentDeletedstatusIntShipVia == false">
@@ -2165,10 +2168,9 @@
                     </span>
                     <span><a class="btn nobg" (click)="openInterShipViaHistory(contentAuditHistInterShipVia,rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                    <span><a class="btn nobg" (click)="restoreIternationalShipVia(restoreShipIntViaPopUp,rowData);"
-                        matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
-                          aria-hidden="true"></i></a> </span>
-                  </div>
+                        <span ><a class="btn nobg btn-users-cstm " (click)="restoreIternationalShipVia(restoreShipIntViaPopUp,rowData);" matTooltip="Restore Record"  
+                          matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                    </div>
                 </td>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == true">
                   <div *ngIf="currentDeletedstatusIntShipVia == false">
@@ -2199,18 +2201,18 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="internationalShippingViaData.length == 0">
               <tr>
-                <td colspan="5" style="color: red; font-weight: bold; text-align: center">
+                <td colspan="5" class="no-records-cstm no-records-msg">
                   No records found
                 </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
               <label id="footer" class="footer">Total:</label>
-              <input style="width: 5%;" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
+              <input class="footer-input-width" [(ngModel)]="internationShipVia._totalRecords" [disabled]="true"
                 name="interTotalRecords" pInputText type="text" />
               &nbsp;&nbsp;
               <label id="footer" class="footer1">Pages Count:</label>
-              <input style="width: 5%;" [ngModel]="
+              <input class="footer-input-width" [ngModel]="
                   getPageCount(internationShipVia._totalRecords, pageSize)
                 " [disabled]="true" name="interTotalPages" pInputText type="text" />
             </ng-template>
@@ -2232,18 +2234,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -2280,18 +2282,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -2354,18 +2356,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -2425,18 +2427,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2468,18 +2470,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-6">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2504,7 +2506,7 @@
     </div>
   </ng-template>
 
-  <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+  <ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
       <h4 class="modal-title">History of Domestic Shipping Info</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -2513,18 +2515,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2605,18 +2607,18 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.country }}
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+              {{ audit.country }}
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
-                  </label>
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+                </label>
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
                   </label>
                 </span>
@@ -2635,11 +2637,11 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.updatedBy }}
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+              {{ audit.updatedBy }}
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
                   </label>
                 </span>
@@ -2656,7 +2658,7 @@
     </div>
   </ng-template>
 
-  <ng-template #contentAuditHistInter let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+  <ng-template #contentAuditHistInter let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
       <h4 class="modal-title">History of International Shipping Info</h4>
       <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -2665,18 +2667,18 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            <label class="control-label labels-font-header wauto">Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            <label class="control-label labels-font-header wauto">Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -2768,16 +2770,16 @@
                 {{ audit.countryName }}
               </td>
 
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isPrimary" [(ngModel)]="audit.isPrimary" disabled>
-                  </label>
-                </span>
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+                </label>
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
                   </label>
                 </span>
@@ -2796,11 +2798,11 @@
                   ? 'black'
                   : 'red'
               }">
-                {{ audit.updatedBy }}
-              </td>
-              <td style="text-align: center;">
-                <span class="value">
-                  <label class="wauto">
+              {{ audit.updatedBy }}
+            </td>
+            <td class="text-center">
+              <span class="value">
+                <label class="wauto">
                     <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
                   </label>
                 </span>
@@ -2828,18 +2830,18 @@
           <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                <label class="control-label labels-font-header wauto">Customer Name:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerName }}
                 </span>
               </p>
             </div>
             <div class="col-md-6">
               <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                <label class="control-label labels-font-header wauto">Customer Code:
                 </label>
-                <span class="span-header-red" style="text-transform: capitalize">
+                <span class="span-header-red text-capital">
                   {{ customerCode }}
                 </span>
               </p>
@@ -2865,29 +2867,29 @@
   <div class="modal-header">
     <h4 class="modal-title">Are You Sure Want to Restore?</h4>
 
-    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <div class="col-md-12 shadow-box-cstm">
-      <div class="col-md-6">
-        <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-          </label>
-          <span class="span-header-red" style="text-transform: capitalize">
-            {{ customerName }}
-          </span>
-        </p>
-      </div>
-      <div class="col-md-6">
-        <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-          </label>
-          <span class="span-header-red" style="text-transform: capitalize">
-            {{ customerCode }}
-          </span>
-        </p>
-      </div>
-    </div>
+      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="col-md-12 shadow-box-cstm">
+        <div class="col-md-6">
+          <p class="fs12">
+            <label class="control-label labels-font-header wauto">Customer Name:
+            </label>
+            <span class="span-header-red text-capital">
+              {{ customerName }}
+            </span>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p class="fs12">
+            <label class="control-label labels-font-header wauto">Customer Code:
+            </label>
+            <span class="span-header-red text-capital">
+              {{ customerCode }}
+            </span>
+          </p>
+        </div>
+      </div> 
   </div>
   <div class="modal-body">
     <strong>
@@ -2905,29 +2907,29 @@
   <div class="modal-header">
     <h4 class="modal-title">Are You Sure Want to Restore?</h4>
 
-    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <div class="col-md-12 shadow-box-cstm">
-      <div class="col-md-6">
-        <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
-          </label>
-          <span class="span-header-red" style="text-transform: capitalize">
-            {{ customerName }}
-          </span>
-        </p>
-      </div>
-      <div class="col-md-6">
-        <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
-          </label>
-          <span class="span-header-red" style="text-transform: capitalize">
-            {{ customerCode }}
-          </span>
-        </p>
-      </div>
-    </div>
+      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="col-md-12 shadow-box-cstm">
+        <div class="col-md-6">
+          <p class="fs12">
+            <label class="control-label labels-font-header wauto">Customer Name:
+            </label>
+            <span class="span-header-red text-capital">
+              {{ customerName }}
+            </span>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p class="fs12">
+            <label class="control-label labels-font-header wauto">Customer Code:
+            </label>
+            <span class="span-header-red text-capital">
+              {{ customerCode }}
+            </span>
+          </p>
+        </div>
+      </div> 
   </div>
   <div class="modal-body">
     <strong>
@@ -2942,48 +2944,48 @@
 </ng-template>
 
 <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">
-      &times;
-    </button>
-    <h4 class="modal-title">Confirmation</h4>
-    <div class="col-md-12 shadow-box-cstm">
-      <div class="col-md-6">
-        <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">
-            Customer Name:
-          </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
-            {{ customerName }}
-          </span>
-        </p>
-      </div>
-      <div class="col-md-6">
-        <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">
-            Customer Code:
-          </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
-            {{ customerCode }}
-          </span>
-        </p>
-      </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">
+            &times;
+        </button>
+        <h4 class="modal-title">Confirmation</h4>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header wauto">
+                        Customer Name:
+                    </label>
+                    <span class="span-header-red text-capital">
+                        {{ customerName }}
+                    </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header wauto">
+                        Customer Code:
+                    </label>
+                    <span class="span-header-red text-capital">
+                        {{ customerCode }}
+                    </span>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="modal-body">
-    <h6 class="text-center">
-      Are you sure you want to go to {{ nextOrPreviousTab }} tab? Unsaved
-      changes will be lost.
-    </h6>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">
-      No
-    </button>
-    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">
-      Yes
-    </button>
-  </div>
+    <div class="modal-body">
+        <h6 class="text-center">
+            Are you sure you want to go to {{ nextOrPreviousTab }} tab? Unsaved
+            changes will be lost.
+        </h6>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">
+            No
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">
+            Yes
+        </button>
+    </div>
 </ng-template>
 
 <div class="preloader" *ngIf="isSpinnerVisible">

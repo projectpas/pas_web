@@ -1231,12 +1231,18 @@ reserveSubWoAltPartData(data){
        }
       }
       getShippingDataList(WorkOrderId: number): Observable<any> {
-        const URL = `${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`;
-        return this.http
-          .get<any>(URL, this.getRequestHeaders())
-          .catch(error => {
+
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId));
-          });
+            
+        });
+
+        // const URL = `${this.configurations.baseUrl}/api/WorkOrder/getworkordershippinglist?WorkOrderId=${WorkOrderId}`;
+        // return this.http
+        //   .get<any>(URL, this.getRequestHeaders())
+        //   .catch(error => {
+        //     return this.handleErrorCommon(error, () => this.getShippingDataList(WorkOrderId));
+        //   });
       }
 
 

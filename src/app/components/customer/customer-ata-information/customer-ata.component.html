@@ -1,19 +1,19 @@
-<div style="padding: 2px 6px;">
+<div class="ata-padding">
   <div class="col-md-12 shadow-box-cstm">
     <div class="col-md-4">
       <p class="fs12">
-        <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+        <label class="control-label labels-font-header wauto">Customer Name:
         </label>
-        <span class="span-header-red" style="text-transform: capitalize">
+        <span class="span-header-red text-capital">
           {{ customerName }}
         </span>
       </p>
     </div>
     <div class="col-md-4">
       <p class="fs12">
-        <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+        <label class="control-label labels-font-header wauto">Customer Code:
         </label>
-        <span class="span-header-red" style="text-transform: capitalize">
+        <span class="span-header-red text-capital">
           {{ customerCode }}
         </span>
       </p>
@@ -91,11 +91,11 @@
             </div>
         </div>
         <div class="row">
-          <div class="col" style="margin-top: 10px !important;">
+          <div class="col m-t-10">
             <div class="row advance-search-card" *ngIf="showAdvancedSearchCard == true">
               <div class="col">
                 <div class="col-md-1 col-md-1-cstm">
-                <h4 class="f-s-14" style="margin-top: 26px;">Search:</h4>
+                <h4 class="f-s-14 search-margin">Search:</h4>
               </div>
               <div class="col-md-3">
                 <div class="form-group ">
@@ -122,7 +122,7 @@
                     name="ataSubchapter" [panelStyle]="{ minWidth: '12em' }" class="pub-multi"></p-multiSelect>
                 </div>
               </div>
-              <div class="col-md-1 add-new-align" style="padding-top: 20px !important;">
+              <div class="col-md-1 add-new-align padding-top-20">
                 <div class="form-group">
                   <button class="btn btn-primary mtop20" (click)="searchATA()">
                     <i class="pi pi-search pi-search"></i>
@@ -260,18 +260,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -380,14 +380,14 @@
                   }">
                     {{audit.updatedBy}}
                 </td>
-                <td style="background-color: #fff !important;"><p style="width: 50px; text-align: center;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                <td class="background-white"><p class="text-center width-50"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
             </tr>
             </tbody>
           </table>
           </div>
           <ng-template #noDatavailable>
             <div class="text-center">
-              <h4 style="color: #ff5663;">No History Found</h4>
+              <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
         </div>

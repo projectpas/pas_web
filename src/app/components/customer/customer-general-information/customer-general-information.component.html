@@ -4,18 +4,18 @@
     <div class="col-md-12 shadow-box-cstm" >
       <div class="col-md-4">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-4">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -51,8 +51,7 @@
                           <div class="form-group">
                             <div>
                               <div
-                                class="pull-left"
-                                style="margin-top: 4px; margin-right: 15px;"
+                                class="pull-left radio-buttons-align"
                               >
                                 <label class="radio-cstm wauto">
                                   <input
@@ -193,7 +192,7 @@
                               (ngModelChange)="enableSave()" value="" autocomplete="new-password"
                             />
                           </div>
-                          <div class="form-group" style="margin-top: 15px;">
+                          <div class="form-group m-t-15">
                             <!-- <div class="label-cstm">Parent</div> -->
                             <div class="checkbox-cstm" style="margin-left: 0;">
                               <label>
@@ -252,7 +251,7 @@
                               </div>
                               <div
                                 *ngIf="disableSaveParentName"
-                                style="color: red;">
+                               class="clr-red">
                                 Parent name can't be same as customer name
                               </div>
                             </div>
@@ -302,13 +301,13 @@
                               </table>
                               <div *ngIf="customerPhone.errors" [ngClass]="'error'">
                                 <div *ngIf="customerPhone.errors.pattern">
-                                  <span style="color: red;">Please enter atleast 6 digits</span>
+                                  <span class="clr-red">Please enter atleast 6 digits</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="form-group">
-                            <label style="margin-top: 15px;"
+                            <label class="m-t-15"
                               >Email <span class="clr-red">*</span></label
                             >
                             <input
@@ -326,7 +325,7 @@
                             />
                             <div *ngIf="userEmail.errors" [ngClass]="'error'">
                               <div *ngIf="userEmail.errors.pattern">
-                                <span style="color: red;"
+                                <span class="clr-red"
                                   >User Email not valid</span
                                 >
                               </div>
@@ -346,7 +345,7 @@
                             />
                             <div *ngIf="url.errors" [ngClass]="'error'">
                               <div *ngIf="url.errors.pattern">
-                                <span style="color: red;">URL not valid</span>
+                                <span class="clr-red">URL not valid</span>
                               </div>
                             </div>
                           </div>
@@ -449,8 +448,8 @@
                               </p-autoComplete>
                             </div>
                           </div>
-                          <div class="form-group" style="margin-top: 15px;">
-                            <div class="checkbox-cstm" style="margin-left: 0;">
+                          <div class="form-group m-t-15">
+                            <div class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
                                   type="checkbox"
@@ -467,8 +466,8 @@
                               </label>
                             </div>
                           </div>
-                          <div class="form-group" style="margin-top: 15px;">
-                            <div class="checkbox-cstm" style="margin-left: 0;">
+                          <div class="form-group m-t-15">
+                            <div class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
                                   type="checkbox"
@@ -485,8 +484,8 @@
                               </label>
                             </div>
                           </div>
-                          <div class="form-group" style="margin-top: 15px;">
-                            <div class="checkbox-cstm" style="margin-left: 0;">
+                          <div class="form-group m-t-15">
+                            <div class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
                                   type="checkbox"
@@ -546,7 +545,7 @@
                             class="form-group"
                             style="margin-top: 15px; clear: both;"
                           >
-                            <span class="checkbox-cstm" style="margin-left: 0;">
+                            <span class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
                                   type="checkbox"
@@ -562,8 +561,8 @@
                               </label>
                             </span>
     
-                            <div style="margin-top: 15px;"
-                              class="rpma-input memo-popup-cstm col-sm-12"
+                            <div 
+                              class="rpma-input memo-popup-cstm col-sm-12 m-t-15"
                               *ngIf="generalInformation.isPBHCustomer"
                             >
                               <div class="col-sm-11">
@@ -611,7 +610,7 @@
                               margin-bottom: 30px;
                             "
                           >
-                            <span class="checkbox-cstm" style="margin-left: 0;">
+                            <span class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
                                   type="checkbox"
@@ -665,8 +664,8 @@
                               </div>
                               <div *ngIf="disableRestrictedPMA">
                                 <div style="text-align: right !important; padding-right: 10px;">
-                                  <div class="checkbox-cstm" style="margin-left: 0;">
-                                    <label style="width: auto; margin-top: 10px !important; margin-bottom: 10px !important; ">
+                                  <div class="checkbox-cstm margin-left-0">
+                                    <label class="general-show-deleted-label">
                                       <input type="checkbox" [(ngModel)]="currantDeletedStatusPMA" name="currantDeletedStatusPMA" id="currantDeletedStatusPMA"  (click)="getPMAPartListByStatus($event.target.checked)"/>
                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                       <b style="top: 0 !important;"> Show Deleted List  </b> 
@@ -707,7 +706,7 @@
                                       >
                                         {{ part[col.field] }}
                                       </td>
-                                      <td style="text-align: center;">
+                                      <td class="text-center">
     
                                         <span *ngIf="!currantDeletedStatusPMA"><a class="btn nobg"
                                           (click)="openPopupForDeleteRestrictPMA( i, rowData, deleteRestrictPMAContent);" matTooltip="Delete"
@@ -719,7 +718,7 @@
                                   </ng-template>
                                   <ng-template pTemplate="emptymessage" let-columns >
                                     <tr>
-                                      <td colspan="4" style="color: red; font-weight: bold; text-align: center">
+                                      <td colspan="4" class="no-records-cstm no-records-msg">
                                         No records found
                                       </td>
                                     </tr>
@@ -733,7 +732,7 @@
                             class="form-group"
                             style="margin-top: 40px; clear: both;"
                           >
-                            <span class="checkbox-cstm" style="margin-left: 0;">
+                            <span class="checkbox-cstm margin-left-0">
                               <label>
                                 <input
                                   type="checkbox"
@@ -788,8 +787,8 @@
                               </div>
                               <div *ngIf="disableRestrictedDER">
                                 <div style="text-align: right !important; padding-right: 10px;">
-                                  <div class="checkbox-cstm" style="margin-left: 0;">
-                                    <label style="width: auto; margin-top: 10px !important; margin-bottom: 10px !important; ">
+                                  <div class="checkbox-cstm margin-left-0">
+                                    <label class="general-show-deleted-label">
                                       <input type="checkbox" [(ngModel)]="currantDeletedStatusDER" name="currantDeletedStatusDER" id="currantDeletedStatusDER"  (click)="getDERPartListByStatus($event.target.checked)"/>
                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                       <b style="top: 0 !important;"> Show Deleted List  </b> 
@@ -830,7 +829,7 @@
                                       >
                                         {{ part[col.field] }}
                                       </td>
-                                      <td style="text-align: center;">
+                                      <td class="text-center">
                                         <span *ngIf="!currantDeletedStatusDER" ><a class="btn nobg"
                                           (click)="openPopupForDeleteRestrictDER(rowIndex, rowData, deleteRestrictDERContent);" matTooltip="Delete"
                                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
@@ -841,7 +840,7 @@
                                   </ng-template>
                                   <ng-template pTemplate="emptymessage" let-columns >
                                     <tr>
-                                      <td colspan="4" style="color: red; font-weight: bold; text-align: center">
+                                      <td colspan="4" class="no-records-msg no-records-cstm">
                                         No records found
                                       </td>
                                     </tr>
@@ -912,7 +911,7 @@
   #contentEdits
   let-c="close"
   let-d="dismiss"
-  style="width: auto;"
+ class="wauto"
   data-backdrop="static"
 >
   <div class="modal-header">
@@ -1042,7 +1041,7 @@
   #contentModel
   let-c="close"
   let-d="dismiss"
-  style="width: auto;"
+ class="wauto"
   data-backdrop="static"
 >
   <div class="modal-content">
@@ -1148,7 +1147,7 @@
                   required
                 >
                 </p-autoComplete>
-                <div *ngIf="isClassificationAlreadyExists" style="color: red;">
+                <div *ngIf="isClassificationAlreadyExists" class="clr-red">
                   Already Exists
                 </div>
                 <div class="clear"></div>

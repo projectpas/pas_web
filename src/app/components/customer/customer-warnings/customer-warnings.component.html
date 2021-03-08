@@ -1,17 +1,17 @@
 ﻿
-	<div class="right_col" role="main" style="padding: 2px 6px;">
-		<div  style="">
+	<div class="right_col warning-main-padding" role="main">
+		<div>
             <div class="x_content">
                 <div class="col-md-12 shadow-box-cstm">        
                     <div class="col-md-4">
                         <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Customer Name: </label>
-                    <span class="span-header-red" style="text-transform: capitalize"> {{customerName }} </span> </p>
+                        <label class="control-label labels-font-header wauto">Customer Name: </label>
+                    <span class="span-header-red text-capital"> {{customerName }} </span> </p>
                     </div>
                     <div class="col-md-4">
                         <p class="fs12">
-                        <label class="control-label labels-font-header" style="width: auto;">Customer Code: </label>
-                        <span class="span-header-red" style="text-transform: capitalize"> {{customerCode }} </span> </p>
+                        <label class="control-label labels-font-header wauto">Customer Code: </label>
+                        <span class="span-header-red text-capital"> {{customerCode }} </span> </p>
                     </div>                            
                 </div>
 
@@ -33,19 +33,19 @@
                                   <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align ">
                                     <div class="tableFixHead">  
                                     <table class="table table-bordered header-table-width warnings-table">
-                                            <thead style="position: sticky; top: 0;">
+                                            <thead class="warning-head">
                                                 <tr align="center">
-                                                    <th style="font-size: 12px !important; text-align: left !important;">Warning Name</th>
-                                                    <th style="font-size: 12px !important;">Allow <input type="checkbox" name="allowAll" [ngModel]="isAllow"  [disabled]="isRestrict" (change)="allowAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control" /></th>
-                                                    <th style="font-size: 12px !important;">Warning <input type="checkbox" name="warningAll" [ngModel]="isWarning" [disabled]="isRestrict"  (change)="warningAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control" /></th>
-                                                    <th style="font-size: 12px !important;">Restrict <input type="checkbox" name="RestrictAll" [ngModel]="isRestrict" (change)="restrictAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control"  /> </th>
-                                                    <th style="font-size: 12px !important;">Warning Msg</th>
-                                                    <th style="font-size: 12px !important;">Restrict Msg</th>
+                                                    <th class="th-warning-name">Warning Name</th>
+                                                    <th class="th-font">Allow <input type="checkbox" name="allowAll" [ngModel]="isAllow"  [disabled]="isRestrict" (change)="allowAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control" /></th>
+                                                    <th class="th-font">Warning <input type="checkbox" name="warningAll" [ngModel]="isWarning" [disabled]="isRestrict"  (change)="warningAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control" /></th>
+                                                    <th class="th-font">Restrict <input type="checkbox" name="RestrictAll" [ngModel]="isRestrict" (change)="restrictAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control"  /> </th>
+                                                    <th class="th-font">Warning Msg</th>
+                                                    <th class="th-font">Restrict Msg</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                     <tr align="center" *ngFor="let w of warningMessages; let i=index">
-                                                            <td style="text-align: left; padding-left: 5px !important">{{w.sourceModule}}</td>                                                          
+                                                            <td class="warning-td">{{w.sourceModule}}</td>                                                          
                                                             <td><input type="checkbox" name="allow{{i}}"  [(ngModel)]="w.allow" (change)="onAllowClick($event)" (ngModelChange)="enableSave()"  [disabled]="w.restrict"  class="form-control" /></td>
                                                             <td><input type="checkbox" name="warning{{i}}"  [(ngModel)]="w.warning" (change)="onWarningClick($event)" (ngModelChange)="enableSave()" [disabled]="w.restrict" class="form-control" /></td>
                                                             <td><input type="checkbox" name="restrict{{i}}" [(ngModel)]="w.restrict" (change)="onRestrictClick($event, i)" (ngModelChange)="enableSave()" class="form-control" /></td>
@@ -61,7 +61,7 @@
                             </div>
                             <div class="clear"></div>
                         </div>
-                        <div style="margin-top: 10px">
+                        <div class="m-t-10">
                             <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
                             <button type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveWarnings()">{{warningsUpdateBoolean ? 'Update' : 'Save' }}</button>
                             <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">Previous</button>
@@ -90,7 +90,7 @@
           <h4 class="modal-title">Confirmation</h4>
         </div>
         <div class="modal-body">
-          <h6 style="padding-left: 2%;">
+          <h6 class="confirmation-padding">
             Do you want to Save changes and Continue ?
           </h6>
         </div>

@@ -4,20 +4,20 @@
       <div class="col-md-12 shadow-box-cstm">
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">
+            <label class="control-label labels-font-header wauto">
               Customer Name:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize;">
+            <span class="span-header-red text-capital">
               {{ customerName }}
             </span>
           </p>
         </div>
         <div class="col-md-4">
           <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto;">
+            <label class="control-label labels-font-header wauto">
               Customer Code:
             </label>
-            <span class="span-header-red" style="text-transform: capitalize;">
+            <span class="span-header-red text-capital">
               {{ customerCode }}
             </span>
           </p>
@@ -36,7 +36,7 @@
         <div class="card-body header-body body-padding">
         <form #financialInfoForm="ngForm" class="form-horizontal">
           <div class="col-md-12 col-sm-12 col-12">
-            <div class="tab-content" style="padding-bottom: 8px;">
+            <div class="tab-content padding-bottom-8">
               <div class="tab-pane active" id="menu2">
                 <div class="form-row">
                   <div class="col-md-1">
@@ -44,7 +44,7 @@
                       <label>
                         <span class="pull-left">Mark Up %</span>
                       </label>
-                      <select style="text-align: left;" name="markUpPercentageId" (ngModelChange)="enableSave()"
+                      <select class="text-left" name="markUpPercentageId" (ngModelChange)="enableSave()"
                         [(ngModel)]="savedGeneralInformationData.markUpPercentageId">
                         <!-- <option value="0">-- Select --</option> -->
                         <option *ngFor="let Percentlist of percentageList" [ngValue]="Percentlist.value">
@@ -58,7 +58,7 @@
                       </label>
                       <select name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
                         <!-- <option value="0">-- Select --</option> -->
-                        <option style="text-align: right;" *ngFor="let discontValue of discountList1"
+                        <option class="text-right" *ngFor="let discontValue of discountList1"
                           [ngValue]="discontValue.value">
                           {{ discontValue.label }}
                         </option>
@@ -68,13 +68,14 @@
                     <div class="form-group">
                       <label>
                         Credit Limit<span class="clr-red">*</span>
-                        <span style="margin-left: 3px; cursor: pointer;">
+                        <span class="credit-linit-span">
                           <a class="fa fa-info-circle fa-lg" matTooltip="Format: {{
                               globalSettings.currencyFormat
                             }}" matTooltipPosition="above"></a>
                         </span>
                       </label>
-                      <input class="form-control text-left" type="text" style="text-align: right !important;" id=""
+                      <input class="form-control text-right" type="text"
+                        id=""
                         name="creditLimit" [ngModel]="savedGeneralInformationData.creditLimit | twoDecimalGlobalNumberFormatPipe" 
                         [ngModelOptions]="{ updateOn: 'blur' }" (ngModelChange)="savedGeneralInformationData.creditLimit = $event;enableSave()" required />
                     </div>
@@ -114,7 +115,7 @@
                   </div>
 
                   <div class="col-md-2">
-                    <div class="form-group" style="margin-top: 15px;"  *ngIf="showAllowNettingOfAPAR == true">
+                    <div class="form-group m-t-15"  *ngIf="showAllowNettingOfAPAR == true">
                       <span class="checkbox-cstm">
                         <label>
                           <input type="checkbox" name="allowNettingOfAPAR" (ngModelChange)="enableSave()" [(ngModel)]="
@@ -125,7 +126,7 @@
                         </label>
                       </span>
                     </div>
-                    <div class="form-group" style="margin-top: 15px; margin-left: 0px;">
+                    <div class="form-group partial-billing-div">
                       <span class="checkbox-cstm">
                         <label>
                           <input type="checkbox" name="allowPartialBilling" (ngModelChange)="enableSave()" [(ngModel)]="
@@ -136,7 +137,7 @@
                         </label>
                       </span>
                     </div>
-                    <div class="form-group" style="margin-top: 15px;">
+                    <div class="form-group m-t-15">
                       <span class="checkbox-cstm">
                         <label>
                           <input type="checkbox" name="allowProformaBilling" (ngModelChange)="enableSave()" [(ngModel)]="
@@ -151,8 +152,8 @@
 
                   <div class="col-md-9">
                     <div class="card">
-                      <div class="form-group" style="margin-top: 15px;">
-                        <span class="checkbox-cstm" style="margin-left: 0px;">
+                      <div class="form-group m-t-15">
+                        <span class="checkbox-cstm margin-left-0">
                           <label>
                             <input type="checkbox" name="isTaxExempt"
                               (ngModelChange)="enableSave()"
@@ -316,16 +317,16 @@
                     <div class="card">
                       <table>
                         <tr>
-                          <td style="width: 85%;">
+                          <td class="tax-type-td">
                             <div class="form-row">
-                              <div class="col-md-4" style="margin-top: 10px;">
+                              <div class="col-md-4 m-t-10">
                                 <div class="form-group tax-type option">
                                   <div>
-                                    <label class="fs12" style="padding-right: 5px;">
+                                    <label class="fs12 padding-right-5">
                                       Tax Type
                                     </label>
-                                    <select style="width:75% !important;" name="taxType" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxType">
-                                      <option value="0">-- Select --</option>
+                                    <select class="select-width-75" name="taxType" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxType">
+                                      <option value="">-- Select --</option>
                                       <option *ngFor="let Percentlist of taxTypeList" [ngValue]="Percentlist.value">
                                         {{ Percentlist.label }}
                                       </option>
@@ -333,13 +334,13 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-4" style="margin-top: 10px;">
+                              <div class="col-md-4 m-t-10">
                                 <div class="form-group">
-                                  <label class="fs12" style="padding-right: 5px;">
+                                  <label class="fs12 padding-right-5">
                                     Tax Rate
                                   </label>
-                                  <select style="width:75% !important;" name="taxRates" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxRates">
-                                    <option value="0">-- Select --</option>
+                                  <select class="select-width-75" name="taxRates" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxRates">
+                                    <option value="">-- Select --</option>
                                     <option *ngFor="let Percentlist of taxRatesList" [ngValue]="Percentlist.value">
                                       {{ Percentlist.label }}
                                     </option>
@@ -348,17 +349,17 @@
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
-                                  <button class="btn btn-primary" style="margin-top: 10px !important;" [disabled]="currentDeletedstatus" [disabled]="disableTaxSave"   (ngModelChange)="enableSave()" (click)="mapTaxTypeandRate()">
+                                  <button class="btn btn-primary m-t-10" [disabled]="currentDeletedstatus" [disabled]="disableTaxSave"   (ngModelChange)="enableSave()" (click)="mapTaxTypeandRate()">
                                     Add 
                                   </button>
                                 </div>
                               </div>                            
                           </div>
                         </td>
-                        <td style="text-align: right !important; width: 120px !important;">
+                        <td class="show-deleted-td">
                             <div class="col" >
-                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label style="width: auto !important;margin-top: 3px;">
+                              <div class="checkbox-cstm margin-left-0">
+                                <label class="financial-show-deleted-label">
                                   <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
                                     />
                                   <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -426,15 +427,15 @@
                               </div>
 
                               <div *ngIf="currentDeletedstatus">
-                                    <button style="margin-right: 5px;" [disabled]="rowData.isDisable"
-                                    class="btn-edit set_proper_align set_position" mat-icon-button (click)="
+                                    <button [disabled]="rowData.isDisable"
+                                    class="btn-edit set_proper_align set_position margin-right-5" mat-icon-button (click)="
                                     getAuditHistoryById(contentAuditHist, rowData)
                                     " matTooltip="History" matTooltipPosition="above">
                                     <i class="fa fa-history" [ngClass]="{
                                         grayColor: rowData.isDisable
                                       }"></i>
                                   </button>
-                                  <span ><a class="btn nobg" (click)="restoreTaxTypeRate(restpreContent,rowData,rowIndex);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                  <span ><a class="btn nobg btn-users-cstm" (click)="restoreTaxTypeRate(restpreContent,rowData,rowIndex);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                               </div>
                             </td>
                           </tr>
@@ -499,18 +500,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -578,18 +579,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -621,7 +622,8 @@
             }">
             {{ x.taxRate }}
           </td>
-          <td style="background-color: #fff !important; text-align: center;"><input type="checkbox" name="isDeleted" [(ngModel)]="x.isDeleted" disabled></td>
+          <td class="background-white text-center">
+            <input type="checkbox" name="isDeleted" [(ngModel)]="x.isDeleted" disabled></td>
         </tr>
       </tbody>
     </table>
@@ -645,18 +647,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -702,18 +704,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -744,18 +746,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -788,7 +790,7 @@
         <h4 class="modal-title">Add Mark Up Percent</h4>
       </div>
       <div class="modal-body">
-        <div class="modal-body" style="padding-bottom: 30px;">
+        <div class="modal-body padding-bottom-30">
           <div class="form-group">
             <label for="name" class="control-label">Mark Up Percentage <span class="clr-red">*</span></label>
             <div class="col-sm-3">
@@ -901,7 +903,7 @@
           <div class="form-group">
             <div class="col-sm-6">
               <span class="checkbox-cstm">
-                <label style="margin-top: 12px;" class="form-check-label" for="isActive">
+                <label class="form-check-label m-t-12" for="isActive">
                   <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked
                     id="isActive" [(ngModel)]="creditTermsNew.isActive" />
                   <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -1089,7 +1091,7 @@
           <div class="form-group">
             <div class="col-sm-12">
               <div class="col-sm-4">
-                <label for="description" class="control-label" style="margin-top: 7px;">
+                <label for="description" class="control-label m-t-7">
                   Percentage
                   <span class="clr-red">*</span>
                 </label>
@@ -1130,18 +1132,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -1149,7 +1151,7 @@
     </div>
   </div>
   <div class="modal-body">
-    <h6 style="padding-left: 2%;">
+    <h6 class="padding-left-2">
       <!-- Are you sure you want to go to {{ nextOrPreviousTab }} tab? Unsaved
       changes will be lost. -->
       Do you want to Save changes and Continue ?
@@ -1176,18 +1178,18 @@
         <div class="col-md-12 shadow-box-cstm">
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              <label class="control-label labels-font-header wauto">Customer Name:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
+              <span class="span-header-red text-capital">
                 {{ customerName }}
               </span>
             </p>
           </div>
           <div class="col-md-6">
             <p class="fs12">
-              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              <label class="control-label labels-font-header wauto">Customer Code:
               </label>
-              <span class="span-header-red" style="text-transform: capitalize;">
+              <span class="span-header-red text-capital">
                 {{ customerCode }}
               </span>
             </p>
@@ -1285,8 +1287,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
-            style="text-align: center;" (click)="
+          <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn text-center"
+            (click)="
               addDocumentInformation(
                 '#addDocumentDetailsNew',
                 documentInformation
@@ -1296,8 +1298,8 @@
             ">
             Add
           </button>
-          <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"
-            style="text-align: center;" (click)="
+          <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn text-center"
+            (click)="
               addDocumentInformation(
                 '#addDocumentDetailsNew',
                 documentInformation
@@ -1375,7 +1377,7 @@
 </div>
 
 
-<ng-template #contentAuditHistDoc let-c="close" let-d="dismiss" style="width: auto;" data-backdrop="static">
+<ng-template #contentAuditHistDoc let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
   <div class="modal-header">
     <h4 class="modal-title">History of Documents</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModelNew()">
@@ -1384,18 +1386,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
@@ -1492,18 +1494,18 @@
     <div class="col-md-12 shadow-box-cstm">
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          <label class="control-label labels-font-header wauto">Customer Name:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerName }}
           </span>
         </p>
       </div>
       <div class="col-md-6">
         <p class="fs12">
-          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          <label class="control-label labels-font-header wauto">Customer Code:
           </label>
-          <span class="span-header-red" style="text-transform: capitalize;">
+          <span class="span-header-red text-capital">
             {{ customerCode }}
           </span>
         </p>
