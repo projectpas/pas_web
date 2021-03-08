@@ -308,14 +308,14 @@
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <div class="col-sm-4">
-                                                            <label>Tag <span class="clr-red">*</span></label>
+                                                            <label>Tag <span class="clr-red"></span></label>
                                                           </div>
                                                         <div class="col-sm-5">
                                                             <div class="inner-addon right-addon inline-block" style="width: 100%">
                                                               <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.tagName"
                                                                 (ngModelChange)="enableSaveDomestic()" name="tagName" field="tagName" [suggestions]="tagNamesList"
                                                                 (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                                                                [inputStyle]="{ width: '100%' }" required>
+                                                                [inputStyle]="{ width: '100%' }" >
                                                               </p-autoComplete>
                                                             </div>
                                                           </div>
@@ -500,7 +500,7 @@
                                                 <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                     <thead>
                                                         <tr>
-                                                            <th>Tag Name <span class="clr-red">*</span></th>
+                                                            <th>Tag Name <span class="clr-red"></span></th>
                                                             <th>Attention</th>
                                                             <th>Site Name <span class="clr-red">*</span></th>
                                                             <th>Address1 <span class="clr-red">*</span></th>
@@ -1689,7 +1689,7 @@
                     </div>
                 </span>
             </p>
-            <p><span class="label"><b>Tag: </b><span class="clr-red">*</span> </span><span class="value">{{sourceVendor.tagName}}</span></p>
+            <p><span class="label"><b>Tag: </b><span class="clr-red"></span> </span><span class="value">{{sourceVendor.tagName}}</span></p>
             <p><span class="label"><b>Attention: </b> </span><span class="value">{{sourceVendor.attention}}</span></p>
             <p><span class="label"><b>Site Name: </b>  <span class="clr-red">*</span></span><span class="value">{{siteName}}</span></p>
             <p><span class="label"><b> Address 1: </b>  <span class="clr-red">*</span></span><span class="value">{{address1}}</span></p>

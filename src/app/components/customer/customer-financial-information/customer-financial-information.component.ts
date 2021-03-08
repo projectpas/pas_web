@@ -45,7 +45,7 @@ import { LocalStoreManager } from '../../../services/local-store-manager.service
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Params, ActivatedRoute } from '@angular/router';
-declare var $ : any;
+declare var $: any;
 @Component({
   selector: 'app-customer-financial-information',
   templateUrl: './customer-financial-information.component.html',
@@ -59,9 +59,9 @@ export class CustomerFinancialInformationComponent implements OnInit {
   @Input() editMode;
   @Output() tab = new EventEmitter();
   @Input() selectedCustomerTab: string = '';
-  @ViewChild('taxExemptFileUploadInput',{static:false}) taxExemptFileUploadInput: any;
-  @ViewChild('tabRedirectConfirmationModal',{static:false}) public tabRedirectConfirmationModal: ElementRef;
-  @ViewChild("financialInfoForm",{static:false}) fininfoformdata;
+  @ViewChild('taxExemptFileUploadInput', { static: false }) taxExemptFileUploadInput: any;
+  @ViewChild('tabRedirectConfirmationModal', { static: false }) public tabRedirectConfirmationModal: ElementRef;
+  @ViewChild("financialInfoForm", { static: false }) fininfoformdata;
   stopmulticlicks: boolean;
   taxRatesList: any = [];
   pageSize: number = 10;
@@ -167,8 +167,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   allCurrencyInfo: any;
   customerCode: any;
   customerName: any;
-  selectedTaxRates: any;
-  selectedTaxType: any;
+  selectedTaxRates: any = 0;
+  selectedTaxType: any = 0;
   taxTypeRateMapping: any = [];
   selectedConsume: any;
   disableSaveConsume: boolean;
@@ -200,13 +200,13 @@ export class CustomerFinancialInformationComponent implements OnInit {
   disableCreditTerms: boolean = true;
   creditTermsListOriginal: any[];
   CREDITTERMDATA: any = [];
-  currentDeletedstatus:boolean=false;
+  currentDeletedstatus: boolean = false;
   disableSave: boolean = true;
   editModeFinance: boolean = false;
   isCountdisable: boolean = false;
   disableTaxSave: boolean = true;
-	moduleName:any="CustomerFinance";
-	referenceId:any;
+  moduleName: any = "CustomerFinance";
+  referenceId: any;
   constructor(
     public taxtypeser: TaxTypeService,
     public creditTermsService: CreditTermsService,
@@ -227,22 +227,22 @@ export class CustomerFinancialInformationComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private router: ActivatedRoute
   ) {
-      this.id = this.router.snapshot.params['id'];
+    this.id = this.router.snapshot.params['id'];
   }
   taxtypesList = [];
 
   ngOnInit(): void {
     this.savedGeneralInformationData = this.savedGeneralInformationData || {};
     this.savedGeneralInformationData.discountId = 0;
-    this.savedGeneralInformationData.markUpPercentageId = 0;    
+    this.savedGeneralInformationData.markUpPercentageId = 0;
 
     if (this.editMode) {
       //this.id = this.editGeneralInformationData.customerId;
-      this.customerGeneralInformation = this.editGeneralInformationData;      
+      this.customerGeneralInformation = this.editGeneralInformationData;
       this.savedGeneralInformationData = this.editGeneralInformationData;
       this.customerCode = this.editGeneralInformationData.customerCode;
       this.customerName = this.editGeneralInformationData.name;
-     
+
       if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
         this.showAllowNettingOfAPAR = true;
       } else {
@@ -251,20 +251,20 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
     } else {
       this.savedGeneralInformationData.allowPartialBilling = true;
-      this.savedGeneralInformationData.allowProformaBilling = true;      
-      this.customerGeneralInformation = this.savedGeneralInformationData;      
+      this.savedGeneralInformationData.allowProformaBilling = true;
+      this.customerGeneralInformation = this.savedGeneralInformationData;
       //this.id = this.savedGeneralInformationData.customerId;
       this.customerCode = this.savedGeneralInformationData.customerCode;
       this.customerName = this.savedGeneralInformationData.name;
       this.getDefaultCurrency();
-      
+
       if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
         this.showAllowNettingOfAPAR = true;
       } else {
         this.showAllowNettingOfAPAR = false;
       }
     }
-    
+
   }
   ngOnChanges(changes: SimpleChanges) {
     for (let property in changes) {
@@ -272,43 +272,40 @@ export class CustomerFinancialInformationComponent implements OnInit {
         if (changes[property].currentValue != {} && changes.selectedCustomerTab.currentValue == "Financial") {
 
           this.getGlobalSettings();
-          this.getAllCreditTerms(); 
+          this.getAllCreditTerms();
           this.getAllPercentage();
-          this.getAllDiscountList1();             
-          this.getAllCurrency();          
+          this.getAllDiscountList1();
+          this.getAllCurrency();
           this.getAllTaxTypes();
           this.getAllTaxRates();
 
-          if (this.editMode) {            
-              this.disableSave = true;
-              if (this.editGeneralInformationData.currency == null || this.editGeneralInformationData.currency == 0) {
-                this.getDefaultCurrency();
-              }
-              this.getMappedTaxTypeRateDetails();             
+          if (this.editMode) {
+            this.disableSave = true;
+            if (this.editGeneralInformationData.currency == null || this.editGeneralInformationData.currency == 0) {
+              this.getDefaultCurrency();
+            }
+            this.getMappedTaxTypeRateDetails();
 
-              if (this.id) {
-                this.toGetDocumentsListNew(this.id);
-                this.getFinanceInfoByCustomerId();
-              }
+            if (this.id) {
+              this.toGetDocumentsListNew(this.id);
+              this.getFinanceInfoByCustomerId();
+            }
 
-              this.savedGeneralInformationData = {
-                ...this.editGeneralInformationData,
-                creditTermsId: getObjectById('value', this.editGeneralInformationData.creditTermsId, this.creditTermsListOriginal),
-              };
+            this.savedGeneralInformationData = {
+              ...this.editGeneralInformationData,
+              creditTermsId: getObjectById('value', this.editGeneralInformationData.creditTermsId, this.creditTermsListOriginal),
+            };
           }
         }
       }
     }
   }
 
-  getFinanceInfoByCustomerId() {		
-    if(this.id)
-    {
+  getFinanceInfoByCustomerId() {
+    if (this.id) {
       this.isSpinnerVisible = true;
       this.customerService.getFinanceInfoByCustomerId(this.id).subscribe(res => {
-        
-        if(res)
-        {
+        if (res) {
           this.editModeFinance = true;
           this.savedGeneralInformationData = res;
           this.savedGeneralInformationData = {
@@ -318,29 +315,29 @@ export class CustomerFinancialInformationComponent implements OnInit {
               this.savedGeneralInformationData.creditTermsId,
               this.creditTermsListOriginal
             ),
-            };
+          };
         }
-        else{
+        else {
           this.savedGeneralInformationData.allowPartialBilling = true;
-          this.savedGeneralInformationData.allowProformaBilling = true;   
+          this.savedGeneralInformationData.allowProformaBilling = true;
         }
         this.isSpinnerVisible = false;
-      },error => this.saveFailedHelper(error))
+      }, error => { this.isSpinnerVisible = false });
     }
   }
-  
+
   getAllCreditTerms() {
-		this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name','','',20).subscribe(res => {
-			this.creditTermsListOriginal = res;
-		},error => this.saveFailedHelper(error))
-	}
+    this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+      this.creditTermsListOriginal = res;
+    }, error => { this.isSpinnerVisible = false });
+  }
 
   get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-    }
-  
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : null;
+  }
+
   get userName(): string {
     return this.authService.currentUser
       ? this.authService.currentUser.userName
@@ -348,13 +345,13 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
   parsedText(text) {
     if (text) {
-        const dom = new DOMParser().parseFromString(
-            '<!doctype html><body>' + text,
-            'text/html');
-        const decodedString = dom.body.textContent;
-        return decodedString;
+      const dom = new DOMParser().parseFromString(
+        '<!doctype html><body>' + text,
+        'text/html');
+      const decodedString = dom.body.textContent;
+      return decodedString;
     }
-}
+  }
 
   getGlobalSettings() {
     this.globalSettings =
@@ -363,17 +360,16 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   getAllcreditTermList() {
-    this.commonservice
-      .smartDropDownList('CreditTerms', 'CreditTermsId', 'Name')
-      .subscribe((res) => {
-        this.creditTermsListOriginal = res;
-      },error => this.saveFailedHelper(error));
+    //this.commonservice.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').subscribe((res) => {
+    this.commonservice.autoSuggestionSmartDropDownList('CreditTerms', 'CreditTermsId', 'Name', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+      this.creditTermsListOriginal = res;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   getAllCurrency() {
-    this.currencyService.getCurrencyList().subscribe((res) => {
+    this.currencyService.getCurrencyList(this.currentUserMasterCompanyId).subscribe((res) => {
       this.allCurrencyInfo = res[0];
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   formatCreditLimit(val) {
@@ -391,35 +387,30 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getDefaultCurrency() {
     this.legalEntityId = 19;
-    this.commonservice
-      .getDefaultCurrency(this.legalEntityId)
-      .subscribe((res) => {
-        this.savedGeneralInformationData.generalCurrencyId = res.currencyId;
-      },error => this.saveFailedHelper(error));
+    this.commonservice.getDefaultCurrency(this.legalEntityId).subscribe((res) => {
+      this.savedGeneralInformationData.generalCurrencyId = res.currencyId;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   getAllPercentage() {
-    this.commonservice
-      .smartDropDownList('[Percent]', 'PercentId', 'PercentValue')
-      .subscribe((res) => {
-        this.percentageList = res;
-      },error => this.saveFailedHelper(error));
+    //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
+    this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+      this.percentageList = res;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   getAllTaxRates() {
-    this.commonservice
-      .smartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate')
-      .subscribe((res) => {
-        this.taxRatesList = res;
-      },error => this.saveFailedHelper(error));
+    //this.commonservice.smartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate').subscribe((res) => {
+    this.commonservice.autoSuggestionSmartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+      this.taxRatesList = res;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   getAllTaxTypes() {
-    this.commonservice
-      .smartDropDownList('TaxType', 'TaxTypeId', 'Description')
-      .subscribe((res) => {
-        this.taxTypeList = res;
-      },error => this.saveFailedHelper(error));
+    //this.commonservice.smartDropDownList('TaxType', 'TaxTypeId', 'Description').subscribe((res) => {
+    this.commonservice.autoSuggestionSmartDropDownList('TaxType', 'TaxTypeId', 'Description', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+      this.taxTypeList = res;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   filterCreditTerms(event) {
@@ -445,11 +436,11 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   validateCreditTerms(value) {
     if (value != 0) {
-        this.disableCreditTerms = false;
+      this.disableCreditTerms = false;
     } else {
-        this.disableCreditTerms = true;
+      this.disableCreditTerms = true;
     }
-    }
+  }
 
   checkCreditTermsExists(field, value) {
     const exists = validateRecordExistsOrNot(
@@ -532,10 +523,10 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.isTaxRateExists = true;
   }
 
+  // not in use
   getAllDiscountList() {
     this.customerService.getDiscountList().subscribe((res) => {
-      if(res)
-      {
+      if (res) {
         this.discountList = res[0];
 
         for (let i = 0; i < this.discountList.length; i++) {
@@ -550,15 +541,14 @@ export class CustomerFinancialInformationComponent implements OnInit {
           }
         }
       }
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   getAllDiscountList1() {
-    this.commonservice
-      .smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue')
-      .subscribe((res) => {
-        this.discountList1 = res;
-      },error => this.saveFailedHelper(error));
+    //this.commonservice.smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue').subscribe((res) => {
+    this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+      this.discountList1 = res;
+    }, error => { this.isSpinnerVisible = false });
   }
 
   filterDiscount(event) {
@@ -604,7 +594,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.isDiscountExists = false;
     }
   }
- 
+
   checkDiscountExistss(value) {
     this.isDiscountExists = false;
     if (
@@ -652,10 +642,10 @@ export class CustomerFinancialInformationComponent implements OnInit {
     }
   }
 
+  // not in use
   getAllTaxList() {
     this.taxRateService.getTaxRateList().subscribe((res) => {
-      if(res)
-      {
+      if (res) {
         const responseData = res[0];
         this.taxtypesList = responseData.map((x) => {
           return {
@@ -664,7 +654,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
           };
         });
       }
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   getPageCount(totalNoofRecords, pageSize) {
@@ -684,23 +674,18 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.pageSizeTax = event.rows;
   }
 
-  validateSaveButton()
-  {
-    if(this.selectedTaxRates > 0 && this.selectedTaxType > 0)
-    {
-        this.disableTaxSave = false;
+  validateSaveButton() {
+    if (this.selectedTaxRates > 0 && this.selectedTaxType > 0) {
+      this.disableTaxSave = false;
     }
-    else
-    {
+    else {
       this.disableTaxSave = true;
     }
   }
 
   getMappedTaxTypeRateDetails() {
     this.isSpinnerVisible = true;
-    this.customerService
-      .getMappedTaxTypeRateDetails(this.id, this.currentDeletedstatus)
-      .subscribe((res) => {
+    this.customerService.getMappedTaxTypeRateDetails(this.id, this.currentDeletedstatus).subscribe((res) => {
         res.map((element, index) => {
           element.id = index + 1;
         });
@@ -708,7 +693,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         this.totalRecords = this.taxTypeRateMapping.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         this.isSpinnerVisible = false;
-      },error => this.saveFailedHelper(error));
+      }, error => { this.isSpinnerVisible = false });
   }
 
   mapTaxTypeandRate() {
@@ -731,7 +716,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         );
         this.selectedTaxRates = null;
         this.selectedTaxType = null;
-        this.disableTaxSave = true;        
+        this.disableTaxSave = true;
       } else {
         this.taxTypeRateMapping.push({
           isDisable: true,
@@ -767,9 +752,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   updateTaxTypeandRate() {
     if (this.taxRateEditData.customerTaxTypeRateMappingId) {
-      this.customerService
-        .updateCustomerTaxTypeRate(this.taxRateEditData)
-        .subscribe((res) => {
+      this.customerService.updateCustomerTaxTypeRate(this.taxRateEditData).subscribe((res) => {
           this.taxRateEditData = undefined;
           this.getMappedTaxTypeRateDetails();
           this.alertService.showMessage(
@@ -777,7 +760,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
             `Successfully Updated Tax Type and Tax Rate`,
             MessageSeverity.success
           );
-        },error => this.saveFailedHelper(error));
+        }, error => { this.isSpinnerVisible = false });
     } else {
       const data = [
         ...this.taxTypeRateMapping.map((x) => {
@@ -816,45 +799,42 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getAuditHistoryById(content, data) {
     const { customerTaxTypeRateMappingId } = data;
-    this.customerService
-      .getAuditHistoryForTaxType(customerTaxTypeRateMappingId)
-      .subscribe((res) => {
+    this.customerService.getAuditHistoryForTaxType(customerTaxTypeRateMappingId).subscribe((res) => {
         this.auditDataForTaxData = res;
-      },error => this.saveFailedHelper(error));
+      }, error => { this.isSpinnerVisible = false });
     this.modal = this.modalService.open(content, {
       size: 'sm',
       backdrop: 'static',
       keyboard: false,
     });
   }
-  
+
   saveFinancialInformation() {
     this.isSpinnerVisible = true;
-    this.customerService
-      .updatefinanceinfo(
-        {
-          ...this.savedGeneralInformationData,
-          CustomerTaxTypeRateMapping: this.taxTypeRateMapping.map(obj => { 
-            return{
-              ...obj,
-              createdBy: this.userName,
-              updatedBy: this.userName,
-            }}),
-          discountId: this.savedGeneralInformationData.discountId == 0 || this.savedGeneralInformationData.discountId == undefined ? null : this.savedGeneralInformationData.discountId,
-          markUpPercentageId: this.savedGeneralInformationData.markUpPercentageId == 0 || this.savedGeneralInformationData.markUpPercentageId == undefined ? null : this.savedGeneralInformationData.markUpPercentageId,
+
+    this.customerService.updatefinanceinfo({
+      ...this.savedGeneralInformationData,
+      CustomerTaxTypeRateMapping: this.taxTypeRateMapping.map(obj => {
+        return {
+          ...obj,
           createdBy: this.userName,
           updatedBy: this.userName,
-          creditTermsId: this.savedGeneralInformationData.creditTermsId.value,
-        },
-        this.id
-      )
-      .subscribe((res) => {
+        }
+      }),
+      discountId: this.savedGeneralInformationData.discountId == 0 || this.savedGeneralInformationData.discountId == undefined ? null : editValueAssignByCondition('DiscountId', this.savedGeneralInformationData.discountId),//this.savedGeneralInformationData.discountId,
+      markUpPercentageId: this.savedGeneralInformationData.markUpPercentageId == 0 || this.savedGeneralInformationData.markUpPercentageId == undefined ? null : editValueAssignByCondition('PercentId', this.savedGeneralInformationData.markUpPercentageId),//this.savedGeneralInformationData.markUpPercentageId,
+      createdBy: this.userName,
+      updatedBy: this.userName,
+      creditTermsId: this.savedGeneralInformationData.creditTermsId.value,
+    },
+      this.id
+    ).subscribe((res) => {
         this.onUploadDocumentListNew();
         this.savedGeneralInformationData.customerFinancialId = res;
         this.alertService.showMessage(
           'Success',
           ` ${
-            this.editModeFinance ? 'Updated' : 'Saved'
+          this.editModeFinance ? 'Updated' : 'Saved'
           }  Customer Financial Information Sucessfully`,
           MessageSeverity.success
         );
@@ -863,7 +843,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         this.disableSave = true;
         this.isSpinnerVisible = false;
         //this.fininfoformdata.reset();
-      },error => this.saveFailedHelper(error));
+      }, error => { this.isSpinnerVisible = false });
   }
 
   downloadFileUpload(rowData) {
@@ -878,13 +858,13 @@ export class CustomerFinancialInformationComponent implements OnInit {
         ...this.allCustomerFinanceDocumentsList.filter((x) => {
           if (
             moment(x.createdDate).format('MMMM DD YYYY') ===
-              moment(date).format('MMMM DD YYYY') &&
+            moment(date).format('MMMM DD YYYY') &&
             field === 'createdDate'
           ) {
             return x;
           } else if (
             moment(x.updatedDate).format('MMMM DD YYYY') ===
-              moment(date).format('MMMM DD YYYY') &&
+            moment(date).format('MMMM DD YYYY') &&
             field === 'updatedDate'
           ) {
             return x;
@@ -903,8 +883,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   deleteConformationForFile(value) {
     if (value === 'Yes') {
-      this.customerService
-        .GetCustomerAttachmentDelete(
+      this.customerService.GetCustomerAttachmentDelete(
           this.selectedRowFileForDelete.attachmentDetailId,
           true,
           this.userName
@@ -916,7 +895,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
             MessageSeverity.success
           );
           this.toGetDocumentsListNew(this.id);
-        },error => this.saveFailedHelper(error));
+        }, error => { this.isSpinnerVisible = false });
     } else {
       this.selectedRowFileForDelete = undefined;
     }
@@ -929,17 +908,16 @@ export class CustomerFinancialInformationComponent implements OnInit {
       updatedBy: this.userName,
     };
     this.customerService.newMarkUp(data).subscribe((data) => {
-      if(data)
-      {
+      if (data) {
         this.savedGeneralInformationData.markUpPercentageId =
-        data.markUpPercentageId;
+          data.markUpPercentageId;
         this.alertService.showMessage(
           'Success',
           `Add MarkUp Sucessfully `,
           MessageSeverity.success
         );
       }
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   restMarkUpPopUp() {
@@ -963,7 +941,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.resetCreditTermsPopUp();
 
       this.savedGeneralInformationData.creditTermsId = data.creditTermsId;
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
   resetCreditTermsPopUp() {
     this.addNewCreditTerms = { ...this.creditTermsNew };
@@ -988,7 +966,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       );
       this.restDiscount();
       this.savedGeneralInformationData.discountId = data.discontValue;
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   restDiscount() {
@@ -1014,7 +992,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         MessageSeverity.success
       );
       this.resetTaxType();
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
   newTaxRateAdd() {
     const data = {
@@ -1036,7 +1014,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         `Added New Tax Rate  Successfully`,
         MessageSeverity.success
       );
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   resetTaxType() {
@@ -1055,15 +1033,15 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.enableSave();
     this.enableSaveDoc();
     //this.memoPopupValue = value;
-}   
-onClickPopupSave() {
+  }
+  onClickPopupSave() {
     this.documentInformation.docMemo = this.memoPopupContent;
     this.memoPopupContent = '';
     $('#financial-memo-popup').modal("hide");
-}
-closeMemoModel() {
+  }
+  closeMemoModel() {
     $('#financial-memo-popup').modal("hide");
-}
+  }
 
   deleteTaxTypeRate(content, rowData, index) {
     this.taxRateIndex = index;
@@ -1080,26 +1058,19 @@ closeMemoModel() {
   }
 
   deleteItemAndCloseModel() {
-
     let customerTaxRateMappingId = this.customerTaxRateMappingId;
     let user = this.userName;
     if (customerTaxRateMappingId > 0) {
-      this.customerService
-        .deleteCustomerTaxTypeRateById(customerTaxRateMappingId, true, user)
-        .subscribe(
+      this.customerService.deleteCustomerTaxTypeRateById(customerTaxRateMappingId, true, user).subscribe(
           (response) => {
             this.saveCompleted('');
-
             this.getMappedTaxTypeRateDetails();
-          },
-          (error) => this.saveFailedHelper(error)
-        );
+          },(error) => {this.currentUserMasterCompanyId});
     } else {
       this.taxTypeRateMapping.splice(this.taxRateIndex, 1);
       this.totalRecords = this.taxTypeRateMapping.length;
       this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
-
     this.modal.close();
   }
 
@@ -1107,7 +1078,6 @@ closeMemoModel() {
     this.taxRateIndex = index;
     this.localcollection = rowData;
     this.selectedRowForDelete = rowData;
-
     this.customerTaxRateMappingId = rowData.customerTaxTypeRateMappingId;
     this.modal = this.modalService.open(content, {
       size: 'sm',
@@ -1117,20 +1087,16 @@ closeMemoModel() {
   }
 
   restoreItemAndCloseModel() {
-
     let customerTaxRateMappingId = this.customerTaxRateMappingId;
     let user = this.userName;
     if (customerTaxRateMappingId > 0) {
-      this.customerService
-        .deleteCustomerTaxTypeRateById(customerTaxRateMappingId, false, user)
-        .subscribe(
+      this.customerService.deleteCustomerTaxTypeRateById(customerTaxRateMappingId, false, user).subscribe(
           (response) => {
             this.alertService.showMessage(
               'Success',
               `Action was Restore successfully`,
               MessageSeverity.success
             );
-
             this.getMappedTaxTypeRateDetails();
           },
           (error) => this.saveFailedHelper(error)
@@ -1140,7 +1106,6 @@ closeMemoModel() {
       this.totalRecords = this.taxTypeRateMapping.length;
       this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
-
     this.modal.close();
   }
 
@@ -1163,9 +1128,9 @@ closeMemoModel() {
   }
   private saveFailedHelper(error: any) {
     this.isSpinnerVisible = false;
-		this.alertService.stopLoadingMessage();
-		this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
-		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+    this.alertService.stopLoadingMessage();
+    this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
+    this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     setTimeout(() => this.alertService.stopLoadingMessage(), 10000);
   }
 
@@ -1194,29 +1159,28 @@ closeMemoModel() {
   nextClick(nextOrPrevious) {
     this.nextOrPreviousTab = nextOrPrevious;
     if (this.fininfoformdata.form.dirty) {
-        let content = this.tabRedirectConfirmationModal;
-        this.modal = this.modalService.open(content, { size: 'sm' });
+      let content = this.tabRedirectConfirmationModal;
+      this.modal = this.modalService.open(content, { size: 'sm' });
     }
     else {
-        this.stopmulticlicks = true;
-        this.fininfoformdata.reset();
-        if (this.nextOrPreviousTab == 'Next') {
-          this.tab.emit('Billing');
-        }
-        if (this.nextOrPreviousTab == 'Previous') {
-          this.tab.emit('Atachapter');
-        }
-        setTimeout(() => {
-            this.stopmulticlicks = false;
-        }, 500)
+      this.stopmulticlicks = true;
+      this.fininfoformdata.reset();
+      if (this.nextOrPreviousTab == 'Next') {
+        this.tab.emit('Billing');
+      }
+      if (this.nextOrPreviousTab == 'Previous') {
+        this.tab.emit('Atachapter');
+      }
+      setTimeout(() => {
+        this.stopmulticlicks = false;
+      }, 500)
     }
   }
 
   redirectToTab() {
-    if(!this.disableSave)
-    {
+    if (!this.disableSave) {
       this.saveFinancialInformation();
-    }    
+    }
     this.dismissModel();
     this.fininfoformdata.reset();
     if (this.nextOrPreviousTab == 'Next') {
@@ -1286,7 +1250,7 @@ closeMemoModel() {
           fileSize: file.size,
         });
 
-          this.formData.append(file.name, file);
+        this.formData.append(file.name, file);
       }
     }
 
@@ -1390,7 +1354,7 @@ closeMemoModel() {
       MessageSeverity.success
     );
   }
-  
+
   editCustomerDocument(rowdata, index = 0) {
     this.selectedFileAttachment = [];
     this.isEditButton = true;
@@ -1413,23 +1377,19 @@ closeMemoModel() {
   deleteItemAndCloseModelNew() {
     let attachmentDetailId = this.selectedRowForDelete.attachmentDetailId;
     if (attachmentDetailId > 0) {
-      this.commonservice
-        .GetAttachmentDeleteById(attachmentDetailId, this.userName)
-        .subscribe((res) => {
+      this.commonservice.GetAttachmentDeleteById(attachmentDetailId, this.userName).subscribe((res) => {
           this.toGetDocumentsListNew(this.id);
-
           this.alertService.showMessage(
             'Success',
             `Deleted Attachment  Successfully`,
             MessageSeverity.success
           );
-        },error => this.saveFailedHelper(error));
+        }, error => { this.isSpinnerVisible = false });
     } else {
       this.allCustomerFinanceDocumentsList.splice(this.rowIndex, 1);
       this.totalRecordNew = this.allCustomerFinanceDocumentsList.length;
       this.totalPagesNew = Math.ceil(this.totalRecordNew / this.pageSizeNew);
     }
-
     this.modal.close();
   }
 
@@ -1443,22 +1403,21 @@ closeMemoModel() {
       moduleId: 50,
     }
     for (var key in data) {
-        this.formData.append(key, data[key]);
-    }    
-    if(this.allCustomerFinanceDocumentsList != undefined && this.allCustomerFinanceDocumentsList.length > 0)
-    {
-        this.formData.append(
+      this.formData.append(key, data[key]);
+    }
+    if (this.allCustomerFinanceDocumentsList != undefined && this.allCustomerFinanceDocumentsList.length > 0) {
+      this.formData.append(
         'attachmentdetais',
         JSON.stringify(this.allCustomerFinanceDocumentsList)
       );
-  
+
       this.commonservice
-          .uploadDocumentsEndpoint(this.formData)
+        .uploadDocumentsEndpoint(this.formData)
         .subscribe((res) => {
-            this.formData = new FormData();
+          this.formData = new FormData();
           this.toGetDocumentsListNew(this.id);
-        },error => this.saveFailedHelper(error));
-    }    
+        }, error => { this.isSpinnerVisible = false });
+    }
   }
 
   toGetDocumentsListNew(id) {
@@ -1472,17 +1431,17 @@ closeMemoModel() {
           item['isFileFromServer'] = true;
         });
 
-          this.savedGeneralInformationData.isTaxExempt = true;
+        this.savedGeneralInformationData.isTaxExempt = true;
       }
       this.totalRecordNew = this.allCustomerFinanceDocumentsList.length;
       this.totalPagesNew = Math.ceil(this.totalRecordNew / this.pageSizeNew);
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   toGetDocumentView(id) {
     this.commonservice.GetAttachment(id).subscribe((res) => {
       this.sourceViewforDocument = res || [];
-    },error => this.saveFailedHelper(error));
+    }, error => { this.isSpinnerVisible = false });
   }
 
   private onAuditHistoryLoadSuccessful(auditHistory, content) {
@@ -1518,29 +1477,28 @@ closeMemoModel() {
   removeFile(event) {
     //this.formData.delete(event.file.name)
   }
-  
+
   dismissModelNew() {
     this.isDeleteMode = false;
     this.isEditButton = false;
     this.modal.close();
   }
 
-  getDeleteListByStatus(value){
-		if(value){
-			this.currentDeletedstatus=true;
-		}else{
-			this.currentDeletedstatus=false;
-		}
-		this.getMappedTaxTypeRateDetails();
-  } 
-  
-  enableSave() {
-		this.disableSave = false;
+  getDeleteListByStatus(value) {
+    if (value) {
+      this.currentDeletedstatus = true;
+    } else {
+      this.currentDeletedstatus = false;
+    }
+    this.getMappedTaxTypeRateDetails();
   }
-  enableSaveDoc()
-  {
+
+  enableSave() {
+    this.disableSave = false;
+  }
+  enableSaveDoc() {
     this.attachCertificateUpdateFlag = false;
   }
 
-  dateFilterForTableNew(event, field) {}
+  dateFilterForTableNew(event, field) { }
 }

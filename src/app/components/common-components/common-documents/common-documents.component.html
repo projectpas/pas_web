@@ -39,7 +39,7 @@
             <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" pButton
               icon="fa-download" matTooltip="Download  Data" matTooltipPosition="above" iconPos="left"
               label="Export  Data" (click)="selectedOnly = false; targetData = documents;" data-toggle="modal"
-              data-target="#downloadConfirmation"></button>
+              data-target="#downloadConfirmationDocument"></button>
             <!-- 
                   <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
                   matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
@@ -264,7 +264,7 @@
     </button>
   </div>
 </ng-template>
-<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="downloadConfirmationDocument" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
