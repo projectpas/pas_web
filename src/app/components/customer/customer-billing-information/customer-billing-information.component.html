@@ -369,6 +369,27 @@
                        />
                   </div>
             </div>
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label for="tag">Tag <span class="clr-red"></span></label>
+              </div>
+              <div class="col-sm-5">
+                <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="billingInfo.tagName"
+                  (ngModelChange)="enableSave()" name="tag" field="tagName" [suggestions]="tagNamesList"
+                  (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                  [inputStyle]="{ width: '100%' }" [forceSelection]="true" autocomplete="off">
+                </p-autoComplete>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Attention </label>
+              </div>
+              <div class="col-sm-5">
+                <input class="form-control" type="text" name="attention" (ngModelChange)="enableSave()"
+                  [(ngModel)]="billingInfo.attention" value="" autocomplete="new-password" />
+              </div>               
+          </div>
 
             <div class="col-sm-12">
               <div class="col-sm-4">
@@ -549,6 +570,14 @@
               class="value">{{ viewData.siteName }}</span>
           </p>
           <p>
+            <span class="label"><b>Tag Name<span class="clr-red"></span> : </b></span><span
+              class="value">{{ viewData.tagName }}</span>
+          </p>
+          <p>
+            <span class="label"><b>Attention<span class="clr-red"></span> : </b></span><span
+              class="value">{{ viewData.attention }}</span>
+          </p>
+          <p>
             <span class="label"><b>Is Active : </b></span>
             <span class="value">
               <label class="wauto">
@@ -673,6 +702,8 @@
         <thead>
           <tr>
             <th>Site Name</th>
+            <th>Tag Name</th>
+            <th>Attention</th>
             <th>Address1</th>
             <th>Address2</th>
             <th>City</th>
@@ -696,6 +727,20 @@
                 : 'red'
             }">
             {{ audit.siteName }}
+          </td>
+          <td [ngStyle]="{
+            color: getColorCodeForHistory(i, 'tagName', audit.tagName)
+              ? 'black'
+              : 'red'
+          }">
+          {{ audit.tagName }}
+         </td>
+         <td [ngStyle]="{
+          color: getColorCodeForHistory(i, 'attention', audit.attention)
+            ? 'black'
+            : 'red'
+          }">
+          {{ audit.attention }}
           </td>
           <td [ngStyle]="{
               color: getColorCodeForHistory(i, 'address1', audit.address1)

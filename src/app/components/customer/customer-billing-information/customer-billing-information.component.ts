@@ -3,7 +3,7 @@ import { CustomerService } from '../../../services/customer.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CustomerBillingAddressModel } from '../../../models/customer-billing-address.model';
 import { AuthService } from '../../../services/auth.service';
-import { getValueFromObjectByKey, getObjectByValue, editValueAssignByCondition } from '../../../generic/autocomplete';
+import { getValueFromObjectByKey, getObjectByValue,getObjectById, editValueAssignByCondition } from '../../../generic/autocomplete';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuditHistory } from '../../../models/audithistory.model';
@@ -40,9 +40,10 @@ export class CustomerBillingInformationComponent {
     billingInfoList: any = [];
     billingInfoTableHeaders = [
         { field: 'siteName', header: 'Site Name' },
+        { field: 'tagName', header: 'Tag Name' },
+        { field: 'attention', header: 'Attention' },
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
-
         { field: 'city', header: 'City' },
         { field: 'stateOrProvince', header: 'State / Prov' },
         { field: 'postalCode', header: 'Postal Code' },
@@ -332,9 +333,10 @@ export class CustomerBillingInformationComponent {
             updatedBy: this.userName,
             countryId: getValueFromObjectByKey('countries_id', this.billingInfo.countryId),
             siteName: editValueAssignByCondition('siteName', this.billingInfo.siteName),
+            tagName:editValueAssignByCondition('tagName', this.billingInfo.tagName),
+            contactTagId: editValueAssignByCondition('contactTagId', this.billingInfo.tagName),            
             masterCompanyId: this.currentUserMasterCompanyId,
             customerId: this.id
-
         }
         // create shipping 
         if (!this.isEditMode) {
@@ -453,6 +455,10 @@ export class CustomerBillingInformationComponent {
         };
         this.selectedSitename = rowData.siteName
         this.isSiteNameAlreadyExists = false;
+        if(rowData.contactTagId > 0){
+			this.arrayTagNamelist.push(rowData.contactTagId);
+			this.getAllTagNameSmartDropDown('', rowData.contactTagId);
+        }        
         if(rowData.customerBillingAddressId > 0) {			
             this.arrayShipingIdlist.push(rowData.customerBillingAddressId); }
 
@@ -668,5 +674,32 @@ export class CustomerBillingInformationComponent {
 			if(this.isEditMode)
 			this.disableSaveSiteName = true;
 		}			
-    }    
+    }
+    
+    arrayTagNamelist:any[] = [];  
+    tagNamesList: any;
+
+	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+		if(this.arrayTagNamelist.length == 0) {			
+			this.arrayTagNamelist.push(0); }
+			this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+			this.tagNamesList = res.map(x => {
+				return {
+					tagName: x.label, contactTagId: x.value 
+				}
+			})
+			if(contactTagId > 0){
+				this.billingInfo = {
+					...this.billingInfo,
+					tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+				}
+			}
+		})
+	}
+
+	filterTagNames(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllTagNameSmartDropDown(event.query); }
+    }
+    
 }

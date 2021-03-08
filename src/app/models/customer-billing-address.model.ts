@@ -14,6 +14,8 @@ export class CustomerBillingAddressModel {
         this.postalCode = '';
         this.countryId = '';
         this.country='';
+        this.tagName='';
+        this.contactTagId = 0;        
         // this.CustomerBillingAddressId = CustomerBillingAddressId;
         // this.CustomerId = CustomerId;
         // this.AddressId = AddressId;
@@ -37,6 +39,10 @@ export class CustomerBillingAddressModel {
     public postalCode: string;
     public countryId: any;
     public country :string
+    public tagName :string
+    public contactTagId :number
+    
+
 }
 //     public CustomerBillingAddressId: number;
 //     public CustomerId: number;

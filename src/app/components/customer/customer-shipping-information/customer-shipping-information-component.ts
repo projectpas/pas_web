@@ -525,7 +525,9 @@ export class CustomerShippingInformationComponent implements OnInit {
             siteName: editValueAssignByCondition('siteName', this.domesticShippingInfo.siteName),
             countryId: getValueFromObjectByKey('countries_id', this.domesticShippingInfo.countryId),
             masterCompanyId: this.currentUserMasterCompanyId,
-            customerId: this.id
+            customerId: this.id,
+            tagName:editValueAssignByCondition('tagName', this.domesticShippingInfo.tagName),
+			contactTagId: editValueAssignByCondition('contactTagId', this.domesticShippingInfo.tagName),
         }
         // create shipping
         if (!this.isEditDomestic) {
@@ -585,7 +587,11 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.isEditDomestic = true;
         this.isSiteNameAlreadyExists = false;
         this.domesticShippingInfo = rowData;
-        this.selectedSitename = rowData.siteName;
+        this.selectedSitename = rowData.siteName;      
+		if(rowData.contactTagId > 0){
+			this.arrayTagNamelist.push(rowData.contactTagId);
+			this.getAllTagNameSmartDropDown('', rowData.contactTagId);
+		}
         if(rowData.customerDomensticShippingId > 0) {
             this.arrayDomesricShipIdlist.push(rowData.customerDomensticShippingId); }
 
@@ -597,8 +603,7 @@ export class CustomerShippingInformationComponent implements OnInit {
                     return {
                         siteName: x.label, value: x.value
                     }
-                })
-
+                })              
                 this.domesticSieList = [...this.domesticSieListOriginal];
                 //this.arrayDomesricShipIdlist = [];
                 //this.isprimarydomesticdata=rowData.isPrimary
@@ -607,7 +612,8 @@ export class CustomerShippingInformationComponent implements OnInit {
                 this.domesticShippingInfo = {
                     ...this.domesticShippingInfo,
                     //countryId: getObjectById('countries_id', rowData.countryId, this.countryListOriginal),
-                    siteName:  getObjectByValue('siteName', rowData.siteName, this.domesticSieListOriginal)
+                    siteName:  getObjectByValue('siteName', rowData.siteName, this.domesticSieListOriginal),
+                    //tagName:  getObjectByValue('tagName', rowData.tagName, this.tagNamesList)
                 };
                 this.domesticShippingOriginalInfo = this.domesticShippingInfo;
             },err => {
@@ -1122,9 +1128,19 @@ export class CustomerShippingInformationComponent implements OnInit {
         }
     }
     saveshipViaDomestic() {
+        this.isSpinnerVisible = true;
         if(this.demosticShippingViaData && this.demosticShippingViaData.length==0){
-            this.shipViaDomestic.isPrimary=true;
+            this.shipViaDomestic.isPrimary=true;                        
         }
+        if(!this.shipViaDomestic.shipViaId && !this.shipViaDomestic.shippingAccountInfo){
+            this.alertService.showMessage(
+                'Error',
+                `Please Add Atleast one value Ship via or Shipping Account Info`,
+                MessageSeverity.error
+            );
+            this.isSpinnerVisible = false;
+            return;
+        } 
         const data = {
             ...this.shipViaDomestic,
             customerShippingAddressId: this.selectedShipViaDomestic.customerShippingAddressId,
@@ -1135,7 +1151,7 @@ export class CustomerShippingInformationComponent implements OnInit {
             updatedBy: this.userName,
         }
         if (!this.isEditDomesticShipVia) {
-            this.isSpinnerVisible = true;
+           
             this.customerService.newShippingViaAdd(data).subscribe(res => {
                 this.getShipViaByDomesticShippingId(this.selectedShipViaDomestic.customerDomensticShippingId)
                 this.shipViaDomestic = new CustomerInternationalShipVia()
@@ -1460,5 +1476,30 @@ export class CustomerShippingInformationComponent implements OnInit {
 		}			
     } 
 
+    arrayTagNamelist:any[] = [];  
+    tagNamesList: any;
+
+	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+		if(this.arrayTagNamelist.length == 0) {			
+			this.arrayTagNamelist.push(0); }
+			this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+			this.tagNamesList = res.map(x => {
+				return {
+					tagName: x.label, contactTagId: x.value 
+				}
+			})
+			if(contactTagId > 0){
+				this.domesticShippingInfo = {
+					...this.domesticShippingInfo,
+					tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+				}
+			}
+		})
+	}
+
+	filterTagNames(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllTagNameSmartDropDown(event.query); }
+	}
 
 }
