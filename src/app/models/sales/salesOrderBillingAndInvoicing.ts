@@ -1,5 +1,5 @@
 export class SalesOrderBillingAndInvoicing {
-    sOBillingInvoicingId: number;
+    soBillingInvoicingId: number;
     salesOrderId: number;
     salesOrderPartId: number;
     itemMasterId: number;
@@ -8,39 +8,37 @@ export class SalesOrderBillingAndInvoicing {
     customerId: number;
     masterCompanyId: number;
     invoiceDate: Date;
-    invoiceTime: string;
     printDate: Date;
-    shipDate: Date;
+    openDate: Date;
     noofPieces: number;
-    revType: number;
+    revType: string;
     currencyId: number;
-    gateStatus: string;
     soldToCustomerId: number;
     soldToSiteId: number;
     soldToCustomerName: string;
     shipToCustomerId: number;
     shipToSiteId: number;
     shipToAttention: string;
-    isProForma: boolean = false;
     shipViaId: number;
     wayBillRef: string;
     tracking: string;
     availableCredit: number;
+    creditLimit: number;
+    billToCustomerId: number;
+    billToSiteId: number;
+    employeeName: string;
+    salesPersonId: number;
+    salesPerson: string;
+    customerRef: string;
+    typeId: number;
+    salesOrderType: string;
+    invoiceStatus: string;
     createdBy: string;
     updatedBy: string;
     isActive: boolean;
     isDeleted: boolean;
     createdDate: Date;
     updatedDate: Date;
-    billToCustomerId: number;
-    billToSiteId: number;
-    employeeName: string;
-    salesPersonId:number;
-    salesPerson:string;
-    customerRef:string;
-    openDate: Date;
-    typeId:number;
-    salesOrderType:string;
 }
 // {
 //     soBillingInvoicingId: 0;

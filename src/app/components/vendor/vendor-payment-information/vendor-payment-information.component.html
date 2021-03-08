@@ -933,7 +933,7 @@
                                   </div>
                                   <div class="col-sm-5">
                                     <input class="form-control" type="text" name="attention" (ngModelChange)="enableSave()"
-                                      [(ngModel)]="sourceVendor.attention" />
+                                      [(ngModel)]="sourceVendor.attention" value="" autocomplete="new-password"/>
                                   </div>
                                 </div>
                             <div class="col-sm-12">
@@ -950,9 +950,10 @@
                                     field="siteName" 
                                     (onKeyUp)="checkSiteNameExist($event.target.value)"
                                     (onChange)="checkSiteNameExist($event.target.value)"
+                                    (onSelect)="checkBillingSiteNameSelect()"
                                     (completeMethod)="filterSite($event);" 
                                     (ngModelChange)="enableSave()" 
-                                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                                    [size]="30" [minLength]="1" [dropdown]="true" required value="" autocomplete="new-password">
                                 </p-autoComplete>
                               <div *ngIf="isSiteNameAlreadyExists" class="clr-red">
                                     Entry Already Exists
@@ -965,7 +966,7 @@
                             </div>
                             <div class="col-sm-5">
                                 <input class="form-control" type="text" name="vsaddress1" (ngModelChange)="enableSave()"
-                                    [(ngModel)]="sourceVendor.address1" required>
+                                    [(ngModel)]="sourceVendor.address1" required value="" autocomplete="new-password">
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -974,7 +975,7 @@
                             </div>
                             <div class="col-sm-5">
                                 <input class="form-control" type="text" name="vsaddress2" (ngModelChange)="enableSave()"
-                                    [(ngModel)]="sourceVendor.address2">
+                                    [(ngModel)]="sourceVendor.address2" value="" autocomplete="new-password">
                             </div>
                         </div>
                             <div class="col-sm-12">
@@ -983,7 +984,7 @@
                              </div>
                              <div class="col-sm-5">
                                 <input class="form-control" type="text" name="vscity" (ngModelChange)="enableSave()"
-                                    [(ngModel)]="sourceVendor.city" required>
+                                    [(ngModel)]="sourceVendor.city" required value="" autocomplete="new-password">
                              </div>
                             </div>
                             <div class="col-sm-12">
@@ -992,7 +993,7 @@
                                 </div>
                                 <div class="col-sm-5">
                                 <input class="form-control" type="text" name="vsstate" (ngModelChange)="enableSave()"
-                                    [(ngModel)]="sourceVendor.stateOrProvince" required>
+                                    [(ngModel)]="sourceVendor.stateOrProvince" required value="" autocomplete="new-password">
                                </div>
                            </div>
                            <div class="col-sm-12">
@@ -1001,7 +1002,7 @@
                               </div>
                               <div class="col-sm-5">
                                 <input class="form-control" type="text" name="vspostal" (ngModelChange)="enableSave()"
-                                    [(ngModel)]="sourceVendor.postalCode" required>
+                                    [(ngModel)]="sourceVendor.postalCode" required value="" autocomplete="new-password">
                                </div>
                            </div>
                         <div class="col-sm-12">
@@ -1010,28 +1011,33 @@
                             </div>
                             <div class="col-sm-5">
                                 <div class="inner-addon right-addon inline-block" style="width: 100%">
-                                    <p-autoComplete field="nice_name" class="pautocomp-cstm"
-                                        (onSelect)="onCountrieselected($event)" (onKeyUp)=eventCountryHandler($event)
-                                        [(ngModel)]="sourceVendor.countryId" [ngModelOptions]="{standalone: true}"
-                                        [suggestions]="countrycollection" (completeMethod)="filtercountry($event)"
+                                    <p-autoComplete                                         
+                                        class="autocomp-customer-cstm"
+                                        name="country1"
+                                        [(ngModel)]="sourceVendor.countryId"
+                                        [suggestions]="countrycollection"
+                                        field="nice_name"
+                                        (onKeyUp) = eventCountryHandler($event)
+                                        (onSelect)="onCountrieselected($event)"                                        
+                                        (completeMethod)="filtercountry($event)"
+                                        (ngModelChange)="enableSave()"
                                         [size]="30" [minLength]="1" [dropdown]="true" [forceSelection]="true"
-                                        (ngModelChange)="enableSave()" required>
-                                    </p-autoComplete>
+                                         required>
+                                    </p-autoComplete>                                    
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    
+                    </div>                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" *ngIf="sourceVendor.checkPaymentId == undefined"
                         class="btn btn-primary pull-right" (click)="saveCheckPaymentInfo()"
-                        [disabled]="!addPaymentForm.valid" data-dismiss="modal">Save</button>
+                        [disabled]="!addPaymentForm.valid || disableSaveSiteName" data-dismiss="modal">Save</button>
                         <!-- [disabled]="!addPaymentForm.valid || disableSavePaymentCountry" -->
                     <button type="button"
                         *ngIf="sourceVendor.checkPaymentId != undefined && sourceVendor.checkPaymentId !=0"
                         class="btn btn-primary pull-right" (click)="saveCheckPaymentInfo()"
-                        [disabled]="!addPaymentForm.valid  || disableSave" data-dismiss="modal">Update</button>
+                        [disabled]="!addPaymentForm.valid  || disableSave || disableSaveSiteName" data-dismiss="modal">Update</button>
                         <!-- [disabled]="!addPaymentForm.valid  || disableSave || disableSavePaymentCountry" -->
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>

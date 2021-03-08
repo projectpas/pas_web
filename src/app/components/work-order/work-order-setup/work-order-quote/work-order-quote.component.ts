@@ -347,7 +347,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.enableEditBtn = Boolean(this.enableEditBtn);
         this.getCustomerWarningsList();
-        console.log(this.isView);
         this.breadcrumbs = [
 			{ label: 'Work Order Quote' },
 		];
@@ -365,7 +364,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.quoteForm = new WorkOrderQuote();
         }
         this.moduleName = "Quote Information";
-        console.log(this.quoteForm);
         if(this.workorderid == 0){
             this.router.queryParams.subscribe((params: Params) => {
                 if (params['workorderid']) {
@@ -382,11 +380,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getEmployeeList(this.workOrderId);
             this.getTaskList();
             this.getMarkup();
-            this.loadCurrency();
+            this.loadCurrency('');
             this.getCondition();
             this.getUnitOfMeasure();
             this.getAllEmailType();
-            this.getAllWorkOrderStatus();
+            this.getAllWorkOrderStatus('');
         }
     }
 
@@ -398,16 +396,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description').subscribe(res => {
-            this.quoteStatusList = res;
-            console.log(this.quoteStatusList);
-         },
-         err => {
-             // this.isSpinnerVisible = false;
-             this.errorHandling(err);
-         })
-    }
+
 
     deleteMemoConfirmation(mainIndex, subIndex){
         this.mainIndex = mainIndex;
@@ -506,6 +495,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         `Quote ${isCreateQuote ? 'Created' : 'Updated'}  Succesfully`,
                         MessageSeverity.success
                     );
+                    this.upDateDisabeldbutton=true;
                 },
                 err => {
                     this.errorHandling(err);
@@ -587,7 +577,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.csr = res.customerDetails.csrName;
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
-
+this.creditTerms=res.creditTerm;
 
                     this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 0);
                     this.workOrderNumber = res.workOrderNum;
@@ -608,6 +598,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                             (res: any) => {
                                 
                                 if (res) {
+                                    this.upDateDisabeldbutton=true;
                                     this.currentCustomerId = res.customerId
                                     this.isEdit = true;
                                     this.setWorkOrderQuoteId(res['workOrderQuote']['workOrderQuoteId']);
@@ -777,7 +768,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {
                 
                 this.workOrderWorkFlowOriginalData = res;
-                console.log(res);
                 this.mpnPartNumbersList = res.map(x => {
                     return {
                         value:
@@ -914,7 +904,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     }
 
-    getMPNDetails(workOrderId) {
+    getMPNDetails(workOrderId) { 
         this.workOrderService.getPartsDetail(workOrderId)
             .subscribe(
                 (workOrderParts: partsDetail[]) => {
@@ -989,7 +979,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this.workorderMainService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId).subscribe(res => {
             this.isSpinnerVisible = false;
-            this.workOrderMaterialList = res;
+            this.workOrderMaterialList = res; 
             if (res.length > 0) {
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
@@ -1007,11 +997,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
                 let temp = []
                 let formedData = [];
-                this.materialListQuotation.forEach(
-                    (x) => {
-                        formedData = [...formedData, ...x];
-                    }
-                )
+                // this.materialListQuotation.forEach(
+                //     (x) => {
+                //         formedData = [...formedData, ...x];
+                //     }
+                // )
+                formedData=[...this.materialListQuotation]
                 temp = formedData.reduce(function (r, a) {
                     r[a['taskId']] = r[a['taskId']] || [];
                     r[a['taskId']].push(a);
@@ -1166,6 +1157,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.workOrderService.getWorkFlowDetails(data.workFlowId)
                 .subscribe(
                     res => {
+                        this.upDateDisabeldbutton=true;
                         this.materialListQuotation = res['materialList'];
                         if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                             for (let charge in this.materialListQuotation) {
@@ -1182,11 +1174,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         }
                         let temp = []
                         let formedData = [];
-                        this.materialListQuotation.forEach(
-                            (x) => {
-                                formedData = [...formedData, ...x];
-                            }
-                        )
+                        // this.materialListQuotation.forEach(
+                        //     (x) => {
+                        //         formedData = [...formedData, ...x];
+                        //     }
+                        // )
                         temp = formedData.reduce(function (r, a) {
                             r[a['taskId']] = r[a['taskId']] || [];
                             r[a['taskId']].push(a);
@@ -1669,7 +1661,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 },
                 (error) => {
                     this.errorHandling(error);
-                    console.log(error);
                 }
             )
     }
@@ -1697,7 +1688,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveworkOrderLabor(data) {
-        console.log(data);
         this.laborPayload.BuildMethodId = this.getBuildMethodId();
         // this.laborPayload.WorkOrderQuoteLaborHeader.WorkOrderQuoteLaborHeaderId = data.workOrderLaborHeaderId;
         // this.laborPayload.WorkOrderQuoteLaborHeader.WorkOrderQuoteDetailsId = 0;
@@ -1902,7 +1892,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.errorHandling(err);
                 }
             )
-        console.log(data);
     }
 
     updateWorkOrderExclusionsList(data) {
@@ -1967,8 +1956,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveMaterialListForWO(data) {
-
-        console.log("materialist data", data);
         data['materialList'].forEach(
             mData => {
                 if (mData.billingRate) {
@@ -1978,6 +1965,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     mData.unitCost = Number(mData.unitCost.toString().split(',').join('')).toFixed(2);
                 }
                 mData['billingAmount'] = (mData.quantity * Number(mData.billingRate.toString().split(',').join(''))).toFixed(2);
+                mData.partNumber= mData.partNumber.partName;
+                mData.taskId=(typeof mData.taskId == 'string')?mData.taskId :mData.taskId.taskId;
+                mData.taskName=(typeof mData.taskId != 'string')?mData.taskId.description:'';
             }
         )
         if (!this.editMatData || this.editMatData.length == 0) {
@@ -1999,7 +1989,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 // this.workOrderExclusionsList = [...this.workOrderExclusionsList, ...this.workOrderExclusionsLists[x].map(da=>{ return {...da, taskId:x}})]
                 this.materialListQuotation.push(temp[x]);
             }
-            console.log("materialist After push", this.materialListQuotation)
         }
         else {
             this.editMatData = [];
@@ -2019,12 +2008,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             )
     }
 
-    loadCurrency() {
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', '', '').subscribe(
-            results => this.currencyList = results,
-            error => { this.errorHandling(error)}
-        );
-    }
+
 
     markupChanged(matData, type) {
         try {
@@ -2046,7 +2030,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             })
         }
         catch (e) {
-            console.log(e);
         }
     }
 
@@ -2107,7 +2090,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
     }
     updateWorkOrderChargesList(data) {
-        console.log(data);
     }
     checkValidQuote() {
         if (this.quoteDueDate && this.validFor && this.currency) {
@@ -2550,7 +2532,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             })]
             this.employeeList = employee;
         }
-        // console.log("cust_mainID")
     }
 
     clearautoCompleteInput(currentRecord, field) {
@@ -2562,7 +2543,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     noBack(data) {
-        console.log(data);
     }
     customerWarningsList: any;
     getCustomerWarningsList(): void {
@@ -2578,9 +2558,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         })
     }
     customerWarnings(customerId) {
-        console.log("reasons list22", customerId);
         this.commonService.customerWarnings(customerId, this.createQuoteListID).subscribe((res: any) => {
-            console.log("reasons list", res);
             if (res) {
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
@@ -2597,7 +2575,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.restrictMessage = '';
         //   if(customerId && this.customerWarningListId){
         this.commonService.customerResctrictions(customerId, id).subscribe((res: any) => {
-            console.log("reasons list22", res);
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
@@ -2617,8 +2594,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     }
     showAlertMessage(warningMessage, restrictMessage) {
-        console.log("alert mesages", this.warningMessage);
-        console.log("restrict mesages", this.restrictMessage);
         $('#warnRestrictMesg').modal("show");
         //   this.modal.close();
     }
@@ -2689,7 +2664,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.getApproversList();
         this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId']).subscribe(res => {      
             this.customerContactList = res;
-            console.log("quote app lis",this.customerContactList)
             if(this.customerContactList.length > 0){
                 for(let i=0; i<this.customerContactList.length; i++){
                     if(this.customerContactList[i].isDefaultContact == true){
@@ -2994,14 +2968,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.cusContactList = this.customerContactList;
     }
     filterCustomerContact(event): void {
-        // console.log("event",event)
         this.cusContactList = this.customerContactList;
         if (event.query !== undefined && event.query !== null) {
             const customers = [...this.customerContactList.filter(x => {
                 return x.contactName.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.cusContactList = customers;
-            console.log("cus",this.cusContactList)
         }else{
             this.cusContactList = this.customerContactList; 
         }
@@ -3061,5 +3033,70 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     parseToInt(str : any) {
         return Number(str);
+    }
+
+    onFilterTangible(value) {
+        this.getAllWorkOrderStatus(value);
+    }
+    setEditArray:any=[];
+    getAllWorkOrderStatus(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderQuoteStatus', 'WorkOrderQuoteStatusId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.quoteStatusList = res;
+            }
+        })
+    }
+    onFilterCurrency(value) {
+        this.loadCurrency(value);
+    }
+    loadCurrency(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.quoteForm.expirationDateStatus? this.quoteForm.expirationDateStatus :0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.currencyList = res;
+            }
+        })
+    }
+    upDateDisabeldbutton:any;
+    getValid(){
+        this.upDateDisabeldbutton=false;
+    }
+    disableForMemo:boolean=false;
+    tempMemo:any;
+    onAddDescription(value) {
+        this.disableForMemo = true;
+        this.type = value;
+        this.tempMemo = "";
+            this.tempMemo = this.memo;
+    }
+    onSaveDescription() {
+            this.memo = this.tempMemo;
+
+        this.upDateDisabeldbutton = false;
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    memoValidate() {
+        this.disableForMemo = false;
     }
 }

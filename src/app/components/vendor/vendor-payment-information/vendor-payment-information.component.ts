@@ -158,7 +158,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	disableSavePaymentCountry: boolean = true;
 	vendorCodeandName: any;
 	contact: any;
-	
+	editSiteName: any
+
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -178,9 +179,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 								this.local = res[0];
 								this.vendorCodeandName = res[0];
 						},err => {
-							const errorLog = err;
-							this.saveFailedHelper(errorLog);
-						});
+							this.isSpinnerVisible = false;
+					});
 				}
             }
 		}
@@ -728,8 +728,9 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
         }
 
 		this.arraySiteIdlist.push(row.checkPaymentId); 
-        this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName','',true,20,this.arraySiteIdlist.join()).subscribe(response => {
-            this.sitelistCollectionOriginal = response.map(x => {
+        //this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName','',true,20,this.arraySiteIdlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownVendorCheckPaymentList('siteName', '', true, this.arraySiteIdlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => { 
+			this.sitelistCollectionOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
                 }
@@ -746,10 +747,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
             {
                 this.arrayTagNamelist.push(row.contactTagId);
                 this.getAllTagNameSmartDropDown('', row.contactTagId);
-            }
+			}
+			this.editSiteName = row.siteName;
             },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+                this.isSpinnerVisible = false;
             });
 
 		this.sourceVendor['tempIsPrimary'] = this.sourceVendor.isPrimayPayment;
@@ -1262,6 +1263,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 	onAddPaymentInfo() {
 		this.sourceVendor = {};
+		this.editSiteName = '' ;
+		this.isSiteNameAlreadyExists = false;
 		this.isEditPaymentInfo = false;
 	}
 
@@ -1326,7 +1329,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
         this.changeName = true;
         this.isSiteNameAlreadyExists = false;
         this.disableSaveSiteName = false;
-        if (value != this.sourceVendor.siteName) {
+        if (value != this.editSiteName) {
             for (let i = 0; i < this.sitelistCollectionOriginal.length; i++) {
                 if (this.sourceVendor.siteName == this.sitelistCollectionOriginal[i].siteName || value == this.sitelistCollectionOriginal[i].siteName) {
                     this.isSiteNameAlreadyExists = true;
@@ -1340,8 +1343,9 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	getAllSiteSmartDropDown(strText = ''){
 		if(this.arraySiteIdlist.length == 0) {
 			this.arraySiteIdlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName',strText,true,20,this.arraySiteIdlist.join()).subscribe(response => {
-            this.sitelistCollectionOriginal = response.map(x => {
+        //this.commonService.autoSuggestionSmartDropDownList('CheckPayment', 'CheckPaymentId', 'SiteName',strText,true,20,this.arraySiteIdlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownVendorCheckPaymentList('siteName', strText, true, this.arraySiteIdlist.join(),this.currentUserMasterCompanyId,this.id).subscribe(response => {
+		this.sitelistCollectionOriginal = response.map(x => {
                 return {
                     siteName: x.label, value: x.value
                 }
@@ -1349,14 +1353,26 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
             this.sitelistCollection = [...this.sitelistCollectionOriginal];
             this.arraySiteIdlist = [];
 		},err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
+			this.isSpinnerVisible = false;
 		});
     }
 
 	filterSite(event) {
         if (event.query !== undefined && event.query !== null) {
             this.getAllSiteSmartDropDown(event.query); 
+        }
+	}
+	
+	checkBillingSiteNameSelect() {    
+        if(this.editSiteName  != editValueAssignByCondition('siteName', this.sourceVendor.siteName))
+        {
+            this.isSiteNameAlreadyExists = true;
+            this.disableSaveSiteName = true;
+        }
+        else
+        {
+            this.isSiteNameAlreadyExists = false;
+            this.disableSaveSiteName = false;
         }
     }
 

@@ -399,6 +399,9 @@ export class WorkOrderService {
     getSiteByCustomerId(customerId){
         return this.workOrderEndpointService.getSiteByCustomerId(customerId);
     }
+    getShippingBillSiteByCustomerId(customerId){
+        return this.workOrderEndpointService.getShippingBillSiteByCustomerId(customerId);
+    }
     saveWorkOrderShipping(data){
         return this.workOrderEndpointService.saveWorkOrderShipping(data);
     }
@@ -586,6 +589,11 @@ export class WorkOrderService {
     getFreightHistory(isSubworkOrder,freightId){
         return this.workOrderEndpointService.getFreightHistory(isSubworkOrder,freightId);
     }
+    getShippingDataList(WorkOrderId: number): Observable<any> {
+        return Observable.forkJoin(
+          this.workOrderEndpointService.getShippingDataList(WorkOrderId)
+        );
+      }
     
 } 
 

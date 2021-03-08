@@ -113,6 +113,7 @@ import { CommonCommunicationModule } from "../components/common-components/commo
 import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 import { SOApprovalRuleComponent } from "../components/sales/order/shared/components/so-approval-rule/so-approval-rule.component";
 import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
+import { SalesShippingLabelComponent } from "../components/sales/order/sales-order-shipping-label/sales-order-shipping-label.component";
 //import { AddressComponentComponent } from "../components/address-component/address-component.component";
 // import { AddressComponentComponent } from "../components/address-component/address-component.component";
 
@@ -209,10 +210,10 @@ import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-
     SalesOrderAnalysisComponent,
     SOQApprovalRuleComponent,
     SOApprovalRuleComponent,
-    SalesOrderPickTicketsComponent
-    //AddressComponentComponent
+    SalesOrderPickTicketsComponent,
+    SalesShippingLabelComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent]
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent]
 })
 export class SalesPagesModule { }
