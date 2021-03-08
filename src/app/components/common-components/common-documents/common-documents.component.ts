@@ -607,7 +607,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     closeDeleteModal() {
-        $('#downloadConfirmation').modal("hide");
+        $('#downloadConfirmationDocument').modal("hide");
     }
 
     viewModelDismiss() {
