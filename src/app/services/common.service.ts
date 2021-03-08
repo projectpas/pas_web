@@ -782,6 +782,12 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  getworkorderaddressdetailsbyuser(ModuleId, UserId, AddressType, IdList?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getworkorderaddressdetailsbyuser?ModuleId=${ModuleId}&UserId=${UserId}&AddressType=${AddressType}&IdList=${IdList !== undefined ? IdList : 0}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getaddressdetailsbyuser(ModuleId, UserId, AddressType, IdList));
+    });
+  }
+
   getaddressdetailsOnlyUserbyuser(ModuleId, UserId, AddressType, purchaseOrderID?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/getaddressdetailsOnlyUserbyuser?ModuleId=${ModuleId}&UserId=${UserId}&AddressType=${AddressType}&purchaseOrderID=${purchaseOrderID !== undefined ? purchaseOrderID : 0}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getaddressdetailsOnlyUserbyuser(ModuleId, UserId, AddressType, purchaseOrderID));

@@ -196,10 +196,14 @@
   </div>
 
   <div *ngIf="isQuote" class="float-right">
-    <button class="btn btn-primary" (click)="saveMaterialsWorkOrder()"
-      [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
-      Add
+    <button class="btn btn-primary" (click)="saveMaterialsWorkOrder()" *ngIf="isEdit==true"
+      [disabled]="!materialCreateForm.valid || checkQuantityAvailability() || disableUpdateButton">
+      Update
     </button>
+    <button class="btn btn-primary" (click)="saveMaterialsWorkOrder()" *ngIf="isEdit==false"
+    [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
+    Save
+  </button>
   </div>
 
   <div *ngIf="isWorkOrder && isEdit" class="float-right">

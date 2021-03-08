@@ -101,6 +101,8 @@ export class SalesShippingLabelComponent implements OnInit {
                 padding-left: 2px;
                 width: 66.66666667%;
               }
+              .input-width{width:60px !important}
+              .sold-block-div{margin: 0px 0;position: relative;display:flex;min-height: 1px;width: 100%;}
               
               .first-block-label {
                 position: relative;
@@ -108,7 +110,7 @@ export class SalesShippingLabelComponent implements OnInit {
                 float: left;
                 padding-right: 2px;
                 padding-left: 2px;
-                width: 38.33333333%;
+                 width: 38.33333333%;
                 text-transform: capitalize;
                 margin-bottom: 0;
                 text-align: left;
@@ -149,16 +151,20 @@ export class SalesShippingLabelComponent implements OnInit {
                 padding-left: 2px;
                 box-sizing: border-box;
               }
-              
-              .second-block-div {
-                margin: 2px 0;
-                position: relative;
+              .second-block-div{margin: 2px 0;
+                position: relative;display:flex;
                 min-height: 1px;
-                float: left;
-                padding-right: 2px;
-                padding-left: 2px;
-                width: 100%;
-              }
+                width: 100%;}
+              // .second-block-div {
+              //   margin: 2px 0;
+              //   position: relative;
+              //   min-height: 1px;
+              //   display:flex;
+              //   float: left;
+              //   padding-right: 2px;
+              //   padding-left: 2px;
+              //   width: 100%;
+              // }
               
               .second-block-label {
                 position: relative;
@@ -196,6 +202,8 @@ export class SalesShippingLabelComponent implements OnInit {
               .image {
                 border: 1px solid #ccc;
                 padding: 5px;
+                margin-top:20px;
+                margin-bottom:10px;
               }
               
               .mtop20 {
@@ -238,6 +246,9 @@ export class SalesShippingLabelComponent implements OnInit {
                 text-align: left;
                 background: #0d57b0 !important;
                 color: #fff !important;
+                -webkit-print-color-adjust: exact;
+              }
+             
               }
               
               .div-height {

@@ -71,19 +71,19 @@ export class ShippingComponent implements OnInit {
         private workorderService: WorkOrderService, private alertService: AlertService, private authService: AuthService) {
     }
     ngOnInit(): void {
-        debugger;
-      console.log("general info",this.workOrderGeneralInformation);
-      if (this.workOrderGeneralInformation)
-      {
-          this.workOrderId =this.workOrderGeneralInformation.workOrderId; 
-          this.CustomerId=this.workOrderGeneralInformation['customerDetails']['customerId']
+        //console.log("general info",this.workOrderGeneralInformation);
+        if (this.workOrderGeneralInformation)
+        {
+            this.workOrderId =this.workOrderGeneralInformation.workOrderId; 
+            this.CustomerId=this.workOrderGeneralInformation['customerDetails']['customerId']
 
-          //this.getAddressById(this.workOrderId);
-      }
-      this.initColumns();
+            //this.getAddressById(this.workOrderId);
+        }
+         this.initColumns();
+         this.getShippingList();
         this.getShipVia();
         this.getCountriesList();
-        this.getSiteName();
+        //this.getSiteName();
         //this.setBillToSelectedSite(0)
         this.getShippingData();
         //this.getCustomerNameList();
@@ -121,7 +121,7 @@ export class ShippingComponent implements OnInit {
 
         this.headers = [
             //{ field: "itemNo", header: "Item #", width: "100px" },
-            { field: "WorkOrderNumber", header: "WO Num", width: "100px" },
+            { field: "workOrderNumber", header: "WO Num", width: "100px" },
             { field: "partNumber", header: "PN", width: "100px" },
             { field: "partDescription", header: "PN Description", width: "100px" },
             { field: "qtyToShip", header: "Qty Picked", width: "65px" },
@@ -216,8 +216,15 @@ export class ShippingComponent implements OnInit {
             //this.updateBtnExp = true;
         }
     }
-    getSiteName() {
-        this.workorderService.getShippingBillSiteByCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'])
+    getSiteName(customerId,siteid) {
+
+        //const customerId= this.workOrderGeneralInformation['customerDetails']['customerId'];
+        const AddressType = 'Bill';
+        const billUsertype =1;
+        //const siteid =0;	
+
+        this.commonService.getworkorderaddressdetailsbyuser(billUsertype,customerId,AddressType,siteid)
+        //this.workorderService.getShippingBillSiteByCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'])
             .subscribe(
                 res => {
                     this.siteList = res;
@@ -225,7 +232,7 @@ export class ShippingComponent implements OnInit {
                         this.siteList.forEach(
                             x => {
                                 if(x.isPrimary){
-                                    this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
+                                    this.shippingHeader.soldToSiteId = x.siteID;
                                     
                                     this.setSoldToAddress();
                                 }
@@ -252,7 +259,7 @@ export class ShippingComponent implements OnInit {
     setShipToAddress() {
         this.shipCustomerSiteList.forEach(site => {
             //if (site.customerShippingAddressId == this.shippingHeader.shipToSiteId) {
-                if (site.customerDomensticShippingId == this.shippingHeader.shipToSiteId) {
+                if (site.siteID == this.shippingHeader.shipToSiteId) {
                 this.shippingHeader['shipToAddress1'] = site.address1;
                 this.shippingHeader['shipToAddress2'] = site.address2;
                 this.shippingHeader['shipToCity'] = site.city;
@@ -260,7 +267,7 @@ export class ShippingComponent implements OnInit {
                 this.shippingHeader['shipToZip'] = site.postalCode;
                 this.shippingHeader['shipToCountryId'] = site.countryId;
                 this.shippingHeader['shipToSiteName'] = site.siteName;
-                this.shippingHeader['shipToCountryName'] = site.countryName;
+                this.shippingHeader['shipToCountryName'] = site.country;
                 this.shippingHeader['shipToCountryId'] = site.countryId;
             }
         });
@@ -300,7 +307,7 @@ export class ShippingComponent implements OnInit {
     }
     setSoldToAddress() {
         this.siteList.forEach(site => {
-            if (site.customerDomensticShippingId == this.shippingHeader.soldToSiteId) {
+            if (site.siteID == this.shippingHeader.soldToSiteId) {
                 this.shippingHeader['soldToAddress1'] = site.address1;
                 this.shippingHeader['soldToAddress2'] = site.address2;
                 this.shippingHeader['soldToCity'] = site.city;
@@ -308,14 +315,14 @@ export class ShippingComponent implements OnInit {
                 this.shippingHeader['soldToZip'] = site.postalCode;
                 this.shippingHeader['soldToCountryId'] = site.countryId;
                 this.shippingHeader['soldToSiteName'] = site.siteName;
-                this.shippingHeader['soldToCountryName'] = site.countryName;
+                this.shippingHeader['soldToCountryName'] = site.country;
             }
         });
     }
     assignDetails(value){
         if(value==true){
             this.shippingHeader.shipToCustomerId=this.workOrderGeneralInformation['customerDetails'];
-            this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']);
+            this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails'],0);
             this.shippingHeader['shipToSiteId'] = this.shippingHeader.soldToSiteId;
             // this.shippingHeader.shipToSiteId=this.
             this.shippingHeader['shipToAddress1'] = this.shippingHeader.soldToAddress1;
@@ -364,21 +371,51 @@ export class ShippingComponent implements OnInit {
             this.loadcustomerData(event.query);
         }
     }
-    async  getSiteNamesByShipCustomerId(object) {
-        console.log("object",object);
-        this.clearShipToAddress();
+
+    onselectcustomergetsite(object) 
+    {
         const { customerId } = object;
-        await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
-            this.shipCustomerShippingOriginalData = res[0];
-            this.shipCustomerSiteList = res[0];
-            this.shipCustomerShippingOriginalData.forEach(
-                x => {
-                    if(x.isPrimary){
-                        this.shippingHeader.shipToSiteId = x.customerDomensticShippingId;
-                        this.setShipToAddress();
-                    }
-                }
-            )
+        this.getSiteNamesByShipCustomerId(customerId,0);
+
+    }
+    async  getSiteNamesByShipCustomerId(customerId,siteid) {
+       // console.log("object",object);
+        this.clearShipToAddress();
+        //const { customerId } = object;
+        const AddressType = 'Ship';
+        const billUsertype =1;
+        //const siteid =0;	
+        await this.commonService.getworkorderaddressdetailsbyuser(billUsertype,customerId,AddressType,siteid).subscribe(res => {
+            
+            if (res) 
+            {
+                this.shipCustomerShippingOriginalData = res;
+                this.shipCustomerSiteList = res;
+                if(siteid > 0) 
+                {
+                    this.shipCustomerShippingOriginalData.forEach(
+                        x => {
+                            if(x.siteID == siteid)
+                            {
+                                this.shippingHeader.shipToSiteId = x.siteID;
+                                this.setShipToAddress();
+                            }
+                        }
+                    )
+                 }else
+                 {
+                    this.shipCustomerShippingOriginalData.forEach(
+                        x => {
+                            if(x.isPrimary){
+                                this.shippingHeader.shipToSiteId = x.siteID;
+                                this.setShipToAddress();
+                            }
+                        }
+                    )
+                 }
+               
+            }
+          
         },
         err => {
             this.errorHandling(err);
@@ -429,7 +466,8 @@ export class ShippingComponent implements OnInit {
                     this.isSpinnerVisible = false;
                     if (res) {
                         if (!res['response']) {
-                            this.getEditSiteData(res.shipToCustomerId);
+                            this.getSiteNamesByShipCustomerId(res.shipToCustomerId,res.shipToSiteId);
+                            this.getSiteName(this.workOrderGeneralInformation['customerDetails']['customerId'],res.soldToSiteId)
                             console.log('this.shipCustomerSiteList', this.shipCustomerSiteList);
                             this.shippingHeader = res;
                             this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
@@ -441,8 +479,9 @@ export class ShippingComponent implements OnInit {
                         else
                         {
                              this.shippingHeader.shipToCustomerId = this.workOrderGeneralInformation['customerDetails'];
-                             this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']);
-                        }
+                             this.getSiteNamesByShipCustomerId(this.workOrderGeneralInformation['customerDetails']['customerId'],0);
+                             this.getSiteName(this.workOrderGeneralInformation['customerDetails']['customerId'],0)
+                            }
                     }
                 },
                 err => {
