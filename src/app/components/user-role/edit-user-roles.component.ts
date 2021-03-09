@@ -163,10 +163,6 @@ export class EditUserRolesComponent implements OnInit {
 
                 if (rolePermission != undefined && rolePermission.length > 0) {
                     for(let role of rolePermission){ 
-                    // modules.rolePermission.canAdd = role.canAdd;
-                    // modules.rolePermission.canUpdate = role.canUpdate;
-                    // modules.rolePermission.canDelete = role.canDelete;
-                    // modules.rolePermission.canView = role.canView;
                     modules.rolePermission.permissionID=role.permissionID;
                     switch (role.permissionID) {
                         case 1:
@@ -215,13 +211,6 @@ export class EditUserRolesComponent implements OnInit {
                     this.currentUserRole.rolePermissions.push(Object.assign({}, role));
                     this.setCorrospondingValue(modules,role.permissionID, true);
                     }
-                    // modules.rolePermission.canAdd = rolePermission[0].canAdd;
-                    // modules.rolePermission.canUpdate = rolePermission[0].canUpdate;
-                    // modules.rolePermission.canDelete = rolePermission[0].canDelete;
-                    // modules.rolePermission.canView = rolePermission[0].canView;
-                    // rolePermission[0].id = 0;
-                    
-                    // this.currentUserRole.rolePermissions.push(Object.assign({}, rolePermission[0]));
                 }
                 else {
                     modules.rolePermission.canAdd = false;
@@ -332,6 +321,20 @@ export class EditUserRolesComponent implements OnInit {
                 var currentRolePermission = Object.assign({}, currentModule.rolePermission);
                 currentRolePermission.moduleHierarchyMasterId = currentModule.id;
                 this.currentUserRole.rolePermissions.push(currentRolePermission);
+
+                var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
+                    return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
+                })[0];
+    
+                if(viewPermission==undefined){
+                if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
+                    var rolePermissionData=Object.assign({}, currentModule.rolePermission);
+                    rolePermissionData.permissionID=2;
+                    rolePermissionData.moduleHierarchyMasterId = currentModule.id;
+                    this.currentUserRole.rolePermissions.push(rolePermissionData);
+                    this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
+                }
+            }
             }
             else{
                 this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.id);
@@ -372,6 +375,20 @@ export class EditUserRolesComponent implements OnInit {
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             currentRolePermission.id = 0;
             this.currentUserRole.rolePermissions.push(currentRolePermission);
+           
+            var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
+                return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
+            })[0];
+
+            if(viewPermission==undefined){
+            if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
+                var rolePermissionData=Object.assign({}, currentModule.rolePermission);
+                rolePermissionData.permissionID=2;
+                rolePermissionData.moduleHierarchyMasterId = currentModule.id;
+                this.currentUserRole.rolePermissions.push(rolePermissionData);
+                this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
+            }
+        }
         }
 
     }

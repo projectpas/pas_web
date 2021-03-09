@@ -176,7 +176,7 @@ console.log(this.sortedHierarchy)
         //         });
         //     }
         // }
-        this.setCorrospondingValue(currentModule, value);
+        this.setCorrospondingValue(currentModule,+type, value);
         // }
         // if(currentModule.parentId!=null && currentModule.isPage){
         // if (isUncheck) {
@@ -203,8 +203,8 @@ console.log(this.sortedHierarchy)
         this.sortedHierarchy = [...this.sortedHierarchy];
     }
 
-    setCorrospondingValue(val, value) {
-        switch (val.rolePermission.permissionID) {
+    setCorrospondingValue(val,type, value) {
+        switch (type) {
             case 1:
                 val.rolePermission.canAdd = value;
                 break;
@@ -293,6 +293,19 @@ console.log(this.sortedHierarchy)
                 var currentRolePermission = Object.assign({}, currentModule.rolePermission);
                 currentRolePermission.moduleHierarchyMasterId = currentModule.id;
                 this.currentUserRole.rolePermissions.push(currentRolePermission);
+                var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
+                    return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
+                })[0];
+    
+                if(viewPermission==undefined){
+                if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
+                    var rolepermissionData=Object.assign({}, currentModule.rolePermission);
+                    rolepermissionData.permissionID=2;
+                    rolepermissionData.moduleHierarchyMasterId = currentModule.id;
+                    this.currentUserRole.rolePermissions.push(rolepermissionData);
+                    this.setCorrospondingValue(currentModule,rolepermissionData.permissionID,value);
+                }
+            }
             }
             else{
                 this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.filter(i=>i.moduleHierarchyMasterId!==currentModule.id);
@@ -329,6 +342,20 @@ console.log(this.sortedHierarchy)
             var currentRolePermission = Object.assign({}, currentModule.rolePermission);
             currentRolePermission.moduleHierarchyMasterId = currentModule.id;
             this.currentUserRole.rolePermissions.push(currentRolePermission);
+
+            var viewPermission= this.currentUserRole.rolePermissions.filter(function (permission: RolePermission) {
+                return permission.moduleHierarchyMasterId == currentModule.id && permission.permissionID == 2;
+            })[0];
+
+            if(viewPermission==undefined){
+            if(currentModule.rolePermission.permissionID==1 || currentModule.rolePermission.permissionID==3||currentModule.rolePermission.permissionID==4){
+                var rolePermissionData=Object.assign({}, currentModule.rolePermission);
+                rolePermissionData.permissionID=2;
+                rolePermissionData.moduleHierarchyMasterId = currentModule.id;
+                this.currentUserRole.rolePermissions.push(rolePermissionData);
+                this.setCorrospondingValue(currentModule,rolePermissionData.permissionID,value);
+            }
+        }
         }
 
     }
