@@ -29,6 +29,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() isStockLineViewMode = false;
   @Input() selectedParts: any = [];
   @Input() selectedSummaryRow: SummaryPart;
+  @Input() type: string;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
   @ViewChild("searchMultiPart", { static: false }) searchMultiPart: ElementRef;
