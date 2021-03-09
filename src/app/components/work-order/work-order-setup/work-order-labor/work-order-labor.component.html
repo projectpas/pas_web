@@ -273,6 +273,8 @@
       </thead>
       <tbody>
         <!-- Receive -->
+        <!-- <p style="color: red;">{{taskList |json}}</p> -->
+       <!-- <p style="color: blueviolet;"> {{laborForm.workOrderLaborList | json}}</p> -->
         <ng-container *ngFor="let task of taskList; let taskIndex = index">
           <!-- <ng-container *ngIf="isAllowedTask(task.taskId)"> -->
           <tr *ngIf="getLenghtOfTask(laborForm.workOrderLaborList[0][task.description | lowercase])">

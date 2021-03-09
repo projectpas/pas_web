@@ -157,6 +157,14 @@
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{ part.priorityName }}
                                     </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
+                                            #priorityId="ngModel" (change)="onEditPartDetails()">
+                                            <option *ngFor="let p of priorities" [ngValue]="p.priorityId">
+                                                {{ p.description }}
+                                            </option>
+                                        </select>
+                                    </td>
                                     <td colspan="2" *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
                                     </td>
@@ -217,14 +225,6 @@
                                     </td>
                                     <td>
                                         {{ part.serialNumber }}
-                                    </td>
-                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
-                                            #priorityId="ngModel" (change)="onEditPartDetails()">
-                                            <option *ngFor="let p of priorities" [ngValue]="p.priorityId">
-                                                {{ p.description }}
-                                            </option>
-                                        </select>
                                     </td>
                                     <td>
                                         {{ salesQuote.openDate | date: "MM/dd/yyyy"}}
@@ -455,7 +455,7 @@
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
         [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow"
-        (select)="openSalesMargin($event)" (close)="onClose($event)">
+        (select)="openSalesMargin($event)" (close)="onClose($event)" [type]="'SOQ'">
     </app-add-sales-part-number>
 </ng-template>
 

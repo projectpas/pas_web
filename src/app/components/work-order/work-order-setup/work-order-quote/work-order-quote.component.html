@@ -224,14 +224,14 @@
                     <label for="Employee">
                         Employee
                     </label>
-                    <p-autoComplete field="label"  (ngModelChange)="getValid()"
+                    <p-autoComplete field="label"  (ngModelChange)="getValid()" 
                                     [(ngModel)]="quoteForm.employeeId"
                                     name="employees" #employees="ngModel"
                                     errorMessage="Records not found" [forceSelection]="true"
                                     [dropdown]="true" [suggestions]="employeeList"
                                     (completeMethod)="filterEmployee($event)"
                                     [size]="30" [minLength]="1" [dropdown]="true"
-                                    class="p-autoComplete-ctsm" [disabled]="isView">
+                                    class="p-autoComplete-ctsm" [disabled]="true">
                     </p-autoComplete>
                     <!-- <input class="form-control" type="text" [(ngModel)]="employeeName" name="Employee"/> -->
                 </div>
@@ -709,7 +709,7 @@
         <div >
 
             <div class="col-md-12">
-                <div class="col-md-3" *ngIf="!savedWorkOrderData.isSinglePN">
+                <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==false">
                     <!-- <div class="form-group "> -->
                         <label class="fs12">
                             MPN
@@ -726,7 +726,7 @@
                         </p-dropdown>
                     <!-- </div> -->
                 </div>
-                <div class="col-md-3" *ngIf="savedWorkOrderData.isSinglePN">
+                <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==true">
                     <label class="fs12">
                         Part Number:
                     </label>
@@ -1623,7 +1623,7 @@
                                     [isQuote]="isQuote"
                                     [isEdit]="isEdit"
                                     [editData]="editData"
-                                    [workFlow]="workFlowObject"
+                                    [workFlow]="workFlowObject" 
                                     [isWorkOrder]="isWorkOrder"
                                     [markupList]="markupList"
                                     [taskList]="taskList"
@@ -1633,7 +1633,6 @@
             </div>
         </div>
     </div>
-
     <div id="showHistoricalWorkOrder"
          class="modal fade"
          role="dialog"
@@ -1646,7 +1645,7 @@
                         &times;
                     </button>
                 </div>
-                <div class="modal-body table-responsive">
+                <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
                     <div class="form-group" style="color: red; font-size: 20px;">
                         {{(displayType == 'use historical wos')?'List of Historical Workorders for MPN '+this.selectedPartNumber['partNumber']:'List of Historical Workorder Quotes for MPN '+this.selectedPartNumber['partNumber']}}
                     </div>
