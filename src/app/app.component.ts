@@ -1719,7 +1719,12 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.authService.SetMenuInfo(data[0]);
           this.dynamicMenu();
         });
+          //  this.moduleHierarchy = this.authService.getModuleByUserRole();
+          //  alert(this.moduleHierarchy);
+          //  this.dynamicMenu();
+        //console.log(this.authService.getModuleByUserRole());
       }
+      
       }
       else{
         this.megaMenuItems=[];

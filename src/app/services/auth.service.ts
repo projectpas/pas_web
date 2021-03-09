@@ -58,6 +58,7 @@ private defaultEmployeeDetails= new Subject<any>()
 
     public SetMenuInfo(newValue: ModuleHierarchyMaster[]): void {
         this.ModuleInfo.next(Object.assign([], newValue));
+        this.localStorage.saveSyncedSessionData(newValue, "UserRoleModule");
       }
     //  public  removeMenuInfo() {
     //     this.ModuleInfo.next([]);
@@ -247,7 +248,9 @@ private defaultEmployeeDetails= new Subject<any>()
         this.loadGlobalSettings();
         this.getEmployeeDetails(user);
         this.getManagementstructureDetails(user);
-
+        // if(user.roleID!=undefined){
+        // this.TestROle(user.roleID);
+        // }
         return user;
     }
 
@@ -349,6 +352,7 @@ private defaultEmployeeDetails= new Subject<any>()
         this.localStorage.deleteData(DBkeys.GLOBAL_SETTINGS);
         this.localStorage.deleteData(DBkeys.EMPLOYEE);
         this.localStorage.deleteData(DBkeys.MANAGEMENTSTRUCTURE);
+        this.localStorage.deleteData("UserRoleModule");
         this.configurations.clearLocalChanges();
 
         this.reevaluateLoginStatus();
@@ -445,8 +449,13 @@ private defaultEmployeeDetails= new Subject<any>()
         return new Promise((resolve) => {
             this.userRoleService.getUserMenuByRoleId(roleID).subscribe(data=>{
                 resolve(data[0]);
+               
             })
         });
+      }
+
+      public getModuleByUserRole(): ModuleHierarchyMaster[]{
+        return  this.localStorage.getData("UserRoleModule");
       }
 
       public checkPermission(permissionName:string):boolean{
@@ -461,6 +470,27 @@ private defaultEmployeeDetails= new Subject<any>()
            
         }
         
+        return isAllowed;
+      }
+
+      public ShowTab(moduleName:string, tabName: string):Boolean {
+        let Menus:ModuleHierarchyMaster[] = this.getModuleByUserRole();
+        //alert(Menus);
+        tabName = tabName.toLocaleLowerCase();
+         let isAllowed:Boolean = false;
+
+        var parentModule=Menus.filter(function(value){
+            return value.name==moduleName;
+        });
+
+        if(parentModule!=undefined){
+            Menus.forEach(el => {
+                if(el.parentId==parentModule[0].id && el.name.toLocaleLowerCase().indexOf(tabName) != -1)
+                {
+                  isAllowed = true;
+                }
+              });
+        }
         return isAllowed;
       }
 }

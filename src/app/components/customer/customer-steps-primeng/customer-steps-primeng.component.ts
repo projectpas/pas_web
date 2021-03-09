@@ -43,6 +43,7 @@ export class CustomerStepsPrimengComponent {
 	customerIdList: any[] = [];
 	arrayCustlist:any[] = [];
 	isView:boolean=true;
+	isShowGeneralInfo
 	constructor(private customerService: CustomerService,
 		private acRouter: ActivatedRoute,
 		public employeeService: EmployeeService,
@@ -55,6 +56,12 @@ export class CustomerStepsPrimengComponent {
 		private authService: AuthService,
 	) {
 		this.isView=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.View);
+	}
+
+	isShowTab(value){
+		debugger;
+		var isShow=this.authService.ShowTab('Create Customer',value);
+		return isShow;
 	}
 	ngOnInit() {
 		this.customerId = this.acRouter.snapshot.params['id'];
