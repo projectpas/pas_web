@@ -48,7 +48,7 @@ export class WorkOrderQuote {
     IsActive:boolean = true;
     IsDeleted:boolean = false;
     creditTermsandLimit: string;
-    quoteNumber: any;
+    quoteNumber: any='Creating';
     expirationDateStatus: number;
     employeeId: any;
     versionNo: any;

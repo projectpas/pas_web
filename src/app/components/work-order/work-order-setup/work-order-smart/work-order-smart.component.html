@@ -1,40 +1,15 @@
 <div >
-    <!--{{isEdit}}
-  {{editWorkOrderGeneralInformation}}
-  {{workOrderTypes}}
-  {{workOrderStatusList}}
-  {{technicianOriginalList }}-->
-  <div *ngIf="
-    (isEdit)">
+  <div *ngIf="isEdit">
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
       [jobTitles]="jobTitles" [workOrderStagesList]="workOrderStagesList"
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
       [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
       [workorderSettings]="workorderSettings" [partNumberOriginalData]="partNumberOriginalData" 
-      [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
-     >
+      [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList">
     </app-work-order-add>
   </div>
-  <!-- creditTerms && && technicianByExpertiseTypeList && technicianOriginalList && technicianOriginalList &&
-    editWorkOrderGeneralInformation &&
-    workOrderTypes &&
-    workOrderStatusList &&    
-    workOrderStagesList &&
-    partNumberOriginalData &&
-    jobTitles   && salesPersonOriginalList && salesAgentsOriginalList
-     && csrOriginalList 
-    
-     workOrderTypes &&
-      workOrderStatusList &&      
-      workOrderStagesList &&    
-      partNumberOriginalData &&     
-       jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList -->
-
-  <div *ngIf="
-    !(
-      isEdit     
-    )">
+  <div *ngIf="!isEdit">
     <!-- using add form as subworkOrder also -->
     <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
@@ -55,7 +30,6 @@
     <img src="../../../../assets/images/loader.gif">
   </div>
 </ng-template>
-
 <div class="preloader" *ngIf="isSpinnerEnable">
   <div class="loading">
       <div class="lds-roller">
