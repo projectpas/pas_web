@@ -1987,20 +1987,19 @@
               </div>
               <div class="col-md-3 cli_vds">
                 <div class="form-group">
-                  <label>Ship Via <span class="clr-red">*</span></label>
+                  <label>Ship Via <span class="clr-red"></span></label>
                   <p-dropdown name="company2" (ngModelChange)="enableSaveShipViaInternational()" #wocompanyId2="ngModel"
-                    required [options]="shipViaDropdownList" placeholder="Select Ship Via"
+                    [options]="shipViaDropdownList" placeholder="Select Ship Via"
                     class="p-dropdown-custom-md p-dropdown-cus-fullwidth" [(ngModel)]="shipViaInternational.shipViaId">
                   </p-dropdown>
                 </div>
               </div>
-
               <div class="col-md-2">
                 <div class="form-group">
-                  <label>Shipping Account <span class="clr-red">*</span></label>
+                  <label>Shipping Account <span class="clr-red"></span></label>
                   <input class="form-control" type="text" name="shippingAccountinfo"
                     (ngModelChange)="enableSaveShipViaInternational()"
-                    [(ngModel)]="shipViaInternational.shippingAccountInfo" required />
+                    [(ngModel)]="shipViaInternational.shippingAccountInfo" />
                 </div>
               </div>
               <div class="col-md-3">
