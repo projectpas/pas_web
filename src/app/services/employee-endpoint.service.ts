@@ -120,257 +120,232 @@ export class EmployeeEndpoint extends EndpointFactory {
 	}
 
 	getEmployeeEndpoint<T>(): Observable<T> {
-
 		return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getEmployeeCommonEndpoint<T>(managementStructureId): Observable<T> {
 		let endpointUrl = `${this.getEmployeeCommonDataUrl}/${managementStructureId}`
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeCommonEndpoint(managementStructureId));
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeCommonEndpoint(managementStructureId));
+		});
 	}
-	getEmployeeNamesEndpoint<T>(): Observable<T> {
 
+	getEmployeeNamesEndpoint<T>(): Observable<T> {
 		return this.http.get<T>(this.actionsNameUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeNamesEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeNamesEndpoint());
+		});
 	}
 
 	getEmployeeEndpointforView<T>(employeeId): Observable<T> {
 		let endpointUrl = `${this.getView}/${employeeId}`;
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getEmployeeCertifications<T>(employeeId): Observable<T> {
-
-
 		let endpointUrl = `${this._certificationUrlNew}/${employeeId}`;
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getNewLeaveEndpoint<T>(userObject: any): Observable<T> {
-
 		return this.http.post<T>(this._newLeavesUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getNewLeaveEndpoint(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getNewLeaveEndpoint(userObject));
+		});
 	}
-
 
 	employeeLeavetypeAdd<T>(userObject: any): Observable<T> {
-
 		return this.http.post<T>(this._actionsUrlLeaveTypeMap, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getNewEmployeeEndpoint(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getNewEmployeeEndpoint(userObject));
+		});
 	}
-	employeeLeavetypeRemove<T>(userObject: any): Observable<T> {
 
+	employeeLeavetypeRemove<T>(userObject: any): Observable<T> {
 		return this.http.post<T>(this._actionsUrlLeaveTypeMapRemove, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getNewEmployeeEndpoint(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getNewEmployeeEndpoint(userObject));
+		});
 	}
-	employeeshifttypeRemove<T>(userObject: any): Observable<T> {
 
+	employeeshifttypeRemove<T>(userObject: any): Observable<T> {
 		return this.http.post<T>(this._actionsUrlShiftTypeMapRemove, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getNewEmployeeEndpoint(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getNewEmployeeEndpoint(userObject));
+		});
 	}
 
 	employeeShifttypeAdd<T>(userObject: any): Observable<T> {
-
 		return this.http.post<T>(this._actionsUrlShiftTypeMap, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getNewEmployeeEndpoint(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getNewEmployeeEndpoint(userObject));
+		});
 	}
 
 	getRolesSetupEntityData<T>(): Observable<T> {
-
 		return this.http.get<T>(this.rolesUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
-	getUserRolelevelList<T>(): Observable<T> {
 
+	getUserRolelevelList<T>(): Observable<T> {
 		return this.http.get<T>(this.userrolevelList, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
-	getshiftEndpoint<T>(): Observable<T> {
 
+	getshiftEndpoint<T>(): Observable<T> {
 		return this.http.get<T>(this.getshiftUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getCountriesEndpoint<T>(): Observable<T> {
-
 		return this.http.get<T>(this.getCountriesUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getEmployeeLeaveTypeEndpoint<T>(): Observable<T> {
-
 		return this.http.get<T>(this.getEmployeeLeaveTypeUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getEmployeeTrainingTypeEndpoint<T>(): Observable<T> {
-
 		return this.http.get<T>(this.getEmployeeTrainingTypeUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
+
 	getNewEmployeeEndpoint<T>(userObject: any): Observable<T> {	
 		return this.http.post<T>(this.createnewemployee, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewEmployeeEndpoint(userObject));
-			});
+		});
 	}
 
-	getNewCertification<T>(userObject: any): Observable<T> {
-		// debugger;
+	getNewCertification<T>(userObject: any): Observable<T> {		
 		return this.http.post<T>(this.createnewemployeeCerti, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewCertification(userObject));
-			});
+		});
 	}
 
-	addRolesData<T>(userObject: any): Observable<T> {
-		// debugger;
+	addRolesData<T>(userObject: any): Observable<T> {		
 		return this.http.post<T>(this._addRolesData, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.addRolesData(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.addRolesData(userObject));
+		});
 	}
 
-	deleteRoleData<T>(userObject: any): Observable<T> {
-		// debugger;
+	deleteRoleData<T>(userObject: any): Observable<T> {	
 		let endpointUrl = `${this._deleteRoleById}/${userObject}`;
-
 		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.deleteRoleData(userObject));
-			});
-
+				return this.handleErrorCommon(error, () => this.deleteRoleData(userObject));
+		});
 	}
 
 	getNewTrainingEndpoint<T>(userObject: any): Observable<T> {
-
 		return this.http.post<T>(this.createnewemployeetrining, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getNewTrainingEndpoint(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getNewTrainingEndpoint(userObject));
+		});
 	}
 
 	//getCerEmployeeEndpoint<T>(employeeLicensureId: any): Observable<T> {
-
 	//    return this.http.post<T>(this._certificationUrlNew, JSON.stringify(employeeLicensureId), this.getRequestHeaders())
 	//        .catch(error => {
 	//            return this.handleError(error, () => this.getCerEmployeeEndpoint(employeeLicensureId));
 	//        });
 	//}
 
-
 	getCerEmployeeEndpoint<T>(employeeLicensureId: any): Observable<T> {
 		let endpointurl = `${this.certificationUrlNew}/${employeeLicensureId}`;
 		return this.http.get<T>(endpointurl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getTrainEmployeeEndpoint<T>(employeeTrainingId: any): Observable<T> {
 		let endpointurl = `${this.trainUrlNew}/${employeeTrainingId}`;
 		return this.http.get<T>(endpointurl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getTrainingType<T>(): Observable<T> {
-
 		return this.http.get<T>(this.trainingTypeUrlNew, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
 
 	getHistoryEmployeeEndpoint<T>(employeeId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlAuditHistory}/${employeeId}`;
-
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getHistoryEmployeeEndpoint(employeeId));
-			});
+				return this.handleErrorCommon(error, () => this.getHistoryEmployeeEndpoint(employeeId));
+		});
 	}
 
 	getEditEmployeeEndpoint<T>(employeeId?: number): Observable<T> {
 		let endpointUrl = employeeId ? `${this._actionsUrlNew}/${employeeId}` : this._actionsUrlNew;
-
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEditEmployeeEndpoint(employeeId));
-			});
+				return this.handleErrorCommon(error, () => this.getEditEmployeeEndpoint(employeeId));
+		});
 	}
 
 	getUpdateEmployeeEndpoint<T>(roleObject: any, employeeId: number): Observable<T> {
 		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlNewUpdate}/${employeeId}`;
-
 		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getUpdateEmployeeEndpoint(roleObject, employeeId));
-			});
+		});
 	}
 
 	updateEmployeeListDetails<T>(roleObject: any): Observable<T> {
-
 		let endpointUrl = `${this._employeeUpdateUrl}/${roleObject.employeeId}`;
 		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.updateEmployeeListDetails(roleObject));
-			});
+				return this.handleErrorCommon(error, () => this.updateEmployeeListDetails(roleObject));
+		});
 	}
 
 	updateCertificationListDetails<T>(roleObject: any): Observable<T> {
-
 		let endpointUrl = this.configurations.baseUrl + `${this._certifiUpdateUrl}/${roleObject.employeeCertificationId}`;
 		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateCertificationListDetails(roleObject));
-			});
+		});
 	}
 
 	updateTrainingListDetails<T>(roleObject: any): Observable<T> {
-
 		let endpointUrl = this.configurations.baseUrl + `${this._trainingUpdateUrl}/${roleObject.employeeTrainingId}`;
 		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.updateTrainingListDetails(roleObject));
-			});
+				return this.handleErrorCommon(error, () => this.updateTrainingListDetails(roleObject));
+		});
 	}
 
 	getDeleteEmployeeEndpoint<T>(employye: any): Observable<T> {
@@ -378,104 +353,97 @@ export class EmployeeEndpoint extends EndpointFactory {
 		return this.http.put<T>(endpointUrl, JSON.stringify(employye), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getDeleteEmployeeEndpoint(employye));
-			});
+		});
 	}
+
 	getUpdatecustomerEndpointforActive<T>(roleObject: any, employeeId: number): Observable<T> {
 		let endpointUrl = this.configurations.baseUrl + `${this._updateActiveInactive}/${roleObject.employeeId}`;
-
 		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getUpdatecustomerEndpoint(roleObject, employeeId));
-			});
-
+		});
 	}
+
 	getUpdatecustomerEndpoint<T>(roleObject: any, employeeId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew}/${roleObject.employeeId}`;
-
 		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getUpdatecustomerEndpoint(roleObject, employeeId));
-			});
-
+				return this.handleErrorCommon(error, () => this.getUpdatecustomerEndpoint(roleObject, employeeId));
+		});
 	}
 
 	getEmployeeShiftEndpoint<T>(): Observable<T> {
-
 		return this.http.get<T>(this._actionsUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeEndpoint());
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
+		});
 	}
+
 	getemployeeshiftsList<T>(action: any): Observable<T> {
 		let url = `${this.getemployeeshiftsListUrl}/${action}`;
 		return this.http.get<T>(url, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getemployeeshiftsList(action));
+				return this.handleErrorCommon(error, () => this.getemployeeshiftsList(action));
 			});
 	}
 
 	getShifts<T>(userObject: any): Observable<T> {
-
-
 		return this.http.post<T>(this._shiftsurl, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getShifts(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getShifts(userObject));
+		});
 	}
 
 	getMultileaves<T>(userObject: any): Observable<T> {
-
-
 		return this.http.post<T>(this._multileavesurl, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getMultileaves(userObject));
-			});
+				return this.handleErrorCommon(error, () => this.getMultileaves(userObject));
+		});
 	}
 
 	getAllRolesOfEmployee<T>(): Observable<T> {	   
 		return this.http.get<T>(this.getAllEmployeeRoles, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getAllRolesOfEmployee());
-			});
+		});
 	}
 
 	getleavedata<T>(employeeId: any): Observable<T> {
 		let url = `${this.getLeavesListUrl}/${employeeId}`;
 		return this.http.get<T>(url, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getleavedata(employeeId));
-			});
+				return this.handleErrorCommon(error, () => this.getleavedata(employeeId));
+		});
 	}
 
 	getAllEmployeesInfo<T>(): Observable<T> {
 		let endPointURL = this._getAllEmployeeInfoURL;
 		return this.http.get<T>(endPointURL, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getAllEmployeesInfo());
-			});
-
+				return this.handleErrorCommon(error, () => this.getAllEmployeesInfo());
+		});
 	}
 
 	getEmployeeDataById<T>(employeeId): Observable<T> {
 		let endpointUrl = `${this._getEmpDataByid}/${employeeId}`;
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeDataById(employeeId));
-			});
+				return this.handleErrorCommon(error, () => this.getEmployeeDataById(employeeId));
+		});
 	}
 
 	storeEmployeeRoles<T>(data): Observable<T> {
 		return this.http.post<T>(this.getStoreEmployeeRolesUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getMultileaves(data));
-			});
+		});
 	}
 	//get all employee list
 	getAllEmployeeList(data) {
 		return this.http.post(this.employeeListUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getAllEmployeeList(data));
-			});
+		});
 	}
 	// employee global search
 	//employeeListGlobalSearch(data) {
@@ -484,47 +452,44 @@ export class EmployeeEndpoint extends EndpointFactory {
 	employeeListGlobalSearch(data) {
 		return this.http.post(this.employeeGlobalSearchUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.employeeListGlobalSearch(data));
-			});
+				return this.handleErrorCommon(error, () => this.employeeListGlobalSearch(data));
+		});
 	}
+
 	storeEmployeeManagementStructure<T>(data): Observable<T> {
 		return this.http.post<T>(this.getStoreEmployeeManagementStructure, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getMultileaves(data));
-			});
+				return this.handleErrorCommon(error, () => this.getMultileaves(data));
+		});
 	}
 
 	getEmployeeRoles<T>(empId: any): Observable<T> {         
 		return this.http.get<T>(`${this.getEmployeeRolesUrl}?employeeId=${empId}`, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
-			});
+		});
 	}
 
 	getStoredEmployeeManagementStructure<T>(employeeId): Observable<T> {
 		return this.http.get<T>(`${this.getEmployeeManagementStructure}?employeeId=${employeeId}`, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getEmployeeEndpoint());
-			});
+		});
 	}
 
 	getEmployeeAuditDetailsEndPoint<T>(employeeId): Observable<T> {
 		return this.http.get<T>( this.configurations.baseUrl + `${this._getEmployeeAuditHistoryByEmpId}/${employeeId}`, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getEmployeeAuditDetailsEndPoint(employeeId));
-			});
+		});
 	}
-
-
 
 	getEmployeeUpdateMemoEndpoint<T>(employeeId: number, memo: any): Observable<T> {
 		let endpointUrl = this.configurations.baseUrl + `${this._actionsUrlEmployeeMemoUpdate}?employyeId=${employeeId}&memo=${memo}`;
-
 		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getEmployeeUpdateMemoEndpoint(employeeId, memo));
-			});
-
+				return this.handleErrorCommon(error, () => this.getEmployeeUpdateMemoEndpoint(employeeId, memo));
+		});
 	}
 
 	// uploadEmployeeTrainingDocEndpoint<T>(file: any): Observable<T> {
@@ -536,16 +501,15 @@ export class EmployeeEndpoint extends EndpointFactory {
 		return this.http.get<T>(this.configurations.baseUrl + `${this._getEmployeeDetailsByEmpId}/${employeeId}`, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getEmployeeAuditDetailsEndPoint(employeeId));
-			});
+		});
 	}
 
 	downloadAllEmployeeList<T>(employeeId): Observable<T> {
 		let url =  this.configurations.baseUrl + this._employeeTotallistUrl;		
 		return this.http.post<T>(url, employeeId, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.downloadAllEmployeeList(employeeId));
-			});
-	}
-	
+				return this.handleErrorCommon(error, () => this.downloadAllEmployeeList(employeeId));
+		});
+	}	
 
 }

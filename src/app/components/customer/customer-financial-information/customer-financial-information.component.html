@@ -115,7 +115,7 @@
                   </div>
 
                   <div class="col-md-2">
-                    <div class="form-group m-t-15"  *ngIf="showAllowNettingOfAPAR == true">
+                    <!-- <div class="form-group m-t-15"  *ngIf="showAllowNettingOfAPAR == true">
                       <span class="checkbox-cstm">
                         <label>
                           <input type="checkbox" name="allowNettingOfAPAR" (ngModelChange)="enableSave()" [(ngModel)]="
@@ -125,7 +125,20 @@
                           Allow Netting of AP/AR
                         </label>
                       </span>
-                    </div>
+                    </div> -->
+                   
+                      <div class="form-group m-t-15">
+                        <span class="checkbox-cstm">
+                          <label>
+                            <input type="checkbox" [disabled]="showAllowNettingOfAPAR" name="allowNettingOfAPAR" (ngModelChange)="enableSave()" [(ngModel)]="
+                                savedGeneralInformationData.allowNettingOfAPAR
+                              " />
+                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                            Allow Netting of AP/AR
+                          </label>
+                        </span>
+                      </div>
+
                     <div class="form-group partial-billing-div">
                       <span class="checkbox-cstm">
                         <label>
