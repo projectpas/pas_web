@@ -194,9 +194,9 @@ export class WorkOrderSmartComponent implements OnInit {
     getAllSalesEmployeeListByJobTitle(jobTitles) {
 
         const CSRid = getValueByFieldFromArrayofObject('jobTitle', 'CSR', this.jobTitles);
-        const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'Sales', this.jobTitles);
-        const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'Agents', this.jobTitles);
-        const Technicianid = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
+        const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'SALES', this.jobTitles);
+        const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'AGENT', this.jobTitles);
+        const Technicianid = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles); 
         if (CSRid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
