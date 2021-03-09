@@ -190,6 +190,14 @@
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.priorityName }}
                                     </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
+                                            #priorityId="ngModel" (change)="onEditPartDetails()">
+                                            <option *ngFor=" let p of salesQuote.priorities" [ngValue]="p.priorityId">
+                                                {{ p.description }}
+                                            </option>
+                                        </select>
+                                    </td>
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
                                     </td>
@@ -262,14 +270,6 @@
                                     </td>
                                     <td>
                                         {{  part.altOrEqType }}
-                                    </td>
-                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
-                                            #priorityId="ngModel" (change)="onEditPartDetails()">
-                                            <option *ngFor=" let p of salesQuote.priorities" [ngValue]="p.priorityId">
-                                                {{ p.description }}
-                                            </option>
-                                        </select>
                                     </td>
                                     <td>
                                         {{ part.statusName }}
@@ -488,7 +488,7 @@
 <ng-template #addPart let-c="close" let-d="dismiss">
     <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
         (select)="openSalesMargin($event)" [isStockLineViewMode]="isStockLineViewMode"
-        [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)">
+        [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)" [type]="'SO'">
     </app-add-sales-part-number>
 </ng-template>
 <ng-template #salesReserve let-c="close" let-d="dismiss">
