@@ -29,7 +29,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
         return this.http.get<T>(this.jobtitleurl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getJobtitleEndpoint());
+                return this.handleErrorCommon(error, () => this.getJobtitleEndpoint());
             });
     }
 
@@ -37,7 +37,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
         return this.http.post<T>(this._JobTilesUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewjobtitleEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewjobtitleEndpoint(userObject));
             });
     }
 
@@ -46,7 +46,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditJobTitleEndpoint(actionId));
+                return this.handleErrorCommon(error, () => this.getEditJobTitleEndpoint(actionId));
             });
     }
 
@@ -55,7 +55,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateJobtitleEndpoint(roleObject, actionId));
+                return this.handleErrorCommon(error, () => this.getUpdateJobtitleEndpoint(roleObject, actionId));
             });
     }
 
@@ -64,7 +64,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeleteJobTitleEndpoint(actionId));
+                return this.handleErrorCommon(error, () => this.getDeleteJobTitleEndpoint(actionId));
             });
     }
 
@@ -73,7 +73,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
 		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleError(error, () => this.getHistoryJobTitleEndpoint(jobTitleId));
+				return this.handleErrorCommon(error, () => this.getHistoryJobTitleEndpoint(jobTitleId));
 			});
     }
     
@@ -82,7 +82,7 @@ export class JobTitleEndpontService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getJobTitleAuditById(jobTitleId));
+                return this.handleErrorCommon(error, () => this.getJobTitleAuditById(jobTitleId));
             });
     }
 }
