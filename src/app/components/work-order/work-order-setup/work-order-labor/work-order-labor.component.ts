@@ -1202,7 +1202,7 @@ this.commonfunctionHandler();
   taskComletedByConfirmation(event) {
     $('#confirmation').modal('show');
   }
-  checkHoursAndDirectLabour() {
+  checkHoursAndDirectLabour() { 
     var result = false;
     for (let task in this.laborForm.workOrderLaborList[0]) {
       this.laborForm.workOrderLaborList[0][task].forEach(

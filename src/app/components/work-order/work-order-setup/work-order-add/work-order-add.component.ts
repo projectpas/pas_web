@@ -1692,7 +1692,8 @@ export class WorkOrderAddComponent implements OnInit {
                 return {
                     id: x.value,
                     description: x.label.toLowerCase(),
-                    taskId: x.value
+                    taskId: x.value,
+                    label:x.label.toLowerCase(),
                 }
             });
             if (this.labor.workOrderLaborList && this.labor.workOrderLaborList.length != 0) {

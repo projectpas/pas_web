@@ -184,6 +184,12 @@ export class SalesOrderListComponent implements OnInit {
     { field: 'isDeleted', header: 'Is Deleted', isRequired: 0 }
   ]
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : null;
+  }
+
   getDeleteListByStatus(value) {
     this.currentDeletedstatus = value;
     this.pageIndex = this.searchParameters.rows > 10 ? this.searchParameters.first / this.searchParameters.rows : 0;
@@ -223,6 +229,7 @@ export class SalesOrderListComponent implements OnInit {
       viewType: this.viewType
     }
 
+    this.searchParameters.filters.masterCompanyId = this.currentUserMasterCompanyId;
     this.searchParameters.globalFilter = globalFilter;
     if (this.isSettingsReceived) {
       this.onSearch();
@@ -248,8 +255,8 @@ export class SalesOrderListComponent implements OnInit {
                 quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy') : '',
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
-                requestedDateType: moment(x.requestedDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.requestedDateType ? this.datePipe.transform(x.requestedDateType, 'MMM-dd-yyyy hh:mm a') : ''),
-                estimatedShipDateType: moment(x.estimatedShipDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '')
+                requestedDateType: moment(x.requestedDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.requestedDateType && x.requestedDateType != 'Multiple' ? this.datePipe.transform(x.requestedDateType, 'MMM-dd-yyyy hh:mm a') : ''),
+                estimatedShipDateType: moment(x.estimatedShipDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.estimatedShipDateType && x.estimatedShipDateType != 'Multiple' ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '')
               }
             });
 

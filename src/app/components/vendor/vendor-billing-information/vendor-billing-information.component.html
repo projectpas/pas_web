@@ -355,7 +355,7 @@
             <table class="table table-bordered header-table-width" *ngIf="billingauditHisory.length> 0 else noDatavailable">
                 <thead>
                     <tr>
-                        <th>Tag <span class="clr-red">*</span></th>
+                        <th>Tag <span class="clr-red"></span></th>
                         <th>Attention</th>
                         <th>Site Name <span class="clr-red">*</span></th>
                         <th>Address1 <span class="clr-red">*</span></th>
@@ -494,7 +494,7 @@
                         <input type="checkbox" name="isPrimary" disabled>
                     </div>    
             </span></p>
-            <p><span class="label"><b>Tag: </b><span class="clr-red">*</span></span><span
+            <p><span class="label"><b>Tag: </b><span class="clr-red"></span></span><span
                 class="value">{{ sourceVendor.tagName}}</span></p>
             <p><span class="label"><b>Attention: </b><span class="clr-red">*</span></span><span
                 class="value">{{sourceVendor.attention}}</span></p>
@@ -571,14 +571,14 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="col-sm-4">
-                                    <label>Tag <span class="clr-red">*</span></label>
+                                    <label>Tag <span class="clr-red"></span></label>
                                   </div>
                                 <div class="col-sm-5">
                                     <div class="inner-addon right-addon inline-block" style="width: 100%">
                                       <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.tagName"
                                         (ngModelChange)="enableSave()" name="tagName" field="tagName" [suggestions]="tagNamesList"
                                         (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                                        [inputStyle]="{ width: '100%' }" [forceSelection]="true" required>
+                                        [inputStyle]="{ width: '100%' }" [forceSelection]="true">
                                       </p-autoComplete>
                                     </div>
                                   </div>

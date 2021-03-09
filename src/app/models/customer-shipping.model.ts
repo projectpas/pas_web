@@ -19,6 +19,8 @@ export class CustomerShippingModel {
                 this.customerId = null;
                 this.vendorId = null;
                 this.isPrimary = false;
+                this.contactTagId = 0
+                this.tagName ="";
         
                 // this.CustomerShippingId = CustomerShippingId;
                 // this.CustomerId = CustomerId;
@@ -49,7 +51,9 @@ export class CustomerShippingModel {
             public customerId : number;
             public vendorId: number;
             public isPrimary: boolean;
-        
+            public contactTagId : number;
+            public tagName:string
+          
             // public CustomerShippingId: number;
             // public CustomerId: number;
             // public AddressId: number;
