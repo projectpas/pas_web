@@ -203,12 +203,12 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             });
         })
     }
-    createNew() {
+    createNew() { 
         this.isEdit = false;
         let newFreight = new Freight();
         newFreight.isShowDelete=false;
         newFreight.amount = this.formateCurrency(newFreight.amount);
-        const taskId = this.taskList.filter(x => x.description === 'shipping');
+        const taskId = this.taskList.filter(x => x.description.toLowerCase() == 'shipping');
         console.log("taskId",taskId)
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [newFreight];
@@ -232,6 +232,19 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
        this.getUOMList('');
        this.disableUpdate=true;
     }
+    checkAmount(){
+        var result = false;
+        for (let data in this.freightForm) {
+          this.freightForm.forEach(
+            data => {
+              if (data.amount <= 0 ) {
+                result = true; 
+              }
+            }
+          )
+        }
+        return result;
+      }
     getActive(){
         this.disableUpdate=false;
     }

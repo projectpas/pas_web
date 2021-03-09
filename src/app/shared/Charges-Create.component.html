@@ -104,7 +104,8 @@
         <td></td>
         <td *ngIf="isWorkOrder || isQuote">&nbsp;</td>
         <td>&nbsp;</td>
-        <td *ngIf="!isQuote" class="text-right"><b>{{ workFlow.extendedCostSummation }}</b></td>
+        <!-- *ngIf="!isQuote" -->
+        <td  class="text-right"><b>{{ workFlow.extendedCostSummation }}</b></td>
         <td>&nbsp;</td>
         <td></td>
         <!-- <td *ngIf="!isQuote" class="align_rightset"><b>{{ workFlow.totalChargesCost }}</b></td> -->

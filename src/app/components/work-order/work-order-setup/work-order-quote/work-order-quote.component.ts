@@ -1029,7 +1029,7 @@ this.creditTerms=res.creditTerm;
             let laborList = this.labor.workOrderLaborList;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
-            this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId;
+            this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId; 
             this.taskList.forEach((tl) => {
                 if (res) {
                     res.laborList.forEach((rt) => {
@@ -1141,13 +1141,15 @@ this.creditTerms=res.creditTerm;
     }
 
     checkForAllEmpty(){
-        let result = true;
-        for(let x of this.labor.workOrderLaborList[0]){
-            if(this.labor.workOrderLaborList[0][x].length>0){
-                result = false;
-            }
-        }
-        return result;
+        // let result = true;
+        // console.log("this.labor",this.labor)
+        // console.log("this.labor.workOrderLaborList",this.labor.workOrderLaborList)
+        // for(let x of this.labor.workOrderLaborList[0]){
+        //     if(this.labor.workOrderLaborList[0][x].length>0){
+        //         result = false;
+        //     }
+        // }
+        // return result;
     }
     getQuoteInfo(data) {
         this.selectedWorkFlowOrWorkOrder = data;
@@ -1654,7 +1656,10 @@ this.creditTerms=res.creditTerm;
         this.commonService.smartDropDownList('task', 'taskId', 'description')
             .subscribe(
                 (taskList) => {
-                    taskList = taskList.map(x=>{return {'taskId': x.value, 'description': x.label}})
+                    taskList = taskList.map(x=>{return {
+                        ...x,
+                        'taskId': x.value, 'description': x.label}
+                    })
                     this.labor.workOrderLaborList[0] = {}
                     this.taskList = taskList;
                     this.formTaskList();
@@ -2274,7 +2279,7 @@ this.creditTerms=res.creditTerm;
         }
     }
     getQuoteLaborListByWorkOrderQuoteId() {
-        if (this.workOrderQuoteDetailsId) {
+        if (this.workOrderQuoteDetailsId) { 
             this.isSpinnerVisible = true;
             this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
                 this.isSpinnerVisible = false;
@@ -2628,7 +2633,7 @@ this.creditTerms=res.creditTerm;
         }
     }
 
-    getApproversList(){
+    getApproversList(){ 
         let currentUser = JSON.parse(window.sessionStorage.getItem('current_user'));
         if(!currentUser){
             currentUser = JSON.parse(window.localStorage.getItem('current_user'));
