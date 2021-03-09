@@ -62,8 +62,9 @@ export class CustomerWarningsComponent implements OnInit {
 
 	getTypesOfWarnings(){
 		this.isSpinnerVisible = true;
-		this.commonService.smartDropDownList('CustomerWarningType','CustomerWarningTypeId', 'Name').subscribe(data => {
-			this.types = data;
+		//this.commonService.smartDropDownList('CustomerWarningType','CustomerWarningTypeId', 'Name').subscribe(data => {
+		this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(data => {
+			this.types = data;			
 			if (!this.editMode) {
 				this.warningMessages = this.types.map(x => {
 					return {
@@ -76,17 +77,14 @@ export class CustomerWarningsComponent implements OnInit {
 						restrictMessage: '',
 						customerWarningTypeId: x.value
 					}
-				})
-
+				})				
 				this.allowAll(true);
 			}
-			else	
-			{
+			else{
 				this.initWarningData();
-			}			
-				
+			}	
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false;})
 	}
 
 	onRestrictClick($event, i){
@@ -237,7 +235,7 @@ export class CustomerWarningsComponent implements OnInit {
 					this.allowAll(true);
 				}
 				this.isSpinnerVisible = false;
-			}, error => this.saveFailedHelper(error))
+			}, error => {this.isSpinnerVisible = false;})
 
 		} 
 		else {
@@ -277,18 +275,16 @@ export class CustomerWarningsComponent implements OnInit {
 		await this.customerService.getCustomerWarningsById(this.id).subscribe(res => {
 			this.customerWarningData = res;
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false;})
 	}
 
 	allowAll(value) {
-
 		if (value) {
 			this.warningMessages = this.warningMessages.map(x => {
 
 				return {
 					...x,
 					allow: true,
-
 				}
 			});
 			this.isAllow = value;
@@ -298,7 +294,6 @@ export class CustomerWarningsComponent implements OnInit {
 				return {
 					...x,
 					allow: false,
-
 				}
 			});
 			this.isAllow = value;
@@ -306,19 +301,15 @@ export class CustomerWarningsComponent implements OnInit {
 	}
 
 	warningAll(value) {
-
 		if (value) {
 			this.warningMessages = this.warningMessages.map(x => {
-
 				return {
 					...x,
 					warning: true
 				}
 			})
 			this.isWarning = value;
-
 		} else {
-
 			this.warningMessages = this.warningMessages.map(x => {
 				return {
 					...x,
@@ -326,13 +317,11 @@ export class CustomerWarningsComponent implements OnInit {
 				}
 			})
 			this.isWarning = value;
-
 		}
 	}
 
 	restrictAll(value) {
 		if (value) {
-
 			this.warningMessages = this.warningMessages.map(x => {
 				return {
 					...x,
@@ -376,7 +365,6 @@ export class CustomerWarningsComponent implements OnInit {
 				customerWarningTypeId : x.customerWarningTypeId
 			}
 		})
-
 		const warningsData = {
 			warningsData: [...data],
 			customerWarningsId: this.customerWarningsId == null || this.customerWarningsId == undefined ? 0 : this.customerWarningsId,
@@ -410,7 +398,7 @@ export class CustomerWarningsComponent implements OnInit {
 				this.isSpinnerVisible = false;
 				this.disableSave = true;				
 				//this.formdata.reset();
-			}, error => this.saveFailedHelper(error))
+			}, error => {this.isSpinnerVisible = false;})
 	}
 
 	enableSave() {
@@ -472,7 +460,6 @@ export class CustomerWarningsComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.alertService.stopLoadingMessage();
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-        setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
-        
+        setTimeout(() => this.alertService.stopLoadingMessage(), 5000);        
     }
 }

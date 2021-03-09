@@ -405,9 +405,12 @@
       <h4 class="modal-title">Documents of {{ this.selectedRow['name'] }}</h4>
     </div>
     <div class="modal-body viewform">
-      <app-customer-documents
+      <!-- <app-customer-documents
         [customerDataFromExternalComponents]="selectedRow"
-      ></app-customer-documents>
+      ></app-customer-documents> -->
+      <app-common-documents [moduleName]="moduleName"  [referenceId]="customerId"
+                [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
+                
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-danger" (click)="dismissModel()">

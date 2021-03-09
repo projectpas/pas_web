@@ -29,6 +29,7 @@ import { PermissionMaster } from '../../user-role/ModuleHierarchyMaster.model';
     providers: [DatePipe]
 })
 export class CustomersListComponent implements OnInit {
+    moduleName="Customer"
     isSpinnerVisible: Boolean = true;
     totalRecords: number = 0;
     totalPages: number = 0;
@@ -527,9 +528,11 @@ export class CustomersListComponent implements OnInit {
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
-    openDocumentsList(content, row) {
+    openDocumentsList(content, row) {      
+        const { customerId } = row;        
         this.selectedRow = row;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.customerId = customerId;
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });   
     }
 
     private loadContactDataData(customerId) {

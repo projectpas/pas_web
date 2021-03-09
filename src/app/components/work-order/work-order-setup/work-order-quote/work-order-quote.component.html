@@ -1059,15 +1059,28 @@
     </div>
 
     <div class="table-responsive" *ngIf="gridActiveTab === 'charges' && workOrderChargesList">
-        <div *ngIf="!isView">
+        <!-- <div *ngIf="!isView">
             <button data-target="#addNewCharges"
                     data-toggle="modal"
                     (click)="createNew('add')"
                     class="btn-primary"
                     style="margin-left: 6px; margin-bottom: -8px;">
                 Add Charges
-            </button>
-        </div>
+            </button> 
+        </div> -->
+        <div class="header">
+            <div class="row">
+                <div class="col">
+                    <h4 class="header-name">Work Order Quote Charges List</h4>
+                </div>
+                <div *ngIf="!isView">
+                    <button type="button" class="btn-sm header-button "data-target="#addNewCharges"
+                    data-toggle="modal" (click)="createNew('add')">
+                        Create Charge
+                    </button>
+                </div>
+            </div>
+          </div>
         <app-work-order-charges [workFlowObject]="workFlowObject"
                                 isWorkOrder="false"
                                 [workOrderChargesList]="workOrderChargesList"
@@ -1487,7 +1500,7 @@
 
     <div id="addNewMaterials" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog modal-xl">
-
+ 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">

@@ -179,7 +179,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                     this.salesInfo.secondarySalesPersonId = salesSecondaryPerson;
                 }
                 this.isSpinnerVisible = false;
-            },error => this.saveFailedHelper(error))
+            },error => {this.isSpinnerVisible = false;});
         }
 	}
 
@@ -351,7 +351,8 @@ export class CustomerSalesPersonComponent implements OnInit {
             {
                 this.isSpinnerVisible = false;
                 if(res.statusCode == 500) {
-                    this.saveFailedHelper(res.message)
+                    //this.saveFailedHelper(res.message)
+                    this.isSpinnerVisible = false;
                 }
                 else{
                     this.customerSalesId = res.customerSalesId;                    
@@ -365,7 +366,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 this.disableSave = true;
                 //this.formdata.reset();
             }
-        ),error => this.saveFailedHelper(error)}
+        ),error => {this.isSpinnerVisible = false;}}
         
     formatannualRevenuePotential(val) {
         if (val) {
@@ -469,7 +470,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 this.getAllSalesEmployeeListByJobTitle(this.jobTitles)
             }
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		},error => {this.isSpinnerVisible = false;});
     }
 
     enableSave() {
