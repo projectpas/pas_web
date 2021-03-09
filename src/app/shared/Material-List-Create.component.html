@@ -42,7 +42,8 @@
                 task.description
                 }}</option>
             </select> -->
-            <p-dropdown placeholder="--Select--" required (ngModelChange)="getActive()" optionLabel="description" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen{{ i }}" [options]="taskList"
+            <!-- optionLabel="description" -->
+            <p-dropdown placeholder="--Select--" editable="true" required (ngModelChange)="getActive()"  #taskId="ngModel" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen1x{{ i }}" [options]="taskList"
             class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.taskId">
           </p-dropdown> 
           </td>
