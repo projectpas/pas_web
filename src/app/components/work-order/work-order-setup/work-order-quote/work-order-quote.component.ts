@@ -932,8 +932,9 @@ this.creditTerms=res.creditTerm;
 
 
     }
-
+    showDisplayData:boolean=false;
     getDisplayData(buildType) {
+        this.showDisplayData=false;
         this.displayType = buildType;
         var partId;
         var workScopeId;
@@ -960,6 +961,7 @@ this.creditTerms=res.creditTerm;
                         .subscribe(
                             (res: any[]) => {
                                 this.buildHistoricalList = res;
+                                this.showDisplayData=true;
                             }
                         )
                 }
@@ -968,6 +970,7 @@ this.creditTerms=res.creditTerm;
                         .subscribe(
                             (res: any[]) => {
                                 this.buildHistoricalList = res;
+                                this.showDisplayData=true;
                             }
                         )
                 }
@@ -1141,15 +1144,15 @@ this.creditTerms=res.creditTerm;
     }
 
     checkForAllEmpty(){
-        // let result = true;
-        // console.log("this.labor",this.labor)
-        // console.log("this.labor.workOrderLaborList",this.labor.workOrderLaborList)
-        // for(let x of this.labor.workOrderLaborList[0]){
-        //     if(this.labor.workOrderLaborList[0][x].length>0){
-        //         result = false;
-        //     }
-        // }
-        // return result;
+        let result = true;
+        console.log("this.labor",this.labor)
+        console.log("this.labor.workOrderLaborList",this.labor.workOrderLaborList)
+        for(let x of this.labor.workOrderLaborList[0]){
+            if(this.labor.workOrderLaborList[0][x].length>0){
+                result = false;
+            }
+        }
+        return result;
     }
     getQuoteInfo(data) {
         this.selectedWorkFlowOrWorkOrder = data;
@@ -1656,10 +1659,20 @@ this.creditTerms=res.creditTerm;
         this.commonService.smartDropDownList('task', 'taskId', 'description')
             .subscribe(
                 (taskList) => {
-                    taskList = taskList.map(x=>{return {
-                        ...x,
-                        'taskId': x.value, 'description': x.label}
-                    })
+                    taskList = taskList.map(x=>{
+                        
+                        // return {
+                        // ...x,
+                        // 'taskId': x.value, 'description': x.label}
+                  
+                    return {
+                        id: x.value,
+                        description: x.label.toLowerCase(),
+                        taskId: x.value,
+                        label:x.label.toLowerCase(),
+                    }
+                }
+                    )
                     this.labor.workOrderLaborList[0] = {}
                     this.taskList = taskList;
                     this.formTaskList();
@@ -1669,6 +1682,8 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
+
+ 
 
     createNew(type) {
         // this.isEdit = false;
@@ -1961,7 +1976,7 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialListForWO(data) {
-        data['materialList'].forEach(
+        data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
                     mData.billingRate = Number(mData.billingRate.toString().split(',').join('')).toFixed(2);
@@ -2892,22 +2907,6 @@ this.creditTerms=res.creditTerm;
         $("#textarea-popupintmemo").modal("hide");
     }
     errorHandling(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
     }
     checkValidEmails(){
         let result = false;
