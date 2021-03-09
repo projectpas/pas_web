@@ -9,7 +9,7 @@
     <app-customer-detail [salesQuote]="salesQuote"></app-customer-detail>
     <app-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfoArray"
       [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" (onPartSearch)="onPartSearch($event)"
-      [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)">
+      [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)" [type]="type">
     </app-part-number-filter>
     <ng-container>
       <app-part-details [parts]="parts" [query]="query" (select)="onSelect($event)"

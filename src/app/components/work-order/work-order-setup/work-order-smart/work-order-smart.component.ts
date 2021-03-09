@@ -192,11 +192,10 @@ export class WorkOrderSmartComponent implements OnInit {
         })
     }
     getAllSalesEmployeeListByJobTitle(jobTitles) {
-
         const CSRid = getValueByFieldFromArrayofObject('jobTitle', 'CSR', this.jobTitles);
         const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'SALES', this.jobTitles);
         const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'AGENT', this.jobTitles);
-        const Technicianid = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles); 
+        const Technicianid = getValueByFieldFromArrayofObject('jobTitle', 'TECHNICIAN', this.jobTitles); 
         if (CSRid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
@@ -205,8 +204,8 @@ export class WorkOrderSmartComponent implements OnInit {
 
         if (Agentsid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
-        if (Technicianid[0].jobTitleId > 0)
-            this.arayJobTitleIds.push(Technicianid[0].jobTitleId);
+        // if (Technicianid[0].jobTitleId > 0)
+        //     this.arayJobTitleIds.push(Technicianid[0].jobTitleId);
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
             if (res) {
                 this.csrOriginalList = res.filter(x => {
@@ -228,11 +227,11 @@ export class WorkOrderSmartComponent implements OnInit {
                 })
                 this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
 
-                this.technicianOriginalList = res.filter(x => {
-                    if (Technicianid[0].jobTitleId == x.jobTitleId) {
-                        return x;
-                    }
-                })
+                // this.technicianOriginalList = res.filter(x => {
+                //     if (Technicianid[0].jobTitleId == x.jobTitleId) {
+                //         return x;
+                //     }
+                // })
                 this.arayJobTitleIds = [];
             }
         })
