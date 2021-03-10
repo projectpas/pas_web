@@ -15,7 +15,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-body new-card-body">
+            <div class="card-body header-body">
             <p-table #dt class="rpo-table-cstm rro-table-cstm lastcol-fix" 
                 [value]="allRecevinginfo" 
                 [lazy]="true"
@@ -37,14 +37,15 @@
                 <div class="row">
                     <div class="col">
                         <p-multiSelect [maxSelectedLabels]="2" [options]="cols" [(ngModel)]="selectedColumns"
-                        optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
-                        defaultLabel="Choose Columns" style="float:left">
+                        optionLabel="header" selectedItemsLabel="{0} columns selected" 
+                        class="multiselect-field"
+                        defaultLabel="Choose Columns">
                     </p-multiSelect>
                     </div>
                     <div class="col">
-                            <div
-                            style="width: auto !important; float: right;"
-                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                        <div					
+						class="global-search-field inner-addon right-addon inline-block"
+					  >
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50" class="form-control"
                             (input)="globalSearch($event.target.value)" placeholder=" Filter">
@@ -53,46 +54,44 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-primary new-table-button" type="button" pButton icon="fa-download" iconPos="left"
+                        <button class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
                             label="Export  Data" matTooltip="Download Data" matTooltipPosition="above"
                             data-toggle="modal"
                             (click)="selectedOnly = false; targetData = dt;" 
-                            data-target="#downloadConfirmation"
-                            style="padding: 5px 10px !important;"></button>
-                        <button class="btn btn-primary new-table-button" type="button" pButton icon="fa-download" iconPos="left"
+                            data-target="#downloadConfirmation"></button>
+                        <button class="btn btn-primary exports-button" type="button" pButton icon="fa-download" iconPos="left"
                             label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
-                            (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;">
+                            (click)="dt.exportCSV({selectionOnly:true})">
                         </button>
                     </div>
                     <div class="col">
                         <div class="">
                             <div class="col" style="padding:3px 0 0;">
-                                <div class="form-group" style="float: right;">
+                                <div class="form-group float-right">
                                     <div
-                                    class="pull-left"
-                                    style="margin-top: 4px; margin-right: 15px;">
+                                    class="pull-left radio-buttons-align">
                                     <label class="radio-cstm wauto">
                                         <input type="radio" name="custworkstatus" class="form-control" value="1"
                                             (click)="getCustWorkStatus('1')" [ngModel]="currentStatusCW" checked>
                                         <span class="checkmark"></span>Pending WO Creation
                                     </label>
                                     </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align ">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="custworkstatus" class="form-control" value="2"
                                                 (click)="getCustWorkStatus('2')" [ngModel]="currentStatusCW">
                                             <span class="checkmark"></span>Returned to Customers
                                         </label>
                                     </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="custworkstatus" class="form-control" value="3"
                                                 (click)="getCustWorkStatus('3')" [ngModel]="currentStatusCW">
                                             <span class="checkmark"></span>All
                                         </label>
                                     </div>
-                                    <div class="checkbox-cstm" style="margin-left: 0; display: none;">
-                                        <label style="width: auto !important;margin-top: 3px;">                   
+                                    <div class="checkbox-cstm show-deleted-div">
+                                        <label class="show-deleted-label">                   
                                             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                             Show  Deleted List
@@ -106,44 +105,44 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" style="width:140px">
+                    <col *ngFor="let col of columns" class="table-column-width ">
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <ng-container *ngFor="let col of columns">
-                        <th class="text-center" style="width:auto;"
+                        <th class="text-center table-column-width"
                             *ngIf="col.field!='levelCode1' && col.field!='levelCode2' && col.field!='levelCode3' && col.field!='levelCode4'"
                             pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="text-center" style="width:auto;" *ngIf="col.field=='levelCode1'" colspan="4" pResizableColumn
+                        <th class="text-center table-column-width" *ngIf="col.field=='levelCode1'" colspan="4" pResizableColumn
                             pReorderableColumn [pSortableColumn]="col.field">
                             Management Structure
                         </th>
                     </ng-container>
-                    <th style="width: 130px; position:sticky">Actions</th>
+                    <th class="table-actions-column">Actions</th>
                 </tr>
                 <tr>
-                    <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input type="text" *ngIf="col.field !== 'receivedDate' && col.field != 'createdDate' && col.field != 'updatedDate'" style="width:100%;" pInputText
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input class="table-header-input-width" type="text" *ngIf="col.field !== 'receivedDate' && col.field != 'createdDate' && col.field != 'updatedDate'" pInputText
                                (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate'" name="receivedDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
-                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
-                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'receivedDate'" name="receivedDate" (change)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
+                        <input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
+                        <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
                     </th>
-                    <th style="width:130px;position:sticky"></th>
+                    <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                     (dblclick)="viewSelectedRowdbl(rowData)">
 
-                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                    <td *ngFor="let col of columns" class="ui-resizable-column table-column-width" pReorderableRowHandle>
                         {{col.field == 'receivedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'woOpenDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
                     </td>
-                    <td style="width:130px;">
+                    <td class="action-icons-cstm table-column-width">
                         <div *ngIf="currentDeletedstatus==false">
                           
                             <span data-toggle="modal" data-target="#cusView">
@@ -151,7 +150,8 @@
                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                             </span>
                             <span> 
-                                <button class="btn  nobg" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="openEdits(rowData)" style="padding:0%"  matTooltip="Edit" matTooltipPosition="above" >
+                                <button class="btn  nobg padding-0" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="openEdits(rowData)"
+                                 matTooltip="Edit" matTooltipPosition="above" >
                                     <i class="fa fa-pencil" ></i>
                                 </button>
                                 <!-- <a class="btn nobg" 
@@ -165,7 +165,8 @@
                                 <!-- <a class="btn nobg btn-pluspo-cstm"
                                    *ngIf="rowData['woNumber'] == '' || rowData['woNumber'] == null"
                                    (click)="gotoWorkOrder(rowData)" matTooltip="Create WO" matTooltipPosition="above"><i class="fa fa-plus"></i></a> -->
-                                   <button class="btn nobg btn-pluspo-cstm" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="gotoWorkOrder(rowData)" style="padding:0%"   matTooltip="Create WO" matTooltipPosition="above" >
+                                   <button class="btn nobg btn-pluspo-cstm padding-0" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="gotoWorkOrder(rowData)"
+                                     matTooltip="Create WO" matTooltipPosition="above" >
                                     <i class="fa fa-plus" ></i>
                                 </button>
                                 </span>
@@ -187,17 +188,17 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" *ngIf="totalRecords == 0">
                 <tr>
-                  <td [attr.colspan]="21" class="no-records-cstm">
+                  <td [attr.colspan]="21" class="no-records-cstm no-records-msg">
                           No records found
                   </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
                 <label id="footer" class="footer">Total:</label>
-                <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" />
                 &nbsp;&nbsp;
                 <label id="footer" class="footer1">Pages Count:</label>
-                <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
             </ng-template>
         </p-table>
     </div>
@@ -240,7 +241,7 @@
     </div>
 </ng-template>
 
-<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Receive Customer Work</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
@@ -370,10 +371,10 @@
                 <div class="col-sm-3">
                     <h4 class="modal-title">Details of Receiving - Customer</h4>
                 </div>
-                <div class="col-sm-3" style="padding-top: 5px;">
+                <div class="col-sm-3 padding-top-5">
                     Customer Name<span class="text-danger"> : {{viewCustWorkInfo.customerName}}</span>
                 </div>
-                <div class="col-sm-3" style="padding-top: 5px;">
+                <div class="col-sm-3 padding-top-5">
                     Customer Code<span class="text-danger"> : {{viewCustWorkInfo.customerCode}}</span>
                 </div>
             </div>
@@ -399,16 +400,16 @@
                             <span class="label"><b>Employee Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.employeeName }}</span>
                         </p>
                         <div class="form-group" >
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                <label class="radio-inline" style="pointer-events: none;">
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-inline pointer-none">
                                     <input type="radio" value="1" name="assetRadio" class="form-check-inline"
                                         [checked]="viewCustWorkInfo.isCustomerStock == true"
                                         >
                                     Rotable Customer Stock
                                 </label>
                             </div>
-                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                <label class="radio-inline" style="pointer-events: none;">
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-inline pointer-none">
                                     <input type="radio" value="2" name="assetRadio" 
                                         [checked]="viewCustWorkInfo.isCustomerStock == false">
                                     Piece Parts
@@ -546,26 +547,26 @@
                         </p>
                         <div class="form-row managementstr stR_wdt">
                             <div class="col-md-8">
-                                <div class="card" style="margin-top: 20px;">
-                                    <div class="card-header" style="padding: 0 10px;">
-                                        <h5 style="margin-bottom: 0; font-size: 12px;">
+                                <div class="card mgmt-card">
+                                    <div class="card-header mgmt-card-header">
+                                        <h5 class="mgmt-header">
                                             Management Structure <span class="text-danger">*</span>
                                         </h5>
                                     </div>
-                                    <div class="card-body" style="padding: 4px 12px 6px;">
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                    <div class="card-body mgmt-card-body">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="companyName"
                                                    [(ngModel)]="viewCustWorkInfo.level1" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="BUName"
                                                    [(ngModel)]="viewCustWorkInfo.level2" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="divisionName"
                                                    [(ngModel)]="viewCustWorkInfo.level3" disabled>
                                         </div>
-                                        <div class="form-group" style="margin-bottom: 4px;">
+                                        <div class="form-group margin-bottom-4">
                                             <input class="form-control" type="text" name="deptName"
                                                    [(ngModel)]="viewCustWorkInfo.level4" disabled>
                                         </div>
@@ -582,7 +583,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-body" style="padding: 2px 10px;">
+                    <div class="card-body card-body-padding">
                         <div class="form-row">
                             <div class="col-md-3">
                                 <div class="form-group p-t-10">
@@ -599,7 +600,7 @@
                             <div class="col-md-3">
                                 <div class="form-group p-t-10">
                                     <div class="checkbox-cstm">
-                                        <label style="width: 100%;">
+                                        <label class="width-100-percent">
                                             <input type="checkbox" name="isSkipSerialized"
                                                    [(ngModel)]="viewCustWorkInfo.isSkipSerialNo" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -618,8 +619,8 @@
                     </div>
                 </div>
 
-                <div class="card" style="margin-top: 5px;">
-                    <div class="card-body" style="padding: 2px 10px;">
+                <div class="card m-t-5">
+                    <div class="card-body card-body-padding">
                         <div class="form-row">
                             <div class="col-md-3">
                                 <div class="form-group p-t-10">
@@ -636,7 +637,7 @@
                             <div class="col-md-3">
                                 <div class="form-group p-t-10">
                                     <div class="checkbox-cstm">
-                                        <label style="width: 100%;">
+                                        <label class="width-100-percent">
                                             <input type="checkbox" name="isSkipTimeLife"
                                                    [(ngModel)]="viewCustWorkInfo.isSkipTimeLife" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -755,8 +756,8 @@
                 </p>
             </div>
             <div class="modal-footer" style="padding:10px;">
-                <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
-                        style="padding: 6px 12px !important;">
+                <button class="btn btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
+                      >
                     Ok
                 </button>
             </div>
