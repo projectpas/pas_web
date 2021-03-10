@@ -282,8 +282,7 @@
                                                 <span class="clr-red">*</span>
                                             </label>
                                             <p-autoComplete 
-                                                field="vendorName" 
-                                                [disabled]= "true"
+                                                field="vendorName"                                                
                                                 class="pautocomp-cstm"                                                 
                                                 [(ngModel)]="domesticSaveObj.vendorName" 
                                                 name="vendorName" 
@@ -373,15 +372,10 @@
                             <form #addInternationalWireForm="ngForm" class="form-horizontal">
                                 <div class="form-row">
                                     <div class="col-md-6">
-
                                         <div class="form-group">
-                                            <label for="vendorname">
-                                                Beneficiary Customer
-                                                <span class="clr-red">*</span>
-                                            </label>
+                                            <label for="vendorname">Beneficiary Customer<span class="clr-red">*</span></label>
                                             <p-autoComplete 
-                                                field="vendorName" 
-                                                [disabled]= "true"
+                                                field="vendorName"                                                 
                                                 class="pautocomp-cstm"                                                 
                                                 [(ngModel)]="internationalSaveObj.vendorName" 
                                                 name="vendorName" 
@@ -390,46 +384,28 @@
                                                 [size]="30" [minLength]="1" 
                                                 (ngModelChange)="enableSave()"                                                
                                                 [dropdown]="true" required>
-                                            </p-autoComplete>
-                                            <!-- <div *ngIf="disableSaveVenderName" class="clr-red">
-                                                Already Exists
-                                            </div> -->
+                                            </p-autoComplete>                                            
                                             <div class="clear"></div>
                                         </div> 
                                         <div class="form-group">
-                                            <label>Bank SWIFT <span class="clr-red">*</span></label>
-                                            <input class="form-control" type="text" name="swiftCode"
-                                                [(ngModel)]="internationalSaveObj.swiftCode" (ngModelChange)="enableSave()" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Beneficiary Bank Account</label>
+                                            <label>Beneficiary Bank Account <span class="clr-red">*</span></label>
                                             <input class="form-control" type="text" name="beneficiaryBankAccount"
-                                                [(ngModel)]="internationalSaveObj.beneficiaryBankAccount" (ngModelChange)="enableSave()">
+                                                [(ngModel)]="internationalSaveObj.beneficiaryBankAccount" 
+                                                (ngModelChange)="enableSave()" required value="" autocomplete="new-password">
                                         </div>
                                         <div class="form-group">
-                                            <label>Beneficiary Bank</label>
-                                            <input class="form-control" type="text" name="beneficiaryBank"
-                                                [(ngModel)]="internationalSaveObj.beneficiaryBank" (ngModelChange)="enableSave()">
+                                            <label>Bank Address 2</label> 
+                                            <input class="form-control" type="text" name="internationalAddress2" value="" autocomplete="new-password"
+                                                [(ngModel)]="internationalSaveObj.address2" (ngModelChange)="enableSave()">
                                         </div>
                                         <div class="form-group">
-                                            <label>Bank City <span class="clr-red">*</span></label>
-                                            <input class="form-control" type="text" name="internationalCity"
-                                                [(ngModel)]="internationalSaveObj.city" (ngModelChange)="enableSave()" required>
-                                        </div>                                                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Bank State/Prov <span class="clr-red">*</span></label>
+                                            <label>Bank State/Prov <span class="clr-red"></span></label>
                                             <input class="form-control" type="text" name="internationalState"
-                                                [(ngModel)]="internationalSaveObj.stateOrProvince" (ngModelChange)="enableSave()" required>
+                                                [(ngModel)]="internationalSaveObj.stateOrProvince" (ngModelChange)="enableSave()" 
+                                                value="" autocomplete="new-password">
                                         </div>
                                         <div class="form-group">
-                                            <label>Bank Postal Code <span class="clr-red">*</span></label>
-                                            <input class="form-control" type="text" name="internationalPostalCode"
-                                                [(ngModel)]="internationalSaveObj.postalCode" (ngModelChange)="enableSave()" required>
-                                        </div>       
-                                        <div class="form-group">
-                                            <label>Bank Country <span class="clr-red">*</span></label>
+                                            <label>Bank Country <span class="clr-red"></span></label>
                                             <p-autoComplete field="nice_name" class="pautocomp-cstm"
                                                 (onSelect)="onInternalBankCountrieselected($event)"
                                                 (onKeyUp)=eventInternalBankCountryHandler($event)
@@ -438,11 +414,37 @@
                                                 (completeMethod)="filtercountry($event)" [size]="30" [minLength]="1"
                                                 [dropdown]="true" [forceSelection]="true" (ngModelChange)="enableSave()" required>
                                             </p-autoComplete>
-
                                             <div *ngIf="disablesavefoInternalrCountry" style="color:red">Please Select
                                                 from DropDown</div>
+                                            </div>                                                              
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">                                            
+                                            <label>Beneficiary Bank <span class="clr-red">*</span></label>
+                                            <input class="form-control" type="text" name="beneficiaryBank"
+                                                [(ngModel)]="internationalSaveObj.beneficiaryBank" (ngModelChange)="enableSave()" value="" autocomplete="new-password" required>
                                         </div>
                                         <div class="form-group">
+                                            <label>Bank Address 1 </label>
+                                            <input class="form-control" type="text" name="internationalAddress1" value="" autocomplete="new-password"
+                                                [(ngModel)]="internationalSaveObj.address1" (ngModelChange)="enableSave()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bank City <span class="clr-red"></span></label>
+                                            <input class="form-control" type="text" name="internationalCity"
+                                                [(ngModel)]="internationalSaveObj.city" (ngModelChange)="enableSave()" value="" autocomplete="new-password">
+                                        </div>                                        
+                                        <div class="form-group">
+                                            <label>Bank Postal Code <span class="clr-red"></span></label>
+                                            <input class="form-control" type="text" name="internationalPostalCode"
+                                                [(ngModel)]="internationalSaveObj.postalCode" (ngModelChange)="enableSave()" value="" autocomplete="new-password">
+                                        </div> 
+                                        <div class="form-group">
+                                            <label>SWIFT Code<span class="clr-red">*</span></label>
+                                            <input class="form-control" type="text" name="swiftCode"
+                                                [(ngModel)]="internationalSaveObj.swiftCode" (ngModelChange)="enableSave()" required value="" autocomplete="new-password">
+                                        </div>
+                                        <!-- <div class="form-group">
                                             <label>Beneficiary Customer</label>
                                             <input type="text" pInputText size="50"
                                             class="form-control ui-autocomplete-input" name="beneficiaryCustomer"
@@ -450,7 +452,7 @@
                                          style="height: 28px !important;">
                                         </div>
                                         <div *ngIf="disablesaveforBeneficiary" class="clr-red">Select From DropDown
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="form-row  pull-right">

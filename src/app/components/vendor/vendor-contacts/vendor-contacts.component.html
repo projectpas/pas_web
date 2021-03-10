@@ -777,14 +777,14 @@
             </div>
             <div class="col-sm-12">
               <div class="col-sm-4">
-                <label>Tag <span class="clr-red">*</span></label>
+                <label>Tag <span class="clr-red"></span></label>
               </div>
               <div class="col-sm-5">
                 <div class="inner-addon right-addon inline-block" style="width: 100%">
                   <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.tagName"
                     (ngModelChange)="enableSave()" name="tagName" field="tagName" [suggestions]="tagNamesList"
                     (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                    [inputStyle]="{ width: '100%' }" [forceSelection]="true" required>
+                    [inputStyle]="{ width: '100%' }" [forceSelection]="true">
                   </p-autoComplete>
                 </div>
               </div>
