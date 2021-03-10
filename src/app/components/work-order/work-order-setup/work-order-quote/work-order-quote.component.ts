@@ -1060,20 +1060,21 @@ this.creditTerms=res.creditTerm;
                                 epnDescription: exclusion.partDescription
                             }
                         });
-
+                        console.log("getQuote info",this.labor.workOrderLaborList[0])
                         // this.labor.workOrderLaborList[0] = {};
                         this.taskList.forEach((tl) => {
                             res['expertise'].forEach((rt) => {
                                 if (rt['taskId'] == tl['taskId']) {
-                                    if (this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0] && this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0]['employeeId'] == null) {
-                                        this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
+                                    if (this.labor.workOrderLaborList[0][tl['description']][0] && this.labor.workOrderLaborList[0][tl['description']][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description']][0]['employeeId'] == null) {
+                                        this.labor.workOrderLaborList[0][tl['description']] = [];
                                     }
                                     let labor = {}
                                     labor = { ...rt, expertiseId: rt.expertiseTypeId, hours: rt.estimatedHours, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
-                                    this.labor.workOrderLaborList[0][tl['description'].toLowerCase()].push(labor);
+                                    this.labor.workOrderLaborList[0][tl['description']].push(labor);
                                 }
                             })
                         })
+                        console.log("getQuote info",this.labor.workOrderLaborList[0])
                         this.labor.workFloworSpecificTaskorWorkOrder = 'workFlow';
                         this.savedWorkOrderData.workFlowWorkOrderId = undefined;
                     },
@@ -1338,6 +1339,7 @@ this.creditTerms=res.creditTerm;
                     
                     if (res) {
                         this.tabQuoteCreated['labor'] = true;
+                        console.log("laborlist",this.labor.workOrderLaborList[0])
                         let laborList = this.labor.workOrderLaborList;
                         this.labor = { ...res.workOrderQuoteLaborHeader, workOrderLaborList: laborList };
                         this.mpnPartNumbersList.forEach((mpn) => {
@@ -1547,8 +1549,9 @@ this.creditTerms=res.creditTerm;
     }
 
     formTaskList() {
+        console.log("form task list",this.labor.workOrderLaborList[0])
         this.taskList.forEach(task => {
-            this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
+            this.labor.workOrderLaborList[0][task.description] = [];
         });
     }
 
@@ -2797,13 +2800,20 @@ this.creditTerms=res.creditTerm;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
             this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId; 
+            console.log("labor list",this.labor.workOrderLaborList[0])
+            this.taskList.forEach(task => {
+                this.labor.workOrderLaborList[0][task.description] = [];
+            });
             this.taskList.forEach((tl) => {
                 if (res) {
+
                     res.laborList.forEach((rt) => {
+
                         if (rt['taskId'] == tl['taskId']) {
-                            if (this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0] && this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0]['employeeId'] == null) {
-                                this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
+                            console.log("labor list",this.labor.workOrderLaborList[0])
+                            if (this.labor.workOrderLaborList[0][tl['description']][0] && this.labor.workOrderLaborList[0][tl['description']][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description']][0]['employeeId'] == null) {
                             }
+                            this.labor.workOrderLaborList[0][tl['description']] = [];
                             let labor = {}
                             if(rt.hours){
                                 let hours = rt.hours.toFixed(2);
@@ -2811,7 +2821,7 @@ this.creditTerms=res.creditTerm;
                                 rt.totalMinutes = hours.toString().split('.')[1];
                             }
                             labor = { ...rt, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
-                            this.labor.workOrderLaborList[0][tl['description'].toLowerCase()].push(labor);
+                            this.labor.workOrderLaborList[0][tl['description']].push(labor);
                         }
                     })
                 }
@@ -2886,7 +2896,8 @@ this.creditTerms=res.creditTerm;
         else if(value == 'exclusions' && (!this.workOrderExclusionsList || this.workOrderExclusionsList.length <= 0)){
             this.getQuoteExclusionListByWorkOrderQuoteId();
         }
-        else if(value == 'labor' && (!this.labor.workOrderLaborList || this.isEmptyObj(this.labor.workOrderLaborList[0]) || this.checkForAllEmpty())){
+        else if(value == 'labor'){
+            // && (!this.labor.workOrderLaborList || this.isEmptyObj(this.labor.workOrderLaborList[0]) || this.checkForAllEmpty())
             this.getQuoteLaborListByWorkOrderQuoteId();
         }
         else if(value == 'freight' ){
