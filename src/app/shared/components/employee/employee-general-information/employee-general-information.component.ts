@@ -457,8 +457,6 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         }
     }
 
-
-
     get currentUserManagementStructureId(): number {
         return this.authService.currentUser
             ? this.authService.currentUser.managementStructureId
@@ -498,7 +496,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.sourceEmployee.firstName = getObjectByValue('firstName', contactName, this.firstCollection);
             }
 
-        }, error => this.saveFailedHelper(error));
+       // }, error => this.saveFailedHelper(error));
+          }, error => this.isSpinnerVisible = false);
     }
 
     getAllContactMiddleNameSmartDropDown(strText = '', contactName = '') {
@@ -506,7 +505,6 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.arrayContactlist.push(0);
         }
         this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
-
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
                 let alreadyExist = false;
@@ -523,7 +521,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             if (contactName != '') {
                 this.sourceEmployee.middleName = getObjectByValue('middleName', contactName, this.middleNameCollection);
             }
-        }, error => this.saveFailedHelper(error));
+        //}, error => this.saveFailedHelper(error));
+          }, error => this.isSpinnerVisible = false);
     }
 
     getAllContactLastNameSmartDropDown(strText = '', contactName = '') {
@@ -531,7 +530,6 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.arrayContactlist.push(0);
         }
         this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
-
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
                 let alreadyExist = false;
@@ -544,15 +542,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     endResult.push({ lastName: response[resInd].label })
                 }
             }
-
             this.lastNameCollection = endResult;
             if (contactName != '') {
                 this.sourceEmployee.lastName = getObjectByValue('lastName', contactName, this.lastNameCollection);
             }
-
-
             this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error));
+        }, error => this.isSpinnerVisible = false);
     }
 
 
@@ -573,14 +568,16 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     this.allJobTitlesinfo = [...originalData, obj];
                 }
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                //const errorLog = err;
+                //this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             });
             return id;
         } else {
             return null;
         }
     }
+
     errorMessageHandler(log) {
         this.isSpinnerVisible = false;
         const errorLog = log;
@@ -613,10 +610,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             );
         }
     }
+
     getDetailsInactive(res) {
         this.sourceEmployee.employeeExpertiseId = this.getInactiveObjectOnEdit('value', res.employeeExpertiseId, this.allEmployeeExpertiseInfo, 'EmployeeExpertise', 'EmployeeExpertiseId', 'Description');
         this.sourceEmployee.jobTitleId = this.getInactiveObjectOnEdit('value', res.jobTitleId, this.allJobTitlesinfo, 'JobTitle', 'JobTitleId', 'Description');
     }
+
     loadEditData() {
         this.isSpinnerVisible = true;
         this.employeeService.toGetEmployeeDetailsByEmpId(this.employeeid).subscribe(res => {
@@ -1028,7 +1027,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private loadCurrencyData(strText = '') {
 		if(this.arraycurrencylist.length == 0) {			
 			this.arraycurrencylist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20000,this.arraycurrencylist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20000,this.arraycurrencylist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.allCurrencyData = response.map(x => {
                             return {                                
                                 currencyId: x.value,
@@ -1036,8 +1035,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                             }
                         });			
 		},err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			// const errorLog = err;
+            // this.errorMessageHandler(errorLog);	
+            this.isSpinnerVisible = false;	
 		});
 	}
 
@@ -1240,7 +1240,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     this.employeeService.employeeLeavetypeRemove(this.sourceEmployee).subscribe(
                         results => {
                         },
-                        error => this.onDataLoadFailed(error))
+                        //error => this.onDataLoadFailed(error))
+                          error => {this.isSpinnerVisible = false});
                 });
         }
     }
@@ -1250,9 +1251,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.employeeService.employeeshifttypeRemove(this.sourceEmployee).subscribe(
             results => {
             },
-            error => this.onDataLoadFailed(error)
-        );
+            error => {this.isSpinnerVisible = false});        
     }
+
     removeEmployeeShiftValues() {
         for (var i = 0; i < this.sessionShiftValues.length; i++) {
             var selectedShift = this.sessionShiftValues[i];
@@ -1262,6 +1263,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             };
         }
     }
+
     employeeShifttypeUpdate(empId) {
         for (var i = 0; i < this.selectedshiftValues.length; i++) {
             var selectedLevae = this.selectedshiftValues[i];
@@ -1277,6 +1279,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             };
         }
     }
+
     newShiftValuetobeAdded(selectedLevae) {
         if (selectedLevae != null) {
             this.sourceEmployee.ShiftTypeId = selectedLevae;
@@ -1284,10 +1287,10 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.employeeService.employeeShifttypeAdd(this.sourceEmployee).subscribe(
                 results => {
                 },
-                error => this.onDataLoadFailed(error)
-            );
+                 error => {this.isSpinnerVisible = false});           
         }
     }
+
     employeeLeavetypeUpdate(empId) {
         this.selectedLeaveValues;
         this.removeEmployeeLevaes();
@@ -1302,17 +1305,17 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         var arr = this.sessionLeaveValues;
         var check = this.selectedLeaveValues;
         var found = false;
-
     }
+
     newValuetobeAdded(selectedLevae) {
         this.sourceEmployee.LeaveTypeId = selectedLevae;
         this.sourceEmployee.EmployeeId = this.sourceEmployee.employeeId;
         this.employeeService.employeeLeavetypeAdd(this.sourceEmployee).subscribe(
             results => {
             },
-            error => this.onDataLoadFailed(error)
-        );
+            error => {this.isSpinnerVisible = false});
     }
+
     employeeShifttypeAdd(employeeId) {
         for (var i = 0; i < this.selectedshiftValues.length; i++) {
             var shiftTypeId = this.selectedshiftValues[i];
@@ -1322,11 +1325,11 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.employeeService.employeeShifttypeAdd(this.sourceEmployee).subscribe(
                     results => {
                     },
-                    error => this.onDataLoadFailed(error)
-                );
+                    error => {this.isSpinnerVisible = false});                
             }
         }
     }
+
     employeeLeavetypeAdd(employeeId) {
         this.selectedLeaveValues = this.selectedLeaveValues.filter((el, i, a) => i === a.indexOf(el));
         this.selectedLeaveValues;
@@ -1337,8 +1340,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.employeeService.employeeLeavetypeAdd(this.sourceEmployee).subscribe(
                 results => {
                 },
-                error => this.onDataLoadFailed(error)
-            );
+                error => {this.isSpinnerVisible = false});
         }
     }
     // onSubmit() {
@@ -1361,6 +1363,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.sourceEmpFirst = null;
         // this.loadData();
     }
+
     empAdd(obj: any, res: any) {
         this.showMsg = true;
         //this.sourceEmployee.reser
@@ -1380,6 +1383,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.alertService.showMessage("Failure", this.showTitle, MessageSeverity.success);
         }
     }
+
     singleClick(click) {
         if (click == 'single') {
             this.selectedshiftValues = [];
@@ -1394,17 +1398,19 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.sourceEmployee.inMultipleShifts = true;
         }
     }
+
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
+
     public allWorkFlows: any[] = [];
     private loadData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
         this.employeeService.getEmployeeNamesList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error =>  {this.isSpinnerVisible = false}
         );
         this.selectedColumns = this.cols;
 
@@ -1414,9 +1420,10 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false}
         );
     }
+
     private shift() {
         // this.alertService.startLoadingMessage();
         // this.loadingIndicator = true;
@@ -1426,15 +1433,15 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         // );
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 10000, '0').subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 10000, '0',this.currentUserMasterCompanyId).subscribe(res => {
             this.shiftValues = res;
             // this.legalEntityList_Forgrid = res;
             // this.legalEntityList_ForShipping = res;
             // this.legalEntityList_ForBilling= res;
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
 
@@ -1443,7 +1450,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.employeeService.getEmployeeTrainingType().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false}
         );
     }
     private EmployeeLeaveType() {
@@ -1451,7 +1458,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.employeeService.getEmployeeLeaveType().subscribe(
             results => this.onLeavedata(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false}
         );
     }
     // private multiLeavelist() {
@@ -1467,7 +1474,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private multiLeavelist(strText = '') {
 		if(this.arraymultileavelist.length == 0) {			
             this.arraymultileavelist.push(0); }            
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType',strText,true,20000,this.arraymultileavelist.join()).subscribe(response => {           
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType',strText,true,20000,this.arraymultileavelist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
             this.leavemultiValues = response;          
             this.leavemultiValues = this.leavemultiValues.reduce((unique, o) => {
                 if (!unique.some(obj => obj.label === o.label)) {
@@ -1477,8 +1484,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             }, []);
             let valAirCraft = [];
 		},err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			// const errorLog = err;
+            // this.errorMessageHandler(errorLog);	
+            this.isSpinnerVisible = false;	
 		});
 	}
 
@@ -1581,12 +1589,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         //this.loadingIndicator = true;
 		if(this.arrayjobtitlelist.length == 0) {			
 			this.arrayjobtitlelist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description',strText,true,20000,this.arrayjobtitlelist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description',strText,true,20000,this.arrayjobtitlelist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.allJobTitlesinfo = response;			
 		},err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
 		});
     }
     
@@ -1595,7 +1603,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.loadingIndicator = true;
         this.jobTypeService.getAllJobTypeList().subscribe(
             results => this.onJobtypeDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false
         );
     }
     onJobtypeDataLoadSuccessful(jobTypes: JobType[]) {
@@ -1665,12 +1673,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private loademployeesexperties(strText = '') {
 		if(this.arrayExpertiselist.length == 0) {			
 			this.arrayExpertiselist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description',strText,true,20000,this.arrayExpertiselist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description',strText,true,20000,this.arrayExpertiselist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.allEmployeeExpertiseInfo =  response;			
 		},err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
 		});
     }
     
@@ -1716,7 +1724,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.sourceAction.isActive == false;
             this.employeeService.updateEmployee(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false)//this.saveFailedHelper(error));
         }
         else {
             this.sourceAction = rowData;
@@ -1725,7 +1733,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.sourceAction.isActive == true;
             this.employeeService.updateEmployee(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false)//this.saveFailedHelper(error));
         }
     }
     open(content) {
@@ -1819,7 +1827,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.sourceAction = row;
         this.employeeService.historyEmployee(this.sourceAction.employeeId).subscribe(
             results => this.onHistoryLoadSuccessful(results[0], content),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false)// this.saveFailedHelper(error));
     }
     editItemAndCloseModel() {
         if (!(this.sourceEmployee.firstName && this.sourceEmployee.middleName && this.sourceEmployee.employeeIdAsPerPayroll && this.sourceEmployee.stationId
@@ -1882,7 +1890,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
                 this.employeeService.updateEmployeeDetails(this.sourceEmployee).subscribe(
                     response => this.saveCompleted(this.sourceEmployee),
-                    error => this.saveFailedHelper(error));
+                    error => this.isSpinnerVisible = false)//this.saveFailedHelper(error));
                 this.activeIndex = 0;
                 this.employeeService.indexObj.next(this.activeIndex);
             }
@@ -1903,9 +1911,9 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             ///this.sourceEmployee.reset();
             this.alertService.showMessage("Success", this.showTitle, MessageSeverity.success);
         }, err => {
-
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
     saveJobType() {
@@ -1948,9 +1956,10 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.jobTitleService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false) //this.saveFailedHelper(error));
         }
     }
+
     editItemLeaveCloseModel() {
         this.isSaving = true;
         if (this.leaveType.toLowerCase().trim() == "") {
@@ -2013,7 +2022,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.jobTitleService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false) //this.saveFailedHelper(error));
         }
         //s this.modal.close();
     }
@@ -2128,7 +2137,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.sourceAction.updatedBy = this.userName;
         this.employeeService.deleteEmployee(this.sourceAction.employeeId).subscribe(
             response => this.saveCompleted(this.sourceAction),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false)//this.saveFailedHelper(error));
         this.modal.close();
     }
     filterEmployees(event) {
@@ -2584,12 +2593,12 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     getAllStationData(strText = '') {
 		if(this.arrayAllStationlist.length == 0) {			
 			this.arrayAllStationlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName',strText,true,20000,this.arrayAllStationlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName',strText,true,20000,this.arrayAllStationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.getAllAllStationInfodrpData =  response;
 		},err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
 		});
 	}
 

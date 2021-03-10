@@ -242,13 +242,14 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.savedGeneralInformationData = this.editGeneralInformationData;
       this.customerCode = this.editGeneralInformationData.customerCode;
       this.customerName = this.editGeneralInformationData.name;
-
-      if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+      //if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+      if (this.customerGeneralInformation.isCustomerAlsoVendor == true) {
         this.showAllowNettingOfAPAR = true;
+        this.savedGeneralInformationData.allowNettingOfAPAR = true;
       } else {
         this.showAllowNettingOfAPAR = false;
+        this.savedGeneralInformationData.allowNettingOfAPAR = false;
       }
-
     } else {
       this.savedGeneralInformationData.allowPartialBilling = true;
       this.savedGeneralInformationData.allowProformaBilling = true;
@@ -257,11 +258,13 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.customerCode = this.savedGeneralInformationData.customerCode;
       this.customerName = this.savedGeneralInformationData.name;
       this.getDefaultCurrency();
-
-      if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+      //if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+      if (this.customerGeneralInformation.isCustomerAlsoVendor == true) {
         this.showAllowNettingOfAPAR = true;
+        this.savedGeneralInformationData.allowNettingOfAPAR = true;
       } else {
         this.showAllowNettingOfAPAR = false;
+        this.savedGeneralInformationData.allowNettingOfAPAR = false;
       }
     }
 
@@ -289,7 +292,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
             if (this.id) {
               this.toGetDocumentsListNew(this.id);
               this.getFinanceInfoByCustomerId();
-            }
+            }            
 
             this.savedGeneralInformationData = {
               ...this.editGeneralInformationData,
