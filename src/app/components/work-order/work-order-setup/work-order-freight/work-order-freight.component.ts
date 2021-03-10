@@ -214,7 +214,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.freightForm = [newFreight];
 
     }
-    addNewRow() {
+    addNewRow() { 
         let newFreight = new Freight();
         const taskId = this.taskList.filter(x => x.description === 'shipping');
         console.log("taskId",taskId)
