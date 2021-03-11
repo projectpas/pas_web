@@ -163,7 +163,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
             //   label: x.expertiseType,
             //   value: x.employeeExpertiseId
             // }
-            if(x.expertiseType =='Technician'){
+            if(x.empExpCode =='TECHNICIAN'){
                this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                return;
             }
@@ -244,7 +244,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         })
     }
     getSalesPersonList() {
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'Sales', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.salesPersonOriginalList = res;
@@ -254,7 +254,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
     getCSRList() {
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'CSR', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.csrOriginalList = res;
@@ -263,7 +263,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
     getAgentsList() {
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'Agents', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.agentsOriginalList = res;
@@ -279,7 +279,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     // }
 
     getTechnicianList() {
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
                 this.technicianOriginalList = res;

@@ -139,7 +139,7 @@ export class CommonTeardownComponent implements OnInit {
             this.showViewTemplate = true;
           var iscall= false;  
 
-        const TechnicianId = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
+        const TechnicianId = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
         if (TechnicianId !== undefined) 
         {
             if(this.arrayTechnicianlist.length == 0) 
@@ -203,7 +203,7 @@ export class CommonTeardownComponent implements OnInit {
                 }, error => error => this.saveFailedHelper(error))
         }
 
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'Inspector', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'INSPECTOR', this.jobTitles);
         if (id !== undefined) 
         {
             if(this.arrayInsectorlist.length == 0) 
@@ -334,7 +334,7 @@ export class CommonTeardownComponent implements OnInit {
     }
 
     async autoCompleteDropdownsEmployeeByJobTitleInspector(serachtext:string) {
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'Inspector', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'INSPECTOR', this.jobTitles);
         if (id !== undefined) 
         {
             if(this.arrayInsectorlist.length == 0) {			
@@ -348,7 +348,7 @@ export class CommonTeardownComponent implements OnInit {
     }
     
     async autoCompleteDropdownsEmployeeByJobTitleTechnician(serachtext:string) {
-        const id = getValueByFieldFromArrayofObject('jobTitle', 'Technician', this.jobTitles);
+        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
         if (id !== undefined) 
         {
             if(this.arrayTechnicianlist.length == 0) {			

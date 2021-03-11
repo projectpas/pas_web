@@ -65,6 +65,7 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         "updatedDate":new Date(),
         "isActive":true,
         "isDeleted":false,
+        "isApprovalRule":false
         };
     isEditMode: boolean = false;
     private onDestroy$: Subject<void> = new Subject<void>();

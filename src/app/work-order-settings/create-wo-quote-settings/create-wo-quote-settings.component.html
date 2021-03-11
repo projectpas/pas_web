@@ -48,6 +48,15 @@
                             <input type="number" name="validDays" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.validDays" required>
                         </div>
                     </div>
+                    <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
+                        <div class="form-group">
+                            <p-checkbox name="isApprovalRule" binary="true"
+                                [(ngModel)]="receivingForm.isApprovalRule">
+                            </p-checkbox>
+                            <label style="padding-left:10px;">Apply Approval Rule
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 

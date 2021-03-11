@@ -136,7 +136,7 @@ export class WorkOrderSmartComponent implements OnInit {
     getAllExpertiseType() {
         this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
             this.expertiseTypeList = res.map(x => {
-                if (x.expertiseType == 'Technician'  || x.expertiseType == 'TECHNICIAN') {
+                if (x.empExpCode == 'TECHNICIAN') {
                     this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                     return;
                 }
@@ -192,10 +192,10 @@ export class WorkOrderSmartComponent implements OnInit {
         })
     }
     getAllSalesEmployeeListByJobTitle(jobTitles) {
-        const CSRid = getValueByFieldFromArrayofObject('jobTitle', 'CSR', this.jobTitles);
-        const Salesid = getValueByFieldFromArrayofObject('jobTitle', 'SALES', this.jobTitles);
-        const Agentsid = getValueByFieldFromArrayofObject('jobTitle', 'AGENT', this.jobTitles);
-        const Technicianid = getValueByFieldFromArrayofObject('jobTitle', 'TECHNICIAN', this.jobTitles); 
+        const CSRid = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
+        const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
+        const Agentsid = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
+        const Technicianid = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles); 
         if (CSRid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
