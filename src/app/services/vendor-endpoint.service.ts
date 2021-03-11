@@ -1375,10 +1375,11 @@ export class VendorEndpointService extends EndpointFactory {
 			});
 	}
 
-	getcountryListEndpoint<T>(): Observable<T> {
-		return this.http.get<T>(this.countryUrl, this.getRequestHeaders())
+	getcountryListEndpoint<T>(masterCompanyId?): Observable<T> {
+		let endpointUrl = `${this.countryUrl}/${masterCompanyId!==undefined ? masterCompanyId : 1}`;
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleErrorCommon(error, () => this.getcountryListEndpoint());
+				return this.handleErrorCommon(error, () => this.getcountryListEndpoint(masterCompanyId));
 			});
 	}
 

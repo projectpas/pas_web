@@ -24,10 +24,10 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a class="collapsed" data-toggle="collapse" href="#step1">Domestic Shipping Info</a>
+                                <a class="collapsed" data-toggle="collapse" href="#stepd1">Domestic Shipping Info</a>
                             </h4>
                         </div>
-                        <div id="step1" class="panel-collapse collapse">
+                        <div id="stepd1" class="panel-collapse collapse">
                             <div class="panel-body m-lr-7">
                                 <div class="col-sm-12">
                                     <div style="text-align: right;">
@@ -209,7 +209,7 @@
                                                             </span>
                                                             <button (click)="openShipVia(rowData)" data-target="#contentDomesticShipVia"
                                                                     data-toggle="modal" class="btn btn-danger nobg" style="padding: 0px;"
-                                                                    matTooltip="Add Ship Via" matTooltipPosition="above">
+                                                                    matTooltip="{{ !isViewMode ? 'Add Ship Via' : 'Ship Via'}}" matTooltipPosition="above">
                                                                 <i class="fa fa-truck"></i>
                                                             </button>
                                                             <span data-target="#domesticShippingHistory" data-toggle="modal">
@@ -1267,10 +1267,10 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a class="collapsed" data-toggle="collapse" href="#step2">International Shipping Info</a>
+                                <a class="collapsed" data-toggle="collapse" href="#stepi2">International Shipping Info</a>
                             </h4>
                         </div>
-                        <div id="step2" class="panel-collapse  collapse">
+                        <div id="stepi2" class="panel-collapse  collapse">
                             <div class="panel-body m-lr-7">
                                 <div class="col-sm-12">
                                     <div style="text-align: right;">
@@ -1473,7 +1473,7 @@
                                                             </a>
                                                             </span>
                                                             <button data-target="#internationalShipVia" data-toggle="modal" class="btn btn-danger nobg"
-                                                                    style="padding: 0px;" matTooltip="Add Ship Via" matTooltipPosition="above"
+                                                                    style="padding: 0px;" matTooltip="{{!isViewMode ? 'Add Ship Via' : 'Ship Via'}}" matTooltipPosition="above"
                                                                     data-original-title="View Shipping Via Information"
                                                                     (click)="onClickInterShipvia(rowData);getVendorBasicData(rowData.vendorId)">
                                                                 <i class="fa fa-truck"></i>

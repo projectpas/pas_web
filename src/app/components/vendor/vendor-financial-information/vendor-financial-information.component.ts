@@ -110,6 +110,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     disableUpdate: boolean = true;
     isSpinnerVisible: Boolean = false;
     stopmulticlicks: boolean= false;
+    isVendorAlsoCustomer : boolean = false;
     emailPattern = emailPattern()
     urlPattern = urlPattern()
     phonePattern = phonePattern();
@@ -118,6 +119,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     arrayListDiscountId:any[] = [];
     arrayListCurrancyId:any[] = [];
     arrayListPercentageId:any[] = [];
+    showAllowNettingOfAPAR: boolean = false;
 
     constructor(private cdRef: ChangeDetectorRef, public CreditTermsService: CreditTermsService, public currencyService: CurrencyService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private commonservice: CommonService) {
         if(window.localStorage.getItem('vendorService')){
@@ -135,17 +137,22 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                     res => {
                             this.local = res[0];
                             this.vendorCodeandName = res[0];
+                            this.isVendorAlsoCustomer = res[0].isVendorAlsoCustomer;
+                            if(this.isVendorAlsoCustomer){
+                                this.sourceVendor.isAllowNettingAPAR = true;
+                                this.showAllowNettingOfAPAR = true;
+                            }
                     },err => {
-                        const errorLog = err;
-                        this.saveFailedHelper(errorLog);
-                    });
+                        this.isSpinnerVisible=false;
+                        //const errorLog = err;
+                        //this.saveFailedHelper(errorLog);
+                });
             }
         }
         else
         {
             this.getVendorCodeandNameByVendorId();
         }
-
         if (this.vendorService.listCollection !== undefined) {
             this.vendorService.isEditMode = true;
             this.sourceVendor.vendorId = this.vendorService.listCollection.vendorId;
@@ -182,14 +189,12 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         this.loadCreditTermsData();
         this.sourceVendor.v1099RentDefault = true;
         this.sourceVendor.is1099Required = false;
-
         if(this.vendorId == undefined || this.vendorId == 0 || this.vendorId == null)
         {
             this.vendorId = this.router.snapshot.params['id'];
             this.vendorService.vendorId = this.vendorId;
             this.vendorService.listCollection.vendorId = this.vendorId;
-        }
-        
+        }        
         if (this.local) {
              this.getVendorsList();
         }
@@ -206,7 +211,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         this.isSpinnerVisible = true;
         this.vendorService.getVendordata(this.local.vendorId).subscribe(
             results => this.onVendorsLoadSuccssfull(results),
-            error => this.saveFailedHelper(error)
+            error => this.isSpinnerVisible=false//this.saveFailedHelper(error)
         );
     }
 
@@ -219,10 +224,11 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     }
 
     getAllPercentage() {
-        this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+        //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
             this.percentageList = res;
         },
-        error => this.saveFailedHelper(error))
+        error => this.isSpinnerVisible=false)//this.saveFailedHelper(error))
     }
 
     getVendorCodeandNameByVendorId()
@@ -233,8 +239,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 res => {
                         this.vendorCodeandName = res[0];
                 },err => {
-                    const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+                      this.isSpinnerVisible=false
+                    //const errorLog = err;
+                    //this.saveFailedHelper(errorLog);
             });
         }        
     }
@@ -248,7 +255,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         this.isSpinnerVisible = true;
         this.vendorService.getWorkFlows().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => this.saveFailedHelper(error)
+            error => this.isSpinnerVisible=false//this.saveFailedHelper(error)
         );
     }
 
@@ -256,7 +263,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.saveFailedHelper(error)
+            error => this.isSpinnerVisible=false//this.saveFailedHelper(error)
         );
     }
 
@@ -279,7 +286,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             });
             this.isSpinnerVisible = false;
         },
-        error => this.saveFailedHelper(error))
+        error => this.isSpinnerVisible=false)//this.saveFailedHelper(error))
     }
 
     private getVendorProcess1099FromTransaction(vendorId) {
@@ -304,7 +311,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 this.getVendorProcess1099();
             }
             this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error))
+        }, error => this.isSpinnerVisible=false )// this.saveFailedHelper(error))
     }
 
     handleChange(rowData, e) {
@@ -334,10 +341,12 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 this.enableUpdate = true;
                 this.sourceVendor.creditLimit =  this.dataSource.data[0].creditLimit;
                 this.sourceVendor.creditTermsId =  this.dataSource.data[0].creditTermsId;
-
+                this.sourceVendor.isAllowNettingAPAR =  this.dataSource.data[0].isAllowNettingAPAR;
+                if(this.sourceVendor.isAllowNettingAPAR){                   
+                    this.showAllowNettingOfAPAR = true;
+                }
                 this.arrayListDiscountId.push(this.dataSource.data[0].discountId);
                 this.getAllDiscountDropdownList(this.dataSource.data[0].discountId);
-
                 this.arrayListCurrancyId.push(this.dataSource.data[0].currencyId);
                 this.loadCurrencyData(this.dataSource.data[0].currencyId);
             }
@@ -465,13 +474,11 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     editItemAndCloseModel(isGoNxt?: boolean) {
         this.isSaving = true;
         var errmessage = '';
-        this.alertService.resetStickyMessage();	
-
+        this.alertService.resetStickyMessage();
         if(this.sourceVendor.creditLimit == 0 || this.sourceVendor.creditLimit == null) {	
             this.isSpinnerVisible = false;	
             errmessage = errmessage + "Credit Limit values must be greater than zero."
         }
-
         if(this.sourceVendor.creditTermsId == 0 || this.sourceVendor.creditTermsId == null) {	
             this.isSpinnerVisible = false;	
             if(errmessage != '') {
@@ -482,7 +489,6 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 errmessage = errmessage + "Please Select Creadit Tearms."
             }	
         }
-
         if(this.sourceVendor.currencyId == 0 || this.sourceVendor.currencyId == null) {	
             this.isSpinnerVisible = false;	
             if(errmessage != '') {
@@ -493,16 +499,13 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 errmessage = errmessage + "Please Select Currency"
             }	
         }
-
         if(errmessage != '') {
             this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
             return;
         }
-
         if(this.sourceVendor.discountId == 0 || this.sourceVendor.discountId == null) {
             this.sourceVendor.discountId = null;
         }
-
         if (this.sourceVendor.country != null) {
             this.sourceVendor.country = "99";
         }
@@ -586,7 +589,8 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                     updatedBy: this.sourceVendor.updatedBy,
                     isActive: true,
                     is1099Required: this.sourceVendor.is1099Required ? this.sourceVendor.is1099Required : false,
-                    masterCompanyId: this.sourceVendor.masterCompanyId
+                    masterCompanyId: this.sourceVendor.masterCompanyId,
+                    isAllowNettingAPAR : this.sourceVendor.isAllowNettingAPAR
                 }
                 if (this.sourceVendor.is1099Required) {
                     if (this.sourceVendor.master1099s.length !=0) {
@@ -606,7 +610,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                                 this.disableUpdate = true;
                                 this.isSpinnerVisible = false;
                             },
-                            error => this.saveFailedHelper(error))
+                            error => this.isSpinnerVisible=false )// this.saveFailedHelper(error))
                         } else {
                             this.alertService.showMessage("Failure", `Must select a radio option`, MessageSeverity.error);
                             this.isSpinnerVisible = false;
@@ -626,7 +630,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                         this.disableUpdate = true;
                         this.isSpinnerVisible = false;
 
-                    }, error => this.saveFailedHelper(error))
+                    }, error => this.isSpinnerVisible=false )// this.saveFailedHelper(error))
                 }
             }
             else {
@@ -638,7 +642,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                     this.enableUpdate = true;
                     this.disableUpdate = true;
                     this.isSpinnerVisible = false;
-                },error => this.saveFailedHelper(error))
+                },error => this.isSpinnerVisible=false )// this.saveFailedHelper(error))
             }
         }
         else {
@@ -735,7 +739,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     loadCurrencyData(CurrencyId){
         if(this.arrayListCurrancyId.length == 0) {
 			this.arrayListCurrancyId.push(0); }
-        this.commonservice.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code','',true,500,this.arrayListCurrancyId.join()).subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code','',true,500,this.arrayListCurrancyId.join(),this.currentUserMasterCompanyId).subscribe(res => {
               this.allCurrencyInfo = res.map(x => {
                   return {
                       ...x,
@@ -750,7 +754,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
               else{
                 this.sourceVendor.currencyId = 0;
               }
-        }, error => this.saveFailedHelper(error))
+        }, error => this.isSpinnerVisible=false ) //this.saveFailedHelper(error))
     }
 
     saveCurrency() {
@@ -773,7 +777,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.currencyService.updatecurrency(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible=false )//this.saveFailedHelper(error));
         }
         this.modal.close();
     }
@@ -809,9 +813,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     private loadCreditTermsData() {
         //this.alertService.startLoadingMessage();
         //this.loadingIndicator = true;
-        this.CreditTermsService.getCreditTermsList().subscribe(
+        this.CreditTermsService.getCreditTermsList(this.currentUserMasterCompanyId).subscribe(
             results => this.onCreditTermsdata(results[0]),
-            error => this.saveFailedHelper(error)
+            error => this.isSpinnerVisible=false //this.saveFailedHelper(error)
         );
     }
 
@@ -831,7 +835,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         //this.loadingIndicator = true;
         this.vendorService.getDiscountList().subscribe(
             results => this.onDataLoadClassifiSuccessful(results[0]),
-            error => this.saveFailedHelper(error)
+            error => this.isSpinnerVisible=false//this.saveFailedHelper(error)
         );
 
     }
@@ -850,7 +854,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     getAllDiscountDropdownList(DiscountId){
 		if(this.arrayListDiscountId.length == 0) {
 			this.arrayListDiscountId.push(0); }
-        this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue','',true,500,this.arrayListDiscountId.join()).subscribe(response => {
+        this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue','',true,500,this.arrayListDiscountId.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.discountList = response;
             if(DiscountId > 0){
                 this.sourceVendor.discountId = DiscountId;
@@ -859,8 +863,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 this.sourceVendor.discountId = 0;
             }
 		},err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
+            this.isSpinnerVisible=false
+			//const errorLog = err;
+			//this.saveFailedHelper(errorLog);
 		});
     }
 
