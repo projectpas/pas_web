@@ -236,21 +236,21 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.savedGeneralInformationData.discountId = 0;
     this.savedGeneralInformationData.markUpPercentageId = 0;
 
-    if (this.editMode) {
+    if (this.editMode) {     
       //this.id = this.editGeneralInformationData.customerId;
       this.customerGeneralInformation = this.editGeneralInformationData;
       this.savedGeneralInformationData = this.editGeneralInformationData;
       this.customerCode = this.editGeneralInformationData.customerCode;
       this.customerName = this.editGeneralInformationData.name;
-      //if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {
+      //if (this.customerGeneralInformation.isCustomerAlsoVendor == true && this.customerGeneralInformation.type == 'Customer') {      
       if (this.customerGeneralInformation.isCustomerAlsoVendor == true) {
-        this.showAllowNettingOfAPAR = true;
-        this.savedGeneralInformationData.allowNettingOfAPAR = true;
-      } else {
-        this.showAllowNettingOfAPAR = false;
-        this.savedGeneralInformationData.allowNettingOfAPAR = false;
+         this.showAllowNettingOfAPAR = true;
+         this.savedGeneralInformationData.allowNettingOfAPAR = true;
+       } else {
+         this.showAllowNettingOfAPAR = false;
+         this.savedGeneralInformationData.allowNettingOfAPAR = false;
       }
-    } else {
+    } else {     
       this.savedGeneralInformationData.allowPartialBilling = true;
       this.savedGeneralInformationData.allowProformaBilling = true;
       this.customerGeneralInformation = this.savedGeneralInformationData;
@@ -267,8 +267,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
         this.savedGeneralInformationData.allowNettingOfAPAR = false;
       }
     }
-
   }
+
   ngOnChanges(changes: SimpleChanges) {
     for (let property in changes) {
       if (property == 'selectedCustomerTab') {
