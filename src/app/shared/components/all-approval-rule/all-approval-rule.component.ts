@@ -152,6 +152,9 @@ export class AllApprovalRuleComponent implements OnInit {
       else if(this.moduleType  == 'RO') {
         this.moduleName = 'Repair Order';       
       }
+     else if(this.moduleType  == 'WOQ') {
+        this.moduleName = 'Work Order Quote';
+      }
       this.getTaskNames();    	
   }
 
@@ -551,6 +554,10 @@ addNewApproval(){
         this.moduleName = 'Sales Order';
         this.creatingData.approvalTaskId = this.taskID;
       }
+      if(this.moduleType  == 'WOQ') {
+        this.moduleName = 'Work Order Quote';
+        this.creatingData.approvalTaskId = this.taskID;
+      }
       this.getManagementStructureDetails(this.currentUserManagementStructureId,this.employeeId);
       this.creatingData.managementStructureId = this.currentUserManagementStructureId;	
       this.arrayEmplsit = [];
@@ -578,6 +585,9 @@ addNewApproval(){
                     this.taskID = element.value;
                 }
                 else if(element.label == 'SO Approval' && this.moduleType == 'SO') {
+                    this.taskID = element.value;
+                }
+                else if(element.label == 'WO Quote Approval' && this.moduleType == 'WOQ') {
                     this.taskID = element.value;
                 }
             });

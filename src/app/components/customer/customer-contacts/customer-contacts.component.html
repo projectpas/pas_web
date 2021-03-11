@@ -618,14 +618,12 @@
           <div class="form-row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="tag">Tag <span class="clr-red">*</span></label>
-                <!-- <input type="text" class="form-control" [(ngModel)]="contactInformation.tag"
-                  (ngModelChange)="enableSave()" name="tag" required /> -->
+                <label for="tag">Tag <span class="clr-red"></span></label>                
                   <div class="inner-addon right-addon inline-block input-width-100-percent">
                     <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="contactInformation.tag"
                       (ngModelChange)="enableSave()" name="tag" field="tagName" [suggestions]="tagNamesList"
                       (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
-                      [inputStyle]="{ width: '100%' }" [forceSelection]="true" required autocomplete="off">
+                      [inputStyle]="{ width: '100%' }" [forceSelection]="true" autocomplete="off">
                     </p-autoComplete>
                   </div>
               </div>

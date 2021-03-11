@@ -464,7 +464,7 @@ this.alertService.showMessage(
                 //   label: x.expertiseType,
                 //   value: x.employeeExpertiseId
                 // }
-                if(x.expertiseType =='Technician'){
+                if(x.empExpCode =='TECHNICIAN'){
                    this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
                    return;
                 }

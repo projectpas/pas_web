@@ -667,8 +667,8 @@ export class CustomerContactsComponent implements OnInit {
 			firstName: editValueAssignByCondition('firstName', this.contactInformation.firstName),
 			middleName: editValueAssignByCondition('middleName', this.contactInformation.middleName),
 			lastName: editValueAssignByCondition('lastName', this.contactInformation.lastName),
-			tag:editValueAssignByCondition('tagName', this.contactInformation.tag),
-			contactTagId: editValueAssignByCondition('contactTagId', this.contactInformation.tag)
+			tag:editValueAssignByCondition('tagName', this.contactInformation.tag),			
+			contactTagId: this.contactInformation.tag == "NA" ? null : editValueAssignByCondition('contactTagId', this.contactInformation.tag)
 		}
 		if (String(data.isDefaultContact) == "Yes") {
 			data.isDefaultContact = true
@@ -676,7 +676,7 @@ export class CustomerContactsComponent implements OnInit {
 		}
 		else if (String(data.isDefaultContact) == "") {
 			data.isDefaultContact = false;
-		}
+		}		
 		this.customerService.updateContactinfo(data).subscribe(res => {
 			//this.getAllContacts();
 			this.customerContacts = [];

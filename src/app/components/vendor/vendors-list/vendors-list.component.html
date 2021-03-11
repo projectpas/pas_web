@@ -648,6 +648,7 @@
                     <span class="value">{{vendorData.isActive ? 'Active' : 'In-Active'}}</span>
                 </button>
             </div>
+            <hr />
         </div>
         
       <div class="panel-group" id="accordion">
@@ -794,6 +795,22 @@
                             ><i class="cr-icon pi pi-check"></i
                           ></span>
                           Is this Vendor also a Customer
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isAllowNettingAPAR"
+                            [(ngModel)]="vendorData.isAllowNettingAPAR"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Allow Netting of AP/AR
                         </label>
                       </div>
                     </div>
@@ -1224,7 +1241,7 @@
                   <div class="col-sm-6">
                     <div class="=col-sm-12">
                       <p>
-                        <span class="label"><b>Default Payment Mode: </b></span
+                        <span class="label"><b>Default Payment Method : </b></span
                         ><span class="value">{{ paymentTypeName }}</span>
                       </p>
                     </div>

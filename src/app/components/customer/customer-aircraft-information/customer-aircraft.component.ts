@@ -275,8 +275,7 @@ export class CustomerAircraftComponent implements OnInit {
         }
     }
 
-    async getAircraftModelByManfacturerType(id) {
-        
+    async getAircraftModelByManfacturerType(id) {       
         //this.selectAircraftManfacturer = String(id);
         // construct url from array
         await this.searchByFieldUrlCreateforAircraftInformation();
@@ -284,10 +283,8 @@ export class CustomerAircraftComponent implements OnInit {
         this.selectedAircraftModel = [];
         this.selectedDashNumbers = []
         // checks where multi select is empty or not and calls the service
-        if (this.selectAircraftManfacturer !== '' && this.selectAircraftManfacturer !== 'null') {
-            this.aircraftModelService
-                .getAircraftModelListByManufactureId(this.selectAircraftManfacturer)
-                .subscribe(models => {
+        if (this.selectAircraftManfacturer !== '' && this.selectAircraftManfacturer !== null) {
+            this.aircraftModelService.getAircraftModelListByManufactureId(this.selectAircraftManfacturer).subscribe(models => {
                     const responseValue = models[0];
                     this.search_AircraftModelList = responseValue.map(models => {
                         return {
@@ -323,19 +320,19 @@ export class CustomerAircraftComponent implements OnInit {
     }
 
     //  search aircraft information by all parameter
-    async searchAircraftInformation() {
+    async searchAircraftInformation() {        
         await this.searchByFieldUrlCreateforAircraftInformation();
         this.searchAircraftParams = '';
         // checks where multi select is empty or not and calls the service
         if (
-            this.aircraftManfacturerIdsUrl !== '' &&
+            (this.aircraftManfacturerIdsUrl !== '' || this.aircraftManfacturerIdsUrl!== null) &&
             this.aircraftModelsIdUrl !== '' &&
             this.dashNumberIdUrl !== ''
         ) {
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}&AircraftModelId=${this.aircraftModelsIdUrl}&DashNumberId=${this.dashNumberIdUrl}`;
         }
         else if (
-            this.aircraftManfacturerIdsUrl !== '' &&
+            (this.aircraftManfacturerIdsUrl !== '' || this.aircraftManfacturerIdsUrl!== null) &&
             this.aircraftModelsIdUrl !== '' &&
             this.dashNumberIdUrl !== ''
         ) {
@@ -343,13 +340,13 @@ export class CustomerAircraftComponent implements OnInit {
         }
         // search only by manfacturer and Model and  publicationId
         else if (
-            this.aircraftManfacturerIdsUrl !== '' &&
+            (this.aircraftManfacturerIdsUrl !== '' || this.aircraftManfacturerIdsUrl!== null) &&
             this.aircraftModelsIdUrl !== ''
         ) {
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}&AircraftModelId=${this.aircraftModelsIdUrl}`;
         }
         else if (
-            this.aircraftManfacturerIdsUrl !== '' &&
+            (this.aircraftManfacturerIdsUrl !== '' || this.aircraftManfacturerIdsUrl!== null) &&
             this.dashNumberIdUrl !== ''
         ) {
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}&DashNumberId=${this.dashNumberIdUrl}`;
@@ -360,7 +357,7 @@ export class CustomerAircraftComponent implements OnInit {
         ) {
             this.searchAircraftParams = `AircraftModelId=${this.aircraftModelsIdUrl}&DashNumberId=${this.dashNumberIdUrl}`;
         }        
-        else if (this.aircraftManfacturerIdsUrl !== '') {
+        else if (this.aircraftManfacturerIdsUrl !== '' || this.aircraftManfacturerIdsUrl!== null) {
             this.searchAircraftParams = `AircraftTypeId=${this.aircraftManfacturerIdsUrl}`;
         }
         // search only by model and publicationId
@@ -375,7 +372,7 @@ export class CustomerAircraftComponent implements OnInit {
             this.searchAircraftParams = `${this.searchAircraftParams}&memo=${this.selectedmemo}`
         } else {
             this.searchAircraftParams = this.searchAircraftParams;
-        }
+        }        
         this.customerService.searchAirMappedByMultiTypeIDModelIDDashIDByCustomerId(this.id, this.searchAircraftParams).subscribe(res => {
             this.aircraftListDataValues = res;
             if (this.aircraftListDataValues.length > 0) {

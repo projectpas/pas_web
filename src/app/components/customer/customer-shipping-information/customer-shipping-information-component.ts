@@ -1095,6 +1095,15 @@ export class CustomerShippingInformationComponent implements OnInit {
         if(this.internationalShippingViaData && this.internationalShippingViaData.length==0){
             this.shipViaInternational.isPrimary=true;
         }
+        if(!this.shipViaInternational.shipViaId && !this.shipViaInternational.shippingAccountInfo){
+            this.alertService.showMessage(
+                'Error',
+                `Please Add Atleast one value Ship via or Shipping Account Info`,
+                MessageSeverity.error
+            );
+            this.isSpinnerVisible = false;
+            return;
+        }
         const data = {
             ...this.shipViaInternational,
             internationalShippingId: this.selectedShipViaInternational.internationalShippingId,
