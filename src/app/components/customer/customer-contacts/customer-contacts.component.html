@@ -28,7 +28,7 @@
               <div class="col">
                 <h4 class="header-name"> Contacts</h4>
               </div>
-              <div>
+              <div *ngIf="isAdd">
                 <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addContactDetails">
                   <button type="button" class="btn-sm header-button" 
                    matTooltip="Add Contact" matTooltipPosition="above" (click)="onAddContactInfo();">
@@ -218,15 +218,15 @@
               </td>
               <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">
                   <div *ngIf="currentDeletedstatus==false">
-                      <p-inputSwitch matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
+                      <p-inputSwitch *ngIf="isEdit" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
                                      onLabel="on" [disabled]="rowData.isDefaultContact == true" offLabel="off" (onChange)="handleChange(rowData)" [(ngModel)]="rowData['isActive']">
                       </p-inputSwitch>
-                      <span data-toggle="modal" data-target="#view">
+                      <span  data-toggle="modal" data-target="#view">
                           <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewSelectedRow(rowData)"
                              matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                       </span>
 
-                      <span data-toggle="modal" data-target="#addContactDetails">
+                      <span *ngIf="isEdit" data-toggle="modal" data-target="#addContactDetails">
                           <a class="btn nobg"
                              (click)="editCustomerContact(rowData)" matTooltip="Edit" matTooltipPosition="above">
                               <i class="fa fa-pencil"></i>
@@ -241,7 +241,7 @@
                                  aria-hidden="true"></i>
                           </a>
                       </span>
-                      <span data-toggle="modal">
+                      <span *ngIf="isDelete" data-toggle="modal">
                           <a class="btn nobg"
                              (click)="openDelete(deleteContent, rowData);contact.reset()" matTooltip="Delete"
                              matTooltipPosition="above"><i class="fa fa-trash"></i></a>
@@ -254,7 +254,7 @@
                       </span>
                   </div>
                       <div *ngIf="currentDeletedstatus==true">
-                        <p-inputSwitch   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
+                        <p-inputSwitch *ngIf="isEdit"  matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
                         onLabel="on"  [disabled]="true" offLabel="off" (onChange)="handleChange(rowData)" [(ngModel)]="rowData['isActive']">
                       </p-inputSwitch>
                         <span data-toggle="modal" data-target="#view">
@@ -267,7 +267,7 @@
                               <i class="fa fa-history"></i>
                           </a>
                         </span>
-                        <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        <span *ngIf="isDelete"><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                         </div>
               </td>
               <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == true">
@@ -275,7 +275,7 @@
                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewSelectedRow(rowData)"
                     matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                 </span>
-                <span data-target="#ATAADD" data-toggle="modal"><a class="btn nobg" 
+                <span *ngIf="isATA" data-target="#ATAADD" data-toggle="modal"><a class="btn nobg" 
                   matTooltip="ATA Chapters"
                   matTooltipPosition="above"
                   (click)="addATAChapter(rowData)"><i class="fa fa-plane"

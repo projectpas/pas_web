@@ -1,10 +1,21 @@
 export class ModuleConstants
 {
-     static Vendore:string = "Vendor";
+    static Vendore:string = "Vendor";
     static Customer:string = "Customers";
     static Employee:string="Employees";
     static  Organization:string = "Organization";
     static Publication:string = "Publications";
+    static CustomerList:string = "CustomersList";
+    static Customers_GeneralInformation:string = "Customers_GeneralInformation";
+    static Customers_Contacts:string = "Customers_Contacts";
+    static Customers_AircraftInformation:string = "Customers_AircraftInformation";
+    static Customers_ATAChapter:string = "Customers_ATAChapter";
+    static Customers_FinancialInformation:string = "Customers_FinancialInformation";
+    static Customers_BillingInformation:string = "Customers_BillingInformation";
+    static Customers_ShippingInformation:string = "Customers_ShippingInformation";
+    static Customers_SalesPersonInformation:string = "Customers_SalesPersonInformation";
+    static Customers_Warnings:string = "Customers_Warnings";
+    static Customers_Documents:string = "Customers_Documents";
 }
 
 export class PermissionConstants

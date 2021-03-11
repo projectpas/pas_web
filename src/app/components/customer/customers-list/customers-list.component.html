@@ -228,7 +228,7 @@
             *ngIf="selectedColumns.length > 0"
           >
             <div *ngIf="onDeletedActionState == false">
-              <p-inputSwitch *ngIf="isEdit"
+              <p-inputSwitch *ngIf="isActive"
                 [(ngModel)]="rowData['isActive']"
                 name="isActive{{ rowIndex }}"
                 matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"

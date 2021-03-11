@@ -473,12 +473,25 @@ private defaultEmployeeDetails= new Subject<any>()
         return isAllowed;
       }
 
+      public checkPermissionCustomer(permissionName:string[]):boolean{
+        let isAllowed:boolean = false;
+        if(this.currentUser && this.currentUser.permissionName!=null){
+            
+            let getData=this.currentUser.permissionName.filter((value)=>
+                permissionName.includes(value));
+            isAllowed=getData.length>0;
+        }
+        
+        return isAllowed;
+      }
+
       public ShowTab(moduleName:string, tabName: string):Boolean {
         let Menus:ModuleHierarchyMaster[] = this.getModuleByUserRole();
         //alert(Menus);
         tabName = tabName.toLocaleLowerCase();
          let isAllowed:Boolean = false;
 
+         if(this.currentUser.userName!='admin'){
         var parentModule=Menus.filter(function(value){
             return value.name==moduleName;
         });
@@ -491,6 +504,10 @@ private defaultEmployeeDetails= new Subject<any>()
                 }
               });
         }
+    }
+    else{
+        isAllowed=true;
+    }
         return isAllowed;
       }
 }

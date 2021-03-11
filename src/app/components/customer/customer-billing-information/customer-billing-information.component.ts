@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { Params, ActivatedRoute } from '@angular/router';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-billing-information',
@@ -87,7 +88,9 @@ export class CustomerBillingInformationComponent {
     isSiteNameAlreadyExists: boolean = false;
     disableSaveSiteName: boolean;
     selectedSitename : any
-
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal,
@@ -96,6 +99,9 @@ export class CustomerBillingInformationComponent {
         private router: ActivatedRoute ) 
         {
             this.id = this.router.snapshot.params['id'];
+            this.isAdd=this.authService.checkPermissionCustomer([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermissionCustomer([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
+		this.isDelete=this.authService.checkPermissionCustomer([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Delete])
         }
 
     ngOnInit(): void {

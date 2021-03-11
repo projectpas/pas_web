@@ -55,13 +55,14 @@ export class CustomerStepsPrimengComponent {
 		public creditTermService: CreditTermsService,
 		private authService: AuthService,
 	) {
-		this.isView=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.View);
+		this.isView=this.authService.checkPermissionCustomer([ModuleConstants.CustomerList+'.'+PermissionConstants.View]);
 	}
 
 	isShowTab(value){
-		debugger;
+		
 		var isShow=this.authService.ShowTab('Create Customer',value);
 		return isShow;
+	
 	}
 	ngOnInit() {
 		this.customerId = this.acRouter.snapshot.params['id'];

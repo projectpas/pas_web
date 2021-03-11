@@ -186,7 +186,30 @@ export class CustomersListComponent implements OnInit {
     dateObject: any = {};
     isAdd:boolean=true;
     isEdit:boolean=true;
+    isActive:boolean=true;
     isDelete: boolean = true;
+    permissionAddCheck=[ModuleConstants.Customer+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_Documents+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Add];
+    permissionUpdateCheck=[ModuleConstants.Customer+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_Documents+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update,
+        ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Update];
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -200,9 +223,12 @@ export class CustomersListComponent implements OnInit {
         private commonService: CommonService,
         private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
-        this.isAdd=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Add);
-        this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
-        this.isDelete=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Delete);
+        //this.isAdd=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Add);
+        this.isAdd=this.authService.checkPermissionCustomer(this.permissionAddCheck);
+        //this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
+        this.isEdit=this.authService.checkPermissionCustomer(this.permissionUpdateCheck);
+        this.isActive=this.authService.checkPermissionCustomer([ModuleConstants.Customer+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermissionCustomer([ModuleConstants.Customer+'.'+PermissionConstants.Delete]);
     }
 
     ngOnInit() {
