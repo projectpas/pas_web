@@ -760,7 +760,7 @@ updatedBy: this.userName
 
 	getSalesPersonList() {
   
-         const id = getValueByFieldFromArrayofObject('jobTitle', 'Sales', this.jobTitles);
+         const id = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
 
         if (id !== undefined) {
             this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {

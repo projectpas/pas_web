@@ -120,6 +120,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.receivingForm.masterCompanyId = 0;
         this.receivingForm.createdBy = 0;
         this.receivingForm.updatedBy = 0;
+        this.receivingForm.isApprovalRule = false;
         this.receivingForm.receivedDate = new Date();
     }
 
