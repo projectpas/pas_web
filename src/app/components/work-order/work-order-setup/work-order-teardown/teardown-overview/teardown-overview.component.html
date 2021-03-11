@@ -36,11 +36,11 @@
         </div>
         <div id="step2" class="panel-collapse  collapse" >
             <div class="panel-body m-lr-7">
-               <p><strong>Mandatory Service Bulletins:</strong> <span *ngIf="saveTearDownData && saveTearDownData.mandatoryService">{{saveTearDownData.mandatoryService}}</span></p>
-                <p><strong>Requested Service Bulletins :</strong> <span *ngIf="saveTearDownData && saveTearDownData.requestedService">{{saveTearDownData.requestedService}}</span> </p>
-                <p><strong> Service Letters :</strong>  <span *ngIf="saveTearDownData && saveTearDownData.serviceLetters">{{saveTearDownData.serviceLetters}}</span></p>
-                <p><strong>Pma Parts :</strong><span *ngIf="saveTearDownData && saveTearDownData.pmaParts">{{saveTearDownData.pmaParts}}</span> </p>
-                <p><strong>Der Repairs :</strong> <span *ngIf="saveTearDownData && saveTearDownData.derRepairs">{{saveTearDownData.derRepairs}}</span></p>
+               <p><strong>Mandatory Service Bulletins: <span class="clr-red" >*</span></strong> <span *ngIf="saveTearDownData && saveTearDownData.mandatoryService">{{saveTearDownData.mandatoryService}}</span></p>
+                <p><strong>Requested Service Bulletins : <span class="clr-red" >*</span></strong> <span *ngIf="saveTearDownData && saveTearDownData.requestedService">{{saveTearDownData.requestedService}}</span> </p>
+                <p><strong> Service Letters :<span class="clr-red" >*</span></strong>  <span *ngIf="saveTearDownData && saveTearDownData.serviceLetters">{{saveTearDownData.serviceLetters}}</span></p>
+                <p><strong>Pma Parts : <span class="clr-red" >*</span></strong><span *ngIf="saveTearDownData && saveTearDownData.pmaParts">{{saveTearDownData.pmaParts}}</span> </p>
+                <p><strong>Der Repairs :<span class="clr-red" >*</span></strong> <span *ngIf="saveTearDownData && saveTearDownData.derRepairs">{{saveTearDownData.derRepairs}}</span></p>
  </div>
         </div>
     </div>

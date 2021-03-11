@@ -72,8 +72,8 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group" style="float: right;">
-                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <div class="form-group float-right">
+                                <div class="pull-left radio-buttons-align">
                                     <label class="radio-inline">
                                         <input type="radio" value="1" name="assetRadio" class="form-check-inline"
                                             [checked]="receivingForm.isCustomerStock == true"
@@ -81,7 +81,7 @@
                                         Rotable Customer Stock
                                     </label>
                                 </div>
-                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <div class="pull-left radio-buttons-align">
                                     <label class="radio-inline">
                                         <input type="radio" value="2" name="assetRadio" (change)="getStockStatus(1)"
                                             [checked]="receivingForm.isCustomerStock == false">
@@ -362,7 +362,7 @@
                                     </div>
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.isTimeLife">
-                                    <div class="table-responsive form-group" style="padding: 0 5px;"
+                                    <div class="table-responsive form-group time-life-padding"
                                         *ngIf="!receivingForm.isSkipTimeLife">
                                         <table class="table table-bordered">
                                             <thead>
@@ -531,7 +531,7 @@
                                     [(ngModel)]="receivingForm.mfgLotNo">
                             </div>
                             <div class="form-group">
-                                <div class="checkbox-cstm " style="margin-top: 20px;">
+                                <div class="checkbox-cstm m-t-20">
                                     <label>
                                         <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate"
                                             (ngModelChange)="getActive()">
@@ -564,7 +564,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group" style="margin-bottom: 8px;">
+                            <div class="form-group margin-bottom-8">
                                 <label>Obtain From </label>
                                 <!-- <label>Obtain From <span class="text-danger">*</span> </label> -->
                                 <select [(ngModel)]="receivingForm.obtainFromTypeId" (ngModelChange)="getActive()"
@@ -575,7 +575,7 @@
                                         {{item.moduleName}}</option>
                                 </select>
                             </div>
-                            <div class="form-group" style="margin-bottom: 8px !important;">
+                            <div class="form-group margin-bottom-8">
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 1">
                                     <div class="col-sm-12">
                                         <label>
@@ -629,7 +629,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 8px !important;">
+                            <div class="form-group margin-bottom-8">
                                 <label>Owner </label>
                                 <select [(ngModel)]="receivingForm.ownerTypeId" name="ownerType"
                                     (ngModelChange)="getActive()" (change)="onSelectOwner(receivingForm.ownerTypeId)"
@@ -758,13 +758,13 @@
                             
                         </div>
                         <div class="col-md-4 main_facture">
-                            <div class="card" style="margin-top: 8px;margin-bottom: 8px;">
-                                <div class="card-header" style="padding: 10px 4px;">
-                                    <h5 style="margin-bottom: 0; font-size: 12px;">
+                            <div class="card mgmt-card">
+                                <div class="card-header mgmt-card-header">
+                                    <h5 class="mgmt-header">
                                         Management Structure <span class="text-danger">*</span>
                                     </h5>
                                 </div>
-                                <div class="card-body" style="padding: 10px 4px 0px 4px !important;">
+                                <div class="card-body mgmt-card-body">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <p-dropdown [showClear]="true" class="p-dropdown-100"
@@ -799,7 +799,7 @@
                                 </div>
                             </div>
                             <div>
-                               <span class="label" style="width: 100%;">Memo
+                               <span class="label input-width-100-percent">Memo
                                     <span>
                                         <a style="margin-left: 5px;" class="nobg"  (click)="onClickMemo()" matTooltip="Add Memo"
                                             matTooltipPosition="above"><i class="fa fa-pencil" style="color: #2275ce;
@@ -931,8 +931,7 @@
                 </p>
             </div>
             <div class="modal-footer" style="padding:10px;">
-                <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
-                    style="padding: 6px 12px !important;">
+                <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()">
                     Ok
                 </button>
             </div>
