@@ -830,6 +830,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return Math.ceil(totalNoofRecords / pageSize)
     }
     checkQuantityAvailability() {
+        console.log("task",this.workFlow.materialList)
         let result = false;
         this.workFlow.materialList.forEach(
             material => {
