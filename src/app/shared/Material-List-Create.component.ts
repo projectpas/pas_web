@@ -232,6 +232,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         if (this.isWorkOrder) {
             this.row = this.workFlow.materialList[0];
             if (this.isEdit) {
+                console.log("edit data",this.editData)
                 this.workFlow.materialList = [];
                 this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
                 this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
@@ -250,7 +251,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             if (this.row == undefined) {
                 this.row = {};
             }
-            this.row.taskId = this.workFlow.taskId ? this.workFlow.taskId :"";
+            // this.row.taskId = this.workFlow.taskId ? this.workFlow.taskId :"";
             this.workFlow.materialList.map((x, index) => {
                 this.getPNDetails(x);
             })
@@ -259,12 +260,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
             this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
             this.editData.extendedCost = this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
-        //    console.log("edit metrial",this.editData)
+           console.log("edit metrial",this.editData)
             this.workFlow.materialList = this.editData;
         }
         else if (this.isQuote) {
             this.workFlow.materialList = [];
             this.addRow();
+            console.log(" metrial",this.editData)
         }
         this.getMaterailMandatories();
         if (!this.isView) {
@@ -294,16 +296,16 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
         }
         if (this.UpdateMode) {
-            this.reCalculate();
+            this.reCalculate(); 
         }
         if (this.isQuote && this.editData.length > 0) {
-            // console.log("hello",this.editData)
+            console.log("hello",this.editData)
             // this.editData[0].quantity= this.editData[0].quantity ? formatNumberAsGlobalSettingsModule(this.editData[0].quantity, 0) : '0',
             // this.editData[0].unitCost= this.editData[0].unitCost ? formatNumberAsGlobalSettingsModule(this.editData[0].unitCost, 2) : '0.00',
             // this.editData[0].extendedCost= this.editData[0].extendedCost ? formatNumberAsGlobalSettingsModule(this.editData[0].extendedCost, 2) : '0.00',
-            // this.editData[0].partNumber= { partId: this.editData[0].itemMasterId, partName: this.editData[0].partNumber }
+            this.editData[0].partNumber= { partId: this.editData[0].itemMasterId, partName: this.editData[0].partNumber }
             this.workFlow.materialList = this.editData;
-            // console.log("hello",this.editData)
+            console.log("hello 11",this.editData)
         }
         else if (this.isQuote && (!this.editData || this.editData.length <= 0)) {
             this.workFlow.materialList = [];
@@ -828,6 +830,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return Math.ceil(totalNoofRecords / pageSize)
     }
     checkQuantityAvailability() {
+        console.log("task",this.workFlow.materialList)
         let result = false;
         this.workFlow.materialList.forEach(
             material => {

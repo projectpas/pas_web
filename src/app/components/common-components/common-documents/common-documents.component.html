@@ -39,7 +39,7 @@
             <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" pButton
               icon="fa-download" matTooltip="Download  Data" matTooltipPosition="above" iconPos="left"
               label="Export  Data" (click)="selectedOnly = false; targetData = documents;" data-toggle="modal"
-              data-target="#downloadConfirmation"></button>
+              data-target="#downloadConfirmationDocument"></button>
             <!-- 
                   <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
                   matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
@@ -264,7 +264,7 @@
     </button>
   </div>
 </ng-template>
-<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="downloadConfirmationDocument" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
@@ -816,14 +816,14 @@
               </div>
             </div>
             <div class="form-group col-md-12">
-              <div class="col-md-6"><label class="col-md-6">Rev Num <span class="clr-red">*</span> :</label></div>
+              <div class="col-md-6"><label class="col-md-6">Rev Num <span class="clr-red"></span> :</label></div>
               <p-autoComplete class="autocomp-customer-cstm col-md-6" name="revNum" [(ngModel)]="addNew.revNum"
                 [suggestions]="lstfilterDocumentTypeRevNum" emptyMessage="No Match Found" field="revNum"
                 (onKeyUp)="checkDocumentRevnumExist($event.target.value)"
                 (onChange)="checkDocumentRevnumExist($event.target.value)"
                 (onBlur)="checkDocumentRevnumExist($event.target.value)"
                 (completeMethod)="filterDocumentTypeRevnum($event);" [size]="30" [minLength]="1" [dropdown]="true"
-                required>
+                >
               </p-autoComplete>
               <div *ngIf="isDocumentrevnumAlreadyExists" class="clr-red">
                 Rev Num Already Exists

@@ -1,12 +1,20 @@
 ﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card">
-    <div class="card-header">
+    <!-- <div class="card-header">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
                 <li class="breadcrumb-item active" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} WO Quote settings
                 </li>
             </ol>
         </nav>
+    </div> -->
+    <div class="card-header header ">
+        <div class="row">
+            <div class="col">
+              <h4  class="header-name">
+                {{isEditMode ? 'Edit' : 'Create'}} WO Quote settings</h4>
+        </div>
+       </div>
     </div>
     <div class="card-body">
         <form #woQuoteSettingsForm="ngForm">
@@ -48,7 +56,17 @@
                             <input type="number" name="validDays" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.validDays" required>
                         </div>
                     </div>
+                    <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
+                        <div class="form-group">
+                            <p-checkbox name="isApprovalRule" binary="true"
+                                [(ngModel)]="receivingForm.isApprovalRule">
+                            </p-checkbox>
+                            <label style="padding-left:10px;">Apply Approval Rule
+                            </label>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
 

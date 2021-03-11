@@ -329,7 +329,9 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
         this.memoPopupContent = '';
         $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
-        this.disableSave = false;
+        if(this.isEditButton){
+            this.disableSave = false;
+        }
     }
 
     closeMemoModel() {
@@ -607,7 +609,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     closeDeleteModal() {
-        $('#downloadConfirmation').modal("hide");
+        $('#downloadConfirmationDocument').modal("hide");
     }
 
     viewModelDismiss() {
@@ -618,8 +620,8 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
         documents._value = documents._value.map(x => {
             return {
                 ...x,
-                fileName: x.attachmentDetails.map(e => e.fileName).join(","),
-                docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
+                fileName: x.attachmentDetails ? x.attachmentDetails.map(e => e.fileName).join(","):'',
+                docMemo: x.docMemo ?  x.docMemo.replace(/<[^>]*>/g, ''):'',
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }

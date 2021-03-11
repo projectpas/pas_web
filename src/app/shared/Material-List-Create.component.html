@@ -35,20 +35,21 @@
         <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
-            <!-- <select class="form-control" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
+            <select class="form-control" (ngModelChange)="getActive()" [(ngModel)]="material.taskId"
               name="task_{{ i }}" required (change)="onTaskChange(material)">
               <option value="">Select </option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{
                 task.description
                 }}</option>
-            </select> -->
-            <p-dropdown placeholder="--Select--" required (ngModelChange)="getActive()" optionLabel="description" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen{{ i }}" [options]="taskList"
+            </select>
+            <!-- optionLabel="description" -->
+            <!-- <p-dropdown placeholder="--Select--" editable="true" required (ngModelChange)="getActive()"  #taskId="ngModel" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen1x{{ i }}" [options]="taskList"
             class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.taskId">
-          </p-dropdown> 
+          </p-dropdown>  -->
           </td>
           <td>
             <div style="display:inline-flex">
-           <p-autoComplete (ngModelChange)="getActive()" (onSelect)="onPartSelect($event, material,i)"  class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
+           <p-autoComplete (ngModelChange)="getActive()" required (onSelect)="onPartSelect($event, material,i)"  class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
               errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage="No Records Found"
               (completeMethod)="filterpartItems($event)"  [size]="30" [minLength]="1" [forceSelection]="true"
               [(ngModel)]="material.partNumber"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >

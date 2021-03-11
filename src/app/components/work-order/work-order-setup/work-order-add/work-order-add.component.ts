@@ -1692,7 +1692,8 @@ export class WorkOrderAddComponent implements OnInit {
                 return {
                     id: x.value,
                     description: x.label.toLowerCase(),
-                    taskId: x.value
+                    taskId: x.value,
+                    label:x.label.toLowerCase(),
                 }
             });
             if (this.labor.workOrderLaborList && this.labor.workOrderLaborList.length != 0) {
@@ -2595,7 +2596,7 @@ export class WorkOrderAddComponent implements OnInit {
         else{
             this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => { 
                 res.map(x => {
-                  if(x.expertiseType.toLowerCase() =='technician' || x.expertiseType =='Technician' || x.expertiseType =='TECHNICIAN'){
+                  if(x.empExpCode =='TECHNICIAN'){
                     this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId).subscribe(res => {
                         this.technicianByExpertiseTypeList = res;
                         this.technicianList = this.technicianByExpertiseTypeList;

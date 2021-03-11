@@ -200,7 +200,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.disableAccountType = true;
                 }
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error));
+            }, error => {this.isSpinnerVisible = false})
 
             setTimeout(async () => {
                 await this.getCustomerRestrictedPMAByCustomerId();
@@ -249,7 +249,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.generalInformation.customerClassificationIds = res.map(x => x.customerClassificationId);
             this.arrayCustomerClassificationlist.push(this.generalInformation.customerClassificationIds);
             this.getAllCustomerClassification();
-        }, error => this.saveFailedHelper(error));
+        }, error => {this.isSpinnerVisible = false})
     }
 
     async getCustomerIntegrationTypesByCustomerId() {
@@ -258,7 +258,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 this.generalInformation.integrationPortalId = res.map(x => x.integrationPortalId);
                 this.arrayIntegrationlist.push(this.generalInformation.integrationPortalId);
                 this.getAllIntegrations();
-            }, error => this.saveFailedHelper(error));
+            }, error => {this.isSpinnerVisible = false})
         }
     }
 
@@ -279,7 +279,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             else {
                 this.isSpinnerVisible = false;
             }
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false})
     }
 
     getPMAPartListByStatus(value) {
@@ -317,7 +317,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             else {
                 this.isSpinnerVisible = false;
             }
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false})
     }
 
     get userName(): string {
@@ -625,7 +625,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false})
         }
 
         this.partListForPMA = [{ label: this.selectedRowForDeleteRestrictPMA.partNumber, value: this.selectedRowForDeleteRestrictPMA }, ...this.partListForPMA];
@@ -744,7 +744,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 );
                 this.getCustomerRestrictedPMAByCustomerId();
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false})
         }
         this.dismissModel()
     }
@@ -760,7 +760,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 );
                 this.getCustomerRestrictedDERByCustomerId();
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false})
         }
         this.dismissModel()
     }
@@ -775,7 +775,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false;
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false})
         }
         this.dismissModel()
         this.partListForDER = [{ label: this.selectedRowForDeleteRestrictDER.partNumber, value: this.selectedRowForDeleteRestrictDER }, ...this.partListForDER];
@@ -1064,7 +1064,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false})
     }
 
     resetClassificationPopUp() {
@@ -1106,7 +1106,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 MessageSeverity.success
             );
             this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false})
 
     }
     resetIntegrationPopUp() {

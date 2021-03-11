@@ -23,6 +23,7 @@ export class AddSalesPartNumberComponent implements OnInit {
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedParts: any = [];
+  @Input() type: string;
   searchType: ItemSearchType;
   parts: IPartJson[];
   showModalMargin: boolean;

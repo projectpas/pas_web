@@ -162,6 +162,12 @@ export class SalesQuoteListComponent implements OnInit {
         }
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+          ? this.authService.currentUser.masterCompanyId
+          : null;
+      }
+
     loadData(event, globalFilter = "") {
         event.filters.statusId = this.currentStatus;
         this.searchParameters.first = parseInt(event.first) / event.rows;
@@ -178,6 +184,8 @@ export class SalesQuoteListComponent implements OnInit {
             this.clearStatusText = false;
         }
         
+        this.searchParameters.filters.masterCompanyId = this.currentUserMasterCompanyId;
+
         this.searchParameters.filters = {
             ...this.searchParameters.filters,
             isDeleted: this.currentDeletedstatus,

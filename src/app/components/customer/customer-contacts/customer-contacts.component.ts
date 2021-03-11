@@ -77,6 +77,7 @@ export class CustomerContactsComponent implements OnInit {
 	customerContactsColumns = [
 		{ field: 'isDefaultContact', header: 'Primary Contact' },
 		{ field: 'tag', header: 'Tag' },
+		{ field: 'attention', header: 'Attention' },
 		{ field: 'firstName', header: 'First Name' },
 		{ field: 'lastName', header: 'Last Name' },
 		{ field: 'contactTitle', header: 'Contact Title' },
@@ -895,7 +896,7 @@ export class CustomerContactsComponent implements OnInit {
 			const responseData = res[0];
 			this.originalATASubchapterData = responseData;
 			this.isSpinnerVisible = false;
-		}, error => this.saveFailedHelper(error))
+		}, error => {this.isSpinnerVisible = false})
 	}
 
 	async getATACustomerContactMapped() {

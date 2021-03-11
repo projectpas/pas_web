@@ -1,46 +1,17 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
-import { PageHeaderComponent } from '../../shared/page-header.component';
 declare var $ : any;
 import { AlertService, MessageSeverity } from '../../services/alert.service';
-import { ItemMasterService } from '../../services/itemMaster.service';
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
-import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { MenuItem } from 'primeng/api';//bread crumb
-import { Charge } from '../../models/charge.model';
-import { MasterCompany } from '../../models/mastercompany.model';
-import { AuditHistory } from '../../models/audithistory.model';
-import { AuthService } from '../../services/auth.service';
-import { ReceivingCustomerWorkService } from '../../services/receivingcustomerwork.service';
-import { MasterComapnyService } from '../../services/mastercompany.service';
-import { CustomerService } from '../../services/customer.service';
-import { Condition } from '../../models/condition.model';
-import { ConditionService } from '../../services/condition.service';
-import { VendorService } from '../../services/vendor.service';
-import { BinService } from '../../services/bin.service';
-import { SiteService } from '../../services/site.service';
-import { Site } from '../../models/site.model';
-import { LegalEntityService } from '../../services/legalentity.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition } from '../../generic/autocomplete';
-import { CommonService } from '../../services/common.service';
+import { Router } from '@angular/router';
+
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
-import { StocklineService } from '../../services/stockline.service';
-import { ConfigurationService } from '../../services/configuration.service';
 import { WorkOrderService } from '../../services/work-order/work-order.service';
 import { WorkOrderType } from '../../models/work-order-type.model';
 import { WorkOrderSettingsService } from '../../services/work-order-settings.service';
-
-
+import { CommonService } from '../../services/common.service';
 @Component({
     selector: 'app-create-wo-quote-settings',
     templateUrl: './create-wo-quote-settings.component.html',
@@ -50,7 +21,6 @@ import { WorkOrderSettingsService } from '../../services/work-order-settings.ser
 })
 
 export class CreateWOQuoteSettingsComponent implements OnInit {
-
     receivingForm: any = {
         "workOrderQuoteSettingId":0,
         "workOrderTypeId":0,
@@ -65,6 +35,7 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         "updatedDate":new Date(),
         "isActive":true,
         "isDeleted":false,
+        "isApprovalRule":false
         };
     isEditMode: boolean = false;
     private onDestroy$: Subject<void> = new Subject<void>();
@@ -74,15 +45,9 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         { label: 'Create WO Quote Settings' }
     ];
     workOrderTypes: WorkOrderType[];
-    moduleName: string = "WO Quote Settings";
-//    workOrderViewList= [{label: "MPN View",value: 1},
-//     {label: "WO View",value: 2}];
-//    workOrderStatusRbList =[{label: "Open",value: 3},
-//     {label: "Closed",value: 4},
-//     {label: "Canceled",value: 5},
-//     {label: "All",value: 6}];
-    
-    constructor(private router: Router, private workOrderService: WorkOrderService, private alertService: AlertService, private receivingCustomerWorkOrderService: WorkOrderSettingsService){
+    moduleName: string = "WO Quote Settings";    
+    constructor(private router: Router,
+        private commonService: CommonService, private workOrderService: WorkOrderService, private alertService: AlertService, private receivingCustomerWorkOrderService: WorkOrderSettingsService){
     }
 
     ngOnInit() {
@@ -93,17 +58,43 @@ export class CreateWOQuoteSettingsComponent implements OnInit {
         }
     }
 
+    // getAllWorkOrderTypes(): void {
+    //     this.workOrderService.getAllWorkOrderTypes().pipe(takeUntil(this.onDestroy$)).subscribe(
+    //         result => {
+    //             this.workOrderTypes = result;
+    //             console.log(this.workOrderTypes);
+    //         },
+    //         err => {
+    //             this.errorHandling(err);
+    //         }
+    //     );
+    // }
+
+
+
+    setEditArray:any=[]
     getAllWorkOrderTypes(): void {
-        this.workOrderService.getAllWorkOrderTypes().pipe(takeUntil(this.onDestroy$)).subscribe(
-            result => {
-                this.workOrderTypes = result;
-                console.log(this.workOrderTypes);
-            },
-            err => {
-                this.errorHandling(err);
+        this.setEditArray = [];
+        const strText ='';
+        if(this.isEditMode==true){
+            this.setEditArray.push(this.receivingForm.workOrderTypeId ? this.receivingForm.workOrderTypeId :0)
+            if(this.setEditArray && this.setEditArray.length==0){
+                this.setEditArray.push(0);  
             }
-        );
+        }else{
+            this.setEditArray.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+      this.workOrderTypes = res.map(x => {
+                return {
+                    id: x.value,
+                    description: x.label
+                }
+            });
+        }) 
     }
+
+
 
     saveOrUpdateWOQuoteSetting(){
         this.workOrderService.saveOrUpdateWOQuoteSetting(this.receivingForm)

@@ -85,13 +85,20 @@ export class WorkOrderEndpointService extends EndpointFactory {
             });
     }
 
-    getAllWorkOrderTypes<T>(): Observable<T> {
-        let endPointUrl = this.getAllWorkOrderTypesURL;
+    getAllWorkOrderTypes<T>(): Observable<T> 
+    {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workOrderTypes`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getAllWorkOrderTypes());
+          });
 
-        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
-            .catch(error => {
-                return this.handleErrorCommon(error, () => this.getAllWorkOrderTypes());
-            });
+        //     return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workOrderTypes`, this.getRequestHeaders()).catch(error => {
+        //   return this.handleErrorCommon(error, () => this.getAllWorkOrderTypes());
+        // let endPointUrl = this.getAllWorkOrderTypesURL;
+
+        // return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        //     .catch(error => {
+        //         return this.handleErrorCommon(error, () => this.getAllWorkOrderTypes());
+        //     });
     }
 
     getAllWorkOrderStatus<T>(): Observable<T> {

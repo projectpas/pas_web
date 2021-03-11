@@ -224,14 +224,14 @@
                     <label for="Employee">
                         Employee
                     </label>
-                    <p-autoComplete field="label"  (ngModelChange)="getValid()"
+                    <p-autoComplete field="label"  (ngModelChange)="getValid()" 
                                     [(ngModel)]="quoteForm.employeeId"
                                     name="employees" #employees="ngModel"
                                     errorMessage="Records not found" [forceSelection]="true"
                                     [dropdown]="true" [suggestions]="employeeList"
                                     (completeMethod)="filterEmployee($event)"
                                     [size]="30" [minLength]="1" [dropdown]="true"
-                                    class="p-autoComplete-ctsm" [disabled]="isView">
+                                    class="p-autoComplete-ctsm" [disabled]="true">
                     </p-autoComplete>
                     <!-- <input class="form-control" type="text" [(ngModel)]="employeeName" name="Employee"/> -->
                 </div>
@@ -709,7 +709,7 @@
         <div >
 
             <div class="col-md-12">
-                <div class="col-md-3" *ngIf="!savedWorkOrderData.isSinglePN">
+                <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==false">
                     <!-- <div class="form-group "> -->
                         <label class="fs12">
                             MPN
@@ -726,7 +726,7 @@
                         </p-dropdown>
                     <!-- </div> -->
                 </div>
-                <div class="col-md-3" *ngIf="savedWorkOrderData.isSinglePN">
+                <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==true">
                     <label class="fs12">
                         Part Number:
                     </label>
@@ -751,43 +751,13 @@
                 </div>
             
         </div>
-
-        <!-- <div class="col-md-12" *ngIf="selectedPartNumber != ''">
-          <div class="form-group ">
-            <label class="fs12">Build Method:
-            </label>
-            <button type="button" [ngClass]="selectedBuildMethod === 'use work order'?'btn-primary':'btn-light-cstm'" (click)="buildMethodSelected('use work order')">Use Work Order</button>
-            <button type="button" [ngClass]="selectedBuildMethod === 'use work flow'?'btn-primary':'btn-light-cstm'" (click)="buildMethodSelected('use work flow')">Use Work Flow</button>
-            <button type="button" [ngClass]="selectedBuildMethod === 'use historical wos'?'btn-primary':'btn-light-cstm'" (click)="buildMethodSelected('use historical wos')">Use Historical WOs</button>
-            <button type="button" [ngClass]="selectedBuildMethod === 'build from scratch'?'btn-primary':'btn-light-cstm'" (click)="buildMethodSelected('build from scratch')">Build From Scratch</button>
-          </div>
-
-        </div> -->
-
     </div>
-    <!-- <div *ngIf="selectedBuildMethod == 'build from scratch'">
-      <div class="col-sm-1">
-          <strong> <label> Task </label></strong>
-      </div>
-      <div class="col-sm-2">
-          <div class="inner-addon inline-block display-flex">
-              <select class="form-control custom-select"
-                      [(ngModel)]="currenttaskId">
-                  <option value="0">Select</option>
-                  <option *ngFor="let action of this.taskList"
-                          value={{action.taskId}}>
-                      {{action.description}}
-                  </option>
-              </select>
-            </div>
-      </div>
-    </div> -->
     <div class="card col-md-12 list_caps" *ngIf="selectedPartNumber != ''" id="quote-grid-tabs">
         <div class="form-group " style="margin:0px;">
-            <button type="button" class="btn" [ngClass]="gridActiveTab === 'materialList'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('materialList');">Material List</button>
-            <button type="button" class="btn" [ngClass]="gridActiveTab === 'labor'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('labor');">Labor</button>
-            <button type="button" class="btn" [ngClass]="gridActiveTab === 'charges'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('charges');">Charges</button>
-            <button type="button" class="btn" [ngClass]="gridActiveTab === 'freight'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('freight');">Freight</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab == 'materialList'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('materialList');">Material List</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab == 'labor'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('labor');">Labor</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab == 'charges'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('charges');">Charges</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab == 'freight'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('freight');">Freight</button>
             <!-- <button type="button" class="btn" [ngClass]="gridActiveTab === 'exclusions'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('exclusions');">Exclusions</button> -->
         </div>
     </div>
@@ -797,7 +767,7 @@
         </div>
         <div style="margin-top: 0px;">
             <table class="table table-bordered table-sorting mpn-list-table matlist-table">
-                <!--table-striped table-disabled-->
+ 
                 <thead>
                     <tr style="color: #f1f1f1; background-color: #fff;">
                         <td colspan="10" class="table-header-col1">&nbsp;</td>
@@ -836,25 +806,12 @@
                             </div>
                         </td>
                         <td style="background: #fff; border: 1px solid #fff;"></td>
-                        <!-- <td colspan="3">
-                          <div>
-                            <p-radioButton
-                              class="p-radiobutton-label-horizontal col-width p-radio-custom"
-                              name="costPlusType"
-                              value="Fixed Mat Price"
-                              label="Fixed Mat Price"
-                              [(ngModel)]="costPlusType"
-                              [disabled]="isView"
-                            ></p-radioButton>
-                          </div>
-                        </td> -->
+                     
                     </tr>
                     <tr>
                         <th>Task</th>
-                        <th>PN</th> <!--MC PN-->
-                        <th>PN Description</th> <!--MC Description-->
-                        <!-- <th>QTE/WO/WF/SL/M</th> -->
-                        <!-- <th>REF</th> -->
+                        <th>PN</th>
+                        <th>PN Description</th>
                         <th>Provision</th>
                         <th>Qty</th>
                         <th>UOM</th>
@@ -886,8 +843,6 @@
                                 </td>
                                 <td><div style="min-width: 100px;">{{matQuotation.partNumber}}</div></td>
                                 <td>{{matQuotation.partDescription}}</td>
-                                <!-- <td>{{matQuotation.partDescription}}</td>
-                                <td>{{matQuotation.partDescription}}</td> -->
                                 <td>{{matQuotation.provision}}</td>
                                 <td class="content-to-end">{{matQuotation.quantity}}</td>
                                 <td>
@@ -925,28 +880,6 @@
                                     <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                     <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                 </td>
-                                <!-- <td *ngIf="!isView">
-                                    <button
-                                      class="btn-edit ptable-wo-btns"
-                                      mat-icon-button
-                                      data-target="#addNewMaterials"
-                                      data-toggle="modal"
-                                      (click)="editMaterialList(matQuotation)"
-                                      matTooltip="Edit"
-                                    >
-                                      <mat-icon>edit</mat-icon>
-                                    </button>
-                                </td>
-                                <td *ngIf="!isView">
-                                    <button
-                                      class="btn-delete ptable-wo-btns"
-                                      mat-icon-button
-                                      matTooltip="Delete"
-                                      (click)="deleteMaterialList(mainIndex, subIndex)"
-                                    >
-                                      <mat-icon color="warn">delete</mat-icon>
-                                    </button>
-                                </td> -->
                             </tr>
                         </ng-container>
                         <tr class="task-total">
@@ -1051,7 +984,7 @@
                                 [buildMethodDetails]="buildMethodDetails"></app-work-order-freight>
     </div>
 
-    <div class="table-responsive" *ngIf="gridActiveTab === 'labor'">
+    <div class="table-responsive" *ngIf="gridActiveTab == 'labor'">
         <app-work-order-labor [taskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
                               (saveworkOrderLabor)="saveworkOrderLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
                               [selectedPartNumber]="selectedPartNumber"></app-work-order-labor>
@@ -1059,15 +992,28 @@
     </div>
 
     <div class="table-responsive" *ngIf="gridActiveTab === 'charges' && workOrderChargesList">
-        <div *ngIf="!isView">
+        <!-- <div *ngIf="!isView">
             <button data-target="#addNewCharges"
                     data-toggle="modal"
                     (click)="createNew('add')"
                     class="btn-primary"
                     style="margin-left: 6px; margin-bottom: -8px;">
                 Add Charges
-            </button>
-        </div>
+            </button> 
+        </div> -->
+        <div class="header">
+            <div class="row">
+                <div class="col">
+                    <h4 class="header-name">Work Order Quote Charges List</h4>
+                </div>
+                <div *ngIf="!isView">
+                    <button type="button" class="btn-sm header-button "data-target="#addNewCharges"
+                    data-toggle="modal" (click)="createNew('add')">
+                        Create Charge
+                    </button>
+                </div>
+            </div>
+          </div>
         <app-work-order-charges [workFlowObject]="workFlowObject"
                                 isWorkOrder="false"
                                 [workOrderChargesList]="workOrderChargesList"
@@ -1486,8 +1432,8 @@
 
 
     <div id="addNewMaterials" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog modal-xl">
-
+        <div class="modal-dialog modal-xlg">
+ 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -1610,7 +1556,7 @@
                                     [isQuote]="isQuote"
                                     [isEdit]="isEdit"
                                     [editData]="editData"
-                                    [workFlow]="workFlowObject"
+                                    [workFlow]="workFlowObject" 
                                     [isWorkOrder]="isWorkOrder"
                                     [markupList]="markupList"
                                     [taskList]="taskList"
@@ -1620,7 +1566,6 @@
             </div>
         </div>
     </div>
-
     <div id="showHistoricalWorkOrder"
          class="modal fade"
          role="dialog"
@@ -1633,7 +1578,7 @@
                         &times;
                     </button>
                 </div>
-                <div class="modal-body table-responsive">
+                <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
                     <div class="form-group" style="color: red; font-size: 20px;">
                         {{(displayType == 'use historical wos')?'List of Historical Workorders for MPN '+this.selectedPartNumber['partNumber']:'List of Historical Workorder Quotes for MPN '+this.selectedPartNumber['partNumber']}}
                     </div>

@@ -619,19 +619,12 @@ export class SalesOrderShippingComponent {
 
     save() {
         this.shippingHeader['salesOrderId'] = this.salesOrderId;
-        //this.shippingHeader['salesOrderPartId'] = this.salesOrderPartNumberId;
         this.shippingHeader['salesOrderPartId'] = this.salesOrderPartId;
         this.shippingHeader['masterCompanyId'] = this.salesOrder['masterCompanyId'];
-        //this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = this.salesOrder['masterCompanyId'];
-        //this.shippingHeader['salesOrderCustomsInfo']['masterCompanyId'] = 1;
         this.shippingHeader['createdBy'] = this.userName;
         this.shippingHeader['updatedBy'] = this.userName;
         this.shippingHeader['createdDate'] = new Date().toDateString();
         this.shippingHeader['updatedDate'] = new Date().toDateString();
-        //this.shippingHeader['salesOrderCustomsInfo']['createdDate'] = new Date().toDateString();
-        //this.shippingHeader['salesOrderCustomsInfo']['updatedDate'] = new Date().toDateString();
-        // this.shippingHeader['trackingNum'] = 23;
-        // this.shippingHeader['houseAirwayBill'] = 349;
         this.shippingHeader['shipToName'] = this.shippingHeader.shipToCustomerId.userName;
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('userID', this.shippingHeader['shipToCustomerId']);
         this.shippingHeader['soldToName'] = this.shippingHeader.soldToName.userName;
@@ -643,18 +636,7 @@ export class SalesOrderShippingComponent {
                 (res: any) => {
                     this.isSpinnerVisible = false;
                     this.isEditModeAdd = false;
-                    //this.getEditSiteData(res.shipToCustomerId);
-                    // this.shippingHeader = res;
-                    // this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
-                    // this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
-                    // this.shippingHeader['shipToCustomerId'] = { userID: res.shipToCustomerId, userName: res.shipToCustomer };
-                    // this.customerNamesList.forEach(
-                    //     x => {
-                    //         if (x.userID == res['shipToCustomerId']) {
-                    //             this.shippingHeader['shipToCustomerId'] = x;
-                    //         }
-                    //     }
-                    // )
+                    
                     this.alertService.showMessage(
                         'Sales Order',
                         'Sales Order Shipping created Succesfully',

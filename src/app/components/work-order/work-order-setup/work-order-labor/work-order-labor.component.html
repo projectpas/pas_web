@@ -62,7 +62,8 @@
               </div>
             </div> -->
           </div>
-          <div class="col-md-3 col-offset-3 task-detail" *ngIf="!isQuote">
+          <!-- *ngIf="!isQuote" -->
+          <div class="col-md-3 col-offset-3 task-detail" >
               <div class="form-row" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
                 <div >
                   <!-- <p-radioButton  (ngModelChange)="checkValid(4)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" label="Labour hours" [value]="1"
@@ -100,6 +101,8 @@
               
                   </div> 
               </div>
+              <!-- <p>{{isQuote}} -- {{laborForm.expertiseId}} -- {{laborForm.employeeId}}</p> -->
+              <!-- <p>{{laborForm.workFloworSpecificTaskorWorkOrder}} -- {{!isView}} </p> -->
               <div class="col-sm-12" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId)) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
                   <div class="form-group">
                       <label>Task</label>
@@ -273,6 +276,8 @@
       </thead>
       <tbody>
         <!-- Receive -->
+        <!-- <p style="color: red;">{{taskList |json}}</p> -->
+       <!-- <p style="color: blueviolet;"> {{laborForm.workOrderLaborList | json}}</p> -->
         <ng-container *ngFor="let task of taskList; let taskIndex = index">
           <!-- <ng-container *ngIf="isAllowedTask(task.taskId)"> -->
           <tr *ngIf="getLenghtOfTask(laborForm.workOrderLaborList[0][task.description | lowercase])">
