@@ -36,29 +36,33 @@ export class CreditTermsService {
         private authService: AuthService,
         private CreditTermsEndpoint: CreditTermsEndpoint) { }
 
-    getCreditTermsList() {
+    getCreditTermsList(masterCompanyId?) {
         return Observable.forkJoin(
-            this.CreditTermsEndpoint.getCreditTermsEndpoint<any>());
+            this.CreditTermsEndpoint.getCreditTermsEndpoint<any>(masterCompanyId));
     }
-
 
     newAddcreditterms(action) {
         return this.CreditTermsEndpoint.getNewCreditermEndpoint<CreditTerms>(action);
     }
+
     updatecreditterms(action: any) {
         return this.CreditTermsEndpoint.getUpdatecredittermsEndpoint(action, action.creditTermsId);
     }
+
     deletecreditterms(actionId: number) {
 
         return this.CreditTermsEndpoint.getDeletecredittermsEndpoint(actionId);
 
     }
+
     historycreditterms(actionId: number) {
         return Observable.forkJoin(this.CreditTermsEndpoint.getHistorycredittermsEndpoint<AuditHistory[]>(actionId));
     }
+
     getCreditTermsAudit(credittermId: number) {
         return this.CreditTermsEndpoint.getCreaditTermsAuditById<any>(credittermId);
     }
+
     creditTermsCustomUpload(file) {
         return this.CreditTermsEndpoint.creditTermsCustomUpload(file);
     }
