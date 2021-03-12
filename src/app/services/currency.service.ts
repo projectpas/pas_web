@@ -36,9 +36,9 @@ export class CurrencyService {
         private authService: AuthService,
         private currencyEndpoint: CurrencyEndpoint) { }
 
-    getCurrencyList(id?) {
+    getCurrencyList(masterCompanyId?) {
         return Observable.forkJoin(
-            this.currencyEndpoint.getCurrencyEndpoint<Currency[]>(id));
+            this.currencyEndpoint.getCurrencyEndpoint<Currency[]>(masterCompanyId));
     }
 
     getCurrencyListAll() {

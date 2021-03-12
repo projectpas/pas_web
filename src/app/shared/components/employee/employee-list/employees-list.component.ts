@@ -160,19 +160,15 @@ export class EmployeesListComponent implements OnInit {
     table3: any;
     
     ngOnInit(): void {
-
         this.activeIndex = 0;
         this.empService.currentUrl = '/employeesmodule/employeepages/app-employees-list';
         this.empService.bredcrumbObj.next(this.empService.currentUrl);
-
         this.empService.ShowPtab = false;
-
         this.empService.alertObj.next(this.empService.ShowPtab);
         // this.getAllFrequencyTrainingData();
         // this.loadCurrencyData();
         // this.getAllStationData();
         // this.getAllAircraftManfacturer();
-
     }
 
     ngOnDestroy(): void {
@@ -184,6 +180,7 @@ export class EmployeesListComponent implements OnInit {
             ? this.authService.currentUser.masterCompanyId
             : null;
     }
+
     get loginEmployeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
@@ -276,7 +273,6 @@ export class EmployeesListComponent implements OnInit {
 
     }
     private onDataLoadSuccessful(allWorkFlows: any[]) {
-
         //this.alertService.stopLoadingMessage();
         //this.loadingIndicator = false;
         this.totalRecords = allWorkFlows.length;
@@ -284,8 +280,6 @@ export class EmployeesListComponent implements OnInit {
         this.dataSource.data = allWorkFlows;
         this.allEmployeesList = allWorkFlows;
         this.isSpinnerVisible = false;
-
-
     }
 
     closeDeleteModal() {
@@ -377,8 +371,8 @@ export class EmployeesListComponent implements OnInit {
             }
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
 
@@ -422,6 +416,7 @@ export class EmployeesListComponent implements OnInit {
 
     //}
 
+    // Not in use
     private loadData() {
         this.empService.getEmployeeList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
@@ -520,8 +515,8 @@ export class EmployeesListComponent implements OnInit {
             this.alertService.showMessage("Success", `Employee Restored Successfully.`, MessageSeverity.success);
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
     globalSearch(value) {
@@ -696,8 +691,8 @@ export class EmployeesListComponent implements OnInit {
             this.loadEmployeePages(this.lazyLoadEventData);
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
 
@@ -743,7 +738,7 @@ export class EmployeesListComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible=false} //this.onDataLoadFailed(error)
         );        
     }
 
@@ -763,7 +758,7 @@ export class EmployeesListComponent implements OnInit {
             this.sourceEmployee.isActive = false;
             this.empService.updateActionforActive(this.sourceEmployee).subscribe(
                 response => this.saveCompleted(this.sourceEmployee),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
             //alert(e);
         }
         else {
@@ -777,7 +772,7 @@ export class EmployeesListComponent implements OnInit {
             this.sourceEmployee.isActive == true;
             this.empService.updateActionforActive(this.sourceEmployee).subscribe(
                 response => this.saveCompleted(this.sourceEmployee),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
             //alert(e);
         }
 
@@ -839,8 +834,8 @@ export class EmployeesListComponent implements OnInit {
 
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+           // this.errorMessageHandler(errorLog);
         });
     }
 
@@ -867,8 +862,8 @@ export class EmployeesListComponent implements OnInit {
 
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            ///this.errorMessageHandler(errorLog);
         });
     }
 
@@ -878,12 +873,12 @@ export class EmployeesListComponent implements OnInit {
     }
 
     private loadCurrencyData() {
-        this.currencyService.getCurrencyList().subscribe(currencydata => {
+        this.currencyService.getCurrencyList(this.currentUserMasterCompanyId).subscribe(currencydata => {
             this.allCurrencyData = currencydata[0];
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
 
@@ -900,8 +895,8 @@ export class EmployeesListComponent implements OnInit {
 
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+           // const errorLog = err;
+           // this.errorMessageHandler(errorLog);
         });
     }
 
@@ -925,11 +920,7 @@ export class EmployeesListComponent implements OnInit {
                             this.selectedRoleNames = this.removeLastComma(this.selectedRoleNames);
                         }
                     }
-
                 }
-
-
-
             )
         this.empService.getStoredEmployeeManagementStructure(empId)
             .subscribe(
@@ -955,9 +946,10 @@ export class EmployeesListComponent implements OnInit {
                 this.employeeRoleLabel = this.employeeRolesList.map((emp) => { return emp['name'] })
                 this.loadManagementStructure(empId);
             },
-            error => console.log(error)
+            error => {this.isSpinnerVisible=false} //console.log(error)
         );
     }
+
     loadManagementStructure(empId) {
         this.legalEntityService.getManagemententity().subscribe(
             (results: any) => {
@@ -965,7 +957,7 @@ export class EmployeesListComponent implements OnInit {
                 this.getManagementStructureData(empId);
             },
             (error: any) => {
-                console.log(error);
+                this.isSpinnerVisible=false
             }
         )
     }
@@ -1033,8 +1025,8 @@ export class EmployeesListComponent implements OnInit {
             this.getManagementStructureNameandCodes(this.empDetailsData.managementStructureId);
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
 
@@ -1047,6 +1039,7 @@ export class EmployeesListComponent implements OnInit {
             })
         });
     }
+
     pageIndexChange(event) {
         this.pageSize = event.rows;
     }
@@ -1118,8 +1111,8 @@ export class EmployeesListComponent implements OnInit {
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                //const errorLog = err;
+                //this.errorMessageHandler(errorLog);
             });
 
     }

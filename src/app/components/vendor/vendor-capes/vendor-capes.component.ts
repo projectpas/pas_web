@@ -288,13 +288,12 @@ export class VendorCapesComponent implements OnInit {
     getItemMasterSmartDropDown(strText = ''){
 		if(this.arraylistItemMasterId.length == 0) {
 			this.arraylistItemMasterId.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arraylistItemMasterId.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arraylistItemMasterId.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.itemMasterlistCollectionOriginal = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
                 }
             })
-
             this.itemMasterlistCollection = [...this.itemMasterlistCollectionOriginal];
 		},err => {
             const errorLog = err;
@@ -312,7 +311,7 @@ export class VendorCapesComponent implements OnInit {
         if(this.arraylistCapabilityTypeId.length == 0) {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.CapesTypelistCollection = res;
             this.isSpinnerVisible = false;
         },err => {
@@ -348,8 +347,7 @@ export class VendorCapesComponent implements OnInit {
         }
     }
 
-    addFieldValue(): void {
-        
+    addFieldValue(): void {        
         this.isSpinnerVisible = true;
         this.newFields.itemMasterId = this.vendorCapsList.itemMasterId;
         this.newFields.manufacturerId = null; 
@@ -366,8 +364,7 @@ export class VendorCapesComponent implements OnInit {
         this.newFields.TAT = null;
         this.newFields.memo = null;
         this.disableCapes = false;
-        this.newFields.isEditable = true,
-        
+        this.newFields.isEditable = true,        
         this.fieldArray = [...this.fieldArray, { ...this.newFields }]
         this.isSpinnerVisible = false;
     }
