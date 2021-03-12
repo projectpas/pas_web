@@ -14,6 +14,7 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { ConditionService } from '../../../../services/condition.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
 import { AuthService } from '../../../../services/auth.service';
+import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 declare var $ : any;
 import {
     AlertService,
@@ -343,7 +344,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     memoPopupContent: any;
     selectall: any;
     cols: any;
-    constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,) { }
+    constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     ngOnInit() {
         this.enableEditBtn = Boolean(this.enableEditBtn);
         this.getCustomerWarningsList();
@@ -2295,25 +2296,43 @@ this.creditTerms=res.creditTerm;
             currentUser = JSON.parse(window.localStorage.getItem('current_user'));
         }
         this.isCurrentUserApprovalLimitExceeded = true;
-        this.workOrderService.getTotals(this.quotationHeader['workOrderQuoteId'])
-        .subscribe(
-            (total: any) => {
-                this.workOrderService.getInternalApproversList(2, total.totalRevenue)
-                    .subscribe(
-                        (res) => {
-                            this.internalApproversList = res.map(x=>{
-                                if(currentUser && currentUser['email'] == x.approverEmail && !x.isExceeded){
-                                    this.isCurrentUserApprovalLimitExceeded = false;
-                                }
-                                return {...x, 'upperValue': this.formateCurrency(x.upperValue), 'totalCost': this.formateCurrency(x.totalCost), 'lowerValue': this.formateCurrency(x.lowerValue)}
-                            });
-                        }
-                    )
-            },
-            err => {
-                this.errorHandling(err);
-            }
-        )
+
+        this.isSpinnerVisible = true;
+		this.purchaseOrderService.approverslistbyTaskId(2, this.quotationHeader['workOrderQuoteId']).subscribe(res => {
+						 this.internalApproversList = res;
+						 this.internalApproversList.map(x => {
+                            if(currentUser && currentUser['email'] == x.approverEmails && !x.isExceeded){
+                               this.isCurrentUserApprovalLimitExceeded = false;
+                             }
+                             
+							//this.apporoverEmailList = x.approverEmails;
+                            //this.apporoverNamesList.push(x.approverName);
+                            
+						})
+						 this.isSpinnerVisible = false;
+						},
+						err =>{
+							 this.isSpinnerVisible = false;
+						 });
+        // this.workOrderService.getTotals(this.quotationHeader['workOrderQuoteId'])
+        // .subscribe(
+        //     (total: any) => {
+        //         this.workOrderService.getInternalApproversList(2, total.totalRevenue)
+        //             .subscribe(
+        //                 (res) => {
+        //                     this.internalApproversList = res.map(x=>{
+        //                         if(currentUser && currentUser['email'] == x.approverEmail && !x.isExceeded){
+        //                             this.isCurrentUserApprovalLimitExceeded = false;
+        //                         }
+        //                         return {...x, 'upperValue': this.formateCurrency(x.upperValue), 'totalCost': this.formateCurrency(x.totalCost), 'lowerValue': this.formateCurrency(x.lowerValue)}
+        //                     });
+        //                 }
+        //             )
+        //     },
+        //     err => {
+        //         this.errorHandling(err);
+        //     }
+        // )
     }
 
     resetApprovalGridData() {

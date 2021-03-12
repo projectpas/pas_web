@@ -1,4 +1,7 @@
-﻿import { NgModule } from '@angular/core';
+﻿import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
+import { CommonModulesModule } from './../common-modules/common-modules.module';
+import { WoApprovalRuleComponent } from './../components/work-order/work-order-setup/wo-approval-rule/wo-approval-rule.component';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
 import { WorkOrdersPagesRoutingModule } from './workorderpages-routing.module';
@@ -129,6 +132,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     CommonDocumentsModule,
     CommonCommunicationModule,
     SplitButtonModule,
+    CommonModulesModule
   ],
   declarations: [
     WorkOrderPagesComponent,
@@ -186,7 +190,9 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     SummarizedChargesComponent,
     SummarizedFreightComponent,
     CommunicationComponent,
-    AnalysisComponent
+    AnalysisComponent,
+    WoApprovalRuleComponent,
+    WoqApprovalRuleComponent
 
   ],
   entryComponents: [],

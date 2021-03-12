@@ -152,6 +152,12 @@ export class AllApprovalRuleComponent implements OnInit {
       else if(this.moduleType  == 'RO') {
         this.moduleName = 'Repair Order';       
       }
+      else if(this.moduleType  == 'WO') {
+        this.moduleName = 'Work Order';       
+      }
+      else if(this.moduleType  == 'WOQ') {
+        this.moduleName = 'Work Order Quote';       
+      }
       this.getTaskNames();    	
   }
 
@@ -240,11 +246,12 @@ export class AllApprovalRuleComponent implements OnInit {
                 this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
             }
 
-    onAddApprover() {    
+    onAddApprover() {  
             if(this.employeelist && this.employeelist.value && this.employeelist.value > 0 ) {
                 var isPrimaryflag = true;
                 var isEmpExists = false;
                 var SeqNo = 1;
+              
                 
                 this.employeeNames.forEach(x => { 
                      if(x.employeeId == this.employeelist.value) {
@@ -310,6 +317,9 @@ export class AllApprovalRuleComponent implements OnInit {
     }
     dismissModel() {
         this.modal.close();
+    }
+    memoValidate() {
+        //this.disableForMemo = false;
     }
 
     onClickMemo() {
@@ -551,6 +561,14 @@ addNewApproval(){
         this.moduleName = 'Sales Order';
         this.creatingData.approvalTaskId = this.taskID;
       }
+      if(this.moduleType  == 'WO') {
+        this.moduleName = 'Work Order';
+        this.creatingData.approvalTaskId = this.taskID;
+      }
+      if(this.moduleType  == 'WOQ') {
+        this.moduleName = 'Work Order Quote';
+        this.creatingData.approvalTaskId = this.taskID;
+      }
       this.getManagementStructureDetails(this.currentUserManagementStructureId,this.employeeId);
       this.creatingData.managementStructureId = this.currentUserManagementStructureId;	
       this.arrayEmplsit = [];
@@ -578,6 +596,12 @@ addNewApproval(){
                     this.taskID = element.value;
                 }
                 else if(element.label == 'SO Approval' && this.moduleType == 'SO') {
+                    this.taskID = element.value;
+                }
+                else if(element.label == 'WO Approval' && this.moduleType == 'WO') {
+                    this.taskID = element.value;
+                }
+                else if(element.label == 'WO Quote Approval' && this.moduleType == 'WOQ') {
                     this.taskID = element.value;
                 }
             });
@@ -616,18 +640,59 @@ addNewApproval(){
       this.employeeNames.forEach(x => { 
         if(x.isActive) { i++;} 
         }); 
-      if(this.creatingData.amountId == 5 && 
-        this.creatingData.lowerValue &&
-         this.creatingData.upperValue &&       
-        Number(this.creatingData.lowerValue) > Number(this.creatingData.upperValue))
+
+       
+      
+      
+
+        if(this.creatingData.amountId ==5)
         {
-            this.alertService.showMessage(
-                'Error',
-                'Upper Value Should be grater than lower Value.',
-                MessageSeverity.error
-            );
-            return;
+            var lowerValue=0
+            var upperValue=0
+            if(this.creatingData.lowerValue != "" && this.creatingData.lowerValue != null && this.creatingData.lowerValue != undefined)
+            {
+                 lowerValue = this.creatingData.lowerValue.replace(/,/g, '');
+            }
+            else
+            {
+                lowerValue = 0
+            }
+    
+            if(this.creatingData.upperValue != "" && this.creatingData.upperValue != null && this.creatingData.upperValue != undefined)
+            {
+                upperValue = this.creatingData.upperValue.replace(/,/g, '');
+            }
+            else
+            {
+                upperValue=0
+            }
+
+            if(Number(lowerValue) > Number(upperValue))
+            {
+                this.alertService.showMessage(
+                    'Error',
+                    'Upper Value Should be grater than lower Value.',
+                     MessageSeverity.error
+                );
+                return;
+            }
         }
+
+    //   if(this.creatingData.amountId == 5 && 
+    //     this.creatingData.lowerValue &&
+    //      this.creatingData.upperValue &&       
+    //     Number(this.creatingData.lowerValue) > Number(this.creatingData.upperValue))
+    //     {
+    //         this.alertService.showMessage(
+    //             'Error',
+    //             'Upper Value Should be grater than lower Value.',
+    //             MessageSeverity.error
+    //         );
+    //         return;
+    //     }
+
+      
+
       if(i==0){
             this.alertService.showMessage(
                 'Error',
@@ -762,18 +827,53 @@ addNewApproval(){
   onChangevalue(str) { 
       
       this.creatingData[str] = this.creatingData[str] ? formatNumberAsGlobalSettingsModule(this.creatingData[str], 2) : 0.00;
-      if(str == 'upperValue' &&  
-         this.creatingData.lowerValue &&
-         this.creatingData.upperValue &&       
-        Number(this.creatingData.lowerValue) > Number(this.creatingData.upperValue))
-        {
-            this.alertService.showMessage(
-                'Error',
-                'Upper Value Should be grater than lower Value.',
-                MessageSeverity.error
-            ); 
-            this.creatingData.upperValue = 0.00         
-        }  
+      
+      if(this.creatingData.amountId ==5  && str == 'upperValue')
+      {
+          var lowerValue=0
+          var upperValue=0
+          if(this.creatingData.lowerValue != "" && this.creatingData.lowerValue != null && this.creatingData.lowerValue != undefined)
+          {
+               lowerValue = this.creatingData.lowerValue.replace(/,/g, '');
+          }
+          else
+          {
+              lowerValue = 0
+          }
+  
+          if(this.creatingData.upperValue != "" && this.creatingData.upperValue != null && this.creatingData.upperValue != undefined)
+          {
+              upperValue = this.creatingData.upperValue.replace(/,/g, '');
+          }
+          else
+          {
+              upperValue=0
+          }
+          
+          if(Number(lowerValue) > Number(upperValue))
+          {
+              this.alertService.showMessage(
+                  'Error',
+                  'Upper Value Should be grater than lower Value.',
+                   MessageSeverity.error
+              );
+              this.creatingData.upperValue = 0.00    
+          }
+      }
+    //   var lowerValue = this.creatingData.lowerValue.replace(/,/g, '');
+    //   var upperValue = this.creatingData.upperValue.replace(/,/g, '');
+    //   if(str == 'upperValue' &&  
+    //      this.creatingData.lowerValue &&
+    //      this.creatingData.upperValue &&       
+    //     Number(lowerValue) > Number(upperValue))
+    //     {
+    //         this.alertService.showMessage(
+    //             'Error',
+    //             'Upper Value Should be grater than lower Value.',
+    //             MessageSeverity.error
+    //         ); 
+    //         this.creatingData.upperValue = 0.00         
+    //     }  
 }
 
 changePage(event: { first: any; rows: number }) {
