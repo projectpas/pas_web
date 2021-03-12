@@ -303,14 +303,16 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             // this.editData[0].quantity= this.editData[0].quantity ? formatNumberAsGlobalSettingsModule(this.editData[0].quantity, 0) : '0',
             // this.editData[0].unitCost= this.editData[0].unitCost ? formatNumberAsGlobalSettingsModule(this.editData[0].unitCost, 2) : '0.00',
             // this.editData[0].extendedCost= this.editData[0].extendedCost ? formatNumberAsGlobalSettingsModule(this.editData[0].extendedCost, 2) : '0.00',
-            this.editData[0].partNumber= { partId: this.editData[0].itemMasterId, partName: this.editData[0].partNumber }
-            this.workFlow.materialList = this.editData;
-            console.log("hello 11",this.editData)
+          const data=[...this.editData];
+        //    data[0].partNumber= { partId:data[0].itemMasterId, partName:data[0].partNumber }
+            this.workFlow.materialList =data;
+            console.log("hello 11",data)
         }
         else if (this.isQuote && (!this.editData || this.editData.length <= 0)) {
             this.workFlow.materialList = [];
             this.addRow();
         }
+        this.disableUpdateButton = true;
     }
     onFilterTask(value){
         
@@ -830,7 +832,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return Math.ceil(totalNoofRecords / pageSize)
     }
     checkQuantityAvailability() {
-        console.log("task",this.workFlow.materialList)
         let result = false;
         this.workFlow.materialList.forEach(
             material => {
@@ -890,7 +891,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.reCalculate();
         this.dismissModel();
     }
-    disableUpdateButton: boolean = false;
+    disableUpdateButton: boolean = true;
     getActive() {
         this.disableUpdateButton = false;
     }

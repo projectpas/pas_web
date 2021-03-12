@@ -1592,7 +1592,7 @@ export class WorkOrderAddComponent implements OnInit {
                     updatedBy: this.userName,
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
                     AltPartMasterPartId : null,
-                    MandatorySupplementalId :x.materialMandatoriesId,
+                    materialMandatoriesId :x.materialMandatoriesId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
                     partNumber: x.partNumber.partName,

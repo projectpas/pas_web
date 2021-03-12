@@ -1,10 +1,6 @@
 ﻿import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
-import {
-    WorkOrderQuote,
-    multiParts,
-    partsDetail
-} from '../../../../models/work-order-quote.modal';
+import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
 import { MenuItem } from 'primeng/api';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
@@ -15,29 +11,15 @@ import { ConditionService } from '../../../../services/condition.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
 import { AuthService } from '../../../../services/auth.service';
 declare var $ : any;
-import {
-    AlertService,
-    MessageSeverity
-} from '../../../../services/alert.service';
-import {
-    WorkOrderLabor,
-    AllTasks,
-    WorkOrderQuoteLabor,
-    ExclusionQuote,
-    ChargesQuote,
-    QuoteMaterialList,
-    QuoteFreightList
-} from '../../../../models/work-order-labor.modal';
+import {AlertService, MessageSeverity} from '../../../../services/alert.service';
+import {WorkOrderLabor,AllTasks,WorkOrderQuoteLabor,ExclusionQuote,ChargesQuote,QuoteMaterialList,QuoteFreightList} from '../../../../models/work-order-labor.modal';
 import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { DBkeys } from '../../../../services/db-Keys';
-
-
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
     styleUrls: ['./work-order-quote.component.scss']
 })
-/** WorkOrderQuote component*/
 export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteForm: WorkOrderQuote;
     @Input() quoteListViewData: any = {};
@@ -111,12 +93,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     isEdit: boolean = false;
     employeeList: any[];
     freight = [];
-    workFlowObject = {
-        materialList: [],
-        equipments: [],
-        charges: [],
-        exclusions: [],
-        freights: []
+    workFlowObject = { materialList: [],equipments: [],charges: [],exclusions: [],freights: []
     }
     isQuote: boolean = true;
     editMatData: any[] = [];
@@ -315,7 +292,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             field: 'marginPercentage'
         }
     ]
-
     @Output() enableBackToWO = new EventEmitter();
     restrictID: number;
     restrictMessage: any;
@@ -509,10 +485,12 @@ this.creditTerms=res.creditTerm;
             })
         }
     }
-
-    deleteMemoConfirmation(mainIndex, subIndex){
+    deleteRowRecord:any={};
+    deleteMemoConfirmation(mainIndex, subIndex,obj){
         this.mainIndex = mainIndex;
         this.subIndex = subIndex;
+        this.deleteRowRecord=obj
+        console.log("obj",obj)
         // $('#deleteRowConfirmation').modal('show');
     }
 
@@ -774,7 +752,7 @@ this.creditTerms=res.creditTerm;
                         {
                             workOrderWorkFlowId: x.value,
                             workOrderNo: x.label,
-                            masterPartId: x.masterPartId,
+                            masterPartId: x.itemMasterId,
                             workflowId: x.workflowId,
                             workflowNo: x.workflowNo,
                             partNumber: x.partNumber,
@@ -789,6 +767,7 @@ this.creditTerms=res.creditTerm;
                         label: x.partNumber
                     }
                 });
+                console.log("this.mpnPartNumbersList",this.mpnPartNumbersList)
                 if (this.savedWorkOrderData && this.savedWorkOrderData.isSinglePN) {
                     this.selectedPartNumber = this.mpnPartNumbersList[0].value;
                     this.selectedquotePn = this.mpnPartNumbersList[0].label
@@ -818,7 +797,7 @@ this.creditTerms=res.creditTerm;
             this.workOrderService.getWOTaskQuote(this.selectedPartNumber['woPartNoId'])
                 .subscribe(
                     (res) => {
-                        this.WOTaskDetails = res;
+                        this.WOTaskDetails = res; 
                     },
                     err => {
                         this.errorHandling(err);
@@ -1241,7 +1220,7 @@ this.creditTerms=res.creditTerm;
                 "ItemMasterId": mList.itemMasterId,
                 "ConditionCodeId": mList.conditionCodeId,
                 "MandatoryOrSupplemental": mList.mandatoryOrSupplemental ? mList.mandatoryOrSupplemental :mList.materialMandatoriesName,
-                "mandatorySupplementalId": mList.mandatorySupplementalId ? mList.mandatorySupplementalId : mList.materialMandatoriesId,
+                "materialMandatoriesId": mList.materialMandatoriesId,
                 "ItemClassificationId": mList.itemClassificationId,
                 "Quantity": mList.quantity,
                 "UnitOfMeasureId": mList.unitOfMeasureId,
@@ -1502,11 +1481,6 @@ this.creditTerms=res.creditTerm;
             .subscribe(
                 (taskList) => {
                     taskList = taskList.map(x=>{
-                        
-                        // return {
-                        // ...x,
-                        // 'taskId': x.value, 'description': x.label}
-                  
                     return {
                         id: x.value,
                         description: x.label.toLowerCase(),
@@ -1828,8 +1802,11 @@ this.creditTerms=res.creditTerm;
                 }
                 mData['billingAmount'] = (mData.quantity * Number(mData.billingRate.toString().split(',').join(''))).toFixed(2);
                 mData.partNumber= mData.partNumber.partName;
-                mData.taskId=(typeof mData.taskId == 'string')?mData.taskId :mData.taskId.taskId;
-                mData.taskName=(typeof mData.taskId != 'string')?mData.taskId.description:'';
+                mData.taskId=(typeof mData.taskId == 'object')? mData.taskId.taskId:mData.taskId;
+                mData.taskName=(typeof mData.taskId == 'object')?mData.taskId.description:mData.taskName;
+
+
+                // (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
             }
         )
         if (!this.editMatData || this.editMatData.length == 0) {
@@ -1946,7 +1923,12 @@ this.creditTerms=res.creditTerm;
     }
 
     editMaterialList(matData) {
-        this.editMatData = [matData];
+        const eData=[matData]
+        this.editMatData = [...eData];
+        // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;
+        // this.editMatData[0].materialMandatoriesId=this.editMatData[0].mandatoryOrSupplemental;
+        this.editMatData[0].partNumber= { partId:this.editMatData[0].itemMasterId, partName:this.editMatData[0].partNumber }
+        console.log("this.edit",this.editMatData); 
     }
 
     deleteMaterialList(mainIndex, subIndex) {
