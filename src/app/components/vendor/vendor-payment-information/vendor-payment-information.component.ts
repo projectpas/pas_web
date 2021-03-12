@@ -375,8 +375,9 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
                 res => {
                         this.vendorCodeandName = res[0];
                 },err => {
-                    const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+					this.isSpinnerVisible = false;
+                    //const errorLog = err;
+                    //this.saveFailedHelper(errorLog);
             });
         }        
     }
@@ -474,7 +475,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
         if(this.arrayCountrylist.length == 0) {			
             this.arrayCountrylist.push(0); }
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,300,this.arrayCountrylist.join()).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,300,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allCountryinfo = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value 
@@ -965,7 +966,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 						this.getDomesticWithVendorId();
 						this.isSpinnerVisible = false;
 					},
-					error => error => {this.isSpinnerVisible = false})
+					error => {this.isSpinnerVisible = false})
 			}
 			this.showDomesticWire();
 			this.domasticWireValue = true;
@@ -1519,7 +1520,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
     getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
         if(this.arrayTagNamelist.length == 0) {			
             this.arrayTagNamelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.tagNamesList = res.map(x => {
                 return {
                     tagName: x.label, contactTagId: x.value 

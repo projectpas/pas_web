@@ -272,8 +272,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     }
 
     private getVendorProcess1099() {
-        let companyId = 1;
-
+        let companyId = this.currentUserMasterCompanyId;
         this.isSpinnerVisible = true;
         this.vendorService.getVendorProcess1099Data(companyId).subscribe(res => {
             this.vendorProcess1099Data = res[0].map(x => {

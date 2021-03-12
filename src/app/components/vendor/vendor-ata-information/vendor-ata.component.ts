@@ -102,8 +102,9 @@ export class VendorATAInformationComponent implements OnInit {
                             this.local = res[0];
                             this.vendorCodeandName = res[0];
                     },err => {
-                        const errorLog = err;
-                        this.saveFailedHelper(errorLog);
+                        this.isSpinnerVisible = false
+                        //const errorLog = err;
+                        //this.saveFailedHelper(errorLog);
                     });
             }
         }
@@ -134,6 +135,12 @@ export class VendorATAInformationComponent implements OnInit {
             this.getContactsByVendorId();
         }
     }
+    
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
 
     getVendorCodeandNameByVendorId()
     {
@@ -143,8 +150,9 @@ export class VendorATAInformationComponent implements OnInit {
                 res => {
                         this.vendorCodeandName = res[0];
                 },err => {
-                    const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+                    this.isSpinnerVisible = false
+                    //const errorLog = err;
+                    //this.saveFailedHelper(errorLog);
             });
         }        
     }
@@ -199,7 +207,7 @@ export class VendorATAInformationComponent implements OnInit {
     // get all subchapters
     getAllATASubChapter() {
         this.isSpinnerVisible = true;
-        this.atasubchapter1service.getAtaSubChapter1List().subscribe(res => {
+        this.atasubchapter1service.getAtaSubChapter1List(this.currentUserMasterCompanyId).subscribe(res => {
             const ataSubChapter = res[0].map(x => {
                 return {
                     label: `${x.ataSubChapterCode}-${x.description}`,
@@ -209,12 +217,12 @@ export class VendorATAInformationComponent implements OnInit {
             // making copy for the subchapters in both add and seach 
             this.search_ataSubChapterList = ataSubChapter;
             this.isSpinnerVisible = false;
-        },error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error))
     }
 
     getAllATAChapter() {
         this.isSpinnerVisible = true;
-        this.atamain.getAtaMainList().subscribe(res => {
+        this.atamain.getAtaMainList(this.currentUserMasterCompanyId).subscribe(res => {
             const responseData = res[0];
             this.search_ataChapterList = responseData.map(x => {
                 return {
@@ -223,7 +231,7 @@ export class VendorATAInformationComponent implements OnInit {
                 }
             })
             this.isSpinnerVisible = false;
-        },error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error))
     }
 
     // get sub chapter by multiple ids in the search
@@ -231,9 +239,7 @@ export class VendorATAInformationComponent implements OnInit {
         this.searchByFieldUrlCreateforATA();
         if (this.ataChapterIdUrl !== '') {
             this.isSpinnerVisible = true;
-            this.atamain
-                .getMultiATASubDesc(this.ataChapterIdUrl)
-                .subscribe(atasubchapter => {
+            this.atamain.getMultiATASubDesc(this.ataChapterIdUrl).subscribe(atasubchapter => {
                     const responseData = atasubchapter;
                     this.search_ataSubChapterList = responseData.map(x => {
                         return {
@@ -259,7 +265,7 @@ export class VendorATAInformationComponent implements OnInit {
             }
             this.isSpinnerVisible = false;
         }, err => {
-                this.onDataLoadFailed(err)
+            this.isSpinnerVisible = false;
         })
     }
 
@@ -310,8 +316,7 @@ export class VendorATAInformationComponent implements OnInit {
                 }
             })
             this.isSpinnerVisible = false;
-        },
-        error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false) //this.onDataLoadFailed(error))
         
     }
 
@@ -361,7 +366,7 @@ export class VendorATAInformationComponent implements OnInit {
                 this.ataSubchapterIdUrl = '';
                 this.ataChapterIdUrl = '';
                 this.isSpinnerVisible = false;
-            },error => this.onDataLoadFailed(error));
+            },error => {this.isSpinnerVisible = false;})  //this.onDataLoadFailed(error));
     }
 
     pageIndexChange(event) {
@@ -440,7 +445,7 @@ export class VendorATAInformationComponent implements OnInit {
             }
         this.isSpinnerVisible = false;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-    },error => this.onDataLoadFailed(error))    
+       },error => {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error))    
     }
 
     getVendorBasicData(vendorId) {
@@ -448,8 +453,7 @@ export class VendorATAInformationComponent implements OnInit {
         this.vendorService.getVendorDataById(vendorId).subscribe(res => {
             this.vendorData = res;
             this.isSpinnerVisible = false;
-        },
-            error => this.onDataLoadFailed(error));
+        },error =>{this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error));
     }
 
     getColorCodeForHistoryATA(i, field, value) {
