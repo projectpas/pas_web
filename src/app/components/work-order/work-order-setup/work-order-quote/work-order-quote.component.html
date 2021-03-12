@@ -2,7 +2,7 @@
     <div *ngIf="selectedDisplayType != ''" style="color: red; font-size: 20px;">
         {{(selectedDisplayType == 'use historical wos')?'Work order details ':'Workorder quote Details of '+quoteForm.quoteNumber}}
     </div>
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" *ngIf="!isView">
         <ol class="breadcrumb">
             <li class="breadcrumb-item" aria-current="page">Work Order</li>
             <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">Create Work Order Quote</li>
@@ -32,7 +32,7 @@
                   <h4  class="header-name">
                     {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
             </div>
-            <div>
+            <div *ngIf="!isView">
                 <button type="button"
                   class="btn-sm header-button pull-right"
                   [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote-list']" >
@@ -1575,14 +1575,12 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">  {{(displayType == 'use historical wos')?'List of Historical Workorders for MPN '+this.selectedPartNumber['partNumber']:'List of Historical Workorder Quotes for MPN '+this.selectedPartNumber['partNumber']}}</h4>
                     <button type="button" class="close" (click)="hideModal('showHistoricalWorkOrder')">
                         &times;
-                    </button>
+                    </button> 
                 </div>
                 <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
-                    <div class="form-group" style="color: red; font-size: 20px;">
-                        {{(displayType == 'use historical wos')?'List of Historical Workorders for MPN '+this.selectedPartNumber['partNumber']:'List of Historical Workorder Quotes for MPN '+this.selectedPartNumber['partNumber']}}
-                    </div>
                     <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"
@@ -1908,11 +1906,16 @@
                     <button type="button" class="close" (click)="hideModal('historicalWorkOrderView')">
                         &times;
                     </button>
-                </div>
-                <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView)">
+                </div> 
+                <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
                     <!-- <grd-quote-view [workorderid]="selectedHistoricalWorkOrder" isView="true"></grd-quote-view> -->
-                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
+
+                   <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                 </div>
+                <div >
+                    <button type="button" class="btn btn-danger foot_bt"  (click)="hideModal('historicalWorkOrderView')"
+                      >Close</button>
+                  </div>
             </div>
         </div>
     </div>

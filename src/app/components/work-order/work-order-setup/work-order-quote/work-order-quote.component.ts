@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output } from '@angular/core';
+﻿import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
 import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
 import { MenuItem } from 'primeng/api';
@@ -362,9 +362,19 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
             this.getAllWorkOrderStatus('');
         }
+        console.log("hell9 ng On Ints ") 
     }
+    ngOnChanges(changes: SimpleChanges) {
+        for (let property in changes) {
+if (property == 'selectedDisplayType') {
+    this.workOrderId=this.workorderid;
+    if(this.workOrderId){
 
-    ngOnChanges() {
+        this.getEmployeeList(this.workOrderId);
+    }
+// selectedDisplayType
+            }
+        }
         this.enableEditBtn = Boolean(this.enableEditBtn);
         if (this.isQuoteListView) {
             this.quoteForm = new WorkOrderQuote();
@@ -1071,12 +1081,14 @@ this.creditTerms=res.creditTerm;
     }
 
     saveWorkOrderFreightsList(e) {
+        console.log("dfdsfsdfsdfdsfsdfdsfsdf",e)
         this.quoteFreightListPayload.BuildMethodId = this.getBuildMethodId();
         this.quoteFreightListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.quoteFreightListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.quoteFreightListPayload['createdDate'] = (e.createdDate) ? e.createdDate : new Date();
         this.quoteFreightListPayload.masterCompanyId = this.quotationHeader.masterCompanyId;
         this.quoteFreightListPayload.SelectedId = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
+        console.log("hello ",this.quoteFreightListPayload);
         this.quoteFreightListPayload.WorkOrderQuoteFreight = e['data'].map(fre => {
             if (fre.workOrderQuoteDetailsId && fre.workOrderQuoteDetailsId != 0) {
                 this.quoteFreightListPayload.WorkOrderQuoteDetailsId = fre.workOrderQuoteDetailsId
@@ -1095,7 +1107,7 @@ this.creditTerms=res.creditTerm;
                 "IsFixedFreight": fre.isFixedFreight,
                 "FixedAmount": fre.fixedAmount,
                 "masterCompanyId": this.quotationHeader.masterCompanyId,
-                "markupPercentageId": fre.markupPercentageId,
+                "markupPercentageId": fre.markupPercentageId ? fre.markupPercentageId: 0,
                 "freightCostPlus": fre.freightCostPlus,
                 "taskId": fre.taskId,
                 "CreatedBy": "admin",
@@ -1104,7 +1116,7 @@ this.creditTerms=res.creditTerm;
                 "UpdatedDate": "2019-10-31T09:06:59.68",
                 "IsActive": true,
                 "IsDeleted": fre.isDeleted,
-                "BillingMethodId": Number(fre.billingMethodId),
+                "billingMethodId": Number(fre.billingMethodId),
                 "BillingAmount": fre.billingAmount,
                 "headerMarkupId": fre.headerMarkupId,
                 "markupFixedPrice": fre.markupFixedPrice,
@@ -1236,7 +1248,7 @@ this.creditTerms=res.creditTerm;
                 "Markup": mList.markup,
                 "masterCompanyId": (mList.masterCompanyId == '') ? 0 : mList.masterCompanyId,
                 "TaskId": (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
-                "BillingMethodId": Number(mList.billingMethodId),
+                "BillingMethodId": mList.billingMethodId? Number(mList.billingMethodId):this.costPlusType,
                 "BillingRate": mList.billingRate,
                 "BillingAmount": mList.billingAmount,
                 "headerMarkupId": this.overAllMarkup,
@@ -1792,6 +1804,7 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialListForWO(data) {
+        console.log("data",data)
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1804,7 +1817,8 @@ this.creditTerms=res.creditTerm;
                 mData.partNumber= mData.partNumber.partName;
                 mData.taskId=(typeof mData.taskId == 'object')? mData.taskId.taskId:mData.taskId;
                 mData.taskName=(typeof mData.taskId == 'object')?mData.taskId.description:mData.taskName;
-
+                mData.billingMethodId=this.costPlusType ? this.costPlusType :0;
+                mData.markupPercentageId=this.overAllMarkup ? this.overAllMarkup : 0;
 
                 // (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
             }
@@ -1828,6 +1842,7 @@ this.creditTerms=res.creditTerm;
                 // this.workOrderExclusionsList = [...this.workOrderExclusionsList, ...this.workOrderExclusionsLists[x].map(da=>{ return {...da, taskId:x}})]
                 this.materialListQuotation.push(temp[x]);
             }
+            console.log(" this.materialListQuotation", this.materialListQuotation);
         }
         else {
             this.editMatData = [];
