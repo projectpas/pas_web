@@ -229,8 +229,9 @@ export class VendorContactsComponent implements OnInit {
                                    this.local = res[0];
                                    this.vendorCodeandName = res[0];
                                },err => {
-                                   const errorLog = err;
-                                   this.saveFailedHelper(errorLog);
+                                   //const errorLog = err;
+                                   //this.saveFailedHelper(errorLog);
+                                   this.isSpinnerVisible = false;
                                });
                         }                        
                     }
@@ -310,8 +311,9 @@ export class VendorContactsComponent implements OnInit {
                 res => {
                         this.vendorCodeandName = res[0];
                 },err => {
-                    const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+                    //const errorLog = err;
+                    //this.saveFailedHelper(errorLog);
+                    this.isSpinnerVisible = false;
             });
         }        
     }
@@ -322,8 +324,8 @@ export class VendorContactsComponent implements OnInit {
         this.isSpinnerVisible = true;
         const vendorId = this.vendorId != 0 ? this.vendorId : this.local.vendorId;
         this.vendorService.getContacts(vendorId).subscribe(
-            results => this.onDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            results => this.onDataLoadSuccessful(results[0]),           
+            error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error))
         );
     }
     enableSaveMemo() {
@@ -376,7 +378,7 @@ export class VendorContactsComponent implements OnInit {
                     this.alertService.showMessage("Success", `Records In-Acivated successfully`, MessageSeverity.success);
                     this.loadData();
                 },
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false} )//this.saveFailedHelper(error));
         }
         else {
             this.isSpinnerVisible = true;
@@ -395,7 +397,7 @@ export class VendorContactsComponent implements OnInit {
                     this.alertService.showMessage("Success", `Records Acivated successfully`, MessageSeverity.success);
                     this.loadData();
                 },
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false} )// this.saveFailedHelper(error));
         }
     }
 
@@ -508,7 +510,7 @@ export class VendorContactsComponent implements OnInit {
         this.isSaving = true;
         this.vendorService.getVendorContactAuditHistory(this.sourceVendor.vendorId, this.sourceVendor.contactId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error));
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
@@ -623,13 +625,13 @@ export class VendorContactsComponent implements OnInit {
                     $("#addContactInfo").modal("hide");
                 }, err => {
                     this.isSpinnerVisible = false;
-                    this.saveFailedHelper(err);
+                    //this.saveFailedHelper(err);
                     this.disableSave = true;
-                    this.alertService.showMessage(
-                        'Warning',
-                        err.error,
-                        MessageSeverity.error
-                    );
+                    // this.alertService.showMessage(
+                    //     'Warning',
+                    //     err.error,
+                    //     MessageSeverity.error
+                    // );
                 })
             }
         }
@@ -660,7 +662,7 @@ export class VendorContactsComponent implements OnInit {
             this.isSpinnerVisible = true;
             this.vendorService.deleteContact(contactId, updatedBy).subscribe(
                 response => this.saveCompleted(this.sourceVendor),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false})//this.saveFailedHelper(error));
         }
         this.modal.close();
     }
@@ -668,8 +670,7 @@ export class VendorContactsComponent implements OnInit {
     updateVendorContact(updateObj: any) {
         this.vendorService.newAddvendorContact(updateObj).subscribe(data => {
             this.loadData();
-        },
-            err => this.saveFailedHelper(err))
+        },err => {this.isSpinnerVisible = false}) //this.saveFailedHelper(err))
     }
 
     private saveCompleted(user?: any) {        
@@ -764,7 +765,7 @@ export class VendorContactsComponent implements OnInit {
                     `Successfully Uploaded File Data. `,
                     MessageSeverity.success
                 );
-            }, err => this.saveFailedHelper(err))
+            }, err => {this.isSpinnerVisible = false}) //this.saveFailedHelper(err))
         }
     }
 
@@ -798,8 +799,7 @@ export class VendorContactsComponent implements OnInit {
                     this.ataListDataValues[i]['ataSubChapterDescription'] ='-'
                 }
                 }
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
     }
 
     getOriginalATASubchapterList() {
@@ -808,8 +808,7 @@ export class VendorContactsComponent implements OnInit {
             const responseData = res[0];
             this.originalATASubchapterData = responseData;
             this.isSpinnerVisible = false;
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
     }
 
 
@@ -832,8 +831,7 @@ export class VendorContactsComponent implements OnInit {
                     label: x.ataChapterCode + '-' + x.ataChapterName
                 }
             })
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
     }
 
     getATASubChapterByATAChapter() {
@@ -849,9 +847,7 @@ export class VendorContactsComponent implements OnInit {
                     value: x
                 }
             })
-
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
     }
 
     getATASubChapter() {
@@ -877,8 +873,7 @@ export class VendorContactsComponent implements OnInit {
                     label: x.description
                 }
             })
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
     }
 
     addATAChapter(rowData) {
@@ -901,8 +896,7 @@ export class VendorContactsComponent implements OnInit {
                     value: x.ataSubChapterId
                 }
             })
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
         this.add_SelectedModels = undefined;
     }
 
@@ -945,8 +939,7 @@ export class VendorContactsComponent implements OnInit {
                 );
                 this.getATAVendorContactMapped();
             }, 1000);
-            },
-            error => this.saveFailedHelper(error))
+            },error => {this.isSpinnerVisible = false})//this.saveFailedHelper(error))
     }else{
             const ataMappingData = [{
                 vendorId: vendorId,
@@ -1043,8 +1036,7 @@ export class VendorContactsComponent implements OnInit {
                         MessageSeverity.success
                     );
                     this.isSpinnerVisible = false;
-                },
-                error => this.saveFailedHelper(error));
+                },error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error));
         }
         this.modal.close();
     }
@@ -1069,7 +1061,7 @@ export class VendorContactsComponent implements OnInit {
                     );
                     this.isSpinnerVisible = false;
                 },
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false;})//this.saveFailedHelper(error));
         }
         this.modal.close();
     }
@@ -1079,8 +1071,7 @@ export class VendorContactsComponent implements OnInit {
         this.vendorService.getVendorContactATAAuditDetails(rowData.vendorContactATAMappingId).subscribe(res => {
             this.auditHistoryATA = res;
             this.isSpinnerVisible = false;
-        },
-            error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false }) //this.onDataLoadFailed(error))
     }
 
     getColorCodeForHistoryATA(i, field, value) {
@@ -1172,8 +1163,7 @@ export class VendorContactsComponent implements OnInit {
 				this.loadData();
                 this.alertService.showMessage("Success", `Record Was Restored Successfully`, MessageSeverity.success);
                 this.isSpinnerVisible = false;
-            },
-                error => this.saveFailedHelper(error))
+            },error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error))
         }
         
         getAllContactFirstNameSmartDropDown(strText = '', contactName = ''){
@@ -1204,7 +1194,7 @@ export class VendorContactsComponent implements OnInit {
                         lastName: this.sourceVendor.lastName,
                     }
                 }
-            },error => this.saveFailedHelper(error));
+            },error => { this.isSpinnerVisible = false;})//this.saveFailedHelper(error));
         }
     
         getAllContactMiddleNameSmartDropDown(strText = '', contactName = ''){
@@ -1236,7 +1226,7 @@ export class VendorContactsComponent implements OnInit {
                         lastName: this.sourceVendor.lastName,
                     }
                 }
-            },error => this.saveFailedHelper(error));
+            },error =>{this.isSpinnerVisible = false;}) //this.saveFailedHelper(error));
         }
     
         getAllContactLastNameSmartDropDown(strText = '', contactName = ''){
@@ -1268,19 +1258,18 @@ export class VendorContactsComponent implements OnInit {
                         middleName: this.sourceVendor.middleName,
                     }
                 }
-            },error => this.saveFailedHelper(error));
+            },error => {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error));
         }
 
         getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
             if(this.arrayTagNamelist.length == 0) {			
                 this.arrayTagNamelist.push(0); }
-                this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+                this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.tagNamesList = res.map(x => {
                     return {
                         tagName: x.label, contactTagId: x.value 
                     }
                 })
-
                 if(contactTagId > 0)
                 {
                     this.sourceVendor = {

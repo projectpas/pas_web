@@ -57,8 +57,9 @@ export class VendorMemoComponent implements OnInit {
 						res => {
 								this.local = res[0];
 						},err => {
-							const errorLog = err;
-							this.saveFailedHelper(errorLog);
+							this.isSpinnerVisible = false;
+							//const errorLog = err;
+							//this.saveFailedHelper(errorLog);
 					});
 				}				
             }
@@ -116,7 +117,7 @@ export class VendorMemoComponent implements OnInit {
 			},
 			err => {
 				this.isSpinnerVisible = false;
-				this.onDataLoadFailed(err);
+				//this.onDataLoadFailed(err);
 			});
 	}
 
@@ -134,7 +135,7 @@ export class VendorMemoComponent implements OnInit {
 			},
 			err => {
 				this.isSpinnerVisible = false;
-				this.onDataLoadFailed(err);
+				//this.onDataLoadFailed(err);
 			});
 	}
 
@@ -153,7 +154,7 @@ export class VendorMemoComponent implements OnInit {
 					MessageSeverity.success
 				);
 				this.isSpinnerVisible = false;
-			}, error => this.saveFailedHelper(error)
+			}, error =>{this.isSpinnerVisible = false;}//  this.saveFailedHelper(error)
 		)
 	}
 

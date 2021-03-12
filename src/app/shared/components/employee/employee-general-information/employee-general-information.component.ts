@@ -382,8 +382,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             }
         }, err => {
             this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            //const errorLog = err;
+            //this.errorMessageHandler(errorLog);
         });
     }
 
