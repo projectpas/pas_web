@@ -99,6 +99,11 @@
                                         {{ formateCurrency(bill.totalSales) }}
                                     </td>
                                     <td class="zui-sticky-col" style="width:107px !important">
+                                        <span *ngIf="bill.qtyBilled > 0">
+                                            <a class="btn nobg" matTooltip="Invoice"
+                                                matTooltipPosition="above" (click)="DownloadInvoice(bill);"><i
+                                                    class="fa fa-print"></i></a>
+                                        </span>
                                         <span>
                                             <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
                                                 (click)="onSelectPartNumber(bill)" matTooltip="Create Billing"
@@ -157,9 +162,9 @@
                                             [(ngModel)]="billingorInvoiceForm.revisionTypeId" [disabled]="isViewMode"
                                             required>
                                         </p-dropdown> -->
-                                        <input type="text" class="form-control wo-input" name="salesOrderType"
-                                            #salesOrderType="ngModel" disabled
-                                            [(ngModel)]="billingorInvoiceForm.salesOrderType" [disabled]="isViewMode" />
+                                        <input type="text" class="form-control wo-input" name="revType"
+                                            #revType="ngModel" disabled [(ngModel)]="billingorInvoiceForm.revType"
+                                            [disabled]="isViewMode" />
                                     </div>
                                 </div>
                             </div>
@@ -184,10 +189,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group ">
-                                        <label> Invoice Date <span class="clr-red">*</span></label>
-                                        <!-- <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
-                                            #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
-                                            [disabled]="isViewMode" required></p-calendar> -->
+                                        <label> Invoice Date & Time <span class="clr-red">*</span></label>
                                         <p-calendar [showIcon]="true" class="calender-cstm" [yearNavigator]="true"
                                             [monthNavigator]="true" yearRange="1900:2100" name="invoiceDate"
                                             #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
@@ -224,14 +226,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <!-- <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Ship Date </label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="shipDate"
-                                            #shipDate="ngModel" [(ngModel)]="billingorInvoiceForm.shipDate"
-                                            [disabled]="isViewMode"></p-calendar>
-                                    </div>
-                                </div> -->
                                 <div class="col-md-6">
                                     <div class="form-group ">
                                         <label> No of Pieces </label>
@@ -511,7 +505,7 @@
                                         <label>Attention </label>
                                         <input type="text" class="form-control wo-input" name="billToAttention"
                                             #billToAttention="ngModel"
-                                            [(ngModel)]="billingorInvoiceForm.shipToAttention"
+                                            [(ngModel)]="billingorInvoiceForm.billToAttention"
                                             [disabled]="isViewMode" />
                                     </div>
                                 </div>

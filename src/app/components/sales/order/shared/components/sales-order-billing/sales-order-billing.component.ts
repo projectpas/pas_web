@@ -32,6 +32,7 @@ export class SalesOrderBillingComponent implements OnInit {
     billingChildHeader = [];
     shipViaList = [];
     selectedPartNumber = 0;
+    selectedQtyToBill = 0;
     isSpinnerVisible = false;
     partsForBilling: any = [];
     totalRecords: number = 0;
@@ -122,6 +123,7 @@ export class SalesOrderBillingComponent implements OnInit {
 
     onSelectPartNumber(rowData) {
         if (rowData.salesOrderPartId != 0 && rowData.salesOrderShippingId != 0) {
+            this.selectedQtyToBill = rowData.qtyToBill;
             this.partSelected = true;
             this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId, rowData.salesOrderShippingId);
         }
@@ -144,11 +146,13 @@ export class SalesOrderBillingComponent implements OnInit {
         this.salesOrderService.getSalesOrderBillingByShipping(this.salesOrderId, partNumber, salesOrderShippingId).subscribe(result => {
             this.isSpinnerVisible = false;
             if (result) {
+                debugger;
                 this.billingorInvoiceForm = result;
                 this.billingorInvoiceForm.openDate = new Date(result.openDate);
                 this.billingorInvoiceForm.printDate = new Date();
                 this.billingorInvoiceForm.invoiceDate = new Date();
                 this.billingorInvoiceForm.creditLimit = this.formateCurrency(result.creditLimit);
+                this.billingorInvoiceForm.customerId = result.customerId;
             } else {
                 this.billingorInvoiceForm = new SalesOrderBillingAndInvoicing();
             }
@@ -365,6 +369,8 @@ export class SalesOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.updatedBy = this.userName;
         this.billingorInvoiceForm.salesOrderId = this.salesOrderId;
         this.billingorInvoiceForm.salesOrderPartId = this.selectedPartNumber;
+        this.billingorInvoiceForm.customerId = billingorInvoiceFormTemp.customerId;
+        this.billingorInvoiceForm.qtyToBill = this.selectedQtyToBill;
         this.billingorInvoiceForm.invoiceNo = "test";
         this.salesOrderService.createBilling(this.billingorInvoiceForm).subscribe(result => {
         }, err => {
@@ -765,5 +771,9 @@ export class SalesOrderBillingComponent implements OnInit {
 
     closeModal() {
         $("#printPost").modal("hide");
+    }
+
+    DownloadInvoice(billData) {
+
     }
 }
