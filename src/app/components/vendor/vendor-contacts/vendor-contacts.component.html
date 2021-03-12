@@ -297,7 +297,7 @@
                                            (click)="openHist(contentAuditHist, rowData)"
                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                       </span>
-                                      <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                      <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
                           </tr>
@@ -1221,7 +1221,7 @@
                         <span data-toggle="modal" data-target="#contentATAChapterHist"><a class="btn nobg"
                           (click)="getATAAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i
                             class="fa fa-history"></i></a></span>
-                        <span *ngIf="isViewMode == false" ><a class="btn nobg" (click)="restoreATAMapped(restoreATAContent,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        <span *ngIf="isViewMode == false" ><a class="btn nobg btn-users-cstm" (click)="restoreATAMapped(restoreATAContent,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                       </div>
                     </td>
                   </tr>
