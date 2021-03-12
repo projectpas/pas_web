@@ -14,6 +14,6 @@ export class SOApprovalRuleComponent implements OnInit {
 
   ngOnInit() {
     
-  }
+  } 
 
 }

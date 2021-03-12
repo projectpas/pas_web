@@ -185,7 +185,8 @@ export class VendorCapesComponent implements OnInit {
                         this.vendorCodeandName = res[0];
                 },err => {
                     const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+                    //this.saveFailedHelper(errorLog);
+                    this.isSpinnerVisible = false;
             });
         }        
     }
@@ -270,7 +271,7 @@ export class VendorCapesComponent implements OnInit {
                     this.vendorCapsList =  results[0];
                     this.isSpinnerVisible = false;
                 },
-                error => this.saveFailedHelper(error)
+                error => this.isSpinnerVisible = false //this.saveFailedHelper(error)
             );
         }
     }
@@ -287,17 +288,17 @@ export class VendorCapesComponent implements OnInit {
     getItemMasterSmartDropDown(strText = ''){
 		if(this.arraylistItemMasterId.length == 0) {
 			this.arraylistItemMasterId.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arraylistItemMasterId.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arraylistItemMasterId.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.itemMasterlistCollectionOriginal = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
                 }
             })
-
             this.itemMasterlistCollection = [...this.itemMasterlistCollectionOriginal];
 		},err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
+            const errorLog = err;
+            this.isSpinnerVisible = false;
+			//this.saveFailedHelper(errorLog);
 		});
     }
 
@@ -310,12 +311,13 @@ export class VendorCapesComponent implements OnInit {
         if(this.arraylistCapabilityTypeId.length == 0) {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.CapesTypelistCollection = res;
             this.isSpinnerVisible = false;
         },err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
+            const errorLog = err;
+            this.isSpinnerVisible = false;
+			//this.saveFailedHelper(errorLog);
 		});
     }
 
@@ -345,8 +347,7 @@ export class VendorCapesComponent implements OnInit {
         }
     }
 
-    addFieldValue(): void {
-        
+    addFieldValue(): void {        
         this.isSpinnerVisible = true;
         this.newFields.itemMasterId = this.vendorCapsList.itemMasterId;
         this.newFields.manufacturerId = null; 
@@ -363,8 +364,7 @@ export class VendorCapesComponent implements OnInit {
         this.newFields.TAT = null;
         this.newFields.memo = null;
         this.disableCapes = false;
-        this.newFields.isEditable = true,
-        
+        this.newFields.isEditable = true,        
         this.fieldArray = [...this.fieldArray, { ...this.newFields }]
         this.isSpinnerVisible = false;
     }
@@ -398,7 +398,7 @@ export class VendorCapesComponent implements OnInit {
 					field.manufacturerId = data[0].manufacturerId;
                     field.manufacturerName = data[0].name;
 				}
-			}, error => this.saveFailedHelper(error))
+			}, error => this.isSpinnerVisible = false) //this.saveFailedHelper(error))
     }
 
     saveVendorCapes(){
@@ -436,8 +436,7 @@ export class VendorCapesComponent implements OnInit {
             obj.partNumber = obj.partNumber.partNumber;
             obj.partDescription = obj.partDescription;
             obj.manufacturerName = obj.manufacturerName;
-            obj.manufacturerId = obj.manufacturerId;
-            
+            obj.manufacturerId = obj.manufacturerId;            
             obj.capabilityTypeId = obj.capabilityTypeId;
             obj.capabilityTypeName = obj.capabilityTypeName == null ? obj.capabilityTypeDescription : obj.capabilityTypeName;
             obj.capabilityTypeDescription = obj.capabilityTypeDescription;
@@ -475,13 +474,16 @@ export class VendorCapesComponent implements OnInit {
                         res.message,
                         MessageSeverity.error
                     );
-                }
+                }  
+                this.disableCapes = true;               
+                this.getVendorCapabilitylistId('all');                  
              }
              else{
                 this.isSpinnerVisible = false;
              }
         }, error => {
-            this.saveFailedHelper(error);        
+           // this.saveFailedHelper(error);  
+            this.isSpinnerVisible = false;      
             this.getVendorCapabilitylistId('all');    
         })
     }
@@ -537,7 +539,7 @@ export class VendorCapesComponent implements OnInit {
                         MessageSeverity.success
                     );
                     this.isSpinnerVisible = false;
-            },error => this.saveFailedHelper(error))
+            },error => this.isSpinnerVisible = false)//this.saveFailedHelper(error))
            
         } else {
             if (this.fieldArray.length > 0) {
@@ -581,7 +583,7 @@ export class VendorCapesComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.fieldArray[i].isEditable = false;
                 
-            },error => this.saveFailedHelper(error))        
+            },error => this.isSpinnerVisible = false) //this.saveFailedHelper(error))        
         } else {
             this.restoreCapesRecordRow = undefined;
         }
@@ -593,7 +595,7 @@ export class VendorCapesComponent implements OnInit {
         this.vendorNameHist = rowData.vendorName;
         this.vendorService.getVendorCapabilityAuditHistory(rowData.vendorCapabilityId, rowData.vendorId).subscribe(
             results => this.onHistoryOfVendorCapesSuccess(results, content),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false)//this.saveFailedHelper(error));
     }
 
     private onHistoryOfVendorCapesSuccess(auditHistory, content) {

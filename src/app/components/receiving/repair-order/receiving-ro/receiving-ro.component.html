@@ -4,8 +4,8 @@
             <div class="row">
                 <div class="col">
                     <h4 class="header-name">Receiving/Repair Order
-                        <button class="btn-sm header-button header-button-alignment"
-                            (click)="receiving_ro_header=!receiving_ro_header" style="margin-left: 20px;">
+                        <button class="btn-sm header-button header-button-alignment margin-left-20"
+                            (click)="receiving_ro_header=!receiving_ro_header">
                             {{receiving_ro_header ? 'Collapse' : 'Expand'}}
                         </button>
                     </h4>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <hr *ngIf="receiving_ro_header" />
-                <div class="form-row" *ngIf="receiving_ro_header" style="margin-top: 10px;">
+                <div class="form-row m-t-10" *ngIf="receiving_ro_header">
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -259,7 +259,7 @@
                             <ng-container *ngFor="let part of repairOrderData; let row_index=index">
                                 <!--this row is for the parent part-->
                                 <tr class="parent-data" *ngIf="part.isParent">
-                                    <td class="details-control eachcol" style="padding: 4px 6px;">
+                                    <td class="details-control eachcol parent-padding">
                                         <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                 (click)="showSplitShipmentParts(part)"></i>
@@ -316,13 +316,12 @@
                                                 (onChange)="togglePartTimeLife(part)"></p-inputSwitch>
                                         </section>
                                     </td>
-                                    <td style="padding:4px;">
+                                    <td class="padding-4">
                                         <input type="text"
                                             *ngIf="!part.hasChildren && part.quantityRepaired < part.quantityToRepair"
                                             [(ngModel)]="part.quantityActuallyReceived"
                                             (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum"
-                                            class="form-control text-right" [maxLength]="12" required style="width: 50px !important;
-                                            margin-right: 10px !important;" />
+                                            class="form-control text-right quantity-input" [maxLength]="12" required  />
                                         <button
                                             *ngIf="!part.hasChildren && part.quantityRepaired < part.quantityToRepair"
                                             [disabled]="!part.quantityActuallyReceived"
@@ -373,8 +372,7 @@
                                     <td><input type="text" *ngIf="part.quantityRepaired < part.quantityToRepair"
                                             [(ngModel)]="part.quantityActuallyReceived"
                                             (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum"
-                                            class="form-control" style="width: 50px !important;
-                                            margin-right: 10px !important; text-align: right;" [maxLength]="12"
+                                            class="form-control quantity-input text-right" [maxLength]="12"
                                             required />
                                         <button class="btn btn-primary btn-po-details"
                                             *ngIf="part.quantityRepaired < part.quantityToRepair"
@@ -386,7 +384,7 @@
 
                                 <tr class="more-info" *ngIf="part.showStockLineGrid" [hidden]="!part.visible">
                                     <td colspan="13">
-                                        <div class="form-row" style="margin-top: 10px;padding: 0px 7px;">
+                                        <div class="form-row pn-div">
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>PN</label>
@@ -512,15 +510,15 @@
                                             <h3 class="add-details-heading">{{ part.itemMaster?.partNumber }} receiving
                                                 Qty {{ (part.currentSLIndex + 1) }} of
                                                 {{ part.stocklineListObj.length }} </h3>
-                                            <div class="pull-right" style="margin-top: -37px;margin-right: 85px;"
+                                            <div class="pull-right parts-div"
                                                 *ngIf="!part.isSameDetailsForAllParts">
                                                 <!--*ngIf="part.itemMaster.isSerialized"-->
                                                 <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                     (click)="moveStockLineMainPage('stockline', part.currentSLIndex - 1, part)"></i>
                                                 <input [value]="part.currentSLIndex + 1" type="text" pInputText
                                                     pKeyFilter="pnum" (keyup)="gotoStockLineMainPage($event, part)"
-                                                    (focusout)="paginatorFocusOut($event, part)" class="form-control"
-                                                    style="width: 50px;border-radius: 0 !important;" />
+                                                    (focusout)="paginatorFocusOut($event, part)" class="form-control parts-input"
+                                                   />
                                                 <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                     (click)="moveStockLineMainPage('stockline', part.currentSLIndex + 1, part)"></i>
                                                 <p>Page {{part.currentSLIndex + 1}} of {{part.stocklineListObj.length}}
@@ -530,8 +528,8 @@
                                                 <div class="form-row">
                                                     <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <div class="checkbox-cstm" style="margin-top: 4px">
-                                                                <label style="width: 200px;">
+                                                            <div class="checkbox-cstm m-t-4">
+                                                                <label class="width-200">
                                                                     <!--*ngIf="part.itemMaster.isSerialized"-->
                                                                     <input type="checkbox" class="form-control"
                                                                         (change)="toggleSameDetailsForAllParts(part)">
@@ -546,14 +544,13 @@
 
                                                 <div class="form-row">
                                                     <div class="col-md-3">
-                                                        <div class="card"
-                                                            style="margin-top: 20px; margin-bottom: 10px;">
-                                                            <div class="card-header" style="padding: 10px 12px;">
-                                                                <h5 style="margin-bottom: 0; font-size: 12px;">
+                                                        <div class="card mgmt-card">
+                                                            <div class="card-header mgmt-card-header">
+                                                                <h5 class="mgmt-label">
                                                                     Management Structure <span class="clr-red">*</span>
                                                                 </h5>
                                                             </div>
-                                                            <div class="card-body" style="padding: 12px 12px 4px;">                                                                
+                                                            <div class="card-body mgmt-card-body">                                                                
                                                                 <div class="form-group">
                                                                     <select class="form-control"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSLIndex].parentCompanyId"
@@ -1006,18 +1003,17 @@
                                             </section>
                                             <br />
                                             <section>
-                                                <h4 class="add-details-heading" style="text-align: left;"
+                                                <h4 class="add-details-heading text-left"
                                                     *ngIf="part.itemMaster.isSerialized">Serialized
                                                 </h4> 
-                                                <div class="pull-right" style="margin-top: 19px;margin-right: 85px;"
+                                                <div class="pull-right serialised-div"
                                                     *ngIf="part.itemMaster.isSerialized">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('stockline', part.currentSERIndex - 1, part)"></i>
                                                     <input [value]="part.currentSERIndex + 1" type="text" pInputText
                                                         pKeyFilter="pnum" (keyup)="gotoStockLinePage($event, part)"
                                                         (focusout)="paginatorFocusOut($event, part)"
-                                                        class="form-control"
-                                                        style="width: 50px;border-radius: 0 !important;" />
+                                                        class="form-control parts-input" />
                                                     <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('stockline', part.currentSERIndex + 1, part)"></i>
                                                     <p>Page {{part.currentSERIndex + 1}} of
@@ -1032,8 +1028,8 @@
                                                                 disabled="{{part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided}}"
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumber"
                                                                 type="text" pInputText [maxLength]="25">
-                                                            <div class="checkbox-cstm" style="margin-top: 4px">
-                                                                <label style="width: 200px;">
+                                                            <div class="checkbox-cstm m-t-4">
+                                                                <label class="width-200">
                                                                     <input type="checkbox" class="form-control"
                                                                         [(ngModel)]="part.stocklineListObj[part.currentSERIndex].serialNumberNotProvided"
                                                                         (click)="onSerialNumberNotProvided(part.stocklineListObj[part.currentSERIndex])">
@@ -1053,15 +1049,14 @@
                                                     receiving Qty Time Life {{ (part.currentTLIndex + 1) }} of
                                                     {{ part.timeLifeList.length }} 
                                                 </h3>                                                
-                                                <div class="pull-right" style="margin-top: -37px;margin-right: 85px;"
+                                                <div class="pull-right parts-div"
                                                     *ngIf="part.itemMaster.isTimeLife">
                                                     <i class="fa fa-chevron-left btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('timelife', part.currentTLIndex - 1, part)"></i>
                                                     <input [value]="part.currentTLIndex + 1" type="text" pInputText
                                                         pKeyFilter="pnum" (keyup)="gotoStockLinePage($event, part)"
                                                         (focusout)="paginatorFocusOut($event, part)"
-                                                        class="form-control"
-                                                        style="width: 50px;border-radius: 0 !important;" />
+                                                        class="form-control parts-input" />
                                                     <i class="fa fa-chevron-right btn btn-primary btn-ad-icons"
                                                         (click)="moveStockLinePage('timelife', part.currentTLIndex + 1, part)"></i>
                                                     <p>Page {{part.currentTLIndex + 1}} of {{part.timeLifeList.length}}
@@ -1071,8 +1066,8 @@
                                                 <div class="form-row">
                                                     <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <div class="checkbox-cstm" style="margin-top: 4px">
-                                                                <label style="width: 200px;">
+                                                            <div class="checkbox-cstm  m-t-4">
+                                                                <label class="width-200">
                                                                     <input type="checkbox"
                                                                         [(ngModel)]="part.timeLifeList[part.currentTLIndex].detailsNotProvided"
                                                                         class="form-control"
@@ -1284,7 +1279,7 @@
                                             </section>
 
                                             <section *ngIf="part.assetId != null">
-                                                <h3 class="add-details-heading" style="text-align: left;">Calibrated
+                                                <h3 class="add-details-heading text-left">Calibrated
                                                     Equipment</h3>
                                                 <div class="form-row">
                                                     <div class="col-md-3">
@@ -1343,7 +1338,7 @@
             <div class="modal-body">
                 <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
-                        <th style="color: #fff;">Notes</th>
+                        <th class="color-white">Notes</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -1382,7 +1377,7 @@
             <div class="modal-body">
                 <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
-                        <th style="color: #fff;">Memo</th>
+                        <th class="color-white">Memo</th>
                     </thead>
                     <tbody>
                         <tr>

@@ -333,8 +333,9 @@ export class VendorGeneralInformationComponent implements OnInit {
                         res => {
                                 this.local = res[0];
                         },err => {
-                            const errorLog = err;
-                            this.saveFailedHelper(errorLog);
+                            this.isSpinnerVisible = false;
+                            //const errorLog = err;
+                            //this.saveFailedHelper(errorLog);
                     });
                 }				
             }
@@ -405,7 +406,8 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.editModeDataBinding();
             this.isSpinnerVisible = false;
         }, error =>{
-                this.onDataLoadFailed(error)
+                  this.isSpinnerVisible = false;
+               // this.onDataLoadFailed(error)
         })
 
         this.toGetDocumentsListNew(vendorId ? vendorId : this.newvendorId);
@@ -455,18 +457,15 @@ export class VendorGeneralInformationComponent implements OnInit {
         if(this.vendorId > 0)
 			this.arrayVendorlist.push(this.vendorId);
 		if(this.arrayVendorlist.length == 0) {			
-            this.arrayVendorlist.push(0); }
-        
-        await this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join()).subscribe(response => {
-            
+            this.arrayVendorlist.push(0); 
+        }        
+        await this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join(),this.currentUserMasterCompanyId).subscribe(response => {            
             this.venderListOriginal = response.map(x => {
                 return {
                     vendorName: x.label, vendorId: x.value //, customerId: x.value
                 }
-            })
-                    
+            })                    
             this.vendorNames = response;
-
             this.vendorNames = this.venderListOriginal.reduce((acc, obj) => {
                 return acc.filter(x => x.vendorId !== this.selectedParentId)
             }, this.venderListOriginal)
@@ -476,8 +475,8 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
             this.checVendorName();
 		},err => {
-			const errorLog = err;
-            this.onDataLoadFailed(errorLog);		
+			//const errorLog = err;
+            //this.onDataLoadFailed(errorLog);		
             this.isSpinnerVisible = false;
 		});
     }	
@@ -488,7 +487,7 @@ export class VendorGeneralInformationComponent implements OnInit {
 		if(this.arrayVendorlist.length == 0) {			
             this.arrayVendorlist.push(0); }
         
-        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.venderListOriginal = response.map(x => {
                 return {
                     vendorName: x.label, vendorId: x.value 
@@ -501,8 +500,8 @@ export class VendorGeneralInformationComponent implements OnInit {
             
             this.checVendorName();
 		},err => {
-			const errorLog = err;
-            this.onDataLoadFailed(errorLog);		
+			//const errorLog = err;
+            //this.onDataLoadFailed(errorLog);		
             this.isSpinnerVisible = false;
 		});
     }
@@ -522,9 +521,9 @@ export class VendorGeneralInformationComponent implements OnInit {
     //get Country List
     private countrylist() {
         this.isSpinnerVisible = true;
-        this.vendorService.getCountrylist().subscribe(
+        this.vendorService.getCountrylist(this.currentUserMasterCompanyId).subscribe(
             results => this.onDatacountrySuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false//this.onDataLoadFailed(error)
         );
     }
     private onDatacountrySuccessful(allWorkFlows: any[]) {
@@ -542,15 +541,14 @@ export class VendorGeneralInformationComponent implements OnInit {
         dialogRef.afterClosed().subscribe(role => {
             if (role) {
             }
-        },
-            error => this.onDataLoadFailed(error));
+        },error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error));
     }
-    //Load Address 
+    //Load Address  // not in use
     private loadAddressDara() {
         this.isSpinnerVisible = true;
         this.vendorService.getAddressDtails().subscribe(
             results => this.onAddressDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false // this.onDataLoadFailed(error)
         );
     }
     private onAddressDataLoadSuccessful(alladdress: any[]) {
@@ -575,11 +573,13 @@ export class VendorGeneralInformationComponent implements OnInit {
     onClickPopupSave() {
         this.documentInformation.docMemo = this.memoPopupContent;
     }
+
+    // not in use
     private loadMasterCompanies() {
         this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false //this.onDataLoadFailed(error)
         );
     }
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
@@ -599,17 +599,17 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
     
     async getAllVendorClassification() {
-        await this.commonService.smartDropDownList('VendorClassification', 'VendorClassificationId', 'ClassificationName').subscribe(res => {
+        //await this.commonService.smartDropDownList('VendorClassification', 'VendorClassificationId', 'ClassificationName').subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('VendorClassification', 'VendorClassificationId', 'ClassificationName','',true,300,'',this.currentUserMasterCompanyId).subscribe(res => {
             this.allvendorclassificationInfo = res;
-        },
-            error => this.onDataLoadFailed(error));
+        },error => this.isSpinnerVisible = false )//this.onDataLoadFailed(error));
     }
 
     async getAllIntegrations() {
 		var strText = '';
         if(this.arrayIntegrationlist.length == 0) {			
             this.arrayIntegrationlist.push(0); }
-        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description',strText,true,300,this.arrayIntegrationlist.join()).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description',strText,true,300,this.arrayIntegrationlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.integrationOriginalList = res.map(x => {
                 return {
                     label: x.label, value: x.value 
@@ -618,12 +618,11 @@ export class VendorGeneralInformationComponent implements OnInit {
 		})
 	}
 
-    async  getVendorIntegrationByVendorrId() {
+    async getVendorIntegrationByVendorrId() {
         if (this.sourceVendor.vendorId > 0) {
             await this.commonService.getIntegrationMapping(this.sourceVendor.vendorId, 3).subscribe(res => {
                 this.sourceVendor.integrationPortalIds = res.map(x => x.integrationPortalId);
-            },
-                error => this.onDataLoadFailed(error));
+            },error => this.isSpinnerVisible = false )//this.onDataLoadFailed(error));
         }
     }
 
@@ -657,25 +656,22 @@ export class VendorGeneralInformationComponent implements OnInit {
     async loadVendorParentsData(strText = '') {      
 		if(this.arrayVendorParentlist.length == 0 || this.arrayVendorParentlist == undefined) {			
 			this.arrayVendorParentlist.push(0); }
-        await  this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorParentlist.join()).subscribe(response => {
-            
+        await this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorParentlist.join(),this.currentUserMasterCompanyId).subscribe(response => {            
             this.parentVendorOriginal = response.map(x => {
                 return {
                     vendorName: x.label, vendorId: x.value 
                 }
             })
-
             this.vendorParentNames = this.parentVendorOriginal.reduce((acc, obj) => {
                 return acc.filter(x => x.vendorId != this.newvendorId)
             }, this.parentVendorOriginal)
-
             this.sourceVendor = {
                 ...this.sourceVendor,
                 vendorParentId: getObjectByValue('vendorName', this.sourceVendor.vendorParentName, this.parentVendorOriginal)
             };
 		},err => {
-			const errorLog = err;
-            this.onDataLoadFailed(errorLog);	
+			//const errorLog = err;
+            //this.onDataLoadFailed(errorLog);	
             this.isSpinnerVisible = false;	
 		});
     }
@@ -693,6 +689,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.disableSaveParentName = false;
         }
     }
+
     checkWithName(event) {
         if (event === this.sourceVendor.vendorName) {
             this.disableSaveParentName = true;
@@ -701,6 +698,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.disableSaveParentName = false;
         }
     }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -710,6 +708,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             return decodedString;
         }
     }
+
     filterVendorCodes(event) {
         this.vendorCodes = [];
         for (let i = 0; i < this.allActions.length; i++) {
@@ -738,12 +737,14 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.actionName = "";
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     openDelete(content, row) {
         this.isEditMode = false;
         this.isDeleteMode = true;
         this.sourceVendor = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     openEdit(content, row) {
         this.toGetVendorGeneralDocumentsList(this.sourceVendor.vendorId);
         this.isEditMode = true;
@@ -752,6 +753,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.loadMasterCompanies();
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     openView(content, row) {
         this.sourceVendor = row;
         this.action_name = row.description;
@@ -764,6 +766,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.toGetVendorGeneralDocumentsList(this.sourceVendor.vendorId);
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     openHelpText(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
@@ -810,6 +813,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+
     saveConformation(goNext?){
         if(this.sourceVendor.isVendorAlsoCustomer &&  this.vendorService.isEditMode ){
             this.editItemAndCloseModel(goNext);
@@ -922,8 +926,7 @@ export class VendorGeneralInformationComponent implements OnInit {
                         this.vendorService.isEditMode = true;
                         this.vendorService.enableExternal = true;
                         this.router.navigateByUrl(`vendorsmodule/vendorpages/app-vendor-general-information/${this.vendorId}`);
-                  },
-                      error => this.saveFailedHelper(error))
+                  },error => this.isSpinnerVisible = false)//this.saveFailedHelper(error))
                 }
             }
             else {
@@ -962,16 +965,19 @@ export class VendorGeneralInformationComponent implements OnInit {
         else {
         }
     }
+
     nextClick() {
         this.vendorService.vendorgeneralcollection = this.local;
         this.activeIndex = 2;
         this.vendorService.changeofTab(this.activeIndex);
     }
+
     dismissModelNew() {
         this.isDeleteMode = false;
         this.isEditMode = false;
         this.modal.close();
     }
+
     private saveCompleted(user?: any) {
         this.isSaving = false;
         if (this.isDeleteMode == true) {
@@ -982,10 +988,12 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
         }
     }
+
     private savesuccessCompleted(user?: any, goNxt?: any) {
         this.isSaving = false;
         this.alertService.showMessage("Success", `${this.vendorService.isEditMode==true ? 'Updated' : 'Saved'}  General Information  successfully`, MessageSeverity.success);
     }
+
     private saveSuccessHelper(role?: any) {
         this.isSaving = false;
         this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
@@ -1012,7 +1020,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         } else {
             this.selectedEditData = undefined;
         }
-
         const exists = selectedValueValidate('vendorId', object, this.selectedEditData);
         this.disableSaveVenderName = !exists;
     }
@@ -1038,6 +1045,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+
     onVendorCodeselected(event) {
         for (let i = 0; i < this.VendorCodesColl.length; i++) {
             if (event == this.VendorCodesColl[i][0].vendorCode) {
@@ -1047,6 +1055,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+
     onCountrieselected(event) {
         if (this.allCountryinfo) {
             for (let i = 0; i < this.allCountryinfo.length; i++) {
@@ -1135,14 +1144,17 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+
     onAddIntegrationWith() {
         this.addNewIntergation = { ...this.intergrationNew };
         this.isIntegrationAlreadyExists = false;
     }
+
     onAddCapabilities() {
         const id=this.sourceVendor.vendorId ? this.sourceVendor.vendorId :this.vendorId;
         this.router.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-capabilities-list/' + id );
     }
+
     patternMobilevalidationWithSpl(event: any) {
         const pattern = /[0-9\+\-()\ ]/;
         let inputChar = String.fromCharCode(event.charCode);
@@ -1150,6 +1162,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             event.preventDefault();
         }
     }
+
     fileUpload(event, fileType) {
         if (event.files.length === 0)
             return;
@@ -1158,25 +1171,28 @@ export class VendorGeneralInformationComponent implements OnInit {
 
         }
     }
+
     toGetVendorGeneralDocumentsList(vendorId) {
         var moduleId = 3;
         this.vendorService.GetVendorGeneralDocumentsList(vendorId, moduleId).subscribe(res => {
             this.allVendorGeneralDocumentsList = res;
-        },
-            error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
+
     downloadFileUpload(rowData) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }
+
     VendorAttachmentDelete(rowData) {
         let attachmentDetailId = rowData.attachmentDetailId;
         let updatedBy = this.userName;
         this.vendorService.GetVendorAttachmentDelete(attachmentDetailId, updatedBy).subscribe(res => {
             this.toGetVendorGeneralDocumentsList(this.sourceVendor.vendorId)
         },
-            error => this.onDataLoadFailed(error))
+            error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
+
     onClearParent() {
         this.sourceVendor.vendorParentId = undefined;
     }
@@ -1196,6 +1212,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.isIntegrationAlreadyExists = false;
         }
     }
+
     selectedWebSite() {
         this.isIntegrationAlreadyExists = true;
     }
@@ -1215,8 +1232,9 @@ export class VendorGeneralInformationComponent implements OnInit {
                 MessageSeverity.success
             );
         },
-            error => this.onDataLoadFailed(error))
+            error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
+
     addDocumentDetails() {
         this.selectedFileAttachment = [];
         this.disableFileAttachmentSubmit = false;
@@ -1230,19 +1248,22 @@ export class VendorGeneralInformationComponent implements OnInit {
             attachmentDetailId: 0
         }
     }
+
     dismissDocumentPopupModel(type) {
         this.fileUploadInput.clear();
         this.fileUploadInputAudit.clear();
         this.closeMyModel(type);
     }
+
     closeMyModel(type) {
         $(type).modal("hide");
-
     }
+
     downloadFileUploadNew(link) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${link}`;
         window.location.assign(url);
     }
+
     fileUploadCertified(event) {
 
         if (event.files.length === 0) {
@@ -1484,6 +1505,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.fileUploadInputAudit.clear()
         }
     }
+
     editCustomerDocument(rowdata,index=0) {
         this.selectedFileAttachment = [];
         this.disableSaveForEditDocumentAudit = true;
@@ -1532,8 +1554,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         if (attachmentDetailId > 0) {
             this.commonService.GetAttachmentDeleteById(attachmentDetailId, this.userName).subscribe(res => {
                 this.toGetDocumentsListNew(this.sourceVendor.vendorId);
-            },
-                error => this.saveFailedHelper(error))
+            },error => this.isSpinnerVisible = false) //this.saveFailedHelper(error))
         }
         else {
             this.sourceViewforDocumentList.splice(this.rowIndex, 1)
@@ -1547,13 +1568,13 @@ export class VendorGeneralInformationComponent implements OnInit {
         );
         this.modal.close();
     }
+
     deleteItemAndCloseModelAudit() {
         let attachmentDetailId = this.selectedRowForDeleteAudit.attachmentDetailId;
         if (attachmentDetailId > 0) {
             this.commonService.GetAttachmentDeleteById(attachmentDetailId, this.userName).subscribe(res => {
                 this.toGetDocumentsListAudit(this.sourceVendor.vendorId);
-            },
-                error => this.saveFailedHelper(error))
+            },error => this.isSpinnerVisible = false )//this.saveFailedHelper(error))
         }
         else {
             this.sourceViewforDocumentListAudit.splice(this.rowIndexAudit, 1)
@@ -1567,6 +1588,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         );
         this.modal.close();
     }
+
     onUploadDocumentListNew(vendorId) {
         const vdata = {
             referenceId: vendorId,
@@ -1600,9 +1622,9 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.formData.append('attachmentdetais', JSON.stringify(this.sourceViewforDocumentList));
         this.commonService.uploadVendorDocumentsEndpoint(this.formData).subscribe(res => {
             this.formData = new FormData();
-        },
-            error => this.saveFailedHelper(error));
+        },error => this.isSpinnerVisible = false )//this.saveFailedHelper(error));
     }
+
     onUploadDocumentListVendorAudit() {
 
         const vdata = {
@@ -1620,8 +1642,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.commonService.uploadVendorAuditDocumentsEndpoint(this.formData).subscribe(res => {
             this.formData = new FormData();
             this.toGetDocumentsListAudit(this.sourceVendor.vendorId);
-        },
-            error => this.saveFailedHelper(error));
+        },error => this.isSpinnerVisible = false) // this.saveFailedHelper(error));
 
     }
 
@@ -1630,20 +1651,18 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.commonService.GetDocumentsListNew(id, moduleId).subscribe(res => {
             this.sourceViewforDocumentList = res || [];
             this.allDocumentListOriginal = res;
-
             if (this.sourceViewforDocumentList.length > 0) {
                 this.sourceViewforDocumentList.forEach(item => {
                     item["isFileFromServer"] = true;
                     item["moduleId"] = 48;
-
-
                 })
             }
             this.totalRecordsCertified = this.sourceViewforDocumentList.length;
             this.totalPagesCertified = Math.ceil(this.totalRecordsCertified / this.pageSizeNew);
         },
-            error => this.onDataLoadFailed(error))
+            error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
+    
     toGetDocumentsListAudit(id) {
         var moduleId = 49;
         this.commonService.GetDocumentsListNew(id, moduleId).subscribe(res => {
@@ -1661,14 +1680,14 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.totalPagesAudit = Math.ceil(this.totalRecordsAudit / this.pageSizeNew);
 
         },
-            error => this.onDataLoadFailed(error))
+            error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
     toGetDocumentView(id) {
         this.commonService.GetAttachment(id).subscribe(res => {
             this.sourceViewforDocument = [];
             this.sourceViewforDocument.push(res);
         },
-            error => this.onDataLoadFailed(error))
+            error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
 
     toGetDocumentViewAudit(id) {
@@ -1676,7 +1695,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.sourceViewforDocumentVendorAudit = [];
             this.sourceViewforDocumentVendorAudit.push(res);
         },
-            error => this.onDataLoadFailed(error))
+            error => this.isSpinnerVisible = false)//this.onDataLoadFailed(error))
     }
 
     dateFilterForTableNew(date, field) {
@@ -1723,7 +1742,7 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false )//this.saveFailedHelper(error));
     }
     getColorCodeForHistory(i, field, value) {
         const data = this.sourceViewforDocumentAudit;

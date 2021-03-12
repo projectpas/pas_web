@@ -183,6 +183,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 								if (this.local.vendorName !== undefined) {
 									this.domesticSaveObj.vendorName = { vendorId: res[0].vendorId, vendorName: res[0].vendorName }
 								}
+								if (this.local.vendorName !== undefined) {
+									this.internationalSaveObj.vendorName = { vendorId: res[0].vendorId, vendorName: res[0].vendorName }
+								}
+								
 						},err => {
 							this.isSpinnerVisible = false;
 					});
@@ -371,8 +375,9 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
                 res => {
                         this.vendorCodeandName = res[0];
                 },err => {
-                    const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+					this.isSpinnerVisible = false;
+                    //const errorLog = err;
+                    //this.saveFailedHelper(errorLog);
             });
         }        
     }
@@ -443,7 +448,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.id = this.local.vendorId ? this.local.vendorId :this.router.snapshot.params['id'];
 		this.vendorService.getDomesticvedor(this.id).subscribe(
 			results => this.onDomestciLoad(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false} //this.onDataLoadFailed(error)
 		);
 	}
 
@@ -452,7 +457,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.id = this.local.vendorId ? this.local.vendorId :this.router.snapshot.params['id'];
 		this.vendorService.getInternationalWire(this.id).subscribe(
 			results => this.onInternatioalLoad(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false}//this.onDataLoadFailed(error)
 		);
 	}
 
@@ -461,7 +466,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.id = this.local.vendorId ? this.local.vendorId :this.router.snapshot.params['id'];
 		this.vendorService.getDefaultlist(this.id).subscribe(
 			results => this.onDefaultLoad(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false}//this.onDataLoadFailed(error)
 		);
 	}
 
@@ -470,7 +475,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
         if(this.arrayCountrylist.length == 0) {			
             this.arrayCountrylist.push(0); }
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,300,this.arrayCountrylist.join()).subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,300,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allCountryinfo = res.map(x => {
                 return {
                     nice_name: x.label, countries_id: x.value 
@@ -489,7 +494,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		const newvendorId = vendorId ? vendorId :this.router.snapshot.params['id'];
 		this.vendorService.getCheckPaymentobj(newvendorId).subscribe(
 			results => this.onDataLoadSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false} //this.onDataLoadFailed(error)
 		);
 	}
 
@@ -497,7 +502,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.isSpinnerVisible = false;
 		this.masterComapnyService.getMasterCompanies().subscribe(
 			results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false} //this.onDataLoadFailed(error)
 		);
 	}
 
@@ -514,7 +519,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.sourceVendor.isActive == false;
 			this.vendorService.updateActiveforpayment(this.sourceVendor).subscribe(
 				response => this.saveCompleted(this.sourceVendor),
-				error => this.saveFailedHelper(error));
+				error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error));
 			this.sourceVendor = "";
 		}
 		else {
@@ -525,7 +530,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.sourceVendor.isActive == true;
 			this.vendorService.updateActiveforpayment(this.sourceVendor).subscribe(
 				response => this.saveCompleted(this.sourceVendor),
-				error => this.saveFailedHelper(error));
+				error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error));
 			this.sourceVendor = "";
 		}
 	}
@@ -611,7 +616,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					MessageSeverity.success
 				);
 				this.isSpinnerVisible = false;
-			}, error => this.saveFailedHelper(error))
+			}, error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error))
 		} else {
 			this.restorerecord = undefined;
 		}
@@ -621,7 +626,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	private onDataLoadSuccessful(allWorkFlows: any[]) {
 		this.dataSource.data = allWorkFlows;
 		this.originalTableData=allWorkFlows;
-		let obtainedVendorId = this.originalTableData[0].vc.vendorId;
+		//let obtainedVendorId = this.originalTableData[0].vc.vendorId;
 		//this.getVendorBasicData(obtainedVendorId);
 		this.geListByStatus(this.status ? this.status :this.currentstatus)
 		this.isSpinnerVisible = false;
@@ -652,7 +657,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				//this.domesticSaveObj.countryId = getObjectById('countries_id', this.domesticSaveObj.countryId, this.allCountryinfo);
 			}
 			if (this.domesticSaveObj.vendorId !=null) {
-				this.domesticSaveObj.vendorName = { vendorId: this.domesticSaveObj.vendorId, vendorName: this.domesticSaveObj.vendorName }
+				this.domesticSaveObj.vendorName = { vendorId: this.domesticSaveObj.accountNameId, vendorName: this.domesticSaveObj.vendorName }
 			}			
 		}
 	}
@@ -667,7 +672,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.internationalSaveObj.countryId = getObjectById('countries_id', this.internationalSaveObj.countryId, this.allCountryinfo);
 			}
 			if (this.internationalSaveObj.vendorId !=null) {
-				this.internationalSaveObj.vendorName = { vendorId: this.internationalSaveObj.vendorId, vendorName: this.internationalSaveObj.vendorName }
+				this.internationalSaveObj.vendorName = { vendorId: this.internationalSaveObj.beneficiaryCustomerId, vendorName: this.internationalSaveObj.vendorName }
 			}
 		}
 	}
@@ -826,7 +831,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		this.isSpinnerVisible = true;
 		this.vendorService.paymentHist(this.sourceVendor.checkPaymentId).subscribe(
 			results => this.onHistoryLoadSuccessful(results[0], content),
-			error => this.saveFailedHelper(error));
+			error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error));
 	}
 	
 	onBlurMethod(data) {
@@ -892,7 +897,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.updateVendorCheckPayment(this.localCollection);
 					this.sourceVendor = {};
 					this.isSpinnerVisible = false;
-				}, error => this.saveFailedHelper(error))
+				}, error => {this.isSpinnerVisible = false})// this.saveFailedHelper(error))
 			}
 			else {
 				this.sourceVendor.createdBy = this.userName;
@@ -908,7 +913,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 					this.updatedCollection = data;
 					this.loadData();
 					this.isSpinnerVisible = false;
-				}, error => this.saveFailedHelper(error))
+				}, error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error))
 				this.saveCompleted(this.sourceVendor);
 				this.sourceVendor = {};
 				this.disableSave=true;
@@ -922,18 +927,15 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	}
 
 	saveDomesticPaymentInfo() {		
-		this.isSaving = true;
-		
+		this.isSaving = true;		
 		this.sourceVendor.masterCompanyId = this.currentUserMasterCompanyId;
 		this.sourceVendor.isActive = true;
-
 		this.domesticSaveObj.createdBy = this.userName;
 		this.domesticSaveObj.updatedBy = this.userName;
 		this.domesticSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
 		this.domesticSaveObj.countryId = editValueAssignByCondition('countries_id', this.domesticSaveObj.countryId);
-		//this.domesticSaveObj.vendorId = this.local.vendorId ? this.local.vendorId : this.sourceVendor.vendorId ;
-		this.domesticSaveObj.vendorId = editValueAssignByCondition('vendorId', this.domesticSaveObj.vendorName);
-		
+		this.domesticSaveObj.vendorId = this.local.vendorId ? this.local.vendorId : this.sourceVendor.vendorId ;
+		this.domesticSaveObj.accountNameId = editValueAssignByCondition('vendorId', this.domesticSaveObj.vendorName);		
 		if (!(this.domesticSaveObj.aba && this.domesticSaveObj.accountNumber && this.domesticSaveObj.bankName
 		)) {
 			this.display = true;
@@ -964,7 +966,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 						this.getDomesticWithVendorId();
 						this.isSpinnerVisible = false;
 					},
-					error => error => {this.isSpinnerVisible = false})
+					error => {this.isSpinnerVisible = false})
 			}
 			this.showDomesticWire();
 			this.domasticWireValue = true;
@@ -989,7 +991,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.internationalSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
 				this.vendorService.addInternationalinfo({
 					...this.internationalSaveObj,
-					vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),		
+					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),
+					beneficiaryCustomerId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),		
 					countryId: editValueAssignByCondition('countries_id', this.internationalSaveObj.countryId),
 				}).subscribe(data => {
 					this.localCollection = {
@@ -1014,7 +1017,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 
 				this.vendorService.vendorInternationalUpdate({
 					...this.internationalSaveObj,
-					vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),		
+					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),	
+					beneficiaryCustomerId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),	
 					countryId: editValueAssignByCondition('countries_id', this.internationalSaveObj.countryId),
 				}).subscribe(
 					data => {
@@ -1516,7 +1520,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
     getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
         if(this.arrayTagNamelist.length == 0) {			
             this.arrayTagNamelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.tagNamesList = res.map(x => {
                 return {
                     tagName: x.label, contactTagId: x.value 

@@ -844,7 +844,7 @@ this.creditTerms=res.creditTerm;
             //   this.selectedWorkFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
             // this.getTabDataFromWorkOrder();
             this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId)
-                .subscribe( 
+                .subscribe(  
                     (res) => {
                         this.buildMethodDetails = res;
                         if (res) {
@@ -990,8 +990,6 @@ this.creditTerms=res.creditTerm;
 
     checkForAllEmpty(){
         let result = true;
-        console.log("this.labor",this.labor)
-        console.log("this.labor.workOrderLaborList",this.labor.workOrderLaborList)
         for(let x of this.labor.workOrderLaborList[0]){
             if(this.labor.workOrderLaborList[0][x].length>0){
                 result = false;
@@ -1061,7 +1059,6 @@ this.creditTerms=res.creditTerm;
                                 epnDescription: exclusion.partDescription
                             }
                         });
-                        console.log("getQuote info",this.labor.workOrderLaborList[0])
                         // this.labor.workOrderLaborList[0] = {};
                         this.taskList.forEach((tl) => {
                             res['expertise'].forEach((rt) => {
@@ -1075,7 +1072,6 @@ this.creditTerms=res.creditTerm;
                                 }
                             })
                         })
-                        console.log("getQuote info",this.labor.workOrderLaborList[0])
                         this.labor.workFloworSpecificTaskorWorkOrder = 'workFlow';
                         this.savedWorkOrderData.workFlowWorkOrderId = undefined;
                     },
@@ -1245,8 +1241,8 @@ this.creditTerms=res.creditTerm;
                 "WorkOrderQuoteDetailsId": (mList.workOrderQuoteDetailsId) ? mList.workOrderQuoteDetailsId : 0,
                 "ItemMasterId": mList.itemMasterId,
                 "ConditionCodeId": mList.conditionCodeId,
-                "MandatoryOrSupplemental": mList.mandatoryOrSupplemental,
-                "mandatorySupplementalId": mList.mandatorySupplementalId,
+                "MandatoryOrSupplemental": mList.mandatoryOrSupplemental ? mList.mandatoryOrSupplemental :mList.materialMandatoriesName,
+                "mandatorySupplementalId": mList.mandatorySupplementalId ? mList.mandatorySupplementalId : mList.materialMandatoriesId,
                 "ItemClassificationId": mList.itemClassificationId,
                 "Quantity": mList.quantity,
                 "UnitOfMeasureId": mList.unitOfMeasureId,
@@ -1261,7 +1257,7 @@ this.creditTerms=res.creditTerm;
                 "TotalPartsCost": 155,
                 "Markup": mList.markup,
                 "masterCompanyId": (mList.masterCompanyId == '') ? 0 : mList.masterCompanyId,
-                "TaskId": mList.taskId,
+                "TaskId": (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
                 "BillingMethodId": Number(mList.billingMethodId),
                 "BillingRate": mList.billingRate,
                 "BillingAmount": mList.billingAmount,
@@ -1271,14 +1267,14 @@ this.creditTerms=res.creditTerm;
                 "UpdatedBy": "admin",
                 "IsActive": true,
                 "IsDeleted": mList.isDeleted
-            }
+            } 
         })
         this.saveType = 'materialList';
         $('#quoteVer').modal("show");
        
     }
 
-    saveMaterialList(){
+    saveMaterialList(){ 
         this.workOrderService.saveMaterialListQuote(this.materialListPayload)
         .subscribe(
             res => {
@@ -1340,7 +1336,6 @@ this.creditTerms=res.creditTerm;
                     
                     if (res) {
                         this.tabQuoteCreated['labor'] = true;
-                        console.log("laborlist",this.labor.workOrderLaborList[0])
                         let laborList = this.labor.workOrderLaborList;
                         this.labor = { ...res.workOrderQuoteLaborHeader, workOrderLaborList: laborList };
                         this.mpnPartNumbersList.forEach((mpn) => {
@@ -1396,7 +1391,7 @@ this.creditTerms=res.creditTerm;
                 "ExtendedPrice": charge.extendedPrice,
                 "HeaderMarkupId": charge.headerMarkupId,
                 "masterCompanyId": this.quotationHeader.masterCompanyId,
-                "taskId": (typeof charge.taskId == 'string')?charge.taskId :charge.taskId.taskId,
+                "taskId": (typeof charge.taskId === 'object')?charge.taskId.taskId :charge.taskId,
                 "CreatedBy": "admin",
                 "UpdatedBy": "admin",
                 "IsActive": true,
@@ -1550,7 +1545,6 @@ this.creditTerms=res.creditTerm;
     }
 
     formTaskList() {
-        console.log("form task list",this.labor.workOrderLaborList[0])
         this.taskList.forEach(task => {
             this.labor.workOrderLaborList[0][task.description] = [];
         });
@@ -1919,6 +1913,7 @@ this.creditTerms=res.creditTerm;
                             }
                         )
                         formedData = [...formedData, ...da.materialList]
+
                         temp = formedData.reduce(function (r, a) {
                             r[a['taskId']] = r[a['taskId']] || [];
                             r[a['taskId']].push(a);
@@ -2819,7 +2814,6 @@ this.creditTerms=res.creditTerm;
             this.labor = { ...res, workOrderLaborList: laborList };
             this.labor.hoursorClockorScan = undefined;
             this.labor.workFlowWorkOrderId = this.workFlowWorkOrderId; 
-            console.log("labor list",this.labor.workOrderLaborList[0])
             this.taskList.forEach(task => {
                 this.labor.workOrderLaborList[0][task.description] = [];
             });
@@ -2829,10 +2823,9 @@ this.creditTerms=res.creditTerm;
                     res.laborList.forEach((rt) => {
 
                         if (rt['taskId'] == tl['taskId']) {
-                            console.log("labor list",this.labor.workOrderLaborList[0])
                             if (this.labor.workOrderLaborList[0][tl['description']][0] && this.labor.workOrderLaborList[0][tl['description']][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description']][0]['employeeId'] == null) {
+                                this.labor.workOrderLaborList[0][tl['description']] = [];
                             }
-                            this.labor.workOrderLaborList[0][tl['description']] = [];
                             let labor = {}
                             if(rt.hours){
                                 let hours = rt.hours.toFixed(2);
@@ -2972,6 +2965,12 @@ this.creditTerms=res.creditTerm;
             this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
+                this.materialListQuotation.forEach(element => {
+                    return{
+                        ...element,
+                        taskName:element.taskName.toLowerCase()
+                    }
+                });
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
                     for (let charge in this.materialListQuotation) {
                         if (this.materialListQuotation[charge]['unitCost']) {
@@ -2991,11 +2990,18 @@ this.creditTerms=res.creditTerm;
                 }
                 let temp = []
                 let formedData = [];
-                this.materialListQuotation.forEach(
-                    (x) => {
-                        formedData = [...formedData, ...x];
-                    }
-                )
+                // this.materialListQuotation.forEach(
+                //     (x) => {
+                //         formedData = [...formedData, ...x];
+                //     }
+                // )
+
+                  // this.materialListQuotation.forEach(
+                //     (x) => {
+                //         formedData = [...formedData, ...x];
+                //     }
+                // )
+                formedData=[...this.materialListQuotation]
                 temp = formedData.reduce(function (r, a) {
                     r[a['taskId']] = r[a['taskId']] || [];
                     r[a['taskId']].push(a);
@@ -3027,7 +3033,6 @@ this.creditTerms=res.creditTerm;
     }
 
     getQuoteFreightListByWorkOrderQuoteId() {
-        console.log("workOrderQuoteDetailsId",this.workOrderQuoteDetailsId);
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
             this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {

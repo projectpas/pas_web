@@ -250,8 +250,9 @@ export class VendorShippingInformationComponent {
                         res => {
                                 this.local = res[0];
                         },err => {
-                            const errorLog = err;
-                            this.saveFailedHelper(errorLog);
+                            this.isSpinnerVisible = false;
+                            //const errorLog = err;
+                            //this.saveFailedHelper(errorLog);
                     });
                 }                
             }
@@ -394,7 +395,8 @@ export class VendorShippingInformationComponent {
     }
    
     getshipvialistList(){
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
+        //this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
               this.shipViaDropdownList = res.map(x => {
                   return {
                       ...x,
@@ -402,8 +404,8 @@ export class VendorShippingInformationComponent {
                       name: x.label
                   }
               });
-        }, error => this.onDataLoadFailed(error))
-      }
+        }, error => {this.isSpinnerVisible = false;}) // this.onDataLoadFailed(error))
+    }
 
     private loadData() {
         this.isSpinnerVisible = true;
@@ -414,7 +416,7 @@ export class VendorShippingInformationComponent {
                 this.onDataLoadSuccessful(results[0]);
                 this.isSpinnerVisible = false;
             },
-            error => {this.onDataLoadFailed(error);}
+            error => {this.isSpinnerVisible = false;}
         );
     }
 
@@ -422,7 +424,7 @@ export class VendorShippingInformationComponent {
         this.isSpinnerVisible = true;
         this.vendorService.getCountrylist().subscribe(
             results => this.onDatacountrySuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false;}
         );
     }
 
@@ -441,7 +443,8 @@ export class VendorShippingInformationComponent {
                 this.onShipViadetails(results[0])
             },
             error => {
-                this.onDataLoadFailed(error)
+                //this.onDataLoadFailed(error)
+                this.isSpinnerVisible=false;
                 this.loaderForDomesticShipVia = false;
             }
         );
@@ -472,7 +475,7 @@ export class VendorShippingInformationComponent {
                 `Sucessfully Updated Domestic Ship Via Status`,
                 MessageSeverity.success
             );
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
     }
 
     // private loadMasterCompanies() {
@@ -604,18 +607,17 @@ export class VendorShippingInformationComponent {
                         siteName: x.label, value: x.value
                     }
                 })
-
                 this.domesticSieList = [...this.domesticSieListOriginal];
                 this.sourceVendor = {
                     ...this.sourceVendor,
                     siteName:  getObjectByValue('siteName', row.siteName, this.domesticSieListOriginal)
                 };
-
                 this.editSiteName = row.siteName;
                 this.domesticShippingOriginalInfo = this.sourceVendor;
             },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+                //const errorLog = err;
+                //this.saveFailedHelper(errorLog)
+                this.isSpinnerVisible = false;
             });
         
         //this.loadMasterCompanies();
@@ -659,7 +661,7 @@ export class VendorShippingInformationComponent {
         this.isSaving = true;
         this.vendorService.shipviaHistory(row.vendorShippingId).subscribe(
             results => this.onHistoryLoadSuccessful(results[0], content),
-            error => this.saveFailedHelper(error));
+            error =>  {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error));
     }
 
     openShipaddressHistory(content, row) {
@@ -668,7 +670,7 @@ export class VendorShippingInformationComponent {
         this.isSaving = true;
         this.vendorService.getShipaddressHistory(this.sourceVendor.vendorId, this.sourceVendor.vendorShippingAddressId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error =>{ this.isSpinnerVisible = false;}) //this.saveFailedHelper(error));
     }
     closeDomesticDeleteModal() {
 		$("#downloadDomesticConfirmation").modal("hide");
@@ -719,7 +721,7 @@ export class VendorShippingInformationComponent {
                     this.savesuccessCompleted(this.sourceVendor);
                     this.sourceVendor = {};
                     this.disableSaveDomesticSite = true;
-                }, error => this.saveFailedHelper(error))
+                }, error =>{ this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
             }
             else {
                 this.sourceVendor.createdBy = this.userName;
@@ -735,7 +737,7 @@ export class VendorShippingInformationComponent {
                     this.sourceVendor = {};
                     this.alertService.showMessage("Success", `Record was edited successfully`, MessageSeverity.success);
                     this.disableSaveDomesticSite = true;
-                }, error => this.saveFailedHelper(error))
+                }, error => {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
             }
         }
 
@@ -748,19 +750,16 @@ export class VendorShippingInformationComponent {
             this.alertService.showMessage("Empty", 'Cannot Submit Empty', MessageSeverity.warn);
             return;
         }
-
         if (this.shipViaObj.vendorShippingId > 0) {
             this.shipViaObj.createdBy = this.userName;
             this.shipViaObj.updatedBy = this.userName;
             this.shipViaObj.masterCompanyId = this.currentUserMasterCompanyId;
             this.shipViaObj.isActive = true;
             this.shipViaObj.isPrimary = this.allShipViaDetails.length == 0 ? true : this.isPrimaryshipvia;
-
             const newshipviaobj = this.shipViaObj;
             newshipviaobj.isPrimary = this.allShipViaDetails.length == 0 ? true : this.isPrimaryshipvia; 
             newshipviaobj.vendorId = this.shipViaNewObj.vendorId;
             newshipviaobj.vendorShippingAddressId = this.shipViaNewObj.vendorShippingAddressId;
-
             this.vendorService.updateshippingViainfo(newshipviaobj).subscribe(data => {
                 this.shipViaCollection = data;
                 this.alertService.showMessage("Success", `Saved Data successfully`, MessageSeverity.success);
@@ -850,7 +849,7 @@ export class VendorShippingInformationComponent {
                 this.updateVendorShippingAddress(this.localCollection);
             })
             this.loadData();
-        }, error => this.saveFailedHelper(error))
+        }, error => { this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
     }
 
     deleteVendorShippingAddress() {
@@ -860,7 +859,7 @@ export class VendorShippingInformationComponent {
         this.localCollection.updatedBy = this.userName;
         this.vendorService.deleteVendorShippingAddress(this.localCollection).subscribe(
             response => this.saveCompleted(this.sourceVendor),
-            error => this.saveFailedHelper(error));
+            error =>  {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error));
         this.modal.close();
     }
 
@@ -873,7 +872,7 @@ export class VendorShippingInformationComponent {
         this.vendorService.deleteVendorAcion(this.localCollection).subscribe(data => {
             this.alertService.showMessage("Success", `Record was deleted successfully`, MessageSeverity.success);
             this.loadShipViaCollection(this.localCollection.vendorShippingAddressId);
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;})
         this.modal.close();
     }
 
@@ -883,7 +882,7 @@ export class VendorShippingInformationComponent {
         this.vendorService.restorevendorshippingVia(this.localCollection).subscribe(data => {
             this.alertService.showMessage("Success", `Record was Restore successfully`, MessageSeverity.success);
             this.loadShipViaCollection(this.localCollection.vendorShippingAddressId);
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;}) //error => this.saveFailedHelper(error))
         this.modal.close();
     }
 
@@ -956,7 +955,7 @@ export class VendorShippingInformationComponent {
                     this.alertService.showMessage("Success", `Record was In-Activated successfully`, MessageSeverity.success);
                     this.loadData();
                     this.isSpinnerVisible = false;
-                },error => this.saveFailedHelper(error));
+                },error => {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error));
             this.sourceVendor = "";
         }
         else {
@@ -970,7 +969,7 @@ export class VendorShippingInformationComponent {
                     this.alertService.showMessage("Success", `Record was Activated successfully`, MessageSeverity.success);
                     this.loadData();
                     this.isSpinnerVisible = false;
-                },error => this.saveFailedHelper(error));
+                },error =>  {this.isSpinnerVisible = false;})
             this.sourceVendor = "";
         }
     }
@@ -1090,7 +1089,7 @@ export class VendorShippingInformationComponent {
         this.vendorHistoryRowData = rowData;
         this.vendorService.getShipaddressHistory(rowData.vendorId, rowData.vendorShippingAddressId).subscribe(res => {
             this.auditHistory = res;
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;})
         this.getVendorBasicData(rowData.vendorId);
     }
 
@@ -1152,7 +1151,7 @@ export class VendorShippingInformationComponent {
                     `Successfully Uploaded  `,
                     MessageSeverity.success
                 );
-            }, error => this.saveFailedHelper(error))
+            }, error =>  {this.isSpinnerVisible = false;})
         }
     }
 
@@ -1172,7 +1171,7 @@ export class VendorShippingInformationComponent {
                     `Successfully Uploaded  `,
                     MessageSeverity.success
                 );
-            }, error => this.saveFailedHelper(error))
+            }, error =>  {this.isSpinnerVisible = false;})
         }
     }
 
@@ -1244,7 +1243,7 @@ export class VendorShippingInformationComponent {
                     MessageSeverity.success
                 );
                 this.isEditInternational = false;
-            }, error => this.saveFailedHelper(error))
+            }, error =>  {this.isSpinnerVisible = false;})
         } else {
             this.vendorService.updateInternationalShipping(data).subscribe(res => {
                 this.getInternationalShippingByVendorId()
@@ -1254,7 +1253,7 @@ export class VendorShippingInformationComponent {
                     `Saved International Shipping Information Sucessfully `,
                     MessageSeverity.success
                 );
-            }, error => this.saveFailedHelper(error))
+            }, error =>  {this.isSpinnerVisible = false;})
         }
     }
 
@@ -1272,7 +1271,7 @@ export class VendorShippingInformationComponent {
                 this.enableCheckForInternational = false;
             }
             this.geListByStatusInternational(this.isActivIntStatus ? this.isActivIntStatus : 'Active')
-        }, err => { this.onDataLoadFailed(err) })
+        }, err => {this.isSpinnerVisible = false;})
     }
 
     closeInternationalModal() {
@@ -1296,7 +1295,7 @@ export class VendorShippingInformationComponent {
             this.getVendorBasicData(rowData.vendorId);
             this.onClickInterShipvia(rowData)
             $("#viewInter").modal('show');           
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;})
     }
 
     getInternationalShippingById(rowData) {
@@ -1315,7 +1314,7 @@ export class VendorShippingInformationComponent {
             this.internationalShippingInfo['tempIsPrimary'] = this.internationalShippingInfo.isPrimary;
             this.isSpinnerVisible = false;
 
-        }, error => this.onDataLoadFailed(error))
+        }, error => {this.isSpinnerVisible = false;})
     }
 
     openInterShipHistory(rowData) {
@@ -1323,7 +1322,7 @@ export class VendorShippingInformationComponent {
         this.getVendorBasicData(rowData.vendorId);
         this.vendorService.getVendorInternationalAuditHistory(rowData.vendorInternationalShippingId).subscribe(
             results => this.onAuditInterShipViaHistoryLoadSuccessful(results),
-            error => this.saveFailedHelper(error));
+            error =>  {this.isSpinnerVisible = false;})
     }
 
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory) {
@@ -1348,7 +1347,7 @@ export class VendorShippingInformationComponent {
             );
             this.getInternationalShippingByVendorId();            
             $('#deleteInterShipInfo').modal('hide');
-        }, error => this.saveFailedHelper(error))
+        },error =>  {this.isSpinnerVisible = false;})
     }
 
     changeOfStatusForInternationalShipping(rowData, e) {
@@ -1362,7 +1361,7 @@ export class VendorShippingInformationComponent {
                 this.alertService.showMessage(  'Success',  `Record was Activated sucessfully.`,  MessageSeverity.success );
             }
             this.getInternationalShippingByVendorId();
-        }, error => this.saveFailedHelper(error))
+        },error =>  {this.isSpinnerVisible = false;})
     }
 
     openDomesticShippingViewVia(rowData) {
@@ -1459,7 +1458,8 @@ export class VendorShippingInformationComponent {
         },
         err => {
             this.loaderForInterShipVia = false;
-            this.onDataLoadFailed(err)
+            //this.onDataLoadFailed(err)
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -1496,7 +1496,7 @@ export class VendorShippingInformationComponent {
                 `Record was deleted successfully`,
                 MessageSeverity.success
             );
-        }, error => this.saveFailedHelper(error));
+        }, error =>  {this.isSpinnerVisible = false;})
         this.modal.close();
     }
 
@@ -1508,7 +1508,7 @@ export class VendorShippingInformationComponent {
                 `Record was Restored successfully`,
                 MessageSeverity.success
             );
-        }, error => this.saveFailedHelper(error));
+        }, error =>  {this.isSpinnerVisible = false;})
         this.modal.close();
     }
 
@@ -1517,7 +1517,7 @@ export class VendorShippingInformationComponent {
         this.selectedShipViaInterHistory = row;
         this.vendorService.getShipviaHistoryInter(row.vendorInternationalShipViaDetailsId).subscribe(res => {
             this.auditHistoryInterShipvia = res[0];
-        }, error => this.onDataLoadFailed(error));
+        }, error => {this.isSpinnerVisible = false;})
     }
 
     openInterShippingViewVia(rowData) {
@@ -1539,7 +1539,7 @@ export class VendorShippingInformationComponent {
                 `Sucessfully Updated International Ship Via Status`,
                 MessageSeverity.success
             );
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;})
     }
 
     pageIndexChangeForDomestic(event) {
@@ -1734,7 +1734,7 @@ export class VendorShippingInformationComponent {
               this.loadData()
               this.alertService.showMessage("Success", `Record was Resstored Successfully.`, MessageSeverity.success);
               this.isSpinnerVisible = false;
-          }, error => this.saveFailedHelper(error))
+          }, error =>  {this.isSpinnerVisible = false;})
       }
 
     restoreRecordIntern(){
@@ -1745,7 +1745,7 @@ export class VendorShippingInformationComponent {
             this.getInternationalShippingByVendorId();
             this.alertService.showMessage("Success", `Record was Resstored Successfully.`, MessageSeverity.success);
             this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error))
+        }, error =>  {this.isSpinnerVisible = false;})
     }
 
     getAllDomesticSiteSmartDropDown(strText = ''){
@@ -1762,8 +1762,9 @@ export class VendorShippingInformationComponent {
             this.arrayDomesricShipIdlist = [];
             //this.isSpinnerVisible = false;
 		},err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
+			//const errorLog = err;
+            //this.saveFailedHelper(errorLog);
+            this.isSpinnerVisible = false;
 		});
     }
 
@@ -1826,7 +1827,8 @@ export class VendorShippingInformationComponent {
         },
         err => {
             this.loaderForInterShipVia = false;
-            this.onDataLoadFailed(err)
+            //this.onDataLoadFailed(err)
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -1855,13 +1857,12 @@ export class VendorShippingInformationComponent {
     getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
         if(this.arrayTagNamelist.length == 0) {			
             this.arrayTagNamelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.tagNamesList = res.map(x => {
                 return {
                     tagName: x.label, contactTagId: x.value 
                 }
             })
-
             if(contactTagId > 0)
             {
                 this.sourceVendor = {

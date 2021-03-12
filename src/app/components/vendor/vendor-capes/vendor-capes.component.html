@@ -243,7 +243,7 @@
     <div style="margin-top: 10px;" *ngIf="!isViewMode">
       <button class="btn btn-primary pull-right" (click)="previousOrNextTab('Next')" type="button">Next</button> &nbsp;
       <button class="btn btn-primary pull-right" (click)="saveVendorCapes()"
-        [disabled]="!vendorCapes.valid && !vendorCapes.disabled" [disabled]="disableCapes" type="submit">Save </button>
+        [disabled]="!vendorCapes.valid || disableCapes" type="submit">Save </button>
       &nbsp;
       <button class="btn btn-primary pull-right" type="button" (click)="previousOrNextTab('Previous')">Previous</button>
     </div>

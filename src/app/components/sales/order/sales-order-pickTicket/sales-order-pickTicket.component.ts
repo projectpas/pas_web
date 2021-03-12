@@ -95,7 +95,7 @@ table, thead, th {
 
   .first-block-sold {position: relative; min-height: 1px; float: left;padding-right: 2px;padding-left: 2px;width: 50%;}
   .first-block-ship {position: relative; min-height: 1px; float: right;padding-right: 2px; padding-left: 2px;width: 48%;}
-  .address-block {position: relative;min-height: 1px;float: left;padding-right: 2px;border: 1px solid black;width: 95%; padding-left: 2px;}
+  .address-block {position: relative;min-height: 1px;float: left;padding-right: 2px;border: 1px solid black;width: 100%; padding-left: 2px;}
   .first-block-address{margin-right: 20px;text-align: left}
   
 

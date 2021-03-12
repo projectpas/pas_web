@@ -74,7 +74,8 @@
                                   <input
                                     type="radio"
                                     value="1"
-                                    name="optradio2"                                   
+                                    name="optradio2" 
+                                    [disabled]="editMode"                                  
                                     (ngModelChange)="enableSave()"
                                     [(ngModel)]="
                                       generalInformation.customerAffiliationId
@@ -89,7 +90,8 @@
                                 <label class="radio-cstm wauto">
                                   <input
                                     type="radio"
-                                    value="3"                                   
+                                    value="3"   
+                                    [disabled]="editMode"                                
                                     name="optradio3"
                                     (ngModelChange)="enableSave()"
                                     [(ngModel)]="
@@ -320,7 +322,7 @@
                               pKeyFilter="email"
                               mask="email"
                               [(ngModel)]="generalInformation.email"
-                              (ngModelChange)="enableSave()" autocomplete="off"
+                              autocomplete="off"
                               required
                             />
                             <div *ngIf="userEmail.errors" [ngClass]="'error'">
@@ -855,19 +857,17 @@
                         <button
                           type="submit"
                           class="btn btn-primary submit-btn new-footer-btn"
-                          [disabled]="
-                            !generalInfoForm.valid ||     
+                          [disabled]=" 
+                           !generalInfoForm.valid   ||                        
                             isCustomerNameAlreadyExists ||
                             disableSaveCustomerName ||
                             isCustomerCodeAlreadyExists ||
                             disableSaveParentName ||
                             stopmulticlicks ||
                             countryExistsNow ||
-                            disableSaveForEdit
-                          "
-                          (click)="saveConformation()"
-                        >
-                          {{editMode ? 'Update' : 'Save' }}
+                            disableSaveForEdit" (click)="saveConformation()"
+                        >                        
+                        {{editMode ? 'Update' : 'Save' }}
                         </button>
                         <button
                           type="button"

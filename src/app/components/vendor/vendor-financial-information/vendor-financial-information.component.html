@@ -72,6 +72,19 @@
                                 </div>
                             </div>
                             <div class="col-md-5">
+
+                                <div class="form-group m-t-15">
+                                    <span class="checkbox-cstm">
+                                      <label>
+                                        <input type="checkbox" 
+                                        [disabled]="showAllowNettingOfAPAR"
+                                        name="isAllowNettingAPAR" (ngModelChange)="enableSave()" 
+                                        [(ngModel)]="sourceVendor.isAllowNettingAPAR" />
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Allow Netting of AP/AR
+                                      </label>
+                                    </span>
+                                </div>
                                 <div class="form-group">
                                     <div class="checkbox-cstm">
                                         <label>

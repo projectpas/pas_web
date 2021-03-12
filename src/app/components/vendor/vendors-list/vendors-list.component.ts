@@ -340,7 +340,7 @@ export class VendorsListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false //this.onDataLoadFailed(error)
         );
     }
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
@@ -366,7 +366,7 @@ export class VendorsListComponent implements OnInit {
                     const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
                     this.getList(PagingData);
                     this.alertService.showMessage("Success", `Records In-Acivated successfully`, MessageSeverity.success);
-                } ,error => this.saveFailedHelper(error));
+                } ,error => this.isSpinnerVisible = false )  //this.saveFailedHelper(error));
         }
         else {
             this.Active = "Active";
@@ -378,7 +378,7 @@ export class VendorsListComponent implements OnInit {
                     this.getList(PagingData);
                     this.alertService.showMessage("Success", `Records Acivated successfully`, MessageSeverity.success);
                 },
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false )//this.saveFailedHelper(error));
         }
     }
     private refresh() {
@@ -465,7 +465,7 @@ export class VendorsListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.vendorService.getContacts(vendorId).subscribe(
             results => this.onContactDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false// this.onDataLoadFailed(error)
         );
         this.contactcols = [
             { field: 'firstName', header: 'First Name' },
@@ -514,7 +514,7 @@ export class VendorsListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.vendorService.getVendordata(vendorId).subscribe(
             results => this.onVendorsLoadSuccssfull(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false //this.onDataLoadFailed(error)
         );
     }
 
@@ -540,7 +540,7 @@ export class VendorsListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.vendorService.getCheckPaymentobj(vendorId).subscribe(
             results => this.onPaymentDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false // this.onDataLoadFailed(error)
         );
         this.paymentcols = [
             { field: 'siteName', header: 'Site Name' },
@@ -567,8 +567,7 @@ export class VendorsListComponent implements OnInit {
         this.vendorService.getVendorDataById(row.vendorId).subscribe(res => {
             this.vendorData = res;    
             this.isSpinnerVisible = false;        
-        },error => this.onDataLoadFailed(error)); 
-
+        },error => this.isSpinnerVisible = false); //this.onDataLoadFailed(error)); 
         this.toGetVendorGeneralDocumentsList(row.vendorId);
         this.toGetVendorCertifiedDocumentsList(row.vendorId);
         this.toGetVendorAuditDocumentsList(row.vendorId);
@@ -582,7 +581,7 @@ export class VendorsListComponent implements OnInit {
 
         this.isSpinnerVisible = false;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-        $('#step1').collapse('show');  
+        //$('#step1').collapse('show');  
        
     }
 
@@ -597,7 +596,7 @@ export class VendorsListComponent implements OnInit {
         this.selectedRow = row;
         this.vendorService.getHistoryForVendor(this.sourceVendor.vendorId).subscribe(
             results => this.onHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false ); //this.saveFailedHelper(error));
     }
     AddPage() {
         this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-general-information');
@@ -611,7 +610,7 @@ export class VendorsListComponent implements OnInit {
         this.updateActiveData.updatedBy = this.userName;
         this.vendorService.updateVendorIsDelete(this.updateActiveData).subscribe(
             response => this.saveCompleted(this.sourceVendor),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false ) //this.saveFailedHelper(error));
         this.modal.close();
     }
     dismissModel() {
@@ -662,7 +661,7 @@ export class VendorsListComponent implements OnInit {
 
             this.vendorService.updateContactforActive(this.sourceVendorUpdateStatus).subscribe(
                 response => this.saveCompleted(this.sourceVendor),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false )//this.saveFailedHelper(error));
         }
         else {
             this.sourceVendor = rowData;
@@ -676,7 +675,7 @@ export class VendorsListComponent implements OnInit {
 
             this.vendorService.updateContactforActive(this.sourceVendorUpdateStatus).subscribe(
                 response => this.saveCompleted(this.sourceVendor),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false ) //this.saveFailedHelper(error));
         }
     }
     opencontactView(content, row) {
@@ -719,7 +718,7 @@ export class VendorsListComponent implements OnInit {
 
             this.vendorService.updateContactforActive(this.sourceVendorUpdateStatus).subscribe(
                 response => this.saveCompleted(this.sourceVendor),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false ) //this.saveFailedHelper(error));
         }
         else {
             this.sourceVendor = rowData;
@@ -733,7 +732,7 @@ export class VendorsListComponent implements OnInit {
 
             this.vendorService.updateContactforActive(this.sourceVendorUpdateStatus).subscribe(
                 response => this.saveCompleted(this.sourceVendor),
-                error => this.saveFailedHelper(error));
+                error => this.isSpinnerVisible = false )//this.saveFailedHelper(error));
         }
     }
 
@@ -745,7 +744,7 @@ export class VendorsListComponent implements OnInit {
         this.isSaving = true;
         this.vendorService.historyAcion(this.sourceVendor.contactId).subscribe(
             results => this.onHistoryLoadSuccessful(results[0], content),
-            error => this.saveFailedHelper(error));
+            error => this.isSpinnerVisible = false ) //this.saveFailedHelper(error));
     }
     openContactList(content, row) {
         this.vendorId = row.vendorId;
@@ -811,8 +810,7 @@ export class VendorsListComponent implements OnInit {
         this.vendorService.GetVendorGeneralDocumentsList(vendorId, moduleId).subscribe(res => {
             this.allVendorGeneralDocumentsList = res;
             this.isSpinnerVisible = false;
-        },
-            error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false ) //this.onDataLoadFailed(error))
     }
     downloadFileUpload(rowData) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
@@ -854,14 +852,13 @@ export class VendorsListComponent implements OnInit {
                 }
             }
             this.isSpinnerVisible = false;
-          },
-              error => this.onDataLoadFailed(error))
+          },error => this.isSpinnerVisible = false )//this.onDataLoadFailed(error))
     }
     public getDomesticWithVendorId(vendorId) {
         this.isSpinnerVisible = true;
         this.vendorService.getDomesticvedor(vendorId).subscribe(
             results => this.onDomestciLoad(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false //this.onDataLoadFailed(error)
 
         );
     }
@@ -876,7 +873,7 @@ export class VendorsListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.vendorService.getInternationalWire(vendorId).subscribe(
             results => this.onInternatioalLoad(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => this.isSpinnerVisible = false //this.onDataLoadFailed(error)
         );
     }
     public onInternatioalLoad(allWorkFlows: any) {
@@ -896,8 +893,7 @@ export class VendorsListComponent implements OnInit {
                 if (this.defaultPaymentData != null && this.defaultPaymentData.paymentType != null) {
                     this.paymentTypeName = this.defaultPaymentData.paymentType;
                 }
-            },
-            error => this.onDataLoadFailed(error)
+            },error => this.isSpinnerVisible = false //this.onDataLoadFailed(error)
         );
     }
     viewFileSelectedCapsRow(rowData) {
@@ -925,8 +921,7 @@ export class VendorsListComponent implements OnInit {
             this.allVendorCertifiedocumentsList = res;
             this.allVendorCertifiedocumentsListOriginal = res;
             this.isSpinnerVisible = false;
-        },
-            error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false) //this.onDataLoadFailed(error))
     }
     toGetVendorAuditDocumentsList(vendorId) {
         var moduleId = 49;
@@ -935,8 +930,7 @@ export class VendorsListComponent implements OnInit {
             this.allVendorAuditdocumentsList = res;
             this.allVendorAuditdocumentsListOriginal = res;
             this.isSpinnerVisible = false;
-        },
-            error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false )  //this.onDataLoadFailed(error))
     }
     dateFilterForTableVendorAudit(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
@@ -980,8 +974,7 @@ export class VendorsListComponent implements OnInit {
  this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
             res => {
                 this.sourceViewforDocumentAudit = res;
-     },
-     error => this.onDataLoadFailed(error))
+     },error => this.isSpinnerVisible = false )  //this.onDataLoadFailed(error))
     }
     getColorCodeForHistoryDoc(i, field, value) {
         const data = this.sourceViewforDocumentAudit;
@@ -1027,8 +1020,7 @@ export class VendorsListComponent implements OnInit {
             this.modal.close();
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Record was Restored successfully. `, MessageSeverity.success);
-        },
-            error => this.onDataLoadFailed(error))
+        },error => this.isSpinnerVisible = false) //this.onDataLoadFailed(error))
     }
     exportCSV(dt) {
         this.isSpinnerVisible = true;        
