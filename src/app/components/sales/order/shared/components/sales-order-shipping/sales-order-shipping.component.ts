@@ -136,23 +136,20 @@ export class SalesOrderShippingComponent {
     refresh(parts) {
         this.partSelected = false;
         this.initColumns();
+        this.bindData();
+    }
+
+    bindData() {
         this.getShippingList();
         this.getShipVia();
         this.getCountriesList();
-        //this.getSiteName();
-        //this.getCustomerNameList();
         this.getOriginSiteNames();
         this.getUnitOfMeasure();
         this.getAddressById(this.salesOrderId);
-        //this.getAddresDetail();
 
         if (this.customerDetails) {
             this.shippingHeader['soldToName'] = this.customerDetails['name'];
             this.shippingHeader['shipToName'] = this.customerDetails['name'];
-            //if (!this.shippingHeader.shipToCustomerId) {
-            //this.shippingHeader.shipToCustomerId = this.customerDetails;
-            //this.getSiteNamesByShipCustomerId(this.customerDetails['name']);
-            //}
             this.shippingHeader['customerId'] = this.customerDetails['customerId'];
         }
     }
@@ -231,6 +228,7 @@ export class SalesOrderShippingComponent {
         this.currQtyToShip = rowData.qtyToShip;
         this.salesOrderPartId = rowData.salesOrderPartId;
         this.partSelected = true;
+        this.bindData();
         // this.clearShipToAddress();
         // this.clearSoldToAddress();
         // this.clearOriginAddress();

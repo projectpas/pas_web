@@ -26,6 +26,7 @@ export class SalesOrderBillingAndInvoicing {
     creditLimit: number;
     billToCustomerId: number;
     billToSiteId: number;
+    billToAttention: string;
     employeeName: string;
     salesPersonId: number;
     salesPerson: string;
@@ -33,6 +34,7 @@ export class SalesOrderBillingAndInvoicing {
     typeId: number;
     salesOrderType: string;
     invoiceStatus: string;
+    qtyToBill: number;
     createdBy: string;
     updatedBy: string;
     isActive: boolean;
