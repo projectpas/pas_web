@@ -491,6 +491,7 @@
                               <label>
                                 <input
                                   type="checkbox"
+                                  [disabled]="editMode"     
                                   name="isCustomerAlsoVendor"
                                   (ngModelChange)="enableSave()"
                                   [(ngModel)]=" generalInformation.isCustomerAlsoVendor"/>
