@@ -56,7 +56,7 @@
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled > 0">
-                                        <label style="color: #0F9D58">Billed</label>
+                                        <label style="color: #0F9D58">{{ bill.invoiceStatus == 1 ? "Reviewed" : "Invoiced" }}</label>
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
@@ -100,9 +100,8 @@
                                     </td>
                                     <td class="zui-sticky-col" style="width:107px !important">
                                         <span *ngIf="bill.qtyBilled > 0">
-                                            <a class="btn nobg" matTooltip="Invoice"
-                                                matTooltipPosition="above" (click)="DownloadInvoice(bill);"><i
-                                                    class="fa fa-print"></i></a>
+                                            <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
+                                                (click)="DownloadInvoice(bill);"><i class="fa fa-print"></i></a>
                                         </span>
                                         <span>
                                             <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
@@ -136,401 +135,418 @@
                 </table>
             </div>
         </div>
-        <form #billinForm="ngForm">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="card">
-                        <div class="card-body" *ngIf="billingorInvoiceForm">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Invoice Type <span class="clr-red">*</span></label>
-                                        <p-dropdown [options]="invoiceTypeList" name="invoiceType"
-                                            #invoiceType="ngModel" placeholder="Select"
-                                            class="p-dropdown-custom-md-Header"
-                                            [(ngModel)]="billingorInvoiceForm.invoiceTypeId" [disabled]="isViewMode"
-                                            required>
-                                        </p-dropdown>
+        <div *ngIf="showBillingForm">
+            <form #billinForm="ngForm">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="card">
+                            <div class="card-body" *ngIf="billingorInvoiceForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Invoice Type <span class="clr-red">*</span></label>
+                                            <p-dropdown [options]="invoiceTypeList" name="invoiceType"
+                                                #invoiceType="ngModel" placeholder="Select"
+                                                class="p-dropdown-custom-md-Header"
+                                                [(ngModel)]="billingorInvoiceForm.invoiceTypeId" [disabled]="isViewMode"
+                                                required>
+                                            </p-dropdown>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> REV Type </label>
-                                        <!-- <p-dropdown [options]="revisionTypeList" name="revisionType"
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> REV Type </label>
+                                            <!-- <p-dropdown [options]="revisionTypeList" name="revisionType"
                                             #revisionType="ngModel" placeholder="Select"
                                             class="p-dropdown-custom-md-Header"
                                             [(ngModel)]="billingorInvoiceForm.revisionTypeId" [disabled]="isViewMode"
                                             required>
                                         </p-dropdown> -->
-                                        <input type="text" class="form-control wo-input" name="revType"
-                                            #revType="ngModel" disabled [(ngModel)]="billingorInvoiceForm.revType"
-                                            [disabled]="isViewMode" />
+                                            <input type="text" class="form-control wo-input" name="revType"
+                                                #revType="ngModel" disabled [(ngModel)]="billingorInvoiceForm.revType"
+                                                [disabled]="isViewMode" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Invoice Number </label>
-                                        <input type="text" class="form-control wo-input" name="invoiceNumber"
-                                            #invoiceNumber="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceNo"
-                                            [disabled]="true" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Invoice Number </label>
+                                            <input type="text" class="form-control wo-input" name="invoiceNumber"
+                                                #invoiceNumber="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceNo"
+                                                [disabled]="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Customer Ref </label>
+                                            <input type="text" class="form-control wo-input" name="customerRef"
+                                                #customerRef="ngModel" disabled
+                                                [(ngModel)]="billingorInvoiceForm.customerRef"
+                                                [disabled]="isViewMode" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Customer Ref </label>
-                                        <input type="text" class="form-control wo-input" name="customerRef"
-                                            #customerRef="ngModel" disabled
-                                            [(ngModel)]="billingorInvoiceForm.customerRef" [disabled]="isViewMode" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Invoice Date & Time <span class="clr-red">*</span></label>
+                                            <p-calendar [showIcon]="true" class="calender-cstm" [yearNavigator]="true"
+                                                [monthNavigator]="true" yearRange="1900:2100" name="invoiceDate"
+                                                #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
+                                                [disabled]="isViewMode" appendTo="body" showTime="true" hourFormat="24"
+                                                required></p-calendar>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> SO Open Date </label>
+                                            <p-calendar [showIcon]="true" class="calender-cstm" name="woOpenDate"
+                                                #woOpenDate="ngModel" [disabled]=true
+                                                [(ngModel)]="billingorInvoiceForm.openDate" [disabled]="isViewMode">
+                                            </p-calendar>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Invoice Date & Time <span class="clr-red">*</span></label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" [yearNavigator]="true"
-                                            [monthNavigator]="true" yearRange="1900:2100" name="invoiceDate"
-                                            #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
-                                            [disabled]="isViewMode" appendTo="body" showTime="true" hourFormat="24"
-                                            required></p-calendar>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Print Date </label>
+                                            <p-calendar [showIcon]="true" class="calender-cstm" name="printDate"
+                                                #printDate="ngModel" [(ngModel)]="billingorInvoiceForm.printDate"
+                                                [disabled]="isViewMode"></p-calendar>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Sales Person </label>
+                                            <input type="text" class="form-control wo-input" name="salesPerson"
+                                                #salesPerson="ngModel" disabled
+                                                [(ngModel)]="billingorInvoiceForm.salesPerson"
+                                                [disabled]="isViewMode" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> SO Open Date </label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="woOpenDate"
-                                            #woOpenDate="ngModel" [disabled]=true
-                                            [(ngModel)]="billingorInvoiceForm.openDate" [disabled]="isViewMode">
-                                        </p-calendar>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> No of Pieces </label>
+                                            <input type="number" class="form-control wo-input" name="noofPieces"
+                                                #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
+                                                [disabled]="isViewMode" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="credit" style="width: 100%;">Currency <span
+                                                    class="clr-red">*</span>
+                                            </label>
+                                            <p-dropdown [options]="currencyList" name="currency" #currency="ngModel"
+                                                required placeholder="Select" class="p-dropdown-custom-md-Header"
+                                                [(ngModel)]="billingorInvoiceForm.currencyId" [disabled]="isViewMode">
+                                            </p-dropdown>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Print Date </label>
-                                        <p-calendar [showIcon]="true" class="calender-cstm" name="printDate"
-                                            #printDate="ngModel" [(ngModel)]="billingorInvoiceForm.printDate"
-                                            [disabled]="isViewMode"></p-calendar>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label for="employee">Employee </label>
+                                            <input type="text" class="form-control wo-input" name="employee"
+                                                #employee="ngModel" disabled
+                                                [(ngModel)]="billingorInvoiceForm.employeeName"
+                                                [disabled]="isViewMode" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label> Available Credit</label>
+                                            <input type="number" class="form-control wo-input" name="salePerson"
+                                                #salePerson="ngModel" [(ngModel)]="billingorInvoiceForm.creditLimit"
+                                                [disabled]="isViewMode" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Sales Person </label>
-                                        <input type="text" class="form-control wo-input" name="salesPerson"
-                                            #salesPerson="ngModel" disabled
-                                            [(ngModel)]="billingorInvoiceForm.salesPerson" [disabled]="isViewMode" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> No of Pieces </label>
-                                        <input type="number" class="form-control wo-input" name="noofPieces"
-                                            #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
-                                            [disabled]="isViewMode" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="credit" style="width: 100%;">Currency <span class="clr-red">*</span>
-                                        </label>
-                                        <p-dropdown [options]="currencyList" name="currency" #currency="ngModel"
-                                            required placeholder="Select" class="p-dropdown-custom-md-Header"
-                                            [(ngModel)]="billingorInvoiceForm.currencyId" [disabled]="isViewMode">
-                                        </p-dropdown>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label for="employee">Employee </label>
-                                        <input type="text" class="form-control wo-input" name="employee"
-                                            #employee="ngModel" disabled [(ngModel)]="billingorInvoiceForm.employeeName"
-                                            [disabled]="isViewMode" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label> Available Credit</label>
-                                        <input type="number" class="form-control wo-input" name="salePerson"
-                                            #salePerson="ngModel" [(ngModel)]="billingorInvoiceForm.creditLimit"
-                                            [disabled]="isViewMode" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group ">
-                                        <label>Credit Terms </label>
-                                        <input type="text" class="form-control wo-input" name="creditTerms"
-                                            #creditTerms="ngModel" disabled
-                                            [(ngModel)]="billingorInvoiceForm.creditTerm" [disabled]="isViewMode" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label>Credit Terms </label>
+                                            <input type="text" class="form-control wo-input" name="creditTerms"
+                                                #creditTerms="ngModel" disabled
+                                                [(ngModel)]="billingorInvoiceForm.creditTerm" [disabled]="isViewMode" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="card" *ngIf="billingorInvoiceForm">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h5 class="po-heading">Sold To</h5>
-                                    <div class="form-group ">
-                                        <label>Customer
-                                        </label><span class="clr-red">*</span>
-                                        <input type="text" class="form-control wo-input" name="soldToCustomerName"
-                                            #soldToCustomerName="ngModel"
-                                            [(ngModel)]="billingorInvoiceForm.soldToCustomerName" disabled />
+                    <div class="col-md-7">
+                        <div class="card" *ngIf="billingorInvoiceForm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h5 class="po-heading">Sold To</h5>
+                                        <div class="form-group ">
+                                            <label>Customer
+                                            </label><span class="clr-red">*</span>
+                                            <input type="text" class="form-control wo-input" name="soldToCustomerName"
+                                                #soldToCustomerName="ngModel"
+                                                [(ngModel)]="billingorInvoiceForm.soldToCustomerName" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="po-heading">Bill To</h5>
+                                        <div class="form-group ">
+                                            <label>Customer
+                                            </label><span class="clr-red">*</span>
+                                            <p-autoComplete field="userName"
+                                                [(ngModel)]="billingorInvoiceForm.billToCustomerId"
+                                                name="billcustomerName" errorMessage="Records not found"
+                                                [forceSelection]="true" (onSelect)="onBillToSelected($event)"
+                                                [suggestions]="userBillingList"
+                                                (completeMethod)="filterCustomerNameBill($event)"
+                                                (onKeyUp)="clearAddress('BillTo' , $event.target.value)" [size]="30"
+                                                [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                                class="p-autoComplete-ctsm" [disabled]="isViewMode">
+                                            </p-autoComplete>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="po-heading">Ship To</h5>
+                                        <div class="form-group ">
+                                            <label>Customer
+                                            </label><span class="clr-red">*</span>
+                                            <p-autoComplete field="userName"
+                                                [(ngModel)]="billingorInvoiceForm.shipToCustomerId"
+                                                name="shipcustomerName" errorMessage="Records not found"
+                                                [forceSelection]="true" (onSelect)="onShipToSelected($event)"
+                                                [suggestions]="userShipingList"
+                                                (completeMethod)="filterCustomerShip($event)"
+                                                (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
+                                                [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                                class="p-autoComplete-ctsm" [disabled]="isViewMode">
+                                            </p-autoComplete>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <h5 class="po-heading">Bill To</h5>
-                                    <div class="form-group ">
-                                        <label>Customer
-                                        </label><span class="clr-red">*</span>
-                                        <p-autoComplete field="userName"
-                                            [(ngModel)]="billingorInvoiceForm.billToCustomerId" name="billcustomerName"
-                                            errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="onBillToSelected($event)" [suggestions]="userBillingList"
-                                            (completeMethod)="filterCustomerNameBill($event)"
-                                            (onKeyUp)="clearAddress('BillTo' , $event.target.value)" [size]="30"
-                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
-                                            class="p-autoComplete-ctsm" [disabled]="isViewMode">
-                                        </p-autoComplete>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 1 </label>
+                                            <input type="text" class="form-control wo-input" name="soldAddress1"
+                                                #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1"
+                                                disabled />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5 class="po-heading">Ship To</h5>
-                                    <div class="form-group ">
-                                        <label>Customer
-                                        </label><span class="clr-red">*</span>
-                                        <p-autoComplete field="userName"
-                                            [(ngModel)]="billingorInvoiceForm.shipToCustomerId" name="shipcustomerName"
-                                            errorMessage="Records not found" [forceSelection]="true"
-                                            (onSelect)="onShipToSelected($event)" [suggestions]="userShipingList"
-                                            (completeMethod)="filterCustomerShip($event)"
-                                            (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
-                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
-                                            class="p-autoComplete-ctsm" [disabled]="isViewMode">
-                                        </p-autoComplete>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Address 1 </label>
-                                        <input type="text" class="form-control wo-input" name="soldAddress1"
-                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1" disabled />
-                                    </div>
-                                </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="credit">Site Name</label><span class="clr-red">*</span>
-                                        <select [(ngModel)]="billingorInvoiceForm.billToSiteId"
-                                            (change)="setSoldToAddresses()" [disabled]="isViewMode" name="billToSite"
-                                            required>
-                                            <option value="">Select</option>
-                                            <option *ngFor="let site of billCustomerSiteList" [value]="site.siteID">
-                                                {{site.siteName}}
-                                            </option>
-                                        </select>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="credit">Site Name</label><span class="clr-red">*</span>
+                                            <select [(ngModel)]="billingorInvoiceForm.billToSiteId"
+                                                (change)="setSoldToAddresses()" [disabled]="isViewMode"
+                                                name="billToSite" required>
+                                                <option value="">Select</option>
+                                                <option *ngFor="let site of billCustomerSiteList" [value]="site.siteID">
+                                                    {{site.siteName}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="credit">Site Name</label><span class="clr-red">*</span>
+                                            <select [(ngModel)]="billingorInvoiceForm.shipToSiteId"
+                                                (change)="setShipToAddress()" [disabled]="isViewMode" name="shipToSite"
+                                                required>
+                                                <option value="">Select</option>
+                                                <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">
+                                                    {{site.siteName}}</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="credit">Site Name</label><span class="clr-red">*</span>
-                                        <select [(ngModel)]="billingorInvoiceForm.shipToSiteId"
-                                            (change)="setShipToAddress()" [disabled]="isViewMode" name="shipToSite"
-                                            required>
-                                            <option value="">Select</option>
-                                            <option *ngFor="let site of shipCustomerSiteList" [value]="site.siteID">
-                                                {{site.siteName}}</option>
-                                        </select>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 2 </label>
+                                            <input type="text" class="form-control wo-input" name="soldAddress2"
+                                                #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line2"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 1 </label>
+                                            <input type="text" class="form-control wo-input" name="billAddress1"
+                                                #billAddress1="ngModel" [(ngModel)]="billCustomerAddress.line1"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 1 </label>
+                                            <input type="text" class="form-control wo-input" name="shipAddress1"
+                                                #shipAddress1="ngModel" [(ngModel)]="shipCustomerAddress.line1"
+                                                disabled />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Address 2 </label>
-                                        <input type="text" class="form-control wo-input" name="soldAddress2"
-                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line2" disabled />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>City </label>
+                                            <input type="text" class="form-control wo-input" name="soldCity"
+                                                #soldCity="ngModel" [(ngModel)]="soldCustomerAddress.city" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 2 </label>
+                                            <input type="text" class="form-control wo-input" name="billAddress2"
+                                                #billAddress2="ngModel" [(ngModel)]="billCustomerAddress.line2"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Address 2 </label>
+                                            <input type="text" class="form-control wo-input" name="shipAddress2"
+                                                #shipAddress1="ngModel" [(ngModel)]="shipCustomerAddress.line2"
+                                                disabled />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Address 1 </label>
-                                        <input type="text" class="form-control wo-input" name="billAddress1"
-                                            #billAddress1="ngModel" [(ngModel)]="billCustomerAddress.line1" disabled />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>StateOrProvince </label>
+                                            <input type="text" class="form-control wo-input" name="soldstateOrProvince"
+                                                #soldstateOrProvince="ngModel"
+                                                [(ngModel)]="soldCustomerAddress.stateOrProvince" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>City </label>
+                                            <input type="text" class="form-control wo-input" name="billCity"
+                                                #billCity="ngModel" [(ngModel)]="billCustomerAddress.city" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>City </label>
+                                            <input type="text" class="form-control wo-input" name="shipCity"
+                                                #shipCity="ngModel" [(ngModel)]="shipCustomerAddress.city" disabled />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Address 1 </label>
-                                        <input type="text" class="form-control wo-input" name="shipAddress1"
-                                            #shipAddress1="ngModel" [(ngModel)]="shipCustomerAddress.line1" disabled />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Postal Code </label>
+                                            <input type="number" class="form-control wo-input" name="soldpostalCode"
+                                                #soldpostalCode="ngModel" [(ngModel)]="soldCustomerAddress.postalCode"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>StateOrProvince </label>
+                                            <input type="text" class="form-control wo-input" name="billstateOrProvince"
+                                                #billstateOrProvince="ngModel"
+                                                [(ngModel)]="billCustomerAddress.stateOrProvince" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>StateOrProvince </label>
+                                            <input type="text" class="form-control wo-input" name="stateOrProvince"
+                                                #shipstateOrProvince="ngModel"
+                                                [(ngModel)]="shipCustomerAddress.stateOrProvince" disabled />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>City </label>
-                                        <input type="text" class="form-control wo-input" name="soldCity"
-                                            #soldCity="ngModel" [(ngModel)]="soldCustomerAddress.city" disabled />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Country </label>
+                                            <input type="text" class="form-control wo-input" name="soldcountry"
+                                                #soldcountry="ngModel" [(ngModel)]="soldCustomerAddress.country"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Postal Code </label>
+                                            <input type="number" class="form-control wo-input" name="billpostalCode"
+                                                #billpostalCode="ngModel" [(ngModel)]="billCustomerAddress.postalCode"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Postal Code </label>
+                                            <input type="number" class="form-control wo-input" name="shippostalCode"
+                                                #shippostalCode="ngModel" [(ngModel)]="shipCustomerAddress.postalCode"
+                                                disabled />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Address 2 </label>
-                                        <input type="text" class="form-control wo-input" name="billAddress2"
-                                            #billAddress2="ngModel" [(ngModel)]="billCustomerAddress.line2" disabled />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Country </label>
+                                            <input type="text" class="form-control wo-input" name="billcountry"
+                                                #billcountry="ngModel" [(ngModel)]="billCustomerAddress.country"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Country </label>
+                                            <input type="text" class="form-control wo-input" name="shipcountry"
+                                                #shipcountry="ngModel" [(ngModel)]="shipCustomerAddress.country"
+                                                disabled />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Address 2 </label>
-                                        <input type="text" class="form-control wo-input" name="shipAddress2"
-                                            #shipAddress1="ngModel" [(ngModel)]="shipCustomerAddress.line2" disabled />
+                                <div class="row">
+                                    <div class="col-md-4">
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>StateOrProvince </label>
-                                        <input type="text" class="form-control wo-input" name="soldstateOrProvince"
-                                            #soldstateOrProvince="ngModel"
-                                            [(ngModel)]="soldCustomerAddress.stateOrProvince" disabled />
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Attention </label>
+                                            <input type="text" class="form-control wo-input" name="billToAttention"
+                                                #billToAttention="ngModel"
+                                                [(ngModel)]="billingorInvoiceForm.billToAttention"
+                                                [disabled]="isViewMode" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>City </label>
-                                        <input type="text" class="form-control wo-input" name="billCity"
-                                            #billCity="ngModel" [(ngModel)]="billCustomerAddress.city" disabled />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>City </label>
-                                        <input type="text" class="form-control wo-input" name="shipCity"
-                                            #shipCity="ngModel" [(ngModel)]="shipCustomerAddress.city" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Postal Code </label>
-                                        <input type="number" class="form-control wo-input" name="soldpostalCode"
-                                            #soldpostalCode="ngModel" [(ngModel)]="soldCustomerAddress.postalCode"
-                                            disabled />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>StateOrProvince </label>
-                                        <input type="text" class="form-control wo-input" name="billstateOrProvince"
-                                            #billstateOrProvince="ngModel"
-                                            [(ngModel)]="billCustomerAddress.stateOrProvince" disabled />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>StateOrProvince </label>
-                                        <input type="text" class="form-control wo-input" name="stateOrProvince"
-                                            #shipstateOrProvince="ngModel"
-                                            [(ngModel)]="shipCustomerAddress.stateOrProvince" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Country </label>
-                                        <input type="text" class="form-control wo-input" name="soldcountry"
-                                            #soldcountry="ngModel" [(ngModel)]="soldCustomerAddress.country" disabled />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Postal Code </label>
-                                        <input type="number" class="form-control wo-input" name="billpostalCode"
-                                            #billpostalCode="ngModel" [(ngModel)]="billCustomerAddress.postalCode"
-                                            disabled />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Postal Code </label>
-                                        <input type="number" class="form-control wo-input" name="shippostalCode"
-                                            #shippostalCode="ngModel" [(ngModel)]="shipCustomerAddress.postalCode"
-                                            disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Country </label>
-                                        <input type="text" class="form-control wo-input" name="billcountry"
-                                            #billcountry="ngModel" [(ngModel)]="billCustomerAddress.country" disabled />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Country </label>
-                                        <input type="text" class="form-control wo-input" name="shipcountry"
-                                            #shipcountry="ngModel" [(ngModel)]="shipCustomerAddress.country" disabled />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Attention </label>
-                                        <input type="text" class="form-control wo-input" name="billToAttention"
-                                            #billToAttention="ngModel"
-                                            [(ngModel)]="billingorInvoiceForm.billToAttention"
-                                            [disabled]="isViewMode" />
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <label>Attention </label>
-                                        <input type="text" class="form-control wo-input" name="shipToAttention"
-                                            #shipToAttention="ngModel"
-                                            [(ngModel)]="billingorInvoiceForm.shipToAttention"
-                                            [disabled]="isViewMode" />
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <label>Attention </label>
+                                            <input type="text" class="form-control wo-input" name="shipToAttention"
+                                                #shipToAttention="ngModel"
+                                                [(ngModel)]="billingorInvoiceForm.shipToAttention"
+                                                [disabled]="isViewMode" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div style="float: right;" *ngIf="!isViewMode">
-                <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
-                    data-toggle="modal" data-target="#printPost">Generate
-                    Invoice</button>
-                <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
-                    (click)="updateWorkOrderBilling()">Update</button>
-            </div>
-        </form>
+                <div style="float: right;" *ngIf="!isViewMode">
+                    <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
+                        data-toggle="modal" data-target="#printPost">Generate
+                        Invoice</button>
+                    <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
+                        (click)="updateWorkOrderBilling()">Update</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
