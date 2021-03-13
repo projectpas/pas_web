@@ -159,8 +159,9 @@ export class VendorBillingInformationComponent {
                                 this.local = res[0];
                                 this.vendorCodeandName = res[0];
                         },err => {
-                            const errorLog = err;
-                            this.saveFailedHelper(errorLog);
+                            //const errorLog = err;
+                            //this.saveFailedHelper(errorLog);
+                            this.isSpinnerVisible = false;
                         });
                 }
             }
@@ -235,8 +236,9 @@ export class VendorBillingInformationComponent {
                 res => {
                         this.vendorCodeandName = res[0];
                 },err => {
-                    const errorLog = err;
-                    this.saveFailedHelper(errorLog);
+                   // const errorLog = err;
+                    //this.saveFailedHelper(errorLog);
+                    this.isSpinnerVisible = false;
             });
         }        
     }
@@ -252,7 +254,8 @@ export class VendorBillingInformationComponent {
                 this.isSpinnerVisible = false;
             },
             error =>{
-                this.onDataLoadFailed(error);
+                //this.onDataLoadFailed(error);
+                this.isSpinnerVisible = false;
             } 
         );
     }
@@ -272,9 +275,9 @@ export class VendorBillingInformationComponent {
     }
     private countrylist() {
         this.isSpinnerVisible = true;
-        this.vendorService.getCountrylist().subscribe(
+        this.vendorService.getCountrylist(this.currentUserMasterCompanyId).subscribe(
             results => this.onDatacountrySuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => { this.isSpinnerVisible = false;} //this.onDataLoadFailed(error)
         );
     }
 
@@ -312,7 +315,7 @@ export class VendorBillingInformationComponent {
             this.obtainedVendorName = this.vendorData.vendorName;
             this.obtainedVendorCode = this.vendorData.vendorCode;
             this.isSpinnerVisible = false;
-        }, error => this.onDataLoadFailed(error));
+        }, error =>  {this.isSpinnerVisible = false;}) //this.onDataLoadFailed(error));
     }
 
     filterActions(event) {
@@ -390,8 +393,9 @@ export class VendorBillingInformationComponent {
             this.editSiteName = row.siteName;
             
             },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+                //const errorLog = err;
+                //this.saveFailedHelper(errorLog);
+                this.isSpinnerVisible = false;
             });
             if(row.contactTagId > 0)
             {
@@ -428,7 +432,7 @@ export class VendorBillingInformationComponent {
         this.isSaving = true;
         this.vendorService.getVendorBillingAuditHistory(this.sourceVendor.vendorId, this.sourceVendor.vendorBillingAddressId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false}) //this.saveFailedHelper(error));
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
@@ -507,7 +511,7 @@ export class VendorBillingInformationComponent {
                     `Record was deleted successfully`,
                     MessageSeverity.success
                 );
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false }) //this.saveFailedHelper(error))
         } else {
             this.selectedRowforDelete = undefined;
         }
@@ -578,7 +582,7 @@ export class VendorBillingInformationComponent {
                     this.isSpinnerVisible = false;
                     this.loadData();
                 }, 
-                error => this.saveFailedHelper(error));
+                error =>{this.isSpinnerVisible = false;})// this.saveFailedHelper(error));
             this.sourceVendor = "";
 
         }
@@ -594,7 +598,7 @@ export class VendorBillingInformationComponent {
                     this.isSpinnerVisible = false;
                     this.loadData();
                 }, 
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false;})//this.saveFailedHelper(error));
             this.sourceVendor = "";
         }
 
@@ -682,7 +686,7 @@ export class VendorBillingInformationComponent {
                     `Successfully Uploaded File `,
                     MessageSeverity.success
                 );
-            }, error => this.saveFailedHelper(error))
+            }, error => {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
         }
     }
 
@@ -777,7 +781,7 @@ export class VendorBillingInformationComponent {
             this.loadData();
             this.modal.close();
             this.alertService.showMessage( 'Success', `Record was Restored successfully`, MessageSeverity.success );
-        }, error => this.saveFailedHelper(error))
+        }, error => {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
     }
 
     checkSiteNameExist(value) {
@@ -819,8 +823,9 @@ export class VendorBillingInformationComponent {
             this.sitelistCollection = [...this.sitelistCollectionOriginal];
             this.arraySiteIdlist = [];
 		},err => {
-			const errorLog = err;
-			this.saveFailedHelper(errorLog);
+            this.isSpinnerVisible = false;
+			//const errorLog = err;
+			//this.saveFailedHelper(errorLog);
 		});
     }
 
@@ -842,7 +847,7 @@ export class VendorBillingInformationComponent {
     getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
         if(this.arrayTagNamelist.length == 0) {			
             this.arrayTagNamelist.push(0); }
-            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.tagNamesList = res.map(x => {
                 return {
                     tagName: x.label, contactTagId: x.value 

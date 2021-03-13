@@ -703,6 +703,16 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 { label: 'WO Shipping', routerLink: '/#' },
                 { label: 'WO Billing', routerLink: '/#' },
+                {
+                  label: 'Work Order Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/workordersmodule/workorderspages/app-wo-approval-rule',
+                },
+                {
+                  label: 'Work Order Quote Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/workordersmodule/workorderspages/app-woq-approval-rule',
+                }
               ],
             },
             {

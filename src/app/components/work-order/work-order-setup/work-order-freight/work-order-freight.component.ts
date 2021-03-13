@@ -300,7 +300,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                     uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
                     dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                     currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
-                    billingAmount: this.formateCurrency(x.amount)
+                    billingAmount: this.formateCurrency(x.amount),
+                    billingMethodId:this.costPlusType? this.costPlusType :0,
+                    markupPercentageId: this.overAllMarkup ? this.overAllMarkup : 0,
+                    // currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
                 }
             });
             if (this.isEdit) {
@@ -340,6 +343,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                     {
                       "WorkOrderQuoteTaskId":0,
                       "TaskId":task.taskId,
+                      "taskName":task.description ? task.description :task.label,
                       "FreightCost":this.getTotalTaskAmount(taskCharge),
                       "FreightBilling":this.getTotalTaskBillingAmount(taskCharge),
                       "FreightRevenue":this.getTotalTaskBillingAmount(taskCharge),
@@ -349,7 +353,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                       "CreatedDate":new Date().toDateString(),
                       "UpdatedDate":new Date().toDateString(),
                       "IsActive":true,
-                      "IsDeleted":false
+                      "IsDeleted":false,
+                 
                     }
                   )
                 }
@@ -357,6 +362,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             )
           }
         )
+
         let temp = this.workOrderFreightList;
         let sendData = []
         for (let index = 0; index < temp.length; index++) {
@@ -366,6 +372,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             return { ...f, headerMarkupId: Number(this.overAllMarkup), markupFixedPrice: this.costPlusType }
         })
         let result = {'data': sendData, 'taskSum': WorkOrderQuoteTask, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType}
+      console.log("emitzz")
         this.saveFreightListForWO.emit(result);
     }
     currentRow:any={};

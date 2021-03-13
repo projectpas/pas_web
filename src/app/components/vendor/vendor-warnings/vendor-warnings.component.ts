@@ -94,8 +94,9 @@ export class VendorWarningsComponent implements OnInit {
                         res => {
                                 this.local = res[0];
                         },err => {
-                            const errorLog = err;
-                            this.saveFailedHelper(errorLog);
+                            this.isSpinnerVisible = false;
+                            //const errorLog = err;
+                            //this.saveFailedHelper(errorLog);
                     });
                 }                
             }
@@ -129,11 +130,12 @@ export class VendorWarningsComponent implements OnInit {
     }
 
     async getTypesOfWarnings(){
-	    await	this.commonService.smartDropDownList('VendorWarningList','vendorWarningListId', 'Name').subscribe(data => {
-            this.types = data;
+	   // await	this.commonService.smartDropDownList('VendorWarningList','vendorWarningListId', 'Name').subscribe(data => {
+        this.commonService.autoSuggestionSmartDropDownList('VendorWarningList', 'vendorWarningListId', 'Name','',true,200,'',this.currentUserMasterCompanyId).subscribe(res => {
+            this.types = res;
             this.allowAll(true)
             this.loadData();
-		}, error => this.saveFailedHelper(error))
+		}, error =>  {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
     }
 
     private loadData() {
@@ -195,7 +197,7 @@ export class VendorWarningsComponent implements OnInit {
 					})
                 }
                 this.isSpinnerVisible = false;
-			}, error => this.saveFailedHelper(error))
+			}, error => { this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
 
 		} else {
            this.vendorId =this.local.vendorId ? this.local.vendorId :this.activeRoute.snapshot.params['id'];
@@ -249,7 +251,7 @@ export class VendorWarningsComponent implements OnInit {
 						}
 					})
                 }
-			}, error => this.saveFailedHelper(error))
+			}, error =>  {this.isSpinnerVisible = false;}) //this.saveFailedHelper(error))
         }     
     }
 
@@ -404,7 +406,7 @@ export class VendorWarningsComponent implements OnInit {
                 this.isSpinnerVisible = false;      
                 this.warningsUpdateBoolean = true;
                 this.loadData();
-            }, error => this.saveFailedHelper(error))
+            }, error =>{ this.isSpinnerVisible = false;})// this.saveFailedHelper(error))
             this.enableUpdate = true;
 		} else {
 			this.vendorService.updateVendorWarnings(warningsData).subscribe(res => {
@@ -414,7 +416,7 @@ export class VendorWarningsComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.isSpinnerVisible = false; 
-            }, error => this.saveFailedHelper(error))
+            }, error =>{ this.isSpinnerVisible = false;})// this.saveFailedHelper(error))
         }
         this.disableUpdate=true;
         this.disableSave = false;
