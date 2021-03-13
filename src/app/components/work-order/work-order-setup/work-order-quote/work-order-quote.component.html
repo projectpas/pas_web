@@ -494,14 +494,16 @@
                                 <th>Approver Code</th>
                                 <th>Approver Email</th>
                                 <th>Total PO Cost</th>
-                                <th>Min Amount</th>
-                                <th>Max Amount</th>
+                                <th>Approver Rule</th>
+                                <th>Memo</th>
+                                <!-- <th>Min Amount</th>
+                                <th>Max Amount</th> -->
                                 <th>Message</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="mpn-row" style="display: table-row;"
-                                *ngFor="let approver of internalApproversList; let i=index;" [ngClass]="(approver.isExceeded)?'approver-limit-exceeded':''">
+                                *ngFor="let approver of internalApproversList; let i=index;">
                                 <td>
                                     <label>{{approver.approverName}}</label>
                                 </td>
@@ -509,19 +511,25 @@
                                     <label>{{approver.approverCode}}</label>
                                 </td>
                                 <td>
-                                    <label>{{approver.approverEmail}}</label>
+                                    <label>{{approver.approverEmails}}</label>
                                 </td>
                                 <td>
                                     <label>{{approver.totalCost}}</label>
                                 </td>
                                 <td>
+                                    <label>{{approver.rule}}</label>
+                                </td>
+                                <td>
+                                    <p class="m-0 p-0 p_textEditor memo-left" [innerHTML]="approver['memo']"></p>
+                                </td>
+                                <!-- <td>
                                     <label>{{approver.lowerValue}}</label>
                                 </td>
                                 <td>
                                     <label>{{approver.upperValue}}</label>
-                                </td>
+                                </td> -->
                                 <td>
-                                    <label>{{approver.message}}</label>
+                                    <label [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</label>
                                 </td>
                             </tr>
                         </tbody>

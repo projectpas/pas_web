@@ -1,4 +1,6 @@
-﻿// ===============================
+﻿import { WoqApprovalRuleComponent } from './../components/work-order/work-order-setup/woq-approval-rule/woq-approval-rule.component';
+import { WoApprovalRuleComponent } from './../components/work-order/work-order-setup/wo-approval-rule/wo-approval-rule.component';
+// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -82,6 +84,16 @@ const workorderPagesRoutes: Routes = [
         // path: 'app-work-order-edit?receivingCustWorkId=:receivingCustWorkId&workOrderId=:workOrderId',
         component: WorkOrderSmartComponent,
         data: { title: 'Work Order Setup' }
+      },
+      { 
+        path: "app-wo-approval-rule", 
+        component: WoApprovalRuleComponent, 
+        data: { title: "Work Order Approval Rule"} 
+      },
+      { 
+        path: "app-woq-approval-rule", 
+        component: WoqApprovalRuleComponent, 
+        data: { title: "Work Order Quote Approval Rule"} 
       },
 
 
