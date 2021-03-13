@@ -1,10 +1,6 @@
-﻿import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output } from '@angular/core';
+﻿import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
-import {
-    WorkOrderQuote,
-    multiParts,
-    partsDetail
-} from '../../../../models/work-order-quote.modal';
+import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
 import { MenuItem } from 'primeng/api';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
@@ -16,29 +12,15 @@ import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service
 import { AuthService } from '../../../../services/auth.service';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 declare var $ : any;
-import {
-    AlertService,
-    MessageSeverity
-} from '../../../../services/alert.service';
-import {
-    WorkOrderLabor,
-    AllTasks,
-    WorkOrderQuoteLabor,
-    ExclusionQuote,
-    ChargesQuote,
-    QuoteMaterialList,
-    QuoteFreightList
-} from '../../../../models/work-order-labor.modal';
+import {AlertService, MessageSeverity} from '../../../../services/alert.service';
+import {WorkOrderLabor,AllTasks,WorkOrderQuoteLabor,ExclusionQuote,ChargesQuote,QuoteMaterialList,QuoteFreightList} from '../../../../models/work-order-labor.modal';
 import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { DBkeys } from '../../../../services/db-Keys';
-
-
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
     styleUrls: ['./work-order-quote.component.scss']
 })
-/** WorkOrderQuote component*/
 export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteForm: WorkOrderQuote;
     @Input() quoteListViewData: any = {};
@@ -112,12 +94,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     isEdit: boolean = false;
     employeeList: any[];
     freight = [];
-    workFlowObject = {
-        materialList: [],
-        equipments: [],
-        charges: [],
-        exclusions: [],
-        freights: []
+    workFlowObject = { materialList: [],equipments: [],charges: [],exclusions: [],freights: []
     }
     isQuote: boolean = true;
     editMatData: any[] = [];
@@ -316,7 +293,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             field: 'marginPercentage'
         }
     ]
-
     @Output() enableBackToWO = new EventEmitter();
     restrictID: number;
     restrictMessage: any;
@@ -387,9 +363,19 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
             this.getAllWorkOrderStatus('');
         }
+        console.log("hell9 ng On Ints ") 
     }
+    ngOnChanges(changes: SimpleChanges) {
+        for (let property in changes) {
+if (property == 'selectedDisplayType') {
+    this.workOrderId=this.workorderid;
+    if(this.workOrderId){
 
-    ngOnChanges() {
+        this.getEmployeeList(this.workOrderId);
+    }
+// selectedDisplayType
+            }
+        }
         this.enableEditBtn = Boolean(this.enableEditBtn);
         if (this.isQuoteListView) {
             this.quoteForm = new WorkOrderQuote();
@@ -510,10 +496,12 @@ this.creditTerms=res.creditTerm;
             })
         }
     }
-
-    deleteMemoConfirmation(mainIndex, subIndex){
+    deleteRowRecord:any={};
+    deleteMemoConfirmation(mainIndex, subIndex,obj){
         this.mainIndex = mainIndex;
         this.subIndex = subIndex;
+        this.deleteRowRecord=obj
+        console.log("obj",obj)
         // $('#deleteRowConfirmation').modal('show');
     }
 
@@ -775,7 +763,7 @@ this.creditTerms=res.creditTerm;
                         {
                             workOrderWorkFlowId: x.value,
                             workOrderNo: x.label,
-                            masterPartId: x.masterPartId,
+                            masterPartId: x.itemMasterId,
                             workflowId: x.workflowId,
                             workflowNo: x.workflowNo,
                             partNumber: x.partNumber,
@@ -790,6 +778,7 @@ this.creditTerms=res.creditTerm;
                         label: x.partNumber
                     }
                 });
+                console.log("this.mpnPartNumbersList",this.mpnPartNumbersList)
                 if (this.savedWorkOrderData && this.savedWorkOrderData.isSinglePN) {
                     this.selectedPartNumber = this.mpnPartNumbersList[0].value;
                     this.selectedquotePn = this.mpnPartNumbersList[0].label
@@ -819,7 +808,7 @@ this.creditTerms=res.creditTerm;
             this.workOrderService.getWOTaskQuote(this.selectedPartNumber['woPartNoId'])
                 .subscribe(
                     (res) => {
-                        this.WOTaskDetails = res;
+                        this.WOTaskDetails = res; 
                     },
                     err => {
                         this.errorHandling(err);
@@ -1093,12 +1082,14 @@ this.creditTerms=res.creditTerm;
     }
 
     saveWorkOrderFreightsList(e) {
+        console.log("dfdsfsdfsdfdsfsdfdsfsdf",e)
         this.quoteFreightListPayload.BuildMethodId = this.getBuildMethodId();
         this.quoteFreightListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.quoteFreightListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.quoteFreightListPayload['createdDate'] = (e.createdDate) ? e.createdDate : new Date();
         this.quoteFreightListPayload.masterCompanyId = this.quotationHeader.masterCompanyId;
         this.quoteFreightListPayload.SelectedId = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
+        console.log("hello ",this.quoteFreightListPayload);
         this.quoteFreightListPayload.WorkOrderQuoteFreight = e['data'].map(fre => {
             if (fre.workOrderQuoteDetailsId && fre.workOrderQuoteDetailsId != 0) {
                 this.quoteFreightListPayload.WorkOrderQuoteDetailsId = fre.workOrderQuoteDetailsId
@@ -1117,7 +1108,7 @@ this.creditTerms=res.creditTerm;
                 "IsFixedFreight": fre.isFixedFreight,
                 "FixedAmount": fre.fixedAmount,
                 "masterCompanyId": this.quotationHeader.masterCompanyId,
-                "markupPercentageId": fre.markupPercentageId,
+                "markupPercentageId": fre.markupPercentageId ? fre.markupPercentageId: 0,
                 "freightCostPlus": fre.freightCostPlus,
                 "taskId": fre.taskId,
                 "CreatedBy": "admin",
@@ -1126,7 +1117,7 @@ this.creditTerms=res.creditTerm;
                 "UpdatedDate": "2019-10-31T09:06:59.68",
                 "IsActive": true,
                 "IsDeleted": fre.isDeleted,
-                "BillingMethodId": Number(fre.billingMethodId),
+                "billingMethodId": Number(fre.billingMethodId),
                 "BillingAmount": fre.billingAmount,
                 "headerMarkupId": fre.headerMarkupId,
                 "markupFixedPrice": fre.markupFixedPrice,
@@ -1242,7 +1233,7 @@ this.creditTerms=res.creditTerm;
                 "ItemMasterId": mList.itemMasterId,
                 "ConditionCodeId": mList.conditionCodeId,
                 "MandatoryOrSupplemental": mList.mandatoryOrSupplemental ? mList.mandatoryOrSupplemental :mList.materialMandatoriesName,
-                "mandatorySupplementalId": mList.mandatorySupplementalId ? mList.mandatorySupplementalId : mList.materialMandatoriesId,
+                "materialMandatoriesId": mList.materialMandatoriesId,
                 "ItemClassificationId": mList.itemClassificationId,
                 "Quantity": mList.quantity,
                 "UnitOfMeasureId": mList.unitOfMeasureId,
@@ -1258,7 +1249,7 @@ this.creditTerms=res.creditTerm;
                 "Markup": mList.markup,
                 "masterCompanyId": (mList.masterCompanyId == '') ? 0 : mList.masterCompanyId,
                 "TaskId": (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
-                "BillingMethodId": Number(mList.billingMethodId),
+                "BillingMethodId": mList.billingMethodId? Number(mList.billingMethodId):this.costPlusType,
                 "BillingRate": mList.billingRate,
                 "BillingAmount": mList.billingAmount,
                 "headerMarkupId": this.overAllMarkup,
@@ -1503,11 +1494,6 @@ this.creditTerms=res.creditTerm;
             .subscribe(
                 (taskList) => {
                     taskList = taskList.map(x=>{
-                        
-                        // return {
-                        // ...x,
-                        // 'taskId': x.value, 'description': x.label}
-                  
                     return {
                         id: x.value,
                         description: x.label.toLowerCase(),
@@ -1819,6 +1805,7 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialListForWO(data) {
+        console.log("data",data)
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1829,8 +1816,12 @@ this.creditTerms=res.creditTerm;
                 }
                 mData['billingAmount'] = (mData.quantity * Number(mData.billingRate.toString().split(',').join(''))).toFixed(2);
                 mData.partNumber= mData.partNumber.partName;
-                mData.taskId=(typeof mData.taskId == 'string')?mData.taskId :mData.taskId.taskId;
-                mData.taskName=(typeof mData.taskId != 'string')?mData.taskId.description:'';
+                mData.taskId=(typeof mData.taskId == 'object')? mData.taskId.taskId:mData.taskId;
+                mData.taskName=(typeof mData.taskId == 'object')?mData.taskId.description:mData.taskName;
+                mData.billingMethodId=this.costPlusType ? this.costPlusType :0;
+                mData.markupPercentageId=this.overAllMarkup ? this.overAllMarkup : 0;
+
+                // (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
             }
         )
         if (!this.editMatData || this.editMatData.length == 0) {
@@ -1852,6 +1843,7 @@ this.creditTerms=res.creditTerm;
                 // this.workOrderExclusionsList = [...this.workOrderExclusionsList, ...this.workOrderExclusionsLists[x].map(da=>{ return {...da, taskId:x}})]
                 this.materialListQuotation.push(temp[x]);
             }
+            console.log(" this.materialListQuotation", this.materialListQuotation);
         }
         else {
             this.editMatData = [];
@@ -1947,7 +1939,12 @@ this.creditTerms=res.creditTerm;
     }
 
     editMaterialList(matData) {
-        this.editMatData = [matData];
+        const eData=[matData]
+        this.editMatData = [...eData];
+        // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;
+        // this.editMatData[0].materialMandatoriesId=this.editMatData[0].mandatoryOrSupplemental;
+        this.editMatData[0].partNumber= { partId:this.editMatData[0].itemMasterId, partName:this.editMatData[0].partNumber }
+        console.log("this.edit",this.editMatData); 
     }
 
     deleteMaterialList(mainIndex, subIndex) {

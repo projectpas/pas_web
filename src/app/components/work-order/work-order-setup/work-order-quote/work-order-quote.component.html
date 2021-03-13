@@ -2,7 +2,7 @@
     <div *ngIf="selectedDisplayType != ''" style="color: red; font-size: 20px;">
         {{(selectedDisplayType == 'use historical wos')?'Work order details ':'Workorder quote Details of '+quoteForm.quoteNumber}}
     </div>
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" *ngIf="!isView">
         <ol class="breadcrumb">
             <li class="breadcrumb-item" aria-current="page">Work Order</li>
             <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">Create Work Order Quote</li>
@@ -32,7 +32,7 @@
                   <h4  class="header-name">
                     {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
             </div>
-            <div>
+            <div *ngIf="!isView">
                 <button type="button"
                   class="btn-sm header-button pull-right"
                   [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote-list']" >
@@ -849,7 +849,7 @@
                                         <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
                                     </select>
                                 </td>
-                                <td><div style="min-width: 100px;">{{matQuotation.partNumber}}</div></td>
+                                <td><div style="min-width: 100px;">{{matQuotation.partNumber.partName?matQuotation.partNumber.partName :matQuotation.partNumber }}</div></td>
                                 <td>{{matQuotation.partDescription}}</td>
                                 <td>{{matQuotation.provision}}</td>
                                 <td class="content-to-end">{{matQuotation.quantity}}</td>
@@ -886,7 +886,7 @@
                                 </td>
                                 <td *ngIf="!isView">
                                     <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                    <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                    <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                 </td>
                             </tr>
                         </ng-container>
@@ -1445,7 +1445,8 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" (click)="editMatData = [];">&times;</button>
+                    <!-- (click)="editMatData = [];" -->
+                    <button type="button" class="close" data-dismiss="modal" >&times;</button>
                     <h4 class="modal-title">{{(editMatData.length>0)?'Edit':'Add'}} Material</h4>
                 </div>
                 <div class="modal-body">
@@ -1582,14 +1583,12 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">  {{(displayType == 'use historical wos')?'List of Historical Workorders for MPN '+this.selectedPartNumber['partNumber']:'List of Historical Workorder Quotes for MPN '+this.selectedPartNumber['partNumber']}}</h4>
                     <button type="button" class="close" (click)="hideModal('showHistoricalWorkOrder')">
                         &times;
-                    </button>
+                    </button> 
                 </div>
                 <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
-                    <div class="form-group" style="color: red; font-size: 20px;">
-                        {{(displayType == 'use historical wos')?'List of Historical Workorders for MPN '+this.selectedPartNumber['partNumber']:'List of Historical Workorder Quotes for MPN '+this.selectedPartNumber['partNumber']}}
-                    </div>
                     <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"
@@ -1889,6 +1888,12 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <div class="modal-body">
+                    <strong>
+                       PN:
+                        <span class="new-label">{{deleteRowRecord.partNumber}}</span>
+                    </strong>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteMaterialList(mainIndex, subIndex)">Yes</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
@@ -1909,11 +1914,16 @@
                     <button type="button" class="close" (click)="hideModal('historicalWorkOrderView')">
                         &times;
                     </button>
-                </div>
-                <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView)">
+                </div> 
+                <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
                     <!-- <grd-quote-view [workorderid]="selectedHistoricalWorkOrder" isView="true"></grd-quote-view> -->
-                    <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
+
+                   <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                 </div>
+                <div >
+                    <button type="button" class="btn btn-danger foot_bt"  (click)="hideModal('historicalWorkOrderView')"
+                      >Close</button>
+                  </div>
             </div>
         </div>
     </div>
