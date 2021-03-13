@@ -12905,6 +12905,7 @@ p-dialog .ui-widget.ui-widget-content {
 .modal-body p .value {
   width: 70%;
   display: inline-block;
+  padding-top:2px;
 }
 
 .ui-autocomplete-dropdown.ui-button-icon-only {
@@ -13764,11 +13765,11 @@ body .ui-table .ui-table-tbody>tr>td a.btn {
 }
 
 .btn-light-cstm {
-  color: #212529 !important;
-  background-color: #f8f9fa !important;
+  color: #fff !important;
+  background-color: #4298ffb0 !important;
   border-color: #2e6da4;
   border-radius: 4px !important;
-  padding: 6px 12px !important;
+  // padding: 6px 12px !important;
 }
 
 // .btn-success {

@@ -778,12 +778,12 @@
  
                 <thead>
                     <tr style="color: #f1f1f1; background-color: #fff;">
-                        <td colspan="10" class="table-header-col1">&nbsp;</td>
-                        <td colspan="4">
+                        <th colspan="10">&nbsp;</th>
+                        <th colspan="4" class="labour-radio-buttons">
 
-                            <div class="display-flex" style="width: 450px;">
-                                <div class="form-group" style="text-align: center; display: flex;margin-bottom: 0px;">
-                                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92"
+                            <div class="display-flex">
+                                <div class="form-group labour-radio-buttons-align" >
+                                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w125"
                                                    name="costPlusType"
                                                    label="T&M - Mark Up"
                                                    value="1"
@@ -791,13 +791,13 @@
                                                    [disabled]="isView || isViewForApprovedPart"
                                                    (click)="(!isView)?tmchange():''"></p-radioButton>
                                     <div>
-                                        <select class="form-control select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart" style="margin-top: 10px;">
+                                        <select class="form-control select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart" style="margin-top: 10px;">
                                             <option value="">Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div style="margin-bottom: 10px; margin-left: 30px;margin-right: 30px;">
+                                <div class="radio-align">
                                     <p-radioButton class="p-radiobutton-label-horizontal"
                                                    name="costPlusType"
                                                    value="2"
@@ -812,8 +812,8 @@
                                     </p-radioButton>
                                 </div>
                             </div>
-                        </td>
-                        <td style="background: #fff; border: 1px solid #fff;"></td>
+                        </th>
+                        <th></th>
                      
                     </tr>
                     <tr>
