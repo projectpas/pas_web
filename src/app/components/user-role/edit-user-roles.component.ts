@@ -24,7 +24,7 @@ export class EditUserRolesComponent implements OnInit {
     public pagesToHide: ModuleHierarchyMaster[];
     public userRoles: UserRole[] = [];
     public permissionMaster: PermissionMaster[];
-
+    isSpinnerVisible: Boolean = true;
     constructor(private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
 
     }
@@ -37,6 +37,7 @@ export class EditUserRolesComponent implements OnInit {
         this.currentUserRole.rolePermissions = [];
         this.pages = [];
         this.currentUserRole.id = 0;
+        this.isSpinnerVisible = false;
     }
 
     getAllModuleHierarchies(): void {
@@ -145,6 +146,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     userRoleChanged(event): void {
+        this.isSpinnerVisible=true;
         this.sortModules();
         this.currentUserRole.rolePermissions = [];
 
@@ -219,6 +221,10 @@ export class EditUserRolesComponent implements OnInit {
                     modules.rolePermission.canView = false;
                 }
             }
+            this.isSpinnerVisible=false;
+        }
+        else{
+            this.isSpinnerVisible=false;
         }
     }
     
@@ -464,7 +470,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     UpdateUserRole(): void {
-
+        this.isSpinnerVisible=true;
         this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
             x.userRoleId=this.currentUserRole.id;
             return x;
@@ -482,6 +488,7 @@ export class EditUserRolesComponent implements OnInit {
                 this.userRoleService.getAllUserRole().subscribe(result => {
                     this.userRoles = result[0];
                 });
+                this.isSpinnerVisible=false;
             },
             error => {
                 var message = '';
@@ -491,6 +498,7 @@ export class EditUserRolesComponent implements OnInit {
                 else {
                     message = error.error.Message;
                 } 
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage('User Role', message, MessageSeverity.error);
             }
         );

@@ -66,8 +66,8 @@
           </div>
         </div>
         <div class="row">
-          <div class="col">
-            <button
+          <div class="col" >
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Data"
@@ -80,7 +80,7 @@
               (click)="selectedOnly = false; targetData = dt;" 
               data-target="#downloadConfirmation"
             ></button>
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Selected Data"
@@ -291,7 +291,7 @@
               </span>
             </div>
             <div *ngIf="onDeletedActionState == true">
-              <p-inputSwitch
+              <p-inputSwitch *ngIf="isEdit"
                 [(ngModel)]="rowData['isActive']"
                 [disabled]="true"
                 name="isActive{{ rowIndex }}"

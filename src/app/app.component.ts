@@ -78,6 +78,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   managementStructure: any = {};
   moduleHierarchy: ModuleHierarchyMaster[];
   childMenu: MenuItem[] = [];
+  menuArray=[];
   setStep(index: number) {
     this.step = index;
   }
@@ -158,17 +159,31 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   dynamicMenu() {
     this.megaMenuItems = [];
-    for (let module of this.moduleHierarchy) {
+    for (let module of this.menuArray) {
       var menu: MenuItem = {};
-      menu.label = module.name;
-      menu.icon = module.moduleIcon;
-      menu.routerLink = module.routerLink;
-      menu.id = String(module.id);
-      menu.automationId = module.parentId;
-      this.megaMenuItems.push(menu);
-    }
-    // console.log(this.getDataByParentId(this.megaMenuItems,null));
+      menu.label = module.Name;
+      menu.icon = module.ModuleIcon;
+      menu.routerLink = module.RouterLink;
+      menu.id = String(module.ID);
+      menu.automationId = module.ParentID;
+      if(this.megaMenuItems.length==0){
+        this.megaMenuItems.push(menu);
+      }
+      else{
+        var isDuplicate=this.megaMenuItems.filter(function(item){
+          return item.label==menu.label
+        })
+        if(isDuplicate.length==0){
+          this.megaMenuItems.push(menu);
+        }
 
+      }
+      
+    }
+    
+    // console.log(this.getDataByParentId(this.megaMenuItems,null));
+    
+    
     //this.megaMenuItems= this.getDataByParentId(this.megaMenuItems,null);
 
     var r = this.getDataByParentId(this.megaMenuItems, null);
@@ -1715,7 +1730,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           if(this.authService .currentUser.userName!="admin"){
         this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
           console.log(data[0]);
-          this.moduleHierarchy = data[0];
+          this.menuArray = data[0];
           this.authService.SetMenuInfo(data[0]);
           this.dynamicMenu();
         });

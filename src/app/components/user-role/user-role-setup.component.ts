@@ -26,6 +26,7 @@ export class UserRolesSetupComponent implements OnInit {
     public permissionMaster: PermissionMaster[];
     public removePermission: RolePermission[] = [];
     form1: FormGroup;
+    isSpinnerVisible: Boolean = true;
     roleForm = new FormGroup({
         name: new FormControl('name', Validators.required),
         description: new FormControl('description')
@@ -48,6 +49,7 @@ export class UserRolesSetupComponent implements OnInit {
         this.currentUserRole = new UserRole();
         this.currentUserRole.rolePermissions = [];
         this.pages = [];
+        this.isSpinnerVisible=false;
     }
 
     getAllModuleHierarchies(): void {
@@ -434,13 +436,14 @@ console.log(this.sortedHierarchy)
     }
 
     addUserRole(): void {
-
+        this.isSpinnerVisible=true;
         this.currentUserRole.name = this.roleForm.value.name;
         this.currentUserRole.memo = this.roleForm.value.description;
         console.log(this.currentUserRole.name);
         console.log(this.currentUserRole.memo);
         //return;
         if (this.currentUserRole.name == null) {
+            this.isSpinnerVisible=false;
             this.alertService.showMessage(
                 "Validation Failed",
                 "Role Name is require",
@@ -451,6 +454,7 @@ console.log(this.sortedHierarchy)
 
         this.userRoleService.add(this.currentUserRole).subscribe(
             result => {
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role added successfully.', MessageSeverity.success);
                 for (let module of this.sortedHierarchy) {
                     this.resetRolePermission(module.rolePermission);
@@ -460,6 +464,7 @@ console.log(this.sortedHierarchy)
                 this.pages = [];
             },
             error => {
+                this.isSpinnerVisible=false;
                 this.alertService.showMessage('User Role', error, MessageSeverity.error);
             }
         );

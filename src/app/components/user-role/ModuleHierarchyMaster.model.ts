@@ -12,6 +12,7 @@
     moduleIcon:string;
     routerLink:string;
     //children: ModuleHierarchyMaster[];
+    permissionID:number;
     rolePermission: RolePermission;
     
 }

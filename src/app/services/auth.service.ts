@@ -429,7 +429,7 @@ private defaultEmployeeDetails= new Subject<any>()
 
     public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string):Promise<Boolean> {
         debugger;
-        let Menus:ModuleHierarchyMaster[] = MenuInfo.getValue();
+        let Menus =this.getModuleByUserRole();// MenuInfo.getValue();
         linkToCheck = linkToCheck.toLocaleLowerCase();
         let isAllowed:Boolean = false;
         if(Menus.length == 0){
@@ -437,7 +437,7 @@ private defaultEmployeeDetails= new Subject<any>()
           Menus= await this.getRolestypes(roleID);
         }
         Menus.forEach(el => {
-          if(el.routerLink && el.routerLink.toLocaleLowerCase().indexOf(linkToCheck) != -1)
+          if(el.RouterLink && el.RouterLink.toLocaleLowerCase().indexOf(linkToCheck) != -1)
           {
             isAllowed = true;
           }
@@ -454,21 +454,21 @@ private defaultEmployeeDetails= new Subject<any>()
         });
       }
 
-      public getModuleByUserRole(): ModuleHierarchyMaster[]{
+      public getModuleByUserRole(){
         return  this.localStorage.getData("UserRoleModule");
       }
 
       public checkPermission(permissionName:string):boolean{
-        let isAllowed:boolean = false;
-        if(this.currentUser && this.currentUser.permissionName!=null){
+        let isAllowed:boolean = true;
+        // if(this.currentUser && this.currentUser.permissionName!=null){
             
-            let getData=this.currentUser.permissionName.filter(function(value){
-                    return value==permissionName;
-            });
-            isAllowed=getData.length>0;
+        //     let getData=this.currentUser.permissionName.filter(function(value){
+        //             return value==permissionName;
+        //     });
+        //     isAllowed=getData.length>0;
         
            
-        }
+        // }
         
         return isAllowed;
       }
@@ -486,19 +486,19 @@ private defaultEmployeeDetails= new Subject<any>()
       }
 
       public ShowTab(moduleName:string, tabName: string):Boolean {
-        let Menus:ModuleHierarchyMaster[] = this.getModuleByUserRole();
+        let Menus= this.getModuleByUserRole();
         //alert(Menus);
         tabName = tabName.toLocaleLowerCase();
          let isAllowed:Boolean = false;
 
          if(this.currentUser.userName!='admin'){
         var parentModule=Menus.filter(function(value){
-            return value.name==moduleName;
+            return value.Name==moduleName;
         });
 
         if(parentModule!=undefined){
             Menus.forEach(el => {
-                if(el.parentId==parentModule[0].id && el.name.toLocaleLowerCase().indexOf(tabName) != -1)
+                if(el.parentId==parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3))
                 {
                   isAllowed = true;
                 }

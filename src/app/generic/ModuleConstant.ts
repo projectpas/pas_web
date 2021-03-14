@@ -16,6 +16,13 @@ export class ModuleConstants
     static Customers_SalesPersonInformation:string = "Customers_SalesPersonInformation";
     static Customers_Warnings:string = "Customers_Warnings";
     static Customers_Documents:string = "Customers_Documents";
+
+    static Employees:string = "Employees";
+        static EmployeesList:string = "EmployeesList";
+        static Employees_GeneralInformation:string = "Employees_GeneralInformation";
+        static Employees_Certification:string = "Employees_Certification";
+        static Employees_Training:string = "Employees_Training";
+        static Employees_ManagementStructure:string = "Employees_ManagementStructure";
 }
 
 export class PermissionConstants
