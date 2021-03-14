@@ -238,6 +238,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     event['charges'].forEach(
       x => {
         x.billingAmount = Number(x.extendedCost.toString().split(',').join('')).toFixed(2);
+        x.billingMethodId=this.costPlusType? this.costPlusType :0;
+        x.markupPercentageId= this.overAllMarkup ? this.overAllMarkup : 0;
       }
     )
     this.saveChargesListForWO.emit(event);

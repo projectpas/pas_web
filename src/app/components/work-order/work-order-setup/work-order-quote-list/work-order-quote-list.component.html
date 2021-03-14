@@ -1,13 +1,13 @@
 ﻿<div class="card new-card">
-    <div class="card-header bg-primary new-card-header">
+    <div class="card-header header">
 		<div class="row">
 		  <div class="col">
-			<h4 class="new-card-heading">Work Order Quote List</h4>
+			<h4 class="header-name">Work Order Quote List</h4>
 		  </div>
 		  <div>
 			<button
 			  type="button"
-			  class="btn-sm new-btn-primary"
+			  class="btn-sm header-button"
               [routerLink]="['/workordersmodule/workorderspages/app-work-order-quote']"
               >
 			  Add Work Order Quote
@@ -15,7 +15,7 @@
 		  </div>
 		</div>
       </div>
-      <div class="card-body new-card-body">
+      <div class="card-body header-body">
     <p-table #dt
     class="p-table-cstm"
     [value]="woQuoteList"
@@ -38,36 +38,36 @@
     scrollHeight="450px">
     <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-            <col *ngFor="let col of columns" style="width:120px">
+            <col *ngFor="let col of columns" class="table-column-width">
         </colgroup>
       </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
 
             <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-            [pSortableColumn]="col.field" style="text-align:center;">
+            [pSortableColumn]="col.field" class="text-center table-column-width">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>
-            <th style="width:80px;position:sticky" *ngIf="selectedColumns.length > 0">
+            <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
                 Actions
             </th>
         </tr>
         <tr>
-            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                 <input *ngIf="col.field !== 'openDate' 
                 && col.field !== 'customerRequestDateType'
                 && col.field !== 'promisedDateType'
                 && col.field !== 'estimatedShipDateType'
                 && col.field !== 'estimatedCompletionDateType'" 
-                style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); ">
-                <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                <input type="date"  *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                <input type="date"  *ngIf="col.field == 'promisedDateType'" name="promisedDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
-                <input type="date"  *ngIf="col.field == 'estimatedCompletionDateType'" name="estimatedCompletionDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+               class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); ">
+                <input type="date" class="table-header-input-width" *ngIf="col.field == 'openDate'" name="openDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                <input type="date" class="table-header-input-width" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                <input type="date" class="table-header-input-width" *ngIf="col.field == 'promisedDateType'" name="promisedDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                <input type="date" class="table-header-input-width" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                <input type="date" class="table-header-input-width" *ngIf="col.field == 'estimatedCompletionDateType'" name="estimatedCompletionDate" (change)="dt.filter($event.target.value, col.field, 'contains')">
             </th>
-            <th style="width:80px;position:sticky"></th>
+            <th class="table-actions-column"></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body"
@@ -93,7 +93,7 @@
 
                  </td> -->
                  <!-- [ngStyle]="{'color': convertDate(col.field , rowData)   == 'Multiple' ? 'green' : 'red'  }" -->
-                <td *ngFor="let col of columns" style="text-overflow: ellipsis; overflow: hidden; " [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" 
+                <td class="table-column-width" *ngFor="let col of columns" style="text-overflow: ellipsis; overflow: hidden; " [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" 
                 [ngStyle]="{'color': getColorCodeForMultiple(rowData)}"
                 
                 > 
@@ -101,7 +101,7 @@
                     
                 </td>
 
-                <td style="width:80px" *ngIf="selectedColumns.length > 0">
+                <td class="table-actions-column table-column-width action-icons-cstm" *ngIf="selectedColumns.length > 0">
                     <span data-toggle="modal" data-target="#viewWorkOrder"><a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                     <span><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                 </td>

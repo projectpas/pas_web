@@ -10,6 +10,7 @@ import { CustomerService } from '../../../../../../services/customer.service';
 import { AuthService } from '../../../../../../services/auth.service';
 import { AppModuleEnum } from '../../../../../../enum/appmodule.enum';
 import { AddressTypeEnum } from '../../../../../../shared/components/address-component/Address-type-enum';
+import { InvoiceTypeEnum } from '../../../models/sales-order-invoice-type-enum';
 declare var $: any;
 
 @Component({
@@ -32,6 +33,7 @@ export class SalesOrderBillingComponent implements OnInit {
     billingChildHeader = [];
     shipViaList = [];
     selectedPartNumber = 0;
+    selectedQtyToBill = 0;
     isSpinnerVisible = false;
     partsForBilling: any = [];
     totalRecords: number = 0;
@@ -56,6 +58,7 @@ export class SalesOrderBillingComponent implements OnInit {
     isEditBilling: any;
     billingList: any[] = [];
     partSelected: boolean = false;
+    showBillingForm: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public commonService: CommonService,
@@ -84,7 +87,7 @@ export class SalesOrderBillingComponent implements OnInit {
     refresh(id) {
         this.billingorInvoiceForm = null;
         this.salesOrderId = id;
-        this.getShippingList();
+        this.getBillingList();
         this.getCountriesList();
     }
 
@@ -108,7 +111,7 @@ export class SalesOrderBillingComponent implements OnInit {
         return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
     }
 
-    getShippingList() {
+    getBillingList() {
         this.isSpinnerVisible = true;
         this.salesOrderService
             .getBillingInvoiceList(this.salesOrderId)
@@ -122,7 +125,9 @@ export class SalesOrderBillingComponent implements OnInit {
 
     onSelectPartNumber(rowData) {
         if (rowData.salesOrderPartId != 0 && rowData.salesOrderShippingId != 0) {
+            this.selectedQtyToBill = rowData.qtyToBill;
             this.partSelected = true;
+            this.showBillingForm = true;
             this.getBillingAndInvoicingForSelectedPart(rowData.salesOrderPartId, rowData.salesOrderShippingId);
         }
     }
@@ -149,6 +154,7 @@ export class SalesOrderBillingComponent implements OnInit {
                 this.billingorInvoiceForm.printDate = new Date();
                 this.billingorInvoiceForm.invoiceDate = new Date();
                 this.billingorInvoiceForm.creditLimit = this.formateCurrency(result.creditLimit);
+                this.billingorInvoiceForm.customerId = result.customerId;
             } else {
                 this.billingorInvoiceForm = new SalesOrderBillingAndInvoicing();
             }
@@ -352,7 +358,7 @@ export class SalesOrderBillingComponent implements OnInit {
 
     }
 
-    saveSalesOrderBilling() {
+    saveSalesOrderBilling(isPost: boolean) {
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId;
         this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['userID'];
@@ -365,14 +371,26 @@ export class SalesOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.updatedBy = this.userName;
         this.billingorInvoiceForm.salesOrderId = this.salesOrderId;
         this.billingorInvoiceForm.salesOrderPartId = this.selectedPartNumber;
+        this.billingorInvoiceForm.customerId = billingorInvoiceFormTemp.customerId;
+        this.billingorInvoiceForm.qtyToBill = this.selectedQtyToBill;
         this.billingorInvoiceForm.invoiceNo = "test";
+        this.billingorInvoiceForm.invoiceStatus = isPost ? InvoiceTypeEnum.Invoiced.toString() : InvoiceTypeEnum.Reviewed.toString();
         this.salesOrderService.createBilling(this.billingorInvoiceForm).subscribe(result => {
+            let pdfPath = result[0].invoiceFilePath;
+            this.commonService.toDownLoadFile(pdfPath);
+            this.closeModal();
+            this.getBillingList();
+            this.showBillingForm = false;
         }, err => {
         });
     }
 
     PrintInvoice() {
-        this.saveSalesOrderBilling();
+        this.saveSalesOrderBilling(false);
+    }
+
+    PrintPostInvoice() {
+        this.saveSalesOrderBilling(true);
     }
 
     convertDate(key, data) {
@@ -765,5 +783,9 @@ export class SalesOrderBillingComponent implements OnInit {
 
     closeModal() {
         $("#printPost").modal("hide");
+    }
+
+    DownloadInvoice(billData) {
+
     }
 }

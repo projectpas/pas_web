@@ -870,7 +870,7 @@
                                                                             <i class="fa fa-eye"></i>
                                                                         </a>
                                                                     </span>
-                                                                    <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restoreDomesticShippingVia(restoreDomesticShippingViaId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                                    <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm " (click)="restoreDomesticShippingVia(restoreDomesticShippingViaId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                                     <span>
                                                                         <a class="btn nobg" (click)="openHist(contentAuditHistShipVia,rowData)"
                                                                            data-target="#contentAuditHistShipVia" data-toggle="modal"
@@ -1036,7 +1036,7 @@
                                                     </span>
                                                 </p>
                                                 <p>
-                                                    <span class="label"><b>Shipping Account Info <span class="clr-red">*</span>: </b></span><span class="value">
+                                                    <span class="label"><b>Shipping Account Info <span class="clr-red"></span>: </b></span><span class="value">
                                                         {{
                                                             domesticShippingViaView.shippingAccountInfo
                                                         }}
@@ -2502,7 +2502,7 @@
                                                data-target="#auditHistInterShipVia" data-toggle="modal"
                                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                         </span>
-                                        <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restoreShipViaInternational(rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm" (click)="restoreShipViaInternational(rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                     </div>
                                 </td>
                             </tr>
@@ -2787,7 +2787,7 @@
                         </span>
                     </p>
                     <p>
-                        <span class="label"><b>Shipping Account Info <span class="clr-red">*</span>: </b></span><span class="value">
+                        <span class="label"><b>Shipping Account Info <span class="clr-red"></span>: </b></span><span class="value">
                             {{interShippingViaView.shippingAccountInfo}}
                         </span>
                     </p>

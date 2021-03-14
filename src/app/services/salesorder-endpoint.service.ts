@@ -1,5 +1,5 @@
 ﻿import { Injectable, Injector } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import { EndpointFactory } from "./endpoint-factory.service";
@@ -718,6 +718,13 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId));
       });
+  }
+
+  downloadPDF(url) {
+    debugger;
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.http.get(url, { headers: headers, responseType: 'blob' });
   }
   //end nitin
 }

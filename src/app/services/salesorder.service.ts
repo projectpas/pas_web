@@ -115,7 +115,7 @@ export class SalesOrderService {
     );
   }
 
-  createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing) {
+  createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing) : any {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.createBilling(salesOrderBilling)
     );
@@ -623,6 +623,12 @@ export class SalesOrderService {
   getShippingLabelPrint(salesOrderId: number, salesOrderPartId: number, soShippingId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getShippingLabelPrint(salesOrderId, salesOrderPartId, soShippingId)
+    );
+  }
+
+  downloadPDF(url: string) {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.downloadPDF(url)
     );
   }
 

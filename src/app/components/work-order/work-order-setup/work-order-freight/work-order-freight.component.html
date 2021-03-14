@@ -41,7 +41,7 @@
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
                   <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
-                    label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                    label="T&M - Mark Up" style="margin-top:-10px;" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                   </p-radioButton>
                   <div>
                     <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
@@ -53,15 +53,16 @@
                 </div>
                 <div class="radio-align">
                   <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
-                    label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
+                    label="Actual"  style="margin-top:-10px;" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                 </div>
                 <div>
                   <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
-                    value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                    value="3" label="Flat Rate"  style="margin-top:-10px;" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
               </div>
             </th>
+            <th></th>
         </ng-container>
         <ng-container *ngIf="!isView">
             <th colspan="5" class="freight-isview-th">
@@ -89,6 +90,7 @@
                 </div>
               </div>
             </th>
+            <th></th>
             <!-- <th style="background: #fff; border: 1px solid #fff;"></th> -->
         </ng-container>
         <!-- <th colspan="2">
@@ -135,11 +137,11 @@
         <!-- *ngIf="!dt['isDeleted']" -->
         <tr >
           <td class="table-column-width">
-            <p  class="mrg_0">{{dt.taskName}}</p>
-            <!-- <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
+            <!-- <p  class="mrg_0">{{dt.taskName}}</p> -->
+            <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
               <option value="">Select</option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
-            </select> -->
+            </select>
           </td>
           <ng-container *ngFor="let col of columns">
             <!-- <td *ngIf="col.field != 'shipVia' && col.field != 'carrierName'">
@@ -152,11 +154,12 @@
               </select>
             </td>
             <td class="table-column-width" *ngIf="col.field == 'shipVia'">
-              <!-- <select class="form-control select-read-only back-transparent" [(ngModel)]="dt.shipViaId" disabled>
+              <select  *ngIf="isQuote"  class="form-control select-read-only back-transparent" [(ngModel)]="dt.shipViaId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
-              </select> -->
-              <p class="mrg_0">{{dt.shipVia}}</p>
+              </select>
+              <p class="mrg_0" *ngIf="!isQuote">{{dt.shipVia}}</p>
+              <!-- <p class="mrg_0" *ngIf="isQuote">{{dt.shipViaName}}</p> -->
             </td>
           </ng-container>
           <td class="content-to-end table-column-width">{{dt.weight}}</td>
@@ -514,7 +517,8 @@
   <div class="modal-body">
     <strong>
       Ship Via :
-        <span class="new-label">{{currentRow.shipVia}}</span>
+        <span class="new-label" *ngIf="!isQuote">{{currentRow.shipVia}}</span>
+        <span class="new-label" *ngIf="isQuote">{{currentRow.shipViaName}}</span>
     </strong>
 </div>
   <div class="modal-footer">

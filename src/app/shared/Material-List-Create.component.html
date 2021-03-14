@@ -133,7 +133,7 @@
             </div>
           </td>
           <td>
-            <button class="btn btn-danger nobg" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
+            <button class="btn btn-danger nobg" [disabled]="isEdit" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -205,6 +205,8 @@
     [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
     Save
   </button>
+  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterialTab()"
+  >Close</button>
   </div>
 
   <div *ngIf="isWorkOrder && isEdit" class="float-right">

@@ -103,7 +103,8 @@
               </div>
               <!-- <p>{{isQuote}} -- {{laborForm.expertiseId}} -- {{laborForm.employeeId}}</p> -->
               <!-- <p>{{laborForm.workFloworSpecificTaskorWorkOrder}} -- {{!isView}} </p> -->
-              <div class="col-sm-12" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId)) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
+              <div class="col-sm-12" 
+               *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId)) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !isView">
                   <div class="form-group">
                       <label>Task</label>
                       <ng-multiselect-dropdown 
