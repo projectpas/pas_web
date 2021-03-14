@@ -15,6 +15,7 @@ import { AppModuleEnum } from '../../../../../../enum/appmodule.enum';
 import { CustomerShippingModel } from '../../../../../../models/customer-shipping.model';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SalesShippingLabelComponent } from '../../../sales-order-shipping-label/sales-order-shipping-label.component'
+
 @Component({
     selector: 'app-sales-order-shipping',
     templateUrl: './sales-order-shipping.component.html',
@@ -93,23 +94,7 @@ export class SalesOrderShippingComponent {
     }
 
     initColumns() {
-        // this.headers = [
-        //     { field: "shipDate", header: "Ship Date", width: "100px" },
-        //     { field: "partNumber", header: "PN", width: "100px" },
-        //     { field: "partDescription", header: "PN Description", width: "100px" },
-        //     { field: "stockLineNumber", header: "Stk Line Num", width: "110px" },
-        //     { field: "serialNumber", header: "Ser Num", width: "90px" },
-        //     { field: "controlNumber", header: "Cntrl Num", width: "90px" },
-        //     { field: "idNumber", header: "Cntrl ID", width: "90px" },
-        //     { field: "promisedDate", header: "Promised Date ", width: "100px" },
-        //     { field: "estimatedShipDate", header: "Est Shipped Date", width: "100px" },
-        //     { field: "shippingRef", header: "Shipping  Ref", width: "100px" },
-        //     { field: "pickTicketRef", header: "Pick Ticket Ref", width: "150px" }
-        // ];
-        // this.selectedColumns = this.headers;
-
         this.headers = [
-            //{ field: "itemNo", header: "Item #", width: "100px" },
             { field: "salesOrderNumber", header: "SO Num", width: "100px" },
             { field: "partNumber", header: "PN", width: "100px" },
             { field: "partDescription", header: "PN Description", width: "100px" },
@@ -161,82 +146,12 @@ export class SalesOrderShippingComponent {
     shipUsertype: number = 0;
     billUsertype: number = 0;
 
-    // getAddresDetail(){
-    //     this.ModuleID = AppModuleEnum.SalesOrder;
-    // 		this.commonService.getAllAddEditID(this.salesOrderId,this.ModuleID).subscribe(res => {
-    // 			this.getShipToBillToDropDown(res)
-    // 	});
-    // }
-
-    // getShipToBillToDropDown(res){
-    //     const result = res;
-    //     // var shipUsertype = 9; 
-    //     // var billUsertype = 9; 
-    //     if(result && result.length > 0) {
-    //         result.forEach(x => {
-    //                 if(x.label == "SHIP_TYPE") {
-    //                     this.shipUsertype =  x.value;
-    //                     //this.sourcePoApproval.shipToUserTypeId = x.value;
-    //                 }
-    //                 else if (x.label == "BILL_TYPE") {
-    //                     this.billUsertype = x.value;
-    //                     //this.sourcePoApproval.billToUserTypeId = x.value;
-    //                 }
-    //                 else if (x.label == "BILL_USERID") {
-    //                     this.userBillingIdList.push(x.value);						
-    //                 }
-    //                 else if (x.label == "SHIP_USERID") {
-    //                     this.userShipingIdList.push(x.value);
-    //                 }
-    //                 else if (x.label == "MSCOMPANYID") {
-    //                     //this.defaultMSCOMPANYID =x.value;
-    //                     this.userBillingIdList.push(x.value);
-    //                     this.userShipingIdList.push(x.value);						
-    //                 }
-
-    //             });	
-    //             this.isSpinnerVisible = true;
-    //             if(this.userShipingIdList && this.userShipingIdList.length == 0) {			
-    //                 this.userShipingIdList.push(0); }	
-    //             this.commonService.autoSuggestionSmartuserDropDownList(this.shipUsertype, '', true, 20, this.userShipingIdList.join()).subscribe(res => {
-    //                 //this.userShipingList = res;
-    //                 this.customerNamesList = res;
-    //                 if(this.userBillingIdList && this.userBillingIdList.length == 0) {			
-    //                     this.userBillingIdList.push(0); }	
-    //                 this.commonService.autoSuggestionSmartuserDropDownList(this.billUsertype, '', true, 20, this.userBillingIdList.join()).subscribe(res => {
-    //                         this.userBillingList = res;
-    //                     this.getAddressById(this.salesOrderId);
-    //                     this.isSpinnerVisible = false;
-    //                     },err => {
-    //                         this.isSpinnerVisible = false;
-    //                         const errorLog = err;
-    //                         //this.errorMessageHandler(errorLog);		
-    //                     });	
-    //             },err => {
-    //                 this.isSpinnerVisible = false;
-    //                 const errorLog = err;
-    //                 //this.errorMessageHandler(errorLog);		
-    //             });	
-
-    //         }	
-    //   }
-
     onSelectPartNumber(rowData) {
-        // if (rowData.salesOrderPartId != 0) {
-        //     if (rowData.selected) {
         this.currSOPickTicketId = rowData.soPickTicketId;
         this.currQtyToShip = rowData.qtyToShip;
         this.salesOrderPartId = rowData.salesOrderPartId;
         this.partSelected = true;
         this.bindData();
-        // this.clearShipToAddress();
-        // this.clearSoldToAddress();
-        // this.clearOriginAddress();
-        // } else {
-        //     this.partSelected = false;
-        // }
-        // this.getShippingForSelectedPart(rowData.salesOrderPartId);
-        //}
     }
 
     getShippingForSelectedPart(partNumber) {
@@ -277,10 +192,8 @@ export class SalesOrderShippingComponent {
     getCustomerNameList() {
         let userShipingIdList = [];
         userShipingIdList.push(0);
-        //this.commonService.autoSuggestionSmartuserDropDownList(1, '', true, 20, userShipingIdList.join()).subscribe(res => {
         this.commonService.autoSuggestionSmartuserDropDownList(this.shipUsertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
-            //this.getAddressById(this.salesOrderId);
         }, err => {
         });
     }
@@ -288,7 +201,6 @@ export class SalesOrderShippingComponent {
     getShipCustomerNameList(usertype) {
         let userShipingIdList = [];
         userShipingIdList.push(0);
-        //this.commonService.autoSuggestionSmartuserDropDownList(1, '', true, 20, userShipingIdList.join()).subscribe(res => {
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
         }, err => {
@@ -298,10 +210,8 @@ export class SalesOrderShippingComponent {
     getSoldCustomerNameList(usertype) {
         let userBillinngIdList = [];
         userBillinngIdList.push(0);
-        //this.commonService.autoSuggestionSmartuserDropDownList(1, '', true, 20, userShipingIdList.join()).subscribe(res => {
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userBillinngIdList.join()).subscribe(res => {
             this.userBillingList = res;
-            //this.bindShippingInformation();
         }, err => {
         });
     }
@@ -322,8 +232,6 @@ export class SalesOrderShippingComponent {
                         x => {
                             if (x.isPrimary) {
                                 this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
-                                //this.setSoldToAddress();
-                                //if (customerId == 0) this.setOriginAddress();
                             }
                         }
                     )
@@ -348,16 +256,13 @@ export class SalesOrderShippingComponent {
 
     setShipToAddress() {
         this.shipCustomerSiteList.forEach(site => {
-            //if (site.customerDomensticShippingId == Number(this.shippingHeader.shipToSiteId)) {
             if (site.siteID == Number(this.shippingHeader.shipToSiteId)) {
                 this.shippingHeader['shipToAddress1'] = site.address1;
                 this.shippingHeader['shipToAddress2'] = site.address2;
                 this.shippingHeader['shipToCity'] = site.city;
                 this.shippingHeader['shipToState'] = site.stateOrProvince;
                 this.shippingHeader['shipToZip'] = site.postalCode;
-                //this.shippingHeader['shipToCountryId'] = site.countryId;
                 this.shippingHeader['shipToSiteName'] = site.siteName;
-                //this.shippingHeader['shipToCountryName'] = site.countryName;
                 this.shippingHeader['shipToCountryName'] = site.country;
                 this.shippingHeader['shipToCountryId'] = site.countryId;
             }
@@ -366,8 +271,6 @@ export class SalesOrderShippingComponent {
 
     setSoldToAddresses() {
         this.soldCustomerSiteList.forEach(site => {
-            //if (site.customerDomensticShippingId == Number(this.shippingHeader.soldToSiteId)) {
-            //if (site.customerBillingAddressId == Number(this.shippingHeader.soldToSiteId)) {  
             if (site.siteID == Number(this.shippingHeader.soldToSiteId)) {
                 this.shippingHeader['soldToAddress1'] = site.address1;
                 this.shippingHeader['soldToAddress2'] = site.address2;
@@ -376,7 +279,6 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader['soldToZip'] = site.postalCode;
                 this.shippingHeader['soldToCountryId'] = site.countryId;
                 this.shippingHeader['soldToSiteName'] = site.siteName;
-                //this.shippingHeader['soldToCountryName'] = site.countryName;
                 this.shippingHeader['soldToCountryName'] = site.country;
                 this.shippingHeader['soldToCountryId'] = site.countryId;
             }
@@ -441,12 +343,9 @@ export class SalesOrderShippingComponent {
 
     assignDetails(value) {
         if (value == true) {
-            //this.shippingHeader.shipToCustomerId = this.customerDetails;
             this.shippingHeader.shipToCustomerId = this.shippingHeader.soldToName;
-            //this.getSiteNamesByShipCustomerId(this.customerDetails);
             this.getSiteNamesByShipCustomerId(this.shippingHeader.soldToName);
             this.shippingHeader['shipToSiteId'] = this.shippingHeader.soldToSiteId;
-            // this.shippingHeader.shipToSiteId=this.
             this.shippingHeader['shipToAddress1'] = this.shippingHeader.soldToAddress1;
             this.shippingHeader['shipToAddress2'] = this.shippingHeader.soldToAddress2;
             this.shippingHeader['shipToCity'] = this.shippingHeader.soldToCity;
@@ -461,8 +360,6 @@ export class SalesOrderShippingComponent {
 
     filterCustomerName(event) {
         const value = event.query.toLowerCase();
-        //let userShipingIdList = [];
-        //userShipingIdList.push(0);
         this.commonService.autoSuggestionSmartuserDropDownList(this.shipUsertype, value, true, 20, this.userShipingIdList.join()).subscribe(res => {
             this.customerNamesList = res;
         }, err => {
@@ -471,24 +368,11 @@ export class SalesOrderShippingComponent {
 
     filterCustomerNameSold(event) {
         const value = event.query.toLowerCase();
-        //let userShipingIdList = [];
-        //userShipingIdList.push(0);
         this.commonService.autoSuggestionSmartuserDropDownList(this.billUsertype, value, true, 20, this.userBillingIdList.join()).subscribe(res => {
             this.userBillingList = res;
         }, err => {
         });
     }
-
-    // getSoldCustomerNameList() {
-    //     // let userShipingIdList = [];
-    //     // userShipingIdList.push(0);
-    //     //this.commonService.autoSuggestionSmartuserDropDownList(1, '', true, 20, userShipingIdList.join()).subscribe(res => {
-    //     this.commonService.autoSuggestionSmartuserDropDownList(this.billUsertype, '', true, 20, this.userShipingIdList.join()).subscribe(res => {
-    //         this.userBillingList = res;
-    //         //this.getAddressById(this.salesOrderId);
-    //     }, err => {
-    //     });
-    // }
 
     shipToUserId: any = 0;
     async getSiteNamesByShipCustomerId(object) {
@@ -498,14 +382,6 @@ export class SalesOrderShippingComponent {
         await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
             this.shipCustomerShippingOriginalData = res[0];
             this.shipCustomerSiteList = res[0];
-            // this.shipCustomerShippingOriginalData.forEach(
-            //     x => {
-            //         if (x.isPrimary) {
-            //             this.shippingHeader.shipToSiteId = x.customerDomensticShippingId;
-            //             this.setShipToAddress();
-            //         }
-            //     }
-            // )
             this.setShipToAddress();
 
             this.shipToSite = res[0];;
@@ -516,30 +392,20 @@ export class SalesOrderShippingComponent {
                     }
                 });
             }
-
         }, err => {
         });
     }
+
     billToUserId: any = 0;
     async getSiteNamesBySoldCustomerId(object) {
         this.clearSoldToAddress();
         let customerId = object.userID;
         this.billToUserId = object.userID;
-        //this.getSiteName(customerId);
-        //await this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
         await this.customerService.getCustomerBillAddressGet(customerId).subscribe(res => {
             this.soldCustomerShippingOriginalData = res[0];
             this.soldCustomerSiteList = res[0];
-            // this.soldCustomerShippingOriginalData.forEach(
-            //     x => {
-            //         if (x.isPrimary) {
-            //             this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
-            //             this.setSoldToAddresses();
-            //         }
-            //     }
-            // )
-
             this.billToSite = res[0];
+
             if (this.billToSite && this.billToSite.length != 0) {
                 this.billingSieListOriginal = this.billToSite.map(x => {
                     return {
@@ -547,7 +413,6 @@ export class SalesOrderShippingComponent {
                     }
                 })
             }
-
             this.setSoldToAddresses();
         }, err => {
         });
@@ -579,15 +444,12 @@ export class SalesOrderShippingComponent {
         this.clearSoldToAddress();
         let customerId = object.userID;
         this.billToUserId = object.userID;
-        //this.customerService.getCustomerShipAddressGet(customerId).subscribe(res => {
         await this.customerService.getCustomerBillAddressGet(customerId).subscribe(res => {
             this.soldCustomerSiteList = res[0];
             this.soldCustomerShippingOriginalData = res[0];
             this.shippingHeader.soldToSiteId = siteId;
-
             this.billToSite = res[0];
-            //if(this.sourcePoApproval.billToSiteId) {
-            //this.onBillToGetAddress(this.sourcePoApproval.billToSiteId);}
+
             if (this.billToSite && this.billToSite.length != 0) {
                 this.billingSieListOriginal = this.billToSite.map(x => {
                     return {
@@ -629,12 +491,13 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['sOPickTicketId'] = this.currSOPickTicketId;
         this.shippingHeader['qtyShipped'] = this.currQtyToShip;
         this.isSpinnerVisible = true;
+
         this.salesOrderService.createShipping(this.shippingHeader)
             .subscribe(
                 (res: any) => {
                     this.isSpinnerVisible = false;
                     this.isEditModeAdd = false;
-                    
+
                     this.alertService.showMessage(
                         'Sales Order',
                         'Sales Order Shipping created Succesfully',
@@ -715,8 +578,6 @@ export class SalesOrderShippingComponent {
                 this.shippingHeader['originCity'] = site.originCity;
                 this.shippingHeader['originState'] = site.originState;
                 this.shippingHeader['originZip'] = site.originZip;
-                // this.shippingHeader['shipToCountryId'] = site.countryId;
-                // this.shippingHeader['shipToSiteName'] = site.siteName;
                 this.shippingHeader['originCountryName'] = site.originCountryName;
                 this.shippingHeader['originCountryId'] = site.originCountryId;
             }
@@ -830,15 +691,9 @@ export class SalesOrderShippingComponent {
                 }
                 this.getSoldCustomerNameList(this.sourceSOApproval.billToUserTypeId);
             }
-            // if(this.sourceSOApproval.shipToUserTypeId > 0 && this.sourceSOApproval.billToUserTypeId > 0)
-            // {
-            //     //this.bindShippingInformation();
-            // }
             setTimeout(() => {
                 this.bindShippingInformation();
             }, 1000);
-
-            //this.bindShippingInformation();
         });
     }
 
@@ -846,9 +701,7 @@ export class SalesOrderShippingComponent {
         if (this.billToAddress !== undefined) {
             let customer = getObjectByValue('userID', this.billToAddress.userId, this.userBillingList);
             this.shippingHeader.soldToName = customer;
-            //this.setSiteNamesBySoldCustomerId(customer, this.billToAddress.siteId);
             this.setBillToSelectedSite(this.billToAddress.userId, this.billToAddress.siteId);
-            //this.shippingHeader.soldToSiteId = this.billToAddress.siteId;
             this.shippingHeader.soldToAddress1 = this.billToAddress.address1;
             this.shippingHeader.soldToAddress2 = this.billToAddress.address2;
             this.shippingHeader.soldToCity = this.billToAddress.city;
@@ -860,8 +713,6 @@ export class SalesOrderShippingComponent {
         if (this.shipToAddress !== undefined) {
             let shipcustomer = getObjectByValue('userID', this.shipToAddress.userId, this.customerNamesList);
             this.shippingHeader.shipToCustomerId = shipcustomer;
-            //this.shippingHeader.shipToSiteId = this.shipToAddress.siteId;
-            //this.setSiteNamesByShipCustomerId(shipcustomer, this.shipToAddress.siteId);
             this.setShipToSelectedSite(this.shipToAddress.userId, this.shipToAddress.siteId);
             this.shippingHeader.shipToAddress1 = this.shipToAddress.address1;
             this.shippingHeader.shipToAddress2 = this.shipToAddress.address2;
@@ -877,36 +728,11 @@ export class SalesOrderShippingComponent {
         this.isSpinnerVisible = false;
     }
 
-    // getShippingData() {
-    //     this.isSpinnerVisible = true;
-    //     this.salesOrderService.getSalesOrderShipping(this.salesOrderId, this.salesOrderPartNumberId)
-    //         .subscribe(
-    //             (res: any) => {
-    //                 this.isSpinnerVisible = false;
-    //                 if (res) {
-    //                     if (!res['response']) {
-    //                         this.getEditSiteData(res.shipToCustomerId);
-    //                         this.shippingHeader = res;
-    //                         this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
-    //                         this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
-    //                         this.shippingHeader['shipToCustomerId'] = { userID: res.shipToCustomerId, userName: res.shipToCustomer };
-    //                     }
-    //                 }
-    //             },
-    //             err => {
-    //                 this.isSpinnerVisible = false;
-    //             });
-    // }
-
-    // loadData(event) {
-    // }
-
     shippingEdit(rowData, pickticketieminterface) {
         const salesOrderShippingId = rowData.salesOrderShippingId;
         this.currSOPickTicketId = rowData.soPickTicketId;
         this.currQtyToShip = rowData.qtyShipped;
         this.partSelected = true;
-        //this.modal = this.modalService.open(pickticketieminterface, { size: "lg", backdrop: 'static', keyboard: false });
         this.salesOrderService
             .getShippingEdit(salesOrderShippingId)
             .subscribe((response: any) => {
@@ -918,12 +744,9 @@ export class SalesOrderShippingComponent {
                 let shiptocustomerobj = getObjectByValue('userID', this.shippingHeader.shipToCustomerId, this.customerNamesList);
                 this.shippingHeader.shipToCustomerId = shiptocustomerobj;
                 this.shippingHeader['shipToSiteId'] = this.shippingHeader.shipToSiteId;
-                //this.getSiteNamesByShipCustomerId(shiptocustomerobj);
-
                 let soldtocustomerobj = getObjectByValue('userName', this.shippingHeader.soldToName, this.userBillingList);
                 this.shippingHeader.soldToName = soldtocustomerobj;
                 this.shippingHeader['soldToSiteId'] = this.shippingHeader.soldToSiteId;
-                //this.getSiteNamesBySoldCustomerId(soldtocustomerobj);
                 this.setBillToSelectedSite(soldtocustomerobj.userID, this.shippingHeader.soldToSiteId);
             }, error => {
                 this.isSpinnerVisible = false;
@@ -957,7 +780,6 @@ export class SalesOrderShippingComponent {
     }
 
     checkSiteNameSelect() {
-        //if(this.isEditModeBillingPoOnly == false && this.isEditModeBilling == false) {
         if (this.isEditModeBilling == false) {
             this.isSiteNameAlreadyExists = true;
             this.billAddbutton = false;
@@ -975,24 +797,6 @@ export class SalesOrderShippingComponent {
     }
 
     checkSiteNameExist(value) {
-        // if(this.isEditModeBillingPoOnly == false && this.isEditModeBilling == false) {
-        // this.changeName = true;
-        // this.isSiteNameAlreadyExists = false;
-        // this.billAddbutton = true;
-        // if (value != undefined && value != null ) {
-        //     if(this.billingSieListOriginal && this.billingSieListOriginal.length !=0){
-        //     for (let i = 0; i < this.billingSieListOriginal.length; i++) {
-        //         if ((this.addressFormForBilling.siteName == this.billingSieListOriginal[i].siteName 
-        //             || value.toLowerCase() == this.billingSieListOriginal[i].siteName.toLowerCase())
-        //             && this.addressFormForBilling.siteName != '') {
-        //             this.isSiteNameAlreadyExists = true;
-        //             this.billAddbutton = false;
-        //             return;
-        //         }
-        //     }
-        // }
-        // }}
-        // else {
         this.changeName = true;
         this.isSiteNameAlreadyExists = false;
         this.billAddbutton = true;
@@ -1010,7 +814,6 @@ export class SalesOrderShippingComponent {
             }
         }
     }
-    //}
 
     billAddChange() {
         this.billAddbutton = true;
@@ -1019,39 +822,10 @@ export class SalesOrderShippingComponent {
     onClickBillSiteName(value, data?) {
         this.resetAddressBillingForm();
         if (value === 'Add') {
-            //this.addressSiteNameHeader = 'Add Ship To ' + this.billingingModuleName +' Details';
             this.billAddbutton = true;
             this.editSiteName = '';
-            //this.isEditModeBillingPoOnly = false;
             this.isEditModeBilling = false;
         }
-        // if (value === 'Edit') {
-
-        // 	this.addressSiteNameHeader = 'Edit Ship To ' + this.billingingModuleName +' Details';
-        // 	this.billAddbutton =  false;				
-        // 	if(this.sourcePoApproval.billAddIsPoOnly) 
-        // 		this.isEditModeBillingPoOnly = true;
-        // 	else
-        // 		this.isEditModeBilling = true;	
-        //         if(this.billToAddressList && this.billToAddressList.length!=0){
-        // 		for(let i=0; i < this.billToAddressList.length; i++ ) {
-        // 			if(this.billToAddressList[i].siteID == this.sourcePoApproval.billToSiteId ) {
-        // 				this.addressFormForBilling.isPrimary = this.billToAddressList[i].isPrimary;								
-        // 				this.addressFormForBilling.siteId = this.billToAddressList[i].siteID;	
-        // 				this.editSiteName = this.billToAddressList[i].siteName;
-        // 				this.addressFormForBilling.siteName = getObjectByValue('siteName',this.billToAddressList[i].siteName, this.billingSieListOriginal);
-        // 				this.addressFormForBilling.addressID = this.billToAddressList[i].addressId;
-        // 				this.addressFormForBilling.address1 = this.billToAddressList[i].address1;
-        // 				this.addressFormForBilling.address2 = this.billToAddressList[i].address2;
-        // 				this.addressFormForBilling.city =  this.billToAddressList[i].city;
-        // 				this.addressFormForBilling.stateOrProvince = this.billToAddressList[i].stateOrProvince;
-        // 				this.addressFormForBilling.postalCode = this.billToAddressList[i].postalCode;
-        // 				this.addressFormForBilling.countryId= getObjectByValue('value',this.billToAddressList[i].countryId ,this.allCountriesList);
-        // 				return;
-        // 			} 
-        // 		}
-        // 	}				
-        // }
     }
 
     filterCountries(event) {
@@ -1084,10 +858,8 @@ export class SalesOrderShippingComponent {
         if (!this.isEditModeBilling) {
             this.commonService.createAllAddres(addressData).subscribe(response => {
                 if (response) {
-                    //this.onBillToSelected(this.sourcePoApproval.billToUserId,0,0,response);                   			
                     let soldtocustomerobj = getObjectByValue('userID', this.shippingHeader.soldToName.userID, this.userBillingList);
                     this.shippingHeader.soldToName = soldtocustomerobj;
-                    //this.setSiteNamesBySoldCustomerId(soldtocustomerobj,response);
                     this.setBillToSelectedSite(soldtocustomerobj.userID, response);
                     this.alertService.showMessage(
                         'Success',
@@ -1104,12 +876,10 @@ export class SalesOrderShippingComponent {
             }, err => {
                 this.isSpinnerVisible = false;
                 const errorLog = err;
-                //this.errorMessageHandler(errorLog);		
             });
         } else {
             this.commonService.createAllAddres(addressData).subscribe(response => {
                 if (response) {
-                    //this.onBillToSelected(this.sourcePoApproval.billToUserId,0,0,response);						         			
                     this.alertService.showMessage(
                         'Success',
                         `Shipping Information Updated Successfully`,
@@ -1125,7 +895,6 @@ export class SalesOrderShippingComponent {
             }, err => {
                 this.isSpinnerVisible = false;
                 const errorLog = err;
-                //this.errorMessageHandler(errorLog);		
             });
         }
     }
@@ -1139,9 +908,7 @@ export class SalesOrderShippingComponent {
     lstfilterShippingSite: any[];
     shippingSieListOriginal: any[];
     shipToSite: any;
-    //changeName: boolean = false;
     isShippingSiteNameAlreadyExists: boolean = false;
-    //editSiteName: string = '';
     ShipAddbutton: boolean = false;
     isEditModeShipping: boolean = false;
 
@@ -1156,7 +923,6 @@ export class SalesOrderShippingComponent {
     }
 
     checkShippingSiteNameSelect() {
-        //if(this.isEditModeShippingPoOnly == false && this.isEditModeShipping == false) {
         if (this.isEditModeShipping == false) {
             this.isShippingSiteNameAlreadyExists = true;
             this.ShipAddbutton = false;
@@ -1217,39 +983,10 @@ export class SalesOrderShippingComponent {
     onClickShipSiteName(value, data?) {
         this.resetAddressShippingForm();
         if (value === 'Add') {
-            //this.addressSiteNameHeader = 'Add Ship To ' + this.shippingModuleName +' Details';
             this.ShipAddbutton = true;
             this.editSiteName = '';
-            //this.isEditModeShippingPoOnly = false;
             this.isEditModeShipping = false;
         }
-        // if (value === 'Edit') {
-        // 	this.ShipAddbutton = false;
-        // 	this.addressSiteNameHeader = 'Edit Ship To ' + this.shippingModuleName +' Details';				
-        // 	if(this.sourcePoApproval.shipAddIsPoOnly) 
-        // 		this.isEditModeShippingPoOnly = true;
-        // 	else
-        // 		this.isEditModeShipping = true;		
-        // 		if(this.shipToAddressList && this.shipToAddressList.length!=0){
-        // 	for(let i=0; i < this.shipToAddressList.length; i++ ) {
-        // 			if(this.shipToAddressList[i].siteID == this.sourcePoApproval.shipToSiteId ) {
-        // 				this.addressFormForShipping.isPrimary = this.shipToAddressList[i].isPrimary;								
-        // 				this.addressFormForShipping.siteId = this.shipToAddressList[i].siteID;	
-        // 				this.editSiteName = this.shipToAddressList[i].siteName;
-        // 				this.addressFormForShipping.siteName = getObjectByValue('siteName',this.shipToAddressList[i].siteName, this.shippingSieListOriginal); 
-        // 				this.addressFormForShipping.addressID = this.shipToAddressList[i].addressId;							
-        // 				this.addressFormForShipping.address1 = this.shipToAddressList[i].address1;
-        // 				this.addressFormForShipping.address2 = this.shipToAddressList[i].address2;
-        // 				this.addressFormForShipping.city =  this.shipToAddressList[i].city;
-        // 				this.addressFormForShipping.stateOrProvince = this.shipToAddressList[i].stateOrProvince;
-        // 				this.addressFormForShipping.postalCode = this.shipToAddressList[i].postalCode;
-        // 				this.addressFormForShipping.countryId= getObjectByValue('value',this.shipToAddressList[i].countryId ,this.allCountriesList);
-        // 				return;
-        // 			} 
-        // 		}		
-
-        // 		}
-        // 	}
     }
 
     resetAddressShippingForm() {
@@ -1276,11 +1013,8 @@ export class SalesOrderShippingComponent {
         if (!this.isEditModeShipping) {
             this.commonService.createAllAddres(addressData).subscribe(response => {
                 if (response) {
-                    //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,response);
                     let shiptocustomerobj = getObjectByValue('userID', this.shippingHeader.shipToCustomerId.userID, this.customerNamesList);
                     this.shippingHeader.shipToCustomerId = shiptocustomerobj;
-                    //this.shippingHeader['shipToSiteId'] = this.shippingHeader.shipToSiteId;
-                    //this.setSiteNamesByShipCustomerId(shiptocustomerobj,response);
                     this.setShipToSelectedSite(shiptocustomerobj.userID, response);
                     this.alertService.showMessage(
                         'Success',
@@ -1297,13 +1031,10 @@ export class SalesOrderShippingComponent {
                 }
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                //this.errorMessageHandler(errorLog);		
             });
         } else {
             this.commonService.createAllAddres(addressData).subscribe(response => {
                 if (response) {
-                    //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,response);						         			
                     this.alertService.showMessage(
                         'Success',
                         `Shipping Information Updated Successfully`,
@@ -1318,34 +1049,21 @@ export class SalesOrderShippingComponent {
                 }
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                //this.errorMessageHandler(errorLog);		
             });
         }
     }
 
     onShipToSelected(res?, ModuleId?, UserId?, siteId?, poonly?, Shippingid?) {
         this.clearShipToAddress();
-        //let customerId = res.userID;
         this.shipToUserId = res.userID;
-        // const moduleId = ModuleId > 0 ? ModuleId : this.sourcePoApproval.shipToUserTypeId;
         const userId = res.userID;
         const AddressType = 'Ship';
+
         if (userId > 0) {
             this.commonService.getaddressdetailsbyuser(this.shipUsertype, userId, AddressType, this.salesOrderId).subscribe(
                 returnddataforbill => {
                     this.shipCustomerShippingOriginalData = returnddataforbill.address;
                     this.shipCustomerSiteList = returnddataforbill.address;
-                    // this.shipCustomerShippingOriginalData.forEach(
-                    //     x => {
-                    //         if (x.isPrimary) {
-                    //             this.shippingHeader.shipToSiteId = x.customerDomensticShippingId;
-                    //             this.setShipToAddress();
-                    //         }
-                    //     }
-                    // )
-                    //this.setShipToAddress();
-
                     this.shipToSite = returnddataforbill.address;
                     if (this.shipToSite && this.shipToSite.length != 0) {
                         this.shippingSieListOriginal = this.shipToSite.map(x => {
@@ -1360,27 +1078,17 @@ export class SalesOrderShippingComponent {
 
     setShipToSelectedSite(userID, siteId?) {
         this.clearShipToAddress();
-        //let customerId = res.userID;
         this.shipToUserId = userID;
-        // const moduleId = ModuleId > 0 ? ModuleId : this.sourcePoApproval.shipToUserTypeId;
         const userId = userID;
         const AddressType = 'Ship';
+
         if (userId > 0) {
             this.commonService.getaddressdetailsbyuser(this.shipUsertype, userId, AddressType, this.salesOrderId).subscribe(
                 returnddataforbill => {
                     this.shipCustomerShippingOriginalData = returnddataforbill.address;
                     this.shipCustomerSiteList = returnddataforbill.address;
-                    // this.shipCustomerShippingOriginalData.forEach(
-                    //     x => {
-                    //         if (x.isPrimary) {
-                    //             this.shippingHeader.shipToSiteId = x.customerDomensticShippingId;
-                    //             this.setShipToAddress();
-                    //         }
-                    //     }
-                    // )
-                    //this.setShipToAddress();
-
                     this.shipToSite = returnddataforbill.address;
+
                     if (this.shipToSite && this.shipToSite.length != 0) {
                         this.shippingSieListOriginal = this.shipToSite.map(x => {
                             return {
@@ -1399,43 +1107,23 @@ export class SalesOrderShippingComponent {
                             }
                         }
                     }
-                    //     else {
-                    //         if(this.shipToSite && this.shipToSite.length !=0){
-                    //     for(var i =0; i < this.shipToSite.length; i++) {
-                    //         if(this.shipToSite[i].isPrimary) {			
-                    //             this.sourcePoApproval.shipToSiteId = this.shipToSite[i].siteId;
-                    //             this.sourcePoApproval.shipToAddressId = this.shipToSite[i].addressId;
-                    //             this.onShipToGetAddress(this.shipToSite[i].siteId)
-                    //         }
-                    //     }}
-                    // }
                 });
         }
     }
 
     onBillToSelected(res?, ModuleId?, UserId?, siteId?, poonly?) {
         this.clearSoldToAddress();
-        //let customerId = res.userID;
         this.billToUserId = res.userID;
-        // const moduleId = ModuleId > 0 ? ModuleId : this.sourcePoApproval.shipToUserTypeId;
         const userId = res.userID;
         const AddressType = 'Bill';
+
         if (userId > 0) {
             this.commonService.getaddressdetailsbyuser(this.billUsertype, userId, AddressType, this.salesOrderId).subscribe(
                 returnddataforbill => {
-
                     this.soldCustomerShippingOriginalData = returnddataforbill.address;
                     this.soldCustomerSiteList = returnddataforbill.address;
-                    // this.soldCustomerShippingOriginalData.forEach(
-                    //     x => {
-                    //         if (x.isPrimary) {
-                    //             this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
-                    //             this.setSoldToAddresses();
-                    //         }
-                    //     }
-                    // )
-
                     this.billToSite = returnddataforbill.address;
+
                     if (this.billToSite && this.billToSite.length != 0) {
                         this.billingSieListOriginal = this.billToSite.map(x => {
                             return {
@@ -1443,12 +1131,8 @@ export class SalesOrderShippingComponent {
                             }
                         })
                     }
-
-                    //this.setSoldToAddresses();
                 }, err => {
                     this.isSpinnerVisible = false;
-                    const errorLog = err;
-                    //this.errorMessageHandler(errorLog);		
                 });
         }
     }
@@ -1456,36 +1140,25 @@ export class SalesOrderShippingComponent {
 
     setBillToSelectedSite(userID, siteId?) {
         this.clearSoldToAddress();
-        //let customerId = res.userID;
         this.billToUserId = userID;
-        // const moduleId = ModuleId > 0 ? ModuleId : this.sourcePoApproval.shipToUserTypeId;
         const userId = userID;
         const AddressType = 'Bill';
+
         if (userId > 0) {
             this.commonService.getaddressdetailsbyuser(this.billUsertype, userId, AddressType, this.salesOrderId).subscribe(
                 returnddataforbill => {
                     this.soldCustomerShippingOriginalData = returnddataforbill.address;
                     this.soldCustomerSiteList = returnddataforbill.address;
-                    // this.soldCustomerShippingOriginalData.forEach(
-                    //     x => {
-                    //         if (x.isPrimary) {
-                    //             this.shippingHeader.soldToSiteId = x.customerDomensticShippingId;
-                    //             this.setSoldToAddresses();
-                    //         }
-                    //     }
-                    // )
-
                     this.billToSite = returnddataforbill.address;
+
                     if (this.billToSite && this.billToSite.length != 0) {
                         this.billingSieListOriginal = this.billToSite.map(x => {
                             return {
-                                //siteName: x.siteName, siteId: x.customerBillingAddressId
                                 siteName: x.siteName, siteId: x.siteID
                             }
                         })
                     }
 
-                    //this.setSoldToAddresses();
                     if (siteId > 0) {
                         if (this.billToSite && this.billToSite.length != 0) {
                             for (var i = 0; i < this.billToSite.length; i++) {
@@ -1496,21 +1169,6 @@ export class SalesOrderShippingComponent {
                             }
                         }
                     }
-                    // else {
-                    //     if(this.billToSite && this.billToSite.length !=0){
-                    //     for(var i =0; i < this.billToSite.length; i++) {
-                    //         if(this.billToSite[i].isPrimary ) {
-                    //         this.sourcePoApproval.billToSiteId = this.billToSite[i].siteId;
-                    //         this.sourcePoApproval.billToAddressId = this.billToSite[i].addressId;
-                    //         this.onBillToGetAddress(this.billToSite[i].siteId)
-                    //         }
-                    //     }}
-                    // }
-
-                    // }, err => {
-                    //     this.isSpinnerVisible = false;
-                    //     const errorLog = err;
-                    //     //this.errorMessageHandler(errorLog);		
                 });
         }
     }
@@ -1524,5 +1182,30 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['originCountryId'] = "";
         this.shippingHeader['originName'] = "";
         this.shippingHeader['originCountryName'] = "";
+    }
+
+    viewShipping(ship) {
+        this.isSpinnerVisible = true;
+        this.isView = true;
+        this.salesOrderPartId = ship.salesOrderPartId;
+        this.partSelected = true;
+        this.salesOrderService
+            .getShippingEdit(ship.salesOrderShippingId)
+            .subscribe((response: any) => {
+                this.isEditModeAdd = true;
+                this.isSpinnerVisible = false;
+                this.shippingHeader = response[0];
+                this.shippingHeader['openDate'] = new Date(this.shippingHeader['openDate']);
+                this.shippingHeader['shipDate'] = new Date(this.shippingHeader['shipDate']);
+                let shiptocustomerobj = getObjectByValue('userID', this.shippingHeader.shipToCustomerId, this.customerNamesList);
+                this.shippingHeader.shipToCustomerId = shiptocustomerobj;
+                this.shippingHeader['shipToSiteId'] = this.shippingHeader.shipToSiteId;
+                let soldtocustomerobj = getObjectByValue('userName', this.shippingHeader.soldToName, this.userBillingList);
+                this.shippingHeader.soldToName = soldtocustomerobj;
+                this.shippingHeader['soldToSiteId'] = this.shippingHeader.soldToSiteId;
+                this.isSpinnerVisible = false;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 }

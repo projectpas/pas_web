@@ -90,6 +90,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getPickTicketforEdit: string = environment.baseUrl + "/api/salesorder/getpickticketedit"
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
+  private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(
@@ -721,10 +722,18 @@ export class SalesOrderEndpointService extends EndpointFactory {
   }
 
   downloadPDF(url) {
-    debugger;
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
     return this.http.get(url, { headers: headers, responseType: 'blob' });
+  }
+
+  updateShipping(serviceClass: string, salesOrderShippingId: number): Observable<any> {
+    let url: string = `${this.updateServiceClass}?serviceClass=${serviceClass}&salesOrderShippingId=${salesOrderShippingId}`;
+    return this.http
+      .put(url, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.updateShipping(serviceClass, salesOrderShippingId));
+      });
   }
   //end nitin
 }

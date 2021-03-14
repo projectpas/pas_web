@@ -358,7 +358,7 @@ export class SalesOrderService {
     );
   }
 
-  createSOQCharge(chargesList: ISalesOrderCharge[]): Observable<ISalesOrderQuote[]> {
+  createSOCharge(chargesList: ISalesOrderCharge[]): Observable<ISalesOrderQuote[]> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.createCharges(chargesList)
     );
@@ -632,5 +632,10 @@ export class SalesOrderService {
     );
   }
 
-  //ed --nitin
+  updateShipping(serviceClass: string, salesOrderShippingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.updateShipping(serviceClass, salesOrderShippingId)
+    );
+  }
+  //end --nitin
 }

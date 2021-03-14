@@ -28,6 +28,7 @@ export class SOFreight implements ISOFreight {
     updatedDate?: Date;
     createdDate?: Date;
     headerMarkupPercentageId: number;
+    masterCompanyId: number;
     constructor() {
         this.shipViaId = null;
         this.length = null;
