@@ -409,9 +409,20 @@ export class WorkOrderListComponent implements OnInit {
             this.workOrderData = res['results'].map(x => {
                 return {
                     ...x,
-                    createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
-                    openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy') : '',  
+                    //createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                    //updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+
+                    openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
+                    estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    estimatedShipDateType: x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    estimatedCompletionDateType: x.estimatedCompletionDateType ? this.datePipe.transform(x.estimatedCompletionDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    customerRequestDateType: x.customerRequestDateType ? this.datePipe.transform(x.customerRequestDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 }
             });
 
@@ -1033,9 +1044,13 @@ export class WorkOrderListComponent implements OnInit {
                         ...x,
                         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
                         estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        estimatedShipDateType: x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        estimatedCompletionDateType: x.estimatedCompletionDateType ? this.datePipe.transform(x.estimatedCompletionDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        customerRequestDateType: x.customerRequestDateType ? this.datePipe.transform(x.customerRequestDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
