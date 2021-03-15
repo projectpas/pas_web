@@ -665,7 +665,9 @@ export class VendorCapesComponent implements OnInit {
         }
     }
 
-    customExcelUpload(event) {
+    vendorCapasNotExistList : any = [];
+    customExcelUpload(event,tabRedirectConfirmationModal) {
+        this.vendorCapasNotExistList = [];
         const file = event.target.files;
         if (file.length > 0) {
             this.formData.append('file', file[0])
@@ -680,8 +682,13 @@ export class VendorCapesComponent implements OnInit {
                         'isActive':true,
                         'isDeleted':false
             }
-
-            this.vendorService.uploadVendorCapabilitiesList(this.formData, this.vendorId, data).subscribe(res => {
+            this.vendorService.uploadVendorCapabilitiesList(this.formData, this.vendorId, data).subscribe(res => {                
+                if(res){
+                   this.vendorCapasNotExistList = res;
+                   if(this.vendorCapasNotExistList){
+                        this.modal = this.modalService.open(tabRedirectConfirmationModal, { size: 'lg', backdrop: 'static', keyboard: false }); 
+                    } 
+                }
                 event.target.value = '';
                 this.formData = new FormData();
                 this.getVendorCapabilitylistId('all'); 

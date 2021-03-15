@@ -302,9 +302,10 @@
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'submittedCustomerApproval'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('submittedCustomerApproval');selectall = false;">Submitted Customer Approval</button>-->
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'workOrderQuoteAnalysis'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('workOrderQuoteAnalysis');">Work Order Quote Analysis</button>
             </div>
-            <div class="table-responsive" *ngIf="approvalGridActiveTab === 'mpns'">
-                <div class="table-responsive" style="margin-top: 10px;" *ngIf="!isQuoteListView">
-                    <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+        </div>
+            <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
+                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                    <table class="table table-bordered mpn-list-table"
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
@@ -489,9 +490,9 @@
                 </div>
             </div>
 
-            <div class="table-responsive" *ngIf="approvalGridActiveTab === 'internalApprovers'">
-                <div class="table-responsive" style="margin-top: 10px;" *ngIf="!isQuoteListView">
-                    <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'internalApprovers'">
+                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                    <table class="table table-bordered header-table-width"
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
@@ -541,14 +542,14 @@
                     </table>
                 </div>
             </div>
-
-            <div class="table-responsive" *ngIf="approvalGridActiveTab === 'approvalProcess'">
-                <div class="table-responsive" style="margin-top: 10px;" *ngIf="!isQuoteListView">
-                    <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+           
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'approvalProcess'">
+                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                    <table class="table table-bordered header-table-width"
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
-                                <th>
+                                <th class="approver-th-align th-width">
                                     <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isView || isCurrentUserApprovalLimitExceeded"/> Select All
                                 </th>
                                 <th *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
@@ -690,15 +691,16 @@
                         </tbody>
                     </table>
                 </div>
-                <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()" style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+            <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()" style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+
             </div>
 
             
 
 
-            <div class="table-responsive" *ngIf="approvalGridActiveTab === 'workOrderQuoteAnalysis'">
-                <div class="table-responsive" style="margin-top: 10px;" *ngIf="!isQuoteListView">
-                    <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'workOrderQuoteAnalysis'">
+                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                    <table class="table table-bordered header-table-width"
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
@@ -718,8 +720,8 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <div >
+        <!-- </div> -->
+        <div style="margin-top:5% !important;" >
 
             <div class="col-md-12">
                 <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==false">
@@ -759,8 +761,8 @@
                 </div>
             </div>
                 <div class="form-group " *ngIf="selectedPartNumber != ''">
-                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
-                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
+                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
+                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                 </div>
             
         </div>
@@ -788,7 +790,7 @@
 
                             <div class="display-flex">
                                 <div class="form-group labour-radio-buttons-align" >
-                                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w125"
+                                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w125 radio-margin-top"
                                                    name="costPlusType"
                                                    label="T&M - Mark Up"
                                                    value="1"
@@ -803,7 +805,7 @@
                                     </div>
                                 </div>
                                 <div class="radio-align">
-                                    <p-radioButton class="p-radiobutton-label-horizontal"
+                                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top"
                                                    name="costPlusType"
                                                    value="2"
                                                    label="Actual"
@@ -812,7 +814,7 @@
                                                    (click)="(!isView)?tmchange():''"></p-radioButton>
                                 </div>
                                 <div>
-                                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
+                                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                                                    value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView || isViewForApprovedPart" (click)="(!isView)?tmchange():''">
                                     </p-radioButton>
                                 </div>
@@ -998,7 +1000,7 @@
                                 [buildMethodDetails]="buildMethodDetails"></app-work-order-freight>
     </div>
 
-    <div class="table-responsive" *ngIf="gridActiveTab == 'labor'"> 
+    <div *ngIf="gridActiveTab == 'labor'">
         <app-work-order-labor [taskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
                               (saveworkOrderLabor)="saveworkOrderLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
                               [selectedPartNumber]="selectedPartNumber"></app-work-order-labor>

@@ -218,12 +218,19 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     $("#textarea-popupFreight").modal("hide");
   }
 
+  get currentUserMasterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : null;
+  }
+
   saveFreightList() {
     this.chargeForm = this.chargeForm.map(x => {
       return {
         ...x,
         billingAmount: this.formateCurrency(x.extendedCost),
-        billingRate: this.formateCurrency(x.unitCost)
+        billingRate: this.formateCurrency(x.unitCost),
+        masterCompanyId: this.currentUserMasterCompanyId
       }
     });
     if (this.isEdit) {

@@ -229,9 +229,15 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         $("#textarea-popupFreight").modal("hide");
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
+
     createFreightsQuote() {
         let temp = this.salesOrderFreightList;
-        let sendData = []
+        let sendData: any = [];
         for (let index = 0; index < temp.length; index++) {
             if (typeof temp[index][Symbol.iterator] === 'function')
                 sendData = [...sendData, ...temp[index]];
@@ -242,6 +248,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
         })
         let result = { 'data': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
+        debugger;
         this.isSpinnerVisible = true;
         this.salesOrderQuoteService.createFreight(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
@@ -549,7 +556,8 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
                 dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                 currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
-                billingAmount: this.formateCurrency(x.amount)
+                billingAmount: this.formateCurrency(x.amount),
+                masterCompanyId: this.currentUserMasterCompanyId
             }
         });
         if (this.isEdit) {

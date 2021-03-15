@@ -1,5 +1,4 @@
 export class SalesOrderShipping {
-
     salesOrderShippingId: 0;
     salesOrderId: 0;
     salesOrderPartId: 0;
@@ -56,4 +55,5 @@ export class SalesOrderShipping {
     exportECCN: number;
     trackingNum: number = 0;
     houseAirwayBill: number = 0;
+    noOfContainer: number = 0;
 }

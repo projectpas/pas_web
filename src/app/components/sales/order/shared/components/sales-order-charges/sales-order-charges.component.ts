@@ -261,12 +261,19 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         $("#textarea-popupFreight").modal("hide");
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     saveChargesList() {
         this.chargeForm = this.chargeForm.map(x => {
             return {
                 ...x,
                 billingAmount: this.formateCurrency(x.extendedCost),
-                billingRate: this.formateCurrency(x.unitCost)
+                billingRate: this.formateCurrency(x.unitCost),
+                masterCompanyId: this.currentUserMasterCompanyId
             }
         });
         if (this.isEdit) {
@@ -321,7 +328,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
 
         let result = { 'data': sendData, 'chargesFlatBillingAmount': this.formateCurrency(this.chargesFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
         this.isSpinnerVisible = true;
-        this.salesOrderService.createSOQCharge(sendData).subscribe(result => {
+        this.salesOrderService.createSOCharge(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
                 'Success',

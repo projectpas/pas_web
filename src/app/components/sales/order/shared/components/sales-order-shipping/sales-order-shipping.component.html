@@ -105,6 +105,13 @@
                                                     class="fa fa-print"></i></a>
                                         </span>
                                         <span>
+                                            <button *ngIf="ship.qtyShipped > 0" class="btn nobg" mat-icon-button
+                                                (click)="viewShipping(ship)" matTooltip="View Shipping"
+                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </span>
+                                        <span>
                                             <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
                                                 matTooltipPosition="above" style="font-weight: bold;"
@@ -253,7 +260,8 @@
                                     <div class="col-md-3">
                                         <input type="number" class="input-field-value" pKeyFilter="num" pInputText
                                             maxlength="10" [(ngModel)]="shippingHeader.weight" name="shipWeight"
-                                            id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
+                                            id="shipWeight" title="Export Weight" (keyup)="btnChange()"
+                                            [disabled]="isView" />
                                     </div>
                                     <div class="col-md-2">
                                         <label class="sale-order-shipping-lable" style="margin-left: 40px;">UOM <span
@@ -264,7 +272,8 @@
                                         <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
                                             [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
                                             [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
-                                            [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
+                                            [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()"
+                                            [disabled]="isView">
                                         </p-dropdown>
                                     </div>
                                 </div>
@@ -276,13 +285,13 @@
                                         <span class="display-flex inline-block">
                                             <input type="number" name="exportLength" class="input-field-value"
                                                 pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
-                                                [(ngModel)]="shippingHeader.shipSizeLength" />&nbsp;
+                                                [(ngModel)]="shippingHeader.shipSizeLength" [disabled]="isView" />&nbsp;
                                             <input type="number" name="exportWidth" class="input-field-value" pInputText
                                                 pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
-                                                [(ngModel)]="shippingHeader.shipSizeWidth" />&nbsp;
+                                                [(ngModel)]="shippingHeader.shipSizeWidth" [disabled]="isView" />&nbsp;
                                             <input type="number" name="exportHeight" class="input-field-value"
                                                 pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
-                                                [(ngModel)]="shippingHeader.shipSizeHeight" />
+                                                [(ngModel)]="shippingHeader.shipSizeHeight" [disabled]="isView" />
                                         </span>
                                     </div>
                                     <div class="col-md-2">
@@ -297,7 +306,20 @@
                                             name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
                                             placeholder="Select" [showClear]="true"
                                             [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
-                                            (onChange)="btnChange()"></p-dropdown>
+                                            (onChange)="btnChange()" [disabled]="isView"></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="sale-order-shipping-lable">No of Containers</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="display-flex inline-block">
+                                            <input type="number" name="exportLength" class="input-field-value"
+                                                pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                                [(ngModel)]="shippingHeader.noOfContainer" [disabled]="isView"
+                                                required />
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +340,8 @@
                                     </div>
                                     <div class="col-md-8">
                                         <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
-                                            (change)="setOriginToAddress(shippingHeader.originSiteId)" required>
+                                            (change)="setOriginToAddress(shippingHeader.originSiteId)" required
+                                            [disabled]="isView">
                                             <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
                                                 {{site.originName}}</option>
                                         </select>
@@ -409,7 +432,7 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="shippingHeader.soldToName"
+                                            <span *ngIf="isView ? false : (shippingHeader.soldToName ? true : false) "
                                                 style="margin-left:3px;cursor:pointer;"><a
                                                     class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name"
                                                     matTooltipPosition="above" data-toggle="modal"
@@ -513,7 +536,8 @@
                                 <div class="form-group col-md-12">
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
-                                            <span *ngIf="shippingHeader.shipToCustomerId"
+                                            <span
+                                                *ngIf="isView ? false : (shippingHeader.shipToCustomerId ? true : false) "
                                                 style="margin-left:3px;cursor:pointer;"><a
                                                     class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name"
                                                     matTooltipPosition="above" data-toggle="modal"
