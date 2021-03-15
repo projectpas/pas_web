@@ -1,4 +1,5 @@
-﻿import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
+﻿import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
+import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
 import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
 import { MenuItem } from 'primeng/api';
@@ -16,6 +17,8 @@ import {AlertService, MessageSeverity} from '../../../../services/alert.service'
 import {WorkOrderLabor,AllTasks,WorkOrderQuoteLabor,ExclusionQuote,ChargesQuote,QuoteMaterialList,QuoteFreightList} from '../../../../models/work-order-labor.modal';
 import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { DBkeys } from '../../../../services/db-Keys';
+import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
+import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
@@ -75,6 +78,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     labor = new WorkOrderLabor();
     taskList: any;
     currencyList: any[];
+    statusList: any = [];
     savedWorkOrderData: any;
     laborPayload = new WorkOrderQuoteLabor();
     exclusionPayload = new ExclusionQuote();
@@ -94,6 +98,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     isEdit: boolean = false;
     employeeList: any[];
     freight = [];
+    approvers:  any;
+    isViewMode: any;
+    statusListForApproval = [];
     workFlowObject = { materialList: [],equipments: [],charges: [],exclusions: [],freights: []
     }
     isQuote: boolean = true;
@@ -139,6 +146,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     isCurrentUserApprovalLimitExceeded: boolean = true;
     quotestatusofCurrentPart: string = '';
     isViewForApprovedPart: boolean = false;
+    defaultContactId: any;
     woQuoteListHeader = [
         {
             header: 'Action',
@@ -380,6 +388,44 @@ if (property == 'selectedDisplayType') {
         if (this.isQuoteListView) {
             this.quoteForm = new WorkOrderQuote();
             this.formDataFromViewListData();
+        }
+    }
+
+    refresh( isView = false) {
+        this.isSpinnerVisible = true;
+        this.isViewMode = isView;
+
+    }
+    getInternalSentDateEnableStatus(approver) {
+        return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SentForInternalApproval;
+    }
+
+    getinternalStatusIdEnableStatus(approver) {
+        debugger;
+        return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitInternalApproval;
+    }
+
+    getcustomerSentDateEnableStatus(approver) {
+        return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SentForCustomerApproval;
+    }
+
+    getcustomerStatusIdEnableStatus(approver) {
+        debugger;
+        return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
+    }
+    getApprovalActionInternalStatus(approver) {
+        if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    getApprovalActionCustomerStatus(approver) {
+        if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -2291,7 +2337,8 @@ this.creditTerms=res.creditTerm;
 
         this.isSpinnerVisible = true;
 		this.purchaseOrderService.approverslistbyTaskId(2, this.quotationHeader['workOrderQuoteId']).subscribe(res => {
-						 this.internalApproversList = res;
+                         this.internalApproversList = res;
+                         this.approvers = res;
 						 this.internalApproversList.map(x => {
                             if(currentUser && currentUser['email'] == x.approverEmails && !x.isExceeded){
                                this.isCurrentUserApprovalLimitExceeded = false;
@@ -2332,11 +2379,55 @@ this.creditTerms=res.creditTerm;
         this.approvalGridActiveTab = '';
     }
 
+    onApprovalSelected(approver, i) {
+        if (approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+            if (this.defaultContactId) {
+                this.woQuoteApprovalList[i].customerApprovedById = this.defaultContactId;
+            } else {
+                this.woQuoteApprovalList[i].customerApprovedById = '';
+            }
+        }
+    }
+    get employeeId() {
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+    }
+
+    getPartToDisableOrNot(part) {
+
+        if (part.actionStatus != 'Approved') {
+            if (part.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+                return true;
+            } else if (part.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+                if (this.approvers && this.approvers.length > 0) {
+                    let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId && approver.isExceeded == false);
+                    if (approverFound) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else if (part.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+                return true;
+            } else if (part.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     getWOQuoteApprovalList() {
         this.getApproversList();
+        this.getApproverStatusList();
         this.commonService.getCustomerContactsById(this.quotationHeader['CustomerId']).subscribe(res => {      
             this.customerContactList = res;
             if(this.customerContactList.length > 0){
+
+                this.setDefaultContact();
                 for(let i=0; i<this.customerContactList.length; i++){
                     if(this.customerContactList[i].isDefaultContact == true){
                         this.emailCustomerContact = this.customerContactList[i];
@@ -2351,7 +2442,9 @@ this.creditTerms=res.creditTerm;
         this.workOrderService.getWOQuoteApprovalList(this.quotationHeader['workOrderQuoteId'])
             .subscribe(
                 (res) => {
+                   
                     this.woQuoteApprovalList = [];
+
                     res.forEach(
                         (x)=>{
                             if(x.internalSentDate){
@@ -2395,6 +2488,45 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
+    getApproverStatusList() {
+        this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
+            this.statusList = res.map(x => {
+                return {
+                    ...x,
+                    statusId: x.value,
+                    name: x.label
+                };
+            });
+            this.setStatusListForApproval(this.statusList);
+        })
+    }
+    setStatusListForApproval(statusList) {
+        let tempList = [];
+
+        if (statusList && statusList.length > 0) {
+            for (let i = 0; i < statusList.length; i++) {
+                if (statusList[i].name === ApprovalStatusDescirptionEnum.Approved) {
+                    tempList.push(statusList[i]);
+                } else if (statusList[i].name === ApprovalStatusDescirptionEnum.Rejected) {
+                    tempList.push(statusList[i]);
+                }
+            }
+        }
+        this.statusListForApproval = tempList;
+    }
+
+    setDefaultContact() {
+        if (this.customerContactList) {
+            if (this.customerContactList.length > 0) {
+                for (let i = 0; i < this.customerContactList.length; i++) {
+                    let isDefaultContact = this.customerContactList[i].isDefaultContact;
+                    if (isDefaultContact) {
+                        this.defaultContactId = this.customerContactList[i].contactId;
+                    }
+                }
+            }
+        }
+    }
 
     getWOQuoteAnalysisList() {
         this.workOrderService.getWOQuoteAnalysisList(this.savedWorkOrderData.workOrderId)
@@ -2408,12 +2540,46 @@ this.creditTerms=res.creditTerm;
             )
     }
 
+
+
     selectAllApproval(type, isSelected) {
         this.woQuoteApprovalList.forEach(
-            (x) => {
-                x.isSelected = !isSelected;
+            (x, i) => {
+                let disableEdit = this.getPartToDisableOrNot(x);
+                if (disableEdit) {
+                    x.isSelected = !isSelected;
+                    this.onApprovalSelected(x, i);
+                }
             }
         )
+    }
+
+    getAllPartsToDisableOrNot() {
+        var result = false;
+        if (this.woQuoteApprovalList && this.woQuoteApprovalList.length > 0) {
+            this.woQuoteApprovalList.forEach(
+                (x) => {
+                    if (x.actionStatus != 'Approved') {
+                        if (x.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+                            result = true;
+                        } else if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+                            if (this.approvers && this.approvers.length > 0) {
+                                let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId && approver.isExceeded == false);
+                                if (approverFound) {
+                                    result = true;
+                                }
+                            }
+                        } else if (x.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+                            result = true;
+                        } else if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+                            result = true;
+                        }
+                    }
+                }
+            )
+        }
+
+        return result;
     }
 
     saveApprovalData() {
