@@ -26,4 +26,5 @@ export interface ISOFreight {
     updatedDate?: Date;
     createdDate?: Date;
     headerMarkupPercentageId: number;
+    masterCompanyId: number;
 }

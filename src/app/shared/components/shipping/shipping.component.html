@@ -121,14 +121,14 @@
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
                                                 matTooltipPosition="above" style="font-weight: bold;" [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
-                                        </span>
+                                        </span> -->
                                         <span>
                                             <button *ngIf="ship.qtyShipped != 0" class="btn nobg" mat-icon-button
-                                                (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
+                                                (click)="viewShippingData(ship)" matTooltip="View"
                                                 matTooltipPosition="above" style="font-weight: bold;">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
-                                        </span> -->
+                                        </span> 
                                     </td>
                                 </tr>
                             </tbody>
