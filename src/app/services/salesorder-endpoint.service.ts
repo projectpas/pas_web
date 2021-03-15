@@ -91,6 +91,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getShippingforEdit: string = environment.baseUrl + "/api/salesorder/getshippingedit"
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
+  private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(
@@ -725,6 +726,16 @@ export class SalesOrderEndpointService extends EndpointFactory {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
     return this.http.get(url, { headers: headers, responseType: 'blob' });
+  }
+
+  getSalesOrderBillingInvoicingPdf(sobillingInvoicingId: number): Observable<any> {
+    //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
+    const URL = `${this.getSalesOrderBillingInvoicingPdfURL}/${sobillingInvoicingId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderBillingInvoicingPdf(sobillingInvoicingId));
+      });
   }
 
   updateShipping(serviceClass: string, salesOrderShippingId: number): Observable<any> {

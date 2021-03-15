@@ -153,8 +153,7 @@ export class SalesOrderCreateComponent implements OnInit {
   isHeaderSubmit: boolean = false;
   @ViewChild("updateConfirmationModal", { static: false })
   public updateConfirmationModal: ElementRef;
-  @ViewChild("viewQuote", { static: false })
-  public viewQuoteModal: ElementRef;
+  @ViewChild("viewQuote", { static: false }) public viewQuoteModal: ElementRef;
   submitType: boolean = true;
   totalFreights = 0;
   totalCharges = 0;

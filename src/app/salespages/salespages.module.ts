@@ -9,12 +9,10 @@
 // ===============================
 import { NgModule } from "@angular/core";
 import { CommonModule, DatePipe } from "@angular/common";
-
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateModule } from "@ngx-translate/core";
 import { QuickAppProMaterialModule } from "../modules/material.module";
-
 import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { SelectButtonModule } from "primeng/selectbutton";
@@ -22,7 +20,6 @@ import { InputTextModule } from "primeng/inputtext";
 import { MultiSelectModule } from "primeng/multiselect";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { GMapModule } from "primeng/gmap";
-import { AddActionsDialogComponent } from "../components/dialogs/add-actions-dialog/add-actions-dialog.component";
 import { FileUploadModule } from "primeng/fileupload";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { StepsModule } from "primeng/steps";
@@ -37,9 +34,7 @@ import { SpinnerModule } from "primeng/spinner";
 import { CheckboxModule } from "primeng/checkbox";
 import { PanelModule } from "primeng/panel";
 import { SplitButtonModule } from 'primeng/splitbutton';
-
 import { EditorModule } from 'primeng/editor';
-
 import { SalesPagesRoutingModule } from "./salespages-routing.module";
 import { SalesPagesComponent } from "./salespages.component";
 import { SalesQuoteListComponent } from "../components/sales/quotes/sales-quote-list/sales-quote-list.component";
@@ -60,7 +55,6 @@ import { PartDetailsComponent } from "../components/sales/shared/components/add-
 import { ItemMasterService } from "../services/itemMaster.service";
 import { SalesPartNumbersComponent } from "../components/sales/quotes/shared/components/sales-part-number/sales-part-numbers.component";
 import { StocklinePartDetailsComponent } from "../components/sales/shared/components/add-sales-part-number/stockline-part-details/stockline-part-details.component";
-import { MarginDetail } from "../components/sales/shared/models/margin-detail";
 import { SalesMarginComponent } from "../components/sales/shared/components/sales-margin/sales-margin..component";
 //Sales Order Components - Start
 import { SalesOrderListComponent } from "../components/sales/order/sales-order-list/sales-order-list.component";
@@ -79,7 +73,6 @@ import { SalesOrderViewComponent } from "../components/sales/order/shared/compon
 import { AppSharedModule } from "../app-shared.module";
 import { WorkOrderPagesModule } from "../workorderpages/workorderpages.module";
 import { SalesOrderCustomerApprovalComponent } from "../components/sales/order/shared/components/sales-order-customer-approval/sales-order-customer-approval.component";
-import { TwoDecimalGlobalNumberFormatPipe } from "../pipes/two-decimal-global-number-format-pipe.pipe";
 import { SalesOrderActionsComponent } from "../components/sales/order/sales-order-actions/sales-order-actions.component";
 import { SalesOrderConfirmationModalComponent } from "../components/sales/order/sales-order-confirmation-modal/sales-order-confirmation-modal.compoent";
 import { SalesQuotePrintTemplateComponent } from "../components/sales/shared/components/sales-quote-print-template/sales-quote-print-template.component";
@@ -87,8 +80,6 @@ import { ItemmasterpagesModule } from "../itemmasterpages/itemmasterpages.module
 import { SalesOrderCopyComponent } from "../components/sales/order/sales-order-copy/sales-order-copy.component";
 import { SalesStockLineDetailsViewComponent } from "../components/sales/shared/components/sales-stockline-part-details-view/sales-stockline-part-details-view.component";
 import { SalesQuoteDocumentsComponent } from "../components/sales/quotes/sales-document/salesQuote-document.component";
-
-
 import { CommonService } from "../services/common.service";
 import { SalesOrderDocumentComponent } from "../components/sales/order/shared/components/sales-document/sales-order-document.component";
 import { SalesOrderpickTicketComponent } from "../components/sales/order/sales-order-pickTicket/sales-order-pickTicket.component";
@@ -107,16 +98,13 @@ import { SalesOrderShippingComponent } from "../components/sales/order/shared/co
 import { SalesQuoteAnalysisComponent } from "../components/sales/quotes/sales-quote-analysis/sales-quote-analysis.component";
 import { SalesOrderAnalysisComponent } from "../components/sales/order/sales-order-analysis/sales-order-analysis.component";
 import { SOQApprovalRuleComponent } from "../components/sales/quotes/shared/components/soq-approval-rule/soq-approval-rule.component";
-import { AddressModel } from "../models/address.model";
 import { CommonModulesModule } from "../common-modules/common-modules.module";
 import { CommonCommunicationModule } from "../components/common-components/common-communication/common-communiation.module";
 import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 import { SOApprovalRuleComponent } from "../components/sales/order/shared/components/so-approval-rule/so-approval-rule.component";
 import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { SalesShippingLabelComponent } from "../components/sales/order/sales-order-shipping-label/sales-order-shipping-label.component";
-//import { AddressComponentComponent } from "../components/address-component/address-component.component";
-// import { AddressComponentComponent } from "../components/address-component/address-component.component";
-
+import { SalesOrderPrintInvoiceComponent } from "../components/sales/order/shared/components/sales-order-print-invoice/sales-order-print-invoice.component";
 //Sales Order Components - End
 
 @NgModule({
@@ -211,9 +199,10 @@ import { SalesShippingLabelComponent } from "../components/sales/order/sales-ord
     SOQApprovalRuleComponent,
     SOApprovalRuleComponent,
     SalesOrderPickTicketsComponent,
-    SalesShippingLabelComponent
+    SalesShippingLabelComponent,
+    SalesOrderPrintInvoiceComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
-  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent]
+  entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent, SalesShippingLabelComponent, SalesOrderPrintInvoiceComponent]
 })
 export class SalesPagesModule { }
