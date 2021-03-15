@@ -89,7 +89,7 @@
                                     <div class="checkbox-cstm">
                                         <label>
                                             <input type="checkbox" name="is1099Required"
-                                                [(ngModel)]="sourceVendor.is1099Required">
+                                                [(ngModel)]="sourceVendor.is1099Required" (ngModelChange)="enableSave()">
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                             1099 Required
                                         </label>
