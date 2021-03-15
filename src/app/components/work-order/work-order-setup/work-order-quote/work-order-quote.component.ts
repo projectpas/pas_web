@@ -322,6 +322,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     cols: any;
     constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     ngOnInit() {
+        this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
         this.getCustomerWarningsList();
         this.breadcrumbs = [
@@ -355,11 +356,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         if(this.workOrderId && this.workOrderId != 0)
         {
             this.getEmployeeList(this.workOrderId);
-            this.getTaskList();
-            this.getMarkup();
             this.loadCurrency('');
-            this.getCondition();
-            this.getUnitOfMeasure();
+     
+            // this.getUnitOfMeasure();
             this.getAllEmailType();
             this.getAllWorkOrderStatus('');
         }
@@ -430,6 +429,7 @@ this.creditTerms=res.creditTerm;
                                         ...res.workOrderQuote, WorkOrderId: res.workOrderId,
                                         WorkFlowWorkOrderId: res["workFlowWorkOrderId"], quoteNumber: res.workOrderQuote.quoteNumber, expirationDateStatus: res.workOrderQuote.quoteStatusId
                                     };
+                                    this.employeeName=res.employeeName ?  res.employeeName : this.authService.currentEmployee.name;
                                     this.quoteForm['versionNo'] = 'V1';
                                     if (res.workOrderQuote['versionNo']) {
                                         // let vNo = Number(res.workOrderQuote['versionNo'].split('V')[1]) + 1;
@@ -481,8 +481,9 @@ this.creditTerms=res.creditTerm;
                                 this.isSpinnerVisible = false;
                             }
                         )
-
-                    this.getCreditTerms(res.creditTermsId);
+                        this.getTaskList('');
+                        this.getMarkup('');
+                    // this.getCreditTerms(res.creditTermsId);
                     this.setEmpAndSalesPersonName(res.employeeId, res.salesPersonId);
                     this.getMPNList(res.workOrderId);
                 }
@@ -536,10 +537,17 @@ this.creditTerms=res.creditTerm;
         return;
     }
 
-    getCondition() {
-        this.commonService.smartDropDownList('condition', 'conditionId', 'description')
-            .subscribe(
-                (res: any[]) => {
+    getCondition(value) {
+        if (this.originlaMlist && this.originlaMlist.length !=0) {
+            this.originlaMlist.forEach(element => {
+                this.setEditArray.push(element.conditionCodeId ? element.conditionCodeId : 0);
+            });
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+                    this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+
                     res = res.map(x => { return {'conditionId': x.value, 'description': x.label} })
                     this.conditions = res;
                 },
@@ -548,19 +556,18 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
-
-    getUnitOfMeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName')
-            .subscribe(
-                (res: any[]) => {
-                    res = res.map(x=>{ return {'unitOfMeasureId': x.value, "shortName": x.label, "description": x.label}})
-                    this.unitOfMeasuresList = res;
-                },
-                err => {
-                    this.errorHandling(err);
-                }
-            )
-    }
+    // getUnitOfMeasure() {
+    //     this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName')
+    //         .subscribe(
+    //             (res: any[]) => {
+    //                 res = res.map(x=>{ return {'unitOfMeasureId': x.value, "shortName": x.label, "description": x.label}})
+    //                 this.unitOfMeasuresList = res;
+    //             },
+    //             err => {
+    //                 this.errorHandling(err);
+    //             }
+    //         )
+    // }
 
     calculateExpiryDate() {
         if (this.validFor && this.quoteDueDate) {
@@ -703,29 +710,34 @@ this.creditTerms=res.creditTerm;
         }
     }
 
-    getCreditTerms(ctermId) {
+    // getCreditTerms(ctermId) {
         
-        this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name')
-            .subscribe(
-                (creditTermList: any[]) => {
+    //     this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name')
+    //         .subscribe(
+    //             (creditTermList: any[]) => {
 
-                    for (let cTerm of creditTermList) {
-                        if (cTerm.value == ctermId) {
-                            this.creditTerms = cTerm.label;
-                        }
-                    }
+    //                 for (let cTerm of creditTermList) {
+    //                     if (cTerm.value == ctermId) {
+    //                         this.creditTerms = cTerm.label;
+    //                     }
+    //                 }
                     
-                },
-                err => {
-                    this.errorHandling(err);
-                }
-            )
-    }
-    getEmployeeList(woId) {
-        
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName')
-            .subscribe(
-                (employeeList: any[]) => {
+    //             },
+    //             err => {
+    //                 this.errorHandling(err);
+    //             }
+    //         )
+    // }
+    msId:any;
+    getEmployeeList(woId) { 
+                        this.setEditArray.push(0);
+                        this.msId = this.authService.currentUser
+                ? this.authService.currentUser.managementStructureId
+                : null;
+                    const strText = '';
+                    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(employeeList => {
+
+
                     this.employeeList = employeeList;
                     this.employeesOriginalData = employeeList;
                     this.getWorkOrderInfo(woId);
@@ -1482,17 +1494,14 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
-
-    getTaskList() {
+    getTaskList(value) {
         if (this.labor == undefined) {
             this.labor = new WorkOrderLabor()
         }
         this.labor.workOrderLaborList = [];
         this.labor.workOrderLaborList.push({})
-        
-        this.commonService.smartDropDownList('task', 'taskId', 'description')
-            .subscribe(
-                (taskList) => {
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('task', 'taskId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(taskList => {
                     taskList = taskList.map(x=>{
                     return {
                         id: x.value,
@@ -1850,20 +1859,23 @@ this.creditTerms=res.creditTerm;
         }
         $('#addNewMaterials').modal('hide');
     }
+    getMarkup(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            // this.setEditArray.push(this.currentAsset.tangibleClassId ? this.currentAsset.tangibleClassId : 0);
 
-    getMarkup() {
-        this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue')
-            .subscribe(
-                res => {
-                    this.markupList = res;
-                },
-                err => {
-                    this.errorHandling(err);
-                }
-            )
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.markupList = res;
+            }
+        },err => {
+             this.errorHandling(err);
+            })
     }
-
-
 
     markupChanged(matData, type) {
         try {
@@ -2175,7 +2187,6 @@ this.creditTerms=res.creditTerm;
     }
 
     createQuote() {
-        // this.customerWarnings(this.currentCustomerId)
         window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workorderid}`);
     }
     filterEmployee(event): void {
@@ -2559,6 +2570,7 @@ this.creditTerms=res.creditTerm;
         $("#textarea-popupintmemo").modal("hide");
     }
     errorHandling(err){
+        this.isSpinnerVisible=false
     }
     checkValidEmails(){
         let result = false;
@@ -2956,12 +2968,15 @@ this.creditTerms=res.creditTerm;
             this.getWOExclusionsList();
         }
     }
+    originlaMlist:any=[];
     getQuoteMaterialListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
             this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
+                this.originlaMlist=res;
+              this.getCondition('');
                 this.materialListQuotation.forEach(element => {
                     return{
                         ...element,
@@ -3089,7 +3104,6 @@ this.creditTerms=res.creditTerm;
             this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
-                    // this.workOrderLaborList = res;
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if (res) {
                         this.laborPayload.WorkOrderQuoteLaborHeader = res;

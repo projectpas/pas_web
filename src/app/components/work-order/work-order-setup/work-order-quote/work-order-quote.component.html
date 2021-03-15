@@ -221,6 +221,12 @@
                     <input class="form-control" type="text" [(ngModel)]="csr" name="csr" readonly />
                 </div>
                 <div class="form-group ">
+                    <label for="csr">
+                        CSR
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="employeeName" name="csr" readonly />
+                </div>
+                <!-- <div class="form-group ">
                     <label for="Employee">
                         Employee
                     </label>
@@ -233,8 +239,7 @@
                                     [size]="30" [minLength]="1" [dropdown]="true"
                                     class="p-autoComplete-ctsm" [disabled]="true">
                     </p-autoComplete>
-                    <!-- <input class="form-control" type="text" [(ngModel)]="employeeName" name="Employee"/> -->
-                </div>
+               </div> -->
             </div>
         </div>
 
@@ -854,10 +859,11 @@
                                 <td>{{matQuotation.provision}}</td>
                                 <td class="content-to-end">{{matQuotation.quantity}}</td>
                                 <td>
-                                    <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
+                                    {{matQuotation.uom}}
+                                    <!-- <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
                                         <option value="">Select</option>
                                         <option *ngFor="let uom of unitOfMeasuresList" [value]="uom.unitOfMeasureId">{{uom.description}}</option>
-                                    </select>
+                                    </select> -->
                                 </td>
                                 <td>
                                     <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.conditionCodeId" disabled>
@@ -992,7 +998,7 @@
                                 [buildMethodDetails]="buildMethodDetails"></app-work-order-freight>
     </div>
 
-    <div class="table-responsive" *ngIf="gridActiveTab == 'labor'">
+    <div class="table-responsive" *ngIf="gridActiveTab == 'labor'"> 
         <app-work-order-labor [taskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData"
                               (saveworkOrderLabor)="saveworkOrderLabor($event)" [isQuote]="isQuote" [markupList]="markupList" [isView]="isView || isViewForApprovedPart" [isEdit]="isEdit" [employeesOriginalData]="employeeList" [buildMethodDetails]="buildMethodDetails"
                               [selectedPartNumber]="selectedPartNumber"></app-work-order-labor>
@@ -1785,7 +1791,7 @@
                 <form #attachDocForm="ngForm" 
         class="form-horizontal" ngNativeValidate>
                     <div class="modal-body">
-                        <div class="form-row">
+                        <div class="form-row"> 
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group col-md-12">
