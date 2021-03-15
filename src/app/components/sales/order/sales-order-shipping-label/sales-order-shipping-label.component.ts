@@ -24,6 +24,8 @@ export class SalesShippingLabelComponent implements OnInit {
     salesOrderPartId: number;
     soShippingId: number;
     endPointURL: any;
+    isPrint: boolean = false;
+
     constructor(private salesOrderService: SalesOrderService) {
         this.salesOrderCopyParameters = new SalesOrderCopyParameters();
     }
@@ -45,7 +47,20 @@ export class SalesShippingLabelComponent implements OnInit {
         }
     }
 
+    updateServiceClass() {
+        this.salesOrderService.updateShipping(this.salesOrderShipping.serviceClass, this.soShippingId).subscribe(res => {
+            this.printContent();
+        })
+    }
+
     print(): void {
+        this.isPrint = true;
+        setTimeout(() => {
+            this.updateServiceClass();    
+        }, 100);
+    }
+
+    printContent() {
         let printContents, popupWin;
         printContents = document.getElementById('soShippingLabel').innerHTML;
         popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
@@ -261,5 +276,9 @@ export class SalesShippingLabelComponent implements OnInit {
           </html>`
         );
         popupWin.document.close();
+
+        setTimeout(() => {
+            this.isPrint = false;  
+        }, 2000);
     }
 }

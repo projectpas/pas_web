@@ -232,7 +232,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         rowData.amount = this.formateCurrency(rowData.amount);
         this.freightForm = [rowData];
     }
-    
+
     memoIndex;
     onAddTextAreaInfo(material, index) {
         this.memoIndex = index;
@@ -252,6 +252,12 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         $("#textarea-popupFreight").modal("hide");
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     saveFreightList() {
         this.freightForm = this.freightForm.map(x => {
             return {
@@ -259,7 +265,8 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
                 dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
                 currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
-                billingAmount: this.formateCurrency(x.amount)
+                billingAmount: this.formateCurrency(x.amount),
+                masterCompanyId: this.currentUserMasterCompanyId
             }
         });
         if (this.isEdit) {

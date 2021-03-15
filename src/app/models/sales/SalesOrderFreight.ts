@@ -16,6 +16,7 @@ export class SalesOrderFreight implements ISalesOrderFreight {
     salesOrderQuotePartId: string;
     markupPercentageId: number;
     markupFixedPrice: number;
+    masterCompanyId: number;
     headerMarkupId: number;
     billingMethodId: number;
     billingRate: number;

@@ -167,7 +167,7 @@
             <td colspan="4" class="labour-radio-buttons">
               <div class="display-flex">
                 <div class="form-group labour-radio-buttons-align" >
-                  <p-radioButton (ngModelChange)="checkValid(11)" class="p-radiobutton-label-horizontal p-radiobutton-label-w125" name="costPlusType"
+                  <p-radioButton (ngModelChange)="checkValid(11)" class="p-radiobutton-label-horizontal p-radiobutton-label-w125 radio-margin-top" name="costPlusType"
                     label="T&M - Markup %/Unit" value="1" [(ngModel)]="laborForm.costPlusType" [disabled]="isView"
                     (click)="(!isView)?tmchange():''"></p-radioButton>
                   <div>
@@ -179,12 +179,12 @@
                   </div>
                 </div>
                 <div class="cost-plus-type-align">
-                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
+                  <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                     value="2" label="Actual" (ngModelChange)="checkValid(13)" [(ngModel)]="laborForm.costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
                 <div>
-                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
+                  <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                     value="3" label="Flat Rate" (ngModelChange)="checkValid(14)" [(ngModel)]="laborForm.costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
