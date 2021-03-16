@@ -45,6 +45,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     customerContact: string;
     customerRef: any;
     quoteDueDate: Date = new Date();
+    isDetailedView: boolean;
     validFor: number;
     expirationDate: Date;
     sentDate: Date;
@@ -946,6 +947,11 @@ this.creditTerms=res.creditTerm;
                 // this.woWorkFlowId = 0;
                 // this.selectedBuildMethod = "";
                 // this.currenttaskId = 0;
+            }
+            if (this.workOrderQuoteDetailsId == 0) {
+                this.isDetailedView = false;
+            } else {
+                this.isDetailedView = true;
             }
         },
         err => {
@@ -3326,5 +3332,8 @@ calculatebCost(value,material): void {
             this.getWOLabourList();
         }
 
+    }
+    toggleDisplayMode(): void {
+        this.isDetailedView = !this.isDetailedView;
     }
 }

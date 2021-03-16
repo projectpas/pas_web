@@ -30,7 +30,11 @@
             <div class="row">
                 <div class="col">
                   <h4  class="header-name">
-                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
+                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote
+                
+                    <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
+                        {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
+                </h4>
             </div>
             <div *ngIf="!isView">
                 <button type="button"
@@ -42,7 +46,7 @@
            </div>
         </div>
     <div class="card-body new-card-body">
-        <div class="form-row">
+        <div class="form-row" [hidden]="isDetailedView">
             <div class="col-md-3"> 
                 <div class="form-group ">
                     <label>Quote Number <span class="clr-red">*</span></label>
@@ -241,10 +245,11 @@
                     </p-autoComplete>
                </div> -->
             </div>
+            <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
+                <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
+            </div>
         </div>
 
-        <div>
-        </div>
         <div class="form-row pull-right m-t-10" *ngIf="enableEditBtn && selectedDisplayType == ''">
             <button class="btn btn-primary" (click)="createQuote()" *ngIf="!isView || (isWoTab && !isListView)">
                 Edit Quote
@@ -253,9 +258,7 @@
                 Back To Work Order
             </button>
         </div>
-        <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
-            <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
-        </div>
+
     </div>
 </div>
 
