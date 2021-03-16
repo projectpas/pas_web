@@ -370,7 +370,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
             this.getAllWorkOrderStatus('');
         }
-        console.log("hell9 ng On Ints ") 
+
     }
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
@@ -548,7 +548,7 @@ this.creditTerms=res.creditTerm;
         this.mainIndex = mainIndex;
         this.subIndex = subIndex;
         this.deleteRowRecord=obj
-        console.log("obj",obj)
+
         // $('#deleteRowConfirmation').modal('show');
     }
 
@@ -836,7 +836,7 @@ this.creditTerms=res.creditTerm;
                         label: x.partNumber
                     }
                 });
-                console.log("this.mpnPartNumbersList",this.mpnPartNumbersList)
+
                 if (this.savedWorkOrderData && this.savedWorkOrderData.isSinglePN) {
                     this.selectedPartNumber = this.mpnPartNumbersList[0].value;
                     this.selectedquotePn = this.mpnPartNumbersList[0].label
@@ -976,7 +976,7 @@ this.creditTerms=res.creditTerm;
         else if (buildType == 'use historical wos') {
             this.labor.workFloworSpecificTaskorWorkOrder = 'specificTasks';
         }
-        console.log("this.gridActiveTab",this.gridActiveTab)
+
         if(!this.gridActiveTab || this.gridActiveTab=='materialList' ){
             this.gridTabChange('materialList');
         }
@@ -1010,7 +1010,7 @@ this.creditTerms=res.creditTerm;
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrderQuote(partId, workScopeId, payLoad)
                         .subscribe(
                             (res: any[]) => {
-                                this.buildHistoricalList = res;
+                                this.buildHistoricalList =res['results']; 
                                 this.showDisplayData=true;
                             }
                         )
@@ -1019,7 +1019,7 @@ this.creditTerms=res.creditTerm;
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrder(partId, workScopeId, payLoad)
                         .subscribe(
                             (res: any[]) => {
-                                this.buildHistoricalList = res;
+                                this.buildHistoricalList = res['results'];
                                 this.showDisplayData=true;
                             }
                         )
@@ -1142,14 +1142,12 @@ this.creditTerms=res.creditTerm;
     }
 
     saveWorkOrderFreightsList(e) {
-        console.log("dfdsfsdfsdfdsfsdfdsfsdf",e)
         this.quoteFreightListPayload.BuildMethodId = this.getBuildMethodId();
         this.quoteFreightListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.quoteFreightListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.quoteFreightListPayload['createdDate'] = (e.createdDate) ? e.createdDate : new Date();
         this.quoteFreightListPayload.masterCompanyId = this.quotationHeader.masterCompanyId;
         this.quoteFreightListPayload.SelectedId = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
-        console.log("hello ",this.quoteFreightListPayload);
         this.quoteFreightListPayload.WorkOrderQuoteFreight = e['data'].map(fre => {
             if (fre.workOrderQuoteDetailsId && fre.workOrderQuoteDetailsId != 0) {
                 this.quoteFreightListPayload.WorkOrderQuoteDetailsId = fre.workOrderQuoteDetailsId
@@ -1863,7 +1861,6 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialListForWO(data) {
-        console.log("data",data)
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1901,7 +1898,6 @@ this.creditTerms=res.creditTerm;
                 // this.workOrderExclusionsList = [...this.workOrderExclusionsList, ...this.workOrderExclusionsLists[x].map(da=>{ return {...da, taskId:x}})]
                 this.materialListQuotation.push(temp[x]);
             }
-            console.log(" this.materialListQuotation", this.materialListQuotation);
         }
         else {
             this.editMatData = [];
@@ -2005,7 +2001,6 @@ this.creditTerms=res.creditTerm;
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].mandatoryOrSupplemental;
         this.editMatData[0].partNumber= { partId:this.editMatData[0].itemMasterId, partName:this.editMatData[0].partNumber }
-        console.log("this.edit",this.editMatData); 
     }
 
     deleteMaterialList(mainIndex, subIndex) {
