@@ -206,29 +206,24 @@ get currentUserMasterCompanyId(): number {
       data.filters.masterCompanyId= this.currentUserMasterCompanyId;
       const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
       this.isSpinnerVisible = true;
-      this.workOrderService.getWorkOrderQuoteList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe((res: any[]) => {
-          this.woQuoteList = res;
+      this.workOrderService.getWorkOrderQuoteList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe((res: any) => {
+          // this.woQuoteList = res;
           this.isSpinnerVisible = false;
-        //   this.woQuoteList = res['results'].map(x => {
-        //     return {
-        //         ...x,
-        //         createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-        //         updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
-        //         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy') : '',  
-        //         promisedDate : x.promisedDate ?  this.datePipe.transform(x.promisedDate, 'MM/dd/yyyy hh:mm a'): '',
-        //         estCompletionDate: x.estCompletionDate ? this.datePipe.transform(x.estCompletionDate, 'MM/dd/yyyy') : '',  
-        //     }
-        // });
+          this.woQuoteList = res['results'].map(x => {
+            return {
+                ...x,
+                createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy') : '',  
+                promisedDate : x.promisedDate ?  this.datePipe.transform(x.promisedDate, 'MM/dd/yyyy hh:mm a'): '',
+                estCompletionDate: x.estCompletionDate ? this.datePipe.transform(x.estCompletionDate, 'MM/dd/yyyy') : '',  
+            }
+        });
 
-          if (res.length > 0) {
-              this.totalRecords = res[0].totalRecords;
-              this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-          }
-        //   if (res.results.length > 0) {
-        //     this.totalRecords = res.totalRecordsCount;
-        //     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        // } 
-        else {
+          if (res['results'].length > 0) {
+        this.totalRecords = res.totalRecordsCount;
+            this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+          }else {
             this.totalRecords = 0;
             this.totalPages = 0;
         }
