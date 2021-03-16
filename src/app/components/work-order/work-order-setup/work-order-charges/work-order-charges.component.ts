@@ -195,7 +195,11 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       })
     }
   }
-
+  calculatebCost(value,currentObj): void {
+    setTimeout(() => {
+      currentObj.billingAmount = value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
+    }, 500);
+  }
   getDeleteListByStatus(value) {
     if (value == true) {
       this.currentDeletedstatus = true;

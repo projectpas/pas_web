@@ -9,6 +9,7 @@ import {
   multiParts,
   partsDetail
 } from '../models/work-order-quote.modal';
+import { AuthService } from "../services/auth.service";
 
 @Component({
   selector: 'grd-quote-view',
@@ -70,7 +71,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   isWorkOrder: any;
   
   constructor(private commonService: CommonService, private workorderMainService: WorkOrderService,
-    private workOrderService: WorkOrderQuoteService) {
+    private workOrderService: WorkOrderQuoteService, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -221,7 +222,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
 
   getQuoteMaterialListByWorkOrderQuoteId() {
     if (this.workOrderQuoteDetailsId) {
-      this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
+      this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, 1,this.authService.currentUser.masterCompanyId).subscribe(res => {
         this.materialListQuotation = res;
         if (this.materialListQuotation && this.materialListQuotation.length > 0 && this.materialListQuotation[0].headerMarkupId) {
           this.costPlusType = this.materialListQuotation[0].markupFixedPrice;
@@ -233,7 +234,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
 
   getQuoteFreightListByWorkOrderQuoteId() {
     if (this.workOrderQuoteDetailsId) {
-      this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
+      this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, 1,this.authService.currentUser.masterCompanyId).subscribe(res => {
         this.workOrderFreightList = res;
       })
     }
@@ -241,7 +242,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
 
   getQuoteChargesListByWorkOrderQuoteId() {
     if (this.workOrderQuoteDetailsId) {
-      this.workOrderService.getQuoteChargesList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
+      this.workOrderService.getQuoteChargesList(this.workOrderQuoteDetailsId, 1,this.authService.currentUser.masterCompanyId).subscribe(res => {
         this.workOrderChargesList = res;
       })
     }
@@ -249,7 +250,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
 
   getQuoteLaborListByWorkOrderQuoteId() {
     if (this.workOrderQuoteDetailsId) {
-      this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
+      this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, 1,this.authService.currentUser.masterCompanyId).subscribe(res => {
         if (res) {
           let wowfId = this.labor.workFlowWorkOrderId;
           if (res) {

@@ -186,11 +186,11 @@ export class WorkOrderService {
     getAllTasks() {
         return this.workOrderEndpointService.getTasks();
     }
-    getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId) {
-        return this.workOrderEndpointService.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId)
+    getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId,masterCompanyId)
     } 
-    getSubWorkOrderMaterialList(subWOPartNoId) {
-        return this.workOrderEndpointService.getSubWorkOrderMaterialList(subWOPartNoId)
+    getSubWorkOrderMaterialList(subWOPartNoId,masterCompanyId) {
+        return this.workOrderEndpointService.getSubWorkOrderMaterialList(subWOPartNoId,masterCompanyId)
     } 
     deleteWorkOrderMaterialList(workOrderMaterialsId, updatedBy) {
         return this.workOrderEndpointService.deleteWorkOrderMaterialList(workOrderMaterialsId, updatedBy)
@@ -203,8 +203,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getWorkOrderPublicationList(workFlowWorkOrderId, workOrderId)
     }
 
-    getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted) {
-        return this.workOrderEndpointService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted)
+    getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,isDeleted,masterCompanyId)
     }
 
     deleteWorkOrderChargesByChargesId(workOrderChargeId, updatedBy,isSubWorkOrder) {
@@ -217,11 +217,11 @@ export class WorkOrderService {
     deleteWorkOrderExclusionByExclusionId(workOrderExclusionsId, updatedBy) {
         return this.workOrderEndpointService.deleteWorkOrderExclusionByExclusionId(workOrderExclusionsId, updatedBy)
     }
-    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted){
-        return this.workOrderEndpointService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted)
+    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted,masterCompanyId){
+        return this.workOrderEndpointService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,isDeleted,masterCompanyId)
     }
-    getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId) {
-        return this.workOrderEndpointService.getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId)
+    getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,isSubWorkOrder,subWOPartNoId,masterCompanyId)
     }
 
     getWorkOrderDirectionList(workFlowWorkOrderId, workOrderId) {
@@ -359,11 +359,11 @@ export class WorkOrderService {
     getteardownreasonbyidData(id){
         return this.workOrderEndpointService.getteardownreasonbyid(id);
     }
-    workOrderLabourAnalysisData(workOrderId, workOrderPartNoId,isSubWorkOrder){
-        return this.workOrderEndpointService.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId,isSubWorkOrder);
+    workOrderLabourAnalysisData(workOrderId, workOrderPartNoId,isSubWorkOrder,masterCompanyId){
+        return this.workOrderEndpointService.workOrderLabourAnalysisData(workOrderId, workOrderPartNoId,isSubWorkOrder,masterCompanyId);
     }
-    workOrderAnalysisData(workOrderId, workOrderPartNoId,isSubWorkOrder){
-        return this.workOrderEndpointService.workOrderAnalysisData(workOrderId,workOrderPartNoId,isSubWorkOrder);
+    workOrderAnalysisData(workOrderId, workOrderPartNoId,isSubWorkOrder,masterCompanyId){
+        return this.workOrderEndpointService.workOrderAnalysisData(workOrderId,workOrderPartNoId,isSubWorkOrder,masterCompanyId);
     }
     worOrderTearDownReasonListById(tearDownTypeId){
         return this.workOrderEndpointService.worOrderTearDownReasonListById(tearDownTypeId);
@@ -453,8 +453,8 @@ export class WorkOrderService {
     createSubWorkOrderChargesList(data) {
         return this.workOrderEndpointService.createSubWorkOrderChargesList(data);
     }
-    getSubWorkOrderChargesList(subWOPartNoId) {
-        return this.workOrderEndpointService.getSubWorkOrderChargesList(subWOPartNoId)
+    getSubWorkOrderChargesList(subWOPartNoId,isDeleted,masterCompanyId) {
+        return this.workOrderEndpointService.getSubWorkOrderChargesList(subWOPartNoId,isDeleted,masterCompanyId)
     }
 
     // createWorkOrderFreightList(data){
