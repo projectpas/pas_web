@@ -776,30 +776,22 @@
                                                   <span class="label"><b>Pay Type: </b></span>
                                                   <span class="value"
                                                         *ngIf="allEmployeelist.isHourly == true">Hourly Pay</span>
-                                                  <span class="value"
-                                                        *ngIf="
-                                  allEmployeelist.isHourly == false
-                                ">Monthly Pay</span>
+                                                  <span class="value" *ngIf="allEmployeelist.isHourly == false">Monthly Pay</span>
                                               </p>
                                               <p>
                                                   <span *ngIf="allEmployeelist.isHourly == true"
-                                                        class="label"><b>Hourly Pay: <span class="clr-red">*</span></b></span>
+                                                        class="label"><b>Hourly Pay: <span class="clr-red"></span></b></span>
                                                   <span *ngIf="allEmployeelist.isHourly == false"
-                                                        class="label"><b>Monthly Pay: <span class="clr-red">*</span></b></span>
+                                                        class="label"><b>Monthly Pay: <span class="clr-red"></span></b></span>
                                                   <!-- <span *ngIf="!allEmployeelist.isHourly" class="label"><b>Pay: </b></span> -->
-                                                  <span class="value">
-                                                      {{
-                                allEmployeelist.hourlyPay
-                                  ? allEmployeelist.hourlyPay
-                                  : '-'
-                                                      }}
+                                                  <span class="value">{{allEmployeelist.hourlyPay ? allEmployeelist.hourlyPay : '-' }}
                                                   </span>
                                               </p>
                                           </div>
 
                                           <div class=" col-sm-3">
                                               <p>
-                                                  <span class="label"><b>Currency: <span class="clr-red">*</span></b></span><span class="value">
+                                                  <span class="label"><b>Currency: <span class="clr-red"></span></b></span><span class="value">
                                                       {{
                                 currencyName ? currencyName : '-'
                                                       }}

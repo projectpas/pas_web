@@ -56,7 +56,8 @@
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled > 0">
-                                        <label style="color: #0F9D58">{{ bill.invoiceStatus == 1 ? "Reviewed" : "Invoiced" }}</label>
+                                        <label
+                                            style="color: #0F9D58">{{ bill.invoiceStatus == 1 ? "Reviewed" : "Invoiced" }}</label>
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
@@ -101,7 +102,7 @@
                                     <td class="zui-sticky-col" style="width:107px !important">
                                         <span *ngIf="bill.qtyBilled > 0">
                                             <a class="btn nobg" matTooltip="Invoice" matTooltipPosition="above"
-                                                (click)="DownloadInvoice(bill);"><i class="fa fa-print"></i></a>
+                                                (click)="ViewInvoice(bill);"><i class="fa fa-print"></i></a>
                                         </span>
                                         <span>
                                             <button class="btn nobg" *ngIf="bill.qtyBilled == 0" type="submit"
@@ -540,8 +541,7 @@
                 </div>
                 <div style="float: right;" *ngIf="!isViewMode">
                     <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
-                        data-toggle="modal" data-target="#printPost">Generate
-                        Invoice</button>
+                        (click)="PrintInvoice()">Generate Invoice</button>
                     <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
                         (click)="updateWorkOrderBilling()">Update</button>
                 </div>
@@ -563,35 +563,40 @@
         </div>
     </div>
 </div>
-<div id="printPost" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" (click)="closeModal()">&times;</button>
-                <h4 class="modal-title">Print OR Post Invoice</h4>
-            </div>
-            <div class="modal-body">
-                <button type="button" class="btn btn-primary" (click)="PrintInvoice()">Print</button>
-                <button type="button" class="btn btn-primary" (click)="PrintPostInvoice()">Print And Post</button>
-            </div>
-            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
-                <div class="loading">
-                    <div class="lds-roller">
-                        <div>
-                        </div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
+<!-- <div id="printPost" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"> -->
+<ng-template #printPost let-c="close" let-d="dismiss">
+    <!-- <div class="modal-dialog modal-xl">
+        <div class="modal-content"> -->
+    <div class="modal-header">
+        <button type="button" class="close" (click)="close()">&times;</button>
+        <h4 class="modal-title">Print OR Post Invoice</h4>
+    </div>
+    <div class="modal-body">
+        <app-sales-order-print-invoice [salesOrderbillingInvoicingId]="SObillingInvoicingId"
+            [salesOrderId]="salesOrderId"></app-sales-order-print-invoice>
+    </div>
+    <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div>
                 </div>
-            </div>
-            <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
-            <div class="modal-footer">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     </div>
-</div>
+    <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="PrintInvoice()">Print</button>
+        <button type="button" class="btn btn-primary" (click)="PrintPostInvoice()">Print And Post</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
+    </div>
+    <!--</div>
+    </div>
+     </div> -->
+</ng-template>

@@ -248,7 +248,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
         })
         let result = { 'data': sendData, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType }
-        debugger;
+        
         this.isSpinnerVisible = true;
         this.salesOrderQuoteService.createFreight(sendData).subscribe(result => {
             this.isSpinnerVisible = false;

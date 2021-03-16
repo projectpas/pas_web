@@ -632,6 +632,12 @@ export class SalesOrderService {
     );
   }
 
+  getSalesOrderBillingInvoicingPdf(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getSalesOrderBillingInvoicingPdf(sobillingInvoicingId)
+    );
+  }
+
   updateShipping(serviceClass: string, salesOrderShippingId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.updateShipping(serviceClass, salesOrderShippingId)
