@@ -25,11 +25,9 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
 /** WorkOrderShipping component*/
 export class WorkOrderViewComponent implements OnInit, OnChanges {
     @Input() workOrderId = 0;
-    @Input() currencyList = [];
-    @Input() employeesOriginalData = [];
     creditTerms: any;
     techStationList: any;
-    workScopesList: { label: string; value: number; }[];
+    // workScopesList: { label: string; value: number; }[];
     workOrderStagesList: any;
     priorityList: any;
     workOrderTypes: any;
@@ -93,21 +91,28 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
     getBasicDetails(){
-        this.getConditionsList();
-        this.getAllWorkOrderTypes();
-        this.getAllWorkOrderStatus();
-        this.getAllCreditTerms();
-        // this.getAllCustomers();
-        // this.getAllEmployees();
-        this.getAllTecStations();
-        this.getJobTitles();
-        this.getAllWorkScpoes();
-        this.getAllWorkOrderStages();
-        this.getAllExpertiseType();
-        this.getAllPriority();
-        this.getLegalEntity();
+        // this.getConditionsList();
+        // this.getAllWorkOrderTypes();
+        // this.getAllWorkOrderStatus();
+        // this.getAllCreditTerms();
+      
+        // this.getAllTecStations();
+        // this.getJobTitles();
+      
+        // this.getAllWorkOrderStages();
+        // this.getAllExpertiseType();
+      
      
-        //if (!this.recCustomerId)
+
+
+  // this.getAllPriority();
+        // this.getLegalEntity();
+          // this.getAllWorkScpoes();
+          // this.getAllCustomers();
+        // this.getAllEmployees();
+
+
+
             this.getMultiplePartsNumbers();
         if (this.workOrderId || this.recCustomerId) {
 
@@ -155,26 +160,22 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 		  ? this.authService.currentUser.masterCompanyId
 		  : null;
     }
-    getAllExpertiseType() {
-        this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
+    // getAllExpertiseType() {
+    //     this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
 
-          this.expertiseTypeList = res.map(x => {
-            // return {
-            //   label: x.expertiseType,
-            //   value: x.employeeExpertiseId
-            // }
-            if(x.empExpCode =='TECHNICIAN'){
-               this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
-               return;
-            }
-          });
-        })
-      }
-      getExpertiseEmployeeByExpertiseId(value) {
-        this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
-          this.technicianByExpertiseTypeList = res;
-        })
-      }
+    //       this.expertiseTypeList = res.map(x => {
+    //         if(x.empExpCode =='TECHNICIAN'){
+    //            this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
+    //            return;
+    //         }
+    //       });
+    //     })
+    //   }
+    //   getExpertiseEmployeeByExpertiseId(value) {
+    //     this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
+    //       this.technicianByExpertiseTypeList = res;
+    //     })
+    //   }
     getWorkOrderDefaultSetting(value?) {
       const  value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
         this.commonService.workOrderDefaultSettings(this.masterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -235,70 +236,63 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     getJobTitles() {
         this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
-            this.getSalesPersonList();
-            this.getCSRList();
-            this.getAgentsList();
-            this.getTechnicianList();
+            // this.getSalesPersonList();
+            // this.getCSRList();
+            // this.getAgentsList();
+            // this.getTechnicianList();
             // this.getInspectiorsList();
             // this.getSalesAgentsList();
         })
     }
-    getSalesPersonList() {
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
-        if (id !== undefined) {
-            this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-                this.salesPersonOriginalList = res;
-                this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
-            })
-        }
-    }
-
-    getCSRList() {
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
-        if (id !== undefined) {
-            this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-                this.csrOriginalList = res;
-            })
-        }
-    }
-
-    getAgentsList() {
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
-        if (id !== undefined) {
-            this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-                this.agentsOriginalList = res;
-                this.salesAgentsOriginalList = [...this.salesAgentsOriginalList, ...this.agentsOriginalList];
-            })
-        }
-    }
-
-    // getSalesAgentsList() {
-    //     this.salesAgentsOriginalList = [...this.salesPersonOriginalList , ...this.agentsOriginalList ];
-    //     // this.salesAgentsOriginalList.push(this.salesPersonOriginalList);
-    //     // this.salesAgentsOriginalList.push(this.agentsOriginalList);
+    // getSalesPersonList() {
+    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
+    //     if (id !== undefined) {
+    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
+    //             this.salesPersonOriginalList = res;
+    //             this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
+    //         })
+    //     }
     // }
 
-    getTechnicianList() {
-        const id = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
-        if (id !== undefined) {
-            this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-                this.technicianOriginalList = res;
-            })
-        }
-    }
- 
+    // getCSRList() {
+    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
+    //     if (id !== undefined) {
+    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
+    //             this.csrOriginalList = res;
+    //         })
+    //     }
+    // }
 
-    async getAllEmployees() {
-        await this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.employeesOriginalData = res.map(x => {
-                return {
-                    ...x,
-                    employeeId: x.value,
-                    name: x.label
-                }
-            });
-        })
-    }
+    // getAgentsList() {
+    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
+    //     if (id !== undefined) {
+    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
+    //             this.agentsOriginalList = res;
+    //             this.salesAgentsOriginalList = [...this.salesAgentsOriginalList, ...this.agentsOriginalList];
+    //         })
+    //     }
+    // }
+    // getTechnicianList() {
+    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
+    //     if (id !== undefined) {
+    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
+    //             this.technicianOriginalList = res;
+    //         })
+    //     }
+    // }
+ 
+    employeesOriginalData:any=[];
+    // async getAllEmployees() {
+    //     await this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.employeesOriginalData = res.map(x => {
+    //             return {
+    //                 ...x,
+    //                 employeeId: x.value,
+    //                 name: x.label
+    //             }
+    //         });
+    //     })
+    // }
 
     async getAllTecStations() {
         await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -312,18 +306,18 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         })
     }
 
-    getAllWorkScpoes(): void {
-        this.workOrderService.getAllWorkScopes().pipe(takeUntil(this.onDestroy$)).subscribe(
-            result => {
-                this.workScopesList = result.map(x => {
-                    return {
-                        label: x.description,
-                        value: x.workScopeId
-                    }
-                })
-            }
-        );
-    }
+    // getAllWorkScpoes(): void {
+    //     this.workOrderService.getAllWorkScopes().pipe(takeUntil(this.onDestroy$)).subscribe(
+    //         result => {
+    //             this.workScopesList = result.map(x => {
+    //                 return {
+    //                     label: x.description,
+    //                     value: x.workScopeId
+    //                 }
+    //             })
+    //         }
+    //     );
+    // }
 
 
     getAllWorkOrderStages(): void {
@@ -339,11 +333,11 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         })
     }
 
-    getAllPriority() {
-        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.priorityList = res;
-        })
-    }
+    // getAllPriority() {
+    //     this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.priorityList = res;
+    //     })
+    // }
 
 
     getMultiplePartsNumbers() {
@@ -362,12 +356,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         });
     }
 
-    getLegalEntity() {
-        this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.legalEntityList = res;
-        })
+    // getLegalEntity() {
+    //     this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.legalEntityList = res;
+    //     })
 
-    }
+    // }
 
 
     getConditionsList() {

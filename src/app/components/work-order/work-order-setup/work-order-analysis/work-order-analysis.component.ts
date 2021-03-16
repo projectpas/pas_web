@@ -4,6 +4,7 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
+import { AuthService } from '../../../../services/auth.service';
 declare var $ : any;
 @Component({
     selector: 'app-work-order-analysis',
@@ -51,7 +52,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
     selectedColumns = this.headers;
     workOrderId: any;
 
-    constructor(private workOrderService: WorkOrderService, private localStorage: LocalStoreManager) { }
+    constructor(private workOrderService: WorkOrderService,        private authService: AuthService, private localStorage: LocalStoreManager) { }
 
     ngOnInit() {
         this.workOrderId = this.savedWorkOrderData.workOrderId;
@@ -79,7 +80,7 @@ export class WorkOrderAnalysisComponent implements OnInit, OnChanges {
 
     getWorkOrderAnalysisData(workOrderId) {
         const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
-        this.workOrderService.workOrderAnalysisData(workOrderId, id, this.isSubWorkOrder)
+        this.workOrderService.workOrderAnalysisData(workOrderId, id, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
                     if (res) {

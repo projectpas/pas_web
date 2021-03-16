@@ -22,9 +22,9 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getQuoteExclusionList(workOrderQuoteId, buildMethodId));
           });
     }
-    getQuoteMaterialList(workOrderQuoteId, buildMethodId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotematerials?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getQuoteMaterialList(workOrderQuoteId, buildMethodId));
+    getQuoteMaterialList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotematerials?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getQuoteMaterialList(workOrderQuoteId, buildMethodId,masterCompanyId));
           });
     }
     getQuoteMaterialListForBilling(workOrderId) {
@@ -32,9 +32,9 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getQuoteMaterialListForBilling(workOrderId));
           });
     }
-    getQuoteFreightsList(workOrderQuoteId, buildMethodId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotefreights?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getQuoteFreightsList(workOrderQuoteId, buildMethodId));
+    getQuoteFreightsList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotefreights?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getQuoteFreightsList(workOrderQuoteId, buildMethodId,masterCompanyId));
           });
     }
     getQuoteFreightsListBilling(workOrderId) {
@@ -42,9 +42,9 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getQuoteFreightsListBilling(workOrderId));
           });
     }
-    getQuoteChargesList(workOrderQuoteId, buildMethodId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotecharges?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getQuoteChargesList(workOrderQuoteId, buildMethodId));
+    getQuoteChargesList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotecharges?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getQuoteChargesList(workOrderQuoteId, buildMethodId,masterCompanyId));
           });
     }
     getQuoteChargesListBilling(workOrderId) {
@@ -52,9 +52,9 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getQuoteChargesListBilling(workOrderId));
           });
     }
-    getQuoteLaborList(workOrderQuoteId, buildMethodId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotelabor?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getQuoteLaborList(workOrderQuoteId, buildMethodId));
+    getQuoteLaborList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/quotelabor?workOrderQuoteDetailsId=${workOrderQuoteId}&buildMethodId=${buildMethodId}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getQuoteLaborList(workOrderQuoteId, buildMethodId,masterCompanyId));
           });
     }
     getQuoteLaborListBilling(workOrderId) {

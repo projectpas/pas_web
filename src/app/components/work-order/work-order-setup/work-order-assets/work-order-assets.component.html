@@ -171,24 +171,24 @@
           </td> 
               <td class="action-icons-cstm table-column-width" >
                   <div *ngIf="currentDeletedstatus == false">
-                    <span data-target="#addNewEquipments" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+                    <span data-target="#addNewEquipments" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                       (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                   </span>
                   <span>
-                    <a class="btn  boxed-float-btn nobg" (click)="checkStatus(rowData, 'checkOut'); viewAsstes(rowData)"
+                    <a class="btn  boxed-float-btn nobg" *ngIf="!isView" (click)="checkStatus(rowData, 'checkOut'); viewAsstes(rowData)"
                       data-toggle="modal" data-target="#checkIn" matTooltipPosition="above"
                       matTooltip="Asset Checked-Out">
                       <i class="fa fa-sign-out clr-red"></i>
                     </a>
                   </span>
                   <span>
-                    <a class="btn  boxed-float-btn nobg" (click)="checkStatus(rowData, 'checkIn'); viewAsstes(rowData)"
+                    <a class="btn  boxed-float-btn nobg" *ngIf="!isView" (click)="checkStatus(rowData, 'checkIn'); viewAsstes(rowData)"
                       data-toggle="modal" data-target="#checkIn" matTooltipPosition="above" matTooltip="Asset Checked-In">
                       <i class="fa fa-sign-in clr-blue"></i></a>
                   </span>
   
   
-                  <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete"
+                  <span><a class="btn nobg btn-delete-cstm" *ngIf="!isView" (click)="openDelete(content,rowData)" matTooltip="Delete"
                       matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                       <span data-toggle="modal" data-target="#assetHistory">
                         <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"><i
@@ -197,7 +197,7 @@
                   <div *ngIf="currentDeletedstatus == true">
                   
                      
-                      <span>
+                      <span *ngIf="!isView">
                           <a class="btn nobg" (click)="restore(restoreIdWo,rowData);"
                               matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                   aria-hidden="true"></i></a>
@@ -727,8 +727,15 @@
                 <th>CheckIn By</th>
                 <th>Notes</th>
               </tr>
-            </thead>
-            <tbody>
+            </thead >
+            <tbody *ngIf="assetAuditHistory && assetAuditHistory.length ==0">
+              <tr>
+                <td colspan="13" class="no-records-msg no-records-cstm">
+                    No records found
+                </td>
+            </tr>
+            </tbody>
+            <tbody *ngIf="assetAuditHistory && assetAuditHistory.length !=0">
               <tr *ngFor="let audit of assetAuditHistory; let i = index">
                 <td [ngStyle]="{
                   color: getColorCodeForHistory(

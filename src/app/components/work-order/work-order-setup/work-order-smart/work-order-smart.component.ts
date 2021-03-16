@@ -293,5 +293,5 @@ export class WorkOrderSmartComponent implements OnInit {
         this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
          this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
-    }
+    } 
 }
