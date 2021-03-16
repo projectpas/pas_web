@@ -226,8 +226,8 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                 
             },err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
+                //const errorLog = err;
+               // this.errorMessageHandler(errorLog);		
             });
     }
    
@@ -359,7 +359,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.employeeService.getCertificationList(this.empId).subscribe(
             results => this.onCertifywithEmpId(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
         );
         this.cols = [
             { field: 'certificationNumber', header: 'Certification' },
@@ -380,7 +380,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.employeeService.getEmployeeList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false }//this.onDataLoadFailed(error)
         );
     }
     // Load Master Cpmpanies
@@ -389,7 +389,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
         );
 
     }
@@ -420,7 +420,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
          this.loadingIndicator = true;
 		if(this.arrayCertificationlist.length == 0) {			
 			this.arrayCertificationlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeCertificationType', 'EmployeeCertificationTypeId', 'description',strText,true,20000,this.arrayCertificationlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeCertificationType', 'EmployeeCertificationTypeId', 'description',strText,true,20000,this.arrayCertificationlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.alertService.stopLoadingMessage();
             this.loadingIndicator = false;
             this.allCertification = response;           			
@@ -428,8 +428,8 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.alertService.stopLoadingMessage();
             this.loadingIndicator = false;
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
 		});
     }
     
@@ -483,7 +483,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceAction.isActive == false;
             this.employeeService.updateEmployee(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
 
         }
         else {
@@ -493,7 +493,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceAction.isActive == true;
             this.employeeService.updateEmployee(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
         }
     }
     open(content) {
@@ -537,7 +537,8 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.sourceAction = row;
         this.employeeService.historyEmployee(this.sourceAction.employeeId).subscribe(
             results => this.onHistoryLoadSuccessful(results[0], content),
-            error => this.saveFailedHelper(error));
+            //error => this.saveFailedHelper(error));
+            error =>{this.isSpinnerVisible=true})
     }
     editItemAndCloseModel() {
         this.isSaving = true;
@@ -580,7 +581,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.sourceAction.updatedBy = this.userName;
         this.employeeService.deleteEmployee(this.sourceAction.employeeId).subscribe(
             response => this.saveCompleted(this.sourceAction),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false})//  this.saveFailedHelper(error));
         this.modal.close();
     }
     filterEmployees(event) {
@@ -730,7 +731,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                     // this.router.navigate(['/employeesmodule/employeepages/app-employee-training']);
                     this.isEnableNext=true;  
                     this.saveCompleted(this.sourceEmployee),
-                        error => this.saveFailedHelper(error)
+                        error =>{this.isSpinnerVisible=true} //this.saveFailedHelper(error)
                 });
         }
         this.modal.close();
