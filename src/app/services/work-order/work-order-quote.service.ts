@@ -96,26 +96,26 @@ export class WorkOrderQuoteService {
     getQuoteExclusionList(workOrderQuoteId, buildMethodId) {
         return this.quoteEndPointService.getQuoteExclusionList(workOrderQuoteId, buildMethodId);
     }
-    getQuoteMaterialList(workOrderQuoteId, buildMethodId) {
-        return this.quoteEndPointService.getQuoteMaterialList(workOrderQuoteId, buildMethodId);
+    getQuoteMaterialList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.quoteEndPointService.getQuoteMaterialList(workOrderQuoteId, buildMethodId,masterCompanyId);
     } 
     getQuoteMaterialListForBilling(workOrderId) {
         return this.quoteEndPointService.getQuoteMaterialListForBilling(workOrderId);
     }
-    getQuoteFreightsList(workOrderQuoteId, buildMethodId) {
-        return this.quoteEndPointService.getQuoteFreightsList(workOrderQuoteId, buildMethodId);
+    getQuoteFreightsList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.quoteEndPointService.getQuoteFreightsList(workOrderQuoteId, buildMethodId,masterCompanyId);
     }
     getQuoteFreightsListBilling(workOrderId) {
         return this.quoteEndPointService.getQuoteFreightsListBilling(workOrderId);
     }
-    getQuoteChargesList(workOrderQuoteId, buildMethodId) {
-        return this.quoteEndPointService.getQuoteChargesList(workOrderQuoteId, buildMethodId);
+    getQuoteChargesList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.quoteEndPointService.getQuoteChargesList(workOrderQuoteId, buildMethodId,masterCompanyId);
     }
     getQuoteChargesListBilling(workOrderId) {
         return this.quoteEndPointService.getQuoteChargesListBilling(workOrderId);
     }
-    getQuoteLaborList(workOrderQuoteId, buildMethodId) {
-        return this.quoteEndPointService.getQuoteLaborList(workOrderQuoteId, buildMethodId);
+    getQuoteLaborList(workOrderQuoteId, buildMethodId,masterCompanyId) {
+        return this.quoteEndPointService.getQuoteLaborList(workOrderQuoteId, buildMethodId,masterCompanyId);
     }
     getQuoteLaborListBilling(workOrderId) {
         return this.quoteEndPointService.getQuoteLaborListBilling(workOrderId);

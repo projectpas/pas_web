@@ -64,7 +64,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     selectedBuildMethod: string = "";
     buildWorkOrderList: any[];
     buildHistoricalList: any[];
-    gridActiveTab: string;
+    gridActiveTab: string="materialList";
     quotationHeader: any;
     materialListQuotation: any[];
     chargesQuotation: any[];
@@ -844,47 +844,7 @@ this.creditTerms=res.creditTerm;
             //   this.workFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
             //   this.selectedWorkFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
             // this.getTabDataFromWorkOrder();
-            this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId)
-                .subscribe(  
-                    (res) => {
-                        this.buildMethodDetails = res;
-                        if (res) {
-                            this.costPlusType = res['materialBuildMethod'].toString();
-                            this.materialFlatBillingAmount = res['materialFlatBillingAmount'];
-                        }
-                        if (res && res['workOrderQuoteDetailsId']) {
-                            this.workOrderQuoteDetailsId = res['workOrderQuoteDetailsId'];
-                            this.getQuoteTabData();
-                            this.historicalWorkOrderId = res['selectedId'];
-                            this.woWorkFlowId = res['selectedId'];
-                            this.currenttaskId = res['taskId'];
-                            if (res['buildMethodId'] == 1) {
-                                this.buildMethodSelected('use work order');
-                            }
-                            else if (res['buildMethodId'] == 2) {
-                                this.buildMethodSelected('use work flow');
-                            }
-                            else if (res['buildMethodId'] == 3) {
-                                this.buildMethodSelected('use historical wos');
-                            }
-                            else {
-                                this.buildMethodSelected('build from scratch');
-                            }
-                        }
-                        else {
-                            this.workOrderQuoteDetailsId = 0;
-                            this.updateWorkOrderQuoteDetailsId(this.workOrderQuoteDetailsId);
-                            this.getQuoteTabData();
-                            // this.historicalWorkOrderId = 0;
-                            // this.woWorkFlowId = 0;
-                            // this.selectedBuildMethod = "";
-                            // this.currenttaskId = 0;
-                        }
-                    },
-                    err => {
-                        this.errorHandling(err);
-                    }
-                )
+ this.getBuildMethodDetails();
         }
         // })
         this.savedWorkOrderData.partNumbers.forEach((pns) => {
@@ -905,7 +865,48 @@ this.creditTerms=res.creditTerm;
         // }
 
     }
-
+    getBuildMethodDetails(){
+    this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId)
+    .subscribe((res) => {
+            this.buildMethodDetails = res;
+            if (res) {
+                this.costPlusType = res['materialBuildMethod'].toString();
+                this.materialFlatBillingAmount = res['materialFlatBillingAmount'];
+            }
+            if (res && res['workOrderQuoteDetailsId']) {
+                this.workOrderQuoteDetailsId = res['workOrderQuoteDetailsId'];
+                this.getQuoteTabData();
+                this.historicalWorkOrderId = res['selectedId'];
+                this.woWorkFlowId = res['selectedId'];
+                this.currenttaskId = res['taskId'];
+                if (res['buildMethodId'] == 1) {
+                    this.buildMethodSelected('use work order');
+                }
+                else if (res['buildMethodId'] == 2) {
+                    this.buildMethodSelected('use work flow');
+                }
+                else if (res['buildMethodId'] == 3) {
+                    this.buildMethodSelected('use historical wos');
+                }
+                else {
+                    this.buildMethodSelected('build from scratch');
+                }
+            }
+            else {
+                this.workOrderQuoteDetailsId = 0;
+                this.updateWorkOrderQuoteDetailsId(this.workOrderQuoteDetailsId);
+                this.getQuoteTabData();
+                // this.historicalWorkOrderId = 0;
+                // this.woWorkFlowId = 0;
+                // this.selectedBuildMethod = "";
+                // this.currenttaskId = 0;
+            }
+        },
+        err => {
+            this.errorHandling(err);
+        }
+    )
+}
     getMPNDetails(workOrderId) { 
         this.workOrderService.getPartsDetail(workOrderId)
             .subscribe(
@@ -929,9 +930,10 @@ this.creditTerms=res.creditTerm;
         else if (buildType == 'use historical wos') {
             this.labor.workFloworSpecificTaskorWorkOrder = 'specificTasks';
         }
-        if(!this.gridActiveTab)
+        console.log("this.gridActiveTab",this.gridActiveTab)
+        if(!this.gridActiveTab || this.gridActiveTab=='materialList' ){
             this.gridTabChange('materialList');
-
+        }
 
     }
     showDisplayData:boolean=false;
@@ -1441,6 +1443,7 @@ this.creditTerms=res.creditTerm;
                 }
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteChargesListByWorkOrderQuoteId();
+                this.getBuildMethodDetails();
                 // this.partNumberSelected(this.selectedPartNumber);
                 this.alertService.showMessage(
                     this.moduleName,
@@ -1998,12 +2001,14 @@ this.creditTerms=res.creditTerm;
     }
     getTotalQuantity() {
         let totalQuantity = 0;
+        if( this.materialListQuotation &&  this.materialListQuotation.length !=0){
         this.materialListQuotation.forEach(
             (material) => {
                 totalQuantity += this.getTotalTaskQuantity(material);
             }
         )
         return totalQuantity;
+        }
     }
 
     getTotalTaskQuantity(data) {
@@ -2020,12 +2025,14 @@ this.creditTerms=res.creditTerm;
 
     getTotalUnitCost() {
         let total = 0;
+        if( this.materialListQuotation &&  this.materialListQuotation.length !=0){
         this.materialListQuotation.forEach(
             (material) => {
                 total += Number(this.getTotalTaskUnitCost(material));
             }
         )
         return total.toFixed(2);
+        }
     }
 
     getTotalTaskUnitCost(data) {
@@ -2064,6 +2071,7 @@ this.creditTerms=res.creditTerm;
 
     totalMaterialBillingAmount() {
         let total = 0;
+        if( this.materialListQuotation &&  this.materialListQuotation.length !=0){
         this.materialListQuotation.forEach(
             (material) => {
                 total += Number(this.totalTaskMaterialBillingAmount(material));
@@ -2071,6 +2079,7 @@ this.creditTerms=res.creditTerm;
         )
         this.materialFlatBillingAmount = total.toFixed(2);
         return total.toFixed(2);
+        }
     }
 
     totalTaskMaterialBillingAmount(data) {
@@ -2770,7 +2779,7 @@ this.creditTerms=res.creditTerm;
 
     getWOMaterialList(){
         this.isSpinnerVisible = true;
-        this.workorderMainService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId).subscribe(res => {
+        this.workorderMainService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workOrderMaterialList = res; 
             if (res.length > 0) {
@@ -2817,7 +2826,7 @@ this.creditTerms=res.creditTerm;
     getWOLabourList(){
         this.isSpinnerVisible = true;
         // false, 0 is For Sub Work Order 
-        this.workorderMainService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId,false,0).subscribe(res => {
+        this.workorderMainService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId,false,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             let laborList = this.labor.workOrderLaborList;
             this.labor = { ...res, workOrderLaborList: laborList };
@@ -2856,7 +2865,7 @@ this.creditTerms=res.creditTerm;
 
     getWOChargesList(){
         this.isSpinnerVisible = true;
-        this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,false).subscribe((res: any[]) => {
+        this.workorderMainService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
             this.isSpinnerVisible = false;
             this.workOrderChargesList = res;
             for (let charge in this.workOrderChargesList) {
@@ -2896,7 +2905,7 @@ this.creditTerms=res.creditTerm;
     }
     getWOFrieghtsList(){
         // ,false,0 handle for sub work order handle both apis in end point
-       this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false).subscribe((res: any[]) => {
+       this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
            this.workOrderFreightList = res;
            for (let fre in this.workOrderFreightList) {
                if (this.workOrderFreightList[fre]['billingAmount']) {
@@ -2972,7 +2981,7 @@ this.creditTerms=res.creditTerm;
     getQuoteMaterialListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
+            this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
                 this.originlaMlist=res;
@@ -3047,7 +3056,7 @@ this.creditTerms=res.creditTerm;
     getQuoteFreightListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
+            this.workOrderService.getQuoteFreightsList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workOrderFreightList = res;
                 for (let fre in this.workOrderFreightList) {
@@ -3075,7 +3084,7 @@ this.creditTerms=res.creditTerm;
     getQuoteChargesListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getQuoteChargesList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
+            this.workOrderService.getQuoteChargesList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workOrderChargesList = res;
                 for (let charge in this.workOrderChargesList) {
@@ -3101,7 +3110,7 @@ this.creditTerms=res.creditTerm;
     getQuoteLaborListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) { 
             this.isSpinnerVisible = true;
-            this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4).subscribe(res => {
+            this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, (this.selectedBuildMethod === 'use work order') ? 1 : (this.selectedBuildMethod == "use work flow") ? 2 : (this.selectedBuildMethod == "use historical wos") ? 3 : 4,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     let wowfId = this.labor.workFlowWorkOrderId;

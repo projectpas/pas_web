@@ -168,7 +168,7 @@
             Billing Amount
           </th>
         </ng-container>
-        <th class="table-actions-column" *ngIf="!isView">Actions</th>
+        <th class="table-actions-column" >Actions</th>
         <!-- <th colspan="4" class="text-center" *ngIf="!isView"></th> -->
       </tr>
     </ng-template>
@@ -223,11 +223,11 @@
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>
-            <td class="table-column-width action-icons-cstm" *ngIf="!isView">
+            <td class="table-column-width action-icons-cstm" >
               <div *ngIf="currentDeletedstatus == false">
-              <span data-target="#addNewCharges" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
-                (click)="edit(dt, mainIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-            <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+              <span data-target="#addNewCharges" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+                (click)="edit(dt, mainIndex, subIndex)" *ngIf="!isView" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span> 
                   <span>
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
@@ -243,8 +243,8 @@
                         </a>
                     </span> -->
                  
-                    <span>
-                        <a class="btn nobg" (click)="restore(restoreIdWo,dt);"
+                    <span *ngIf="!isView">
+                        <a class="btn nobg" (click)="restore(restoreIdWo,dt); "
                             matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                 aria-hidden="true"></i></a>
                     </span>
@@ -273,7 +273,7 @@
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="isQuote" class="content-to-end"><strong>{{ getTotalTaskBillingAmount(rowData) }}</strong> </td>
         <td *ngIf="isQuote">&nbsp;</td>
-        <td *ngIf="!isView && !isEdit">&nbsp;</td>
+        <td *ngIf=" !isEdit">&nbsp;</td>
     
       </tr>
     </ng-template>

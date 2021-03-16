@@ -124,7 +124,7 @@
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Fixed Amount</th> -->
         </ng-container>
-        <th rowspan="2" class="table-actions-column" *ngIf="!isView">Actions</th>
+        <th rowspan="2" class="table-actions-column" >Actions</th>
       </tr>
       <tr>
         <th>L</th>
@@ -202,11 +202,11 @@
             </td>
             <!-- <td>{{ dt.billingAmount }}</td> -->
           </ng-container>
-          <td class="btn-spaces text-center action-icons-cstm table-column-width" *ngIf="!isView">
+          <td class="btn-spaces text-center action-icons-cstm table-column-width" >
             <div *ngIf="currentDeletedstatus == false">
-            <span data-target="#addNewFreight" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+            <span data-target="#addNewFreight" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
-            <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
+            <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span>
                   <span>
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
@@ -217,7 +217,7 @@
                   <div *ngIf="currentDeletedstatus == true">
                  
                  
-                    <span>
+                    <span *ngIf="!isView">
                         <a class="btn nobg" (click)="restore(restoreIdWo,dt);"
                             matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                 aria-hidden="true"></i></a>

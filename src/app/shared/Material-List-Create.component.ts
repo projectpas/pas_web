@@ -228,11 +228,12 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
     ngOnInit(): void {
         this.isSubWorkOrder = this.isSubWorkOrder;
-        console.log("isQuote,workorder",this.isQuote,this.isWorkOrder)
+        // if (!this.isView) {
+            this.getPartnumbers('');
+        // }
         if (this.isWorkOrder) {
             this.row = this.workFlow.materialList[0];
             if (this.isEdit) {
-                console.log("edit data",this.editData)
                 this.workFlow.materialList = [];
                 this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
                 this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
@@ -260,18 +261,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
             this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
             this.editData.extendedCost = this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
-           console.log("edit metrial",this.editData)
             this.workFlow.materialList = this.editData;
         }
         else if (this.isQuote) {
             this.workFlow.materialList = [];
             this.addRow();
-            console.log(" metrial",this.editData)
         }
         this.getMaterailMandatories();
-        if (!this.isView) {
-            this.getPartnumbers('');
-        }
+
         if (this.isWorkOrder || this.isQuote) {
             this.provisionList();
             this.getConditionsList();
@@ -299,20 +296,21 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.reCalculate(); 
         }
         if (this.isQuote && this.editData.length > 0) {
-            console.log("hello",this.editData)
             // this.editData[0].quantity= this.editData[0].quantity ? formatNumberAsGlobalSettingsModule(this.editData[0].quantity, 0) : '0',
             // this.editData[0].unitCost= this.editData[0].unitCost ? formatNumberAsGlobalSettingsModule(this.editData[0].unitCost, 2) : '0.00',
             // this.editData[0].extendedCost= this.editData[0].extendedCost ? formatNumberAsGlobalSettingsModule(this.editData[0].extendedCost, 2) : '0.00',
           const data=[...this.editData];
         //    data[0].partNumber= { partId:data[0].itemMasterId, partName:data[0].partNumber }
             this.workFlow.materialList =data;
-            console.log("hello 11",data)
         }
         else if (this.isQuote && (!this.editData || this.editData.length <= 0)) {
             this.workFlow.materialList = [];
             this.addRow();
         }
         this.disableUpdateButton = true;
+        if(!this.isView){
+            this.getPartnumbers('');
+        }
     }
     onFilterTask(value){
         
@@ -395,13 +393,15 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.calculateExtendedPriceSummation();
     }
     filterpartItems(event) {
-        this.partCollection = [];
+        this.partCollection =[];
         this.itemclaColl = [];
         if (event.query != undefined || event.query != null || event.query != '') {
             this.getPartnumbers(event.query);
-        } else {
+        }
+         else {
             this.getPartnumbers('');
         }
+        this.partCollection = this.partCollection;
     }
     getPartnumbers(value) {
         this.isSpinnerVisible = true;
@@ -431,6 +431,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                         "stockType": element.stockType
                     });
                 });
+
+                this.partCollection= this.partCollection;
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -586,13 +588,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         var newRow = Object.assign({}, this.row);
         newRow.workflowMaterialListId = "0";
         if (this.taskList) {
-            this.taskList.forEach(
-                task => {
-                    if (task.description == "Assemble") {
-                        newRow.taskId = task.taskId;
-                    }
-                }
-            )
+            // this.taskList.forEach(
+            //     task => {
+            //         // if (task.description == "Assemble") {
+            //             newRow.taskId = task.taskId;
+            //         // }
+            //     }
+            // )
+            newRow.taskId = this.taskList[0].taskId;
         }
         newRow.conditionCodeId = this.defaultConditionId;
         newRow.extendedCost = "0.00";
