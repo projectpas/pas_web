@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { fadeInOut } from '../../../../../../services/animations';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { SalesOrderBillingAndInvoicing } from '../../../../../../models/sales/salesOrderBillingAndInvoicing';
@@ -11,6 +11,7 @@ import { AuthService } from '../../../../../../services/auth.service';
 import { AppModuleEnum } from '../../../../../../enum/appmodule.enum';
 import { AddressTypeEnum } from '../../../../../../shared/components/address-component/Address-type-enum';
 import { InvoiceTypeEnum } from '../../../models/sales-order-invoice-type-enum';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
 @Component({
@@ -59,12 +60,17 @@ export class SalesOrderBillingComponent implements OnInit {
     billingList: any[] = [];
     partSelected: boolean = false;
     showBillingForm: boolean = false;
+    modal: NgbModalRef;
+    salesOrderBillingInvoiceId: number;
+    SObillingInvoicingId: number;
+    @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
 
     constructor(public salesOrderService: SalesOrderService,
         public commonService: CommonService,
         public alertService: AlertService,
         public customerService: CustomerService,
-        public authService: AuthService) {
+        public authService: AuthService,
+        private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -82,6 +88,11 @@ export class SalesOrderBillingComponent implements OnInit {
             { field: "status", header: "Status", width: "90px" },
         ];
         this.selectedColumns = this.headers;
+    }
+
+    loadInvoiceView() {
+        this.SObillingInvoicingId = this.salesOrderBillingInvoiceId;
+        this.modal = this.modalService.open(this.printPostModal, { size: "lg", backdrop: 'static', keyboard: false });
     }
 
     refresh(id) {
@@ -376,11 +387,18 @@ export class SalesOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.invoiceNo = "test";
         this.billingorInvoiceForm.invoiceStatus = isPost ? InvoiceTypeEnum.Invoiced.toString() : InvoiceTypeEnum.Reviewed.toString();
         this.salesOrderService.createBilling(this.billingorInvoiceForm).subscribe(result => {
-            let pdfPath = result[0].invoiceFilePath;
-            this.commonService.toDownLoadFile(pdfPath);
-            this.closeModal();
+            // let pdfPath = result[0].invoiceFilePath;
+            // this.commonService.toDownLoadFile(pdfPath);
+            // this.closeModal();
+            // this.getBillingList();
+            // this.showBillingForm = false;
+            // this.ViewInvoice(result[0]);
+            
             this.getBillingList();
             this.showBillingForm = false;
+            this.salesOrderId = result[0].salesOrderId;
+            this.salesOrderBillingInvoiceId = result[0].soBillingInvoicingId;
+            this.loadInvoiceView();
         }, err => {
         });
     }
@@ -781,11 +799,13 @@ export class SalesOrderBillingComponent implements OnInit {
         });
     }
 
-    closeModal() {
-        $("#printPost").modal("hide");
+    close() {
+        this.modal.close();
     }
 
-    DownloadInvoice(billData) {
-
+    ViewInvoice(rowData) {
+        this.salesOrderId = rowData.salesOrderId;
+        this.salesOrderBillingInvoiceId = rowData.soBillingInvoicingId;
+        this.loadInvoiceView();
     }
 }
