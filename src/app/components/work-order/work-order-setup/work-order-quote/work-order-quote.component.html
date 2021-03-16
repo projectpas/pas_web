@@ -1599,7 +1599,8 @@
                         &times;
                     </button> 
                 </div>
-                <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
+                <!-- *ngIf="showDisplayData==true" -->
+                <div class="modal-body table-responsive" >
                     <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"
@@ -1614,70 +1615,7 @@
                                        [(ngModel)]="type"
                                        (click)="typeChange()"></p-radioButton>
                     </div>
-                    <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" *ngIf="displayType == 'use historical wos'">
-                      <thead>
-                        <tr>
-                          <th>WO Num</th>
-                          <th>Cust Name</th>
-                          <th>Cust Code</th>
-                          <th>WO Type</th>
-                          <th>Open Date</th>
-                          <th>Promise Date</th>
-                          <th>Est. Comp Date</th>
-                          <th>Est. Ship Date</th>
-                          <th>WO Status</th>
-                          <th class="events1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="mpn-row" *ngFor="let buildl of buildHistoricalList">
-                          <td>{{buildl.workOrderNum}}</td>
-                          <td>{{buildl.customerName}}</td>
-                          <td>{{buildl.customerCode}}</td>
-                          <td>{{buildl.woType}}</td>
-                          <td>{{buildl.openDate}}</td>
-                          <td>{{buildl.promisedDate}}</td>
-                          <td>{{buildl.estimatedCompletionDate}}</td>
-                          <td>{{buildl.estimatedShipDate}}</td>
-                          <td>Closed</td>
-                          <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = buildl.workOrderId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-                    <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" *ngIf="displayType == 'historical WO quotes'">
-                      <thead>
-                        <tr>
-                          <th>Quote Num</th>
-                          <th>WO Num</th>
-                          <th>Cust Name</th>
-                          <th>Cust Code</th>
-                          <th>WO Type</th>
-                          <th>Open Date</th>
-                          <th>Promise Date</th>
-                          <th>Est. Comp Date</th>
-                          <th>Est. Ship Date</th>
-                          <th>Quote Status</th>
-                          <th class="events1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="mpn-row" *ngFor="let buildl of buildHistoricalList">
-                          <td>{{buildl.quoteNumber}}</td>
-                          <td>{{buildl.workOrderNum}}</td>
-                          <td>{{buildl.customerName}}</td>
-                          <td>{{buildl.customerCode}}</td>
-                          <td>{{buildl.woType}}</td>
-                          <td>{{buildl.openDate}}</td>
-                          <td>{{buildl.promisedDate}}</td>
-                          <td>{{buildl.estimatedCompletionDate}}</td>
-                          <td>{{buildl.estimatedShipDate}}</td>
-                          <td>{{buildl.quoteStatus}}</td>
-                          <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = buildl.workOrderId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-
-                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
+             <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
                              [columns]="cols"
                              [value]="buildHistoricalList"
                              [paginator]="true"
@@ -1694,6 +1632,10 @@
                                 <th>Est. Comp Date</th>
                                 <th>Est. Ship Date</th>
                                 <th>WO Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th class="events1"></th>
                             </tr>
                         </ng-template>
@@ -1708,11 +1650,21 @@
                                 <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>Closed</td>
+                                <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.updatedBy}}</td>
                                 <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
                             </tr>
-                        </ng-template>
+                        </ng-template> 
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="16" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template> 
                     </p-table>
-
                     <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
                              [columns]="cols"
                              [value]="buildHistoricalList"
@@ -1731,6 +1683,10 @@
                                 <th>Est. Comp Date</th>
                                 <th>Est. Ship Date</th>
                                 <th>Quote Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th class="events1"></th>
                             </tr>
                         </ng-template>
@@ -1746,16 +1702,25 @@
                                 <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.quoteStatus}}</td>
+                                <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.updatedBy}}</td>
                                 <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="16" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template> 
                     </p-table>
-
                 </div>
             </div>
         </div>
     </div>
-
     <div id="quoteVer"
          class="modal fade"
          role="dialog"
@@ -1824,8 +1789,6 @@
                                     <input class="form-control" type="email" name="bcc"
                                         [(ngModel)]="bcc" multiple="true">
                                 </div>
-                                
-                                
                             </div>
                             <div class="col-md-6">
                                 
