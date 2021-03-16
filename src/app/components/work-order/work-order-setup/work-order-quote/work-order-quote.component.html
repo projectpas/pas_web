@@ -890,12 +890,15 @@
                                 </td>
                                 <td class="content-to-end">{{ formateCurrency(matQuotation.billingRate) }}</td>
                                 <td>
-                                    <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" />
-                                </td>
+                                    <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
+                                    <input type="text" pInputText pKeyFilter="money" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
+                                     value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
+                    
+                                    </td>
                                 <td *ngIf="!isView">
                                     <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                     <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                </td>
+                                </td> 
                             </tr>
                         </ng-container>
                         <tr class="task-total">

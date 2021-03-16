@@ -219,7 +219,7 @@
               </td> -->
               <td class="content-to-end table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
               <td class="table-column-width">
-                <input type="text" class="form-control text-right" pInputText pKeyFilter="money" (change)="dt.billingAmount = dt.billingAmount.toFixed(2)" [(ngModel)]="dt.billingAmount"
+                <input type="text" class="form-control text-right" pInputText pKeyFilter="money" (change)="calculatebCost($event.target.value,dt)" [(ngModel)]="dt.billingAmount"
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>

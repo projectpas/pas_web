@@ -2687,7 +2687,11 @@ this.creditTerms=res.creditTerm;
         }
         return value;
 }
-
+calculatebCost(value,material): void {
+  setTimeout(() => {
+    material.billingAmount = value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
+  }, 500);
+}
     updateQuotationHeader(){
         this.workOrderService.getWorkOrderQuoteDetail(this.workOrderId, this.workFlowWorkOrderId)
         .subscribe(
