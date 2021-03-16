@@ -19,11 +19,13 @@ import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../g
 import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
+
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
     styleUrls: ['./work-order-quote.component.scss']
 })
+
 export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteForm: WorkOrderQuote;
     @Input() quoteListViewData: any = {};
@@ -329,7 +331,21 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     memoPopupContent: any;
     selectall: any;
     cols: any;
+    deleteRowRecord:any={};
+    msId:any;
+    selectedquotePn: any;
+    showDisplayData:boolean=false;
+    customerWarningsList: any;
+    textAreaInfo: any;
+    memoIndex;
+    setEditArray:any=[];
+    upDateDisabeldbutton:any;
+    disableForMemo:boolean=false;
+    tempMemo:any;
+    originlaMlist:any=[];
+    
     constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
+    
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -371,17 +387,17 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
             this.getAllWorkOrderStatus('');
         }
-
     }
+
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
-if (property == 'selectedDisplayType') {
-    this.workOrderId=this.workorderid;
-    if(this.workOrderId){
+            if (property == 'selectedDisplayType') {        
+                this.workOrderId=this.workorderid;
+                if(this.workOrderId){
 
-        this.getEmployeeList(this.workOrderId);
-    }
-// selectedDisplayType
+                    this.getEmployeeList(this.workOrderId);
+                }
+            // selectedDisplayType
             }
         }
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -394,14 +410,13 @@ if (property == 'selectedDisplayType') {
     refresh( isView = false) {
         this.isSpinnerVisible = true;
         this.isViewMode = isView;
-
     }
+
     getInternalSentDateEnableStatus(approver) {
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SentForInternalApproval;
     }
 
     getinternalStatusIdEnableStatus(approver) {
-        debugger;
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitInternalApproval;
     }
 
@@ -410,9 +425,9 @@ if (property == 'selectedDisplayType') {
     }
 
     getcustomerStatusIdEnableStatus(approver) {
-        debugger;
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
     }
+
     getApprovalActionInternalStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
             return true;
@@ -442,8 +457,7 @@ if (property == 'selectedDisplayType') {
                     this.csr = res.customerDetails.csrName;
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
-this.creditTerms=res.creditTerm;
-
+                    this.creditTerms=res.creditTerm;
                     this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 0);
                     this.workOrderNumber = res.workOrderNum;
                     this.quoteForm.WorkOrderId = res.workOrderId;
@@ -544,13 +558,11 @@ this.creditTerms=res.creditTerm;
             })
         }
     }
-    deleteRowRecord:any={};
+    
     deleteMemoConfirmation(mainIndex, subIndex,obj){
         this.mainIndex = mainIndex;
         this.subIndex = subIndex;
         this.deleteRowRecord=obj
-
-        // $('#deleteRowConfirmation').modal('show');
     }
 
     saveApprovalMemo(data){
@@ -577,6 +589,7 @@ this.creditTerms=res.creditTerm;
     getInternalApprovedMaxDate(){
         return new Date();
     }
+
     getCustomerSentMinDate(intApprovedDate){
         if(intApprovedDate){
             return new Date(intApprovedDate);
@@ -593,10 +606,9 @@ this.creditTerms=res.creditTerm;
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-                    this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
-
+            this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
                     res = res.map(x => { return {'conditionId': x.value, 'description': x.label} })
-                    this.conditions = res;
+                    this.conditions = res;        
                 },
                 err => {
                     this.errorHandling(err);
@@ -629,8 +641,7 @@ this.creditTerms=res.creditTerm;
         }
         else{
             this.saveQuoteAPI()
-        }
-        
+        }        
     }
 
     saveQuoteAPI(){
@@ -775,16 +786,14 @@ this.creditTerms=res.creditTerm;
     //             }
     //         )
     // }
-    msId:any;
+    
     getEmployeeList(woId) { 
-                        this.setEditArray.push(0);
-                        this.msId = this.authService.currentUser
+            this.setEditArray.push(0);
+            this.msId = this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null;
                     const strText = '';
                     this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(employeeList => {
-
-
                     this.employeeList = employeeList;
                     this.employeesOriginalData = employeeList;
                     this.getWorkOrderInfo(woId);
@@ -809,12 +818,9 @@ this.creditTerms=res.creditTerm;
         }
     }
 
-    getMPNList(workOrderId) {
-        
+    getMPNList(workOrderId) {        
         if(workOrderId && workOrderId != 0){
-
-            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {
-                
+            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {                
                 this.workOrderWorkFlowOriginalData = res;
                 this.mpnPartNumbersList = res.map(x => {
                     return {
@@ -852,10 +858,9 @@ this.creditTerms=res.creditTerm;
             })
         }
     }
-    selectedquotePn: any;
+    
     partNumberSelected(data) {
         this.selectedPartNumber = data;
-        // this.gridActiveTab = '';
         this.quotestatusofCurrentPart=data.quoteStatus;
         this.isViewForApprovedPart = false;
         if(this.quotestatusofCurrentPart == 'Approved'){
@@ -878,22 +883,9 @@ this.creditTerms=res.creditTerm;
             msId = data.masterPartId;
             this.labor.workFlowWorkOrderId = data;
             this.workFlowWorkOrderId = data.workOrderWorkFlowId;
-            this.selectedWorkFlowWorkOrderId = data.workOrderWorkFlowId;
-
-            // }
-
-            // this.mpnPartNumbersList.forEach((mpn)=>{
-            // if(mpn.label == this.selectedPartNumber){
-            //   this.selectedPartDescription = mpn.value.partDescription;
-            //   this.selectedStockLineNumber = mpn.value.stockLineNumber;
-            //   msId = mpn.value.masterPartId;
-            //   this.labor.workFlowWorkOrderId = mpn;
-            //   this.workFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
-            //   this.selectedWorkFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
-            // this.getTabDataFromWorkOrder();
- this.getBuildMethodDetails();
+            this.selectedWorkFlowWorkOrderId = data.workOrderWorkFlowId;            
+            this.getBuildMethodDetails();
         }
-        // })
         this.savedWorkOrderData.partNumbers.forEach((pns) => {
             if (msId == pns['masterPartId']) {
                 this.laborPayload.IsDER = this.exclusionPayload.IsDER = this.chargesPayload.IsDER = this.materialListPayload.IsDER = this.quoteFreightListPayload.IsDER = pns['isDER'];
@@ -912,9 +904,10 @@ this.creditTerms=res.creditTerm;
         // }
 
     }
+
     getBuildMethodDetails(){
-    this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId)
-    .subscribe((res) => {
+        this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId)
+            .subscribe((res) => {
             this.buildMethodDetails = res;
             if (res) {
                 this.costPlusType = res['materialBuildMethod'].toString();
@@ -988,7 +981,7 @@ this.creditTerms=res.creditTerm;
         }
 
     }
-    showDisplayData:boolean=false;
+    
     getDisplayData(buildType) {
         this.showDisplayData=false;
         this.displayType = buildType;
@@ -1042,7 +1035,6 @@ this.creditTerms=res.creditTerm;
             return true;
     }
 
-
     checkForAllEmpty(){
         let result = true;
         for(let x of this.labor.workOrderLaborList[0]){
@@ -1052,6 +1044,7 @@ this.creditTerms=res.creditTerm;
         }
         return result;
     }
+
     //not used
     getQuoteInfo(data) {
         this.selectedWorkFlowOrWorkOrder = data;
@@ -1387,8 +1380,7 @@ this.creditTerms=res.creditTerm;
         
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
-                res => {
-                    
+                res => {                    
                     if (res) {
                         this.tabQuoteCreated['labor'] = true;
                         let laborList = this.labor.workOrderLaborList;
@@ -1547,6 +1539,7 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
+
     getTaskList(value) {
         if (this.labor == undefined) {
             this.labor = new WorkOrderLabor()
@@ -1574,15 +1567,13 @@ this.creditTerms=res.creditTerm;
             )
     }
 
- 
-
     createNew(type) {
-        // this.isEdit = false;
         this.editData = undefined;
         if (type == 'add') {
             this.fromquote = true;
         }
     }
+
     edit(rowData, i) {
         this.isEditMode=true;
         this.editingIndex = i;
@@ -2012,8 +2003,10 @@ this.creditTerms=res.creditTerm;
     deleteMaterialList(mainIndex, subIndex) {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
     }
+
     updateWorkOrderChargesList(data) {
     }
+
     checkValidQuote() {
         if (this.quoteDueDate && this.validFor && this.currency) {
             return false;
@@ -2031,6 +2024,7 @@ this.creditTerms=res.creditTerm;
         this.materialListPayload.WorkOrderQuoteDetailsId = id;
         this.quoteFreightListPayload.WorkOrderQuoteDetailsId = id;
     }
+
     setWorkOrderQuoteId(id) {
         this.laborPayload.WorkOrderQuoteId = id;
         this.exclusionPayload.WorkOrderQuoteId = id;
@@ -2175,8 +2169,6 @@ this.creditTerms=res.creditTerm;
         }
     }
 
-
-
     updateExclusionsList(event) {
         if (this.isQuote && this.isEdit) {
             this.workOrderExclusionsList[this.editingIndex] = event.exclusions[0];
@@ -2245,6 +2237,7 @@ this.creditTerms=res.creditTerm;
     createQuote() {
         window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workorderid}`);
     }
+
     filterEmployee(event): void {
         this.employeeList = this.employeesOriginalData;
         if (event.query !== undefined && event.query !== null) {
@@ -2265,7 +2258,7 @@ this.creditTerms=res.creditTerm;
 
     noBack(data) {
     }
-    customerWarningsList: any;
+    
     getCustomerWarningsList(): void {
         this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
             res.forEach(element => {
@@ -2278,6 +2271,7 @@ this.creditTerms=res.creditTerm;
             this.errorHandling(err);
         })
     }
+
     customerWarnings(customerId) {
         this.commonService.customerWarnings(customerId, this.createQuoteListID).subscribe((res: any) => {
             if (res) {
@@ -2285,7 +2279,6 @@ this.creditTerms=res.creditTerm;
                 this.warningID = res.customerWarningId;
                 this.customerResctrictions(customerId, this.warningMessage, this.createQuoteListID);
             }
-
         },
         err => {
             this.errorHandling(err);
@@ -2299,8 +2292,6 @@ this.creditTerms=res.creditTerm;
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
-
-
                 if (this.warningID != 0 && this.restrictID == 0) {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
                 } else if (this.warningID == 0 && this.restrictID != 0) {
@@ -2312,8 +2303,8 @@ this.creditTerms=res.creditTerm;
                 }
             }
         })
-
     }
+
     showAlertMessage(warningMessage, restrictMessage) {
         $('#warnRestrictMesg').modal("show");
         //   this.modal.close();
@@ -2327,7 +2318,6 @@ this.creditTerms=res.creditTerm;
         $('#warnRestrictMesg').modal("hide");
         this.warningMessage = '';
         this.restrictMessage = '';
-
     }
 
     approvalGridActiveTabChange(val) {
@@ -2409,12 +2399,12 @@ this.creditTerms=res.creditTerm;
             }
         }
     }
+
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
     getPartToDisableOrNot(part) {
-
         if (part.actionStatus != 'Approved') {
             if (part.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
                 return true;
@@ -2509,6 +2499,7 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
+
     getApproverStatusList() {
         this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
             this.statusList = res.map(x => {
@@ -2521,6 +2512,7 @@ this.creditTerms=res.creditTerm;
             this.setStatusListForApproval(this.statusList);
         })
     }
+
     setStatusListForApproval(statusList) {
         let tempList = [];
 
@@ -2560,8 +2552,6 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
-
-
 
     selectAllApproval(type, isSelected) {
         this.woQuoteApprovalList.forEach(
@@ -2727,9 +2717,7 @@ this.creditTerms=res.creditTerm;
         )
         return result;
     }
-
-    textAreaInfo: any;
-    memoIndex;
+    
     onAddTextAreaInfo(intApproval, index) {
         this.memoIndex = index;
         this.textAreaInfo = intApproval.internalMemo;
@@ -2742,12 +2730,15 @@ this.creditTerms=res.creditTerm;
         }
         $("#textarea-popupintmemo").modal("hide");
     }
+
     onCloseTextAreaInfo() {
         $("#textarea-popupintmemo").modal("hide");
     }
+
     errorHandling(err){
         this.isSpinnerVisible=false
     }
+
     checkValidEmails(){
         let result = false;
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -2795,22 +2786,24 @@ this.creditTerms=res.creditTerm;
                         }
                     }
                 );
-
-
             },
             err => {
                 this.errorHandling(err);
             })
     } 
+
     contactSelected(event){
         this.toEmail = event.email;
     }
+
     showEle(){
         $('#emailDetails').modal('show');
     }
+
     selectedCustomer(){
         this.cusContactList = this.customerContactList;
     }
+
     filterCustomerContact(event): void {
         this.cusContactList = this.customerContactList;
         if (event.query !== undefined && event.query !== null) {
@@ -2823,6 +2816,7 @@ this.creditTerms=res.creditTerm;
         }
         
     }
+
     hideModal(modalName){
         $(`#${modalName}`).modal('hide');
     }
@@ -2848,17 +2842,19 @@ this.creditTerms=res.creditTerm;
 
     formateCurrency(value){
         if(value){
- value = (Number(value.toString().split(',').join(''))).toFixed(2);
+            value = (Number(value.toString().split(',').join(''))).toFixed(2);
             let result = formatNumberAsGlobalSettingsModule(value, 0.00);
             return `${result}.00`;
         }
         return value;
-}
-calculatebCost(value,material): void {
-  setTimeout(() => {
-    material.billingAmount = value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
-  }, 500);
-}
+    }
+
+    calculatebCost(value,material): void {
+        setTimeout(() => {
+            material.billingAmount = value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
+        }, 500);
+    }
+
     updateQuotationHeader(){
         this.workOrderService.getWorkOrderQuoteDetail(this.workOrderId, this.workFlowWorkOrderId)
         .subscribe(
@@ -2886,7 +2882,7 @@ calculatebCost(value,material): void {
     onFilterTangible(value) {
         this.getAllWorkOrderStatus(value);
     }
-    setEditArray:any=[];
+    
     getAllWorkOrderStatus(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
@@ -2901,9 +2897,11 @@ calculatebCost(value,material): void {
             }
         })
     }
+
     onFilterCurrency(value) {
         this.loadCurrency(value);
     }
+
     loadCurrency(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
@@ -2918,23 +2916,23 @@ calculatebCost(value,material): void {
             }
         })
     }
-    upDateDisabeldbutton:any;
+    
     getValid(){
         this.upDateDisabeldbutton=false;
     }
-    disableForMemo:boolean=false;
-    tempMemo:any;
+    
     onAddDescription(value) {
         this.disableForMemo = true;
         this.type = value;
         this.tempMemo = "";
             this.tempMemo = this.memo;
     }
+
     onSaveDescription() {
             this.memo = this.tempMemo;
-
         this.upDateDisabeldbutton = false;
     }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -2944,6 +2942,7 @@ calculatebCost(value,material): void {
             return decodedString;
         }
     }
+
     memoValidate() {
         this.disableForMemo = false;
     }
@@ -3074,6 +3073,7 @@ calculatebCost(value,material): void {
             this.isSpinnerVisible = false;
         })
     }
+
     getWOFrieghtsList(){
         // ,false,0 handle for sub work order handle both apis in end point
        this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
@@ -3085,6 +3085,7 @@ calculatebCost(value,material): void {
            }
        }) 
    }
+
     gridTabChange(value) {
         this.gridActiveTab = value;
         if(value == 'materialList'){
@@ -3148,7 +3149,7 @@ calculatebCost(value,material): void {
             this.getWOExclusionsList();
         }
     }
-    originlaMlist:any=[];
+    
     getQuoteMaterialListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
@@ -3278,6 +3279,7 @@ calculatebCost(value,material): void {
             this.getWOChargesList();
         }
     }
+
     getQuoteLaborListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) { 
             this.isSpinnerVisible = true;
@@ -3333,6 +3335,7 @@ calculatebCost(value,material): void {
         }
 
     }
+    
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
     }
