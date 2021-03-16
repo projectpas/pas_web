@@ -1564,7 +1564,7 @@ export class WorkOrderAddComponent implements OnInit {
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
                     partNumber: x.partNumber.partName,
-                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
+                    taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
             this.isSpinnerVisible = true;
@@ -1596,7 +1596,7 @@ export class WorkOrderAddComponent implements OnInit {
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
                     partNumber: x.partNumber.partName,
-                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
+                    taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
             this.isSpinnerVisible = true;
