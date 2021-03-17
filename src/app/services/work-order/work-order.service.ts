@@ -595,6 +595,21 @@ export class WorkOrderService {
         );
       }
     
+
+      getquoteMaterialHistory(id){
+        return this.workOrderEndpointService.getquoteMaterialHistory(id);
+    }
+    getquoteLaborHistory(id){
+        return this.workOrderEndpointService.getquoteLaborHistory(id);
+    }
+    getquoteChargesHistory(id){
+        return this.workOrderEndpointService.getquoteChargesHistory(id);
+    }
+    getquoteFreightsHistory(id){
+        return this.workOrderEndpointService.getquoteFreightsHistory(id);
+    }
+
+
 } 
 
 
