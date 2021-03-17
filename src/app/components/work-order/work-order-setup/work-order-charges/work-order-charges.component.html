@@ -61,7 +61,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr class="tr-color" *ngIf="isQuote">
         <th colspan="9" class="th-color">&nbsp;</th>
-            <th colspan="5" class="isview-th" *ngIf="isView">
+            <th colspan="5" class="freight-isview-th" *ngIf="isView">
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -81,8 +81,8 @@
                     </div> -->
       
                 <div class="display-flex">
-                  <div class="form-group radios-align">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top " name="costPlusType"
+                  <div class="form-group freight-isview-div">
+                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div> 
@@ -93,12 +93,12 @@
                       </select>
                     </div>
                   </div>
-                  <div class="radios-margin">
-                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top " name="costPlusType" value="2"
+                  <div class="radio-align">
+                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top " name="costPlusType"
+                    <p-radioButton class="p-radiobutton-label-horizontal " name="costPlusType"
                       value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
@@ -124,8 +124,8 @@
                     </div> -->
       
                 <div class="display-flex">
-                  <div class="form-group radios-align">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                  <div class="form-group freight-isview-div">
+                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                     <div>
@@ -137,16 +137,17 @@
                     </div>
                   </div>
                   <div class="radios-margin">
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
+                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
+                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                       value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                 </div>
               </th>
+              
               <!-- <th style="background: #fff; border: 1px solid #fff;"></th> -->
               <!-- <th colspan="8"></th>
               <th colspan="4"></th> -->
@@ -309,7 +310,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="summary" id="footer" *ngIf="!isQuote">
-      <label id="footer" class="footer">Total:</label>
+      <label id="footer" class="footer" style="background:#fff">Total:</label>
       <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
       &nbsp;&nbsp;
       <label id="footer" class="footer1">Pages Count:</label>

@@ -592,8 +592,9 @@
                             header="{{task.Name}}" (click)="onAccordTabClick1(task)">
                             <div *ngIf="task.publication.length > 0">
                                 <h5 class="po-head">Publications</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -723,11 +724,13 @@
                                         </div>
                                       </ng-template>
                                 </div>
+                                </div>
                             </div>
                             <div *ngIf="task.measurements && task.measurements.length > 0">
                                 <h5 class="po-head">Measurements</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -758,12 +761,14 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="task.exclusions && task.exclusions.length > 0">
                                 <h5 class="po-head">Exclusions</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -809,12 +814,14 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="task.directions && task.directions.length > 0">
                                 <h5 class="po-head">Directions</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -836,12 +843,14 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="task.expertise && task.expertise.length > 0">
                                 <h5 class="po-head">Expertise</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -877,12 +886,14 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="task.equipments && task.equipments.length > 0">
                                 <h5 class="po-head">Tools</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -904,12 +915,14 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="task.charges && task.charges.length > 0">
                                 <h5 class="po-head">Charges</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -942,12 +955,14 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="task.materialList && task.materialList.length > 0">
                                 <h5 class="po-head">Material List</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
@@ -1005,6 +1020,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                         </p-accordionTab>
@@ -1053,9 +1069,9 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                        <div class="tableFixHead">
+                            <table class="table table-bordered header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1181,7 +1197,7 @@
 <div *ngIf="isWorkOrder && responseDataForWorkFlow">
     <div class="card">
         <div class="card-header header">
-            <nav class="pull-left" aria-label="breadcrumb">
+            <!-- <nav class="pull-left" aria-label="breadcrumb">
                 <ol class="breadcrumb workflow-breadcrumb">
                     <li class="breadcrumb-item active workflow-li" aria-current="page" >
                         <h4 class="header-name">Work
@@ -1190,7 +1206,20 @@
             </nav>
             <button class="btn-sm header-button pull-right" (click)="toggle_wf_header=!toggle_wf_header">
                 {{toggle_wf_header ? 'Collapse' : 'Expand'}}
-            </button>
+            </button> -->
+
+            <div class="row">
+                <div class="col">
+                    <h4 class="header-name">Work Flow Details
+
+                        <button  class="btn-sm header-button header-button-alignment" (click)="toggle_wf_header=!toggle_wf_header">
+                            {{toggle_wf_header ? 'Collapse' : 'Expand'}}
+                        </button>   
+                    </h4>                     
+                  
+                </div>  
+               
+            </div>
         </div>
         <div class="card-body scroll_set" >
                 <div class="form-horizontal wf-popup-form" *ngIf="toggle_wf_header">
@@ -1419,7 +1448,7 @@
                         <h5 class="po-head">Publications</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1550,7 +1579,7 @@
                         <h5 class="po-head m-t-20">Measurements</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1587,7 +1616,7 @@
                         <h5 class="po-head m-t-20">Exclusions</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1641,7 +1670,7 @@
                         <h5 class="po-head m-t-20">Directions</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1670,7 +1699,7 @@
                         <h5 class="po-head m-t-20">Expertise</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1713,7 +1742,7 @@
                         <h5 class="po-head m-t-20">Tools</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1742,7 +1771,7 @@
                         <h5 class="po-head m-t-20">Charges</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>
@@ -1782,7 +1811,7 @@
                         <h5 class="po-head m-t-20">Material List</h5>
                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                             <div class="tableFixHead">
-                            <table class="table table-bordered table-fixed wfl-table-popup-cstm">
+                            <table class="table table-bordered  header-table-width">
                                 <thead>
                                     <tr>
                                         <th>S.No</th>

@@ -138,7 +138,7 @@
         <tr >
           <td class="table-column-width">
             <!-- <p  class="mrg_0">{{dt.taskName}}</p> -->
-            <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
+            <select class="form-control select-read-only" style="background: #fff;" [(ngModel)]="dt.taskId" disabled>
               <option value="">Select</option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
             </select>
@@ -294,7 +294,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="summary" id="footer" *ngIf="!isQuote">
-      <label id="footer" class="footer">Total:</label>
+      <label id="footer" class="footer" style="background: #fff;">Total:</label>
       <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
       &nbsp;&nbsp;
       <label id="footer" class="footer1">Pages Count:</label>

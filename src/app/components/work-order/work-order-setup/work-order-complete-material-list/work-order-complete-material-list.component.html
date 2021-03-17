@@ -41,7 +41,7 @@
     </div>
 </div> 
 <div>
-    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10 Materials_wo" id="custome_material" [columns]="cols" #materialTble
+    <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="cols" #materialTble
         [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100]"
         (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="header" let-columns>
