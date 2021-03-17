@@ -332,6 +332,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     memoPopupContent: any;
     selectall: any;
     cols: any;
+    pageIndex: number = 0;
+    totalRecords: number=0;
+    totalPages: number;
+    pageSize: number = 10;
     constructor(private router: ActivatedRoute,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
@@ -920,7 +924,7 @@ this.creditTerms=res.creditTerm;
     .subscribe((res) => {
             this.buildMethodDetails = res;
             if (res) {
-                this.costPlusType = res['materialBuildMethod'].toString();
+                this.costPlusType = res['materialBuildMethod']? res['materialBuildMethod'].toString(): '';
                 this.materialFlatBillingAmount = res['materialFlatBillingAmount'];
             }
             if (res && res['workOrderQuoteDetailsId']) {
@@ -1018,18 +1022,32 @@ this.creditTerms=res.creditTerm;
                 if (buildType == 'historical WO quotes') {
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrderQuote(partId, workScopeId, payLoad)
                         .subscribe(
-                            (res: any[]) => {
+                            (res:any) => {
                                 this.buildHistoricalList =res['results']; 
                                 this.showDisplayData=true;
+                                if (res['results'].length > 0) {
+                                    this.totalRecords = res.totalRecordsCount;
+                                        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                                      }else {
+                                        this.totalRecords = 0;
+                                        this.totalPages = 0;
+                                    }
                             }
                         )
                 }
                 else if (buildType == 'use historical wos') {
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrder(partId, workScopeId, payLoad)
                         .subscribe(
-                            (res: any[]) => {
+                            (res: any) => {
                                 this.buildHistoricalList = res['results'];
                                 this.showDisplayData=true;
+                                if (res['results'].length > 0) {
+                                    this.totalRecords = res.totalRecordsCount;
+                                        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                                      }else {
+                                        this.totalRecords = 0;
+                                        this.totalPages = 0;
+                                    }
                             }
                         )
                 }
@@ -3383,5 +3401,13 @@ calculatebCost(value,material): void {
         this.modal.componentInstance.auditHistory = [];  
     }
       }
-
+      triggerWoQuoteView(rowData){
+        this.selectedHistoricalWorkOrder=undefined;
+        this.selectedHistoricalCustomerId=undefined;
+        this.selectedHistoricalWorkOrder = rowData.workOrderId; 
+        this.selectedHistoricalCustomerId = rowData.customerId
+      }
+      getPageCount(totalNoofRecords, pageSize) {
+        return Math.ceil(totalNoofRecords / pageSize)
+    }
 }
