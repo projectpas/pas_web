@@ -5,7 +5,7 @@
         <h4 class="header-name">Employee List</h4>
       </div>
       <div>
-        <button
+        <button *ngIf="isAdd"
           type="button"
           class="btn-sm header-button"
           (click)="navigateTogeneralInfo()">
@@ -273,7 +273,7 @@
                                  ><i class="fa fa-eye"></i
                               ></a>
                           </span>
-                          <span><a class="btn nobg"
+                          <span *ngIf="isEdit"><a class="btn nobg"
                                  (click)="openEdit(rowData)"
                                  matTooltip="Edit"
                                  matTooltipPosition="above"
@@ -283,7 +283,7 @@
                                       (click)="openEdit(rowData)" matTooltip="Edit">
                                           <mat-icon>edit</mat-icon>
                                       </button> -->
-                          <span>
+                          <span *ngIf="isDelete">
                               <a
                                  class="btn nobg"
                                  (click)="openDelete(content, rowData)"

@@ -33,6 +33,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { UserEditorComponent } from './admin/user-editor.component';
 import { UserListComponent } from './admin/user-list.component';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
+import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 //import { PoRoSetupComponent } from './components/receiving/po-ro/po-ro-setup/po-ro-setup.component';
 //import { PoSetupComponent } from './components/receiving/po-ro/po-setup/po-setup.component';
 //import { ReceivingPoComponent } from './components/receiving/po-ro/receiving-po/receiving-po.component';
@@ -62,8 +63,8 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
             { path: "singlepages", loadChildren: './singlepages/singlepages.module#SinglePgesModule' },
             { path: "customersmodule", loadChildren: './customerpages/customerpages.module#CustomerPagesModule' },
             { path: "accountmodule", loadChildren: './accounting-pages/accountingpages.module#AccountingPagesModule' },
+            //{ path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
             { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
-            { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule', canLoad: [AuthGuard] },
             { path: "employeesmodule", loadChildren: './employeepages/employeepages.module#EmployeepagesModule' },
             { path: "itemmastersmodule", loadChildren: './itemmasterpages/itemmasterpages.module#ItemmasterpagesModule' },
             { path: "stocklinemodule", loadChildren: './stocklinepages/stocklinepages.module#StocklinePagesModule' },
@@ -97,6 +98,7 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
             { path: "app-platform", component: PlatformComponent, data: { title: "Platform" } },
             { path: "app-supervisor", component: SupervisorComponent, data: { title: "Supervisor" } },
             { path: "home", redirectTo: "/", pathMatch: "full" },
+            {path:"updatepassword",component:UpdatepasswordComponent,data: { title: "UpdatePassword" } },
             { path: "**", component: NotFoundComponent, data: { title: "Page Not Found" } },
         ], {
             preloadingStrategy: PreloadAllModules

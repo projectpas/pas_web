@@ -8,7 +8,7 @@
         <h4 class="header-name">Vendor List</h4>
       </div>
       <div>
-        <button
+        <button *ngIf="isAdd"
           type="button"
           class="btn-sm header-button"
           (click)="navigateTogeneralInfo()"
@@ -225,59 +225,67 @@
                                      matTooltip="{{
                     rowData['isActive'] ? 'Active' : 'In Active'
                   }}"
-                                     matTooltipPosition="above"
-                                     (onChange)="handleChanges(rowData, $event)"></p-inputSwitch>
-                  </ng-container>
-                  <span data-toggle="modal" data-target="#view">
-                      <a class="btn nobg btn-view-cstm"
-                         (click)="openView(view, rowData)"
-                         matTooltip="View"
-                         matTooltipPosition="above">
-                          <i class="fa fa-eye"></i>
-                      </a>
-                  </span>
-                  <span *ngIf="!isCreatePO && !isCreateRO">
-                      <a class="btn nobg btn-edit-cstm"
-                         (click)="openEdit(rowData)"
-                         matTooltip="Edit"
-                         matTooltipPosition="above">
-                          <i class="fa fa-pencil"></i>
-                      </a>
-                  </span>
-                  <span>
-                      <a class="btn nobg btn-users-cstm"
-                         (click)="openVendorCapesList(contentvendorcapes, rowData)"
-                         matTooltip="Show Capes "
-                         matTooltipPosition="above">
-                          <i class="fa fa-users"></i>
-                      </a>
-                  </span>
-                  <!-- <span
-      ><a
-        class="btn nobg btn-users-cstm"
-        (click)="openContactList(contentcontact, rowData)"
-        matTooltip="Contacts"
-        matTooltipPosition="above"
-        ><i class="fa fa-users"></i
-      ></a>
-    </span> -->
-                  <span *ngIf="!isCreatePO && !isCreateRO">
-                      <a class="btn nobg btn-delete-cstm"
-                         (click)="openDelete(content1, rowData);"
-                         matTooltip="Delete"
-                         matTooltipPosition="above">
-                          <i class="fa fa-trash"></i>
-                      </a>
-                  </span>
-                  <span data-toggle="modal" data-target="#contentAuditHist">
-                      <a class="btn nobg btn-hist-cstm"
-                         (click)="openHist(contentHist, rowData)"
-                         matTooltip="History"
-                         matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                  </span>
-                  <span data-toggle="modal"
-                        data-target="#purchaseOrderList"
-                        *ngIf="
+                  matTooltipPosition="above"
+                  (onChange)="handleChanges(rowData, $event)"
+                ></p-inputSwitch>
+              </ng-container>
+              <span data-toggle="modal" data-target="#view"
+                ><a
+                  class="btn nobg btn-view-cstm"
+                  (click)="openView(view, rowData)"
+                  matTooltip="View"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-eye"></i
+                ></a>
+              </span>
+              <span *ngIf="!isCreatePO && !isCreateRO"
+                ><a *ngIf="isEdit"
+                  class="btn nobg btn-edit-cstm"
+                  (click)="openEdit(rowData)"
+                  matTooltip="Edit"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-pencil"></i
+                ></a>
+              </span>              
+              <span
+                ><a
+                  class="btn nobg btn-users-cstm"
+                  (click)="openVendorCapesList(contentvendorcapes, rowData)"
+                  matTooltip="Show Capes "
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i
+                ></a>
+              </span>
+              <!-- <span
+                ><a
+                  class="btn nobg btn-users-cstm"
+                  (click)="openContactList(contentcontact, rowData)"
+                  matTooltip="Contacts"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i
+                ></a>
+              </span> -->
+              <span *ngIf="!isCreatePO && !isCreateRO"
+                ><a *ngIf="isDelete"
+                  class="btn nobg btn-delete-cstm"
+                  (click)="openDelete(content1, rowData);"
+                  matTooltip="Delete"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-trash"></i
+                ></a>
+              </span>
+              <span data-toggle="modal" data-target="#contentAuditHist"
+                ><a
+                  class="btn nobg btn-hist-cstm"
+                  (click)="openHist(contentHist, rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i></a
+              ></span>
+              <span
+                data-toggle="modal"
+                data-target="#purchaseOrderList"
+                *ngIf="
                   (isVendorList && isCreatePO) || (!isCreatePO && !isCreateRO)
                 ">
                       <a class="btn nobg btn-po-cstm"

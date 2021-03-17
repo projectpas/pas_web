@@ -3,6 +3,8 @@ import { MenuItem } from 'primeng/api';
 import { Message } from 'primeng/components/common/message';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VendorService } from '../../../services/vendor.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-vendor-steps-prime-ng',
@@ -25,10 +27,11 @@ export class VendorStepsPrimeNgComponent implements OnInit {
 	showComponentPTab: boolean;
 	editMode: boolean = false;
 	isEditMode:boolean =false;
-
+	isView:boolean=true;
 	constructor(private router: ActivatedRoute,
 		private _changeDetectionRef: ChangeDetectorRef,
-		private route: Router, public vendorService: VendorService) {
+		private route: Router, public vendorService: VendorService,private authService:AuthService) {
+			this.isView=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.View);
 		if(this.vendorService.vendorId){
 			this.vendorId = this.vendorService.vendorId;
 		}

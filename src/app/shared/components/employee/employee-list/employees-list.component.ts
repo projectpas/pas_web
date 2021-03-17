@@ -32,6 +32,7 @@ import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { ThrowStmt } from '@angular/compiler';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare let $ : any;
 
 
@@ -257,7 +258,9 @@ export class EmployeesListComponent implements OnInit {
         // { field: 'delete', header: 'Delete' },
     ];
     currentDeletedstatus: boolean = false;
-
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete: boolean = true;
     /** employees-list ctor */
     constructor(private modalService: NgbModal,
         private translationService: AppTranslationService,
@@ -266,10 +269,14 @@ export class EmployeesListComponent implements OnInit {
         private authService: AuthService,
         private datePipe: DatePipe,
         private alertService: AlertService, public commonService: CommonService, private configurations: ConfigurationService, public currencyService: CurrencyService, private legalEntityService: LegalEntityService, private itemser: ItemMasterService) {
+
         this.dataSource = new MatTableDataSource();
         this.translationService.closeCmpny = false;
         this.activeIndex = 0;
         this.empService.listCollection = null;
+        this.isAdd=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.Add);
+        this.isEdit=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.Update);
+        this.isDelete=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.Delete);
 
     }
     private onDataLoadSuccessful(allWorkFlows: any[]) {

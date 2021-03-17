@@ -10,10 +10,11 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AccountEndpoint extends EndpointFactory {
-
+    
     private readonly _usersUrl: string = "/api/account/users";
     private readonly _userByUserNameUrl: string = "/api/account/users/username";
     private readonly _currentUserUrl: string = "/api/account/users/me";
@@ -28,21 +29,22 @@ export class AccountEndpoint extends EndpointFactory {
     private readonly _getSavedCountryDataUrl : string = "/api/globalsettings/globalsettings?masterCompanyId="
     private readonly _saveCountryLevelGlobalSettingsUrl: string = "/api/globalsettings/createglobalsettings"
 
-    get usersUrl() { return this.configurations.baseUrl + this._usersUrl; }
-    get userByUserNameUrl() { return this.configurations.baseUrl + this._userByUserNameUrl; }
-    get currentUserUrl() { return this.configurations.baseUrl + this._currentUserUrl; }
-    get currentUserPreferencesUrl() { return this.configurations.baseUrl + this._currentUserPreferencesUrl; }
+    get usersUrl() { return environment.baseUrl + this._usersUrl; }
+    get userByUserNameUrl() { return environment.baseUrl + this._userByUserNameUrl; }
+    get currentUserUrl() { return environment.baseUrl + this._currentUserUrl; }
+    get currentUserPreferencesUrl() { return environment.baseUrl + this._currentUserPreferencesUrl; }
     get unblockUserUrl() { return this.configurations.baseUrl + this._unblockUserUrl; }
-    get rolesUrl() { return this.configurations.baseUrl + this._rolesUrl; }
-    get roleByRoleNameUrl() { return this.configurations.baseUrl + this._roleByRoleNameUrl; }
-    get permissionsUrl() { return this.configurations.baseUrl + this._permissionsUrl; }
-    get countriesListUrl() { return this.configurations.baseUrl + this._countriesListURL; }
-    get getCountrySpecificDataUrl() { return this.configurations.baseUrl + this._getCountrySpecificDataUrl; }
-    get getSavedCountryDataUrl() { return this.configurations.baseUrl + this._getSavedCountryDataUrl; }
-    get saveCountryLevelGlobalSettingsUrl() { return this.configurations.baseUrl + this._saveCountryLevelGlobalSettingsUrl; }
+    get rolesUrl() { return environment.baseUrl + this._rolesUrl; }
+    get roleByRoleNameUrl() { return environment.baseUrl + this._roleByRoleNameUrl; }
+    get permissionsUrl() { return environment.baseUrl + this._permissionsUrl; }
+    get countriesListUrl() { return environment.baseUrl + this._countriesListURL; }
+    get getCountrySpecificDataUrl() { return environment.baseUrl + this._getCountrySpecificDataUrl; }
+    get getSavedCountryDataUrl() { return environment.baseUrl + this._getSavedCountryDataUrl; }
+    get saveCountryLevelGlobalSettingsUrl() { return environment.baseUrl + this._saveCountryLevelGlobalSettingsUrl; }
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 
         super(http, configurations, injector);
+        
     }
 
     getUserEndpoint<T>(userId?: string): Observable<T> {

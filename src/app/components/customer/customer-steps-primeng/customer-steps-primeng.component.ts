@@ -9,6 +9,7 @@ import { MenuItem } from 'primeng/api';
 import { CreditTermsService } from '../../../services/Credit Terms.service';
 import { CommonService } from '../../../services/common.service';
 import { AuthService } from '../../../services/auth.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare var $: any;
 
 @Component({
@@ -41,6 +42,8 @@ export class CustomerStepsPrimengComponent {
 	jobTitles: Object; 
 	customerIdList: any[] = [];
 	arrayCustlist:any[] = [];
+	isView:boolean=true;
+	isShowGeneralInfo
 	constructor(private customerService: CustomerService,
 		private acRouter: ActivatedRoute,
 		public employeeService: EmployeeService,
@@ -52,6 +55,14 @@ export class CustomerStepsPrimengComponent {
 		public creditTermService: CreditTermsService,
 		private authService: AuthService,
 	) {
+		this.isView=this.authService.checkPermissionCustomer([ModuleConstants.CustomerList+'.'+PermissionConstants.View]);
+	}
+
+	isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Customer',value);
+		return isShow;
+	
 	}
 	ngOnInit() {
 		this.customerId = this.acRouter.snapshot.params['id'];

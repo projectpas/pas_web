@@ -4,6 +4,9 @@ import { MenuItem } from 'primeng/api';
 import { Message } from 'primeng/components/common/message';
 import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
 import { EmployeeService } from "../../../../services/employee.service";
+import { AuthService } from 'src/app/services/auth.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { PermissionMaster } from 'src/app/components/user-role/ModuleHierarchyMaster.model';
 
 @Component({
     selector: 'app-employee-steps-prime-ng',
@@ -26,10 +29,10 @@ export class EmployeeStepsPrimeNgComponent implements OnInit{
 	showComponentPTab: boolean;
     isDisabledSteps: boolean = false;
 	employeeId: any;
-  
+	isView:boolean=true;
     /** employee-steps-primeNg ctor */
 	constructor(private router: ActivatedRoute,
-		private acRouter: ActivatedRoute	, private route: Router, public employeeService: EmployeeService) {
+		private acRouter: ActivatedRoute	, private route: Router, public employeeService: EmployeeService,private authService:AuthService) {
 		let currentUrl = this.route.url;
 		this.employeeService.alertChangeObject$.subscribe(value => {
 			this.showComponentPTab = value;
@@ -39,6 +42,7 @@ export class EmployeeStepsPrimeNgComponent implements OnInit{
 			this.activeIndex = value;
 
 		});
+		this.isView=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.View);
 	}
 
 	ngOnInit() {

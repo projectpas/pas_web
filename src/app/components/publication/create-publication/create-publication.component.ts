@@ -30,6 +30,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 declare var $: any;
 
@@ -226,7 +227,7 @@ export class CreatePublicationComponent implements OnInit {
   rowIndex: number;
   disabledPartNumber: boolean = true;
   disableGeneralInfoSave: boolean = true;
-
+  isView:boolean=true;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -247,7 +248,9 @@ export class CreatePublicationComponent implements OnInit {
     private configurations: ConfigurationService,
     private localStorage: LocalStoreManager,
     private modalService: NgbModal
-  ) { }
+  ) { 
+    this.isView=this.authService.checkPermission(ModuleConstants.Publication+'.'+PermissionConstants.View);
+  }
 
 
   ngOnInit() {

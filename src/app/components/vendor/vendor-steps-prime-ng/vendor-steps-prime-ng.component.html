@@ -8,7 +8,7 @@
                     Vendor</h4>
             </div>
             <div>
-                <button
+                <button *ngIf="isView"
                     type="button"
                     class="btn-sm header-button"
                     [routerLink]="['/vendorsmodule/vendorpages/app-vendors-list']">
