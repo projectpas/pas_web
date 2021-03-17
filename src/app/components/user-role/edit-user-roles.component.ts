@@ -7,6 +7,7 @@ import { UserRoleService } from "./user-role-service";
 import { ModuleHierarchyMaster, UserRole, RolePermission, User, PermissionMaster } from "./ModuleHierarchyMaster.model";
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
+import { roleModulesEnum } from '../../enum/rolemodules.enum';
 
 @Component({
     selector: 'edit-app-roles',
@@ -49,8 +50,7 @@ export class EditUserRolesComponent implements OnInit {
 
     getAllPermission() {
         this.userRoleService.getAllPermission().subscribe(data => {
-            this.permissionMaster = data[0];
-            console.log(this.permissionMaster);
+            this.permissionMaster = data[0];            
         })
     }
 
@@ -145,16 +145,16 @@ export class EditUserRolesComponent implements OnInit {
         });
     }
 
-    userRoleChanged(event): void {
+    userRoleChanged(): void {        
         this.isSpinnerVisible=true;
-        this.sortModules();
+        this.sortModules();        
         this.currentUserRole.rolePermissions = [];
 
-        if (this.currentUserRole.id != 0) {
+        if ( this.currentUserRole.id != undefined && this.currentUserRole.id != 0 ) {
             let userRoleId: number = this.currentUserRole.id;
             let selectedUserRole: UserRole = this.userRoles.filter(function (userRole: UserRole) {
                 return userRole.id == userRoleId;
-            })[0];
+            })[0];           
 
             this.currentUserRole.name = selectedUserRole.name;
             for (let modules of this.sortedHierarchy) {
@@ -309,7 +309,7 @@ export class EditUserRolesComponent implements OnInit {
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
         var value = event.target.checked;
-
+        
         if (value == false) {
             this.setPermissionByType(currentModule, type, value);
             if (currentModule.parentId != null)
@@ -352,8 +352,10 @@ export class EditUserRolesComponent implements OnInit {
         else {
             this.setPermissionByType(currentModule, type, value);
             this.setModuleHierarchyPermission(currentModule,type,value);
+            if (currentModule.parentId != null)
+                this.checkParentModule(currentModule,currentModule.parentId,type,value);
         }
-        console.log(this.currentUserRole.rolePermissions);
+        //console.log(this.currentUserRole.rolePermissions);
     }
 
     setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,type,value:boolean=true): void {
@@ -478,30 +480,190 @@ export class EditUserRolesComponent implements OnInit {
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);
+                //console.log(result)
                 for (let module of this.sortedHierarchy) {
                     this.resetRolePermission(module.rolePermission);
                 }
+                var roleId = this.currentUserRole.id;
                 this.currentUserRole = new UserRole();
-                this.currentUserRole.id = 0;
+                this.currentUserRole.id = roleId;
                 this.currentUserRole.rolePermissions = [];
                 this.pages = [];
                 this.userRoleService.getAllUserRole().subscribe(result => {
                     this.userRoles = result[0];
+                    this.userRoleChanged();
                 });
                 this.isSpinnerVisible=false;
             },
             error => {
-                var message = '';
-                if (error.error.constructor == Array) {
-                    message = error.error[0].errorMessage;
-                }
-                else {
-                    message = error.error.Message;
-                } 
+                // var message = '';
+                // if (error.error.constructor == Array) {
+                //     message = error.error[0].errorMessage;
+                // }
+                // else {
+                //     message = error.error.Message;
+                // } 
                 this.isSpinnerVisible=false;
-                this.alertService.showMessage('User Role', message, MessageSeverity.error);
+               // this.alertService.showMessage('User Role', message, MessageSeverity.error);
             }
         );
 
     }
+
+    checkparent(currentModule,parentId,type){        
+        var parentModule = this.sortedHierarchy.filter(function (module) {
+            return (module.id == parentId && module.hasChildren == true);
+        })[0];        
+        this.setPermissionByType(parentModule, type, true);                        
+        if(currentModule.rolePermission.permissionID == 1 || currentModule.rolePermission.permissionID == 2 || currentModule.rolePermission.permissionID == 3 || currentModule.rolePermission.permissionID == 4){
+            // var rolePermissionData=Object.assign({}, currentModule.rolePermission);
+            // rolePermissionData.permissionID=2;
+            // rolePermissionData.moduleHierarchyMasterId = currentModule.id;
+            //this.currentUserRole.rolePermissions.push(rolePermissionData);
+            this.setCorrospondingValue(parentModule,2,true);  
+        }
+    }
+
+    addcount : number
+    viewcount : number
+    updatecount : number
+    deletecount : number
+    canAssign : number
+    canApprove : number
+    canUpload:number
+    canDownload:number
+    canReport : number
+    canRun : number
+    canReportView : number
+    canReportDelete : number
+    canPrint : number   
+    checkParentModule(currentModule: ModuleHierarchyMaster,parentId:any, type: string, checkedValue: boolean) {
+        this.addcount = 0;
+        this.viewcount = 0;
+        this.updatecount = 0;
+        this.deletecount = 0;
+        this.canAssign = 0;
+        this.canApprove = 0;
+        this.canUpload = 0;
+        this.canDownload = 0;
+        this.canReport = 0;
+        this.canRun = 0;
+        this.canReportView = 0;
+        this.canReportDelete = 0;
+        this.canPrint = 0;
+        var childlist = this.sortedHierarchy.filter(function (module) {
+            return module.parentId == parentId
+        });              
+        if (childlist != undefined && childlist.length > 0) {
+            for (let i=0;i<childlist.length;i++) {
+                if(type == roleModulesEnum.canAdd){
+                    if(childlist[i].rolePermission.canAdd === true){
+                        this.addcount+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canView){
+                    if(childlist[i].rolePermission.canView === true){
+                        this.viewcount+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canUpdate){
+                    if(childlist[i].rolePermission.canUpdate === true){
+                        this.updatecount+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canDelete){
+                    if(childlist[i].rolePermission.canDelete === true){
+                        this.deletecount+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canAssign){
+                    if(childlist[i].rolePermission.canAssign === true){
+                        this.canAssign+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canApprove){
+                    if(childlist[i].rolePermission.canApprove === true){
+                        this.canApprove+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canUpload){
+                    if(childlist[i].rolePermission.canUpload === true){
+                        this.canUpload+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canDownload){
+                    if(childlist[i].rolePermission.canDownload === true){
+                        this.canDownload+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canReport){
+                    if(childlist[i].rolePermission.canReport === true){
+                        this.canReport+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canRun){
+                    if(childlist[i].rolePermission.canRun === true){
+                        this.canRun+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canReportView){
+                    if(childlist[i].rolePermission.canReportView === true){
+                        this.canReportView+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canReportDelete){
+                    if(childlist[i].rolePermission.canReportDelete === true){
+                        this.canReportDelete+=1; 
+                    }                                
+                }
+                if(type == roleModulesEnum.canPrint){
+                    if(childlist[i].rolePermission.canPrint === true){
+                        this.canPrint+=1; 
+                    }                                
+                }
+            }           
+            if(this.addcount == childlist.length){  
+                this.checkparent(currentModule,parentId,type);                                                                                          
+            }
+            if(this.viewcount == childlist.length){                
+                this.checkparent(currentModule,parentId,type);               
+            }
+            if(this.updatecount == childlist.length){                
+                this.checkparent(currentModule,parentId,type);                
+            }
+            if(this.deletecount == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canAssign == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canApprove == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canUpload == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canDownload == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canReport == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canRun == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canReportView == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canReportDelete == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+            if(this.canPrint == childlist.length){                
+                this.checkparent(currentModule,parentId,type);              
+            }
+        }
+    }
+
+    
 }
+
