@@ -2830,15 +2830,14 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     filterCustomerContact(event): void {
         this.cusContactList = this.customerContactList;
-        if (event.query !== undefined && event.query !== null) {
+        if (event.query !== undefined && event.query !== null && event.query !== '') {
             const customers = [...this.customerContactList.filter(x => {
                 return x.contactName.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.cusContactList = customers;
         }else{
             this.cusContactList = this.customerContactList; 
-        }
-        
+        }        
     }
 
     hideModal(modalName){
@@ -3359,7 +3358,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
 
     }
-    
+
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
     }
