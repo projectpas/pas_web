@@ -30,7 +30,11 @@
             <div class="row">
                 <div class="col">
                   <h4  class="header-name">
-                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
+                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote
+                
+                    <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
+                        {{!isDetailedView ? 'Collapse' : 'Expand'}}</button>
+                </h4>
             </div>
             <div *ngIf="!isView">
                 <button type="button"
@@ -42,7 +46,7 @@
            </div>
         </div>
     <div class="card-body new-card-body">
-        <div class="form-row">
+        <div class="form-row" [hidden]="isDetailedView">
             <div class="col-md-3"> 
                 <div class="form-group ">
                     <label>Quote Number <span class="clr-red">*</span></label>
@@ -221,6 +225,12 @@
                     <input class="form-control" type="text" [(ngModel)]="csr" name="csr" readonly />
                 </div>
                 <div class="form-group ">
+                    <label for="csr">
+                        Employee
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="employeeName" name="csr" readonly />
+                </div>
+                <!-- <div class="form-group ">
                     <label for="Employee">
                         Employee
                     </label>
@@ -233,12 +243,33 @@
                                     [size]="30" [minLength]="1" [dropdown]="true"
                                     class="p-autoComplete-ctsm" [disabled]="true">
                     </p-autoComplete>
-                    <!-- <input class="form-control" type="text" [(ngModel)]="employeeName" name="Employee"/> -->
-                </div>
+               </div> -->
+            </div>
+            <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
+                <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
             </div>
         </div>
-
-        <div>
+        <div class="form-row" [hidden]="!isDetailedView">
+            <div class="col-md-3"> 
+                <div class="form-group ">
+                    <label>Quote Number <span class="clr-red">*</span></label>
+                    <input class="form-control" type="text" required [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly />
+                </div>
+            </div>
+            <div class="col-md-3"> 
+                <div class="form-group ">
+                    <label>Version Number <span class="clr-red">*</span></label>
+                    <input class="form-control" type="text" required [(ngModel)]="quoteForm.versionNo" name="quotenumber" readonly />
+                </div>
+            </div>
+            <div class="col-md-3"> 
+                <div class="form-group">
+                    <label for="customerName">
+                        Customer Name
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly />
+                </div>
+                </div>
         </div>
         <div class="form-row pull-right m-t-10" *ngIf="enableEditBtn && selectedDisplayType == ''">
             <button class="btn btn-primary" (click)="createQuote()" *ngIf="!isView || (isWoTab && !isListView)">
@@ -248,9 +279,7 @@
                 Back To Work Order
             </button>
         </div>
-        <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
-            <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
-        </div>
+
     </div>
 </div>
 
@@ -545,7 +574,7 @@
                         <thead>
                             <tr class="pad_workflo">
                                 <th class="approver-th-align th-width">
-                                    <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isView || isCurrentUserApprovalLimitExceeded"/> Select All
+                                    <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot()"/> Select All
                                 </th>
                                 <th *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
                             </tr>
@@ -554,7 +583,7 @@
                             <tr class="mpn-row" style="display: table-row;"
                                 *ngFor="let approver of woQuoteApprovalList; let i=index;">
                                 <td>
-                                    <input type="checkbox" [(ngModel)]="approver.isSelected" *ngIf="approver['approvalActionId'] != 5" [disabled]="isView || isCurrentUserApprovalLimitExceeded"/>
+                                    <input type="checkbox" [(ngModel)]="approver.isSelected" (click)="onApprovalSelected(approver, i)"  [disabled]=" isViewMode ||!getPartToDisableOrNot(approver)"/>
                                 </td>
                                 <ng-container *ngFor="let field of woQuoteListHeader">
                                     <td *ngIf="field.field != 'internalSentDate'
@@ -574,23 +603,34 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="approver[field.field]"
-                                                    [disabled]="!approver.isSelected || approver['approvalActionId'] != 1"
+                                                    [disabled]="getInternalSentDateEnableStatus(approver)"
                                                     [minDate]="getInternalSentMinDate(quoteForm.openDate)" [maxDate]="getInternalSentMaxDate(sentDate)" appendTo="body">
                                         </p-calendar>
                                     </td>
-                                    <td *ngIf="field.field == 'internalStatusId'">
-                                        <label *ngIf="field.field != 'internalStatusId'" [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                                        <select *ngIf="field.field == 'internalStatusId'"
-                                                [(ngModel)]="approver['internalStatusId']"
-                                                style="width:120px;"
-                                                [disabled]="!approver.isSelected || approver['approvalActionId'] != 2">
-                                            <option value="">Select</option>
-                                            <option value="1">Pending</option>
-                                            <option value="2">Approved</option>
-                                            <option value="3">Rejected</option>
-                                            <option value="4">Sent For Approval</option>
+                                    <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
+                                        <label *ngIf="field.field != 'internalStatusId'"
+                                          [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                                        <select style="width:150px;" [(ngModel)]="approver.internalStatusId"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
+                                          *ngIf="field.field == 'internalStatusId'">
+                                          <option value='-1'>--Select</option>
+                                          <option *ngFor="let status of statusList" [ngValue]="status.statusId">
+                                            {{status.name}}
+                                          </option>
                                         </select>
-                                    </td>
+                                      </td>
+                                      <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
+                                        <label *ngIf="field.field != 'internalStatusId'"
+                                          [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                                        <select style="width:150px;" [(ngModel)]="approver.internalStatusId"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
+                                          *ngIf="field.field == 'internalStatusId'">
+                                          <option value='' selected>--Select</option>
+                                          <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
+                                            {{status.name}}
+                                          </option>
+                                        </select>
+                                      </td>
                                     <td *ngIf="field.field == 'internalMemo'" class="col-sm-12" style="width: 200px;">
                                         <div class="col-sm-11">
                                         <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
@@ -599,7 +639,7 @@
                                                <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['internalMemo']"></p>
                                                </div>
 
-                                               <div class="col-sm-1" style="margin-top: 4px;" *ngIf="approver['approvalActionId'] == 2">
+                                               <div class="col-sm-1" style="margin-top: 4px;" *ngIf="getApprovalActionInternalStatus(approver)">
                                                <i class="fa fa-info-circle fa-lg" data-toggle="modal" 
                                                data-target="#memo-popup"
                                                  matTooltipPosition="above" matTooltip="Add Memo"
@@ -622,7 +662,7 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="approver[field.field]"
-                                                    [disabled]="!approver.isSelected || approver['approvalActionId'] != 2"
+                                                    [disabled]="getinternalStatusIdEnableStatus(approver)"
                                                     [minDate]="approver.internalSentDate" [maxDate]="getInternalApprovedMaxDate()"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -632,30 +672,39 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="approver[field.field]"
-                                                    [disabled]="!approver.isSelected || approver['approvalActionId'] != 3"
+                                                    [disabled]="getcustomerSentDateEnableStatus(approver)"
                                                     [maxDate]="getInternalApprovedMaxDate()" [minDate]="getCustomerSentMinDate(approver['internalApprovedDate'])"  appendTo="body">
                                         </p-calendar>
                                     </td>
-                                    <td *ngIf="field.field == 'customerStatusId'">
-                                        <label *ngIf="field.field != 'customerStatusId'" [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                                        <select *ngIf="field.field == 'customerStatusId'"
-                                                [(ngModel)]="approver['customerStatusId']"
-                                                style="width:120px;"
-                                                [disabled]="!approver.isSelected || approver['approvalActionId'] != 4">
-                                            <option value="">Select</option>
-                                            <option value="1">Pending</option>
-                                            <option value="2">Approved</option>
-                                            <option value="3">Rejected</option>
-                                            <option value="4">Sent For Approval</option>
+                                    <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
+                                        <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
+                                        <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
+                                          *ngIf="field.field == 'customerStatusId'">
+                                          <option value='-1'>--Select</option>
+                                          <option *ngFor="let status of statusList" [ngValue]="status.statusId">
+                                            {{status.name}}
+                                          </option>
                                         </select>
-                                    </td>
+                                      </td>
+                                      <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver)">
+                                        <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
+                                        <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
+                                          *ngIf="field.field == 'customerStatusId'">
+                                          <option value='' selected>--Select</option>
+                                          <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
+                                            {{status.name}}
+                                          </option>
+                                        </select>
+                                      </td>
                                     <td *ngIf="field.field == 'customerMemo'" class="col-sm-12" style="width: 200px;">
                                         <div class="col-sm-11">
                                         <!-- <input type="text" [(ngModel)]="approver['customerMemo']" class="calender-cstm" style="width:200px;"
                                                [disabled]="!approver.isSelected || approver['approvalActionId'] != 4" /> -->
                                             <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['customerMemo']"></p>
                                             </div>
-                                               <div class="col-sm-1" style="margin-top: 4px;" *ngIf="approver['approvalActionId'] == 4">
+                                               <div class="col-sm-1" style="margin-top: 4px;" *ngIf="getApprovalActionCustomerStatus(approver)">
                                                 <i class="fa fa-info-circle fa-lg" data-toggle="modal" 
                                                 data-target="#memo-popup"
                                                   matTooltipPosition="above" matTooltip="Add Memo"
@@ -667,7 +716,7 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [(ngModel)]="approver[field.field]"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    [disabled]="!approver.isSelected || approver['approvalActionId'] != 4"
+                                                    [disabled]="getcustomerStatusIdEnableStatus(approver)"
                                                     [minDate]="approver['customerSentDate']" [maxDate]="getInternalApprovedMaxDate()"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -676,7 +725,7 @@
                                         <select *ngIf="field.field == 'customerApprovedBy'"
                                                 [(ngModel)]="approver['customerApprovedById']"
                                                 style="width:150px;"
-                                                [disabled]="!approver.isSelected || approver['approvalActionId'] != 4">
+                                                [disabled]="getcustomerStatusIdEnableStatus(approver)">
                                             <option value="">Select</option>
                                             <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.name}}</option>
                                         </select>
@@ -686,7 +735,7 @@
                         </tbody>
                     </table>
                 </div>
-            <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()" style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+            <button *ngIf="!isViewMode" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"  [disabled]="!getAllPartsToDisableOrNot()" style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
 
             </div>
 
@@ -715,8 +764,8 @@
                     </table>
                 </div>
             </div>
-        <!-- </div> -->
-        <div style="margin-top:5% !important;" >
+        <!-- </div> --> 
+        <div>
 
             <div class="col-md-12">
                 <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==false">
@@ -738,23 +787,23 @@
                 </div>
                 <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==true">
                     <label class="fs12">
-                        Part Number:
+                        <strong> Part Number:</strong>
                     </label>
                     <label>{{selectedquotePn}}</label>
                 </div>
                 <div class="col-md-3">
                     <label class="fs12">
-                        Part Description:
+                        <strong>Part Description:</strong>
                     </label>
                     <label>{{selectedPartDescription}}</label>
                 </div>
                 <div class="col-md-3">
                     <label class="fs12">
-                        Stock Line Number:
+                        <strong>   Stock Line Number:</strong>
                     </label>
                     <label>{{selectedStockLineNumber}}</label>
                 </div>
-            </div>
+            </div> 
                 <div class="form-group " *ngIf="selectedPartNumber != ''">
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
@@ -856,10 +905,11 @@
                                 <td>{{matQuotation.provision}}</td>
                                 <td class="content-to-end">{{matQuotation.quantity}}</td>
                                 <td>
-                                    <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
+                                    {{matQuotation.uom}}
+                                    <!-- <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
                                         <option value="">Select</option>
                                         <option *ngFor="let uom of unitOfMeasuresList" [value]="uom.unitOfMeasureId">{{uom.description}}</option>
-                                    </select>
+                                    </select> -->
                                 </td>
                                 <td>
                                     <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.conditionCodeId" disabled>
@@ -884,12 +934,21 @@
                                 </td>
                                 <td class="content-to-end">{{ formateCurrency(matQuotation.billingRate) }}</td>
                                 <td>
-                                    <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" />
-                                </td>
-                                <td *ngIf="!isView">
-                                    <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                    <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                </td>
+                                    <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
+                                    <input type="text" pInputText pKeyFilter="money" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
+                                     value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
+                    
+                                    </td>
+                                <td >
+                                    <span *ngIf="!isView" data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                    <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                    <span>
+                                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(matQuotation)"
+                                            matTooltip="History" matTooltipPosition="above"><i
+                                                class="fa fa-history"></i></a>
+                                    </span>
+                               
+                                </td>  
                             </tr>
                         </ng-container>
                         <tr class="task-total">
@@ -1590,7 +1649,8 @@
                         &times;
                     </button> 
                 </div>
-                <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
+                <!-- *ngIf="showDisplayData==true" -->
+                <div class="modal-body table-responsive" *ngIf="quotationHeader">
                     <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"
@@ -1605,74 +1665,17 @@
                                        [(ngModel)]="type"
                                        (click)="typeChange()"></p-radioButton>
                     </div>
-                    <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" *ngIf="displayType == 'use historical wos'">
-                      <thead>
-                        <tr>
-                          <th>WO Num</th>
-                          <th>Cust Name</th>
-                          <th>Cust Code</th>
-                          <th>WO Type</th>
-                          <th>Open Date</th>
-                          <th>Promise Date</th>
-                          <th>Est. Comp Date</th>
-                          <th>Est. Ship Date</th>
-                          <th>WO Status</th>
-                          <th class="events1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="mpn-row" *ngFor="let buildl of buildHistoricalList">
-                          <td>{{buildl.workOrderNum}}</td>
-                          <td>{{buildl.customerName}}</td>
-                          <td>{{buildl.customerCode}}</td>
-                          <td>{{buildl.woType}}</td>
-                          <td>{{buildl.openDate}}</td>
-                          <td>{{buildl.promisedDate}}</td>
-                          <td>{{buildl.estimatedCompletionDate}}</td>
-                          <td>{{buildl.estimatedShipDate}}</td>
-                          <td>Closed</td>
-                          <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = buildl.workOrderId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-                    <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" *ngIf="displayType == 'historical WO quotes'">
-                      <thead>
-                        <tr>
-                          <th>Quote Num</th>
-                          <th>WO Num</th>
-                          <th>Cust Name</th>
-                          <th>Cust Code</th>
-                          <th>WO Type</th>
-                          <th>Open Date</th>
-                          <th>Promise Date</th>
-                          <th>Est. Comp Date</th>
-                          <th>Est. Ship Date</th>
-                          <th>Quote Status</th>
-                          <th class="events1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="mpn-row" *ngFor="let buildl of buildHistoricalList">
-                          <td>{{buildl.quoteNumber}}</td>
-                          <td>{{buildl.workOrderNum}}</td>
-                          <td>{{buildl.customerName}}</td>
-                          <td>{{buildl.customerCode}}</td>
-                          <td>{{buildl.woType}}</td>
-                          <td>{{buildl.openDate}}</td>
-                          <td>{{buildl.promisedDate}}</td>
-                          <td>{{buildl.estimatedCompletionDate}}</td>
-                          <td>{{buildl.estimatedShipDate}}</td>
-                          <td>{{buildl.quoteStatus}}</td>
-                          <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = buildl.workOrderId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-
-                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
-                             [columns]="cols"
+             <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
+                             [columns]="cols" #dt22
                              [value]="buildHistoricalList"
                              [paginator]="true"
-                             [rows]="10"
+                             [rows]="10" 
+                             [first]="0"
+                             [rows]="pageSize"
+                             [paginator]="true"
+                             [pageLinks]="3" 
+                             [totalRecords]="totalRecords"
+                             [rowsPerPageOptions]="[10, 20, 50, 100]"
                              *ngIf="displayType == 'use historical wos'">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -1685,6 +1688,10 @@
                                 <th>Est. Comp Date</th>
                                 <th>Est. Ship Date</th>
                                 <th>WO Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th class="events1"></th>
                             </tr>
                         </ng-template>
@@ -1699,16 +1706,40 @@
                                 <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>Closed</td>
+                                <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.updatedBy}}</td>
                                 <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
                             </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="16" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer" style="background:#fff !important">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input class="footer-input-width" [ngModel]="getPageCount(dt22._totalRecords, pageSize)" [disabled]="true"
+                                pInputText type="text" />
                         </ng-template>
                     </p-table>
-
-                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
+                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm" #dt11
                              [columns]="cols"
                              [value]="buildHistoricalList"
                              [paginator]="true"
                              [rows]="10"
+                             [first]="0"
+                             [totalRecords]="totalRecords"
+                             [rows]="pageSize"
+                             [paginator]="true"
+                             [pageLinks]="3" 
+                             [rowsPerPageOptions]="[10, 20, 50, 100]"
                              *ngIf="displayType == 'historical WO quotes'">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -1722,6 +1753,10 @@
                                 <th>Est. Comp Date</th>
                                 <th>Est. Ship Date</th>
                                 <th>Quote Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th class="events1"></th>
                             </tr>
                         </ng-template>
@@ -1737,16 +1772,33 @@
                                 <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.quoteStatus}}</td>
-                                <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
+                                <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.updatedBy}}</td>
+                                <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="triggerWoQuoteView(rowData);" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="16" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer" style="background:#fff !important">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input class="footer-input-width" [ngModel]="getPageCount(dt11._totalRecords, pageSize)" [disabled]="true"
+                                pInputText type="text" />
+                        </ng-template>
                     </p-table>
-
                 </div>
             </div>
         </div>
     </div>
-
     <div id="quoteVer"
          class="modal fade"
          role="dialog"
@@ -1787,7 +1839,7 @@
                 <form #attachDocForm="ngForm" 
         class="form-horizontal" ngNativeValidate>
                     <div class="modal-body">
-                        <div class="form-row">
+                        <div class="form-row"> 
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group col-md-12">
@@ -1815,8 +1867,6 @@
                                     <input class="form-control" type="email" name="bcc"
                                         [(ngModel)]="bcc" multiple="true">
                                 </div>
-                                
-                                
                             </div>
                             <div class="col-md-6">
                                 

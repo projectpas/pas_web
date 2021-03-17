@@ -10,7 +10,6 @@ import { listSearchFilterObjectCreation, getObjectById } from '../../../generic/
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
-import { WorkOrderQuoteService } from '../../../services/work-order/work-order-quote.service';
 import { CommonService } from '../../../services/common.service';
 import { Documents } from '../../../models/work-order-documents.modal';
 import {
@@ -43,7 +42,6 @@ export class WorkOrderListComponent implements OnInit {
     totalRecords: number = 0;
     totalPages: number = 0;
     documents: Documents[] = [];
-    taskList: any = [];
     editMode: boolean = false;
     paramsData: any = {};
     isWorkOrderView: boolean = true;
@@ -76,21 +74,7 @@ export class WorkOrderListComponent implements OnInit {
         { field: "updatedBy", header: "UpdatedBy", width: "130px" }
     ]
     selectedColumns = this.headers;
-    workOrderPartListData: any;
-    workOrderPartListDataKeys: string[];
-    viewWorkOrderHeader: any;
-    viewWorkOrderMPN: any;
-    workOrderAssetList: any;
-    workOrderMaterialList: Object;
-    workOrderPublicationList: Object;
-    workOrderChargesList: Object;
-    workOrderExclusionsList: Object;
-    workOrderLaborList: Object;
-    mpnPartNumbersList: any;
-    quoteDetailsId: any;
     workFlowId: any;
-    showTableGrid: boolean = false;
-    showMPN: boolean = false;
     workOrderDirectionList: Object;
     otherOptions = [
         { label: 'Other Options', value: '' },
@@ -99,7 +83,6 @@ export class WorkOrderListComponent implements OnInit {
         { label: 'Accounting', value: 'accounting' },
         { label: 'Charges', value: 'charges' },
         { label: 'Exclusion', value: 'exclusion' },
-
     ]
     selectedOtherSubTask: string = ''
     activeIndex: number;
@@ -120,50 +103,20 @@ export class WorkOrderListComponent implements OnInit {
     warningID: any;
     restrictID: any;
     editData: any;
-    materialStatus: any;
-    savedWorkOrderData: any;
-    documentsDestructuredData: any;
-    communicationOptionShow: boolean = false;
-    selectedCommunicationOption: string = "";
-    workOrderFreightList: any;
-    workFlowObject = {
-        materialList: [],
-        equipments: [],
-        charges: [],
-        exclusions: []
-    }
-    legalEntityList: any;
-    currencyList: any;
-    employeesOriginalData: any;
-    isEditBilling: boolean = false;
-    workOrderQuoteId: any;
-    buildMethodDetails: any;
-    quoteChargesList: any;
-    quoteFreightsList: any;
-    quoteMaterialList: any;
-    quoteLaborList: any;
     labor = new WorkOrderLabor();
     billing: Billing;
-    workOrderPartNumberId: any;
     moduleName: any;
     workOrderDetails: any;
-    showTabsGrid: boolean;
-    showGridMenu: boolean;
     subWorkOrderId: any = 0;
-    quoteExclusionList: any;
     freight: any;
-    isContractAvl: any;
     AuditDetails = SingleScreenAuditDetails;
     home: any;
     restorerecord: any = {};
-    selectedMPN: any;
     customerWarningsList: any;
-
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private authService: AuthService,
         private alertService: AlertService,
-        private quoteService: WorkOrderQuoteService,
         private commonService: CommonService,
         private modalService: NgbModal,
         private datePipe: DatePipe
@@ -182,77 +135,24 @@ export class WorkOrderListComponent implements OnInit {
         ];
         this.getWorkOrderDefaultSetting();
         this.getCustomerWarningsList();
-        this.getTaskList();
-        this.getLegalEntity();
-        this.getCurrency();
-        this.getAllEmployees()
         if (this.isWorkOrderMainView) {
             this.view({ workOrderId: this.workOrderId })
         }
     }
-
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
-
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
-
     get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
 		  ? this.authService.currentUser.masterCompanyId
 		  : null;
     }
-
-    getLegalEntity() {
-        this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.legalEntityList = res;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    getCurrency() {
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'symbol').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.currencyList = res;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    getAllEmployees() {
-        this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.employeesOriginalData = res.map(x => {
-                return {
-                    ...x,
-                    employeeId: x.value,
-                    name: x.label
-                }
-            });
-        }, error => {
-            this.isSpinnerVisible = false;
-        })
-    }
-
-    getTaskList() {
-        this.workOrderService.getAllTasks()
-            .pipe(takeUntil(this.onDestroy$)).subscribe(
-                (taskList) => {
-                    this.taskList = taskList;
-                },
-                err => {
-                    this.isSpinnerVisible = false;
-                }
-            )
-    }
-
     getWorkOrderDefaultSetting() {
         this.commonService.workOrderDefaultSettings(1, 1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res && res[0]) {
@@ -272,7 +172,6 @@ export class WorkOrderListComponent implements OnInit {
                 this.isSpinnerVisible = false;
             })
     }
-
     getColorCodeForMultiple(data) {
         return data['partNoType'] === 'Multiple' ? 'green' : 'black';
     }
@@ -409,9 +308,20 @@ export class WorkOrderListComponent implements OnInit {
             this.workOrderData = res['results'].map(x => {
                 return {
                     ...x,
-                    createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
-                    openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy') : '',  
+                    //createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                    //updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+
+                    openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
+                    estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    estimatedShipDateType: x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    estimatedCompletionDateType: x.estimatedCompletionDateType ? this.datePipe.transform(x.estimatedCompletionDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    customerRequestDateType: x.customerRequestDateType ? this.datePipe.transform(x.customerRequestDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 }
             });
 
@@ -426,16 +336,6 @@ export class WorkOrderListComponent implements OnInit {
         }, err => {
             this.isSpinnerVisible = false;
         })
-    }
-
-    otherOptionSelected(value) {
-        this.selectedOtherSubTask = value;
-        this.otherOptionShow = false;
-    }
-
-    otherCommunicationOptionSelected(value) {
-        this.selectedCommunicationOption = value;
-        this.communicationOptionShow = false;
     }
 
     getPageCount(totalNoofRecords, pageSize) {
@@ -474,398 +374,7 @@ export class WorkOrderListComponent implements OnInit {
     async view(rowData) {
         this.paramsData['workOrderId'] = rowData.workOrderId;
         this.workOrderId = rowData.workOrderId;
-        this.isSpinnerVisible = true;
-        await this.workOrderService.viewWorkOrderHeader(this.workOrderId).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.workOrderDetails = res;
-            this.viewWorkOrderHeader = res;
-            this.showTabsGrid = true;
-            this.showGridMenu = true;
-            this.workFlowWorkOrderId = res.workFlowWorkOrderId
-            this.workOrderPartNumberId = res.woPartNoId;
-            this.billingCreateOrEdit();
-            if (res.singleMPN === "Single MPN") {
-                this.showMPN = false;
-                this.getAllTabsData(res.workFlowWorkOrderId, 0);
-                this.checkQuoteAvailability(rowData.workOrderId, res.workFlowWorkOrderId);
-            } else {
-                this.showMPN = true;
-            }
-            this.workFlowId = res.workFlowId;
-            this.savedWorkOrderData = {
-                workOrderId: this.workOrderId,
-                workFlowId: this.workFlowId,
-                workFlowWorkOrderId: this.workFlowWorkOrderId
-            }
-            this.getQuoteIdByWfandWorkOrderId(this.workFlowWorkOrderId, this.workOrderId);
-            this.getDocumentsByWorkOrderId();
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-
-        await this.workOrderService.viewWorkOrderPartNumber(this.workOrderId).subscribe(res => {
-            this.viewWorkOrderMPN = res;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-        this.getWorkOrderWorkFlowNos(this.workOrderId)
     }
-
-    billingCreateOrEdit() {
-        this.isSpinnerVisible = true;
-        this.workOrderService.getBillingEditData(this.workOrderId, this.workOrderPartNumberId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            // Edit
-            this.isSpinnerVisible = false;
-            this.billing = {
-                ...res,
-                shipDate: new Date(res.shipDate),
-                printDate: new Date(res.printDate),
-                woOpenDate: new Date(res.openDate),
-                invoiceDate: new Date(res.invoiceDate),
-                soldToCustomerId: { customerId: res.soldToCustomerId, customerName: res.soldToCustomer },
-                shipToCustomerId: { customerId: res.shipToCustomerId, customerName: res.shipToCustomer },
-                customerRef: res.customerReference,
-                woType: res.workOrderType,
-                shipAccountInfo: res.shippingAccountinfo
-            }
-            this.isEditBilling = true;
-        }, error => {
-            this.getWorkOrderDetailsFromHeader()
-            this.isSpinnerVisible = false;
-        })
-    }
-
-    getWorkOrderDetailsFromHeader() {
-        this.isSpinnerVisible = true;
-        this.workOrderService.viewWorkOrderHeader(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            const data = res;
-            this.isSpinnerVisible = false;
-            this.billing = new Billing();
-            this.billing = {
-                ...this.billing,
-                customerRef: data.customerReference,
-                employeeName: data.employee,
-                woOpenDate: new Date(data.openDate),
-                salesPerson: data.salesperson,
-                woType: data.workOrderType,
-                creditTerm: data.creditTerm,
-                workScope: "0",
-                managementStructureId: data.managementStructureId
-            }
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    getQuoteIdByWfandWorkOrderId(wfwoid, woid) {
-        this.isSpinnerVisible = true;
-        this.quoteService.getQuoteIdByWfandWorkOrderId(wfwoid, woid).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-
-            this.isSpinnerVisible = false;
-            if (res) {
-                this.workOrderQuoteId = res.quoteDetailId;
-                this.quoteService.getSavedQuoteDetails(wfwoid)
-                    .subscribe(
-                        res => {
-                            this.isSpinnerVisible = false;
-                            this.buildMethodDetails = res;
-                            this.getQuoteCostingData(res['buildMethodId']);
-                            this.billing['materialCost'] = res['materialFlatBillingAmount'];
-                            this.billing['laborOverHeadCost'] = res['laborFlatBillingAmount'];
-                            this.billing['miscChargesCost'] = res['chargesFlatBillingAmount'] + res['freightFlatBillingAmount'];
-                        },
-                        err => {
-                            this.isSpinnerVisible = false;
-                        }
-                    )
-            }
-            else {
-                this.quoteChargesList = [];
-                this.quoteMaterialList = [];
-                this.quoteLaborList = [];
-                this.billing = undefined;
-            }
-
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    getQuoteCostingData(buildMethodId) {
-        this.getQuoteMaterialListByWorkOrderQuoteId(buildMethodId);
-        this.getQuoteFreightsListByWorkOrderQuoteId(buildMethodId);
-        this.getQuoteChargesListByWorkOrderQuoteId(buildMethodId);
-        this.getQuoteLaborListByWorkOrderQuoteId(buildMethodId);
-    }
-
-    async getQuoteMaterialListByWorkOrderQuoteId(buildMethodId) {
-        this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteMaterialList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.quoteMaterialList = res;
-            this.isSpinnerVisible = false;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    async getQuoteFreightsListByWorkOrderQuoteId(buildMethodId) {
-        this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteFreightsList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.quoteFreightsList = res;
-            this.isSpinnerVisible = false;
-
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    async getQuoteChargesListByWorkOrderQuoteId(buildMethodId) {
-        this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteChargesList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.quoteChargesList = res;
-            this.isSpinnerVisible = false;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    async getQuoteLaborListByWorkOrderQuoteId(buildMethodId) {
-        this.isSpinnerVisible = false;
-        await this.quoteService.getQuoteLaborList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            if (res) {
-                let wowfId = this.workFlowWorkOrderId;
-                if (res) {
-                    let laborList = this.labor.workOrderLaborList;
-                    this.quoteLaborList = { ...res, workOrderLaborList: laborList };
-                    this.quoteLaborList.dataEnteredBy = getObjectById('value', res.dataEnteredBy, this.employeesOriginalData);
-                    this.quoteLaborList.workFlowWorkOrderId = wowfId;
-                    if (!this.quoteLaborList.workOrderLaborList || !this.quoteLaborList.workOrderLaborList[0]) {
-                        this.quoteLaborList["workOrderLaborList"] = [{}]
-                    }
-                    this.taskList.forEach((tl) => {
-                        this.quoteLaborList.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
-                        res.laborList.forEach((rt) => {
-                            if (rt['taskId'] == tl['taskId']) {
-                                let labor = {}
-                                labor = { ...rt, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
-                                this.quoteLaborList.workOrderLaborList[0][tl['description'].toLowerCase()].push(labor);
-                            }
-                        })
-                    })
-                }
-            }
-            else {
-                this.taskList.forEach((tl) => {
-                    this.quoteLaborList.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
-                });
-            }
-
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-    }
-
-    getDocumentsByWorkOrderId() {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.documentsDestructuredData = [];
-            this.isSpinnerVisible = true;
-            this.workOrderService.getDocumentsList(this.workFlowWorkOrderId, this.workOrderId, false, 0).subscribe(res => {
-                let arr = [];
-                this.isSpinnerVisible = false;
-                const data = res.map(x => {
-                    for (var i = 0; i < x.attachmentDetails.length; i++) {
-                        const y = x.attachmentDetails;
-                        arr.push({
-                            ...x,
-                            fileName: y[i].fileName,
-                            fileCreatedDate: y[i].createdDate,
-                            fileCreatedBy: y[i].createdBy,
-                            fileUpdatedBy: y[i].updatedBy,
-                            fileUpdatedDate: y[i].updatedDate,
-                            fileSize: y[i].fileSize,
-                            link: y[i].link,
-                            attachmentDetailId: y[i].attachmentDetailId
-                        })
-                    }
-                })
-                this.documentsDestructuredData = arr;
-            }, err => {
-                this.documentsDestructuredData = [];
-                this.isSpinnerVisible = false;
-            })
-        }
-    }
-    
-    getWorkOrderWorkFlowNos(workOrderId) {
-        if (workOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.mpnPartNumbersList = res.map(x => {
-                    return {
-                        value: { workflowId: x.workflowId, workFlowWorkOrderId: x.value },
-                        label: x.partNumber
-                    }
-                })
-                if (this.mpnPartNumbersList && this.mpnPartNumbersList.length > 0) {
-                    this.selectedMPN = this.mpnPartNumbersList[0].value;
-                    this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workFlowWorkOrderId;
-                    this.changeofMPN(this.mpnPartNumbersList[0].value);
-                }
-            },err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    changeofMPN(object) {
-        this.workFlowId = object.workflowId;
-        this.getAllTabsData(object.workFlowWorkOrderId, this.workOrderId);
-        this.checkQuoteAvailability(this.workOrderId, object.workFlowWorkOrderId);
-        this.workFlowWorkOrderId = object.workFlowWorkOrderId;
-    }
-
-    getAllTabsData(workFlowWorkOrderId, workOrderId) {
-        this.getEquipmentByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getMaterialListByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getPublicationListByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getChargesListByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getExclusionListByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getLaborListByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getDirectionByWorkOrderId(workFlowWorkOrderId, workOrderId);
-        this.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId);
-        this.showTableGrid = true;
-        this.activeIndex = 0;
-    }
-
-    getEquipmentByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            // this.isSpinnerVisible = true;
-            // this.workOrderService.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId, 0, false).subscribe(
-            //     result => {
-            //         this.isSpinnerVisible = false;
-            //         this.workOrderAssetList = result;
-            //     },
-            //     err => {
-            //         this.isSpinnerVisible = false;
-            //     }
-            // )
-        }
-    }
-
-    getMaterialListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                if (res.length > 0) {
-                    res.forEach(element => {
-                        element.isShowPlus = true;
-                        if (element.currency) element.currency = element.currency.symbol;
-                    });
-                    this.isSpinnerVisible = false;
-                    this.workOrderMaterialList = res;
-                    this.materialStatus = res[0].partStatusId;
-                }
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    getPublicationListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderPublicationList(workFlowWorkOrderId, workOrderId).subscribe(res => {
-                this.workOrderPublicationList = res;
-                this.isSpinnerVisible = false;
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                })
-
-        }
-    }
-
-    getChargesListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,false).subscribe(res => {
-                this.workOrderChargesList = res;
-                this.isSpinnerVisible = false;
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    getExclusionListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderExclusionsList(workFlowWorkOrderId, workOrderId).subscribe(res => {
-                this.workOrderExclusionsList = res;
-                this.isSpinnerVisible = false;
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderFrieghtsList(workFlowWorkOrderId, workOrderId, false, 0,false).subscribe(res => {
-                this.workOrderFreightList = res;
-                this.isSpinnerVisible = false;
-            },
-                err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    getLaborListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderLaborList(workFlowWorkOrderId, workOrderId, false, 0).subscribe(res => {
-                if (res && res.laborList) {
-
-                    this.workOrderLaborList = res.laborList;
-                }
-                this.isSpinnerVisible = false;
-            }, err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    getDirectionByWorkOrderId(workFlowWorkOrderId, workOrderId) {
-        if (workFlowWorkOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderDirectionList(workFlowWorkOrderId, workOrderId).subscribe(res => {
-                this.workOrderDirectionList = res;
-                this.isSpinnerVisible = false;
-            }, err => {
-                    this.isSpinnerVisible = false;
-                })
-        }
-    }
-
-    gettearDownData() {
-        this.workFlowWorkOrderId = this.workFlowWorkOrderId;
-    }
-
     changeStatus(rowData) {
         this.isSpinnerVisible = true;
         this.workOrderService.updateActionforWorkOrder(rowData, this.userName).subscribe(res => {
@@ -875,49 +384,6 @@ export class WorkOrderListComponent implements OnInit {
             err => {
                 this.isSpinnerVisible = false;
             })
-    }
-
-    getWorkOrderPartListByWorkOrderId(rowData) {
-        const { workOrderId } = rowData;
-        this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderPartListByWorkOrderId(workOrderId).subscribe(res => {
-            if (res.length > 0) {
-                this.workOrderPartListDataKeys = Object.keys(res[0]);
-                this.workOrderPartListData = res;
-            }
-            this.isSpinnerVisible = false;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
-
-    }
-
-    showOtherOptions() {
-        this.otherOptionShow = !this.otherOptionShow;
-    }
-
-    showOtherCommunicationOptions() {
-        this.communicationOptionShow = !this.communicationOptionShow;
-    }
-
-    checkQuoteAvailability(workOrderId, wfwoid) {
-        this.isSpinnerVisible = true;
-        this.quoteService.getQuoteIdByWfandWorkOrderId(wfwoid, workOrderId).subscribe(
-            (res) => {
-                if (res) {
-                    this.quoteDetailsId = res.workOrderQuote.workOrderQuoteId;
-                }
-                else {
-                    this.quoteDetailsId = undefined;
-                }
-
-                this.isSpinnerVisible = false;
-            },
-            err => {
-                this.isSpinnerVisible = false;
-            }
-        )
     }
 
     edit(rowData) {
@@ -1005,14 +471,11 @@ export class WorkOrderListComponent implements OnInit {
         this.restrictMessage = '';
     }
 
-    saveWorkOrderBilling($event) { }
-
     openDownload(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     closeModal() {
-        //$("#downloadConfirmation").modal("hide");
         this.modal.close();
     }
 
@@ -1033,9 +496,13 @@ export class WorkOrderListComponent implements OnInit {
                         ...x,
                         openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy') : '',
                         estimatedShipDate: x.estimatedShipDate ? this.datePipe.transform(x.estimatedShipDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        estimatedShipDateType: x.estimatedShipDateType ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         estimatedCompletionDate: x.estimatedCompletionDate ? this.datePipe.transform(x.estimatedCompletionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        estimatedCompletionDateType: x.estimatedCompletionDateType ? this.datePipe.transform(x.estimatedCompletionDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         customerRequestDate: x.customerRequestDate ? this.datePipe.transform(x.customerRequestDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        customerRequestDateType: x.customerRequestDateType ? this.datePipe.transform(x.customerRequestDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });

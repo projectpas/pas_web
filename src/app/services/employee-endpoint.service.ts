@@ -404,10 +404,11 @@ export class EmployeeEndpoint extends EndpointFactory {
 		});
 	}
 
-	getAllRolesOfEmployee<T>(): Observable<T> {	   
-		return this.http.get<T>(this.getAllEmployeeRoles, this.getRequestHeaders())
+	getAllRolesOfEmployee<T>(masterCompanyId): Observable<T> {	 
+		let endPointURL = `${this.getAllEmployeeRoles}/${masterCompanyId!==undefined?masterCompanyId:1}`;
+		return this.http.get<T>(endPointURL, this.getRequestHeaders())
 			.catch(error => {
-				return this.handleErrorCommon(error, () => this.getAllRolesOfEmployee());
+				return this.handleErrorCommon(error, () => this.getAllRolesOfEmployee(masterCompanyId));
 		});
 	}
 

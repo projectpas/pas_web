@@ -150,7 +150,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             }
         }
         else
-        {
+        {           
             this.getVendorCodeandNameByVendorId();
         }
         if (this.vendorService.listCollection !== undefined) {
@@ -164,11 +164,13 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         this.dataSource = new MatTableDataSource();
         this.getVendorProcess1099();
 
-        if (this.vendorService.listCollection && this.vendorService.isEditMode == true) {
+        if (this.vendorService.listCollection && this.vendorService.isEditMode == true) {            
             this.viewName = "Edit";
             this.local = this.vendorService.listCollection;
             this.sourceVendor = this.vendorService.listCollection;
-            this.getVendorProcess1099FromTransaction(this.sourceVendor.vendorId);
+            setTimeout(() => {
+                this.getVendorProcess1099FromTransaction(this.sourceVendor.vendorId);
+            }, 500)            
             if(!this.sourceVendor.creditLimit){
                 this.sourceVendor.creditLimit = 0;
             }
@@ -289,10 +291,11 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     }
 
     private getVendorProcess1099FromTransaction(vendorId) {
+        this.checkedCheckboxesList = [];
         this.isSpinnerVisible = true;
         this.vendorService.getVendorProcess1099DataFromTransaction(vendorId).subscribe(res => {
             if (res[0].length != 0) {
-                this.sourceVendor.is1099Required = true;
+                //this.sourceVendor.is1099Required = true;
                 this.vendorProcess1099Data = res[0].map(x => {
                     return {
                         ...x
@@ -341,6 +344,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 this.sourceVendor.creditLimit =  this.dataSource.data[0].creditLimit;
                 this.sourceVendor.creditTermsId =  this.dataSource.data[0].creditTermsId;
                 this.sourceVendor.isAllowNettingAPAR =  this.dataSource.data[0].isAllowNettingAPAR;
+                this.sourceVendor.is1099Required =  this.dataSource.data[0].is1099Required;
                 if(this.sourceVendor.isAllowNettingAPAR){                   
                     this.showAllowNettingOfAPAR = true;
                 }
@@ -473,6 +477,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     editItemAndCloseModel(isGoNxt?: boolean) {
         this.isSaving = true;
         var errmessage = '';
+        this.sourceVendor.master1099s = [];
         this.alertService.resetStickyMessage();
         if(this.sourceVendor.creditLimit == 0 || this.sourceVendor.creditLimit == null) {	
             this.isSpinnerVisible = false;	
@@ -571,7 +576,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                     }
                 }
                 if(this.vendorProcess1099Data) {
-                    this.sourceVendor.master1099s = [];
+                    // this.sourceVendor.master1099s = [];
                     this.vendorProcess1099Data.map(x => {
                         //if(x.isDefaultCheck) {
                             this.sourceVendor.master1099s.push(x);
@@ -598,7 +603,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                                 this.isRadioChecked = this.sourceVendor.master1099s[i].isDefaultRadio;
                                 break;
                             }
-                            }
+                        }
                         if (this.isRadioChecked === true) {
                             this.vendorService.updatefinanceinfo(financialInfo, this.sourceVendor.vendorId).subscribe(data => {
                                 this.localCollection = data;

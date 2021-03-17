@@ -1564,7 +1564,7 @@ export class WorkOrderAddComponent implements OnInit {
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
                     partNumber: x.partNumber.partName,
-                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
+                    taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
             this.isSpinnerVisible = true;
@@ -1596,7 +1596,7 @@ export class WorkOrderAddComponent implements OnInit {
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
                     partNumber: x.partNumber.partName,
-                    taskId:(typeof x.taskId == 'string')?x.taskId :x.taskId.taskId
+                    taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
             this.isSpinnerVisible = true;
@@ -1681,7 +1681,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    getTaskList() { 
+    getTaskList() {  
         if (this.labor == undefined) {
             this.labor = new WorkOrderLabor()
         }
@@ -2116,7 +2116,7 @@ export class WorkOrderAddComponent implements OnInit {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res.length > 0) {
                     res.forEach(element => {
@@ -2194,7 +2194,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.clearLaborList();
         if ((this.workFlowWorkOrderId !== 0 || this.workFlowWorkOrderId !== undefined) && this.workOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderLaborList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.data = {};
                 this.data = res;
@@ -2309,7 +2309,7 @@ export class WorkOrderAddComponent implements OnInit {
         if (this.isSubWorkOrder == true) {
             this.isSpinnerVisible = true;
             //Handle Apis for work order and sub work order in work order-endpoint.service
-            this.workOrderService.getSubWorkOrderChargesList(this.subWOPartNoId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getSubWorkOrderChargesList(this.subWOPartNoId,this.chargesDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
 
                 for (let charge in res) {
@@ -2330,7 +2330,7 @@ export class WorkOrderAddComponent implements OnInit {
             if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
                 this.isSpinnerVisible = true;
                 //Handle Apis for work order and sub work order in work order-endpoint.service
-                this.workOrderService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,this.chargesDeletedStatus).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getWorkOrderChargesList(this.workFlowWorkOrderId, this.workOrderId,this.chargesDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
 
                     for (let charge in res) {
@@ -2432,10 +2432,10 @@ export class WorkOrderAddComponent implements OnInit {
         this.getFreightListByWorkOrderId();
     }
     getFreightListByWorkOrderId() {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+        if (this.workFlowWorkOrderId !== 0 && this.workOrderId !=0) {
             this.isSpinnerVisible = true;
             // handle both sub and work order apis in end point using isSubWorkOrder Status and subWOPartNoId
-            this.workOrderService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,this.freightsDeletedStatus).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId,this.freightsDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workOrderFreightList = res;
             },
@@ -2764,7 +2764,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     async getQuoteMaterialListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteMaterialList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteMaterialList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteMaterialList = res;
         },
@@ -2776,7 +2776,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     async getQuoteFreightsListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteFreightsList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteFreightsList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteFreightsList = res;
         },
@@ -2788,7 +2788,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     async getQuoteChargesListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteChargesList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteChargesList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteChargesList = res;
         },
@@ -2800,7 +2800,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     async getQuoteLaborListByWorkOrderQuoteId(buildMethodId) {
         this.isSpinnerVisible = true;
-        await this.quoteService.getQuoteLaborList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.quoteService.getQuoteLaborList(this.workOrderQuoteId, buildMethodId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             if (res) {
                 let wowfId = this.workFlowWorkOrderId;
@@ -3063,8 +3063,10 @@ export class WorkOrderAddComponent implements OnInit {
                 this.warningID = res.customerWarningId;
                 if (this.isEditWorkordershowMsg == true && res.customerWarningId != 0) {
                     this.showAlertMessage();
-                } else {
+                } else { 
+                    if(!this.isView){
                     this.customerResctrictions(customerId, this.warningMessage, id);
+                    }
                 }
             }
         },
@@ -3309,7 +3311,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     getMaterialListByWorkOrderIdForSubWO() {
         this.workOrderMaterialList = [];
-        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res.length > 0) {
                 res.forEach(element => {
                     this.getValues(element)

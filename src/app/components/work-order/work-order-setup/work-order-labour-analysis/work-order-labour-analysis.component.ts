@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../../../services/auth.service';
 declare var $ : any;
 @Component({
     selector: 'app-work-order-labour-analysis',
@@ -37,7 +38,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     ]
     selectedColumns = this.headers;
     workOrderId: any;
-    constructor(private workOrderService: WorkOrderService, ) { }
+    constructor(private workOrderService: WorkOrderService, private authService: AuthService, ) { }
     ngOnInit() {
         this.workOrderId = this.savedWorkOrderData.workOrderId;
         if (this.data.length != 0) {
@@ -58,7 +59,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
     getWorkOrderLabourAnalysisData(workOrderId) {
         this.isSpinnerVisible = true;
  const id = this.isSubWorkOrder ? this.subWOPartNoId : this.selectedPartNumber.workOrderPartNumberId;
-        this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder)
+        this.workOrderService.workOrderLabourAnalysisData(workOrderId, id, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
                     this.isSpinnerVisible = false;

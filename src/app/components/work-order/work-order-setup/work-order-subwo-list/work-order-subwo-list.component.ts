@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../services/auth.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 declare var $ : any;
 
@@ -47,7 +48,7 @@ export class SubWorkOrderListComponent implements OnInit {
     isWorkOrder: any;
     otherOptionShow: any;
     
-    constructor(public _router: Router, private workOrderService: WorkOrderService) { }
+    constructor(public _router: Router, private workOrderService: WorkOrderService,    private authService: AuthService,) { }
 
     ngOnInit() {
         this.getSubWorkOrderByWorkOrderId();
@@ -111,11 +112,11 @@ export class SubWorkOrderListComponent implements OnInit {
             // )
         }
 
-    }
+    } 
 
     getMaterialListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
-            this.workOrderService.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId).subscribe(res => {
+            this.workOrderService.getWorkOrderMaterialList(workFlowWorkOrderId, workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
 
                 this.workOrderMaterialList = res;
 
@@ -137,7 +138,7 @@ export class SubWorkOrderListComponent implements OnInit {
     getChargesListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
 
         if (workFlowWorkOrderId) {
-            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,false).subscribe(res => {
+            this.workOrderService.getWorkOrderChargesList(workFlowWorkOrderId, workOrderId,false,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.workOrderChargesList = res;
             })
 
@@ -159,7 +160,7 @@ export class SubWorkOrderListComponent implements OnInit {
     getLaborListByWorkOrderId(workFlowWorkOrderId, workOrderId) {
         if (workFlowWorkOrderId) {
             // false, 0 is For Sub Work Order 
-            this.workOrderService.getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,false,0).subscribe(res => {
+            this.workOrderService.getWorkOrderLaborList(workFlowWorkOrderId, workOrderId,false,0,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.workOrderLaborList = res.laborList;
             })
         }

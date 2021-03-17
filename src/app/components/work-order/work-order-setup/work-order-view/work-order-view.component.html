@@ -1,15 +1,17 @@
 
   <!-- Edit  -->
-  <div *ngIf="editWorkOrderGeneralInformation && workOrderStatusList && creditTerms && jobTitles && employeesOriginalData && salesAgentsOriginalList && salesPersonOriginalList && csrOriginalList && technicianOriginalList  && workOrderStagesList    && technicianByExpertiseTypeList  && workOrderId">
+  <div *ngIf="editWorkOrderGeneralInformation && workOrderId">
       <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit" [isView]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
-      [jobTitles]="jobTitles" [employeesOriginalData]="employeesOriginalData"
-      [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
-      [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
+      [jobTitles]="jobTitles"
       [workOrderStagesList]="workOrderStagesList" 
       [workorderSettings]="workorderSettings" 
       [partNumberOriginalData]="partNumberOriginalData" 
-      [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+      [workOrderGeneralInformation]="editWorkOrderGeneralInformation"
  [workOrderId]="workOrderId" isListView="true">
     </app-work-order-add>
-  </div>
+  </div> 
+
+
+
+  <!-- && workOrderStatusList && creditTerms && jobTitles && employeesOriginalData && salesAgentsOriginalList && salesPersonOriginalList && csrOriginalList && technicianOriginalList  && workOrderStagesList    && technicianByExpertiseTypeList  && -->

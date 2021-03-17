@@ -65,6 +65,28 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
         { field: 'updatedBy', header: 'Updated By',isRequired:false },
       ]
+      auditHistoryQuoteHeaders = [
+        { field: 'taskName', header: 'Task',isRequired:false },
+        { field: 'shipVia', header: 'Ship Via',isRequired:true },
+        { field: 'weight', header: 'Gl Account Name',isRequired:false },
+        { field: 'uom', header: 'Description',isRequired:false },
+        { field: 'length', header: 'Qty',isRequired:false },
+        { field: 'height', header: 'Ref Num',isRequired:false },
+        { field: 'width', header: 'Unit Cost',isRequired:false },
+        { field: 'dimensionUomName', header: 'Extented Cost',isRequired:false },
+        { field: 'currency', header: 'Vendor Name',isRequired:false },
+        { field: 'amount', header: 'Vendor Name',isRequired:true },
+        { field: 'memo', header: 'Vendor Name',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:false },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
     isEdit: boolean = false;
     unitOfMeasureList: any = [];
     currencyList: any = [];
@@ -546,18 +568,32 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     historyData: any = [];
     getAuditHistoryById(rowData) {
+        console.log("roe",rowData)
+        if(this.isQuote){
+  if(rowData.workOrderQuoteFreightId){
+    this.workOrderService.getquoteFreightsHistory(rowData.workOrderQuoteFreightId).subscribe(res => {
+        this.historyData = res;
+        this.triggerHistory();
+
+      })
+  }else{
+    this.historyData = [];
+    this.triggerHistory();
+  }
+  this.auditHistoryHeaders=this.auditHistoryQuoteHeaders;
+        }else{
         this.workOrderService.getFreightHistory(this.isSubWorkOrder, this.isSubWorkOrder == true ? rowData.subWorkOrderFreightId : rowData.workOrderFreightId).subscribe(res => {
           this.historyData = res.reverse();
           this.auditHistoryHeaders=this.auditHistoryHeaders;
-          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-       
-          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
-          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
-          this.modal.componentInstance.auditHistory = this.historyData;
-          
-          this.modal.result.then(() => {
-          }, () => { })
+          this.triggerHistory();
         })
+        }
+      }
+      triggerHistory(){
+       
+      this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = this.historyData;
     
       }
 }

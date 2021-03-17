@@ -297,7 +297,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="pay-type-label">Pay Type <span class="clr-red">*</span></label>
+                                                <label class="pay-type-label">Pay Type <span class="clr-red"></span></label>
                                                 <div style="display: block;">
                                                      <label *ngFor="let radiobutton of radioItems" class="pay-label-width">
                                                         <input type="radio" name="radiobutton" (ngModelChange)="enableSave()"  (click)="model.option = radiobutton" (change)="handlePayType(model.option)"
@@ -309,14 +309,18 @@
                                                 <div class="form-group col-sm-12 hourpay-block" *ngIf="hourly">
                                                    <label>Hourly Pay</label>
                                                     <div class="inner-addon right-addon inline-block">
-                                                        <input class="form-control amount pay-align" (ngModelChange)="enableSave()" type="text" pInputText pKeyFilter="pnum" maxlength="10" name="hourlyPay" (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay" required 
+                                                        <input class="form-control amount pay-align" (ngModelChange)="enableSave()" 
+                                                        type="text" pInputText pKeyFilter="pnum" maxlength="10" name="hourlyPay" 
+                                                        (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  
                                                       >
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-12 salarypay-block" *ngIf="yearly">
                                                    <label>Monthly Pay</label>
                                                     <div class="inner-addon right-addon inline-block">
-                                                        <input class="form-control amount pay-align" (ngModelChange)="enableSave()" type="text" pInputText pKeyFilter="pnum" maxlength="10"  name="monthlyPay" (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  required
+                                                        <input class="form-control amount pay-align" (ngModelChange)="enableSave()" 
+                                                        type="text" pInputText pKeyFilter="pnum" maxlength="10"  name="monthlyPay" 
+                                                        (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  
                                                          >
                                                     </div>
                                                 </div>
@@ -324,8 +328,12 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Currency <span class="clr-red">*</span></label>
-                                                <p-autoComplete field="code" class="pautocomp-cstm" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.currencyId" name="currencyId" [suggestions]="currencyList" (completeMethod)="filterCurrencyList($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required>
+                                                <label>Currency <span class="clr-red"></span></label>
+                                                <p-autoComplete field="code" class="pautocomp-cstm" (ngModelChange)="enableSave()" 
+                                                [(ngModel)]="sourceEmployee.currencyId" name="currencyId" [suggestions]="currencyList" 
+                                                (completeMethod)="filterCurrencyList($event)" 
+                                                [size]="30" [minLength]="1" [dropdown]="true" 
+                                                errorMessage="Records not found" [forceSelection]="true">
                                                 </p-autoComplete>
                                             </div>
                                             <div class="form-group">
@@ -354,8 +362,8 @@
                                 </div>               
                                 <div class="m-b-10">
                                     <button type="button" [disabled]="!isEnableNext" class="btn btn-primary pull-right" (click)="nextClick('Next')"> Next</button>
-                                    <button *ngIf ="!isEditContent" type="button" [disabled]="(!empform.valid || !sourceEmployee.hourlyPay || sourceEmployee.hourlyPay == '0.00' || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )" class="btn btn-primary pull-right" (click)="onSubmit2()">Save </button>
-                                    <button *ngIf ="isEditContent" type="button" [disabled]="(!empform.valid || !sourceEmployee.hourlyPay || sourceEmployee.hourlyPay == '0.00' || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )" class="btn btn-primary pull-right" (click)="onSubmit2()">Update </button>
+                                    <button *ngIf ="!isEditContent" type="button" [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )" class="btn btn-primary pull-right" (click)="onSubmit2()">Save </button>
+                                    <button *ngIf ="isEditContent" type="button" [disabled]="(!empform.valid || sourceEmployee.managementStructureId == 0 || !enableSaveBtn )" class="btn btn-primary pull-right" (click)="onSubmit2()">Update </button>
                                 </div>
                             </div>
                     </form>

@@ -49,8 +49,9 @@
           </td>
           <td>
             <div style="display:inline-flex">
-           <p-autoComplete (ngModelChange)="getActive()" required (onSelect)="onPartSelect($event, material,i)"  class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
-              errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage="No Records Found"
+           <p-autoComplete [ngClass]="(partCollection && partCollection.length !=0) ? 'mat_hide' : ''" (ngModelChange)="getActive()" required (onSelect)="onPartSelect($event, material,i)" 
+            class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
+              errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage=" "
               (completeMethod)="filterpartItems($event)"  [size]="30" [minLength]="1" [forceSelection]="true"
               [(ngModel)]="material.partNumber"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >
           </p-autoComplete> 
@@ -87,7 +88,7 @@
               <option *ngFor="let item of provisionListData" [ngValue]="item.value" required>
                 {{ item.label }}
               </option>
-            </select>
+            </select> 
           </td>
           <td>
             <input type="text" pInputText pKeyFilter="pnum" (ngModelChange)="getActive()"
@@ -133,7 +134,7 @@
             </div>
           </td>
           <td>
-            <button class="btn btn-danger nobg" [disabled]="isEdit" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
+            <button class="btn btn-danger nobg" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -205,8 +206,6 @@
     [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
     Save
   </button>
-  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterialTab()"
-  >Close</button>
   </div>
 
   <div *ngIf="isWorkOrder && isEdit" class="float-right">

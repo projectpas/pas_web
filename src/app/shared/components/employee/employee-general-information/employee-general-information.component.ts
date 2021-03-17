@@ -48,8 +48,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     allLeaves: EmployeeLeaveType[];
     phonePattern = phonePattern();
     allCountries: any[];
-    yearly: boolean;
-    hourly: boolean;
+    yearly: boolean=false;
+    hourly: boolean=false;
     showsingle: boolean;
     showMultiple: boolean;
     shiftValues: any[] = [];
@@ -656,7 +656,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                 this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? formatNumberAsGlobalSettingsModule(this.sourceEmployee.hourlyPay, 2) : '';
                 this.isMonthly = false;
             }
-            else {
+            if (this.sourceEmployee.isHourly == false) {
                 this.yearly = true
                 this.hourly = false
                 this.model = { option: 'Monthly' };
@@ -762,7 +762,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? formatNumberAsGlobalSettingsModule(this.sourceEmployee.hourlyPay, 2) : '';
             this.isMonthly = false;
         }
-        else {
+        if (this.sourceEmployee.isHourly == false) {
             this.yearly = true
             this.hourly = false
             this.model = { option: 'Monthly' };
@@ -1038,7 +1038,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                                 code: x.label
                             }
                         });			
-		},err => {			
+		    },err => {			
 			// const errorLog = err;
             // this.errorMessageHandler(errorLog);	
             this.isSpinnerVisible = false;	
@@ -1158,7 +1158,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         }
         this.sourceEmployee.jobTitleId = this.sourceEmployee.jobTitleId;
         this.sourceEmployee.employeeExpertiseId = this.sourceEmployee.employeeExpertiseId;
-        this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? this.sourceEmployee.hourlyPay : null;;
+        this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? this.sourceEmployee.hourlyPay : null;
         //this.sourceEmployee.startDate = this.empCreationForm.get('startDate').value;
         this.sourceEmployee.startDate = this.sourceEmployee.startDate;
         this.sourceEmployee.SupervisorId = this.supervisorId;
@@ -1447,7 +1447,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         // );
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 10000, '0',this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('shift', 'ShiftId', 'Description', '', true, 1000, '0',this.currentUserMasterCompanyId).subscribe(res => {
             this.shiftValues = res;
             // this.legalEntityList_Forgrid = res;
             // this.legalEntityList_ForShipping = res;
@@ -1488,7 +1488,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private multiLeavelist(strText = '') {
 		if(this.arraymultileavelist.length == 0) {			
             this.arraymultileavelist.push(0); }            
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType',strText,true,20000,this.arraymultileavelist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeLeaveType', 'employeeLeaveTypeId', 'leaveType',strText,true,2000,this.arraymultileavelist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
             this.leavemultiValues = response;          
             this.leavemultiValues = this.leavemultiValues.reduce((unique, o) => {
                 if (!unique.some(obj => obj.label === o.label)) {
@@ -1603,7 +1603,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         //this.loadingIndicator = true;
 		if(this.arrayjobtitlelist.length == 0) {			
 			this.arrayjobtitlelist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description',strText,true,20000,this.arrayjobtitlelist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('JobTitle', 'JobTitleId', 'Description',strText,true,2000,this.arrayjobtitlelist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.allJobTitlesinfo = response;			
 		},err => {
 			this.isSpinnerVisible = false;
@@ -1687,7 +1687,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private loademployeesexperties(strText = '') {
 		if(this.arrayExpertiselist.length == 0) {			
 			this.arrayExpertiselist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description',strText,true,20000,this.arrayExpertiselist.join(),this.currentUserMasterCompanyId).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description',strText,true,2000,this.arrayExpertiselist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.allEmployeeExpertiseInfo =  response;			
 		},err => {
 			this.isSpinnerVisible = false;

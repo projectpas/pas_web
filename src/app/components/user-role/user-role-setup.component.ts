@@ -52,6 +52,16 @@ export class UserRolesSetupComponent implements OnInit {
         this.isSpinnerVisible=false;
     }
 
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     getAllModuleHierarchies(): void {
         this.userRoleService.getAllModuleHierarchies().subscribe(data => {
             console.log(data[0]);
@@ -451,7 +461,7 @@ console.log(this.sortedHierarchy)
             );
             return;
         }
-
+        this.currentUserRole.masterCompanyId = this.currentUserMasterCompanyId;
         this.userRoleService.add(this.currentUserRole).subscribe(
             result => {
                 this.isSpinnerVisible=false;
@@ -468,6 +478,5 @@ console.log(this.sortedHierarchy)
                 this.alertService.showMessage('User Role', error, MessageSeverity.error);
             }
         );
-
     }
 }

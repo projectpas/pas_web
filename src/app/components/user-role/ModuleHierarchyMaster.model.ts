@@ -22,6 +22,7 @@ export class UserRole {
     name: string;
     memo: string;
     rolePermissions: RolePermission[];
+    masterCompanyId:number = null
 }
 
 export class RolePermission {

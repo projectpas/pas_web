@@ -5,6 +5,7 @@ import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomp
 declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { EndpointFactory } from '../../../../services/endpoint-factory.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
     selector: 'app-common-wo-summarization',
@@ -326,7 +327,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     isSpinnerVisible: boolean = false;
     moduleName = "WO Summarized data"
 
-    constructor(private workOrderService: WorkOrderService, private alertService: AlertService) {
+    constructor(private workOrderService: WorkOrderService, private alertService: AlertService, private authService: AuthService) {
     }
 
     ngOnInit() {
@@ -692,7 +693,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
 
     getMaterialListData(materialMPN){
         this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId).subscribe(res => {
+        this.workOrderService.getWorkOrderMaterialList(materialMPN.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             if (res.length > 0) {
                 res.forEach(element => {
@@ -785,7 +786,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
 
     getChargesListData(chargesMPN){
         this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderChargesList(chargesMPN.workFlowWorkOrderId, this.workOrderId,false).subscribe(res => {
+        this.workOrderService.getWorkOrderChargesList(chargesMPN.workFlowWorkOrderId, this.workOrderId,false,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             chargesMPN.workOrderChargesList = res;
             for(let charge in chargesMPN.workOrderChargesList){
@@ -868,7 +869,7 @@ export class WoSummarizedDataComponent implements OnInit, OnChanges {
     getFreightListByWorkOrderId(freightMPN) {
         if (freightMPN.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderFrieghtsList(freightMPN.workFlowWorkOrderId, this.workOrderId,false,0,false).subscribe(res => {
+            this.workOrderService.getWorkOrderFrieghtsList(freightMPN.workFlowWorkOrderId, this.workOrderId,false,0,false,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 freightMPN.workOrderFreightList = res;
             },
