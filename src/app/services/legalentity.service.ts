@@ -248,9 +248,9 @@ export class LegalEntityService {
 			this.legalEntityEndpont.getcountryListEndpoint<any[]>());
 	}
 
-	getManagemententity() {
+	getManagemententity(masterCompanyId?) {
 		return Observable.forkJoin(
-			this.legalEntityEndpont.getManagemtentEntityData<any[]>());
+			this.legalEntityEndpont.getManagemtentEntityData<any[]>(masterCompanyId));
     }
 
     getManagemtentLengalEntityData() {
