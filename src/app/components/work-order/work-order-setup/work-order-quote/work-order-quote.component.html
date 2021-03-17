@@ -249,7 +249,28 @@
                 <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
             </div>
         </div>
-
+        <div class="form-row" [hidden]="!isDetailedView">
+            <div class="col-md-3"> 
+                <div class="form-group ">
+                    <label>Quote Number <span class="clr-red">*</span></label>
+                    <input class="form-control" type="text" required [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly />
+                </div>
+            </div>
+            <div class="col-md-3"> 
+                <div class="form-group ">
+                    <label>Version Number <span class="clr-red">*</span></label>
+                    <input class="form-control" type="text" required [(ngModel)]="quoteForm.versionNo" name="quotenumber" readonly />
+                </div>
+            </div>
+            <div class="col-md-3"> 
+                <div class="form-group">
+                    <label for="customerName">
+                        Customer Name
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly />
+                </div>
+                </div>
+        </div>
         <div class="form-row pull-right m-t-10" *ngIf="enableEditBtn && selectedDisplayType == ''">
             <button class="btn btn-primary" (click)="createQuote()" *ngIf="!isView || (isWoTab && !isListView)">
                 Edit Quote
