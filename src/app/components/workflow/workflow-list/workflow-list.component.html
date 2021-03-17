@@ -1441,7 +1441,7 @@
                 <hr />
             </div>
             <p-accordion  class="p-accordion-cstm p-acc-thright">
-                <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected">
+                <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected" class="inspect">
                   <p-header (click)="onAccordTabClick1(task)">{{task.Name}}</p-header>
                     <div *ngIf="task.publication && task.publication.length > 0">
                         

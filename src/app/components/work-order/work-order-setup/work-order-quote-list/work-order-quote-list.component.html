@@ -16,9 +16,9 @@
 		  </div>
 		</div>
       </div>
-      <div class="card-body header-body"> 
+      <div class="header-body"> 
     <p-table #dt
-    class="p-table-cstm"
+    class="rpo-table-cstm rro-table-cstm"
     [value]="woQuoteList"
     [first]="0"
     [rows]="pageSize"
@@ -44,7 +44,18 @@
               <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
                   [(ngModel)]="selectedColumns" class="multiselect-field"
                   (onChange)="columnsChanges()"></p-multiSelect>
-                  <button type="button" class="btn btn-primary exports-button wo_exbt" matTooltip="Download Data"
+          </div>
+          <div class="col">
+            <div class="global-search-field inner-addon right-addon inline-block">
+                <i class="fa fa-search"></i>
+                <input type="text" pInputText size="50" class="form-control"
+                    (input)="globalSearch($event.target.value)" placeholder=" Filter" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                   matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                   data-toggle="modal"
                   (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
@@ -52,14 +63,8 @@
                   iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data"
                   matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"></button>
           </div>
-          <div class="col">
-              <div class="global-search-field inner-addon right-addon inline-block">
-                  <i class="fa fa-search"></i>
-                  <input type="text" pInputText size="50" class="form-control"
-                      (input)="globalSearch($event.target.value)" placeholder=" Filter" />
-              </div>
           </div>
-      </div>
+         
     </ng-template>
     <ng-template pTemplate="colgroup" let-columns>
         <colgroup>

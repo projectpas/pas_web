@@ -18,7 +18,7 @@
     </div>
   </div>
   <p-table #dt2 [columns]="cols" [value]="workOrderFreightList" [lazy]="false"  [rows]="10"
-  class="rpo-table-cstm ptable-f10" (onPage)="pageIndexChange($event)"
+  class="rpo-table-cstm rro-table-cstm ptable-f10" (onPage)="pageIndexChange($event)"
   [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [rows]="10"> <!--freightss-->
   <ng-template pTemplate="caption">
     <div class="checkbox-cstm pull-right checkbox-align" *ngIf="isQuote==false">
@@ -65,7 +65,7 @@
             <th></th>
         </ng-container>
         <ng-container *ngIf="!isView">
-            <th colspan="5" class="freight-isview-th">
+            <th colspan="6" class="freight-isview-th">
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
                   <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
@@ -90,7 +90,7 @@
                 </div>
               </div>
             </th>
-            <th></th>
+            <!-- <th></th> -->
             <!-- <th style="background: #fff; border: 1px solid #fff;"></th> -->
         </ng-container>
         <!-- <th colspan="2">
@@ -124,7 +124,7 @@
           <!-- <th tooltip="Time & Materials">T&M Amount</th>
           <th>Fixed Amount</th> -->
         </ng-container>
-        <th rowspan="2" class="table-actions-column" >Actions</th>
+        <th rowspan="2" style="width:130px" class="table-actions-column" >Actions</th>
       </tr>
       <tr>
         <th>L</th>
@@ -138,7 +138,7 @@
         <tr >
           <td class="table-column-width">
             <!-- <p  class="mrg_0">{{dt.taskName}}</p> -->
-            <select class="form-control select-read-only" style="background: #fff;" [(ngModel)]="dt.taskId" disabled>
+            <select class="form-control select-read-only" style="background: #fff !important;" [(ngModel)]="dt.taskId" disabled>
               <option value="">Select</option>
               <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
             </select>
@@ -154,7 +154,7 @@
               </select>
             </td>
             <td class="table-column-width" *ngIf="col.field == 'shipVia'">
-              <select  *ngIf="isQuote"  class="form-control select-read-only back-transparent" [(ngModel)]="dt.shipViaId" disabled>
+              <select  *ngIf="isQuote" style="background: #fff !important;" class="form-control select-read-only back-transparent" [(ngModel)]="dt.shipViaId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
               </select>
@@ -202,7 +202,7 @@
             </td>
             <!-- <td>{{ dt.billingAmount }}</td> -->
           </ng-container>
-          <td class="btn-spaces text-center action-icons-cstm table-column-width" >
+          <td class="action-icons-cstm table-column-width" >
             <div *ngIf="currentDeletedstatus == false">
             <span data-target="#addNewFreight" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
