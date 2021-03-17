@@ -1253,8 +1253,36 @@ reserveSubWoAltPartData(data){
       }
 
 
-//     api/workOrder/getworkorderChargesauditlist?workOrderChargesId=154
+// api/workOrder/getworkorderChargesauditlist?workOrderChargesId=154
 // api/workOrder/workorderfreightauditlist?workOrderFreightId=154
 // api/workOrder/subWorkorderfreightauditlist?subWorkOrderFreightId=27
 // api/workOrder/subWorkorderchargesauditlist?subWorkOrderChargesId=27
+
+getquoteMaterialHistory(WorkOrderQuoteMaterialId) {
+     return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquotematerialauditlist?WorkOrderQuoteMaterialId=${WorkOrderQuoteMaterialId}`, this.getRequestHeaders()).catch(error => {
+         return this.handleErrorCommon(error, () => this.getquoteMaterialHistory(WorkOrderQuoteMaterialId));
+         
+     });
+   }
+
+   getquoteLaborHistory(WorkOrderQuoteLaborId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquotelaborauditlist?WorkOrderQuoteLaborId=${WorkOrderQuoteLaborId}`, this.getRequestHeaders()).catch(error => {
+        return this.handleErrorCommon(error, () => this.getquoteLaborHistory(WorkOrderQuoteLaborId));
+        
+    });
+  }
+
+  getquoteChargesHistory(WorkOrderQuoteChargesId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquotechargesauditlist?WorkOrderQuoteChargesId=${WorkOrderQuoteChargesId}`, this.getRequestHeaders()).catch(error => {
+        return this.handleErrorCommon(error, () => this.getquoteChargesHistory(WorkOrderQuoteChargesId));
+        
+    });
+  }
+
+  getquoteFreightsHistory(WorkOrderQuoteFreightId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquotefreightsauditlist?WorkOrderQuoteFreightId=${WorkOrderQuoteFreightId}`, this.getRequestHeaders()).catch(error => {
+        return this.handleErrorCommon(error, () => this.getquoteFreightsHistory(WorkOrderQuoteFreightId));
+        
+    });
+  }
 }

@@ -5,6 +5,8 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { CommonService } from '../../../../services/common.service';
 import { getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 declare var $: any;
 @Component({
   selector: 'app-work-order-labor',
@@ -62,8 +64,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   taskIndexToggle: any;
   labourHeader: any;
   disabledUpdatebtn:boolean=true; 
+  modal: NgbModalRef;
   constructor(private workOrderService: WorkOrderService,
-    private authService: AuthService,
+    private authService: AuthService,private modalService: NgbModal,
     private commonService: CommonService) { }
  
   ngOnInit() {
@@ -1298,4 +1301,47 @@ this.commonfunctionHandler();
     headerMaintanance(){
       // this.refreshLabor.emit(true);
     }
+    historyData:any=[];
+    // auditHistoryHeaders:any=[];
+    auditHistoryHeaders = [
+        { field: 'taskName', header: 'Task' ,isRequired:false},
+        { field: 'expertise', header: 'Expertise',isRequired:false },
+        { field: 'billabletype', header: 'Billable /NonBillable',isRequired:false },
+        { field: 'hours', header: 'Hours',isRequired:false },
+        { field: 'directLaborOHCost', header: 'Direct Labor',isRequired:false },
+        { field: 'uomName', header: 'Burden Rate %',isRequired:false },
+        { field: 'burdaenRatePercentage', header: 'Burden Rate %',isRequired:false },
+        { field: 'burdenRateAmount', header: 'Burden Rate Amount',isRequired:false },
+        { field: 'totalCostPerHour', header: 'Labor Cost/Hr',isRequired:false },
+        { field: 'totalCost', header: 'Total Direct Cost',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:false },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+    getAuditHistoryById(rowData) { 
+      console.log("roeData",rowData)
+        if(rowData.workOrderQuoteLaborId){
+        this.workOrderService.getquoteLaborHistory(rowData.workOrderQuoteLaborId).subscribe(res => {
+          this.historyData = res;
+          this.auditHistoryHeaders=this.auditHistoryHeaders;
+          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+       
+          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+          this.modal.componentInstance.auditHistory = this.historyData;
+          
+        })
+    }else{
+        this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = [];  
+    }
+      }
+
 }

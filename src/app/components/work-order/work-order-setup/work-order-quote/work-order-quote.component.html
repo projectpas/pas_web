@@ -766,19 +766,19 @@
                 </div>
                 <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==true">
                     <label class="fs12">
-                        Part Number:
+                        <strong> Part Number:</strong>
                     </label>
                     <label>{{selectedquotePn}}</label>
                 </div>
                 <div class="col-md-3">
                     <label class="fs12">
-                        Part Description:
+                        <strong>Part Description:</strong>
                     </label>
                     <label>{{selectedPartDescription}}</label>
                 </div>
                 <div class="col-md-3">
                     <label class="fs12">
-                        Stock Line Number:
+                        <strong>   Stock Line Number:</strong>
                     </label>
                     <label>{{selectedStockLineNumber}}</label>
                 </div>
@@ -918,10 +918,16 @@
                                      value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
                     
                                     </td>
-                                <td *ngIf="!isView">
-                                    <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                    <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                </td> 
+                                <td >
+                                    <span *ngIf="!isView" data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                    <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                    <span>
+                                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(matQuotation)"
+                                            matTooltip="History" matTooltipPosition="above"><i
+                                                class="fa fa-history"></i></a>
+                                    </span>
+                               
+                                </td>  
                             </tr>
                         </ng-container>
                         <tr class="task-total">
@@ -1623,7 +1629,7 @@
                     </button> 
                 </div>
                 <!-- *ngIf="showDisplayData==true" -->
-                <div class="modal-body table-responsive" >
+                <div class="modal-body table-responsive" *ngIf="quotationHeader">
                     <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"

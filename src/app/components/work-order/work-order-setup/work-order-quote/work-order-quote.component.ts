@@ -19,6 +19,8 @@ import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../g
 import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
@@ -148,6 +150,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     quotestatusofCurrentPart: string = '';
     isViewForApprovedPart: boolean = false;
     defaultContactId: any;
+    modal: NgbModalRef;
     woQuoteListHeader = [
         {
             header: 'Action',
@@ -329,7 +332,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     memoPopupContent: any;
     selectall: any;
     cols: any;
-    constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
+    constructor(private router: ActivatedRoute,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -1212,10 +1215,11 @@ this.creditTerms=res.creditTerm;
     }
 
     saveFreights(){
+        this.isSpinnerVisible=true;
         this.workOrderService.saveFreightsListQuote(this.quoteFreightListPayload)
         .subscribe(
             (res) => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['freight'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteFreightListByWorkOrderQuoteId();
@@ -1228,7 +1232,7 @@ this.creditTerms=res.creditTerm;
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -1330,10 +1334,11 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialList(){ 
+        this.isSpinnerVisible=true;
         this.workOrderService.saveMaterialListQuote(this.materialListPayload)
         .subscribe(
             res => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['materialList'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteMaterialListByWorkOrderQuoteId();
@@ -1345,7 +1350,7 @@ this.creditTerms=res.creditTerm;
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -1381,14 +1386,14 @@ this.creditTerms=res.creditTerm;
         )
     }
 
-    createLaborQuote() {
+    createLaborQuote() { 
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
-        
+        this.isSpinnerVisible=true;
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
                 res => {
-                    
+                    this.isSpinnerVisible=false;
                     if (res) {
                         this.tabQuoteCreated['labor'] = true;
                         let laborList = this.labor.workOrderLaborList;
@@ -1410,7 +1415,7 @@ this.creditTerms=res.creditTerm;
                     );
                 },
                 err =>{
-                    
+                    this.isSpinnerVisible=false;
                     this.errorHandling(err)
                 }
             )
@@ -1481,10 +1486,11 @@ this.creditTerms=res.creditTerm;
     }
 
     saveCharges(){
+        this.isSpinnerVisible=true;
         this.workOrderService.saveChargesQuote(this.chargesPayload)
         .subscribe(
             res => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['charges'] = true;
                 this.workOrderChargesList = res.workOrderQuoteCharges;
                 for (let charge in this.workOrderChargesList) {
@@ -1503,7 +1509,7 @@ this.creditTerms=res.creditTerm;
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -3336,4 +3342,46 @@ calculatebCost(value,material): void {
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
     }
+    historyData:any=[];
+    // auditHistoryHeaders:any=[];
+    auditHistoryHeaders = [
+        { field: 'taskName', header: 'Task' ,isRequired:true},
+        { field: 'partNumber', header: 'PN',isRequired:true },
+        { field: 'partDescription', header: 'PN Description',isRequired:false },
+        { field: 'provision', header: 'Provision',isRequired:false },
+        { field: 'quantity', header: 'Qty',isRequired:true },
+        { field: 'uomName', header: 'UOM',isRequired:false },
+        { field: 'conditiontype', header: 'Cond Type',isRequired:true },
+        { field: 'stocktype', header: 'Stock Type',isRequired:false },
+        { field: 'unitCost', header: 'Unit Cost',isRequired:false },
+        { field: 'totalCost', header: 'Total Cost',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:true },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+    getAuditHistoryById(rowData) { 
+        if(rowData.workOrderQuoteMaterialId){
+        this.workorderMainService.getquoteMaterialHistory(rowData.workOrderQuoteMaterialId).subscribe(res => {
+          this.historyData = res;
+          this.auditHistoryHeaders=this.auditHistoryHeaders;
+          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+       
+          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+          this.modal.componentInstance.auditHistory = this.historyData;
+          
+        })
+    }else{
+        this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = [];  
+    }
+      }
+
 }
