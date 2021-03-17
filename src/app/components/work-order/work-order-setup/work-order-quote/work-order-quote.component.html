@@ -30,7 +30,11 @@
             <div class="row">
                 <div class="col">
                   <h4  class="header-name">
-                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</h4>
+                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote
+                
+                    <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
+                        {{!isDetailedView ? 'Collapse' : 'Expand'}}</button>
+                </h4>
             </div>
             <div *ngIf="!isView">
                 <button type="button"
@@ -42,7 +46,7 @@
            </div>
         </div>
     <div class="card-body new-card-body">
-        <div class="form-row">
+        <div class="form-row" [hidden]="isDetailedView">
             <div class="col-md-3"> 
                 <div class="form-group ">
                     <label>Quote Number <span class="clr-red">*</span></label>
@@ -241,9 +245,31 @@
                     </p-autoComplete>
                </div> -->
             </div>
+            <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
+                <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
+            </div>
         </div>
-
-        <div>
+        <div class="form-row" [hidden]="!isDetailedView">
+            <div class="col-md-3"> 
+                <div class="form-group ">
+                    <label>Quote Number <span class="clr-red">*</span></label>
+                    <input class="form-control" type="text" required [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly />
+                </div>
+            </div>
+            <div class="col-md-3"> 
+                <div class="form-group ">
+                    <label>Version Number <span class="clr-red">*</span></label>
+                    <input class="form-control" type="text" required [(ngModel)]="quoteForm.versionNo" name="quotenumber" readonly />
+                </div>
+            </div>
+            <div class="col-md-3"> 
+                <div class="form-group">
+                    <label for="customerName">
+                        Customer Name
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly />
+                </div>
+                </div>
         </div>
         <div class="form-row pull-right m-t-10" *ngIf="enableEditBtn && selectedDisplayType == ''">
             <button class="btn btn-primary" (click)="createQuote()" *ngIf="!isView || (isWoTab && !isListView)">
@@ -253,9 +279,7 @@
                 Back To Work Order
             </button>
         </div>
-        <div class="col-md-12" *ngIf="!isView && !isQuoteListView">
-            <button class="btn btn-primary pull-right" (click)="saveType = '';saveQuoteDetails()" [disabled]="checkValidQuote() || upDateDisabeldbutton">{{quotationHeader && quotationHeader.workOrderQuoteId?'Update':'Save'}}</button>
-        </div>
+
     </div>
 </div>
 
@@ -765,23 +789,23 @@
                 </div>
                 <div class="col-md-3" *ngIf="savedWorkOrderData && savedWorkOrderData.isSinglePN==true">
                     <label class="fs12">
-                        Part Number:
+                        <strong> Part Number:</strong>
                     </label>
                     <label>{{selectedquotePn}}</label>
                 </div>
                 <div class="col-md-3">
                     <label class="fs12">
-                        Part Description:
+                        <strong>Part Description:</strong>
                     </label>
                     <label>{{selectedPartDescription}}</label>
                 </div>
                 <div class="col-md-3">
                     <label class="fs12">
-                        Stock Line Number:
+                        <strong>   Stock Line Number:</strong>
                     </label>
                     <label>{{selectedStockLineNumber}}</label>
                 </div>
-            </div>
+            </div> 
                 <div class="form-group " *ngIf="selectedPartNumber != ''">
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
@@ -917,10 +941,16 @@
                                      value="{{matQuotation.billingAmount}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="calculatebCost($event.target.value,matQuotation)"/>
                     
                                     </td>
-                                <td *ngIf="!isView">
-                                    <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                    <span><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                </td> 
+                                <td >
+                                    <span *ngIf="!isView" data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                    <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                    <span>
+                                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(matQuotation)"
+                                            matTooltip="History" matTooltipPosition="above"><i
+                                                class="fa fa-history"></i></a>
+                                    </span>
+                               
+                                </td>  
                             </tr>
                         </ng-container>
                         <tr class="task-total">
@@ -1622,7 +1652,8 @@
                         &times;
                     </button> 
                 </div>
-                <div class="modal-body table-responsive" *ngIf="showDisplayData==true">
+                <!-- *ngIf="showDisplayData==true" -->
+                <div class="modal-body table-responsive" *ngIf="quotationHeader">
                     <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"
@@ -1637,74 +1668,17 @@
                                        [(ngModel)]="type"
                                        (click)="typeChange()"></p-radioButton>
                     </div>
-                    <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" *ngIf="displayType == 'use historical wos'">
-                      <thead>
-                        <tr>
-                          <th>WO Num</th>
-                          <th>Cust Name</th>
-                          <th>Cust Code</th>
-                          <th>WO Type</th>
-                          <th>Open Date</th>
-                          <th>Promise Date</th>
-                          <th>Est. Comp Date</th>
-                          <th>Est. Ship Date</th>
-                          <th>WO Status</th>
-                          <th class="events1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="mpn-row" *ngFor="let buildl of buildHistoricalList">
-                          <td>{{buildl.workOrderNum}}</td>
-                          <td>{{buildl.customerName}}</td>
-                          <td>{{buildl.customerCode}}</td>
-                          <td>{{buildl.woType}}</td>
-                          <td>{{buildl.openDate}}</td>
-                          <td>{{buildl.promisedDate}}</td>
-                          <td>{{buildl.estimatedCompletionDate}}</td>
-                          <td>{{buildl.estimatedShipDate}}</td>
-                          <td>Closed</td>
-                          <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = buildl.workOrderId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-                    <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" *ngIf="displayType == 'historical WO quotes'">
-                      <thead>
-                        <tr>
-                          <th>Quote Num</th>
-                          <th>WO Num</th>
-                          <th>Cust Name</th>
-                          <th>Cust Code</th>
-                          <th>WO Type</th>
-                          <th>Open Date</th>
-                          <th>Promise Date</th>
-                          <th>Est. Comp Date</th>
-                          <th>Est. Ship Date</th>
-                          <th>Quote Status</th>
-                          <th class="events1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="mpn-row" *ngFor="let buildl of buildHistoricalList">
-                          <td>{{buildl.quoteNumber}}</td>
-                          <td>{{buildl.workOrderNum}}</td>
-                          <td>{{buildl.customerName}}</td>
-                          <td>{{buildl.customerCode}}</td>
-                          <td>{{buildl.woType}}</td>
-                          <td>{{buildl.openDate}}</td>
-                          <td>{{buildl.promisedDate}}</td>
-                          <td>{{buildl.estimatedCompletionDate}}</td>
-                          <td>{{buildl.estimatedShipDate}}</td>
-                          <td>{{buildl.quoteStatus}}</td>
-                          <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = buildl.workOrderId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
-                        </tr>
-                      </tbody>
-                    </table> -->
-
-                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
-                             [columns]="cols"
+             <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
+                             [columns]="cols" #dt22
                              [value]="buildHistoricalList"
                              [paginator]="true"
-                             [rows]="10"
+                             [rows]="10" 
+                             [first]="0"
+                             [rows]="pageSize"
+                             [paginator]="true"
+                             [pageLinks]="3" 
+                             [totalRecords]="totalRecords"
+                             [rowsPerPageOptions]="[10, 20, 50, 100]"
                              *ngIf="displayType == 'use historical wos'">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -1717,6 +1691,10 @@
                                 <th>Est. Comp Date</th>
                                 <th>Est. Ship Date</th>
                                 <th>WO Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th class="events1"></th>
                             </tr>
                         </ng-template>
@@ -1731,16 +1709,40 @@
                                 <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>Closed</td>
+                                <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.updatedBy}}</td>
                                 <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
                             </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="16" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer" style="background:#fff !important">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input class="footer-input-width" [ngModel]="getPageCount(dt22._totalRecords, pageSize)" [disabled]="true"
+                                pInputText type="text" />
                         </ng-template>
                     </p-table>
-
-                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm"
+                    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm" #dt11
                              [columns]="cols"
                              [value]="buildHistoricalList"
                              [paginator]="true"
                              [rows]="10"
+                             [first]="0"
+                             [totalRecords]="totalRecords"
+                             [rows]="pageSize"
+                             [paginator]="true"
+                             [pageLinks]="3" 
+                             [rowsPerPageOptions]="[10, 20, 50, 100]"
                              *ngIf="displayType == 'historical WO quotes'">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -1754,6 +1756,10 @@
                                 <th>Est. Comp Date</th>
                                 <th>Est. Ship Date</th>
                                 <th>Quote Status</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th class="events1"></th>
                             </tr>
                         </ng-template>
@@ -1769,16 +1775,33 @@
                                 <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.quoteStatus}}</td>
-                                <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
+                                <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td>{{rowData.updatedBy}}</td>
+                                <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="triggerWoQuoteView(rowData);" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="16" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template> 
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer" style="background:#fff !important">Total:</label>
+                            <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input class="footer-input-width" [ngModel]="getPageCount(dt11._totalRecords, pageSize)" [disabled]="true"
+                                pInputText type="text" />
+                        </ng-template>
                     </p-table>
-
                 </div>
             </div>
         </div>
     </div>
-
     <div id="quoteVer"
          class="modal fade"
          role="dialog"
@@ -1847,8 +1870,6 @@
                                     <input class="form-control" type="email" name="bcc"
                                         [(ngModel)]="bcc" multiple="true">
                                 </div>
-                                
-                                
                             </div>
                             <div class="col-md-6">
                                 

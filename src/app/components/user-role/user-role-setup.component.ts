@@ -33,6 +33,16 @@ export class UserRolesSetupComponent implements OnInit {
         this.pages = [];
     }
 
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     getAllModuleHierarchies(): void {
         this.userRoleService.getAllModuleHierarchies().subscribe(data => {
             this.moduleHierarchy = data[0];
@@ -218,6 +228,7 @@ export class UserRolesSetupComponent implements OnInit {
     }
 
     addUserRole(): void {
+        this.currentUserRole.masterCompanyId = this.currentUserMasterCompanyId;
         this.userRoleService.add(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role added successfully.', MessageSeverity.success);
@@ -239,6 +250,5 @@ export class UserRolesSetupComponent implements OnInit {
                 this.alertService.showMessage('User Role', message, MessageSeverity.error);
             }
         );
-
     }
 }
