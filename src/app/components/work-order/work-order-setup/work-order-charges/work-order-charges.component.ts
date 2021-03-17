@@ -66,6 +66,27 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     { field: 'updatedDate', header: 'Updated Date',isRequired:false },
     { field: 'updatedBy', header: 'Updated By',isRequired:false },
   ]
+
+  auditHistoryQuoteHeaders= [
+    { field: 'taskName', header: 'Task' ,isRequired:true},
+    { field: 'chargeType', header: 'Charge Type',isRequired:true },
+    { field: 'glAccountName', header: 'Gl Account Name',isRequired:false },
+    { field: 'description', header: 'Description',isRequired:false },
+    { field: 'quantity', header: 'Qty',isRequired:true },
+    { field: 'refNum', header: 'Ref Num',isRequired:false },
+    { field: 'unitCost', header: 'Unit Cost',isRequired:true },
+    { field: 'extendedCost', header: 'Extented Cost',isRequired:false },
+    { field: 'vendorName', header: 'Vendor Name',isRequired:false },
+    { field: 'billingName', header: 'Billing Method',isRequired:false },
+    { field: 'markUp', header: 'Mark Up',isRequired:false },
+    { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+    { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+    { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+    { field: 'createdDate', header: 'Created Date',isRequired:false },
+    { field: 'createdBy', header: 'Created By',isRequired:false },
+    { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+    { field: 'updatedBy', header: 'Updated By',isRequired:false },
+  ]
   modal: NgbModalRef;
   isEdit: boolean = false;
   editData: any;
@@ -224,18 +245,36 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
 
   getAuditHistoryById(rowData) {
-    this.workOrderService.getChargesHistory(this.isSubWorkOrder, this.isSubWorkOrder == true ? rowData.subWorkOrderChargesId : rowData.workOrderChargesId).subscribe(res => {
-      this.historyData = res.reverse();
-      this.auditHistoryHeaders=this.auditHistoryHeaders;
-      // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-   
-      this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
-      this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
-      this.modal.componentInstance.auditHistory = this.historyData;
-      
-      this.modal.result.then(() => {
-      }, () => { })
-    })
+    console.log("roe",rowData)
+    debugger
+    if(this.isQuote){
+      if(rowData.workOrderQuoteChargesId){
+      this.workOrderService.getquoteChargesHistory(rowData.workOrderQuoteChargesId).subscribe(res => {
+        this.historyData = res;
+
+  this.triggerHistory();
+      })
+
+    }else{
+      this.historyData = [];
+      this.triggerHistory();
+    }
+    this.auditHistoryHeaders=this.auditHistoryQuoteHeaders;
+    }else{
+      this.workOrderService.getChargesHistory(this.isSubWorkOrder, this.isSubWorkOrder == true ? rowData.subWorkOrderChargesId : rowData.workOrderChargesId).subscribe(res => {
+        this.historyData = res.reverse();
+        this.auditHistoryHeaders=this.auditHistoryHeaders;
+  this.triggerHistory();
+      })
+    }
+
+
+  }
+  triggerHistory(){
+
+  this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+    this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+    this.modal.componentInstance.auditHistory = this.historyData;
 
   }
   saveChargesList(event) {

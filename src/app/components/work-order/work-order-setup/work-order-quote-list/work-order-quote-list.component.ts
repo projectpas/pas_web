@@ -67,7 +67,8 @@ export class WorkOrderQuoteListComponent implements OnInit {
     return data['partNoType'] === 'Multiple' ? 'green' : 'black';
   }
   getPageCount(totalNoofRecords, pageSize) {
-    return Math.ceil(totalNoofRecords / pageSize)
+   const value= Math.ceil(totalNoofRecords / pageSize)
+   return value ? value :0
 }
   convertDate(key, data) {
     if (key === 'openDate') {

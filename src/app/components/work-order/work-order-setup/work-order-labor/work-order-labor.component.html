@@ -487,10 +487,15 @@
                 </div>
                
                 </td>
-                <td *ngIf="!isView" class="text-center">
-                    <span><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
+                <td  class="text-center">
+                    <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
                       (click)="showDeleteLabourPopup(task.description,rec, i)"><i class="fa fa-trash"></i></button> </span>
-                </td>
+                      <span *ngIf="isQuote">
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rec)"
+                            matTooltip="History" matTooltipPosition="above"><i
+                                class="fa fa-history"></i></a>
+                    </span>
+                    </td>
               </tr>
               <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-sm" style="max-width: 500px !important;">

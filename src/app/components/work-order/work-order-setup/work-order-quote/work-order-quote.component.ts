@@ -19,7 +19,8 @@ import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../g
 import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
@@ -150,6 +151,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     quotestatusofCurrentPart: string = '';
     isViewForApprovedPart: boolean = false;
     defaultContactId: any;
+    modal: NgbModalRef;
     woQuoteListHeader = [
         {
             header: 'Action',
@@ -331,6 +333,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     memoPopupContent: any;
     selectall: any;
     cols: any;
+    pageIndex: number = 0;
+    totalRecords: number=0;
+    totalPages: number;
+    pageSize: number = 10;
     deleteRowRecord:any={};
     msId:any;
     selectedquotePn: any;
@@ -344,7 +350,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     tempMemo:any;
     originlaMlist:any=[];
     
-    constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
+    constructor(private router: ActivatedRoute,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
@@ -910,7 +916,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             .subscribe((res) => {
             this.buildMethodDetails = res;
             if (res) {
-                this.costPlusType = res['materialBuildMethod'].toString();
+                this.costPlusType = res['materialBuildMethod']? res['materialBuildMethod'].toString(): '';
                 this.materialFlatBillingAmount = res['materialFlatBillingAmount'];
             }
             if (res && res['workOrderQuoteDetailsId']) {
@@ -1008,18 +1014,32 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 if (buildType == 'historical WO quotes') {
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrderQuote(partId, workScopeId, payLoad)
                         .subscribe(
-                            (res: any[]) => {
+                            (res:any) => {
                                 this.buildHistoricalList =res['results']; 
                                 this.showDisplayData=true;
+                                if (res['results'].length > 0) {
+                                    this.totalRecords = res.totalRecordsCount;
+                                        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                                      }else {
+                                        this.totalRecords = 0;
+                                        this.totalPages = 0;
+                                    }
                             }
                         )
                 }
                 else if (buildType == 'use historical wos') {
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrder(partId, workScopeId, payLoad)
                         .subscribe(
-                            (res: any[]) => {
+                            (res: any) => {
                                 this.buildHistoricalList = res['results'];
                                 this.showDisplayData=true;
+                                if (res['results'].length > 0) {
+                                    this.totalRecords = res.totalRecordsCount;
+                                        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                                      }else {
+                                        this.totalRecords = 0;
+                                        this.totalPages = 0;
+                                    }
                             }
                         )
                 }
@@ -1205,10 +1225,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveFreights(){
+        this.isSpinnerVisible=true;
         this.workOrderService.saveFreightsListQuote(this.quoteFreightListPayload)
         .subscribe(
             (res) => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['freight'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteFreightListByWorkOrderQuoteId();
@@ -1221,7 +1242,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -1323,10 +1344,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveMaterialList(){ 
+        this.isSpinnerVisible=true;
         this.workOrderService.saveMaterialListQuote(this.materialListPayload)
         .subscribe(
             res => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['materialList'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteMaterialListByWorkOrderQuoteId();
@@ -1338,7 +1360,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -1374,13 +1396,14 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         )
     }
 
-    createLaborQuote() {
+    createLaborQuote() { 
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
-        
+        this.isSpinnerVisible=true;
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
-                res => {                    
+                res => {
+                    this.isSpinnerVisible=false;
                     if (res) {
                         this.tabQuoteCreated['labor'] = true;
                         let laborList = this.labor.workOrderLaborList;
@@ -1402,7 +1425,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     );
                 },
                 err =>{
-                    
+                    this.isSpinnerVisible=false;
                     this.errorHandling(err)
                 }
             )
@@ -1473,10 +1496,11 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveCharges(){
+        this.isSpinnerVisible=true;
         this.workOrderService.saveChargesQuote(this.chargesPayload)
         .subscribe(
             res => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['charges'] = true;
                 this.workOrderChargesList = res.workOrderQuoteCharges;
                 for (let charge in this.workOrderChargesList) {
@@ -1495,7 +1519,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -3338,5 +3362,55 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
+    }
+    historyData:any=[];
+    // auditHistoryHeaders:any=[];
+    auditHistoryHeaders = [
+        { field: 'taskName', header: 'Task' ,isRequired:true},
+        { field: 'partNumber', header: 'PN',isRequired:true },
+        { field: 'partDescription', header: 'PN Description',isRequired:false },
+        { field: 'provision', header: 'Provision',isRequired:false },
+        { field: 'quantity', header: 'Qty',isRequired:true },
+        { field: 'uomName', header: 'UOM',isRequired:false },
+        { field: 'conditiontype', header: 'Cond Type',isRequired:true },
+        { field: 'stocktype', header: 'Stock Type',isRequired:false },
+        { field: 'unitCost', header: 'Unit Cost',isRequired:false },
+        { field: 'totalCost', header: 'Total Cost',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:true },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+    getAuditHistoryById(rowData) { 
+        if(rowData.workOrderQuoteMaterialId){
+        this.workorderMainService.getquoteMaterialHistory(rowData.workOrderQuoteMaterialId).subscribe(res => {
+          this.historyData = res;
+          this.auditHistoryHeaders=this.auditHistoryHeaders;
+          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+       
+          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+          this.modal.componentInstance.auditHistory = this.historyData;
+          
+        })
+    }else{
+        this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = [];  
+    }
+      }
+      triggerWoQuoteView(rowData){
+        this.selectedHistoricalWorkOrder=undefined;
+        this.selectedHistoricalCustomerId=undefined;
+        this.selectedHistoricalWorkOrder = rowData.workOrderId; 
+        this.selectedHistoricalCustomerId = rowData.customerId
+      }
+      getPageCount(totalNoofRecords, pageSize) {
+        return Math.ceil(totalNoofRecords / pageSize)
     }
 }
