@@ -82,7 +82,7 @@
                         [(ngModel)]="laborForm.hoursorClockorScan">
                         Labour hours
                 </label>
-                <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                <label class="wauto" style="margin-left:10px" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
                     matTooltip="Multiple MPN">
                     <input type="radio" (change)="headerMaintanance()" (ngModelChange)="checkValid(5)" [value]=2 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
                         class="radio_adjust"
@@ -90,7 +90,7 @@
                         >
                         Labour Clock In/Out
                 </label>
-                <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                <label class="wauto" matTooltipPosition="above" style="margin-left:10px" [ngClass]="{pointerEvents :isView}"
                 matTooltip="Multiple MPN">
                 <input type="radio" (change)="headerMaintanance()" (ngModelChange)="checkValid(6)" [value]=3 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
                     class="radio_adjust"
@@ -150,7 +150,7 @@
     <table class="table table-bordered  lastcol-fix mpn-list-table">
       <thead>
         <tr *ngIf="isQuote" class="background-white">
-          <td colspan="4" class="table-header-col2" *ngIf="
+          <td colspan="5" class="table-header-col2" *ngIf="
                 !laborForm.hoursorClockorScan || laborForm.hoursorClockorScan == 1
               ">
               &nbsp;
@@ -161,10 +161,10 @@
             <td colspan="6" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == 3">
               &nbsp;
             </td>
-            <td colspan="5" class="table-header-col1">
+            <td colspan="4" class="table-header-col1">
               &nbsp;
             </td>
-            <td colspan="4" class="labour-radio-buttons">
+            <td colspan="5" class="labour-radio-buttons">
               <div class="display-flex">
                 <div class="form-group labour-radio-buttons-align" >
                   <p-radioButton (ngModelChange)="checkValid(11)" class="p-radiobutton-label-horizontal p-radiobutton-label-w125 radio-margin-top" name="costPlusType"
@@ -272,7 +272,7 @@
           <th class="text-center memo-th" style="width:250px !important" *ngIf="!isQuote">
             Memo
           </th>
-          <th *ngIf="!isView">Actions</th>
+          <th style="width:130px !important" *ngIf="!isView">Actions</th>
         </tr>
       </thead>
       <tbody>
