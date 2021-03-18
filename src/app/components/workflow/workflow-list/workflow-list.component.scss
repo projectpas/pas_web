@@ -119,3 +119,13 @@
   max-height: 500px;
   overflow-y: scroll;
 }
+.inspect  .ui-accordion-header a{
+  background-color: #337ab7 !important;
+  /* border: 1px solid #007ad9; */
+  color: #ffffff;
+  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  /* margin: 0px !important; */
+}
+

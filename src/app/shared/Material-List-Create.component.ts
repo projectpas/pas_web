@@ -588,14 +588,19 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         var newRow = Object.assign({}, this.row);
         newRow.workflowMaterialListId = "0";
         if (this.taskList) {
-            // this.taskList.forEach(
-            //     task => {
-            //         // if (task.description == "Assemble") {
-            //             newRow.taskId = task.taskId;
-            //         // }
-            //     }
-            // )
-            newRow.taskId = this.taskList[0].taskId;
+            if(this.isWorkFlow==true){
+            this.taskList.forEach(
+                task => {
+                    if (task.description == "Assemble") {
+                        newRow.taskId = task.taskId;
+                    }
+                }
+            )
+            }
+            if(this.isQuote || this.isWorkOrder){
+
+                newRow.taskId = this.taskList[0].taskId;
+            }
         }
         newRow.conditionCodeId = this.defaultConditionId;
         newRow.extendedCost = "0.00";

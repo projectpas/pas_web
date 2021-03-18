@@ -135,7 +135,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     conditions: any[];
     unitOfMeasuresList: any[];
     employeesOriginalData: any[];
-    materialFlatBillingAmount: any;
+    materialFlatBillingAmount: any="0.00";
     buildMethodDetails: any;
     approvalGridActiveTab: string = 'mpns';
     internalApproversList: any = [];
@@ -349,7 +349,28 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     disableForMemo:boolean=false;
     tempMemo:any;
     originlaMlist:any=[];
-    
+    historyData:any=[];
+    auditHistoryHeaders = [
+        { field: 'taskName', header: 'Task' ,isRequired:true},
+        { field: 'partNumber', header: 'PN',isRequired:true },
+        { field: 'partDescription', header: 'PN Description',isRequired:false },
+        { field: 'provision', header: 'Provision',isRequired:false },
+        { field: 'quantity', header: 'Qty',isRequired:true },
+        { field: 'uomName', header: 'UOM',isRequired:false },
+        { field: 'conditiontype', header: 'Cond Type',isRequired:true },
+        { field: 'stocktype', header: 'Stock Type',isRequired:false },
+        { field: 'unitCost', header: 'Unit Cost',isRequired:false },
+        { field: 'totalPartCost', header: 'Total Part Cost',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:true },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
     constructor(private router: ActivatedRoute,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
     
     ngOnInit() {
@@ -464,7 +485,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
                     this.creditTerms=res.creditTerm;
-                    this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 0);
+                    this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 2);
                     this.workOrderNumber = res.workOrderNum;
                     this.quoteForm.WorkOrderId = res.workOrderId;
                     this.quoteForm.WorkFlowWorkOrderId = res["workFlowWorkOrderId"];
@@ -963,6 +984,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             .subscribe(
                 (workOrderParts: partsDetail[]) => {
                     this.workOrderPartsDetail = workOrderParts;
+                    this.workOrderPartsDetail.forEach(element => {
+                        element.iscontract=element.contract=='No'? false:true;
+                    });
                 },
                 err => {
                     this.errorHandling(err);
@@ -1249,6 +1273,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     createMaterialQuote() {
+        this.disableMat=true;
         this.materialListPayload.BuildMethodId = this.getBuildMethodId();
         this.materialListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.materialListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
@@ -1882,6 +1907,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveMaterialListForWO(data) {
+        this.disableMat=true;
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1934,7 +1960,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join()).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
             }
@@ -2026,6 +2053,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     deleteMaterialList(mainIndex, subIndex) {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
+        this.disableMat=true;
     }
 
     updateWorkOrderChargesList(data) {
@@ -2142,7 +2170,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 total += Number(this.totalTaskMaterialBillingAmount(material));
             }
         )
-        this.materialFlatBillingAmount = total.toFixed(2);
+        this.materialFlatBillingAmount = total? total.toFixed(2):'0.00';
         return total.toFixed(2);
         }
     }
@@ -2242,7 +2270,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.customerPhone = this.quoteListViewData.customerPhone;
             this.customerRef = this.quoteListViewData.customerRef;
             this.accountsReceivableBalance = this.quoteListViewData.arBalance;
-            this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 0);
+            this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 2);
             this.creditTerms = this.quoteListViewData.creditTerms;
             this.salesPerson = this.quoteListViewData.salesPerson;
             this.csr = this.quoteListViewData.csr;
@@ -2830,15 +2858,14 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     filterCustomerContact(event): void {
         this.cusContactList = this.customerContactList;
-        if (event.query !== undefined && event.query !== null) {
+        if (event.query !== undefined && event.query !== null && event.query !== '') {
             const customers = [...this.customerContactList.filter(x => {
                 return x.contactName.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.cusContactList = customers;
         }else{
             this.cusContactList = this.customerContactList; 
-        }
-        
+        }        
     }
 
     hideModal(modalName){
@@ -2976,6 +3003,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.workorderMainService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workOrderMaterialList = res; 
+         
             if (res.length > 0) {
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
@@ -3181,6 +3209,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
                 this.originlaMlist=res;
+                this.disableMat=true;
               this.getCondition('');
                 this.materialListQuotation.forEach(element => {
                     return{
@@ -3359,37 +3388,22 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
 
     }
-    
+
     toggleDisplayMode(): void {
         this.isDetailedView = !this.isDetailedView;
     }
-    historyData:any=[];
-    // auditHistoryHeaders:any=[];
-    auditHistoryHeaders = [
-        { field: 'taskName', header: 'Task' ,isRequired:true},
-        { field: 'partNumber', header: 'PN',isRequired:true },
-        { field: 'partDescription', header: 'PN Description',isRequired:false },
-        { field: 'provision', header: 'Provision',isRequired:false },
-        { field: 'quantity', header: 'Qty',isRequired:true },
-        { field: 'uomName', header: 'UOM',isRequired:false },
-        { field: 'conditiontype', header: 'Cond Type',isRequired:true },
-        { field: 'stocktype', header: 'Stock Type',isRequired:false },
-        { field: 'unitCost', header: 'Unit Cost',isRequired:false },
-        { field: 'totalCost', header: 'Total Cost',isRequired:false },
-        { field: 'billingName', header: 'Billing Method',isRequired:true },
-        { field: 'markUp', header: 'Mark Up',isRequired:false },
-        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
-        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
-        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
-        { field: 'createdDate', header: 'Created Date',isRequired:false },
-        { field: 'createdBy', header: 'Created By',isRequired:false },
-        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
-        { field: 'updatedBy', header: 'Updated By',isRequired:false },
-      ]
+  
     getAuditHistoryById(rowData) { 
         if(rowData.workOrderQuoteMaterialId){
         this.workorderMainService.getquoteMaterialHistory(rowData.workOrderQuoteMaterialId).subscribe(res => {
-          this.historyData = res;
+            this.historyData = res;
+        //     this.historyData = res.forEach(element => {
+        //       element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+        //       element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
+        //       element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+        //       element.unitCost=element.unitCost ?  formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+        //       element.totalPartCost=element.totalPartCost ?  formatNumberAsGlobalSettingsModule(element.totalPartCost, 2) : '0.00';
+        //   });
           this.auditHistoryHeaders=this.auditHistoryHeaders;
           // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
        
@@ -3412,5 +3426,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
       }
       getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
+    }
+    disableMat:boolean=false;
+    getValidMat(){
+        this.disableMat=false;
     }
 }
