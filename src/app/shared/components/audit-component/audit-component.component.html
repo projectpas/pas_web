@@ -25,7 +25,7 @@
                 {{audit[headername.field]}}</td>
                 <td *ngIf="headername.field == 'createdDate' || headername.field == 'updatedDate'  "
                 [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
-                {{audit[headername.field] | date: 'MM/dd/yyyy h:mm:ss a'}}</td>
+                {{audit[headername.field] | date: 'MM/dd/yyyy h:mm a'}}</td> 
                 <td *ngIf="headername.field == 'isDeleted'">
                     <p style="background-color: #fff !important;"> <input type="checkbox"
                                             name="isDeleted" [checked]="audit[headername.field]" disabled></p>
