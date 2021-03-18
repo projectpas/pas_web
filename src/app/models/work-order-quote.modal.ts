@@ -121,4 +121,6 @@ export class partsDetail{
   tatDaysStandard: number;
   workScope: number;
   workOrderId: number;
+  iscontract:any;
+  contract:any;
 }

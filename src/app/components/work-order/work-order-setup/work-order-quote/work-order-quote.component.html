@@ -344,6 +344,7 @@
                                 <th rowspan="2">NTE</th>
                                 <th rowspan="2">Condition </th>
                                 <th rowspan="2">Contract</th>
+                                <th rowspan="2">Contract No</th>
                                 <th rowspan="2">Stock Line Num</th>
                                 <th rowspan="2">Serial Number</th>
                                 <!-- <th rowspan="2">Qty *</th> -->
@@ -360,7 +361,7 @@
                                 <th rowspan="2">DER</th>
                                 <th rowspan="2">PMA</th>
                                 <!-- <th rowspan="2">Qty *</th> -->
-                                <th rowspan="2">First Name</th>
+                                <th rowspan="2">Tech Name</th>
                                 <th rowspan="2">Tech Station</th>
                                 <!-- <th rowspan="2">Tear Down Report</th> -->
                                 <th rowspan="2">TAT Days Current</th>
@@ -431,7 +432,13 @@
                                 </td>
                                 <td>
                                     <!-- {{ p.isDER }} -->
-                                    <span *ngIf="workOrderPart['contract'] == true">Yes</span>
+                                    <!-- <span *ngIf="workOrderPart['contract'] == true">Yes</span> -->
+                                    <input type="checkbox" class="form-control w60" name="contract{{i}}"
+                                    #isDER="ngModel" [(ngModel)]="workOrderPart.iscontract" disabled>
+                                </td>
+                                <td>
+                                    <label>{{workOrderPart['contractNo']}}</label>
+                                    <!-- <input [value]="workOrderPart['stockLine']" readonly/> -->
                                 </td>
                                 <td>
                                     <label>{{workOrderPart['stockLine']}}</label>
@@ -480,11 +487,16 @@
                                     <!-- <input [value]="workOrderPart['estimatedCompletionDate']" readonly/> -->
                                 </td>
                                 <td>
-                                    <label *ngIf="workOrderPart['isDER']==true">Yes</label>
+                                    <input type="checkbox" class="form-control w60" name="isDER{{i}}"
+                                    #isDER="ngModel" [(ngModel)]="workOrderPart.isDER" disabled>
+                                    <!-- <label *ngIf="workOrderPart['isDER']==true">Yes</label>  -->
                                     <!-- <input [value]="workOrderPart['isDER']" readonly/> -->
                                 </td>
                                 <td>
-                                    <label *ngIf="workOrderPart['isPMA']==true">Yes</label>
+                                   
+                                    <!-- <label *ngIf="workOrderPart['isPMA']==true">Yes</label> -->
+                                    <input type="checkbox" class="form-control w60" name="isPMA{{i}}"
+                                    #isPMA="ngModel" [(ngModel)]="workOrderPart.isPMA" disabled>
                                     <!-- <input [value]="workOrderPart['isPMA']" readonly/> -->
                                 </td>
                                 <td>
@@ -510,9 +522,9 @@
                                 <!-- <label>{{workOrderPart['workScope']}}</label> -->
                                 <!-- <input [value]="workOrderPart['workScope']" readonly/> -->
                                 <!-- </td> -->
-                                <td>
-                                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
-                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
+                                <td class="flex_d">
+                                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
+                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -812,10 +824,10 @@
                     <label>{{selectedStockLineNumber}}</label>
                 </div> -->
             </div> 
-                <div class="form-group " *ngIf="selectedPartNumber != ''">
+                <!-- <div class="form-group " *ngIf="selectedPartNumber != ''">
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
-                </div>
+                </div> -->
             
         </div>
     </div>
