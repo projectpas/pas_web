@@ -1930,7 +1930,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             masterCompanyId: '',
             workflowId: "",
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
         }];
         return measurement;
     }
@@ -1948,7 +1948,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             taskId: "",
             workflowId: "",
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
         }];
         return exclusion;
     }
@@ -1996,7 +1996,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             taskId: "",
             workflowId: "",
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
 
         }];
         return charges;
@@ -2013,7 +2013,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            IsDelete: false,
+            IsDeleted: false,
         }];
         return equipmentList;
     }
@@ -2033,7 +2033,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            IsDelete: false,
+            IsDeleted: false,
         }];
 
         return expertise;
@@ -2063,7 +2063,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             createdBy: this.userName,
             updatedBy: this.userName,
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
         }];
 
         return material;
@@ -2080,7 +2080,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
 
         }];
         return directions;
@@ -2373,7 +2373,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-
+console.log("this.workFlowList",this.workFlowList)
             for (let workflow of this.workFlowList) {
                 if (workflow.charges != undefined) {
                     for (let charge of workflow.charges) {
@@ -2385,13 +2385,18 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             charge.masterCompanyId = this.currentUserMasterCompanyId;
                             charge.createdBy = this.userName;
                             charge.createdDate = new Date();
+                            charge.updatedBy = this.userName;
+                            charge.updatedDate = new Date();
 
                         } else {
                             charge.workflowChargesListId = charge.workflowChargesListId > 0 ? charge.workflowChargesListId : 0;
+                            charge.createdBy = this.userName;
+                            charge.createdDate = new Date();
                             charge.masterCompanyId = this.currentUserMasterCompanyId;
                             charge.updatedBy = this.userName;
                             charge.updatedDate = new Date();
                         }
+             
                         this.sourceWorkFlow.charges.push(charge);
                     }
                 }
@@ -2405,9 +2410,14 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             direction.masterCompanyId = this.currentUserMasterCompanyId;
                             direction.createdBy = this.userName;
                             direction.createdDate = new Date();
+                            direction.updatedBy = this.userName;
+                            direction.updatedDate = new Date();
                         } else {
                             direction.workflowDirectionId = direction.workflowDirectionId > 0 ? direction.workflowDirectionId : 0;
                             direction.masterCompanyId = this.currentUserMasterCompanyId;
+                            direction.createdBy = this.userName;
+                            direction.createdDate = new Date();
+
                             direction.updatedBy = this.userName;
                             direction.updatedDate = new Date();
                         }
@@ -2421,6 +2431,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.taskId = workflow.taskId;
                             equipment.order = workflow.order;
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
+                            equipment.updatedBy = this.userName;
+                            equipment.updatedDate = new Date();
                             equipment.createdBy = this.userName;
                             equipment.createdDate = new Date();
                             equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
@@ -2430,6 +2442,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
                             equipment.updatedBy = this.userName;
                             equipment.updatedDate = new Date();
+                            equipment.createdBy = this.userName;
+                            equipment.createdDate = new Date();
                             equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
 								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
                         }
@@ -2446,12 +2460,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             exclusion.masterCompanyId = this.currentUserMasterCompanyId;
                             exclusion.createdBy = this.userName;
                             exclusion.createdDate = new Date();
+                            exclusion.updatedBy = this.userName;
+                            exclusion.updatedDate = new Date();
                         } else {
                             exclusion.workflowExclusionId = exclusion.workflowExclusionId > 0 ? exclusion.workflowExclusionId : 0;
                             exclusion.masterCompanyId = this.currentUserMasterCompanyId;
+                            exclusion.createdBy = this.userName;
+                            exclusion.createdDate = new Date();
                             exclusion.updatedBy = this.userName;
                             exclusion.updatedDate = new Date();
-
                         }
                         this.sourceWorkFlow.exclusions.push(exclusion);
                     }
@@ -2463,6 +2480,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             expert.taskId = workflow.taskId;
                             expert.order = workflow.order;
                             expert.masterCompanyId = this.currentUserMasterCompanyId;
+                            expert.updatedBy = this.userName;
+                            expert.updatedDate = new Date();
                             expert.createdBy = this.userName;
                             expert.createdDate = new Date();
                         } else {
@@ -2470,6 +2489,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             expert.masterCompanyId = this.currentUserMasterCompanyId;
                             expert.updatedBy = this.userName;
                             expert.updatedDate = new Date();
+                            expert.createdBy = this.userName;
+                            expert.createdDate = new Date();
                         }
                         this.sourceWorkFlow.expertise.push(expert);
                     }
@@ -2484,12 +2505,17 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             // material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.createdBy = this.userName;
                             material.createdDate = new Date();
+                            material.updatedBy = this.userName;
+                            material.updatedDate = new Date();
                         } else {
                             material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
                             // material.materialMandatoriesId = workflow.materialMandatoriesId;
+                            material.createdBy = this.userName;
+                            material.createdDate = new Date();
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
+                            material.taskId = workflow.taskId ;
                         }
                         material.partNumber=material.partNumber.partName;
                         this.sourceWorkFlow.materialList.push(material);
@@ -2502,11 +2528,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             measurement.taskId = workflow.taskId;
                             measurement.order = workflow.order;
                             measurement.masterCompanyId = this.currentUserMasterCompanyId;
+                            measurement.updatedBy = this.userName;
+                            measurement.updatedDate = new Date();
                             measurement.createdBy = this.userName;
                             measurement.createdDate = new Date();
                         } else {
                             measurement.workflowMeasurementId = measurement.workflowMeasurementId > 0 ? measurement.workflowMeasurementId : 0;
                             measurement.masterCompanyId = this.currentUserMasterCompanyId;
+                            measurement.createdBy = this.userName;
+                            measurement.createdDate = new Date();
                             measurement.updatedBy = this.userName;
                             measurement.updatedDate = new Date();
                         }
@@ -2532,9 +2562,10 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         } else {
                             publication.id = publication.id > 0 ? publication.id : 0;
                             publication.masterCompanyId = this.currentUserMasterCompanyId;
-                            publication.createdBy = this.userName;
-                            publication.createdDate = new Date();
+                         
                         }
+                        publication.createdBy = this.userName;
+                        publication.createdDate = new Date();
                         publication.updatedBy = this.userName;
                         publication.updatedDate = new Date();
                         publication.masterCompanyId = this.currentUserMasterCompanyId;
@@ -2602,14 +2633,12 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         this.sourceWorkFlow.expertise.push(expert);
                     }
                 }
-                console.log("part material",workflow.materialList)
                 if (workflow.materialList != undefined) {
                     for (let material of workflow.materialList) {
                         material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                         material.workflowId = workflow.workflowId;
                         material.taskId = workflow.taskId;
                         material.partNumber= (typeof material.partNumber == 'string') ? material.partNumber:   material.partNumber.partName;
-                       console.log("material",material)
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }

@@ -638,9 +638,27 @@ export class SalesOrderService {
     );
   }
 
+  getSalesOrderBillingInvoicingData(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getSalesOrderBillingInvoicingData(sobillingInvoicingId)
+    );
+  }
+
+  getSalesOrderBillingInvoicingById(sobillingInvoicingId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.GetSalesOrderBillingInvoicingById(sobillingInvoicingId)
+    );
+  }
+
   updateShipping(serviceClass: string, salesOrderShippingId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.updateShipping(serviceClass, salesOrderShippingId)
+    );
+  }
+
+  UpdateSalesOrderBillingInvoicing(sobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.updateSalesOrderBillingInvoicing(sobillingInvoicingId, billingInvoicing)
     );
   }
   //end --nitin

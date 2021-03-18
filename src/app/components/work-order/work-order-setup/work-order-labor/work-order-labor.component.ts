@@ -140,6 +140,7 @@ laborTaskData:any;
     if (!this.isQuote) {
       this.getEmployeeData();
     }
+    this.selectedItems =[];
     this.laborForm.costPlusType = 'Mark Up'
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     if (this.laborForm['workOrderHoursType']) {
@@ -161,7 +162,8 @@ laborTaskData:any;
       }
       else {
         for (let task in this.taskListForHeader) {
-          if (tData == this.taskListForHeader[task]['description']) {
+          if (tData == this.taskListForHeader[task]['description']) 
+          {
             this.selectedItems = [...this.selectedItems, {
               "taskId": this.taskListForHeader[task]['taskId'],
               "description": this.taskListForHeader[task]['description']
@@ -730,10 +732,14 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
       isActive: true,
     }
 
+    debugger;
     let tasksData = this.laborForm.workOrderLaborList[0];
     let formedData = {}
     for (let tdata in tasksData) {
-      if (tdata != 'length') {
+      if (tdata != 'length') 
+      {
+
+
         formedData[tdata] = tasksData[tdata].map(x => {
           return {
             ...x,
@@ -863,6 +869,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
   currentRecord:any={};
   showDeleteLabourPopup(taskName, res, index) {
     this.currentRecord=res;
+    console.log("hello", this.currentRecord)
     this.deletingLabourObj = {
       taskName: taskName,
       index: index
@@ -1330,6 +1337,17 @@ this.commonfunctionHandler();
         if(rowData.workOrderQuoteLaborId){
         this.workOrderService.getquoteLaborHistory(rowData.workOrderQuoteLaborId).subscribe(res => {
           this.historyData = res;
+        //   this.historyData = res.forEach(element => {
+        //     element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+        //     element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
+        //     element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+
+        //     element.burdaenRatePercentage=element.burdaenRatePercentage ?  formatNumberAsGlobalSettingsModule(element.burdaenRatePercentage, 2) : '0.00';
+        //     element.burdenRateAmount=element.burdenRateAmount ?  formatNumberAsGlobalSettingsModule(element.burdenRateAmount, 2) : '0.00';
+        //     element.totalCostPerHour=element.totalCostPerHour ?  formatNumberAsGlobalSettingsModule(element.totalCostPerHour, 2) : '0.00';
+          
+        //     element.totalCost=element.totalCost ?  formatNumberAsGlobalSettingsModule(element.totalCost, 2) : '0.00';
+        // });
           this.auditHistoryHeaders=this.auditHistoryHeaders;
           // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
        

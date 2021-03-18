@@ -485,12 +485,12 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	//		});
 	//}
 
-	getManagemtentEntityData<T>(): Observable<T> {
-
-		return this.http.get<T>(this._managementUrl, this.getRequestHeaders())
+	getManagemtentEntityData<T>(masterCompanyId?): Observable<T> {
+		let endpointUrl = `${this._managementUrl}/${ masterCompanyId !==undefined ? masterCompanyId : 1 }`;		
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-			});
+		});
 	}
 
 	getEntityDataById(entityId) {

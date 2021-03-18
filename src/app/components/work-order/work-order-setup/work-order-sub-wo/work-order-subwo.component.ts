@@ -89,6 +89,7 @@ this.mpnGridUpdated=true;
         this.getAllWorkOrderStages(); // for stages dropdown
         this.getAllWorkOrderStatus();
         this.getSubWorOrderMpns();
+        this.getAllWorkScpoes('');
 
  
     }
@@ -130,7 +131,7 @@ this.getWorkFlowByPNandScope(x,index);
                     this.subWorkOrderGridData();
                 }else{
                     if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length !=0){
-                        this.getAllWorkScpoes();
+                        this.getAllWorkScpoes('');
                         this.workOrderStatus();
                      }
                 }
@@ -166,7 +167,7 @@ for(let i = 0; i< mylength ; i ++) {
  this.subWorkOrderPartNumbers.push({...subWoObj,...obj});
  }
  if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length !=0){
-    this.getAllWorkScpoes();
+    this.getAllWorkScpoes('');
     this.workOrderStatus();
     if(this.addToExisting == NaN){
     this.subWorkOrderPartNumbers.map((x, index) => {
@@ -338,18 +339,39 @@ this.alertService.showMessage(
 
     // mpn Grid details
 
-    getAllWorkScpoes(): void {
-        this.workOrderService.getAllWorkScopes().subscribe(
-            result => {
-                this.workScopesList = result.map(x => {
-                    return {
-                        label: x.description,
-                        value: x.workScopeId
-                    }
-                })
+    // getAllWorkScpoes(): void {
+    //     this.workOrderService.getAllWorkScopes().subscribe( 
+    //         result => {
+    //             this.workScopesList = result.map(x => {
+    //                 return {
+    //                     label: x.description,
+    //                     value: x.workScopeId
+    //                 }
+    //             })
+    //         }
+    //     );
+    // }
+    setEditArray:any=[];
+    getAllWorkScpoes(value): void {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+                if (element.workOrderScopeId) {
+                    this.setEditArray.push(element.workOrderScopeId)
+                }
+            });
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
             }
-        );
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.workScopesList = res;
+        });
     }
+
     selectedCondition1(value,currentRecord, index,) {
         this.conditionList.forEach(element => {
             if(element.value==value){
