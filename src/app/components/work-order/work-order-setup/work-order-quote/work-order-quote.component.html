@@ -585,6 +585,7 @@
                 </div>
             </div>
            
+            <div class="col-sm-12">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'approvalProcess'">
                 <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
                     <table class="table table-bordered header-table-width"
@@ -594,7 +595,7 @@
                                 <th class="approver-th-align th-width">
                                     <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot()"/> Select All
                                 </th>
-                                <th *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
+                                <th style="z-index: 1;" *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -753,6 +754,7 @@
                         </tbody>
                     </table>
                 </div>
+                </div>
             <button *ngIf="!isViewMode" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"  [disabled]="!getAllPartsToDisableOrNot()" style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
 
             </div>
@@ -842,17 +844,17 @@
         <div *ngIf="!isView && !isViewForApprovedPart ">
             <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary" style="margin-left: 10px;">Add Part No</button>
         </div>
-        <div style="margin-top: 0px;">
-            <table class="table table-bordered table-sorting mpn-list-table matlist-table">
- 
+        <div style="margin-top:0px " class="table-responsive table-overflow headertable-width">
+            <div class="tableFixHead">
+            <table class="table table-bordered lastcol-fix">
                 <thead>
                     <tr style="color: #f1f1f1; background-color: #fff;">
                         <th colspan="10">&nbsp;</th>
-                        <th colspan="4" class="labour-radio-buttons">
+                        <th colspan="5">
 
                             <div class="display-flex">
-                                <div class="form-group labour-radio-buttons-align" >
-                                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w125 radio-margin-top"
+                                <div class="form-group freight-isview-div" >
+                                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top"
                                                    name="costPlusType"
                                                    label="T&M - Mark Up"
                                                    value="1"
@@ -882,7 +884,7 @@
                                 </div>
                             </div>
                         </th>
-                        <th></th>
+                        <!-- <th></th> -->
                      
                     </tr>
                     <tr>
@@ -904,7 +906,7 @@
                         <th>
                             Billing Amount
                         </th>
-                        <th style="min-width: 60px;" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
+                        <th style="width: 130px;" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
                         <!-- <th *ngIf="!isView"></th> -->
                     </tr>
                 </thead>
@@ -922,7 +924,7 @@
                                 <td><div style="min-width: 100px;">{{matQuotation.partNumber.partName?matQuotation.partNumber.partName :matQuotation.partNumber }}</div></td>
                                 <td>{{matQuotation.partDescription}}</td>
                                 <td>{{matQuotation.provision}}</td>
-                                <td class="content-to-end">{{matQuotation.quantity}}</td>
+                                <td class="content-to-end" style="text-align:right !important">{{matQuotation.quantity}}</td>
                                 <td>
                                     {{matQuotation.uom}}
                                     <!-- <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
@@ -937,8 +939,8 @@
                                     </select>
                                 </td>
                                 <td>{{matQuotation.stockType}}</td>
-                                <td class="content-to-end">{{formateCurrency(matQuotation.unitCost)}}</td>
-                                <td class="content-to-end">{{formateCurrency((matQuotation.quantity * matQuotation.unitCost).toFixed(2))}}</td>
+                                <td class="content-to-end" style="text-align:right !important">{{formateCurrency(matQuotation.unitCost)}}</td>
+                                <td class="content-to-end" style="text-align:right !important">{{formateCurrency((matQuotation.quantity * matQuotation.unitCost).toFixed(2))}}</td>
                                 <td>
                                     <select class="form-control" (ngModelChange)="getValidMat()" [(ngModel)]="matQuotation.billingMethodId" style="width: 130px;" [disabled]="isView || costPlusType == 3 || isViewForApprovedPart">
                                         <option value="">Select</option>
@@ -951,7 +953,7 @@
                                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                     </select>
                                 </td>
-                                <td class="content-to-end">{{ formateCurrency(matQuotation.billingRate) }}</td>
+                                <td class="content-to-end" style="text-align:right !important">{{ formateCurrency(matQuotation.billingRate) }}</td>
                                 <td>
                                     <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
                                     <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
@@ -1026,6 +1028,7 @@
                     </tr>
                 </tfoot>
             </table>
+            </div>
         </div>
 
     </div>

@@ -24,7 +24,7 @@ export class UserRoleEndPointService extends EndpointFactory {
 
     getAllModuleHierarchies<T>(): Observable<T> {
         return this.http.get<T>(this.getAllModuleURL, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAllModuleHierarchies());
+            return this.handleErrorCommon(error, () => this.getAllModuleHierarchies());
         });
     }
     
@@ -33,7 +33,7 @@ export class UserRoleEndPointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(userRole), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addUserRole(userRole));
+                return this.handleErrorCommon(error, () => this.addUserRole(userRole));
             });
     }
 
@@ -42,38 +42,38 @@ export class UserRoleEndPointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(userRole), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateUserRole(userRole));
+                return this.handleErrorCommon(error, () => this.updateUserRole(userRole));
             });
     }
 
     getAllUsers<T>(): Observable<T> {
         return this.http.get<T>(this.getAllUsersURL, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAllUsers());
+            return this.handleErrorCommon(error, () => this.getAllUsers());
         });
     }
 
     getAllUserRole<T>(): Observable<T> {
         return this.http.get<T>(this.getAllUserRolesURL, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getAllUserRole());
+            return this.handleErrorCommon(error, () => this.getAllUserRole());
         });
     }
 
     assignRolesToUser<T>(userRoleMapper : UserRoleMapper[]): Observable<T> {
         return this.http.post<T>(this.assignRoleToUserURL, JSON.stringify(userRoleMapper), this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.assignRolesToUser(userRoleMapper));
+            return this.handleErrorCommon(error, () => this.assignRolesToUser(userRoleMapper));
         });
     }
     
     getUserRolesByUserId<T>(userId: string): Observable<T> {
         let endpointUrl = `${this.getUserRolesByUserIdURL}/${userId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getUserRolesByUserId(userId));
+            return this.handleErrorCommon(error, () => this.getUserRolesByUserId(userId));
         });
     }
     getSavedCountryDataEndPoint<T>(masterCompanyId: number): Observable<T> {
         let endpointUrl = `${this.getSavedCountryDataURL}${masterCompanyId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
-            return this.handleError(error, () => this.getSavedCountryDataEndPoint(masterCompanyId));
+            return this.handleErrorCommon(error, () => this.getSavedCountryDataEndPoint(masterCompanyId));
         });
     }
 //     getEmployeeData(masterCompanyId:any,employeeId:any) {
