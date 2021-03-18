@@ -1687,7 +1687,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "CreatedBy": "admin",
                     "UpdatedBy": "admin",
                     "IsActive": true,
-                    "IsDeleted": labor.IsDeleted,
+                    "IsDeleted": labor.isDeleted,
                     "BurdaenRatePercentageId": labor.burdaenRatePercentageId,
                     "BurdenRateAmount": labor.burdenRateAmount,
                     "TotalCostPerHour": labor.totalCostPerHour,
@@ -2017,6 +2017,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     editMaterialList(matData) {
+        matData.unitOfMeasure=matData.uom;
         const eData=[matData]
         this.editMatData = [...eData];
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;

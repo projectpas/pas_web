@@ -154,6 +154,7 @@ laborTaskData:any;
         this.laborForm.workFloworSpecificTaskorWorkOrder = "workOrder";
       }
     }
+    this.selectedItems = [];
     for (let tData in this.laborForm.workOrderLaborList[0]) {
       if (this.laborForm.workOrderLaborList[0][tData].length == 0) {
         delete this.laborForm.workOrderLaborList[0][tData]
