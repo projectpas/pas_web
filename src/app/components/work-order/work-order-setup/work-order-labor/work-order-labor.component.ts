@@ -862,6 +862,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
   currentRecord:any={};
   showDeleteLabourPopup(taskName, res, index) {
     this.currentRecord=res;
+    console.log("hello", this.currentRecord)
     this.deletingLabourObj = {
       taskName: taskName,
       index: index
