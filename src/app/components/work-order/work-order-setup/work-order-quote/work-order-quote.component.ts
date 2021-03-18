@@ -145,6 +145,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     isSpinnerVisible: boolean = false;
     cusContactList: any[];
     saveType: string = '';
+    currentWarningMessage:any;
     fields = ['partsCost', 'partsRevPercentage', 'laborCost', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
     currentApprover: any;
     isCurrentUserApprovalLimitExceeded: boolean = true;
@@ -499,6 +500,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quoteForm.masterCompanyId = res['masterCompanyId'];
                     this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
                     this.quoteForm['versionNo'] = 'V1';
+                    this.salesPerson = res.salesPerson.name;
                     this.workOrderService.getWorkOrderQuoteDetail(res.workOrderId, res["workFlowWorkOrderId"])
                         .subscribe(
                             (res: any) => {
@@ -574,6 +576,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     // this.getCreditTerms(res.creditTermsId);
                     this.setEmpAndSalesPersonName(res.employeeId, res.salesPersonId);
                     this.getMPNList(res.workOrderId);
+                    this.customerWarnings(this.quoteForm['customerId']);
                 }
                 else{
                     this.isSpinnerVisible = false;
@@ -840,7 +843,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.quoteForm['employeeId'] = { label: emp.label, value: empId };
             }
             if (emp.value == salesPerId) {
-                this.salesPerson = emp.label;
+                //this.salesPerson = emp.label;
             }
         }
     }
@@ -2330,6 +2333,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             if (res) {
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
+                this.currentWarningMessage= res.warningMessage;
                 this.customerResctrictions(customerId, this.warningMessage, this.createQuoteListID);
             }
         },
@@ -2365,9 +2369,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     WarnRescticModel() {
         // this.modal.close();
-        if (this.restrictID == 0) {
-            window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
-        }
+        // if (this.restrictID == 0) {
+        //     window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+        // }
         $('#warnRestrictMesg').modal("hide");
         this.warningMessage = '';
         this.restrictMessage = '';
