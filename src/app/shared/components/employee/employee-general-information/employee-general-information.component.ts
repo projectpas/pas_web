@@ -282,7 +282,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         //this.multiLeavelist();
         // this.loadLegalEntityData();
         //this.getAllStationData('');
-        debugger;
+        
         this.employeeid = this.employeeService.listCollection ? this.employeeService.listCollection.employeeId : this.employeeId;
         if (this.employeeid && this.employeeid != null && this.employeeid != 0) {
             this.isEnableNext = true;
