@@ -20,6 +20,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { AccountreceivableRoutingModule } from './accountreceivable-routing.module';
 import { OpenCloseArsubledgerComponent } from '../components/accounts-receivable/open-close-ar-subledger/open-close-ar-subledger.component';
 import { AccountsReceivableComponent } from './accounts-receivable.component';
+import { CustomerInvoiceListComponent } from '../components/accounts-receivable/customer-invoice-list/customer-invoice-list.component';
 
 @NgModule({
     imports: [
@@ -42,7 +43,8 @@ import { AccountsReceivableComponent } from './accounts-receivable.component';
     ],
     declarations: [
         OpenCloseArsubledgerComponent,
-        AccountsReceivableComponent
+        AccountsReceivableComponent,
+        CustomerInvoiceListComponent
     ],
     providers: [
 

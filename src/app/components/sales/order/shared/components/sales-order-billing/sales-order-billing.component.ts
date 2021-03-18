@@ -369,7 +369,8 @@ export class SalesOrderBillingComponent implements OnInit {
 
     }
 
-    saveSalesOrderBilling(isPost: boolean) {
+    saveSalesOrderBilling(invoiceStatus: InvoiceTypeEnum) {
+        this.isSpinnerVisible = true;
         let billingorInvoiceFormTemp = JSON.parse(JSON.stringify(this.billingorInvoiceForm));
         this.billingorInvoiceForm.soldToCustomerId = billingorInvoiceFormTemp.soldToCustomerId;
         this.billingorInvoiceForm.shipToCustomerId = billingorInvoiceFormTemp.shipToCustomerId['userID'];
@@ -385,7 +386,7 @@ export class SalesOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.customerId = billingorInvoiceFormTemp.customerId;
         this.billingorInvoiceForm.qtyToBill = this.selectedQtyToBill;
         this.billingorInvoiceForm.invoiceNo = "test";
-        this.billingorInvoiceForm.invoiceStatus = isPost ? InvoiceTypeEnum.Invoiced.toString() : InvoiceTypeEnum.Reviewed.toString();
+        this.billingorInvoiceForm.invoiceStatus = invoiceStatus == InvoiceTypeEnum.Billed ? 'Billed' : (invoiceStatus == InvoiceTypeEnum.Reviewed ? 'Reviewed' : 'Invoiced');
         this.salesOrderService.createBilling(this.billingorInvoiceForm).subscribe(result => {
             // let pdfPath = result[0].invoiceFilePath;
             // this.commonService.toDownLoadFile(pdfPath);
@@ -393,22 +394,56 @@ export class SalesOrderBillingComponent implements OnInit {
             // this.getBillingList();
             // this.showBillingForm = false;
             // this.ViewInvoice(result[0]);
-            
+
             this.getBillingList();
             this.showBillingForm = false;
             this.salesOrderId = result[0].salesOrderId;
             this.salesOrderBillingInvoiceId = result[0].soBillingInvoicingId;
             this.loadInvoiceView();
+            this.isSpinnerVisible = false;
         }, err => {
+            this.isSpinnerVisible = false;
         });
     }
 
+    GenerateInvoice() {
+        this.saveSalesOrderBilling(InvoiceTypeEnum.Billed);
+    }
+
     PrintInvoice() {
-        this.saveSalesOrderBilling(false);
+        this.isSpinnerVisible = true;
+        this.salesOrderService.getSalesOrderBillingInvoicingById(this.salesOrderBillingInvoiceId).subscribe(result => {
+            let billingInvoiceData = result[0];
+            let pdfPath = billingInvoiceData[0].invoiceFilePath;
+            this.commonService.toDownLoadFile(pdfPath);
+
+            billingInvoiceData[0].invoiceStatus = 'Reviewed';
+            this.salesOrderService.UpdateSalesOrderBillingInvoicing(this.salesOrderBillingInvoiceId, billingInvoiceData[0]).subscribe(result => {
+                this.getBillingList();
+                this.close();
+                this.isSpinnerVisible = false;
+            });
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     PrintPostInvoice() {
-        this.saveSalesOrderBilling(true);
+        this.isSpinnerVisible = true;
+        this.salesOrderService.getSalesOrderBillingInvoicingById(this.salesOrderBillingInvoiceId).subscribe(result => {
+            let billingInvoiceData = result[0];
+            let pdfPath = billingInvoiceData[0].invoiceFilePath;
+            this.commonService.toDownLoadFile(pdfPath);
+
+            billingInvoiceData[0].invoiceStatus = 'Invoiced';
+            this.salesOrderService.UpdateSalesOrderBillingInvoicing(this.salesOrderBillingInvoiceId, billingInvoiceData[0]).subscribe(result => {
+                this.getBillingList();
+                this.close();
+                this.isSpinnerVisible = false;
+            });
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     convertDate(key, data) {
