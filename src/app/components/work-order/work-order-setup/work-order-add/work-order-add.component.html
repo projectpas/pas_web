@@ -32,7 +32,7 @@
                         <div class="card card-border" *ngIf="!hideWOHeader">
                             <div class="card-body new-card-body">
                                 <div class="col-sm-12 link-block">
-                                    <h4 class="pull-left style_h4" >
+                                    <h4 class="pull-right style_h4" >
                                         <!-- General Info -->
                                         <button *ngIf="isView" class="btn-sm header-button expand-left" (click)="toggleDisplayMode()">
                                             {{isDetailedView ? 'Collapse' : 'Expand'}}</button>
@@ -212,7 +212,7 @@
                                                             <span
                                                                 *ngIf="workOrderGeneralInformation.customerId !== null ">
                                                                 <a matTooltipPosition="above"
-                                                                    matTooltip="Customer Email: {{workOrderGeneralInformation.customerId.customerEmail}}, Customer Phone: {{workOrderGeneralInformation.customerId.customerPhoneNo}}"
+                                                                    matTooltip="Customer Email: {{workOrderGeneralInformation.customerId.customerEmail}}, Customer Phone: {{workOrderGeneralInformation.customerPhoneNo}}"
                                                                     (click)="viewCustomerDetails(workOrderGeneralInformation.customerId.customerId)">
                                                                     <i class="fa fa-eye view_icon_adjust"></i>
                                                                 </a>

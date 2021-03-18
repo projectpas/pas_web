@@ -5,6 +5,7 @@ import { IDirections } from "../Workflow/Directions";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 declare var $ : any;
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+import { AuthService } from "../services/auth.service";
 @Component({
     selector: 'grd-directions',
     templateUrl: './Directions-Create.component.html',
@@ -22,7 +23,7 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
     memoIndex;
     textAreaInfo: any;
     modal: NgbModalRef;
-    constructor(private modalService: NgbModal,private alertService: AlertService) {
+    constructor(private modalService: NgbModal,private alertService: AlertService,   private authService: AuthService,) {
     }
 
     ngOnInit(): void {
@@ -46,15 +47,22 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
         newRow.description = "";
         newRow.sequence = "";
         newRow.memo = "";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
+        newRow.updatedBy = this.userName;
+        newRow.createdBy = this.userName;
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
         this.workFlow.directions.push(newRow);
     }
 
-
-
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
     checkDuplicateSequence(event, direction: any): void {
         if (this.workFlow.directions != undefined && this.workFlow.directions.length > 0) {
-            var duplicate = this.workFlow.directions.filter(d => d.sequence == direction.sequence && direction.taskId == this.workFlow.taskId && d.isDelete != true);
+            var duplicate = this.workFlow.directions.filter(d => d.sequence == direction.sequence && direction.taskId == this.workFlow.taskId && d.isDeleted != true);
             if (duplicate.length > 1) {
                 this.alertService.showMessage('Work Flow', 'Duplicate Sequence are not allowed Direction.', MessageSeverity.error);
                 direction.sequence = '';
@@ -96,7 +104,7 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.directions[this.deletedRowIndex].isDeleted = true;
-            this.workFlow.directions[this.deletedRowIndex].isDelete = true;
+            this.workFlow.directions[this.deletedRowIndex].isDeleted = true;
         }
         this.dismissModel();
     }

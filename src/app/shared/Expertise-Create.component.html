@@ -1,4 +1,4 @@
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="height:380px;">
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="max-height:380px;">
     <div class="header-div">
         <span class="cat-heading cat4">Add Expertise <i (click)="addRow()" class="fa fa-plus"></i></span>
     </div>
@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="expertise-tr" [hidden]="expert.isDelete" *ngFor="let expert of workFlow.expertise;let i = index">
+        <tr class="expertise-tr" [hidden]="expert.isDeleted" *ngFor="let expert of workFlow.expertise;let i = index">
             <td>
                 <select id="ddlExpertiesType" class="form-control wf-pub-id full-width"
                     [(ngModel)]="expert.expertiseTypeId" required>

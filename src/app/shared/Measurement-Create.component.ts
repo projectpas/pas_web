@@ -11,6 +11,7 @@ import { AlertService, MessageSeverity } from "../services/alert.service";
 import { CommonService } from "../services/common.service";
 declare var $ : any;
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+import { AuthService } from "../services/auth.service";
 
 @Component({ 
     selector: 'grd-measurement',
@@ -35,7 +36,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     deleteRowRecord:any={};
     deletedRowIndex:any;
 
-    constructor(private commonService: CommonService,   private modalService: NgbModal, private route: ActivatedRoute, private router: Router, private expertiseService: EmployeeExpertiseService, public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private itemser: ItemMasterService, private vendorService: VendorService, private alertService: AlertService) {
+    constructor(private commonService: CommonService, private authService: AuthService,   private modalService: NgbModal, private route: ActivatedRoute, private router: Router, private expertiseService: EmployeeExpertiseService, public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private itemser: ItemMasterService, private vendorService: VendorService, private alertService: AlertService) {
     }
 
     ngOnInit(): void {
@@ -69,10 +70,18 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         newRow.expected = "";
         newRow.memo = "";
         newRow.diagramURL = "";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
+        newRow.updatedBy = this.userName;
+        newRow.createdBy = this.userName;
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
         this.workFlow.measurements.push(newRow);
     }
-
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
     onPartSelect(event, measurement) {
         var anyMeasurement = this.workFlow.measurements.filter(measurement =>
             measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);

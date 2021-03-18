@@ -1,4 +1,5 @@
 export enum InvoiceTypeEnum {
-    Reviewed = 1,
-    Invoiced = 2
+    Billed = 1,
+    Reviewed = 2,
+    Invoiced = 3
 }

@@ -230,39 +230,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                // this.errorMessageHandler(errorLog);		
             });
     }
-   
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-        const errorLog = log;
-        if (errorLog.error) {
-            this.alertService.showMessage(
-                "Validation Failed",
-                errorLog.error,
-                MessageSeverity.error
-            );
-            return;
-        }
-		var msg = '';
-		if(errorLog.message) {
-		  if (errorLog.error && errorLog.error.errors.length > 0) {
-					for (let i = 0; i < errorLog.error.errors.length; i++){
-						msg = msg + errorLog.error.errors[i].message + '<br/>'
-					}
-				}
-				this.alertService.showMessage(
-                    errorLog.error.message,
-					msg,
-					MessageSeverity.error
-				);
-		   }
-		   else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			); }
-	}    
-
+       
     bindData(data: any) {           
             if (this.sourceEmployee.expirationDate == undefined) {
                 this.sourceEmployee.expirationDate = "";
@@ -393,13 +361,16 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         );
 
     }
+
     public applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue;
     }
+
     private refresh() {
         // Causes the filter to refresh there by updating with recently added data.
         this.applyFilter(this.dataSource.filter);
     }
+
     private onDataLoadSuccessful(getCertificationList: any[]) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
@@ -438,6 +409,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = false;
         this.allCertification = allWorkFlows;
     }
+
     private onCertifywithEmpId(certfilist: any) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
@@ -457,6 +429,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.loadDataforCertification('');
         }
     }
+
     private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
@@ -465,16 +438,19 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.modal.result.then(() => {
         }, () => {  })
     }
+
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.allComapnies = allComapnies;
     }
+
     private onDataLoadFailed(error: any) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
 
     }
+
     handleChange(rowData, e) {
         if (e.checked == false) {
             this.sourceAction = rowData;
@@ -496,6 +472,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                 error => {this.isSpinnerVisible = false }); //this.saveFailedHelper(error));
         }
     }
+
     open(content) {
         this.isEditMode = false;
         this.isDeleteMode = false;
@@ -507,6 +484,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.modal.result.then(() => {
         }, () => {  })
     }
+
     openDelete(content, row) {
         this.isEditMode = false;
         this.isDeleteMode = true;
@@ -515,6 +493,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.modal.result.then(() => {
         }, () => {  })
     }
+
     openEdit(content, row) {
         this.isEditMode = true;
         this.isSaving = true;
@@ -526,11 +505,13 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.modal.result.then(() => {
         }, () => {  })
     }
+
     openHelpText(content) {
         this.modal = this.modalService.open(content, { size: 'sm' });
         this.modal.result.then(() => {
         }, () => {  })
     }
+
     openHist(content, row) {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
@@ -540,6 +521,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             //error => this.saveFailedHelper(error));
             error =>{this.isSpinnerVisible=true})
     }
+
     editItemAndCloseModel() {
         this.isSaving = true;
         if (!this.sourceEmployee.employeeCertificationId) {
@@ -558,10 +540,8 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             response => this.saveCompleted(this.sourceEmployee)
             this.activeIndex = 1;
             this.employeeService.indexObj.next(this.activeIndex);
-
         }
         else {
-
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
             this.employeeService.updateCertificationDetails(this.sourceEmployee).subscribe(data => {
@@ -576,6 +556,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
 
         }
     }
+
     deleteItemAndCloseModel() {
         this.isSaving = true;
         this.sourceAction.updatedBy = this.userName;
@@ -584,6 +565,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             error => {this.isSpinnerVisible = false})//  this.saveFailedHelper(error));
         this.modal.close();
     }
+
     filterEmployees(event) {
         this.localCollection = [];
         for (let i = 0; i < this.allEmployeeinfo.length; i++) {
@@ -593,11 +575,13 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             }
         }
     }
+
     dismissModel() {
         this.isDeleteMode = false;
         this.isEditMode = false;
         this.modal.close();
     }
+
     private saveCompleted(user?: any) {
         this.isSaving = false;
         if (this.isDeleteMode == true) {
@@ -614,9 +598,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     private saveSuccessHelper(role?: any) {
         this.isSaving = false;
         this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
-
         this.loadData();
-
     }
 
     get userName(): string {
@@ -639,21 +621,19 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             return `with: ${reason}`;
         }
     }
-    gotnextClick() {
-        
+
+    gotnextClick() {        
         this.activeIndex = 2;
         this.employeeService.indexObj.next(this.activeIndex);       
         if(this.employeeId){
             this.router.navigateByUrl(`/employeesmodule/employeepages/app-employee-training-edit/${this.employeeId}`);
-        }else{
-            
+        }else{            
             this.router.navigate(['/employeesmodule/employeepages/app-employee-training'], { queryParams: { order: this.empId, 'firstName': this.firstName, 'lastName': this.lastName } });
         }
-
     }
+
     previousClick() {        
-        // this.employeeService.listCollection = this.local;
-       
+        // this.employeeService.listCollection = this.local;       
         this.activeIndex = 0;
         this.employeeService.indexObj.next(this.activeIndex);
         if(this.employeeId){
@@ -662,37 +642,33 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.router.navigate(['/employeesmodule/employeepages/app-employee-general-information'], { queryParams: { order: this.empId, 'firstName': this.firstName, 'lastName': this.lastName } });
         }
         // this.router.navigateByUrl('/employeesmodule/employeepages/app-employee-general-information');
-
     }
+
     certificationType(event) {
-
         if (this.allCertification) {
-
             for (let i = 0; i < this.allCertification.length; i++) {
                 if (event == this.allCertification[i].description) {
                     this.disablesave = true;
                     this.selecteddescription = event;
                 }
-
             }
         }
     }
+
     certificationHandlerHandler(event) {
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
             if (this.selecteddescription) {
                 if (value == this.selecteddescription.toLowerCase()) {
                     this.disablesave = true;
-
                 }
                 else {
                     this.disablesave = false;
-
                 }
             }
-
         }
     }
+
     filtercertificationType(event) {
         this.certificationtypeCollection = [];
         for (let i = 0; i < this.allCertification.length; i++) {
@@ -706,6 +682,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             }
         }
     }
+
     saveCertification() {
         this.isSaving = true;
         if (this.isEditMode == false) {
@@ -719,7 +696,6 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                 this.isEnableNext=true;  
                 this.nextbuttonEnable=true;
                 this.sourceEmployee.employeeCertificationId = data.employeeCertificationId;
-
             });
         }
         else {
@@ -736,6 +712,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         }
         this.modal.close();
     }
+
     openCertification(content) {
         this.disablesave = false;
         this.isEditMode = false;
@@ -765,6 +742,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         }
     
     }
+
     redirectToTabWithoutSave(){
         this.dismissModel();
         if(this.nextOrPreviousTab == 'Previous'){
@@ -773,6 +751,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.gotnextClick()
         }
     }
+    
     redirectToTab(){
         this.saveCertificateData();
         this.dismissModel();
