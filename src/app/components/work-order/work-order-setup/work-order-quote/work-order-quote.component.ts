@@ -1687,7 +1687,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "CreatedBy": "admin",
                     "UpdatedBy": "admin",
                     "IsActive": true,
-                    "IsDeleted": labor.IsDeleted,
+                    "IsDeleted": labor.isDeleted,
                     "BurdaenRatePercentageId": labor.burdaenRatePercentageId,
                     "BurdenRateAmount": labor.burdenRateAmount,
                     "TotalCostPerHour": labor.totalCostPerHour,
