@@ -23,7 +23,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr [hidden]="exclusion.isDelete" *ngFor="let exclusion of workFlow.exclusions; let i = index">
+      <tr [hidden]="exclusion.isDeleted" *ngFor="let exclusion of workFlow.exclusions; let i = index">
        <td *ngIf="!isWorkFlow" class="vd_cls">
           <select class="form-control wf-pub-id full-width" [(ngModel)]="exclusion.taskId" name="task_{{i}}" required
             (change)="onTaskChange(exclusion)">

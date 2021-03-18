@@ -57,7 +57,7 @@
                                     <td></td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled > 0">
                                         <label
-                                            style="color: #0F9D58">{{ bill.invoiceStatus == 1 ? "Reviewed" : "Invoiced" }}</label>
+                                            style="color: #0F9D58">{{ bill.invoiceStatus }}</label>
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
@@ -112,7 +112,7 @@
                                                 <i class="fa fa-plus"></i></button>
                                         </span>
                                         <span>
-                                            <button *ngIf="bill.qtyBilled != 0" class="btn nobg" mat-icon-button
+                                            <button [hidden]="true" class="btn nobg" mat-icon-button
                                                 (click)="shippingEdit(bill, pickticketieminterface)" matTooltip="Edit"
                                                 matTooltipPosition="above" style="font-weight: bold;">
                                                 <i class="fa fa-pencil"></i>
@@ -541,7 +541,7 @@
                 </div>
                 <div style="float: right;" *ngIf="!isViewMode">
                     <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
-                        (click)="PrintInvoice()">Generate Invoice</button>
+                        (click)="GenerateInvoice()">Generate Invoice</button>
                     <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
                         (click)="updateWorkOrderBilling()">Update</button>
                 </div>
@@ -563,10 +563,7 @@
         </div>
     </div>
 </div>
-<!-- <div id="printPost" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"> -->
 <ng-template #printPost let-c="close" let-d="dismiss">
-    <!-- <div class="modal-dialog modal-xl">
-        <div class="modal-content"> -->
     <div class="modal-header">
         <button type="button" class="close" (click)="close()">&times;</button>
         <h4 class="modal-title">Print OR Post Invoice</h4>
@@ -596,7 +593,4 @@
         <button type="button" class="btn btn-primary" (click)="PrintPostInvoice()">Print And Post</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">Close</button>
     </div>
-    <!--</div>
-    </div>
-     </div> -->
 </ng-template>

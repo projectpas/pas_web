@@ -72,13 +72,13 @@ export class WorkOrderQuoteListComponent implements OnInit {
 }
   convertDate(key, data) {
     if (key === 'openDate') {
-        return moment(data['openDate']).format('MM-DD-YYYY');
+        return moment(data['openDate']).format('MM/DD/YYYY');
     }
     else if (key === 'promisedDate') {
-        return moment(data['promisedDate']).format('MM-DD-YYYY');
+        return moment(data['promisedDate']).format('MM/DD/YYYY');
     }
     else  if (key === 'estCompletionDate') {
-        return moment(data['estCompletionDate']).format('MM-DD-YYYY');
+        return moment(data['estCompletionDate']).format('MM/DD/YYYY');
     } else {
         return data[key];
     }
@@ -116,7 +116,7 @@ refreshList() {
         return data['customer']
     }
     else if (key === 'openDate') {
-        return moment(data['openDate']).format('MM-DD-YYYY');
+        return moment(data['openDate']).format('MM/DD/YYYY');
     }
     else if (key === 'customerRequestDateType') {
 
@@ -140,7 +140,7 @@ refreshList() {
     const arrDates = [];
     const arr = value.split(',');
     for (var i = 0; i < arr.length; i++) {
-        arrDates.push(moment(arr[i]).format('MM-DD-YYYY'));
+        arrDates.push(moment(arr[i]).format('MM/DD/YYYY'));
     }
     return arrDates;
   }
