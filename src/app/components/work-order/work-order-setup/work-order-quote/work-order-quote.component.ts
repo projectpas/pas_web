@@ -485,7 +485,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
                     this.creditTerms=res.creditTerm;
-                    this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 0);
+                    this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 2);
                     this.workOrderNumber = res.workOrderNum;
                     this.quoteForm.WorkOrderId = res.workOrderId;
                     this.quoteForm.WorkFlowWorkOrderId = res["workFlowWorkOrderId"];
@@ -984,6 +984,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             .subscribe(
                 (workOrderParts: partsDetail[]) => {
                     this.workOrderPartsDetail = workOrderParts;
+                    this.workOrderPartsDetail.forEach(element => {
+                        element.iscontract=element.contract=='No'? false:true;
+                    });
                 },
                 err => {
                     this.errorHandling(err);
@@ -2267,7 +2270,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.customerPhone = this.quoteListViewData.customerPhone;
             this.customerRef = this.quoteListViewData.customerRef;
             this.accountsReceivableBalance = this.quoteListViewData.arBalance;
-            this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 0);
+            this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 2);
             this.creditTerms = this.quoteListViewData.creditTerms;
             this.salesPerson = this.quoteListViewData.salesPerson;
             this.csr = this.quoteListViewData.csr;
