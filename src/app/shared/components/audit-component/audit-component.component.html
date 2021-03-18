@@ -8,7 +8,7 @@
 </div>
 <div class="modal-body" >
 <div class="tableFixHead history_hg">
-<table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+<table class="table table-bordered" *ngIf="auditHistory && auditHistory.length> 0 else noDatavailable">
     <thead>
         <tr>
             <ng-container *ngFor="let headername of auditHistoryHeader; let z = index;">

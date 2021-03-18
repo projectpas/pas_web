@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="expertise-tr" [hidden]="expert.isDelete" *ngFor="let expert of workFlow.expertise;let i = index">
+        <tr class="expertise-tr" [hidden]="expert.isDeleted" *ngFor="let expert of workFlow.expertise;let i = index">
             <td>
                 <select id="ddlExpertiesType" class="form-control wf-pub-id full-width"
                     [(ngModel)]="expert.expertiseTypeId" required>

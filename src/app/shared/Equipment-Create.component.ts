@@ -114,7 +114,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.vendorUnitPrice = "";
         newRow.workflowChargeTypeId = "";
         newRow.partNumber = "";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
         this.workFlow.equipments.push(newRow);
     }
     clearautoCompleteInput(currentRecord) {
@@ -244,7 +244,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.equipments[this.deletedRowIndex].isDeleted = true;
-            this.workFlow.equipments[this.deletedRowIndex].isDelete = true;
+            this.workFlow.equipments[this.deletedRowIndex].isDeleted = true;
         }
         this.dismissModel();
     }

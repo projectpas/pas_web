@@ -13,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr [hidden]="direction.isDelete" *ngFor="let direction of workFlow.directions; let i = index">
+    <tr [hidden]="direction.isDeleted" *ngFor="let direction of workFlow.directions; let i = index">
       <td>
         <input type="text" value="{{ direction.action }}" [(ngModel)]="direction.action" class="form-control"
           required />

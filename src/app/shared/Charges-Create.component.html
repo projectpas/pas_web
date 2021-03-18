@@ -25,7 +25,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="charge-tr" [hidden]="charge.isDelete" *ngFor="let charge of workFlow.charges; let i = index">
+      <tr class="charge-tr" [hidden]="charge.isDeleted" *ngFor="let charge of workFlow.charges; let i = index">
         <td *ngIf="!isWorkFlow">
           <!-- <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
             (change)="onTaskChange(charge)">
