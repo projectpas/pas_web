@@ -41,7 +41,7 @@
     </div>
 </div> 
 <div>
-    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10 Materials_wo" id="custome_material" [columns]="cols" #materialTble
+    <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="cols" #materialTble
         [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100]"
         (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="header" let-columns>
@@ -69,13 +69,13 @@
                       matTooltipPosition="above"  (click)="removeRollUpList(rowData,i)"></i>   
                 </td> 
                 <td class="table-column-width" *ngFor="let col of columns">
-                    <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " class="m-0 p-0"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
-                    <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" class="m-0 p-0 text-right" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
-                    <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" class="m-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
-                    <p *ngIf=" col.field =='controlNo'" [matTooltip]="rowData.controlNo"  [matTooltipDisabled]="rowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" class="m-0 p-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{rowData.isMultipleControlNo== 'Single' ? rowData[col.field] : rowData.isMultipleControlNo  }}</p>
-                    <p *ngIf=" col.field =='controlId'" [matTooltip]="rowData.controlId"  [matTooltipDisabled]="rowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" class="m-0 p-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplecontrolId== 'Single' ? rowData[col.field] : rowData.isMultiplecontrolId }}</p>
-                    <p *ngIf=" col.field =='receiver'" [matTooltip]="rowData.receiver"  [matTooltipDisabled]="rowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" class="m-0 p-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplereceiver== 'Single' ? rowData[col.field] : rowData.isMultiplereceiver }}</p>
-                    <p *ngIf="col.field =='altEquiv'">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
+                    <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
+                    <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" style="margin:0px !important" class=" p-0 text-right" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
+                    <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
+                    <p *ngIf=" col.field =='controlNo'" [matTooltip]="rowData.controlNo"  [matTooltipDisabled]="rowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{rowData.isMultipleControlNo== 'Single' ? rowData[col.field] : rowData.isMultipleControlNo  }}</p>
+                    <p *ngIf=" col.field =='controlId'" [matTooltip]="rowData.controlId"  [matTooltipDisabled]="rowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplecontrolId== 'Single' ? rowData[col.field] : rowData.isMultiplecontrolId }}</p>
+                    <p *ngIf=" col.field =='receiver'" [matTooltip]="rowData.receiver"  [matTooltipDisabled]="rowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplereceiver== 'Single' ? rowData[col.field] : rowData.isMultiplereceiver }}</p>
+                    <p *ngIf="col.field =='altEquiv'" style="margin:0px !important">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
                     <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='defered'"
                     class="form-control w60 defered-check" [(ngModel)]="rowData.defered">
                     <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
@@ -109,7 +109,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
-            <label id="footer" class="footer">Total:</label>
+            <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
             <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
                 type="text" />
             &nbsp;&nbsp;
