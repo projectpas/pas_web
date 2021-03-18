@@ -40,11 +40,11 @@
             <th colspan="5" class="freight-isview-th">
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
-                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                  <p-radioButton  class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
                     label="T&M - Mark Up" style="margin-top:-10px;" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                   </p-radioButton>
                   <div>
-                    <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                    <select  class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                       [disabled]="isView || costPlusType != 1">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -56,7 +56,7 @@
                     label="Actual"  style="margin-top:-10px;" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                 </div>
                 <div>
-                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
+                  <p-radioButton  class="p-radiobutton-label-horizontal" name="costPlusType"
                     value="3" label="Flat Rate"  style="margin-top:-10px;" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
@@ -68,11 +68,11 @@
             <th colspan="6" class="freight-isview-th">
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
-                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
+                  <p-radioButton (ngModelChange)="getValidFrt()" class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
                     label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                   </p-radioButton>
                   <div>
-                    <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                    <select (ngModelChange)="getValidFrt()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                       [disabled]="isView || costPlusType != 1">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -80,11 +80,11 @@
                   </div>
                 </div>
                 <div class="radio-align">
-                  <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
+                  <p-radioButton (ngModelChange)="getValidFrt()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
                     label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
                 </div>
                 <div>
-                  <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
+                  <p-radioButton (ngModelChange)="getValidFrt()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                     value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
@@ -177,14 +177,14 @@
           </td> -->
           <ng-container *ngIf="isQuote">
             <td class="table-column-width">
-              <select class="form-control" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingAmount = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.amount:'';">
+              <select class="form-control" (ngModelChange)="getValidFrt()" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingAmount = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.amount:'';">
                 <option value="">Select</option>
                 <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                   [value]="bm.value">{{bm.label}}</option>
               </select>
             </td>
             <td class="table-column-width">
-              <select class="form-control select-markup" (change)="markupChanged(dt, 'row')"
+              <select class="form-control select-markup" (ngModelChange)="getValidFrt()" (change)="markupChanged(dt, 'row')"
                 [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
                 <option value="">Select</option>
                 <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -197,7 +197,7 @@
                 <input type="number" [(ngModel)]="dt.fixedAmount" [disabled]="costPlusType != 'Fixed Mat Price'"/>
               </td> -->
             <td class="table-column-width">
-              <input type="text" pInputText pKeyFilter="money" class="form-control text_right" value="{{ formateCurrency(dt.billingAmount) }}" (change)="dt.billingAmount = formateCurrency(dt.billingAmount)" [(ngModel)]="dt.billingAmount"
+              <input type="text" (ngModelChange)="getValidFrt()" pInputText pKeyFilter="money" class="form-control text_right" value="{{ formateCurrency(dt.billingAmount) }}" (change)="dt.billingAmount = formateCurrency(dt.billingAmount)" [(ngModel)]="dt.billingAmount"
                 [disabled]="isView || dt.billingMethodId != '2'" />
             </td>
             <!-- <td>{{ dt.billingAmount }}</td> -->
@@ -287,7 +287,7 @@
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
           <td class="table-column-width">
-            <input type="text" pInputText pKeyFilter="money" (blur)="freightFlatBillingAmount = (freightFlatBillingAmount)?formateCurrency(freightFlatBillingAmount):'0.00'" [(ngModel)]="freightFlatBillingAmount" [disabled]="isView" />
+            <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getValidFrt()" (blur)="freightFlatBillingAmount = (freightFlatBillingAmount)?formateCurrency(freightFlatBillingAmount):'0.00'" [(ngModel)]="freightFlatBillingAmount" [disabled]="isView" />
           </td>
         </ng-container>
         <td class="table-column-width" *ngIf="!isView">&nbsp;</td>
@@ -322,8 +322,8 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
   </ng-template>
-  <button class="btn btn-primary pull-right seve" (click)="createFreightsQuote()" *ngIf="!isView && isQuote">
-    Save Freights
+  <button class="btn btn-primary pull-right seve" (click)="createFreightsQuote()" *ngIf="!isView && isQuote" [disabled]="disableFrt">
+   {{originalList && originalList[0].workOrderQuoteDetailsId ? 'Update': 'Save'}}  Freights
   </button>
 </div>
 
@@ -421,7 +421,7 @@
                     <td><input type="number" name="width{{ i }}"  (ngModelChange)="getActive()" #width="ngModel" [(ngModel)]="f.width"
                         class="form-control w50" /></td>
                     <td>
-                      <p-dropdown placeholder="Select UOM"  appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
+                      <p-dropdown placeholder="Select UOM"  [required]="f.width" appendTo="body" [baseZIndex]="9999" (ngModelChange)="getActive()" [showClear]="true" (input)="onFilterUomAction($event.target.value)" filter="true" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
                         class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
                       </p-dropdown>
                     </td>

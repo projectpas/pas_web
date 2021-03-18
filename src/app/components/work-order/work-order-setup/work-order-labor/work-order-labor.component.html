@@ -3,7 +3,7 @@
     <div class="form-row" >
       <div class="col-md-12">
         <div class="col-md-12 display-flex" *ngIf="!hideHeader">
-          <div class="col-md-3">
+          <div class="col-md-3" *ngIf="!isQuote">
             <!-- <div class="form-group" *ngIf="!isQuote">
               <label for="woID">WO ID </label>
               <p-autoComplete
@@ -679,10 +679,14 @@
                   </button>
               </div>
               <div class="modal-body">
-                <strong>
-                    PN:
+                <strong *ngIf="!isQuote">
+                    Employee Name:
                     <span class="new-label" *ngIf="currentRecord && currentRecord.employeeId">{{currentRecord.employeeId.label}}</span>
                 </strong>
+                <strong *ngIf="isQuote">
+                  Task Name:
+                  <span class="new-label" *ngIf="currentRecord && currentRecord.task">{{currentRecord.task}}</span>
+              </strong>
             </div> 
               <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteLabor(deletingLabourObj.taskName, deletingLabourObj.index)">Yes</button>

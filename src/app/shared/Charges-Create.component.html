@@ -25,17 +25,17 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="charge-tr" [hidden]="charge.isDelete" *ngFor="let charge of workFlow.charges; let i = index">
+      <tr class="charge-tr" [hidden]="charge.isDeleted" *ngFor="let charge of workFlow.charges; let i = index">
         <td *ngIf="!isWorkFlow">
-          <!-- <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
+          <select class="form-contro wf-pub-id full-width" (ngModelChange)="getActive()" [(ngModel)]="charge.taskId" name="task_{{i}}" required
             (change)="onTaskChange(charge)">
             <option value="">--Select--</option>
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
-          </select> -->
+          </select>
 
-          <p-dropdown placeholder="--Select--" required (ngModelChange)="getActive()" optionLabel="description" [showClear]="true" filter="true" name="dimen{{ i }}" [options]="taskList"
+          <!-- <p-dropdown placeholder="--Select--" required (ngModelChange)="getActive()" optionLabel="description" [showClear]="true" filter="true" name="dimen{{ i }}" [options]="taskList"
           class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="charge.taskId">
-        </p-dropdown> 
+        </p-dropdown>  -->
         </td>
         <td>
           <select class="form-control full-width border-radius-4" id="dllChargesType" ppendTo='body' (ngModelChange)="getActive()" (change)="onChargeTypeChange($event, charge)"

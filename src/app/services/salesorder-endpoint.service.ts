@@ -92,6 +92,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getShipingLabelForPrintPrint: string = environment.baseUrl + "/api/SalesOrder/getShipingLabelForPrint";
   private readonly updateServiceClass: string = environment.baseUrl + "/api/SalesOrder/updateServiceClass";
   private readonly getSalesOrderBillingInvoicingPdfURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingPdf";
+  private readonly getSalesOrderBillingInvoicingDataURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingData";
+  private readonly GetSalesOrderBillingInvoicingByIdURL: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderBillingInvoicingById";
+  private readonly updateSalesOrderBillingInvoicingURL: string = environment.baseUrl + "/api/SalesOrder/updateSalesOrderBillingInvoicing";
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(
@@ -729,12 +732,29 @@ export class SalesOrderEndpointService extends EndpointFactory {
   }
 
   getSalesOrderBillingInvoicingPdf(sobillingInvoicingId: number): Observable<any> {
-    //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
     const URL = `${this.getSalesOrderBillingInvoicingPdfURL}/${sobillingInvoicingId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getSalesOrderBillingInvoicingPdf(sobillingInvoicingId));
+      });
+  }
+
+  getSalesOrderBillingInvoicingData(sobillingInvoicingId: number): Observable<any> {
+    const URL = `${this.getSalesOrderBillingInvoicingDataURL}/${sobillingInvoicingId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderBillingInvoicingData(sobillingInvoicingId));
+      });
+  }
+
+  GetSalesOrderBillingInvoicingById(sobillingInvoicingId: number): Observable<any> {
+    const URL = `${this.GetSalesOrderBillingInvoicingByIdURL}/${sobillingInvoicingId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.GetSalesOrderBillingInvoicingById(sobillingInvoicingId));
       });
   }
 
@@ -744,6 +764,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .put(url, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.updateShipping(serviceClass, salesOrderShippingId));
+      });
+  }
+
+  updateSalesOrderBillingInvoicing(sobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
+    let url: string = `${this.updateSalesOrderBillingInvoicingURL}/${sobillingInvoicingId}`;
+    return this.http
+    .put(url, JSON.stringify(billingInvoicing), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.updateSalesOrderBillingInvoicing(sobillingInvoicingId, billingInvoicing));
       });
   }
   //end nitin
