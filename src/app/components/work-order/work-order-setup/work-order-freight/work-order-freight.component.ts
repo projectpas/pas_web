@@ -126,8 +126,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     originalList:any=[]
     ngOnChanges() {
         console.log("gffsas",this.workOrderFreightList[0])
-        this.originalList=this.workOrderFreightList
-        if(this.workOrderFreightList && this.workOrderFreightList[0].workOrderQuoteDetailsId){
+        this.originalList=this.workOrderFreightList;
+        console.log("gffsas",this.originalList[0])
+        if(this.originalList && this.originalList[0].workOrderQuoteDetailsId){
             this.disableFrt=true;
         }else{
             this.disableFrt=false;

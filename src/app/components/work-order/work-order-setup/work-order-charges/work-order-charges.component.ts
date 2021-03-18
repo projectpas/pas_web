@@ -105,7 +105,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
   originalList:any=[];
   ngOnChanges() {
-
+ 
     this.originalList=this.workOrderChargesList;
     console.log("charges",this.originalList[0])
     if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId){
@@ -193,7 +193,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.cdRef.detectChanges();
     this.isEdit = true;
     this.addNewCharges = true;
-    this.editData = rowData;
+    this.editData = rowData; 
   }
   currentRow: any = {};
   openDelete(content, row) {
@@ -298,6 +298,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
 
   }
   saveChargesList(event) {
+    console.log("check")
+
     event['charges'].forEach(
       x => {
         x.billingAmount = Number(x.extendedCost.toString().split(',').join('')).toFixed(2);
@@ -307,10 +309,14 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     )
     this.saveChargesListForWO.emit(event);
     $('#addNewCharges').modal('hide');
-    this.disableCrg=false;
+  setTimeout(() => {
+    this.getValidCrg()
+  }, 2000);
   }
 
   updateChargesList(event) {
+    console.log("check2")
+    this.disableCrg=false;
     if (this.isQuote && this.isEdit) {
       this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex] = event.charges[0];
       $('#addNewCharges').modal('hide');
@@ -321,6 +327,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       $('#addNewCharges').modal('hide');
       this.isEdit = false;
     }
+    setTimeout(() => {
+      this.getValidCrg()
+    }, 2000);
   }
 
   getTaskName(id) {
