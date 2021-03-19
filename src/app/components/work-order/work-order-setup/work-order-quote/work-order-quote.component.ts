@@ -222,10 +222,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }, {
             header: 'Freight Cost',
             field: 'freightCost'
-        }, {
-            header: 'Exclusion Cost',
-            field: 'exclusionCost'
-        }, {
+        }, 
+        // {
+        //     header: 'Exclusion Cost',
+        //     field: 'exclusionCost'
+        // },
+         {
             header: 'Direct Cost',
             field: 'directCost'
         }, {
@@ -2581,26 +2583,27 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             .subscribe(
                 (res) => {
              if(res && res.length !=0){
-                this.woQuoteAnalysisList = res.forEach(x => {
-                    x.marginPercentage=x.marginPercentage ? formatNumberAsGlobalSettingsModule(x.marginPercentage, 2) : '0.00';
-                    x.margin= x.margin ? formatNumberAsGlobalSettingsModule(x.margin, 2): '0.00';
-                    x.revenue= x.revenue ? formatNumberAsGlobalSettingsModule(x.revenue, 2): '0.00';
-                    x.directCostPercentage= x.directCostPercentage ? formatNumberAsGlobalSettingsModule(x.directCostPercentage, 2): '0.00';
-                    x.directCost= x.directCost ? formatNumberAsGlobalSettingsModule(x.directCost, 2): '0.00';
-                    x.freightCost= x.freightCost ? formatNumberAsGlobalSettingsModule(x.freightCost, 2): '0.00';
-                    x.chargesCost= x.chargesCost ? formatNumberAsGlobalSettingsModule(x.chargesCost, 2): '0.00';
-                    x.overHeadCost= x.overHeadCost ? formatNumberAsGlobalSettingsModule(x.overHeadCost, 2): '0.00';
-
-                    x.overHeadPercentage= x.overHeadPercentage ? formatNumberAsGlobalSettingsModule(x.overHeadPercentage, 2): '0.00';
-                    x.laborRevPercentage= x.laborRevPercentage ? formatNumberAsGlobalSettingsModule(x.laborRevPercentage, 2): '0.00';
-                    x.laborCost= x.laborCost ? formatNumberAsGlobalSettingsModule(x.laborCost, 2): '0.00';
-                    x.partsCost= x.partsCost ? formatNumberAsGlobalSettingsModule(x.partsCost, 2): '0.00';
-                    x.partsRevPercentage= x.partsRevPercentage ? formatNumberAsGlobalSettingsModule(x.partsRevPercentage, 2): '0.00';
-
-                });
+                this.woQuoteAnalysisList = res.map(x =>{ return {
+                    ...x,
+                    marginPercentage:x.marginPercentage ? formatNumberAsGlobalSettingsModule(x.marginPercentage, 2) : '0.00',
+                    margin: x.margin ? formatNumberAsGlobalSettingsModule(x.margin, 2): '0.00',
+                    revenue: x.revenue ? formatNumberAsGlobalSettingsModule(x.revenue, 2): '0.00',
+                    directCostRevenuePercentage: x.directCostRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.directCostRevenuePercentage, 2): '0.00',
+                    directCost: x.directCost ? formatNumberAsGlobalSettingsModule(x.directCost, 2): '0.00',
+                    freightCost: x.freightCost ? formatNumberAsGlobalSettingsModule(x.freightCost, 2): '0.00',
+                   chargesCost: x.chargesCost ? formatNumberAsGlobalSettingsModule(x.chargesCost, 2): '0.00',
+                    overHeadCost: x.overHeadCost ? formatNumberAsGlobalSettingsModule(x.overHeadCost, 2): '0.00',
+                   overHeadCostRevenuePercentage: x.overHeadCostRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.overHeadCostRevenuePercentage, 2): '0.00',
+                   laborRevenuePercentage: x.laborRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.laborRevenuePercentage, 2): '0.00',
+                  laborCost: x.laborCost ? formatNumberAsGlobalSettingsModule(x.laborCost, 2): '0.00',
+                    materialCost: x.materialCost ? formatNumberAsGlobalSettingsModule(x.materialCost, 2): '0.00',
+                   materialRevenuePercentage: x.materialRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.materialRevenuePercentage, 2): '0.00',
+                   totalLaborCost  : x.totalLaborCost ? formatNumberAsGlobalSettingsModule(x.totalLaborCost, 2): '0.00'
+                }});
              }else{
                 this.woQuoteAnalysisList=[];
              }
+             console.log("hello",this.woQuoteAnalysisList)
                 },
                 (err) => {
                     this.errorHandling(err);

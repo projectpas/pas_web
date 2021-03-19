@@ -585,8 +585,8 @@
                 </div>
             </div>
            
-            <div class="col-sm-12">
-            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'approvalProcess'">
+            <div class="col-sm-12" *ngIf="approvalGridActiveTab === 'approvalProcess'">
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
                 <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
                     <table class="table table-bordered header-table-width"
                            id="mpn-list-table">
@@ -776,8 +776,9 @@
                                 *ngFor="let approver of woQuoteAnalysisList; let i=index;">
                                 <ng-container *ngFor="let field of woQuoteAnalysisHeader">
                                     <td >
-                                        <label [ngClass]="(field.field == 'revenue' || field.field == 'materialCost' || field.field == 'totalLaborCost' || field.field == 'laborCost' || field.field == 'overHeadCost' || field.field == 'otherCost' || field.field == 'directCost' || field.field == 'materialRevenuePercentage' || field.field == 'laborRevenuePercentage' || field.field == 'overHeadCostRevenuePercentage' || field.field == 'directCostRevenuePercentage' || field.field == 'marginPercentage' || field.field == 'margin')?'text-align-right':''">{{(field.field == 'revenue' || field.field == 'materialCost' || field.field == 'totalLaborCost' || field.field == 'laborCost' || field.field == 'overHeadCost' || field.field == 'otherCost' || field.field == 'directCost' || field.field == 'materialRevenuePercentage' || field.field == 'laborRevenuePercentage' || field.field == 'overHeadCostRevenuePercentage' || field.field == 'directCostRevenuePercentage' || field.field == 'marginPercentage' || field.field == 'margin')?formateCurrency(approver[field.field]):approver[field.field]}}</label>
+                                        <label [ngClass]="(field.field == 'revenue' || field.field == 'materialCost' || field.field == 'totalLaborCost' || field.field == 'laborCost' || field.field == 'overHeadCost' || field.field == 'otherCost' || field.field == 'directCost' || field.field == 'materialRevenuePercentage' || field.field == 'laborRevenuePercentage' || field.field == 'overHeadCostRevenuePercentage' || field.field == 'directCostRevenuePercentage' || field.field == 'marginPercentage' || field.field == 'margin')?'text-align-right':''">{{approver[field.field]}}</label>
                                     </td>
+                                    
                                 </ng-container>
                             </tr>
                         </tbody>
