@@ -292,6 +292,7 @@ export class WorkOrderAddComponent implements OnInit {
         ];
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
+            console.log("changes")
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
             this.commonService.getCustomerNameandCode("", this.workOrderGeneralInformation.workOrderTypeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
@@ -354,7 +355,7 @@ export class WorkOrderAddComponent implements OnInit {
             )
         }
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
-            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? (formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) + '.00') : '0.00';
+            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? (formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) + '.00') : '0.00';
         }
         this.getAllEmployees('');
         this.getAllWorkScpoes('');
@@ -386,25 +387,9 @@ export class WorkOrderAddComponent implements OnInit {
         if (changes.workorderSettings) {
             this.workorderSettings = this.workorderSettings;
         }
-        // if(this.isView && this.workOrderGeneralInformation){
-        //     this.workOrderGeneralInformation.customerId = this.workOrderGeneralInformation.customerDetails.customerId;
-        //     this.commonService.getCustomerNameandCode("", this.workOrderGeneralInformation.workOrderTypeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-        //         this.customerNamesList = res;
-        //         for(let i = 0; i< this.customerNamesList.length; i++){
-        //             if(this.customerNamesList[i].customerId == this.workOrderGeneralInformation.customerId){
-        //                 this.workOrderGeneralInformation.customerId = this.customerNamesList[i];
-        //                 this.selectCustomer(this.customerNamesList[i], this.workOrderGeneralInformation,'OnChange');
-        //             }
-        //         }
-        //     })
-        //     this.workOrderGeneralInformation.partNumbers.forEach(
-        //         x => {
-        //             x.masterPartId = x.woPart;
-        //         }
-        //     )
-        // }
+
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
-            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) : this.workOrderGeneralInformation.creditLimit;
+            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : this.workOrderGeneralInformation.creditLimit;
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -549,7 +534,7 @@ export class WorkOrderAddComponent implements OnInit {
                 })
             }
             if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
-                this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 0) : this.workOrderGeneralInformation.creditLimit;
+                this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : this.workOrderGeneralInformation.creditLimit;
             }
 
             this.workFlowWorkOrderId = data.workFlowWorkOrderId;
@@ -712,7 +697,7 @@ export class WorkOrderAddComponent implements OnInit {
         if (this.isView == false && type == 'formHtml') {
             this.customerWarnings(object.customerId);
         }
-        currentRecord.creditLimit = object.creditLimit;
+        currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2):'';
         currentRecord.creditTermsId = object.creditTermsId;
         currentRecord.creditTerm = object.creditTerm;
         this.myCustomerContact = object.customerContact;
@@ -1443,6 +1428,7 @@ export class WorkOrderAddComponent implements OnInit {
                 element.partNumber=element.partNumber.name
             });
         }
+        workFlowDataObject.publication.forEach(element => {element.allDashNumbers=""; })
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;

@@ -283,11 +283,11 @@
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">TAX RATE</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.taxRate}}</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.taxRate | number : '1.2-2'}} %</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">SALES TAX</td>
-                                    <td style="text-align: right;"> 0.00 </td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.tax}} </td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">OTHER TAX</td>

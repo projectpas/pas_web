@@ -504,6 +504,7 @@ export class WorkOrderListComponent implements OnInit {
                         promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
                         promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
 

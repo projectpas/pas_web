@@ -1,4 +1,4 @@
-<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<p-breadcrumb [model]="breadcrumbs" *ngIf="!isWorkOrder || isView"></p-breadcrumb>
 <div class="x_content margin-bottom-0">
     <div class="card" *ngIf="!isQuote">
         <div class="card-header header">
@@ -11,7 +11,7 @@
                         </button>
                     </h4>
                 </div>
-                <div>
+                <div *ngIf="!isWorkOrder || isView">
                     <button type="button" class="btn-sm header-button pull-right"
                         [routerLink]="['/workflowmodule/workflowpages/app-workflow-list']">
                         Workflow List

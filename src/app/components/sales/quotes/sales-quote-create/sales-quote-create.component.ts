@@ -226,8 +226,7 @@ export class SalesQuoteCreateComponent implements OnInit {
 
     setTimeout(() => {
       this.getSOQInstance(true);
-    },
-      2200);
+    }, 1200);
 
     if (this.id) {
       this.getMarginSummary()

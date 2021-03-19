@@ -1,3 +1,11 @@
+
+<div class="header" >
+  <div class="row">
+      <div class="col">
+          <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Labor</h4>
+      </div>
+  </div>
+</div>
 <div class="card">
   <div class="card-body padding-10" *ngIf="!frombilling">
     <div class="form-row" >
@@ -63,7 +71,7 @@
             </div> -->
           </div>
           <!-- *ngIf="!isQuote" -->
-          <div class="col-md-3 col-offset-3 task-detail" >
+          <div class="col-md-3 col-offset-3 task-detail" [ngClass]="{'col-offset-3' :!isQuote}">
               <div class="form-row" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
                 <div >
                   <!-- <p-radioButton  (ngModelChange)="checkValid(4)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" label="Labour hours" [value]="1"
@@ -490,11 +498,11 @@
                 <td  class="text-center">
                     <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
                       (click)="showDeleteLabourPopup(task.description,rec, i)"><i class="fa fa-trash"></i></button> </span>
-                      <span *ngIf="isQuote">
+                      <!-- <span *ngIf="isQuote">
                         <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rec)"
                             matTooltip="History" matTooltipPosition="above"><i
                                 class="fa fa-history"></i></a>
-                    </span>
+                    </span> -->
                     </td>
               </tr>
               <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">
