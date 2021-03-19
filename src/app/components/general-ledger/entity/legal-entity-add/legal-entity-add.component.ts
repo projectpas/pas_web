@@ -101,7 +101,7 @@ export class EntityAddComponent implements OnInit {
             this.generalInformation.isAddressForBilling = true;
             this.generalInformation.isAddressForShipping = true;
             this.generalInformation.isBalancingEntity = true;
-            this.generalInformation.companyCode = "Creating";
+            this.generalInformation.companyCode = "";
             this.CurrencyData('');
             this.CountryData('');
             this.getLegalEntityList('');
@@ -158,6 +158,7 @@ export class EntityAddComponent implements OnInit {
     }
 
     getLegalEntityList(strText = '') {
+        
         if (this.legalEntityId > 0)
             this.arrayEntitylist.push(this.legalEntityId);
         if (this.arrayEntitylist.length == 0) {
@@ -165,10 +166,15 @@ export class EntityAddComponent implements OnInit {
         }
         this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayEntitylist.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.parentLegalEntityList = response;
+            this.parentLegalEntity = this.parentLegalEntityList;
+            this.parentLegalEntity = [...this.parentLegalEntityList.filter(x => {
+                return x.label.toLowerCase().includes(strText.toLowerCase())
+            })]
+            this.arrayEntitylist = [];
         }, err => {
             this.isSpinnerVisible = false;
         });
-    }
+    }   
 
     getEntityDataById(id) {
         this.legalEntityService.getEntityDataById(id).subscribe(res => {
@@ -198,12 +204,18 @@ export class EntityAddComponent implements OnInit {
         })
     }
 
+    // filterParentLegalEntity(event) {
+    //     this.parentLegalEntity = this.parentLegalEntityList;
+    //     this.parentLegalEntity = [...this.parentLegalEntityList.filter(x => {
+    //         return x.label.toLowerCase().includes(event.query.toLowerCase())
+    //     })]
+    // }
+
     filterParentLegalEntity(event) {
-        this.parentLegalEntity = this.parentLegalEntityList;
-        this.parentLegalEntity = [...this.parentLegalEntityList.filter(x => {
-            return x.label.toLowerCase().includes(event.query.toLowerCase())
-        })]
-    }
+		if (event.query !== undefined && event.query !== null) {
+			this.getLegalEntityList(event.query);
+		}
+	}
 
     checkCountryNow(value) {
         if (value.length > 0)
@@ -473,9 +485,9 @@ export class EntityAddComponent implements OnInit {
                 // this.route.navigateByUrl(`generalledgermodule/generalledgerpage/app-legal-entity-edit/${this.legalEntityId}`);
                 // this.LoadData();
             }, err => {
+                this.getEntityDataById(this.legalEntityId)
                 this.isSpinnerVisible=false;
             });
-
         }
     }
 

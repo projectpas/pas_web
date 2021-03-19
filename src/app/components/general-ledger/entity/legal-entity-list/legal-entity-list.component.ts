@@ -103,7 +103,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	legalEntityColumns = [
 		{ field: 'name', header: 'Legal entity Name' },
 		{ field: 'companyName', header: 'Company Name' },
-		{ field: 'companyCode', header: 'Company Code' },
+		{ field: 'companyCode', header: 'Legal Entity Code' },
 		{ field: 'phoneNumber', header: 'Phone Number' },
 		{ field: 'address1', header: 'Address1' },
 		{ field: 'address2', header: 'Address2' },
@@ -738,6 +738,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				this.lockboxing = {
 					...this.lockboxing,
 					internationalBankName: res[0].bankName,
+					bankLocation1: res[0].bankLocation1,
+					bankLocation2: res[0].bankLocation2,
 					internationalIntermediateBank: res[0].intermediaryBank,
 					internationalBenficiaryBankName: res[0].beneficiaryBank,
 					internationalBankAccountNumber: res[0].beneficiaryBankAccount,
@@ -1009,10 +1011,10 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			this.auditHistoryHeaders = [
 				{ header: 'Bank Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
-				{ header: 'Benficiary', field: 'beneficiaryBank' },
+				{ header: 'Beneficiary Bank', field: 'beneficiaryBank' },
 				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
 				{ header: 'ABA Number', field: 'aba' },
-				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -1031,7 +1033,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			this.auditHistoryHeaders = [
 				{ header: 'Bank Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
-				{ header: 'Benficiary Bank Name', field: 'beneficiaryBankName' },
+				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
 				{ header: 'Bank Account Number', field: 'accountNumber' },
 				{ header: 'ABA Number', field: 'aba' },
 				{ header: 'SWIFT Code', field: 'swiftCode' },
