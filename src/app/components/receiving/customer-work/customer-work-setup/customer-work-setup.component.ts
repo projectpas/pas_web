@@ -960,7 +960,6 @@ export class CustomerWorkSetupComponent implements OnInit {
     onSaveCustomerReceiving() {
         this.gettagTypeIds = [];
 
-debugger;
         const receivingForm = {
             ...this.receivingForm,
             customerId: getValueFromObjectByKey('customerId', this.receivingForm.customerId),
