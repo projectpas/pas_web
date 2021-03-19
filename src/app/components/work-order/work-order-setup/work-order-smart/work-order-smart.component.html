@@ -11,7 +11,7 @@
   </div>
   <div *ngIf="!isEdit">
     <!-- using add form as subworkOrder also -->
-    <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
+    <app-work-order-add [isEdit]="isEdit" [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
       [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList"
       [jobTitles]="jobTitles" [salesPersonOriginalList]="salesPersonOriginalList"

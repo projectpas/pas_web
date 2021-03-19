@@ -35,7 +35,7 @@ export class WorkOrderSmartComponent implements OnInit {
     recCustomerId: any = 0;
     editWorkOrderGeneralInformation: any;
     workOrderGeneralInformation: workOrderGeneralInfo = new workOrderGeneralInfo();
-    isEdit: boolean = false;
+    isEdit: boolean ;
     currencyList: any;
     legalEntityList: any;
     private onDestroy$: Subject<void> = new Subject<void>();
@@ -71,12 +71,7 @@ export class WorkOrderSmartComponent implements OnInit {
         }
     }
     ngOnInit() {
-        this.getAllWorkOrderTypes();
-        this.getAllWorkOrderStatus();
-        this.getAllCreditTerms();
-        this.getJobTitles();
-        this.getAllWorkOrderStages();
-        this.getAllExpertiseType();
+    
         if (this.isSubWorkOrder == false) {
         } else {
             this.conditionList = this.conditionListfromSubWo;
@@ -101,9 +96,10 @@ export class WorkOrderSmartComponent implements OnInit {
             this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 setTimeout(() => {
                     this.isSpinnerEnable = false;
-                }, 2000)
-                this.getPartNosByCustomer(res.customerId, 0);
+                }, 3000)
                 this.isEdit = true;
+                this.getPartNosByCustomer(res.customerId, 0);
+             
                 const workOrderData = res;
                 const data = {
                     ...res,
@@ -126,6 +122,12 @@ export class WorkOrderSmartComponent implements OnInit {
         else {
             this.getWorkOrderDefaultSetting();
         }
+        this.getAllWorkOrderTypes();
+        this.getAllWorkOrderStatus();
+        this.getAllCreditTerms();
+        this.getJobTitles();
+        this.getAllWorkOrderStages();
+        this.getAllExpertiseType();
     }
     ngOnChanges(changes: SimpleChanges) {
         this.subWoMpnGridUpdated = this.subWoMpnGridUpdated;

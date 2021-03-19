@@ -2312,7 +2312,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 delete element.partName
             });
         }
-        if (souceData.publication && souceData.publication.length != 0) {
+        if (souceData.publication && souceData.publication.length != 0) { 
             souceData.publication.forEach(element => {
                 delete element.allDashNumbers;
                 delete element.aircraft;
