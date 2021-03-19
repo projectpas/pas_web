@@ -329,7 +329,7 @@
         </div>
             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
                 <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
-                    <table class="table table-bordered mpn-list-table"
+                    <table class="table table-bordered lastcol-fix mpn-list-table"
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
@@ -522,7 +522,7 @@
                                 <!-- <label>{{workOrderPart['workScope']}}</label> -->
                                 <!-- <input [value]="workOrderPart['workScope']" readonly/> -->
                                 <!-- </td> -->
-                                <td class="flex_d">
+                                <td class="flex_d" style="padding-top:5px;padding-bottom: 6px;">
                                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
