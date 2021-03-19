@@ -23,7 +23,7 @@ import { ConfigurationService } from '../../../../services/configuration.service
 import * as moment from 'moment';
 import { CommonService } from '../../../../services/common.service';
 import { DatePipe } from '@angular/common';
-import { debug } from 'console';
+
 @Component({
 	selector: 'app-legal-entity-contact',
 	templateUrl: './legal-entity-contact.component.html',
