@@ -2,7 +2,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Router, } from '@angular/router';
 // declare var $ : any;
-declare var $ : any;
+declare var $: any;
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../services/auth.service';
 import { FormBuilder } from '@angular/forms';
@@ -13,16 +13,17 @@ import { MasterComapnyService } from '../../../../services/mastercompany.service
 import { CustomerService } from '../../../../services/customer.service';
 import { CustomerContactModel } from '../../../../models/customer-contact.model';
 import { MatDialog } from '@angular/material';
-import {  getValueFromObjectByKey, editValueAssignByCondition, listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
+import { getValueFromObjectByKey, getObjectById, editValueAssignByCondition, listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { AtaSubChapter1Service } from '../../../../services/atasubchapter1.service';
 
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 
-import { emailPattern, urlPattern,titlePattern, phonePattern } from '../../../../validations/validation-pattern';
+import { emailPattern, urlPattern, titlePattern, phonePattern } from '../../../../validations/validation-pattern';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import * as moment from 'moment';
 import { CommonService } from '../../../../services/common.service';
 import { DatePipe } from '@angular/common';
+
 @Component({
 	selector: 'app-legal-entity-contact',
 	templateUrl: './legal-entity-contact.component.html',
@@ -37,7 +38,7 @@ export class EntityContactComponent implements OnInit {
 	@Input() editGeneralInformationData;
 	@Input() add_ataChapterList;
 	phonePattern = phonePattern();
-	@Input() legalEntityDataFromExternalComponents:any;
+	@Input() legalEntityDataFromExternalComponents: any;
 	// @Input() ataListDataValues;
 	@Output() tab = new EventEmitter<any>();
 	@Output() refreshCustomerContactMapped = new EventEmitter();
@@ -70,6 +71,7 @@ export class EntityContactComponent implements OnInit {
 	formData = new FormData();
 	entityContactsColumns = [
 		{ field: 'tag', header: 'Tag' },
+		{ field: 'attention', header: 'Attention' },
 		{ field: 'firstName', header: 'First Name' },
 		{ field: 'middleName', header: 'Middle Name' },
 		{ field: 'lastName', header: 'Last Name' },
@@ -117,7 +119,7 @@ export class EntityContactComponent implements OnInit {
 	auditHistory: any[] = [];
 	companyName: string;
 	companyCode: string;
-	@ViewChild('ATAADD',{static:false}) myModal;
+	@ViewChild('ATAADD', { static: false }) myModal;
 	isViewMode: boolean = false;
 
 	constructor(private router: ActivatedRoute,
@@ -138,75 +140,77 @@ export class EntityContactComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.statusForContact = 'Active';
+		this.status = 'Active';
+		if (this.isViewMode == false) {
+			if (this.editMode) {
+				this.id = this.editGeneralInformationData.legalEntityId;
+				if (typeof this.editGeneralInformationData.name != 'string') {
+					this.companyName = this.editGeneralInformationData.name.label;
+				} else {
+					this.companyName = this.editGeneralInformationData.name;
+				}
+				this.companyCode = this.editGeneralInformationData.companyCode;
+			}
+			else {
+				if (this.customerDataFromExternalComponents) {
+					this.id = this.customerDataFromExternalComponents.legalEntityId;
+					this.companyCode = this.customerDataFromExternalComponents.companyCode;
+					if (typeof this.customerDataFromExternalComponents.name != 'string') {
+						this.companyName = this.customerDataFromExternalComponents.name.label;
+					} else {
+						this.companyName = this.customerDataFromExternalComponents.name;
+					}
+				}
+				else {
+					if (this.savedGeneralInformationData) {
+						this.id = this.savedGeneralInformationData.legalEntityId;
+						this.companyCode = this.savedGeneralInformationData.companyCode;
+						if (typeof this.savedGeneralInformationData.name != 'string') {
+							this.companyName = this.savedGeneralInformationData.name.label;
+						} else {
+							this.companyName = this.savedGeneralInformationData.name;
 
-		this.statusForContact='Active';
-		this.status='Active';
-if(this.isViewMode==false){
-	if (this.editMode) {
-		this.id = this.editGeneralInformationData.legalEntityId;
-	
-		if(typeof this.editGeneralInformationData.name != 'string'){
-			this.companyName = this.editGeneralInformationData.name.label;
-		}else{
-			this.companyName = this.editGeneralInformationData.name;
-		}
-		this.companyCode = this.editGeneralInformationData.companyCode;
-	}
-	else {
-		if (this.customerDataFromExternalComponents) {
-			this.id = this.customerDataFromExternalComponents.legalEntityId;
-			this.companyCode = this.customerDataFromExternalComponents.companyCode;
-	
-			if(typeof this.customerDataFromExternalComponents.name != 'string'){
-				this.companyName = this.customerDataFromExternalComponents.name.label;
-			}else{
-				this.companyName = this.customerDataFromExternalComponents.name;
+						}
+					}
+				}
 			}
 		}
-		else {
-		if(this.savedGeneralInformationData){
-			this.id = this.savedGeneralInformationData.legalEntityId;
-			this.companyCode = this.savedGeneralInformationData.companyCode;
-			if(typeof this.savedGeneralInformationData.name != 'string'){
-				this.companyName = this.savedGeneralInformationData.name.label;	
-			}else{
-				this.companyName = this.savedGeneralInformationData.name;
-				
-			}
-		}
-		}
 	}
-}
 
-	} 
-	legalEntityCode:any;
-	legalEntityName:any;
+	legalEntityCode: any;
+	legalEntityName: any;
 	ngOnChanges(changes: SimpleChanges) {
 		for (let property in changes) {
-             if (property == 'legalEntityDataFromExternalComponents') {
-                if (changes[property].currentValue != {}) {
-                    this.id = this.legalEntityDataFromExternalComponents.legalEntityId;
+			if (property == 'legalEntityDataFromExternalComponents') {
+				if (changes[property].currentValue != {}) {
+					this.id = this.legalEntityDataFromExternalComponents.legalEntityId;
 					this.companyCode = this.legalEntityDataFromExternalComponents.legalEntityCode;
 					this.companyName = this.legalEntityDataFromExternalComponents.name;
-                    this.isViewMode = true;
-					this.currentstatusForCotnact='Active';
-					this.statusForContact='Active';
-				
-               setTimeout(() => {
-		if(this.isViewMode==false){
-
-			this.billingStatusForContact(this.statusForContact);
+					this.isViewMode = true;
+					this.currentstatusForCotnact = 'Active';
+					this.statusForContact = 'Active';
+					setTimeout(() => {
+						if (this.isViewMode == false) {
+							this.billingStatusForContact(this.statusForContact);
+						}
+					}, 1200);
+				}
+			}
 		}
-			   }, 1200);
-                }
-            }
-		} 
 
-      }
+	}
 
 	get userName(): string {
 		return this.authService.currentUser ? this.authService.currentUser.userName : "";
 	}
+
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
+
 	setEditArray: any = [];
 	getAllContacts(value, type) {
 		this.setEditArray = [];
@@ -216,60 +220,56 @@ if(this.isViewMode==false){
 			this.contactName = 'FirstName';
 		} else if (type == 2) {
 			this.contactName = 'MiddleName';
-		} else if (type == 3){
+		} else if (type == 3) {
 			this.contactName = 'LastName';
 		}
 		if (this.contactName != undefined) {
 			// this.commonService.autoSuggestionSmartDropDownList('Contact', 'ContactId', this.contactName, strText, true, 20, this.setEditArray.join()).subscribe(res => {
-				this.commonService.autoSuggestionSmartDropDownContactList(this.contactName,strText,true,this.setEditArray.join()).subscribe(res => {
-			this.contactsListOriginal = res;
-			// .filter((v,i,a)=>a.findIndex(t=>(t.value == v.value))==i);
+			this.commonService.autoSuggestionSmartDropDownContactList(this.contactName, strText, true, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
+				this.contactsListOriginal = res;
+				// .filter((v,i,a)=>a.findIndex(t=>(t.value == v.value))==i);
 				this.firstNamesList = [];
 				this.middleNamesList = [];
 				this.lastNamesList = [];
 				if (type == 1) {
 					this.firstNamesList = [...this.contactsListOriginal];
-					if(this.isEditButton==true){
+					if (this.isEditButton == true) {
 						this.firstNamesList.forEach(element => {
-							if(element.label==this.contactInformation.firstName){
-								this.contactInformation.firstName=element
+							if (element.label == this.contactInformation.firstName) {
+								this.contactInformation.firstName = element
 							}
 						});
-					
-						
+
+
 					}
 				} else if (type == 2) {
 					this.middleNamesList = [...this.contactsListOriginal];
-					if(this.isEditButton==true){
+					if (this.isEditButton == true) {
 						this.middleNamesList.forEach(element => {
-							if(element.label==this.contactInformation.middleName){
-								this.contactInformation.middleName=element;
+							if (element.label == this.contactInformation.middleName) {
+								this.contactInformation.middleName = element;
 							}
 						});
 					}
-				} else if (type == 3){
+				} else if (type == 3) {
 					this.lastNamesList = [...this.contactsListOriginal];
-					if(this.isEditButton==true){
+					if (this.isEditButton == true) {
 						this.lastNamesList.forEach(element => {
-							if(element.label==this.contactInformation.lastName){
-								this.contactInformation.lastName=element;
+							if (element.label == this.contactInformation.lastName) {
+								this.contactInformation.lastName = element;
 							}
 						});
-				
+
 					}
 				}
-
-
-			
-
-
-
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
 			});
 		}
 	}
+
 	contactName: any;
 	filterFirstNames(event) {
 		if (event.query != undefined && event.query != "") {
@@ -278,6 +278,7 @@ if(this.isViewMode==false){
 			this.getAllContacts('', 1)
 		}
 	}
+
 	filterMiddleNames(event) {
 		if (event.query != undefined && event.query != "") {
 			this.getAllContacts(event.query, 2)
@@ -285,6 +286,7 @@ if(this.isViewMode==false){
 			this.getAllContacts('', 2);
 		}
 	}
+
 	filterLastNames(event) {
 		if (event.query != undefined && event.query != "") {
 			this.getAllContacts(event.query, 3)
@@ -295,13 +297,12 @@ if(this.isViewMode==false){
 
 	patternMobilevalidationWithSpl(event: any) {
 		const pattern = /[0-9\+\-()\ ]/;
-
 		let inputChar = String.fromCharCode(event.charCode);
 		if (event.keyCode != 8 && !pattern.test(inputChar)) {
 			event.preventDefault();
 		}
-
 	}
+
 	parsedText(text) {
 		if (text) {
 			const dom = new DOMParser().parseFromString(
@@ -311,8 +312,9 @@ if(this.isViewMode==false){
 			return decodedString;
 		}
 	}
-	async saveContactInformation() {
 
+	async saveContactInformation() {
+		debugger
 		// create a new contact in the contact table
 		if (this.contactInformation.firstName && typeof this.contactInformation.firstName != 'string') {
 			this.contactInformation.firstName = editValueAssignByCondition('label', this.contactInformation.firstName);
@@ -323,16 +325,17 @@ if(this.isViewMode==false){
 		if (this.contactInformation.lastName && typeof this.contactInformation.lastName != 'string') {
 			this.contactInformation.lastName = editValueAssignByCondition('label', this.contactInformation.lastName);
 		}
+		// if(this.contactInformation.tag){
+		// 	this.contactInformation.tag = editValueAssignByCondition('tagName', this.contactInformation.tag),			
+		// 	this.contactInformation.contactTagId = this.contactInformation.tag == "NA" ? null : editValueAssignByCondition('contactTagId', this.contactInformation.tag)
+		// }
 		const data = {
 			...this.contactInformation, createdBy: this.userName, updatedBy: this.userName, isActive: true,
-			masterCompanyId: this.authService.currentUser.masterCompanyId,
+			masterCompanyId: this.currentUserMasterCompanyId,
 			legalEntityId: this.id,
-
-			// middleName: editValueAssignByCondition('middleName', this.contactInformation.middleName),
-			// lastName: editValueAssignByCondition('lastName', this.contactInformation.lastName)
-
+			tag: editValueAssignByCondition('tagName', this.contactInformation.tag),
+			contactTagId: this.contactInformation.tag == "NA" ? null : editValueAssignByCondition('contactTagId', this.contactInformation.tag)
 		}
-
 		await this.legalEntityService.newAddContactInfo(data).subscribe(res => {
 			const responseForCustomerCreate = res;
 			this.billingStatusForContact(this.statusForContact);
@@ -346,8 +349,9 @@ if(this.isViewMode==false){
 			);
 		}, err => {
 			this.isEditButton = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
+			//const errorLog = err;
+			//this.errorMessageHandler(errorLog);
 		})
 	}
 
@@ -355,6 +359,7 @@ if(this.isViewMode==false){
 		this.sourceViewforContact = rowData;
 
 	}
+
 	viewSelectedRowdbl(content, rowData) {
 		if (rowData && rowData.contactId) {
 			this.legalEntityService.getLegalEntityContactById(rowData.contactId).subscribe(res => {
@@ -362,83 +367,80 @@ if(this.isViewMode==false){
 					...res[0]
 				}
 				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				//const errorLog = err;
+				//this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
-
-
-
 	}
 
 	onAddContactInfo() {
 		this.isEditButton = false;
 		this.contactInformation = new CustomerContactModel()
-
-
 	}
-	ismemohideOnSave:boolean=false;
+
+	ismemohideOnSave: boolean = false;
 	onClickMemo() {
 		this.memoPopupContent = this.contactInformation.notes;
-		this.ismemohideOnSave=true;
+		this.ismemohideOnSave = true;
 	}
+
 	onClickPopupSave() {
 		this.enableUpdateButton = true;
 		this.contactInformation.notes = this.memoPopupContent;
 	}
-	enableSaveText()
-{
-	this.ismemohideOnSave=false;
-	if(this.memoPopupContent==''){
-		this.ismemohideOnSave=true;
+
+	enableSaveText() {
+		this.ismemohideOnSave = false;
+		if (this.memoPopupContent == '') {
+			this.ismemohideOnSave = true;
+		}
 	}
-}	editContactId: any;
-	editCustomerContact(rowData) {
-	this.disableSave=true;
+
+	editContactId: any;
+	editCustomerContact(rowData) {		
+		this.disableSave = true;
 		this.isPrimatyContactData = rowData.isDefaultContact;
-		this.legalEntityService.getLegalEntityContactById(rowData.contactId).subscribe(res => {
+		this.legalEntityService.getLegalEntityContactById(rowData.contactId).subscribe(res => {			
 			this.isEditButton = true;
 			this.contactInformation = res[0];
 			this.getAllContacts(rowData.firstName, 1);
 			this.getAllContacts(rowData.middleName, 2);
-			this.getAllContacts(rowData.lastName, 3);
-
-			this.editContactId = res[0].contactId;
-		
+			this.getAllContacts(rowData.lastName, 3);				
+			this.editContactId = res[0].contactId;			
+			if (rowData.contactTagId > 0) {
+				this.arrayTagNamelist.push(rowData.contactTagId);
+				this.getAllTagNameSmartDropDown('', rowData.contactTagId);
+			}			
 			this.sourceViewforContact = '';
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		})
-
-
-
 	}
-	openTag(content) {
 
+	openTag(content) {
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
+
 	updateCustomerContact() {
-	
-		if(this.contactInformation.firstName &&  typeof this.contactInformation.firstName != 'string' ){
-			this.contactInformation.firstName= editValueAssignByCondition('label', this.contactInformation.firstName);
+		if (this.contactInformation.firstName && typeof this.contactInformation.firstName != 'string') {
+			this.contactInformation.firstName = editValueAssignByCondition('label', this.contactInformation.firstName);
 		}
-		if( this.contactInformation.middleName && typeof this.contactInformation.middleName != 'string' ){
-			this.contactInformation.middleName= editValueAssignByCondition('label', this.contactInformation.middleName);
+		if (this.contactInformation.middleName && typeof this.contactInformation.middleName != 'string') {
+			this.contactInformation.middleName = editValueAssignByCondition('label', this.contactInformation.middleName);
 		}
-		if( this.contactInformation.lastName && typeof this.contactInformation.lastName != 'string' ){
-			this.contactInformation.lastName= editValueAssignByCondition('label', this.contactInformation.lastName);
-		}
+		if (this.contactInformation.lastName && typeof this.contactInformation.lastName != 'string') {
+			this.contactInformation.lastName = editValueAssignByCondition('label', this.contactInformation.lastName);
+		}	
 		const data = {
 			...this.contactInformation,
-			masterCompanyId: this.authService.currentUser.masterCompanyId,
-			contactId: this.editContactId
-
+			masterCompanyId: this.currentUserMasterCompanyId,
+			contactId: this.editContactId,
+			tag: editValueAssignByCondition('tagName', this.contactInformation.tag),
+			contactTagId :this.contactInformation.tag == "NA" ? null : editValueAssignByCondition('contactTagId', this.contactInformation.tag)	
 		}
 		this.legalEntityService.updateLegalEntityContact(data).subscribe(res => {
-
 			// this.getAllEntityContact();
 			this.billingStatusForContact(this.statusForContact);
 			this.test = res;
@@ -451,28 +453,21 @@ if(this.isViewMode==false){
 			);
 		}, err => {
 			this.isEditButton = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		});
 		// $("#addContactDetails").modal("hide");
 		this.disableSave = true;
 	}
 
-
-	CloserCOnatcHistory(){
+	CloserCOnatcHistory() {
 		$("#contentHist").modal("hide");
 	}
 
-
-
 	openDelete(content, rowData) {
 		if (!rowData.isDefaultContact) {
-
 			this.selectedRowforDelete = rowData;
-
 			this.sourceViewforContact = '';
 			this.isDeleteMode = true;
-
 			this.contactId = rowData.contactId;
 			this.customerContactId = rowData.contactId
 			this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -481,29 +476,23 @@ if(this.isViewMode==false){
 			$('#deleteoops').modal('show');
 		}
 	}
+
 	deleteItemAndCloseModel() {
 		let contactId = this.contactId;
 		let customerContactId = this.customerContactId;
 		if (contactId > 0) {
-
 			this.legalEntityService.deleteLegalEntityContact(customerContactId, this.userName).subscribe(
 				response => {
 					this.saveCompleted(this.sourceCustomer);
 					this.billingStatusForContact(this.statusForContact);
 					this.refreshCustomerContactMapped.emit(this.id);
-
-
 				}, err => {
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				})
-
-
-
 		}
-
 		this.modal.close();
 	}
+
 	addATAChapter(rowData) {
 		this.sourceViewforContact = '';
 		this.add_SelectedModels = undefined;
@@ -512,15 +501,12 @@ if(this.isViewMode==false){
 		this.ataListDataValues = [];
 		this.add_ataSubChapterList = '';
 	}
+
 	dismissModel() {
 		this.modal.close();
 	}
-
-
-
 	// get subchapter by Id in the add ATA Mapping
 	getATASubChapterByATAChapter() {
-
 		const selectedATAId = getValueFromObjectByKey('ataChapterId', this.add_SelectedId)
 		this.atasubchapter1service.getATASubChapterListByATAChapterId(selectedATAId).subscribe(atasubchapter => {
 			const responseData = atasubchapter[0];
@@ -531,38 +517,26 @@ if(this.isViewMode==false){
 				}
 			})
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		})
 	}
 
-
-
-
-
 	deleteATAMapped(content, rowData) {
-
 		this.selectedAtappedRowforDelete = rowData;
 		this.sourceViewforContact = '';
 		this.isDeleteMode = true;
-
-
 		this.contactATAId = rowData.customerContactATAMappingId;
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-	
 	}
 
-
-	isSpinnerVisibleHistory:boolean=false;
+	isSpinnerVisibleHistory: boolean = false;
 	getAuditHistoryById(rowData) {
-		this.isSpinnerVisibleHistory=true;
+		this.isSpinnerVisibleHistory = true;
 		this.legalEntityService.getLegalEntityContactHistoryById(rowData.contactId, this.id).subscribe(res => {
 			this.auditHistory = res;
-			this.isSpinnerVisibleHistory=false;
+			this.isSpinnerVisibleHistory = false;
 		}, err => {
-			const errorLog = err;
-			this.isSpinnerVisibleHistory=false;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisibleHistory = false;
 		})
 	}
 
@@ -581,11 +555,12 @@ if(this.isViewMode==false){
 	nextClick() {
 		this.tab.emit('Banking');
 	}
+
 	backClick() {
 		this.tab.emit('General');
 	}
-	private saveCompleted(user?: any) {
 
+	private saveCompleted(user?: any) {
 		if (this.isDeleteMode == true) {
 			this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
 			this.isDeleteMode = false;
@@ -595,24 +570,27 @@ if(this.isViewMode==false){
 			this.saveCompleted
 		}
 	}
-	private saveFailedHelper(error: any) {
 
+	private saveFailedHelper(error: any) {
 		this.alertService.stopLoadingMessage();
 		this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
 		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
 	}
 
-
 	onFirstNameSelected() {
 		//this.disablesaveForFirstname = true;
 
 	}
+
 	onMiddleNameSelected() {
 		//this.disableSaveMiddleName = true;
 	}
+
 	onLastNameSelected() {
+
 		//this.disableSaveLastName = true;
 	}
+
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
 	}
@@ -625,10 +603,12 @@ if(this.isViewMode==false){
 	enableSave() {
 		this.disableSave = false;
 	}
+
 	closeMyModel() {
 		$("#addContactDetails").modal("hide");
 		this.disableSave = true;
 	}
+
 	lazyLoadEventDataInput: any;
 	lazyLoadEventData: Event;
 	status: string = 'Active';
@@ -637,34 +617,28 @@ if(this.isViewMode==false){
 	currentDeletedstatusCOntact: boolean = false;
 	isSpinnerVisible: boolean = false;
 	handleChange(rowData) {
-	this.sourceViewforContact = '';
+		this.sourceViewforContact = '';
 		const data = { ...rowData, updatedBy: this.userName };
 		data.status = data.isActive == true ? 'Active' : 'InActive';
-
 		this.legalEntityService.updateLegalEntitytContactStatus(data).subscribe(res => {
-
 			this.billingStatusForContact(this.statusForContact);
 			this.alertService.showMessage(
 				'Success',
 				`Successfully Updated Status`,
 				MessageSeverity.success
 			);
-
-
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		});
-
-
 	}
+
 	// currentstatusForCotnact: any = 'Active'
 	loadDatas(event) {
 		this.lazyLoadEventData = event;
 		const pageIndex = parseInt(event.first) / event.rows;;
 		this.pageIndex = pageIndex;
 		this.pageSize = event.rows;
-		event.first = pageIndex !=null ? pageIndex :0;
+		event.first = pageIndex != null ? pageIndex : 0;
 		this.lazyLoadEventDataInput = event;
 		this.lazyLoadEventDataInput.legalEntityId = this.id;
 		this.lazyLoadEventDataInput.filters = {
@@ -672,36 +646,35 @@ if(this.isViewMode==false){
 			status: this.statusForContact ? this.statusForContact : 'Active',
 		}
 		this.currentstatusForCotnact = this.statusForContact ? this.statusForContact : 'Active'
-	// if(this.isViewMode==false){
+		// if(this.isViewMode==false){
 		if (this.filterText == '') {
 			this.getList(this.lazyLoadEventDataInput);
 		} else {
 			this.globalSearch(this.filterText);
 		}
-	// }
+		// }
 	}
+
 	first: any = 0;
 	billingStatusForContact(status) {
 		const pageIndex = 0;
 		this.pageIndex = pageIndex;
-		if(this.isViewMode==false){
+		if (this.isViewMode == false) {
 			this.pageSize = this.lazyLoadEventDataInput.rows;
 			this.lazyLoadEventDataInput.first = pageIndex;
-		}else{
+		} else {
 			this.pageSize = 0;
 			this.lazyLoadEventDataInput.first = 0;
 		}
-		
 		this.lazyLoadEventDataInput.legalEntityId = this.id;
-		
 		this.statusForContact = status;
-	
 		this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
 		const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
 		this.first = 0;
 		PagingData.page = 1;
 		this.getList(PagingData);
 	}
+
 	globalSearch(value) {
 		this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
 		this.pageSize = this.lazyLoadEventDataInput.rows;
@@ -712,8 +685,8 @@ if(this.isViewMode==false){
 		this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForContact };
 		this.getList(this.lazyLoadEventDataInput);
 	}
-	getDeleteListByStatusContact(value) {
 
+	getDeleteListByStatusContact(value) {
 		this.currentDeletedstatusCOntact = true;
 		const pageIndex = 0;
 		this.pageIndex = pageIndex;
@@ -722,85 +695,77 @@ if(this.isViewMode==false){
 		if (value == true) {
 			this.currentDeletedstatusCOntact = true;
 			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForContact };
-		
 			this.getList(this.lazyLoadEventDataInput);
 		} else {
 			this.currentDeletedstatusCOntact = false;
 			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForContact };
-		
 			this.getList(this.lazyLoadEventDataInput);
 		}
 	}
-	statusForContact:any='Active'
-	getList(data) {
 
+	statusForContact: any = 'Active'
+	getList(data) {
 		const isdelete = this.currentDeletedstatusCOntact ? true : false;
 		data.filters.isDeleted = isdelete
 		const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters), legalEntityId: this.id }
-		if(this.id !=undefined){
+		if (this.id != undefined) {
 			// PagingData.first=PagingData.first ==NaN ? 0 :PagingData.first;
-			if(this.isViewMode==true){
-				PagingData.first=0;
-				PagingData.rows=10;
+			if (this.isViewMode == true) {
+				PagingData.first = 0;
+				PagingData.rows = 10;
 				this.pageSize = 10;
 			}
 			this.isSpinnerVisible = true;
-			
-		this.legalEntityService.getContacts(PagingData).subscribe(res => {
-			this.alertService.stopLoadingMessage();
-			const data = res;
-		// setTimeout(() => {
-			this.isSpinnerVisible = false;
-		// }, 1200);
-			this.entityContacts = data[0]['results'].map(x => {
-				return {
-					...x,
-					createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '', 
-					updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+			this.legalEntityService.getContacts(PagingData).subscribe(res => {
+				this.alertService.stopLoadingMessage();
+				const data = res;
+				// setTimeout(() => {
+				this.isSpinnerVisible = false;
+				// }, 1200);
+				this.entityContacts = data[0]['results'].map(x => {
+					return {
+						...x,
+						createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+						updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+					}
+				});
+				if (this.entityContacts.length > 0) {
+					this.totalRecordsContacts = data[0]['totalRecordsCount'];
+					this.totalPages = Math.ceil(this.totalRecordsContacts / this.pageSize);
 				}
-			});
-			if (this.entityContacts.length > 0) {
-				this.totalRecordsContacts = data[0]['totalRecordsCount'];
-				this.totalPages = Math.ceil(this.totalRecordsContacts / this.pageSize);
-			}
-			else {
-				this.totalRecordsContacts = 0;
-				this.totalPages = 0;
-			}
-		}, err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
-		})
-	}
+				else {
+					this.totalRecordsContacts = 0;
+					this.totalPages = 0;
+				}
+			}, err => {
+				this.isSpinnerVisible = false;
+			})
+		}
 	}
 
-    // omit_special_char(event){   
-    //     var k;  
-    //     k = event.charCode;  
-    //     return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57) || k == 45 || k == 95 ); 
-    //  }
-	numberonly(event){   
-		var k;  
+	// omit_special_char(event){   
+	//     var k;  
+	//     k = event.charCode;  
+	//     return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57) || k == 45 || k == 95 ); 
+	//  }
+	numberonly(event) {
+		var k;
 		k = event.charCode;  //         k = event.keyCode;  (Both can be used)
-		return( (k >= 48 && k <= 57)); 
-	 //    (k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||
-	 }
+		return ((k >= 48 && k <= 57));
+		//    (k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||
+	}
 	restorerecord: any = {}
 
-
-
 	restoreRecord() {
-		this.legalEntityService.restoreCOntact(this.restorerecord.contactId,this.userName).subscribe(res => {
+		this.legalEntityService.restoreCOntact(this.restorerecord.contactId, this.userName).subscribe(res => {
 			this.isSpinnerVisible = false;
 			this.billingStatusForContact(this.statusForContact);
 			this.modal.close();
 		}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
 		});
 	}
+
 	restore(content, rowData) {
 		this.restorerecord = rowData;
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -844,13 +809,13 @@ if(this.isViewMode==false){
 		const file = event.target.files;
 		if (file.length > 0) {
 			this.formData.append('file', file[0])
-			this.formData.append('masterCompanyId', this.authService.currentUser.masterCompanyId.toString())
+			this.formData.append('masterCompanyId', this.currentUserMasterCompanyId.toString())
 			this.formData.append('createdBy', this.userName);
 			this.formData.append('updatedBy', this.userName);
 			this.formData.append('isActive', 'true');
 			this.formData.append('isDeleted', 'false');
 			const data = {
-				'masterCompanyId': this.authService.currentUser.masterCompanyId,
+				'masterCompanyId': this.currentUserMasterCompanyId,
 				'createdBy': this.userName,
 				'updatedBy': this.userName,
 				'isActive': true,
@@ -866,20 +831,12 @@ if(this.isViewMode==false){
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 	}
-	errorMessageHandler(log) {
-		this.isSpinnerVisible = false;
-		// this.alertService.showMessage(
-		// 	'Error',
-		// 	log,
-		// 	MessageSeverity.error
-		// );
-	}
-// checkfirstNameExist(value) {
+
+	// checkfirstNameExist(value) {
 	// 	//this.disablesaveForFirstname = false;
 	// 	for (let i = 0; i < this.contactsListOriginal.length; i++) {
 	// 		if (this.contactInformation.firstName == this.contactsListOriginal[i].firstName || value == this.contactsListOriginal[i].firstName) {
@@ -910,11 +867,39 @@ if(this.isViewMode==false){
 	// 	}
 	// }
 	patternValidate(event: any) {
-        const pattern = /[0-9\+\-()\ ]/;
-        let inputChar = String.fromCharCode(event.charCode);
-        if (event.keyCode != 8 && !pattern.test(inputChar)) {
-            event.preventDefault();
-        }
+		const pattern = /[0-9\+\-()\ ]/;
+		let inputChar = String.fromCharCode(event.charCode);
+		if (event.keyCode != 8 && !pattern.test(inputChar)) {
+			event.preventDefault();
+		}
+	}
+
+	
+	arrayTagNamelist:any=[];
+	tagNamesList:any=[];
+	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+		if (this.arrayTagNamelist.length == 0) {
+			this.arrayTagNamelist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName', strText, true, 20, this.arrayTagNamelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.tagNamesList = res.map(x => {
+				return {
+					tagName: x.label, contactTagId: x.value
+				}
+			})
+			if (contactTagId > 0) {
+				this.contactInformation = {
+					...this.contactInformation,
+					tag: getObjectById('contactTagId', contactTagId, this.tagNamesList)
+				}
+			}			
+		})
+	}
+
+	filterTagNames(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllTagNameSmartDropDown(event.query);
+		}
 	}
 
 }

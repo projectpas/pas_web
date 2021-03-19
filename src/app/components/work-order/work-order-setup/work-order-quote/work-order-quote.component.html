@@ -138,7 +138,7 @@
                 <div class="form-group memo-popup-cstm">
                     <label>
                         Memo <i class="fa fa-pencil" *ngIf="!isView" data-toggle="modal" data-target="#add-description"
-                            matTooltipPosition="above" matTooltip="Notes"
+                            matTooltipPosition="above" matTooltip="Memo"
                             (click)="onAddDescription(1)"></i>
                     </label>
                     <span>
@@ -329,7 +329,7 @@
         </div>
             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
                 <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
-                    <table class="table table-bordered mpn-list-table"
+                    <table class="table table-bordered lastcol-fix mpn-list-table"
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
@@ -2046,17 +2046,17 @@
                 <p id="clockdiv" class="clockdiv"></p>
             </div>
             <div class="pad_msf">
-                <p *ngIf="warningID != 0" class="mar_o">
+                <p *ngIf="warningID != 0" class="mar_o warning_color">
                     <strong>Warning Message</strong>
                     :{{warningMessage}}
                 </p>
                 <!-- <p *ngIf="warningMessage != undefined">Not able to create customer work because cuatomer having restrcitions</p> -->
-                <p *ngIf="restrictID != 0 " class="mar_o">
+                <p *ngIf="restrictID != 0 " class="mar_o warning_color">
                     <strong>Restrcition Message</strong>
                     :{{restrictMessage}}
                 </p>
 
-                <p *ngIf=" restrictID != 0 " class="mar_o">
+                <p *ngIf=" restrictID != 0 " class="mar_o warning_color">
                     Not able to  Edit Work Order Quote details because customer
                     having restrictions
                 </p>

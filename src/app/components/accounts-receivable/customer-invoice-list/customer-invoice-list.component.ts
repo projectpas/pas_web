@@ -1,6 +1,10 @@
 ﻿import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { ISalesSearchParameters } from '../../../models/sales/ISalesSearchParameters';
+import { CustomerService } from '../../../services/customer.service';
+import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
+import { ICustomerInvoiceSearchParameters } from '../../../models/sales/ICustomerInvoiceSearchParameters';
+import { CustomerInvoiceSearchParameters } from '../../../models/sales/CustomerInvoiceSearchParameters';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-customer-invoice-list',
@@ -10,7 +14,7 @@ import { ISalesSearchParameters } from '../../../models/sales/ISalesSearchParame
 export class CustomerInvoiceListComponent {
     breadcrumbs: MenuItem[];
     headers: any[];
-    searchParameters: ISalesSearchParameters;
+    searchParameters: ICustomerInvoiceSearchParameters;
     selectedColumns: any[];
     selectedColumn: any[];
     customerInvoices: any[] = [];
@@ -21,8 +25,10 @@ export class CustomerInvoiceListComponent {
     first = 0;
     showPaginator: boolean = false;
     lazyLoadEventData: any;
-    
-    constructor() {
+    isSpinnerVisible: boolean = false;
+    currentStatus: any;
+
+    constructor(private customerService: CustomerService) {
     }
 
     ngOnInit() {
@@ -31,18 +37,19 @@ export class CustomerInvoiceListComponent {
             { label: 'Customer Invoice List' },
         ];
 
+        this.searchParameters = new CustomerInvoiceSearchParameters();
         this.initColumns();
     }
 
     initColumns() {
         this.headers = [
-            { field: "documentType", header: "Document Type", width: "120px" },
+            { field: "documentType", header: "Document Type", width: "130px" },
             { field: "custName", header: "Cust Name", width: "180px" },
-            { field: "custNum", header: "Cust Num", width: "130px" },
+            { field: "customerCode", header: "Cust Num", width: "130px" },
             { field: "docNum", header: "Doc Num", width: "130px" },
-            { field: "invDate", header: "Inv Date", width: "130px" },
+            { field: "invoiceDate", header: "Inv Date", width: "130px" },
             { field: "wosoNum", header: "WO/SO Num", width: "130px" },
-            { field: "custRef", header: "Cust Ref", width: "130px" },
+            { field: "customerReference", header: "Cust Ref", width: "130px" },
             { field: "currencyCode", header: "Currency Code", width: "180px" },
             { field: "fxRate", header: "FX Rate", width: "100px" },
             { field: "originalAmount", header: "Original Amount", width: "100px" },
@@ -51,9 +58,9 @@ export class CustomerInvoiceListComponent {
             { field: "dsi", header: "DSI", width: "130px" },
             { field: "dso", header: "DSO", width: "180px" },
             { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
-            { field: "arBal", header: "AR Bal", width: "130px" },
+            { field: "arBalance", header: "AR Bal", width: "130px" },
             { field: "creditLimit", header: "Credit Limit", width: "130px" },
-            { field: "creditTerm", header: "Credit Term", width: "130px" },
+            { field: "creditTermName", header: "Credit Term", width: "130px" },
             { field: "co", header: "CO", width: "130px" },
             { field: "bu", header: "BU", width: "130px" },
             { field: "div", header: "Div", width: "130px" },
@@ -68,5 +75,82 @@ export class CustomerInvoiceListComponent {
         this.loadData(lazyEvent, val);
     }
 
-    loadData(event, globalFilter = "") { }
+    loadData(event, globalFilter = "") {
+        this.searchParameters.first = parseInt(event.first) / event.rows;
+        this.searchParameters.rows = event.rows;
+        this.searchParameters.sortOrder = event.sortOrder;
+        this.searchParameters.sortField = event.sortField;
+        this.lazyLoadEventData = event;
+        this.searchParameters.filters = listSearchFilterObjectCreation(
+            event.filters
+        );
+
+        this.searchParameters.filters = {
+            ...this.searchParameters.filters
+        }
+
+        this.searchParameters.globalFilter = globalFilter;
+        this.onSearch();
+    }
+
+    onSearch() {
+        this.isSpinnerVisible = true;
+        this.customerService
+            .customerInvoiceSearch(this.searchParameters)
+            .subscribe((response: any) => {
+                if (response[0].results) {
+                    this.customerInvoices = response[0].results
+                        .map(x => {
+                            return {
+                                ...x
+                            }
+                        });
+
+                    this.totalRecords = response[0].totalRecordsCount;
+                    this.totalPages = Math.ceil(
+                        this.totalRecords / this.searchParameters.rows
+                    );
+                    this.showPaginator = this.totalRecords > 0;
+                }
+                this.isSpinnerVisible = false;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
+
+    changeOfStatus(status) {
+        this.currentStatus = status.toString() === '' ? this.currentStatus : status.toString();
+        this.loadData(this.lazyLoadEventData);
+    }
+
+    convertDate(key, data) {
+        if (key === 'requestedDateType' && data[key]) {
+            return data['requestedDateType'] !== 'Multiple' ? moment(data['requestedDate']).format('MM-DD-YYYY') : data['requestedDateType'];
+        }
+        else if (key === 'estimatedShipDateType' && data[key]) {
+            return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM-DD-YYYY') : data['estimatedShipDateType'];
+        } else {
+            return data[key];
+        }
+    }
+
+    onPaging(event, globalFilter = "") {
+        event.filters.statusId = this.currentStatus;
+        this.searchParameters.first = parseInt(event.first) / event.rows;
+    
+        this.searchParameters.rows = event.rows;
+    
+        this.searchParameters.sortOrder = event.sortOrder;
+        this.searchParameters.sortField = event.sortField;
+        this.lazyLoadEventData = event;
+    
+        this.searchParameters.filters = listSearchFilterObjectCreation(
+          event.filters
+        );
+        this.searchParameters.filters = {
+          ...this.searchParameters.filters
+        }
+    
+        this.searchParameters.globalFilter = globalFilter;
+      }
 }

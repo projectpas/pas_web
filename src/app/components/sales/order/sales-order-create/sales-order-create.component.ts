@@ -237,7 +237,7 @@ export class SalesOrderCreateComponent implements OnInit {
     setTimeout(() => {
       this.getSoInstance(true);
     },
-      2200);
+      1200);
 
     this.salesQuoteService.salesOrderViewSubj$.subscribe(data => {
       this.salesOrderView = data;
