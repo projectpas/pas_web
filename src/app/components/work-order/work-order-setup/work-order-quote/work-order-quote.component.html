@@ -367,7 +367,7 @@
                                 <th rowspan="2">TAT Days Current</th>
                                 <!-- <th rowspan="2">Qty *</th> -->
                                 <th rowspan="2">TAT Days Standard</th>
-                                  <th rowspan="2">Actions</th>
+                                  <th rowspan="2" class="table-actions-column1">Actions</th>
                                 <!-- <th rowspan="2">Work Scope</th> -->
                                 <!-- <th rowspan="2"></th>
                                 <th rowspan="2"></th>-->
@@ -522,7 +522,7 @@
                                 <!-- <label>{{workOrderPart['workScope']}}</label> -->
                                 <!-- <input [value]="workOrderPart['workScope']" readonly/> -->
                                 <!-- </td> -->
-                                <td class="flex_d">
+                                <td class="flex_d table-actions-column1">
                                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
@@ -841,9 +841,22 @@
         </div>
     </div>
     <div class="table-responsive" *ngIf="gridActiveTab === 'materialList'">
-        <div *ngIf="!isView && !isViewForApprovedPart ">
+        <div class="header" >
+            <div class="row">
+                <div class="col">
+                    <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Material list</h4>
+                </div>
+                <div *ngIf="!isView &&  !isViewForApprovedPart">
+                    <!-- <button type="button" class="btn-sm header-button " data-target="#addNewCharges" data-toggle="modal" (click)="createNew()">
+                        Create Charge
+                    </button> -->
+                    <button data-target="#addNewMaterials" data-toggle="modal"class="btn-sm header-button" >Add Part No</button>
+                </div>
+            </div>
+          </div>
+        <!-- <div *ngIf="!isView && !isViewForApprovedPart ">
             <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary" style="margin-left: 10px;">Add Part No</button>
-        </div>
+        </div> -->
         <div style="margin-top:0px " class="table-responsive table-overflow headertable-width">
             <div class="tableFixHead">
             <table class="table table-bordered lastcol-fix">
@@ -963,11 +976,11 @@
                                 <td >
                                     <span *ngIf="!isView" data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                     <span *ngIf="!isView"><a data-toggle="modal" data-target="#deleteRowConfirmation" class="btn nobg btn-delete-cstm" (click)="deleteMemoConfirmation(mainIndex, subIndex,matQuotation)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                    <span>
+                                    <!-- <span>
                                         <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(matQuotation)"
                                             matTooltip="History" matTooltipPosition="above"><i
                                                 class="fa fa-history"></i></a>
-                                    </span>
+                                    </span> -->
                                
                                 </td>  
                             </tr>
@@ -1529,7 +1542,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- (click)="editMatData = [];" -->
-                    <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                    <button type="button" (click)="editMatData = [];" class="close" data-dismiss="modal" >&times;</button>
                     <h4 class="modal-title">{{(editMatData.length>0)?'Edit':'Add'}} Material</h4>
                 </div>
                 <div class="modal-body">

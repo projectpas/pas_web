@@ -222,7 +222,7 @@
                             matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                 aria-hidden="true"></i></a>
                     </span>
-                    <span>
+                    <span *ngIf="!isQuote">
                       <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
                           matTooltip="History" matTooltipPosition="above"><i
                               class="fa fa-history"></i></a>

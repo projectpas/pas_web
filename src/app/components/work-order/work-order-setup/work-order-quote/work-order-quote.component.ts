@@ -482,6 +482,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.customerContact = res.customerDetails.customerContact;
                     this.customerRef = res.customerDetails.customerRef;
                     this.csr = res.customerDetails.csrName;
+                    this.salesPerson=res.salesPerson?res.salesPerson.name : '' ;
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
                     this.creditTerms=res.creditTerm;
@@ -530,6 +531,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                                     this.currency = res.workOrderQuote.currencyId;
                                     this.accountsReceivableBalance = res.workOrderQuote.accountsReceivableBalance;
                                     this.warnings = res.warnings;
+                                    this.salesPerson=res.salesPersonName;
                                     this.memo = res.memo;
                                     this.approvedDate = new Date(res.approvedDate);
                                     this.sentDate = new Date(res.sentDate);
@@ -642,19 +644,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
             )
     }
-    // getUnitOfMeasure() {
-    //     this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName')
-    //         .subscribe(
-    //             (res: any[]) => {
-    //                 res = res.map(x=>{ return {'unitOfMeasureId': x.value, "shortName": x.label, "description": x.label}})
-    //                 this.unitOfMeasuresList = res;
-    //             },
-    //             err => {
-    //                 this.errorHandling(err);
-    //             }
-    //         )
-    // }
-
     calculateExpiryDate() {
         if (this.validFor && this.quoteDueDate) {
             this.expirationDate = new Date();
@@ -794,32 +783,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.saveFreights();
         }
     }
-
-    // getCreditTerms(ctermId) {
-        
-    //     this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name')
-    //         .subscribe(
-    //             (creditTermList: any[]) => {
-
-    //                 for (let cTerm of creditTermList) {
-    //                     if (cTerm.value == ctermId) {
-    //                         this.creditTerms = cTerm.label;
-    //                     }
-    //                 }
-                    
-    //             },
-    //             err => {
-    //                 this.errorHandling(err);
-    //             }
-    //         )
-    // }
-    
     getEmployeeList(woId) { 
             this.setEditArray.push(0);
             this.msId = this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null;
                     const strText = '';
+                    this.isSpinnerVisible = true;
                     this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(employeeList => {
                     this.employeeList = employeeList;
                     this.employeesOriginalData = employeeList;
@@ -828,6 +798,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     
                 },
                 err => {
+                    this.isSpinnerVisible = false;
                     this.errorHandling(err);
                 }
             )
@@ -839,9 +810,9 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.employeeName = emp.label;
                 this.quoteForm['employeeId'] = { label: emp.label, value: empId };
             }
-            if (emp.value == salesPerId) {
-                this.salesPerson = emp.label;
-            }
+            // if (emp.value == salesPerId) {
+            //     this.salesPerson = emp.label;
+            // }
         }
     }
 
@@ -1743,19 +1714,15 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
         else if (id == 2) {
             this.selectedBuildMethod = 'use work flow';
-            // this.buildMethodSelected('use work flow');
         }
         else if (id === 3) {
             this.selectedBuildMethod = 'use historical wos';
-            // this.buildMethodSelected('use historical wos');
         }
         else if (id === 4) {
             this.selectedBuildMethod = 'build from scratch';
-            // this.buildMethodSelected('build from scratch');
         }
         else if (id === 5) {
             this.selectedBuildMethod = 'display 3rd party';
-            // this.buildMethodSelected('display 3rd party');
         }
     }
 
@@ -2044,6 +2011,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     editMaterialList(matData) {
+        this.editMatData=[]
         const eData=[matData]
         this.editMatData = [...eData];
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;
@@ -2272,7 +2240,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.accountsReceivableBalance = this.quoteListViewData.arBalance;
             this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 2);
             this.creditTerms = this.quoteListViewData.creditTerms;
-            this.salesPerson = this.quoteListViewData.salesPerson;
+            // this.salesPerson = this.quoteListViewData.salesPerson;
             this.csr = this.quoteListViewData.csr;
             this.employeeName = this.quoteListViewData.employee;
             this.currency = this.quoteListViewData.currency;
@@ -2510,6 +2478,21 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
                     res.forEach(
                         (x)=>{
+                            x.marginPercentage=x.marginPercentage ? formatNumberAsGlobalSettingsModule(x.marginPercentage, 2) : '0.00';
+                            x.margin= x.margin ? formatNumberAsGlobalSettingsModule(x.margin, 2): '0.00';
+                            x.revenue= x.revenue ? formatNumberAsGlobalSettingsModule(x.revenue, 2): '0.00';
+                            x.directCostPercentage= x.directCostPercentage ? formatNumberAsGlobalSettingsModule(x.directCostPercentage, 2): '0.00';
+                            x.directCost= x.directCost ? formatNumberAsGlobalSettingsModule(x.directCost, 2): '0.00';
+                            x.freightCost= x.freightCost ? formatNumberAsGlobalSettingsModule(x.freightCost, 2): '0.00';
+                            x.chargesCost= x.chargesCost ? formatNumberAsGlobalSettingsModule(x.chargesCost, 2): '0.00';
+                            x.overHeadCost= x.overHeadCost ? formatNumberAsGlobalSettingsModule(x.overHeadCost, 2): '0.00';
+
+                            x.overHeadPercentage= x.overHeadPercentage ? formatNumberAsGlobalSettingsModule(x.overHeadPercentage, 2): '0.00';
+                            x.laborRevPercentage= x.laborRevPercentage ? formatNumberAsGlobalSettingsModule(x.laborRevPercentage, 2): '0.00';
+                            x.laborCost= x.laborCost ? formatNumberAsGlobalSettingsModule(x.laborCost, 2): '0.00';
+                            x.partsCost= x.partsCost ? formatNumberAsGlobalSettingsModule(x.partsCost, 2): '0.00';
+                            x.partsRevPercentage= x.partsRevPercentage ? formatNumberAsGlobalSettingsModule(x.partsRevPercentage, 2): '0.00';
+
                             if(x.internalSentDate){
                                 x.internalSentDate = new Date(x.internalSentDate);
                                 if(!x.internalApprovedDate){
@@ -2597,7 +2580,27 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.workOrderService.getWOQuoteAnalysisList(this.savedWorkOrderData.workOrderId)
             .subscribe(
                 (res) => {
-                    this.woQuoteAnalysisList = res;
+             if(res && res.length !=0){
+                this.woQuoteAnalysisList = res.forEach(x => {
+                    x.marginPercentage=x.marginPercentage ? formatNumberAsGlobalSettingsModule(x.marginPercentage, 2) : '0.00';
+                    x.margin= x.margin ? formatNumberAsGlobalSettingsModule(x.margin, 2): '0.00';
+                    x.revenue= x.revenue ? formatNumberAsGlobalSettingsModule(x.revenue, 2): '0.00';
+                    x.directCostPercentage= x.directCostPercentage ? formatNumberAsGlobalSettingsModule(x.directCostPercentage, 2): '0.00';
+                    x.directCost= x.directCost ? formatNumberAsGlobalSettingsModule(x.directCost, 2): '0.00';
+                    x.freightCost= x.freightCost ? formatNumberAsGlobalSettingsModule(x.freightCost, 2): '0.00';
+                    x.chargesCost= x.chargesCost ? formatNumberAsGlobalSettingsModule(x.chargesCost, 2): '0.00';
+                    x.overHeadCost= x.overHeadCost ? formatNumberAsGlobalSettingsModule(x.overHeadCost, 2): '0.00';
+
+                    x.overHeadPercentage= x.overHeadPercentage ? formatNumberAsGlobalSettingsModule(x.overHeadPercentage, 2): '0.00';
+                    x.laborRevPercentage= x.laborRevPercentage ? formatNumberAsGlobalSettingsModule(x.laborRevPercentage, 2): '0.00';
+                    x.laborCost= x.laborCost ? formatNumberAsGlobalSettingsModule(x.laborCost, 2): '0.00';
+                    x.partsCost= x.partsCost ? formatNumberAsGlobalSettingsModule(x.partsCost, 2): '0.00';
+                    x.partsRevPercentage= x.partsRevPercentage ? formatNumberAsGlobalSettingsModule(x.partsRevPercentage, 2): '0.00';
+
+                });
+             }else{
+                this.woQuoteAnalysisList=[];
+             }
                 },
                 (err) => {
                     this.errorHandling(err);
@@ -3236,17 +3239,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 }
                 let temp = []
                 let formedData = [];
-                // this.materialListQuotation.forEach(
-                //     (x) => {
-                //         formedData = [...formedData, ...x];
-                //     }
-                // )
-
-                  // this.materialListQuotation.forEach(
-                //     (x) => {
-                //         formedData = [...formedData, ...x];
-                //     }
-                // )
                 formedData=[...this.materialListQuotation]
                 temp = formedData.reduce(function (r, a) {
                     r[a['taskId']] = r[a['taskId']] || [];
