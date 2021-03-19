@@ -2603,7 +2603,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
              }else{
                 this.woQuoteAnalysisList=[];
              }
-             console.log("hello",this.woQuoteAnalysisList)
                 },
                 (err) => {
                     this.errorHandling(err);
