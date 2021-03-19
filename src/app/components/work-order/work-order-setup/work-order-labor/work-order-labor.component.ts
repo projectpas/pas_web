@@ -140,6 +140,7 @@ laborTaskData:any;
     if (!this.isQuote) {
       this.getEmployeeData();
     }
+    this.selectedItems =[];
     this.laborForm.costPlusType = 'Mark Up'
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     if (this.laborForm['workOrderHoursType']) {
@@ -154,13 +155,15 @@ laborTaskData:any;
         this.laborForm.workFloworSpecificTaskorWorkOrder = "workOrder";
       }
     }
+    this.selectedItems = [];
     for (let tData in this.laborForm.workOrderLaborList[0]) {
       if (this.laborForm.workOrderLaborList[0][tData].length == 0) {
         delete this.laborForm.workOrderLaborList[0][tData]
       }
       else {
         for (let task in this.taskListForHeader) {
-          if (tData == this.taskListForHeader[task]['description']) {
+          if (tData == this.taskListForHeader[task]['description']) 
+          {
             this.selectedItems = [...this.selectedItems, {
               "taskId": this.taskListForHeader[task]['taskId'],
               "description": this.taskListForHeader[task]['description']
@@ -729,10 +732,14 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
       isActive: true,
     }
 
+    debugger;
     let tasksData = this.laborForm.workOrderLaborList[0];
     let formedData = {}
     for (let tdata in tasksData) {
-      if (tdata != 'length') {
+      if (tdata != 'length') 
+      {
+
+
         formedData[tdata] = tasksData[tdata].map(x => {
           return {
             ...x,

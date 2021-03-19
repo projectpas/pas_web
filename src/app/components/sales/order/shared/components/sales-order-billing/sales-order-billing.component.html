@@ -539,9 +539,9 @@
                         </div>
                     </div>
                 </div>
-                <div style="float: right;" *ngIf="!isViewMode">
+                <div style="float: right; margin-top: 10px;" *ngIf="!isViewMode">
                     <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
-                        (click)="GenerateInvoice()">Generate Invoice</button>
+                        (click)="GenerateInvoice()" [disabled]="!billinForm.valid">Generate Invoice</button>
                     <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
                         (click)="updateWorkOrderBilling()">Update</button>
                 </div>

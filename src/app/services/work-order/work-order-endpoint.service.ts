@@ -112,7 +112,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     getAllWorkScopes<T>(): Observable<T> {
         let endPointUrl = this.getAllWorkScopesURL;
-        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        return this.http.get<T>(`${this.configurations.baseUrl}/api/WorkOrder/getAllworkScopes`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAllWorkScopes());
             });
