@@ -8,6 +8,7 @@ import { ModuleHierarchyMaster, UserRole, RolePermission, PermissionMaster } fro
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-roles-setup',
@@ -31,18 +32,22 @@ export class UserRolesSetupComponent implements OnInit {
         name: new FormControl('name', Validators.required),
         description: new FormControl('description')
     });
-    constructor(fb: FormBuilder, private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
+    constructor(fb: FormBuilder,
+         private messageService: MessageService,private authService: AuthService,public route: Router,private alertService: AlertService, private userRoleService: UserRoleService) {
         this.roleForm = fb.group({
             'name': [null, Validators.compose([Validators.required])],
             'description': [null]
         });
     }
+
     get name() {
         return this.roleForm.get('name');
     }
+
     get description() {
         return this.roleForm.get('description');
     }
+
     ngOnInit(): void {
         this.getAllModuleHierarchies();
         this.getAllPermission();
@@ -63,8 +68,7 @@ export class UserRolesSetupComponent implements OnInit {
     }
 
     getAllModuleHierarchies(): void {
-        this.userRoleService.getAllModuleHierarchies().subscribe(data => {
-            console.log(data[0]);
+        this.userRoleService.getAllModuleHierarchies().subscribe(data => {            
             this.moduleHierarchy = data[0];
             this.sortModules();
         });
@@ -72,8 +76,7 @@ export class UserRolesSetupComponent implements OnInit {
 
     getAllPermission() {
         this.userRoleService.getAllPermission().subscribe(data => {
-            this.permissionMaster = data[0];
-            console.log(this.permissionMaster);
+            this.permissionMaster = data[0];            
         })
     }
 
@@ -96,7 +99,6 @@ export class UserRolesSetupComponent implements OnInit {
                 this.hasChild(parentModule);
             }
         }
-console.log(this.sortedHierarchy)
     }
 
     resetRolePermission(rolePermission: RolePermission): void {
@@ -285,7 +287,7 @@ console.log(this.sortedHierarchy)
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
         var value = event.target.checked;
-        console.log("Test");
+        
         if (value == false) {
             this.setPermissionByType(currentModule, type, value);
             if (currentModule.parentId != null)
@@ -331,7 +333,7 @@ console.log(this.sortedHierarchy)
             this.setModuleHierarchyPermission(currentModule, value);
         }
         //this.currentUserRole.rolePermissions.push(currentModule.rolePermission);
-        console.log(this.currentUserRole.rolePermissions);
+        
     }
 
     setModuleHierarchyPermission(currentModule: ModuleHierarchyMaster,value:boolean=true): void {
@@ -458,7 +460,6 @@ console.log(this.sortedHierarchy)
             );
             return;
         }
-
         this.currentUserRole.masterCompanyId = this.currentUserMasterCompanyId;
         this.userRoleService.add(this.currentUserRole).subscribe(
             result => {
@@ -469,7 +470,8 @@ console.log(this.sortedHierarchy)
                 }
                 this.currentUserRole = new UserRole();
                 this.currentUserRole.rolePermissions = [];
-                this.pages = [];
+                this.pages = [];                
+                return this.route.navigate(['/rolesmodule/rolespages/edit-app-roles']);
             },
             error => {
                 this.isSpinnerVisible=false;

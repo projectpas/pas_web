@@ -41,6 +41,12 @@ export class EditUserRolesComponent implements OnInit {
         this.isSpinnerVisible = false;
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     getAllModuleHierarchies(): void {
         this.userRoleService.getAllModuleHierarchies().subscribe(data => {
             this.moduleHierarchy = data[0];
@@ -140,7 +146,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     getAllUserRoles() {
-        return this.userRoleService.getAllUserRole().subscribe(result => {
+        return this.userRoleService.getAllUserRole(this.currentUserMasterCompanyId).subscribe(result => {
             this.userRoles = result[0];
         });
     }
@@ -489,7 +495,7 @@ export class EditUserRolesComponent implements OnInit {
                 this.currentUserRole.id = roleId;
                 this.currentUserRole.rolePermissions = [];
                 this.pages = [];
-                this.userRoleService.getAllUserRole().subscribe(result => {
+                this.userRoleService.getAllUserRole(this.currentUserMasterCompanyId).subscribe(result => {
                     this.userRoles = result[0];
                     this.userRoleChanged();
                 });
