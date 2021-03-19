@@ -97,6 +97,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   addNewCharges: boolean = false;
   workOrderChargesLists: any;
   chargesFlatRateBillingAmount: any;
+  workOrderQuoteDetailsId: any;
 
   constructor(private workOrderService: WorkOrderService, private authService: AuthService,
     private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef, private commonService: CommonService) {
@@ -104,15 +105,15 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
 
   }
   originalList:any=[];
-  ngOnChanges() {
+  ngOnChanges() { 
  
     this.originalList=this.workOrderChargesList;
-    console.log("charges",this.originalList[0])
-    if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId){
-      this.disableCrg=true;
-    }else{
-      this.disableCrg=false;
-    }
+    // console.log("charges",this.originalList[0])
+    // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
+    //   this.disableCrg=true;
+    // }else{
+    //   this.disableCrg=false;
+    // }
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].headerMarkupId) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
@@ -155,8 +156,17 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     //   this.cols = [...this.cols, { field: 'extendedPrice', header: 'Extended Price' }, { field: 'unitPrice', header: 'Unit Price' },]
     // }
     if (this.buildMethodDetails) {
+      this.workOrderQuoteDetailsId=this.buildMethodDetails['workOrderQuoteDetailsId'];
       this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
       this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+      if(this.buildMethodDetails.workOrderQuoteDetailsId !=0){
+      this.disableCrg=true;
+    }else{
+      this.disableCrg=false;
+    }
+    }
+    else{
+      this.disableCrg=false;
     }
   }
 
@@ -309,6 +319,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     )
     this.saveChargesListForWO.emit(event);
     $('#addNewCharges').modal('hide');
+      this.disableCrg=false;
+    
   setTimeout(() => {
     this.getValidCrg()
   }, 2000);
@@ -383,6 +395,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     })
     let result = { 'data': sendData, 'taskSum': WorkOrderQuoteTask, 'chargesFlatRateBillingAmount': this.chargesFlatRateBillingAmount, 'ChargesBuildMethod': this.costPlusType }
     this.createQuote.emit(result);
+    this.disableCrg=true;
   }
 
   markupChanged(matData, type) {

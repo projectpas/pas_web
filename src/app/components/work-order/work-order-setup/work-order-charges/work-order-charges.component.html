@@ -339,7 +339,7 @@
   </div>
 </ng-template>
   <button class="btn btn-primary pull-right" (click)="createChargeQuote()" [disabled]="disableCrg" *ngIf="isQuote && !isView">
-    {{originalList && originalList[0].workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
+    {{workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
   </button>
 </div>
 <ng-template #content let-c="close" let-d="dismiss">
