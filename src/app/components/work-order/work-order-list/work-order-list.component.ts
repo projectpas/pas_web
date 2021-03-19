@@ -66,7 +66,7 @@ export class WorkOrderListComponent implements OnInit {
         { field: 'promisedDateType', header: 'Promise Date' , width: "130px"},
         { field: 'estimatedShipDateType', header: 'Est. Ship Date',  width: "130px"},
         { field: 'estimatedCompletionDateType', header: 'Shipped Date',  width: "130px"},
-        { field: 'stageType', header: 'Stage Code', width: "130px" },
+        { field: 'stageType', header: 'Stage Code', width: "200px" },
         { field: 'workOrderStatusType', header: 'Status', width: "130px" },
         { field: "createdDate", header: "Created Date", width: "130px" },
         { field: "createdBy", header: "CreatedBy", width: "130px" },
