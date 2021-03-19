@@ -1443,6 +1443,7 @@ export class WorkOrderAddComponent implements OnInit {
                 element.partNumber=element.partNumber.name
             });
         }
+        workFlowDataObject.publication.forEach(element => {element.allDashNumbers=""; })
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
