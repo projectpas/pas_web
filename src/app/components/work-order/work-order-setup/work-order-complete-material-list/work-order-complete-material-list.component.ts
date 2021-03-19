@@ -85,7 +85,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'needDate', header: 'Need Date',align: 0 },
         { field: 'controlNo', header: 'Cntl Num' ,align: 0},
         { field: 'controlId', header: 'Cntl ID',align: 0 },
-        { field: 'currency', header: 'Curr' ,align: 1},
+        { field: 'currency', header: 'Cur' ,align: 1},
         { field: 'unitCost', header: 'Unit Cost', align: 1 },
         { field: 'extendedCost', header: 'Extended Cost', align: 1 },
         { field: 'costDate', header: 'Cost Date',align: 0 },
@@ -260,7 +260,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                 })
-        } else {
+        } else { 
             this.isSpinnerVisible = true;
             this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
                 res.forEach((element, index) => {
@@ -474,7 +474,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     allowAll(value) {
-        if (value) {
+        if (value==true) {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                     x.woReservedIssuedAltParts.map(x => {
@@ -485,13 +485,22 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         x.isChildSelected = true;
                     })
                 }
+                if(value==true && (this.statusId === 1 || this.statusId === 5)&& x.quantityReserved !=0){
+                    x.isParentSelected = true;
+                 }
+                 if(value==true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4 )&& x.quantityIssued !=0){
+                    x.isParentSelected = true;
+                 }
+                // })
                 return {
                     ...x,
-                    isParentSelected: true,
+                    // isParentSelected: true,
+                    
                 }
             });
 
             this.isAllow = value;
+            this.savebutonDisabled = true;
         } else {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
@@ -506,11 +515,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 return {
                     ...x,
                     isParentSelected: false,
+                    
                 }
+                
             });
             this.isAllow = value;
+            this.savebutonDisabled = false;
         }
-        this.savebutonDisabled = true;
+       
     }
 
     filterEmployee(event): void {

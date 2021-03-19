@@ -323,10 +323,10 @@ export class CustomerWorkSetupComponent implements OnInit {
                         description: x.label
                     }
                 });
-                if (!this.receivingCustomerWorkId) {
-                    this.receivingForm.conditionId = this.allConditionInfo[0].conditionId
-                    this.onSelectCondition()
-                }
+                // if (!this.receivingCustomerWorkId) {
+                //     this.receivingForm.conditionId = this.allConditionInfo[0].conditionId
+                //     this.onSelectCondition()
+                // }
             }
         })
     }
@@ -413,7 +413,10 @@ export class CustomerWorkSetupComponent implements OnInit {
                 employeeId: { 'value': res.employeeId, 'label': res.employeeName },
                 customerCode: res.customerCode,
                 customerContactId: res,
-                customerPhone: res
+                customerPhone: res,
+                ownerTypeId:res.ownerTypeId==null? 0 :res.ownerTypeId,
+                obtainFromTypeId:res.obtainFromTypeId==null? 0 :res.obtainFromTypeId,
+                traceableToTypeId:res.traceableToTypeId==null? 0 :res.traceableToTypeId,
             };
             this.getManagementStructureDetails(this.receivingForm
                 ? this.receivingForm.managementStructureId
@@ -443,26 +446,18 @@ export class CustomerWorkSetupComponent implements OnInit {
         });
     }
 
+
     getSiteDetailsOnEdit(res) {
         this.getInactiveObjectOnEdit('value', res.siteId, this.allSites, 'Site', 'SiteId', 'Name');
         this.getInactiveObjectOnEdit('value', res.warehouseId, this.allWareHouses, 'Warehouse', 'WarehouseId', 'Name');
         this.getInactiveObjectOnEdit('value', res.locationId, this.allLocations, 'Location', 'LocationId', 'Name');
         this.getInactiveObjectOnEdit('value', res.shelfId, this.allShelfs, 'Shelf', 'ShelfId', 'Name');
         this.getInactiveObjectOnEdit('value', res.binId, this.allBins, 'Bin', 'BinId', 'Name');
-    }
-    
-    getStockStatus(value) {
-        this.disableUpdateButton = false;
-        if (value == 0) {
-            this.receivingForm.isCustomerStock = true;
-        } else {
-            this.receivingForm.isCustomerStock = false;
-        }
-    }
 
+    }
     getObtainOwnerTraceOnEdit(res) {
         if (res.obtainFromTypeId == 1) {
-            this.receivingForm.obtainFrom = { 'customerId': res.obtainFrom, 'name': res.obtainFromName };
+            this.receivingForm.obtainFrom = { 'customerId': res.obtainFrom, 'name': res.obtainFromName ,'label': res.obtainFromName, 'value': res.obtainFrom };
         }
         else if (res.obtainFromTypeId == 2) {
             this.receivingForm.obtainFrom = { 'label': res.obtainFromName, 'value': res.obtainFrom };
@@ -474,7 +469,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.obtainFrom = res.obtainFrom;
         }
         if (res.ownerTypeId == 1) {
-            this.receivingForm.owner = { 'customerId': res.owner, 'name': res.ownerName };
+            this.receivingForm.owner = { 'customerId': res.owner, 'name': res.ownerName,'label': res.ownerName, 'value': res.owner  };
         }
         else if (res.ownerTypeId == 2) {
             this.receivingForm.owner = { 'label': res.ownerName, 'value': res.owner };
@@ -486,7 +481,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.owner = res.owner;
         }
         if (res.traceableToTypeId == 1) {
-            this.receivingForm.traceableTo = { 'customerId': res.traceableTo, 'name': res.tracableToName };
+            this.receivingForm.traceableTo = { 'customerId': res.traceableTo, 'name': res.tracableToName,'label': res.tracableToName, 'value': res.traceableTo };
         }
         else if (res.traceableToTypeId == 2) {
             this.receivingForm.traceableTo = { 'label': res.tracableToName, 'value': res.traceableTo };
@@ -498,6 +493,59 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.traceableTo = res.traceableTo;
         }
     }
+
+    getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
+        if (id) {
+            for (let i = 0; i < originalData.length; i++) {
+                if (originalData[i][string] == id) {
+                    return id;
+                }
+            }
+            let obj: any = {};
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+                obj = res[0];
+                if (tableName == 'Site') {
+                    obj.siteId = obj.value,
+                        obj.name = obj.label,
+                        this.allSites = [...originalData, obj];
+                }
+                else if (tableName == 'Warehouse') {
+                    obj.warehouseId = obj.value,
+                        obj.name = obj.label,
+                        this.allWareHouses = [...originalData, obj];
+                }
+                else if (tableName == 'Location') {
+                    obj.locationId = obj.value,
+                        obj.name = obj.label,
+                        this.allLocations = [...originalData, obj];
+                }
+                else if (tableName == 'Shelf') {
+                    obj.shelfId = obj.value,
+                        obj.name = obj.label,
+                        this.allShelfs = [...originalData, obj];
+                }
+                else if (tableName == 'Bin') {
+                    obj.binId = obj.value,
+                        obj.name = obj.label,
+                        this.allBins = [...originalData, obj];
+                }
+            });
+            return id;
+        } else {
+            return null;
+        }
+    }
+    
+
+    getStockStatus(value) {
+        this.disableUpdateButton = false;
+        if (value == 0) {
+            this.receivingForm.isCustomerStock = true;
+        } else {
+            this.receivingForm.isCustomerStock = false;
+        }
+    }
+
 
     getTimeLifeOnEdit(timeLifeId) {
         this.stocklineService.getStockLineTimeLifeList(timeLifeId).subscribe(res => {
@@ -850,19 +898,34 @@ export class CustomerWorkSetupComponent implements OnInit {
         this.sourceTimeLife = {};
     }
 
-    onSelectObrainFrom(value) {
+    onSelectObrainFrom(value) {     
         this.receivingForm.obtainFrom = undefined;
         this.receivingForm.obtainFromTypeId = value;
+        // if(value==1){
+        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
+        //     this.receivingForm.owner =  this.receivingForm.customerId;;
+        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
+        // }
     }
 
     onSelectOwner(value) {
         this.receivingForm.owner = undefined;
         this.receivingForm.ownerTypeId = value;
+        // if(value==1){
+        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
+        //     this.receivingForm.owner =  this.receivingForm.customerId;;
+        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
+        // }
     }
 
     onSelectTraceableTo(value) {
         this.receivingForm.traceableTo = undefined;
         this.receivingForm.traceableToTypeId = value;
+        // if(value==1){
+        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
+        //     this.receivingForm.owner =  this.receivingForm.customerId;;
+        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
+        // }
     }
 
     onSelectCondition() {
@@ -896,22 +959,8 @@ export class CustomerWorkSetupComponent implements OnInit {
    
     onSaveCustomerReceiving() {
         this.gettagTypeIds = [];
-        if (this.receivingForm.tagType && this.receivingForm.tagType.length > 0) {
-            this.allTagTypes.forEach(element1 => {
-                this.receivingForm.tagType.forEach(element2 => {
-                    if (element1.value == element2) {
-                        this.gettagTypeIds.push(element1.value);
-                    }
-                });
-            });
-            this.receivingForm.tagTypeIds = this.gettagTypeIds.join();
-            for (let i = 0; i < this.receivingForm.tagType.length; i++) {
-                this.receivingForm.tagType[i] = getValueFromArrayOfObjectById('label', 'value', this.receivingForm.tagType[i], this.allTagTypes);
-            }
-            this.receivingForm.tagType = this.receivingForm.tagType.join();
-        } else {
-            this.receivingForm.tagType = "";
-        }
+
+debugger;
         const receivingForm = {
             ...this.receivingForm,
             customerId: getValueFromObjectByKey('customerId', this.receivingForm.customerId),
@@ -935,15 +984,37 @@ export class CustomerWorkSetupComponent implements OnInit {
             workScopeId: this.receivingForm.workScopeId,
             isSerialized: this.receivingForm.isSerialized ? this.receivingForm.isSerialized : false,
             isTimeLife: this.receivingForm.isTimeLife ? this.receivingForm.isTimeLife : false,
-            timeLife: { ...this.sourceTimeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() }
-
+            timeLife: { ...this.sourceTimeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() },
+            ownerTypeId:this.receivingForm.ownerTypeId==0? null :this.receivingForm.ownerTypeId,
+            obtainFromTypeId:this.receivingForm.obtainFromTypeId==0? null :this.receivingForm.obtainFromTypeId,
+            traceableToTypeId:this.receivingForm.traceableToTypeId==0? null :this.receivingForm.traceableToTypeId,
         }
         const { customerCode, customerPhone, partDescription, manufacturer, revisePartId, ...receivingInfo } = receivingForm;
         this.isSpinnerVisible = true;
         if (!this.isEditMode) {
-            receivingInfo.obtainFrom = this.receivingForm.obtainFrom ? editValueAssignByCondition('value', this.receivingForm.obtainFrom) : '',
-                receivingInfo.owner = this.receivingForm.owner ? editValueAssignByCondition('value', this.receivingForm.owner) : '',
-                receivingInfo.traceableTo = this.receivingForm.traceableTo ? editValueAssignByCondition('value', this.receivingForm.traceableTo) : '',
+            receivingInfo.obtainFrom = this.receivingForm.obtainFrom ? editValueAssignByCondition('value', this.receivingForm.obtainFrom) : null;
+                receivingInfo.owner = this.receivingForm.owner ? editValueAssignByCondition('value', this.receivingForm.owner) : null;
+                receivingInfo.traceableTo = this.receivingForm.traceableTo ? editValueAssignByCondition('value', this.receivingForm.traceableTo) : null;
+              
+              
+                if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
+                    this.allTagTypes.forEach(element1 => {
+                        receivingInfo.tagType.forEach(element2 => {
+                            if (element1.value == element2) {
+                                this.gettagTypeIds.push(element1.value);
+                            }
+                        });
+                    });
+                    receivingInfo.tagTypeIds = this.gettagTypeIds.join();
+                    for (let i = 0; i < receivingInfo.tagType.length; i++) {
+                        receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+                    }
+                    receivingInfo.tagType = receivingInfo.tagType.join();
+                } else {
+                    receivingInfo.tagType = "";
+                }
+              
+              
                 this.receivingCustomerWorkService.newReason(receivingInfo).subscribe(res => {
                     this.receivingCustomerWorkId=res.receivingCustomerWorkId;
                     this.uploadDocs.next(true);
@@ -958,27 +1029,68 @@ export class CustomerWorkSetupComponent implements OnInit {
                 });
         }
         else {
-            if (receivingInfo.obtainFromTypeId == 1) {
-                receivingInfo.obtainFrom = receivingInfo.obtainFrom.customerId;
-            } else if (receivingInfo.obtainFromTypeId = 2) {
-                receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
-            } else if (receivingInfo.obtainFromTypeId == 9) {
-                receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
+        
+            // if (receivingInfo.obtainFromTypeId == 1 && receivingInfo.obtainFrom !=null) {
+            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.customerId;
+            // } else if (receivingInfo.obtainFromTypeId = 2 && receivingInfo.obtainFrom !=null) {
+            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
+            // } else if (receivingInfo.obtainFromTypeId == 9 && receivingInfo.obtainFrom !=null) {
+            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
+            // }
+            // if (receivingInfo.ownerTypeId == 1 && receivingInfo.owner !=null) {
+            //     receivingInfo.owner = receivingInfo.owner.customerId;
+            // } else if (receivingInfo.ownerTypeId = 2 && receivingInfo.owner !=null) {
+            //     receivingInfo.owner = receivingInfo.owner.value;
+            // } else if (receivingInfo.ownerTypeId == 9 && receivingInfo.owner !=null) {
+            //     receivingInfo.owner = receivingInfo.owner.value;
+            // }
+            // if (receivingInfo.traceableToTypeId == 1 && receivingInfo.traceableTo !=null) {
+            //     receivingInfo.traceableTo = receivingInfo.traceableTo.customerId;
+            // } else if (receivingInfo.traceableToTypeId = 2 && receivingInfo.traceableTo !=null) {
+            //     receivingInfo.traceableTo = receivingInfo.traceableTo.value;
+            // } else if (receivingInfo.traceableToTypeId == 9 && receivingInfo.traceableTo !=null) {
+            //     receivingInfo.traceableTo = receivingInfo.traceableTo.value;
+            // }
+            receivingInfo.ownerTypeId=(receivingInfo.ownerTypeId==0 || receivingInfo.ownerTypeId==false)? null :receivingInfo.ownerTypeId;
+            receivingInfo.obtainFromTypeId=(receivingInfo.obtainFromTypeId==0 || receivingInfo.obtainFromTypeId==false)? null :receivingInfo.obtainFromTypeId;
+            receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
+
+if(receivingInfo.obtainFromTypeId !=null){
+    receivingInfo.obtainFrom = typeof receivingInfo.obtainFrom=='object'? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
+}else{
+    receivingInfo.obtainFrom=null;
+}
+if(receivingInfo.ownerTypeId !=null){
+    receivingInfo.owner =  typeof  receivingInfo.owner=='object'? receivingInfo.owner.value : receivingInfo.owner;
+}else{
+    receivingInfo.owner =null
+}
+
+if(receivingInfo.traceableToTypeId !=null){
+    receivingInfo.traceableTo = typeof receivingInfo.traceableTo=='object'? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
+}else{
+    receivingInfo.traceableTo=null;  
+}
+
+
+            if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
+                this.allTagTypes.forEach(element1 => {
+                    receivingInfo.tagType.forEach(element2 => {
+                        if (element1.value == element2) {
+                            this.gettagTypeIds.push(element1.value);
+                        }
+                    });
+                });
+                receivingInfo.tagTypeIds = this.gettagTypeIds.join();
+                for (let i = 0; i < receivingInfo.tagType.length; i++) {
+                    receivingInfo.tagType[i] = getValueFromArrayOfObjectById('label', 'value', receivingInfo.tagType[i], this.allTagTypes);
+                }
+                receivingInfo.tagType = receivingInfo.tagType.join();
+            } else {
+                receivingInfo.tagType = "";
             }
-            if (receivingInfo.ownerTypeId == 1) {
-                receivingInfo.owner = receivingInfo.owner.customerId;
-            } else if (receivingInfo.ownerTypeId = 2) {
-                receivingInfo.owner = receivingInfo.owner.value;
-            } else if (receivingInfo.ownerTypeId == 9) {
-                receivingInfo.owner = receivingInfo.owner.value;
-            }
-            if (receivingInfo.traceableToTypeId == 1) {
-                receivingInfo.traceableTo = receivingInfo.traceableTo.customerId;
-            } else if (receivingInfo.traceableToTypeId = 2) {
-                receivingInfo.traceableTo = receivingInfo.traceableTo.value;
-            } else if (receivingInfo.traceableToTypeId == 9) {
-                receivingInfo.traceableTo = receivingInfo.traceableTo.value;
-            }
+
+
             this.receivingCustomerWorkService.updateCustomerWorkReceiving(receivingInfo).subscribe(res => {
                 this.receivingCustomerWorkId=res.receivingCustomerWorkId;
                 this.uploadDocs.next(true);
@@ -1227,48 +1339,6 @@ export class CustomerWorkSetupComponent implements OnInit {
         // }
     }
 
-    getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
-        if (id) {
-            for (let i = 0; i < originalData.length; i++) {
-                if (originalData[i][string] == id) {
-                    return id;
-                }
-            }
-            let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
-                obj = res[0];
-                if (tableName == 'Site') {
-                    obj.siteId = obj.value,
-                        obj.name = obj.label,
-                        this.allSites = [...originalData, obj];
-                }
-                else if (tableName == 'Warehouse') {
-                    obj.warehouseId = obj.value,
-                        obj.name = obj.label,
-                        this.allWareHouses = [...originalData, obj];
-                }
-                else if (tableName == 'Location') {
-                    obj.locationId = obj.value,
-                        obj.name = obj.label,
-                        this.allLocations = [...originalData, obj];
-                }
-                else if (tableName == 'Shelf') {
-                    obj.shelfId = obj.value,
-                        obj.name = obj.label,
-                        this.allShelfs = [...originalData, obj];
-                }
-                else if (tableName == 'Bin') {
-                    obj.binId = obj.value,
-                        obj.name = obj.label,
-                        this.allBins = [...originalData, obj];
-                }
-            });
-            return id;
-        } else {
-            return null;
-        }
-    }
-    
     onClickMemo() {
         $('#textareapopup').modal('show');
         this.memoPopupContent = this.receivingForm.memo;
@@ -1315,6 +1385,11 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.receivingForm.locationId=res[0].defaultLocationId;
             this.receivingForm.shelfId=res[0].defaultShelfId;
             this.receivingForm.binId=res[0].defaultBinId;
+            this.receivingForm.conditionId=res[0].defaultConditionId;
+            if (!this.receivingCustomerWorkId) {
+                this.receivingForm.conditionId = this.receivingForm.conditionId?  this.receivingForm.conditionId : this.allConditionInfo[0].conditionId;
+                this.onSelectCondition()
+            }
             this.loadSiteData('fromOnload');
             this.siteValueChange(this.receivingForm.siteId)
             this.wareHouseValueChange( this.receivingForm.warehouseId)

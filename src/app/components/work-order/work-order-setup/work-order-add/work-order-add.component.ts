@@ -2107,7 +2107,7 @@ export class WorkOrderAddComponent implements OnInit {
                     res.forEach(element => {
                         this.getValues(element)
                         element.isShowPlus = true;
-                        if (element.currency) element.currency = element.currency.symbol;
+                        // if (element.currency) element.currency = element.currency.symbol;
                         if (element.defered == 'No') {
                             element.defered = false;
                         } else {
@@ -2116,7 +2116,8 @@ export class WorkOrderAddComponent implements OnInit {
                     });
                     this.workOrderMaterialList = res;
                     this.workOrderMaterialList.forEach(element => {
-                        element.currency=element.currency ? formatNumberAsGlobalSettingsModule(element.currency, 2) : '0.00';
+                        // ? formatNumberAsGlobalSettingsModule(element.currency, 2) : '0.00'
+                        element.currency=element.currency ;
                        element.unitCost=element.unitCost ? formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
                        element.extendedCost=element.extendedCost ? formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
                     }); 
@@ -3301,7 +3302,7 @@ export class WorkOrderAddComponent implements OnInit {
                 res.forEach(element => {
                     this.getValues(element)
                     element.isShowPlus = true;
-                    if (element.currency) element.currency = element.currency.symbol;
+                    // if (element.currency) element.currency = element.currency.symbol;
                 });
                 this.workOrderMaterialList = res;
                 this.materialStatus = res[0].partStatusId;

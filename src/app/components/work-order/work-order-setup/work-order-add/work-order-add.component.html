@@ -451,7 +451,7 @@
                                     <th rowspan="2">Tech Station</th>
                                     <th rowspan="2" style="display:none">Tear Down Report</th>
                                     <th colspan="2">TAT (Days)</th>
-                                    <th rowspan="2">Action</th>
+                                    <th rowspan="2" class="table-column-icon-width">Action</th>
                                 </tr>
                                 <tr>
                                     <th>PMA</th>
@@ -470,7 +470,7 @@
                                                         #mpn="ngModel" errorMessage="Records not found" [forceSelection]="true"
                                                         [dropdown]="true" [suggestions]="partNumberList" (ngModelChange)="getValid()"
                                                         (onSelect)="onSelectedPartNumber($event, workOrderPartNumber, i); getWorkFlowByPNandScope(workOrderPartNumber); getStockLineByItemMasterIdOnChangePN(workOrderPartNumber,i);"
-                                                        (completeMethod)="filterPartNumber($event)" emptyMessage="No Records Found"
+                                                        (completeMethod)="filterPartNumber($event)" emptyMessage=" "
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'masterPartId' )"
                                                         [size]="30" [minLength]="1"
                                                         class="p-autoComplete-ctsm custome_automo p-autocomplete-mh120" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
@@ -696,7 +696,7 @@
                                                #tatDaysStandard="ngModel" [(ngModel)]="workOrderPartNumber.tatDaysStandard"
                                                disabled>
                                     </td>
-                                    <td *ngIf="!isView"> 
+                                    <td *ngIf="!isView" class="table-column-icon-width"> 
                                         <span *ngIf="!workOrderGeneralInformation.isSinglePN " class="delete-row-btn" >
                                             <!-- <a class="btn btn-danger boxed-float-btn nobg"  (click)="openDelete(content,i)" [disabled]="workOrderQuoteId"
                                                matTooltipPosition="above" matTooltip="Delete" >
@@ -707,11 +707,12 @@
                                                 <i class="fa fa-trash"></i>
                                             </button> </span>
              
-                                        <!-- <span>
-                                            <a class="btn nobg" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above">
-                                                <i class="fa fa-trash"></i>
-                                            </a> [disabled]="workOrderQuoteId"
-                                        </span> -->
+                                        <span *ngIf="workOrderGeneralInformation.isSinglePN ">
+                                         
+                                            <button type="button" class="btn nobg btn-delete-cstm" disabled>
+                                                <i class="fa fa-trash" ></i>
+                                            </button> 
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
