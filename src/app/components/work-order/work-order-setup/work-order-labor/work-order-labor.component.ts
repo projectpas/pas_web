@@ -732,7 +732,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
       isActive: true,
     }
 
-    debugger;
+
     let tasksData = this.laborForm.workOrderLaborList[0];
     let formedData = {}
     for (let tdata in tasksData) {

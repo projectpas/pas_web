@@ -103,7 +103,7 @@ export class WorkOrderAddComponent implements OnInit {
     saveTearDownData: any = [];
     workFlowList: any;
     tearDownReportList = [{
-        label: 'Station 2',
+        label: 'Station 2', 
         value: 20
     }]
     WorkOrderMPN = { ...new WorkOrderPartNumber() };
@@ -292,7 +292,6 @@ export class WorkOrderAddComponent implements OnInit {
         ];
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
-            console.log("changes")
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
             this.commonService.getCustomerNameandCode("", this.workOrderGeneralInformation.workOrderTypeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
@@ -305,7 +304,7 @@ export class WorkOrderAddComponent implements OnInit {
             },
                 err => {
                     this.handleError(err);
-                })
+                }) 
         }
         if (this.isEdit == true) {
             this.disableSaveForEdit = true;
@@ -354,9 +353,9 @@ export class WorkOrderAddComponent implements OnInit {
                 }
             )
         }
-        if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
-            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? (formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) + '.00') : '0.00';
-        }
+        // if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
+        //     this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? (formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2)) : '0.00';
+        // }
         this.getAllEmployees('');
         this.getAllWorkScpoes('');
         this.getConditionsList('');
@@ -389,7 +388,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
 
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
-            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : this.workOrderGeneralInformation.creditLimit;
+            this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : '0.00';
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -534,7 +533,7 @@ export class WorkOrderAddComponent implements OnInit {
                 })
             }
             if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
-                this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : this.workOrderGeneralInformation.creditLimit;
+                this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : '0.00';
             }
 
             this.workFlowWorkOrderId = data.workFlowWorkOrderId;
@@ -613,14 +612,15 @@ export class WorkOrderAddComponent implements OnInit {
         return result;
     }
 
-    checkTechnician() {
+    checkTechnician() { 
         var result = false;
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.partNumbers) {
             this.workOrderGeneralInformation.partNumbers.forEach(
                 x => {
-                    if (x.partTechnicianId == 0) {
+                    if (x.partTechnicianId == 0 || (typeof x.partTechnicianId =='object' && x.partTechnicianId.employeeId==null)) {
                         result = true;
                     }
+                    
                 }
             )
         }
@@ -697,7 +697,7 @@ export class WorkOrderAddComponent implements OnInit {
         if (this.isView == false && type == 'formHtml') {
             this.customerWarnings(object.customerId);
         }
-        currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2):'';
+        currentRecord.creditLimit = object.creditLimit ? formatNumberAsGlobalSettingsModule(object.creditLimit, 2):'0.00';
         currentRecord.creditTermsId = object.creditTermsId;
         currentRecord.creditTerm = object.creditTerm;
         this.myCustomerContact = object.customerContact;
@@ -1413,7 +1413,7 @@ export class WorkOrderAddComponent implements OnInit {
     closeWorkOrderMainView(value) {
         this.isWorkOrderMainView = value;
     }
- 
+  
     savedWorkFlowData(workFlowDataObject) {
         this.isSpinnerVisible = true;
         if (this.isSubWorkOrder == true) {

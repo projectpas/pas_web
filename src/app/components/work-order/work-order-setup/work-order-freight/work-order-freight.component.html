@@ -208,7 +208,7 @@
                 (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
             <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span>
-                  <span>
+                  <span *ngIf="!isQuote">
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
                         matTooltip="History" matTooltipPosition="above"><i
                             class="fa fa-history"></i></a>
