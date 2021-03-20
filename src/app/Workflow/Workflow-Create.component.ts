@@ -2685,6 +2685,12 @@ console.log("this.workFlowList",this.workFlowList)
                 masterCompanyId: this.currentUserMasterCompanyId,
             }
 
+            if (data.measurements && data.measurements.length != 0) {
+                data.measurements.forEach(element => {
+                    delete element.partName
+                });
+            }
+
             const saveWorkFlowWorkOrderData = {
                 ...this.sourceWorkFlow,
                 isSaveToWorkFlow: isSaveToWorkFlow,
