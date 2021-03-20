@@ -1054,19 +1054,19 @@ export class CustomerWorkSetupComponent implements OnInit {
             receivingInfo.obtainFromTypeId=(receivingInfo.obtainFromTypeId==0 || receivingInfo.obtainFromTypeId==false)? null :receivingInfo.obtainFromTypeId;
             receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
 
-if(receivingInfo.obtainFromTypeId !=null){
-    receivingInfo.obtainFrom = typeof receivingInfo.obtainFrom=='object'? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
+if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
+    receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
 }else{
     receivingInfo.obtainFrom=null;
 }
-if(receivingInfo.ownerTypeId !=null){
-    receivingInfo.owner =  typeof  receivingInfo.owner=='object'? receivingInfo.owner.value : receivingInfo.owner;
+if(receivingInfo.ownerTypeId !=null && receivingInfo.owner !=null){
+    receivingInfo.owner =  (typeof  receivingInfo.owner=='object')? receivingInfo.owner.value : receivingInfo.owner;
 }else{
     receivingInfo.owner =null
 }
 
-if(receivingInfo.traceableToTypeId !=null){
-    receivingInfo.traceableTo = typeof receivingInfo.traceableTo=='object'? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
+if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
+    receivingInfo.traceableTo = (typeof receivingInfo.traceableTo=='object')? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
 }else{
     receivingInfo.traceableTo=null;  
 }
