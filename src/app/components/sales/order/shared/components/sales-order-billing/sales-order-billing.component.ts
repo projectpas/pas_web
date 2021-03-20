@@ -129,6 +129,7 @@ export class SalesOrderBillingComponent implements OnInit {
             .subscribe((response: any) => {
                 this.isSpinnerVisible = false;
                 this.billingList = response[0];
+                this.checkIsChecked();
             }, error => {
                 this.isSpinnerVisible = false;
             });
