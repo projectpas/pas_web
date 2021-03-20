@@ -232,7 +232,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         newRow.extendedCost = "";
         newRow.partName = "";
         newRow.partNumber = null;
-        newRow.itemMasterId = "";
+        newRow.itemMasterId = ""; 
         newRow.quantity = "";
         newRow.unitCost = "";
         newRow.memo = "";

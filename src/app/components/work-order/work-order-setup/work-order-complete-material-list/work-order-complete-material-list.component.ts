@@ -552,7 +552,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
                if(res && res.length !=0){
                 this.reservedList = res.map(x => {
-                    x.masterCompanyId = this.authService.currentUser.masterCompanyId
+                    x.masterCompanyId = this.authService.currentUser.masterCompanyId;
+                    x.createdBy = x.createdBy? x.createdBy :this.authService.currentUser.userName;
+                    x.updatedBy = this.authService.currentUser.userName;
                        this.setdefaultValues(x);
                        if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
                            this.savebutonDisabled = true;
@@ -589,6 +591,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                                    reservedById: this.authService.currentEmployee,
                                    issuedById: this.authService.currentEmployee,
                                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                                   createdBy : y.createdBy? y.createdBy :this.authService.currentUser.userName,
+                                   updatedBy : this.authService.currentUser.userName
                                }
                            }),
                            woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
@@ -600,6 +604,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                                    reservedById: this.authService.currentEmployee,
                                    issuedById: this.authService.currentEmployee,
                                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                                   createdBy : y.createdBy? y.createdBy :this.authService.currentUser.userName,
+                                   updatedBy : this.authService.currentUser.userName
                                }
                            })
                        }
