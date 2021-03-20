@@ -1004,7 +1004,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     "filters": {
                         "ItemMasterId": partId,
                         "WorkScopeId": workScopeId,
-                        "statusId": Number(this.type)
+                        "statusId": Number(this.type),
+                        "masterCompanyId":this.authService.currentUser.masterCompanyId
                     },
                     "globalFilter": null
                 }
