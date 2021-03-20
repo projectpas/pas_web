@@ -1413,7 +1413,7 @@ export class WorkOrderAddComponent implements OnInit {
     closeWorkOrderMainView(value) {
         this.isWorkOrderMainView = value;
     }
-
+ 
     savedWorkFlowData(workFlowDataObject) {
         this.isSpinnerVisible = true;
         if (this.isSubWorkOrder == true) {

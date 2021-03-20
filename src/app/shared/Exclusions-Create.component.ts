@@ -388,14 +388,14 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
 
     // sum of the qty
     calculateQtySummation() {
-        this.workFlow.sumofQty = this.workFlow.exclusions.filter(x => x.isDelete != true).reduce((acc, x) => {
+        this.workFlow.sumofQty = this.workFlow.exclusions.filter(x => x.isDeleted != true).reduce((acc, x) => {
             return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
         }, 0);
     }
 
     // sum of extended cost
     calculateExtendedCostSummation() {
-        this.workFlow.sumofExtendedCost = this.workFlow.exclusions.filter(x => x.isDelete != true).reduce((acc, x) => {
+        this.workFlow.sumofExtendedCost = this.workFlow.exclusions.filter(x => x.isDeleted != true).reduce((acc, x) => {
             return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
         }, 0);
         this.workFlow.sumofExtendedCost = this.workFlow.sumofExtendedCost ? formatNumberAsGlobalSettingsModule(this.workFlow.sumofExtendedCost, 2) : '';
@@ -481,7 +481,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.exclusions[this.deletedRowIndex].isDeleted = true;
-            this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
+            // this.workFlow.exclusions[this.deletedRowIndex].isDeleted = true;
         }
         this.reCalculate();
         this.modal.close();
@@ -503,7 +503,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             );
         }
         else {
-            this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
+            this.workFlow.exclusions[this.deletedRowIndex].isDeleted = true;
         }
         this.reCalculate();
         this.dismissModel();

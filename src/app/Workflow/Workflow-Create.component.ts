@@ -2013,7 +2013,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            IsDeleted: false,
+            isDeleted: false,
         }];
         return equipmentList;
     }
@@ -2033,7 +2033,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            IsDeleted: false,
+            isDeleted: false,
         }];
 
         return expertise;
@@ -2311,7 +2311,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             souceData.measurements.forEach(element => {
                 delete element.partName
             });
-        }
+        } 
         if (souceData.publication && souceData.publication.length != 0) { 
             souceData.publication.forEach(element => {
                 delete element.allDashNumbers;
@@ -2652,7 +2652,7 @@ console.log("this.workFlowList",this.workFlowList)
                 }
                 if (workflow.publication != undefined) {
                     for (let publication of workflow.publication) {
-                        publication.id = publication.id > 0 ? publication.id : 0;
+                        // publication.id = publication.id > 0 ? publication.id : 0;
                         publication.workflowId = workflow.workflowId;
                         publication.taskId = workflow.taskId;
                         if (publication.workflowPublicationDashNumbers != undefined) {
@@ -2681,7 +2681,7 @@ console.log("this.workFlowList",this.workFlowList)
                 createdate: new Date(),
                 updatdate: new Date(),
                 isActive: true,
-                IsDeleted: false,
+                // isDeleted: false,
                 masterCompanyId: this.currentUserMasterCompanyId,
             }
 
@@ -2693,18 +2693,20 @@ console.log("this.workFlowList",this.workFlowList)
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 workOrderPartNoId: this.workOrderPartNumberId,
                 existingWorkFlowId: this.sourceWorkFlow.workflowId,
-                charges: data.charges.map(x => { return { ...x, workflowChargesListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                directions: data.directions.map(x => { return { ...x, workflowDirectionId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                equipments: data.equipments.map(x => { return { ...x, workflowEquipmentListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                exclusions: data.exclusions.map(x => { return { ...x, workflowExclusionId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                expertise: data.expertise.map(x => { return { ...x, workflowExpertiseListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                // workflowChargesListId: 0,workflowDirectionId: 0, workflowEquipmentListId: 0,workflowExclusionId: 0,workflowExpertiseListId: 0,
+                // workflowMaterialListId: 0,workflowMeasurementId: 0,
+                charges: data.charges.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                directions: data.directions.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                equipments: data.equipments.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                exclusions: data.exclusions.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                expertise: data.expertise.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 materialList: data.materialList.map(x => { return {
-                     ...x, workflowMaterialListId: 0,
+                     ...x, 
                       workOrderId: this.savedWorkOrderData.workOrderId,
                     //   partNumber:x.partNumber.partName,
                       partNumber: (typeof x.partNumber == 'string') ? x.partNumber:   x.partNumber.partName,
                       ...excessParams } }),
-                measurements: data.measurements.map(x => { return { ...x, workflowMeasurementId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                measurements: data.measurements.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 publication: data.publication.map(x => { return { ...x, Id: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } })
             }
 
