@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="second-block">
-                        <h5>
+                        <h5 style="line-height: 25px; margin-left: 42%;">
                             <b>INVOICE</b>
                         </h5>
                         <div class="second-block-div">
@@ -299,26 +299,26 @@
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">SALES TAX</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.tax}} </td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.tax | number : '1.2-2'}} </td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">OTHER TAX</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.otherTax}}</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.otherTax | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">MISC CHARGES</td>
-                                    <td style="text-align: right;"> 0.00</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.miscCharges | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">FREIGHT</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.freight}}</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.freight | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">
                                         <b>TOTAL</b>
                                     </td>
                                     <td style="text-align: right;">
-                                        <b> {{this.salesOrderInvoice.total}}</b>
+                                        <b> {{this.salesOrderInvoice.total | number : '1.2-2'}}</b>
                                     </td>
                                 </tr>
                                 <tr></tr>
