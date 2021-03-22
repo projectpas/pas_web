@@ -302,12 +302,13 @@
                                                  <div class="col-md-3 col-lg-3  ">
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
-                                                    <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel"  [pattern]="titlePattern" class="form-control"    name="Bank n" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
-                                                    <div *ngIf="bankNmae.errors" [ngClass]="'error'">
+                                                    <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel" class="form-control" name="Bank n" 
+                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
+                                                    <!-- <div *ngIf="bankNmae.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankNmae.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <div class="form-group">
                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red"></span></label>
@@ -334,17 +335,21 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control text-end-align"  name="Account Nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  (ngModelChange)="achval()" > 
+                                                    <input type="text" maxlength="30"  class="form-control"  name="Account Nb" 
+                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  
+                                                    (ngModelChange)="achval()" > 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control text-end-align"   name="ABA nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" required  (ngModelChange)="achval()">
+                                                    <input type="text" maxlength="30" class="form-control" name="ABA nb" 
+                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" 
+                                                    required  (ngModelChange)="achval()">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
-                                                     <input type="text" class="form-control"   name="SWIFT b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achSWIFTID" required  (ngModelChange)="achval()">  
+                                                    <label class="lable-Adjust">SWIFT Code / IBAN Code  <span class="clr-red"></span></label>
+                                                     <input type="text" class="form-control"   name="SWIFT b" [ngModelOptions]="{standalone: true}" 
+                                                     [(ngModel)]="sourceLegalEntity.achSWIFTID" (ngModelChange)="achval()">  
                                                 </div>
-
                                                 <div class="form-group">
                                                     <button type="submit" *ngIf="isAch" class="btn btn-primary" (click)="savebankACH()" [disabled]="!achvalid">
                                                    Save
