@@ -9,7 +9,7 @@
     </span>
   </div>
   <form #materialCreateForm="ngForm">
-    <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
     <div class="tableFixHead">
     <table class="table table-bordered" style="height:auto;max-height:350px !important">
       <thead>
@@ -20,13 +20,13 @@
           <th style="z-index:1">Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
           <th class="min-width-90" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
-          <th>Qty<span class="clr-red">*</span></th>
+          <th style="width:60px">Qty<span class="clr-red">*</span></th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th class="min-width-90">Stk Type</th>
-          <th>Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
-          <th>Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
-          <th>Deferred</th>
+          <th style="width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
+          <th style="width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
+          <th style="width:60px">Deferred</th>
           <th style="z-index:1">Memo</th>
           <th>Actions</th>
         </tr>

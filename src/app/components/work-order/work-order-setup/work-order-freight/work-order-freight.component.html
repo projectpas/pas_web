@@ -108,7 +108,7 @@
       </tr>
       <tr>
         <th class="table-column-width" rowspan="2">Task</th>
-        <th  class="table-column-width" *ngFor="let col of columns" rowspan="2">
+        <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns" rowspan="2">
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <th class="table-column-width" colspan="3">Dimensions</th>
@@ -352,16 +352,16 @@
               <table class="table table-bordered lastcol-fix">
                 <thead>
                   <tr>
-                    <th rowspan="2">Task *</th>
+                    <th rowspan="2">Task <span class="clr-red">*</span></th>
                     <!-- <th>Carrier *</th> -->
-                    <th rowspan="2" style="z-index:1">Ship Via *</th>
+                    <th rowspan="2" style="z-index:1">Ship Via <span class="clr-red">*</span></th>
                     <!-- <th>Dimensions *</th> -->
                     <th rowspan="2">Weight</th>
                     <th rowspan="2" style="z-index:1">UOM</th>
                     <th colspan="3" style="z-index:1">Dimensions</th>
                     <th rowspan="2" style="z-index:1">UOM</th>
                     <th rowspan="2" style="z-index:1">Currency</th>
-                    <th rowspan="2">Amount *</th>
+                    <th rowspan="2">Amount <span class="clr-red">*</span></th>
                     <!-- <th>Fixed Freight</th>
                     <th *ngIf="!isQuote">Fixed Amount</th> -->
                     <th rowspan="2" style="z-index:1">Memo</th>
