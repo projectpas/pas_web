@@ -528,7 +528,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6"> 
                                     <div class="card">
                                         <div class="card-header total-workflow-card" >
                                             <h5 class="workflow-cost-label">Total Workflow Cost</h5>
@@ -590,7 +590,304 @@
                     <p-accordion [multiple]="true" class="p-accordion-cstm">
                         <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected"
                             header="{{task.Name}}" (click)="onAccordTabClick1(task)">
-                            <div *ngIf="task.publication.length > 0">
+                            <div *ngIf="task.charges && task.charges.length > 0">
+                                <h5 class="po-head">Charges</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Type<span class="clr-red">*</span></th>
+                                                <th>Description</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                                <th>Unit Cost<span class="clr-red">*</span></th>
+                                                <th>Extended Cost<span class="clr-red">*</span></th>
+                                                <th>Vendor Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let charge of task.charges;let i=index">
+                                                <td class="text-right">{{(i+1)}}</td>
+                                                <td>{{charge.chargesTypeName}}</td>
+                                                <td>{{charge.description}}</td>
+                                                <td class="text-right">{{charge.quantity}}</td>
+                                                <td class="text-right">{{charge.unitCost}}</td>
+                                                <td class="text-right">{{charge.extendedCost}}</td>
+                                                <td>{{charge.vendorName}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.directions && task.directions.length > 0">
+                                <h5 class="po-head">Directions</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Action<span class="clr-red">*</span></th>
+                                                <th>Description</th>
+                                                <th>Sequence</th>
+                                                <th>Memo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let direction of task.directions;let i = index">
+                                                <td class="text-right">{{(i + 1)}}</td>
+                                                <td>{{direction.action}}</td>
+                                                <td>{{direction.description}}</td>
+                                                <td class="text-right">{{direction.sequence}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="direction.memo"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.equipments && task.equipments.length > 0">
+                                <h5 class="po-head">Tools</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Tool Name</th>
+                                                <th>Tool ID</th>                                               
+                                                <th>Tool Description</th>
+                                                <th>Tool Class</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let equipment of task.equipments;let i=index">
+                                                <td class="text-right">{{(i+1)}}</td>
+                                                <td>{{equipment.assetName}}</td>
+                                                <td>{{equipment.assetName}}</td>
+                                                <td>{{equipment.assetDescription}}</td>
+                                                <td>{{equipment.assetTypeName}}</td>                                                
+                                                <td class="text-right">{{equipment.quantity}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.exclusions && task.exclusions.length > 0">
+                                <h5 class="po-head">Exclusions</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>EPN<span class="clr-red">*</span></th>
+                                                <th>Description</th>
+                                                <th>Condition<span class="clr-red">*</span></th>
+                                                <th>Item Classification</th>
+                                                <th>Stock Type</th>
+                                                <th>Qty</th>
+                                                <th>Unit Cost</th>
+                                                <th>Extended Cost</th>
+                                                <th>Estimated % Occurance</th>
+                                                <th>Memo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let exclusion of task.exclusions;let i = index">
+                                                <td class="text-right">{{(i+1)}}</td>
+                                                <td>{{exclusion.partNumber}}</td>
+                                                <td>{{exclusion.partDescription}}</td>
+                                                <td>{{exclusion.condition}}</td>
+                                                <td>{{exclusion.itemClassification}}</td>
+                                                <td>{{exclusion.stockType}}</td>                                                
+                                                <td class="text-right">{{exclusion.quantity}}</td>
+                                                <td class="text-right">{{exclusion.unitCost}}</td>
+                                                <td class="text-right">{{exclusion.extendedCost}}</td>
+                                                <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
+                                                <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="exclusion.memo"></span>
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.exclusionQty}}</b></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.exclusionextendedQty}}</b></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.expertise && task.expertise.length > 0">
+                                <h5 class="po-head">Expertise</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Expertise Type<span class="clr-red">*</span></th>
+                                                <th>Estimated Hours</th>
+                                                <th>Labor Direct Rate</th>
+                                                <th>Direct Labor Cost</th>
+                                                <th>OHead Burden(%)</th>
+                                                <th>OH Cost</th>
+                                                <th>Direct Labor and OH Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let expertise of task.expertise;let i=index">
+                                                <td class="text-right">{{(i+1)}}</td>
+                                                <td>{{expertise.expetiseTypeName}}</td>
+                                                <td class="text-right">{{expertise.estimatedHours}}</td>
+                                                <td class="text-right">{{expertise.laborDirectRate}}</td>
+                                                <td class="text-right">{{expertise.directLaborRate}}</td>
+                                                <td class="text-right">{{expertise.overheadBurden}}</td>
+                                                <td class="text-right">{{expertise.overheadCost}}</td>
+                                                <td class="text-right">{{expertise.laborOverheadCost}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.expertiseTotalEstimatedHours}}</b></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.expertiseTotalDirectLaborCost}}</b></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.expertiseTotalOHCost}}</b></td>
+                                                <td class="text-right"><b>{{task.expertiseTotalDirectLabourAndOHCost}}</b></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.materialList && task.materialList.length > 0">
+                                <h5 class="po-head">Material List</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>PN<span class="clr-red">*</span></th>
+                                                <th>Description<span class="clr-red">*</span></th>
+                                                <th>Cond<span class="clr-red">*</span></th>
+                                                <th>Mandatory / Supplemental</th>
+                                                <th>Item Classification</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                                <th>UOM<span class="clr-red">*</span></th>
+                                                <th>Unit Cost<span class="clr-red">*</span></th>
+                                                <th>Extended Cost<span class="clr-red">*</span></th>
+                                                <th>Memo</th>
+                                                <th>Deferred</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let material of task.materialList;let i = index">
+                                                <td class="text-right">{{(i+1)}}</td>
+                                                <td>{{material.partNumber}}</td>
+                                                <td>{{material.partDescription}}</td>
+                                                <td>{{material.conditionName}}</td>
+                                                <td>{{material.materialMandatoriesName}}</td>
+                                                <td>{{material.itemClassification}}</td>
+                                                <td class="text-right">{{material.quantity}}</td>
+                                                <td>{{material.unitOfMeasure}}</td>
+                                                <td class="text-right">{{material.unitCost}}</td>
+                                                <td class="text-right">{{material.extendedCost}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="material.memo"></span>
+                                                </td> 
+                                                <td>
+                                                    <!-- {{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }} -->
+                                                    <input type="checkbox" disabled="disabled"
+                                                    [checked]="material.isDeferred"
+                                                    class="form-control names ui-autocomplete-input">
+                                               
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.materialTotalQty}}</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
+                                                <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
+                                                <!-- <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td> -->
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.measurements && task.measurements.length > 0">
+                                <h5 class="po-head">Measurements</h5>
+                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                    <div class="tableFixHead">
+                                    <table class="table table-bordered header-table-width">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>PN<span class="clr-red">*</span></th>
+                                                <th>PN Description</th>
+                                                <th>Sequence</th>
+                                                <th>Stage</th>
+                                                <th>Min</th>
+                                                <th>Max</th>
+                                                <th>Expected</th>
+                                                <th>Diagram</th>
+                                                <th>Memo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let measurement of task.measurements;let i = index">
+                                                <td class="text-right">{{(i+1)}}</td>
+                                                <td>{{measurement.partNumber}}</td>
+                                                <td>{{measurement.partDescription}}</td>
+                                                <td class="text-right">{{measurement.sequence}}</td>
+                                                <td>{{measurement.stage}}</td>
+                                                <td class="text-right">{{measurement.min}}</td>
+                                                <td class="text-right">{{measurement.max}}</td>
+                                                <td>{{measurement.expected}}</td>
+                                                <td>{{measurement.diagramURL}}</td>
+                                                <td>   <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="measurement.memo"></span>
+                                                   </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="task.publication && task.publication.length > 0">
                                 <h5 class="po-head">Publications</h5>
                                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                     <div class="tableFixHead">
@@ -724,303 +1021,6 @@
                                         </div>
                                       </ng-template>
                                 </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.measurements && task.measurements.length > 0">
-                                <h5 class="po-head">Measurements</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>PN<span class="clr-red">*</span></th>
-                                                <th>PN Description</th>
-                                                <th>Sequence</th>
-                                                <th>Stage</th>
-                                                <th>Min</th>
-                                                <th>Max</th>
-                                                <th>Expected</th>
-                                                <th>Diagram</th>
-                                                <th>Memo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let measurement of task.measurements;let i = index">
-                                                <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{measurement.partNumber}}</td>
-                                                <td>{{measurement.partDescription}}</td>
-                                                <td class="text-right">{{measurement.sequence}}</td>
-                                                <td>{{measurement.stage}}</td>
-                                                <td class="text-right">{{measurement.min}}</td>
-                                                <td class="text-right">{{measurement.max}}</td>
-                                                <td>{{measurement.expected}}</td>
-                                                <td>{{measurement.diagramURL}}</td>
-                                                <td>   <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="measurement.memo"></span>
-                                                   </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.exclusions && task.exclusions.length > 0">
-                                <h5 class="po-head">Exclusions</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>EPN<span class="clr-red">*</span></th>
-                                                <th>Description</th>
-                                                <th>Condition<span class="clr-red">*</span></th>
-                                                <th>Item Classification</th>
-                                                <th>Stock Type</th>
-                                                <th>Qty</th>
-                                                <th>Unit Cost</th>
-                                                <th>Extended Cost</th>
-                                                <th>Estimated % Occurance</th>
-                                                <th>Memo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let exclusion of task.exclusions;let i = index">
-                                                <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{exclusion.partNumber}}</td>
-                                                <td>{{exclusion.partDescription}}</td>
-                                                <td>{{exclusion.condition}}</td>
-                                                <td>{{exclusion.itemClassification}}</td>
-                                                <td>{{exclusion.stockType}}</td>                                                
-                                                <td class="text-right">{{exclusion.quantity}}</td>
-                                                <td class="text-right">{{exclusion.unitCost}}</td>
-                                                <td class="text-right">{{exclusion.extendedCost}}</td>
-                                                <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                                <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="exclusion.memo"></span>
-                                                    </td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>Total</b></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.exclusionQty}}</b></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.exclusionextendedQty}}</b></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.directions && task.directions.length > 0">
-                                <h5 class="po-head">Directions</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Action<span class="clr-red">*</span></th>
-                                                <th>Description</th>
-                                                <th>Sequence</th>
-                                                <th>Memo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let direction of task.directions;let i = index">
-                                                <td class="text-right">{{(i + 1)}}</td>
-                                                <td>{{direction.action}}</td>
-                                                <td>{{direction.description}}</td>
-                                                <td class="text-right">{{direction.sequence}}</td>
-                                                <td>
-                                                    <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="direction.memo"></span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.expertise && task.expertise.length > 0">
-                                <h5 class="po-head">Expertise</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Expertise Type<span class="clr-red">*</span></th>
-                                                <th>Estimated Hours</th>
-                                                <th>Labor Direct Rate</th>
-                                                <th>Direct Labor Cost</th>
-                                                <th>OHead Burden(%)</th>
-                                                <th>OH Cost</th>
-                                                <th>Direct Labor and OH Cost</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let expertise of task.expertise;let i=index">
-                                                <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{expertise.expetiseTypeName}}</td>
-                                                <td class="text-right">{{expertise.estimatedHours}}</td>
-                                                <td class="text-right">{{expertise.laborDirectRate}}</td>
-                                                <td class="text-right">{{expertise.directLaborRate}}</td>
-                                                <td class="text-right">{{expertise.overheadBurden}}</td>
-                                                <td class="text-right">{{expertise.overheadCost}}</td>
-                                                <td class="text-right">{{expertise.laborOverheadCost}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>Total</b></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.expertiseTotalEstimatedHours}}</b></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.expertiseTotalDirectLaborCost}}</b></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.expertiseTotalOHCost}}</b></td>
-                                                <td class="text-right"><b>{{task.expertiseTotalDirectLabourAndOHCost}}</b></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.equipments && task.equipments.length > 0">
-                                <h5 class="po-head">Tools</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Tool Name</th>
-                                                <th>Tool ID</th>                                               
-                                                <th>Tool Description</th>
-                                                <th>Tool Class</th>
-                                                <th>Qty<span class="clr-red">*</span></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let equipment of task.equipments;let i=index">
-                                                <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{equipment.assetName}}</td>
-                                                <td>{{equipment.assetName}}</td>
-                                                <td>{{equipment.assetDescription}}</td>
-                                                <td>{{equipment.assetTypeName}}</td>                                                
-                                                <td class="text-right">{{equipment.quantity}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.charges && task.charges.length > 0">
-                                <h5 class="po-head">Charges</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Type<span class="clr-red">*</span></th>
-                                                <th>Description</th>
-                                                <th>Qty<span class="clr-red">*</span></th>
-                                                <th>Unit Cost<span class="clr-red">*</span></th>
-                                                <th>Extended Cost<span class="clr-red">*</span></th>
-                                                <th>Vendor Name</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let charge of task.charges;let i=index">
-                                                <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{charge.chargesTypeName}}</td>
-                                                <td>{{charge.description}}</td>
-                                                <td class="text-right">{{charge.quantity}}</td>
-                                                <td class="text-right">{{charge.unitCost}}</td>
-                                                <td class="text-right">{{charge.extendedCost}}</td>
-                                                <td>{{charge.vendorName}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>Total</b></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="task.materialList && task.materialList.length > 0">
-                                <h5 class="po-head">Material List</h5>
-                                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                                    <div class="tableFixHead">
-                                    <table class="table table-bordered header-table-width">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>PN<span class="clr-red">*</span></th>
-                                                <th>Description<span class="clr-red">*</span></th>
-                                                <th>Cond<span class="clr-red">*</span></th>
-                                                <th>Mandatory / Supplemental</th>
-                                                <th>Item Classification</th>
-                                                <th>Qty<span class="clr-red">*</span></th>
-                                                <th>UOM<span class="clr-red">*</span></th>
-                                                <th>Unit Cost<span class="clr-red">*</span></th>
-                                                <th>Extended Cost<span class="clr-red">*</span></th>
-                                                <th>Memo</th>
-                                                <th>Deferred</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let material of task.materialList;let i = index">
-                                                <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{material.partNumber}}</td>
-                                                <td>{{material.partDescription}}</td>
-                                                <td>{{material.conditionName}}</td>
-                                                <td>{{material.materialMandatoriesName}}</td>
-                                                <td>{{material.itemClassification}}</td>
-                                                <td class="text-right">{{material.quantity}}</td>
-                                                <td>{{material.unitOfMeasure}}</td>
-                                                <td class="text-right">{{material.unitCost}}</td>
-                                                <td class="text-right">{{material.extendedCost}}</td>
-                                                <td>
-                                                    <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="material.memo"></span>
-                                                </td> 
-                                                <td>
-                                                    <!-- {{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }} -->
-                                                    <input type="checkbox" disabled="disabled"
-                                                    [checked]="material.isDeferred"
-                                                    class="form-control names ui-autocomplete-input">
-                                               
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>Total</b></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.materialTotalQty}}</b></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                                <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
-                                                <!-- <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td> -->
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
                                 </div>
                             </div>
                         </p-accordionTab>
@@ -1432,10 +1432,8 @@
                             </div>
                         </div>
                     </div>
-                   
                 </div>
             <div *ngIf="addedTasks && addedTasks.length !=0">
-           
                 <button type="button" class="btn btn-primary" (click)="onOpenAll()">Open All</button>
                 <button type="button" class="btn btn-primary" (click)="onCloseAll()">Close All</button>
                 <hr />
@@ -1443,6 +1441,300 @@
             <p-accordion  class="p-accordion-cstm p-acc-thright">
                 <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected" class="inspect">
                   <p-header (click)="onAccordTabClick1(task)">{{task.Name}}</p-header>
+                    <div *ngIf="task.directions && task.directions.length > 0">
+                        <h5 class="po-head m-t-20">Directions</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Action</th>
+                                        <th>Description</th>
+                                        <th>Sequence</th>
+                                        <th>Memo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let direction of task.directions;let i = index">
+                                        <td class="text-right">{{(i + 1)}}</td>
+                                        <td>{{direction.action}}</td>
+                                        <td>{{direction.description}}</td>
+                                        <td class="text-right">{{direction.sequence}}</td>
+                                        <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span> 
+                                         </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="task.equipments && task.equipments.length > 0">
+                        <h5 class="po-head m-t-20">Tools</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Asset Name</th>
+                                        <th>Asset Id</th>
+                                        <th>Asset Type</th>
+                                        <th>Asset Description</th>
+                                        <th>Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let equipment of task.equipments;let i=index">
+                                        <td class="text-right">{{(i+1)}}</td>
+                                        <td>{{equipment.assetName}}</td>
+                                        <td>{{equipment.assetIdName}}</td>
+                                        <td>{{equipment.assetTypeName}}</td>
+                                        <td>{{equipment.assetDescription}}</td>
+                                        <td class="text-right">{{equipment.quantity}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="task.exclusions && task.exclusions.length > 0">
+                        <h5 class="po-head m-t-20">Exclusions</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>EPN</th>
+                                        <th> Description</th>
+                                        <th> Condition</th>
+                                        <th>Item Classification</th>
+                                        <th>Stock Type</th>
+                                        <th>Qty</th>
+                                        <th>Unit Cost</th>
+                                        <th>Extended Cost</th>
+                                        <th>Estimated % Occurance</th>
+                                        <th>Memo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let exclusion of task.exclusions;let i = index">
+                                        <td class="text-right">{{(i+1)}}</td>
+                                        <td>{{exclusion.partNumber}}</td>
+                                        <td>{{exclusion.partDescription}}</td>
+                                        <td>{{exclusion.condition}}</td>
+                                        <td>{{exclusion.itemClassification}}</td>
+                                        <td>{{exclusion.stockType}}</td>
+                                        <td class="text-right">{{exclusion.quantity}}</td>
+                                        <td class="text-right">{{exclusion.unitCost}}</td>
+                                        <td class="text-right">{{exclusion.extendedCost}}</td>
+                                        <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
+                                        <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Total</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.exclusionQty}}</b></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.exclusionextendedQty}}</b></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="task.expertise && task.expertise.length > 0">
+                        <h5 class="po-head m-t-20">Expertise</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Expertise Type</th>
+                                        <th>Estimated Hours</th>
+                                        <th>Labor Direct Rate</th>
+                                        <th>Direct Labor Cost</th>
+                                        <th>OHead Burden(%)</th>
+                                        <th>OH Cost</th>
+                                        <th>Direct Labor and OH Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let expertise of task.expertise;let i=index">
+                                        <td class="text-right">{{(i+1)}}</td>
+                                        <td>{{expertise.expetiseTypeName}}</td>
+                                        <td class="text-right">{{expertise.estimatedHours}}</td>
+                                        <td class="text-right">{{expertise.laborDirectRate}}</td>
+                                        <td class="text-right">{{expertise.directLaborRate}}</td>
+                                        <td class="text-right">{{expertise.overheadBurden}}</td>
+                                        <td class="text-right">{{expertise.overheadCost}}</td>
+                                        <td class="text-right">{{expertise.laborOverheadCost}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Total</b></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.expertiseTotalEstimatedHours}}</b></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.expertiseTotalDirectLaborCost}}</b></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.expertiseTotalOHCost}}</b></td>
+                                        <td class="text-right"><b>{{task.expertiseTotalDirectLabourAndOHCost}}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="task.charges && task.charges.length > 0">
+                        <h5 class="po-head m-t-20">Charges</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>Unit Cost</th>
+                                        <th>Extended Cost</th>
+                                       <th>Vendor Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let charge of task.charges;let i=index">
+                                        <td class="text-right">{{(i+1)}}</td>
+                                        <td>{{charge.chargesTypeName}}</td>
+                                        <td>{{charge.description}}</td>
+                                        <td class="text-right">{{charge.quantity}}</td>
+                                        <td class="text-right">{{charge.unitCost}}</td>
+                                        <td class="text-right">{{charge.extendedCost}}</td>
+                                      <td>{{charge.vendorName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Total</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
+                                       <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="task.materialList && task.materialList.length > 0">
+                        <h5 class="po-head m-t-20">Material List</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>PN</th>
+                                        <th>Description</th>
+                                        <th>Cond</th>
+                                        <th>Mandatory / Supplemental</th>
+                                        <th>Item Classification</th>
+                                        <th>Qty</th>
+                                        <th>UOM</th>
+                                        <th>Unit Cost</th>
+                                        <th>Extended Cost</th>
+                                        <th>Memo</th>
+                                        <th>Deferred</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let material of task.materialList;let i = index">
+                                        <td class="text-right">{{(i+1)}}</td>
+                                        <td>{{material.partNumber}}</td>
+                                        <td>{{material.partDescription}}</td>
+                                        <td>{{material.conditionName}}</td>
+                                        <td>{{material.materialMandatoriesName}}</td>
+                                        <td>{{material.itemClassification}}</td>
+                                        <td class="text-right">{{material.quantity}}</td>
+                                        <td>{{material.unitOfMeasure}}</td>
+                                        <td class="text-right">{{material.unitCost}}</td>
+                                        <td class="text-right">{{material.extendedCost}}</td>
+                                        <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span> 
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" disabled="disabled"
+                                            [checked]="material.isDeferred"
+                                            class="form-control names ui-autocomplete-input">
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td><b>Total</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.materialTotalQty}}</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="task.measurements && task.measurements.length > 0">
+                        <h5 class="po-head m-t-20">Measurements</h5>
+                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div class="tableFixHead">
+                            <table class="table table-bordered  header-table-width">
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>PN</th>
+                                        <th>Sequence</th>
+                                        <th>Stage</th>
+                                        <th>Min</th>
+                                        <th>Max</th>
+                                        <th>Expected</th>
+                                        <th>Diagram</th>
+                                        <th>Memo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let measurement of task.measurements;let i = index">
+                                        <td class="text-right">{{(i+1)}}</td>
+                                        <td>{{measurement.partNumber}}</td>
+                                        <td class="text-right">{{measurement.sequence}}</td>
+                                        <td class="text-right">{{measurement.stage}}</td>
+                                        <td class="text-right">{{measurement.min}}</td>
+                                        <td class="text-right">{{measurement.max}}</td>
+                                        <td class="text-right">{{measurement.expected}}</td>
+                                        <td>{{measurement.diagramURL}}</td>
+                                        <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
                     <div *ngIf="task.publication && task.publication.length > 0">
                         
                         <h5 class="po-head">Publications</h5>
@@ -1572,300 +1864,6 @@
                                     <button type="button" class="btn btn-danger" (click)="dismissModelView()">Close</button>
                                 </div>
                               </ng-template>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.measurements && task.measurements.length > 0">
-                        <h5 class="po-head m-t-20">Measurements</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>PN</th>
-                                        <th>Sequence</th>
-                                        <th>Stage</th>
-                                        <th>Min</th>
-                                        <th>Max</th>
-                                        <th>Expected</th>
-                                        <th>Diagram</th>
-                                        <th>Memo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let measurement of task.measurements;let i = index">
-                                        <td class="text-right">{{(i+1)}}</td>
-                                        <td>{{measurement.partNumber}}</td>
-                                        <td class="text-right">{{measurement.sequence}}</td>
-                                        <td class="text-right">{{measurement.stage}}</td>
-                                        <td class="text-right">{{measurement.min}}</td>
-                                        <td class="text-right">{{measurement.max}}</td>
-                                        <td class="text-right">{{measurement.expected}}</td>
-                                        <td>{{measurement.diagramURL}}</td>
-                                        <td>
-                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.exclusions && task.exclusions.length > 0">
-                        <h5 class="po-head m-t-20">Exclusions</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>EPN</th>
-                                        <th> Description</th>
-                                        <th> Condition</th>
-                                        <th>Item Classification</th>
-                                        <th>Stock Type</th>
-                                        <th>Qty</th>
-                                        <th>Unit Cost</th>
-                                        <th>Extended Cost</th>
-                                        <th>Estimated % Occurance</th>
-                                        <th>Memo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let exclusion of task.exclusions;let i = index">
-                                        <td class="text-right">{{(i+1)}}</td>
-                                        <td>{{exclusion.partNumber}}</td>
-                                        <td>{{exclusion.partDescription}}</td>
-                                        <td>{{exclusion.condition}}</td>
-                                        <td>{{exclusion.itemClassification}}</td>
-                                        <td>{{exclusion.stockType}}</td>
-                                        <td class="text-right">{{exclusion.quantity}}</td>
-                                        <td class="text-right">{{exclusion.unitCost}}</td>
-                                        <td class="text-right">{{exclusion.extendedCost}}</td>
-                                        <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                        <td>
-                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Total</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.exclusionQty}}</b></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.exclusionextendedQty}}</b></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.directions && task.directions.length > 0">
-                        <h5 class="po-head m-t-20">Directions</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>Action</th>
-                                        <th>Description</th>
-                                        <th>Sequence</th>
-                                        <th>Memo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let direction of task.directions;let i = index">
-                                        <td class="text-right">{{(i + 1)}}</td>
-                                        <td>{{direction.action}}</td>
-                                        <td>{{direction.description}}</td>
-                                        <td class="text-right">{{direction.sequence}}</td>
-                                        <td>
-                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span> 
-                                         </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.expertise && task.expertise.length > 0">
-                        <h5 class="po-head m-t-20">Expertise</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>Expertise Type</th>
-                                        <th>Estimated Hours</th>
-                                        <th>Labor Direct Rate</th>
-                                        <th>Direct Labor Cost</th>
-                                        <th>OHead Burden(%)</th>
-                                        <th>OH Cost</th>
-                                        <th>Direct Labor and OH Cost</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let expertise of task.expertise;let i=index">
-                                        <td class="text-right">{{(i+1)}}</td>
-                                        <td>{{expertise.expetiseTypeName}}</td>
-                                        <td class="text-right">{{expertise.estimatedHours}}</td>
-                                        <td class="text-right">{{expertise.laborDirectRate}}</td>
-                                        <td class="text-right">{{expertise.directLaborRate}}</td>
-                                        <td class="text-right">{{expertise.overheadBurden}}</td>
-                                        <td class="text-right">{{expertise.overheadCost}}</td>
-                                        <td class="text-right">{{expertise.laborOverheadCost}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Total</b></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.expertiseTotalEstimatedHours}}</b></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.expertiseTotalDirectLaborCost}}</b></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.expertiseTotalOHCost}}</b></td>
-                                        <td class="text-right"><b>{{task.expertiseTotalDirectLabourAndOHCost}}</b></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.equipments && task.equipments.length > 0">
-                        <h5 class="po-head m-t-20">Tools</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>Asset Name</th>
-                                        <th>Asset Id</th>
-                                        <th>Asset Type</th>
-                                        <th>Asset Description</th>
-                                        <th>Qty</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let equipment of task.equipments;let i=index">
-                                        <td class="text-right">{{(i+1)}}</td>
-                                        <td>{{equipment.assetName}}</td>
-                                        <td>{{equipment.assetIdName}}</td>
-                                        <td>{{equipment.assetTypeName}}</td>
-                                        <td>{{equipment.assetDescription}}</td>
-                                        <td class="text-right">{{equipment.quantity}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.charges && task.charges.length > 0">
-                        <h5 class="po-head m-t-20">Charges</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                        <th>Qty</th>
-                                        <th>Unit Cost</th>
-                                        <th>Extended Cost</th>
-                                       <th>Vendor Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let charge of task.charges;let i=index">
-                                        <td class="text-right">{{(i+1)}}</td>
-                                        <td>{{charge.chargesTypeName}}</td>
-                                        <td>{{charge.description}}</td>
-                                        <td class="text-right">{{charge.quantity}}</td>
-                                        <td class="text-right">{{charge.unitCost}}</td>
-                                        <td class="text-right">{{charge.extendedCost}}</td>
-                                      <td>{{charge.vendorName}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Total</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
-                                       <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="task.materialList && task.materialList.length > 0">
-                        <h5 class="po-head m-t-20">Material List</h5>
-                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                            <div class="tableFixHead">
-                            <table class="table table-bordered  header-table-width">
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>PN</th>
-                                        <th>Description</th>
-                                        <th>Cond</th>
-                                        <th>Mandatory / Supplemental</th>
-                                        <th>Item Classification</th>
-                                        <th>Qty</th>
-                                        <th>UOM</th>
-                                        <th>Unit Cost</th>
-                                        <th>Extended Cost</th>
-                                        <th>Memo</th>
-                                        <th>Deferred</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let material of task.materialList;let i = index">
-                                        <td class="text-right">{{(i+1)}}</td>
-                                        <td>{{material.partNumber}}</td>
-                                        <td>{{material.partDescription}}</td>
-                                        <td>{{material.conditionName}}</td>
-                                        <td>{{material.materialMandatoriesName}}</td>
-                                        <td>{{material.itemClassification}}</td>
-                                        <td class="text-right">{{material.quantity}}</td>
-                                        <td>{{material.unitOfMeasure}}</td>
-                                        <td class="text-right">{{material.unitCost}}</td>
-                                        <td class="text-right">{{material.extendedCost}}</td>
-                                        <td>
-                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span> 
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" disabled="disabled"
-                                            [checked]="material.isDeferred"
-                                            class="form-control names ui-autocomplete-input">
-                                        </td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td><b>Total</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.materialTotalQty}}</b></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
                             </div>
                         </div>
                     </div>
