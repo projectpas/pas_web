@@ -154,7 +154,7 @@
             </tr>
       <tr>
         <th style="width:180px !important">Task <span style="color: #ff0000;">*</span></th>
-        <th style="width:180px !important" *ngFor="let col of columns">
+        <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns">
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <ng-container *ngIf="isQuote">

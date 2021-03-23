@@ -48,7 +48,7 @@
             <tr>
                 <th class="table-column-icon-width"></th>
                 <!-- [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" -->
-                <th class="table-column-width" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
+                <th class="table-column-width" [ngStyle]="{'width': col.width}" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
                     {{col.header}} 
                 </th>
                 <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
@@ -193,8 +193,8 @@
                                     <th class="text-center" style="min-width: 96px;"> Alternate PN For</th>
                                     <th class="text-center"> Cond Type</th>
                                     <th class="text-center width-50"> Stk Type</th>
-                                    <th class="text-center width-50">Qty Req</th> 
-                                    <th class="text-center width-50">Qty Res</th>
+                                    <th class="text-center width-50" style="width:60px !important">Qty Req</th> 
+                                    <th class="text-center width-50" style="width:60px !important">Qty Res</th>
                                     <th class="text-center" >  Qty To Be Reserved</th>
                                     <th class="text-center" >
                                         <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
