@@ -99,7 +99,7 @@
                    <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
                       <div class="x_panel">
                          <div class="tab-content">
-                            <div id="" class="table-responsive default-bg clear pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div id="" style="max-height: 400px !important;" class="table-responsive default-bg clear pas-table-cstm poro-table-cstm parts-list-table-align">
                                <div class="tableFixHead">
                                   <table class="table table-bordered header-table-width table-striped role-setup-table">
                                      <thead>
@@ -107,7 +107,7 @@
                                             <th>
                                                 Module Name
                                             </th>
-                                           <th *ngFor="let module of permissionMaster;index as i">
+                                           <th  style="min-width: 50px !important;" *ngFor="let module of permissionMaster;index as i">
                                               {{module.permissionName}}
                                            </th>
                                         </tr>

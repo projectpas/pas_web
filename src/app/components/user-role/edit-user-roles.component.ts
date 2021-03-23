@@ -8,6 +8,7 @@ import { ModuleHierarchyMaster, UserRole, RolePermission, User, PermissionMaster
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
 import { roleModulesEnum } from '../../enum/rolemodules.enum';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'edit-app-roles',
@@ -26,8 +27,10 @@ export class EditUserRolesComponent implements OnInit {
     public userRoles: UserRole[] = [];
     public permissionMaster: PermissionMaster[];
     isSpinnerVisible: Boolean = true;
-    constructor(private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
+    id: number;
 
+    constructor(private messageService: MessageService,private router: ActivatedRoute, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
+        this.id = this.router.snapshot.params['id'];
     }
 
     ngOnInit(): void {
@@ -39,6 +42,12 @@ export class EditUserRolesComponent implements OnInit {
         this.pages = [];
         this.currentUserRole.id = 0;
         this.isSpinnerVisible = false;
+        if (this.id > 0) {
+            this.currentUserRole.id = this.id;
+            setTimeout(() => {
+                this.userRoleChanged();
+            },1000);
+        }
     }
 
     get currentUserMasterCompanyId(): number {
@@ -152,7 +161,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     userRoleChanged(): void {        
-        this.isSpinnerVisible=true;
+        this.isSpinnerVisible=true;        
         this.sortModules();        
         this.currentUserRole.rolePermissions = [];
 
@@ -521,11 +530,7 @@ export class EditUserRolesComponent implements OnInit {
             return (module.id == parentId && module.hasChildren == true);
         })[0];        
         this.setPermissionByType(parentModule, type, true);                        
-        if(currentModule.rolePermission.permissionID == 1 || currentModule.rolePermission.permissionID == 2 || currentModule.rolePermission.permissionID == 3 || currentModule.rolePermission.permissionID == 4){
-            // var rolePermissionData=Object.assign({}, currentModule.rolePermission);
-            // rolePermissionData.permissionID=2;
-            // rolePermissionData.moduleHierarchyMasterId = currentModule.id;
-            //this.currentUserRole.rolePermissions.push(rolePermissionData);
+        if(currentModule.rolePermission.permissionID == 1 || currentModule.rolePermission.permissionID == 2 || currentModule.rolePermission.permissionID == 3 || currentModule.rolePermission.permissionID == 4){           
             this.setCorrospondingValue(parentModule,2,true);  
         }
     }

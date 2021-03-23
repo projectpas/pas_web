@@ -453,17 +453,12 @@ export class UserRolesSetupComponent implements OnInit {
         this.currentUserRole.memo = this.roleForm.value.description;       
         if (this.currentUserRole.name == null) {
             this.isSpinnerVisible=false;
-            this.alertService.showMessage(
-                "Validation Failed",
-                "Role Name is require",
-                MessageSeverity.error
-            );
+            this.alertService.showMessage("Validation Failed","Role Name is require",MessageSeverity.error);
             return;
         }
         this.currentUserRole.masterCompanyId = this.currentUserMasterCompanyId;
-        this.userRoleService.add(this.currentUserRole).subscribe(
-            result => {
-                this.isSpinnerVisible=false;
+        this.userRoleService.add(this.currentUserRole).subscribe(result => {                
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role added successfully.', MessageSeverity.success);
                 for (let module of this.sortedHierarchy) {
                     this.resetRolePermission(module.rolePermission);
@@ -471,7 +466,7 @@ export class UserRolesSetupComponent implements OnInit {
                 this.currentUserRole = new UserRole();
                 this.currentUserRole.rolePermissions = [];
                 this.pages = [];                
-                return this.route.navigate(['/rolesmodule/rolespages/edit-app-roles']);
+                return this.route.navigate(['/rolesmodule/rolespages/edit-app-roles/'+result.id]);
             },
             error => {
                 this.isSpinnerVisible=false;
