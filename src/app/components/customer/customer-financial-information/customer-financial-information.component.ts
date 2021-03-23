@@ -397,7 +397,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getAllPercentage() {
     //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
-    this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.percentageList = res;
     }, error => { this.isSpinnerVisible = false });
   }

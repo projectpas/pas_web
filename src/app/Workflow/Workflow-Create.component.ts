@@ -311,17 +311,18 @@ if(!this.isWorkOrder){
                         this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
                     }
                 }
-                this.actionAttributes = this.actionAttributes.sort(function (a, b) {
-                    var nameA = a.Sequence; // ignore upper and lowercase
-                    var nameB = b.Sequence; // ignore upper and lowercase
-                    if (nameA < nameB) {
-                        return -1;
-                    }
-                    if (nameA > nameB) {
-                        return 1;
-                    }
-                    return 0;
-                });
+                // this.actionAttributes = this.actionAttributes.sort(function (a, b) {
+                //     var nameA = a.Sequence; // ignore upper and lowercase
+                //     var nameB = b.Sequence; // ignore upper and lowercase
+                //     if (nameA < nameB) {
+                //         return -1;
+                //     }
+                //     if (nameA > nameB) {
+                //         return 1;
+                //     }
+                //     return 0;
+                // });
+                this.actionAttributes= this.actionAttributes.sort((a, b) => a.Name.localeCompare(b.Name, 'es', {sensitivity: 'base'}))
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -513,21 +514,18 @@ masterItemMasterId:any;
         this.actionService.getActions().subscribe(
             actions1 => {
                 this.isSpinnerVisible = false;
-                const actions = actions1.sort(function (a, b) {
-                    var nameA = a.sequence; // ignore upper and lowercase
-                    var nameB = b.sequence; // ignore upper and lowercase
-                    if (nameA < nameB) {
-                        return -1;
-                    }
-                    if (nameA > nameB) {
-                        return 1;
-                    }
-                    // names must be equal
-                    return 0;
-                }, error => {
-                    this.isSpinnerVisible = false;
-                });
-
+                // const actions = actions1.sort(function (a, b) {
+                //     var nameA = a.sequence; 
+                //     var nameB = b.sequence; 
+                //     if (nameA < nameB) {
+                //         return -1;
+                //     }
+                //     if (nameA > nameB) {
+                //         return 1;
+                //     }
+                //     return 0;
+                // });
+                const actions= actions1.sort((a, b) => a.description.localeCompare(b.description, 'es', {sensitivity: 'base'}))
                 this.isSpinnerVisible = true;
                 this.actionService.getActionAttributes().subscribe(
                     actionAttributes => {
@@ -718,67 +716,6 @@ masterItemMasterId:any;
             });
     }
 
-    getActionsDD() {
-        this.isSpinnerVisible = true;
-        this._workflowService.getWorkFlowActions().subscribe((data: any) => {
-            this.isSpinnerVisible = false;
-            if (data && data[0].length > 0) {
-                this.actionsDD = [{ taskId: "", description: "" }].concat(data[0]);
-            }
-            this.loadedDDs["actions"] = true;
-            if (this.loadedDDs["actionAttributes"])
-                this.getSelectedWorkflowActions();
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    // getMaterialType() {
-    //     this.isSpinnerVisible = true;
-    //     this._workflowService.getMaterialType().subscribe(data => {
-    //         this.materailTypeList = data;
-    //         this.isSpinnerVisible = false;
-    //     }, error => {
-    //         this.isSpinnerVisible = false;
-    //     });
-    // }
-
-    // private loadExpertiseData() {
-    //     this.isSpinnerVisible = true;
-    //     this.expertiseService.getWorkFlows().subscribe(data => {
-    //         this.isSpinnerVisible = false;
-    //         this.employeeExplist = data;
-    //     }, error => {
-    //         this.isSpinnerVisible = false;
-    //     });
-
-    // } 
-
-    getActionAttributesDD() {
-        this.isSpinnerVisible = true;
-        this._workflowService.getActionAttributes().subscribe((data: any) => {
-            this.isSpinnerVisible = false;
-            if (data && data[0].length > 0) {
-                let _attrList: any[] = [];
-                for (let i = 0; i < data[0].length; i++)
-                    _attrList.push({ value: data[0][i].taskAttributeId, label: data[0][i].description });
-                this.actionsAttributesDD = _attrList;
-
-                this.actionsAttributesDD.forEach(obj => {
-                    this.actionAttributeTabs.forEach((tab) => {
-                        if (tab.label == obj["label"])
-                            tab["value"] = obj["value"];
-                    });
-                });
-            }
-            this.loadedDDs["actionAttributes"] = true;
-            if (this.loadedDDs["actions"])
-                this.getSelectedWorkflowActions();
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
     public filterpartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loapartItems(event.query);
@@ -796,10 +733,7 @@ masterItemMasterId:any;
         else {
             this.arrayItemMasterIdlist.push(itemMasterId);
         }
-
-        // this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strvalue, true, 20, this.arrayItemMasterIdlist.join(), this.currentUserMasterCompanyId)
-        //     .subscribe(res => {
-        this.commonService.getPartnumList(strvalue).subscribe(res => {
+  this.commonService.getPartnumList(strvalue).subscribe(res => {
             this.isSpinnerVisible = false;
             this.partCollection = res.map(x => {
                 if (initialCall && this.sourceWorkFlow.partNumber == x.partNumber) {
@@ -984,8 +918,6 @@ masterItemMasterId:any;
             this.sourceWorkFlow.percentageOfReplacement = '';
         }
     }
-
-
     private loadWorkScopedata() {
         let workScopeId = this.sourceWorkFlow.workScopeId ? this.sourceWorkFlow.workScopeId : '0';
         this.arrayworkScopeIdlist.push(workScopeId);
@@ -1003,7 +935,6 @@ masterItemMasterId:any;
                 this.isSpinnerVisible = false;
             });
     }
-
     private loadCurrencyData() {
         let currencyId = this.sourceWorkFlow.currencyId ? this.sourceWorkFlow.currencyId : '0';
         if (this.arraycurrencyIdlist.length == 0 && currencyId == 0) {
@@ -1026,7 +957,6 @@ masterItemMasterId:any;
                 this.isSpinnerVisible = false;
             });
     }
-
     onCustomerNameselected(event) {
         if (this.UpdateMode) {
             this.disableUpdateButton = false;
@@ -1040,13 +970,11 @@ masterItemMasterId:any;
 
         }
     }
-
     filterNames(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loadcustomerData(event.query);
         }
     }
-
     private loadcustomerData(query = '') {
         let customerId = 0;
         if (this.updateMode) {
@@ -1079,7 +1007,6 @@ masterItemMasterId:any;
 
         })
     }
-
     getSelectedWorkflowActions() {
         if (this.isWorkFlowEdit) {
             this.isSpinnerVisible = true;
@@ -1102,7 +1029,6 @@ masterItemMasterId:any;
         // select First Action
         this.displaySelectedAction(this.workflowActions[0]);
     }
-
     //On Action Dropdown value change
     onActionValueChange(selectedvalue) {
         if (Number(selectedvalue.target.value) > 0) {
@@ -1121,7 +1047,6 @@ masterItemMasterId:any;
         if (selAction)
             this.displaySelectedAction(selAction);
     }
-
     //ex: accepted format -> selAction = { workflowId: "1", actionId: 2, workflowActionAttributeIds: "11,12,13" }
     displaySelectedAction(selAction, loadAttrData = false) {
         //Display Action Label
@@ -1150,7 +1075,6 @@ masterItemMasterId:any;
             }
         }
     }
-
     // On Add Button Click
     addActionAttributes() {
         if (this.actionValue && this.actionValue != "" && this.selectedActionAttributes && this.selectedActionAttributes.length > 0) {
@@ -1168,9 +1092,7 @@ masterItemMasterId:any;
             this.displaySelectedAction(selAction);
         }
     }
-
     onMaterialCostChange(percentValue, from) {
-
         if (from == 'html') {
             this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
@@ -1185,7 +1107,6 @@ masterItemMasterId:any;
             this.EstMaterialCost = '0.00';
         }
     }
-
     onExpertiseCostChange(percentValue, from) {
         if (from == 'html') {
             this.isOnload == false
@@ -1201,7 +1122,6 @@ masterItemMasterId:any;
             this.EstTotalExpertiseCost = '0.00';
         }
     }
-
     onChargesChange(percentValue, from) {
         if (from == 'html') {
             this.isOnload == false
@@ -1217,7 +1137,6 @@ masterItemMasterId:any;
             this.EstTotalCharges = '0.00';
         }
     }
-
     onOtherChange(percentValue, from) {
         if (from == 'html') {
             this.isOnload == false
@@ -1238,7 +1157,6 @@ masterItemMasterId:any;
         if (this.UpdateMode) {
             this.disableUpdateButton = false;
         }
-
         const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
         const val = ((otherCost / 100) * this.sourceWorkFlow.percentageOfCharges) + otherCost;
         this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
@@ -1247,7 +1165,7 @@ masterItemMasterId:any;
     }
     onTotalChange(percentValue, from) {
         this.TotalEst = '0.00';
-        if (this.Total) {
+        if (this.Total >0) {
             const Total = parseFloat(this.Total.toString().replace(/\,/g, ''));
             const val = ((Total / 100) * percentValue) + Total;
             this.TotalEst = formatNumberAsGlobalSettingsModule(val, 2);
@@ -1255,7 +1173,7 @@ masterItemMasterId:any;
             this.TotalEst = '0.00';
         }
     }
- 
+
     setTotalCharges() {
         const EstMaterialCost = parseFloat(this.EstMaterialCost.toString().replace(/\,/g, ''));
         const EstTotalExpertiseCost = parseFloat(this.EstTotalExpertiseCost.toString().replace(/\,/g, ''));
@@ -1298,16 +1216,19 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, '')) : 0.00;
         const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
         this.Total = formatNumberAsGlobalSettingsModule(total, 2);
-        // this.TotalEst = this.Total;
         if (this.isOnload == true) {
-            const totlapercent = (this.sourceWorkFlow.percentageOfMaterial + this.sourceWorkFlow.percentageOfExpertise + this.sourceWorkFlow.percentageOfCharges + this.sourceWorkFlow.percentageOfOthers) / 4
+              const percentageOfMaterial=this.sourceWorkFlow.percentageOfMaterial ==-1? 0 :this.sourceWorkFlow.percentageOfMaterial ;
+              const percentageOfExpertise=this.sourceWorkFlow.percentageOfExpertise ==-1? 0 :this.sourceWorkFlow.percentageOfExpertise;
+              const percentageOfCharges= this.sourceWorkFlow.percentageOfCharges ==-1 ? 0 :this.sourceWorkFlow.percentageOfCharges;
+              const  percentageOfOthers=this.sourceWorkFlow.percentageOfOthers==-1?0 :this.sourceWorkFlow.percentageOfOthers
+            const totlapercent = (percentageOfMaterial+percentageOfExpertise+percentageOfCharges+percentageOfOthers) / 4
             this.sourceWorkFlow.percentageOfTotal = totlapercent;
             this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
-            this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
+           this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
             this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise, 'onload');
             this.onChargesChange(this.sourceWorkFlow.percentageOfCharges, 'onload');
             this.onOtherChange(this.sourceWorkFlow.percentageOfOthers, 'onload');
-            this.onTotalChange(this.sourceWorkFlow.percentageOfTotal, 'onload');
+            // this.onTotalChange(this.sourceWorkFlow.percentageOfTotal, 'onload');
 
             
         }
@@ -1330,8 +1251,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             return true;
         }
     }
-
-
     onPercentOfNew(myValue, percentValue = 0) {
         this.sourceWorkFlow.costOfNew = this.sourceWorkFlow.costOfNew ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfNew, 2) : null;
         this.sourceWorkFlow.percentOfNew = '';
@@ -1344,7 +1263,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         }
         this.berDetermination(0,'onload'); 
     }
-
     onPercentOfReplcaement(myValue, percentValue = 0) {
         this.sourceWorkFlow.costOfReplacement = this.sourceWorkFlow.costOfReplacement ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfReplacement, 2) : null;
         this.sourceWorkFlow.percentOfReplacement = '';
@@ -1358,7 +1276,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         }
         this.berDetermination(0,'onload'); 
     }
-
     getWorkFlowMaterial() {
         this.isSpinnerVisible = true;
         this._workflowService.getWorkFlowMaterial().subscribe(data => {
@@ -1369,7 +1286,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         });
 
     }
-
     getWorkFlowChargeList() {
         this.isSpinnerVisible = true;
         this._workflowService.getChargeList().subscribe(data => {
@@ -1380,7 +1296,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         });
 
     }
-
     getWorkFlowEquipment() {
         this.isSpinnerVisible = true;
         this._workflowService.getWorkFlowEquipmentList().subscribe(data => {
@@ -1391,7 +1306,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         });
 
     }
-
     getWorkFlowExpertise() {
         this.isSpinnerVisible = true;
         this._workflowService.getWorkflowExpertise().subscribe(data => {
@@ -1401,8 +1315,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             this.isSpinnerVisible = false;
         });
     }
-
-
     onDataLoadFailed(log) {
         const errorLog = log;
         var msg = '';
@@ -1426,7 +1338,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             );
         }
     }
-
     getAllActions(): void {
         this.isSpinnerVisible = true;
         this.actionService.getActions().subscribe(
@@ -1436,24 +1347,24 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 for (let attr of actions1) {
                     this.actions.push({ Id: attr.taskId, Name: attr.description, Description: "", Memo: "", Sequence: attr.sequence })
                 }
-                this.actions = this.actions.sort(function (a, b) {
-                    var nameA = a.Sequence; // ignore upper and lowercase
-                    var nameB = b.Sequence; // ignore upper and lowercase
-                    if (nameA < nameB) {
-                        return -1;
-                    }
-                    if (nameA > nameB) {
-                        return 1;
-                    }
-                    return 0;
-                });
+
+                this.actions =       this.actions.sort((a, b) => a.Name.localeCompare(b.Name, 'es', {sensitivity: 'base'}))
+                // this.actions = this.actions.sort(function (a, b) {
+                //     var nameA = a.Sequence; 
+                //     var nameB = b.Sequence; 
+                //     if (nameA < nameB) {
+                //         return -1;
+                //     }
+                //     if (nameA > nameB) {
+                //         return 1;
+                //     }
+                //     return 0;
+                // });
             }, error => {
                 this.isSpinnerVisible = false;
             });
     }
-
     currentActiveTab: string;
-
     setCurrentPanel(itemName, id): void {
 
         this.currentPanelId = id;
@@ -1473,7 +1384,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             document.getElementById('tab_' + itemName).classList.add('active');
         }
     }
-
     SetCurrectTab(taskId, index?): void {
         this.currenttaskId = taskId;
         // this.currentPanelId=this.currentPanelId ? this.currentPanelId :0;
@@ -1501,27 +1411,20 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
 
         this.selectedItems = this.workFlow.selectedItems;
     }
-
     AddPage() {
         this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
     }
     AddPageCustomer() {
         this.route.navigateByUrl('/customersmodule/customerpages/app-customer-general-information');
     }
-
     getDashNumbers(publication): void {
-
     }
-
     AddActionAttribute(): void {
         this.selectedSideTabIndex = 0;
-
         if (this.selectedItems.length > 0) {
-
             if (this.workFlowList != undefined && this.workFlowList.length > 0) {
                 var currentWorkFlow = this.GetWorkFlow();
                 var isWorkFlowExist = false;
-
                 for (var i = 0; i < this.workFlowList.length; i++) {
                     if (this.workFlowList[i].taskId == currentWorkFlow.taskId) {
                         isWorkFlowExist = true;
@@ -1536,10 +1439,8 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 this.workFlowList[i].qtySummation = 0;
                                 this.workFlowList[i].extendedCostSummation = 0;
                                 this.workFlowList[i].totalChargesCost = 0;
-
                                 this.workFlowList[i].charges = charge;
                             }
-
                             if (this.selectedItems[j].Name == 'Directions' && (this.workFlowList[i].directions == undefined || (this.workFlowList[i].directions != undefined && this.workFlowList[i].directions.length == 0))) {
                                 var direction: any[];
                                 direction = this.GetDirections();
@@ -1549,9 +1450,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 }
                                 this.workFlowList[i].directions = direction;
                             }
-
                             if (this.selectedItems[j].Name == 'Tools' && (this.workFlowList[i].equipments == undefined || (this.workFlowList[i].equipments != undefined && this.workFlowList[i].equipments.length == 0))) {
-
                                 var equipment: any[];
                                 equipment = this.GetEquipmentList();
                                 if (this.UpdateMode) {
@@ -1562,7 +1461,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 this.workFlowList[i].equipments = equipment;
 
                             }
-
                             if (this.selectedItems[j].Name == 'Expertise' && (this.workFlowList[i].expertise == undefined || (this.workFlowList[i].expertise != undefined && this.workFlowList[i].expertise.length == 0))) {
                                 var expertise: any[];
                                 expertise = this.GetExpertise();
@@ -1570,14 +1468,12 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                     expertise[0].taskId = this.currenttaskId;
                                     expertise[0].workflowId = this.updateWorkFlowId;
                                 }
-
                                 this.workFlowList[i].sumofestimatedhrs = 0;
                                 this.workFlowList[i].sumofLabourDirectCost = 0;
                                 this.workFlowList[i].sumOfOHCost = 0;
                                 this.workFlowList[i].totalExpertiseCost = 0;
                                 this.workFlowList[i].expertise = expertise;
                             }
-
                             if (this.selectedItems[j].Name == 'Material List' && (this.workFlowList[i].materialList == undefined || (this.workFlowList[i].materialList != undefined && this.workFlowList[i].materialList.length == 0))) {
                                 var material: any[];
                                 material = this.GetMaterialList();
@@ -1587,7 +1483,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                     material[0].createdBy = this.userName;
                                     material[0].updatedBy = this.userName;
                                 }
-
                                 this.workFlowList[i].materialQtySummation = 0;
                                 this.workFlowList[i].materialExtendedCostSummation = 0;
                                 this.workFlowList[i].totalMaterialCost = 0;
@@ -1872,9 +1767,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             }, 1000);
         }
     }
-
     GetWorkFlow(): any {
-
         var taskId = this.currenttaskId != undefined ? this.currenttaskId : "0";
         var actionName = "";
         this.actions.forEach(function (value, index) {
@@ -1899,7 +1792,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             order: this.workFlowList.length + 1
         };
     }
-
     openTab(evt, tabId): void {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -1914,7 +1806,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         document.getElementById(tabId).style.display = "block";
         evt.currentTarget.className += " active";
     }
-
     GetMeasurements(): any[] {
         var measurement = [{
             workflowMeasurementId: "0",
@@ -1930,11 +1821,10 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             masterCompanyId: '',
             workflowId: "",
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
         }];
         return measurement;
     }
-
     GetExclusions(): any[] {
         var exclusion = [{
             workFlowExclusionId: "0",
@@ -1948,11 +1838,10 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             taskId: "",
             workflowId: "",
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
         }];
         return exclusion;
     }
-
     GetPublication(): any[] {
         var publication = [{
             id: "0",
@@ -1977,7 +1866,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         }];
         return publication;
     }
-
     GetCharges(): any[] {
         var charges = [{
             workflowChargesListId: "0",
@@ -1996,12 +1884,11 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             taskId: "",
             workflowId: "",
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
 
         }];
         return charges;
     }
-
     GetEquipmentList(): any[] {
         var equipmentList = [{
             workflowEquipmentListId: "0",
@@ -2013,11 +1900,10 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            IsDelete: false,
+            isDeleted: false,
         }];
         return equipmentList;
     }
-
     GetExpertise(): any[] {
         var expertise = [{
             workflowExpertiseListId: "0",
@@ -2033,13 +1919,11 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            IsDelete: false,
+            isDeleted: false,
         }];
 
         return expertise;
     }
-    // this.getDefaultConditionId('new')
-    // this.getDefaultUOMId('Ea')
     GetMaterialList(): any[] {
         var material = [{
             workflowMaterialListId: "0",
@@ -2063,12 +1947,11 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             createdBy: this.userName,
             updatedBy: this.userName,
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
         }];
 
         return material;
     }
-
     GetDirections(): any[] {
         var directions = [{
             workflowDirectionId: "0",
@@ -2080,18 +1963,16 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             workflowId: "",
             masterCompanyId: '',
             AllowEdit: true,
-            isDelete: false,
+            isDeleted: false,
 
         }];
         return directions;
     }
-
     onActionChange(): void {
         if (this.currenttaskId == "0" && this.workFlowList.length == 0) {
             this.showActionAttribute = false;
             return;
         }
-
         if (this.currenttaskId != "0") {
             var currentWF = undefined;
             if (this.workFlowList != undefined) {
@@ -2118,7 +1999,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
 
         }
     }
-
     addAction(): void {
         this.isSpinnerVisible = true;
         this.actionService.addAction(this.newAction).subscribe(
@@ -2130,23 +2010,19 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 this.isSpinnerVisible = false;
             });
     }
-
     validateWorkFlowHeader(): boolean {
         if (this.sourceWorkFlow.itemMasterId == undefined || this.sourceWorkFlow.itemMasterId == '') {
             this.alertService.showMessage(this.title, 'Part Number is required', MessageSeverity.error);
             return false;
         }
-
         if (this.sourceWorkFlow.workScopeId == undefined || this.sourceWorkFlow.workScopeId == '') {
             this.alertService.showMessage(this.title, 'Work Scope is required', MessageSeverity.error);
             return false;
         }
-
         if (this.sourceWorkFlow.currencyId == undefined || this.sourceWorkFlow.currencyId == '') {
             this.alertService.showMessage(this.title, 'Currency is required', MessageSeverity.error);
             return false;
         }
-
         if (this.workFlow != undefined && this.workFlow.materialList != undefined) {
             for (let material of this.workFlow.materialList) {
                 if (material.partNumber == this.sourceWorkFlow.partNumber) {
@@ -2157,6 +2033,160 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         }
 
         return true;
+    }
+
+
+    showVersionUpdate() {
+        $('#quoteVer').modal("show");
+    }
+    resetPage(): void {
+        this.selectedItems = [];
+        this.workFlowList = [];
+        this.currenttaskId = "0";
+        this.showMainPage = false;
+        this.showActionAttribute = false;
+    }
+    onDeSelect(item: any) {
+        var items = this.selectedItems.filter(x => x.Id != item.Id);
+        if (items != undefined && items.length > 0) {
+            this.selectedItems = items;
+            this.AddActionAttribute();
+            this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
+        }
+        else {
+            this.selectedItems = [];
+            this.AddActionAttribute();
+        }
+        this.workFlow.selectedItems = this.selectedItems;
+        this.resetWorkflowGrid();
+    }
+    onItemSelect(item: any) {
+        this.AddActionAttribute();
+    }
+
+    onSelectAll(items: any) {
+        this.selectedItems = items;
+        this.AddActionAttribute();
+        this.setCurrentPanel(this.selectedItems[this.selectedItems.length - 1].Name, this.selectedItems[this.selectedItems.length - 1].Id);
+        this.resetWorkflowGrid();
+    }
+
+    onDeSelectAll(items: any) {
+        this.selectedItems = [];
+        this.AddActionAttribute();
+        this.workFlow.selectedItems = [];
+        this.resetWorkflowGrid();
+    }
+    taskDeleteConfirmation(confirmDeleteTemplate: any, task: any): void {
+        // this.modal = this.modalService.open(confirmDeleteTemplate, { size: 'sm' });
+    }
+    removeTask(workFlow: any): void {
+        var index = this.workFlowList.indexOf(workFlow);
+        this.workFlowList.splice(index, 1);
+        if (index == 0 && this.workFlowList.length == 0) {
+            this.currenttaskId = "0";
+            this.selectedItems = [];
+        }
+        else {
+            this.workFlow = this.workFlowList[0];
+            this.currenttaskId = this.workFlowList[0].taskId;
+
+            this.SetCurrectTab(this.currenttaskId, 0);
+            this.setSelectedItems(this.workFlow);
+        }
+
+        this.tasksData = this.tasksData.filter(x => {
+            if (x.taskId !== workFlow.taskId) {
+                return x;
+            }
+        })
+
+        this.onActionChange();
+    }
+    dismissModel() {
+        this.modal.close();
+    }
+    private resetWorkflowGrid(): void {
+        for (let wf of this.workFlowList) {
+            if (wf.taskId == this.currenttaskId) {
+                var chargesItem = wf.selectedItems.filter(x => x.Name == "Charges");
+                if (chargesItem.length == 0) {
+                    wf.charges = [];
+                }
+
+                var directionsItem = wf.selectedItems.filter(x => x.Name == "Directions");
+                if (directionsItem.length == 0) {
+                    wf.directions = [];
+                }
+
+                var equipmentItem = wf.selectedItems.filter(x => x.Name == "Tools");
+                if (equipmentItem.length == 0) {
+                    wf.equipments = [];
+                }
+
+                var exclusionItem = wf.selectedItems.filter(x => x.Name == "Exclusions");
+                if (exclusionItem.length == 0) {
+                    wf.exclusions = [];
+                }
+
+                var expertiseItem = wf.selectedItems.filter(x => x.Name == "Expertise");
+                if (expertiseItem.length == 0) {
+                    wf.expertise = [];
+                }
+
+                var materialItem = wf.selectedItems.filter(x => x.Name == "Material List");
+                if (materialItem.length == 0) {
+                    wf.materialList = [];
+                }
+
+                var measurementItem = wf.selectedItems.filter(x => x.Name == "Measurements");
+                if (measurementItem.length == 0) {
+                    wf.measurements = [];
+                }
+
+                var measurementItem = wf.selectedItems.filter(x => x.Name == "Publications");
+                if (measurementItem.length == 0) {
+                    wf.publication = [];
+                }
+            }
+
+        }
+
+    }
+    saveBuildFromScratchData() {
+        this.saveData.emit(this.workFlowList);
+    }
+    onAddDescription(value) {
+        this.tempMemo = "";
+        this.tempMemo = this.sourceWorkFlow.memo;
+    }
+    onSaveDescription() {
+        this.sourceWorkFlow.memo = this.tempMemo;
+        if (this.UpdateMode) {
+            this.disableUpdateButton = false;
+        }
+        // this.enableUpdateButton = false;
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    increaseVerConfirmation(isIncrease) {
+        $('#quoteVer').modal("hide");
+        this.sourceWorkFlow['isVersionIncrease'] = isIncrease;
+        if (this.isWorkOrder) {
+            this.saveWorkFlowWorkOrderData['isVersionIncrease'] = isIncrease;
+            this._workflowService.currentWorkFlowId=this.sourceWorkFlow.workflowId !=0 ?this.sourceWorkFlow.workflowId  :this.sourceWorkFlow.existingWorkFlowId
+            this.savedWorkFlowWorkOrderData.emit(this.saveWorkFlowWorkOrderData);
+        }
+        else {
+            this.updateWorkFlow();
+        }
     }
     isheadUpdate: any;
     addWorkFlow(isHeaderUpdate: boolean): void {
@@ -2176,7 +2206,9 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.confirmation();
         }
     }
+    originalworkFLow:any={};
     updateWorkFlow(): void {
+        this.originalworkFLow=this.workFlow
         if (!this.validateWorkFlowHeader()) {
             this.validateheader = true;
             return;
@@ -2200,13 +2232,12 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         }
     }
 
-
     }
     dataCancel() {
         $('#confir').modal("hide");
     }
     confirmation() {
-        this.SaveWorkFlow();
+        this.modifyForSaveUpdateApis();
         if (this.isheadUpdate) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
@@ -2248,7 +2279,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         this.sourceWorkFlow.updatedBy = this.userName;
         const dataSet={...this.sourceWorkFlow}
         delete  dataSet.customerName;
-    
         this.actionService.getNewWorkFlow(dataSet).subscribe(
             data => {
                 this.isSpinnerVisible = false;
@@ -2258,13 +2288,11 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 this.isSpinnerVisible = false;
             });
     }
-
-
     upDateDataCancel() {
         $('#UpdateConfirm').modal("hide");
     }
     updateConfirmation() {
-        this.SaveWorkFlow();
+        this.modifyForSaveUpdateApis();
         if (this.isHeaderUpdate) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
@@ -2296,8 +2324,9 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
 
         if (this.workFlowList.length == 0) {
             this.alertService.showMessage(this.title, "Atleast one task is required.", MessageSeverity.error);
-        }
+        } 
         this.isSpinnerVisible = true;
+        const originalData={ ...this.sourceWorkFlow };
         const souceData = { ...this.sourceWorkFlow };
         if (souceData.exclusions && souceData.exclusions.length != 0) {
             souceData.exclusions.forEach(element => {
@@ -2311,8 +2340,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             souceData.measurements.forEach(element => {
                 delete element.partName
             });
-        }
-        if (souceData.publication && souceData.publication.length != 0) {
+        } 
+        if (souceData.publication && souceData.publication.length != 0) { 
             souceData.publication.forEach(element => {
                 delete element.allDashNumbers;
                 delete element.aircraft;
@@ -2333,38 +2362,22 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             });
         }
         delete    souceData.customerName
-        this.actionService.getNewWorkFlow(souceData).subscribe(
+        this.actionService.getNewWorkFlow(souceData).subscribe( 
             result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow updated successfully.", MessageSeverity.success);
                 this.route.navigateByUrl('/workflowmodule/workflowpages/app-workflow-list');
             }, error => {
                 this.isSpinnerVisible = false;
+                // this.sourceWorkFlow={...originalData};
             });
-    }
-    increaseVerConfirmation(isIncrease) {
-        $('#quoteVer').modal("hide");
-        this.sourceWorkFlow['isVersionIncrease'] = isIncrease;
-        if (this.isWorkOrder) {
-            this.saveWorkFlowWorkOrderData['isVersionIncrease'] = isIncrease;
-            this._workflowService.currentWorkFlowId=this.sourceWorkFlow.workflowId !=0 ?this.sourceWorkFlow.workflowId  :this.sourceWorkFlow.existingWorkFlowId
-            this.savedWorkFlowWorkOrderData.emit(this.saveWorkFlowWorkOrderData);
-        }
-        else {
-            this.updateWorkFlow();
-        }
-    }
-
-    showVersionUpdate() {
-        $('#quoteVer').modal("show");
-    }
-
-    SaveWorkFlow(): void {
+    } 
+    modifyForSaveUpdateApis(): void {
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
             this.sourceWorkFlow.equipments = [];
-            this.sourceWorkFlow.exclusions = [];
+            this.sourceWorkFlow.exclusions = []; 
             this.sourceWorkFlow.expertise = [];
             this.sourceWorkFlow.materialList = [];
             this.sourceWorkFlow.measurements = [];
@@ -2373,7 +2386,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-
             for (let workflow of this.workFlowList) {
                 if (workflow.charges != undefined) {
                     for (let charge of workflow.charges) {
@@ -2385,13 +2397,18 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             charge.masterCompanyId = this.currentUserMasterCompanyId;
                             charge.createdBy = this.userName;
                             charge.createdDate = new Date();
+                            charge.updatedBy = this.userName;
+                            charge.updatedDate = new Date();
 
                         } else {
                             charge.workflowChargesListId = charge.workflowChargesListId > 0 ? charge.workflowChargesListId : 0;
+                            charge.createdBy = this.userName;
+                            charge.createdDate = new Date();
                             charge.masterCompanyId = this.currentUserMasterCompanyId;
                             charge.updatedBy = this.userName;
                             charge.updatedDate = new Date();
                         }
+             
                         this.sourceWorkFlow.charges.push(charge);
                     }
                 }
@@ -2405,9 +2422,14 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             direction.masterCompanyId = this.currentUserMasterCompanyId;
                             direction.createdBy = this.userName;
                             direction.createdDate = new Date();
+                            direction.updatedBy = this.userName;
+                            direction.updatedDate = new Date();
                         } else {
                             direction.workflowDirectionId = direction.workflowDirectionId > 0 ? direction.workflowDirectionId : 0;
                             direction.masterCompanyId = this.currentUserMasterCompanyId;
+                            direction.createdBy = this.userName;
+                            direction.createdDate = new Date();
+
                             direction.updatedBy = this.userName;
                             direction.updatedDate = new Date();
                         }
@@ -2421,6 +2443,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.taskId = workflow.taskId;
                             equipment.order = workflow.order;
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
+                            equipment.updatedBy = this.userName;
+                            equipment.updatedDate = new Date();
                             equipment.createdBy = this.userName;
                             equipment.createdDate = new Date();
                             equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
@@ -2430,6 +2454,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
                             equipment.updatedBy = this.userName;
                             equipment.updatedDate = new Date();
+                            equipment.createdBy = this.userName;
+                            equipment.createdDate = new Date();
                             equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
 								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
                         }
@@ -2446,12 +2472,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             exclusion.masterCompanyId = this.currentUserMasterCompanyId;
                             exclusion.createdBy = this.userName;
                             exclusion.createdDate = new Date();
+                            exclusion.updatedBy = this.userName;
+                            exclusion.updatedDate = new Date();
                         } else {
                             exclusion.workflowExclusionId = exclusion.workflowExclusionId > 0 ? exclusion.workflowExclusionId : 0;
                             exclusion.masterCompanyId = this.currentUserMasterCompanyId;
+                            exclusion.createdBy = this.userName;
+                            exclusion.createdDate = new Date();
                             exclusion.updatedBy = this.userName;
                             exclusion.updatedDate = new Date();
-
                         }
                         this.sourceWorkFlow.exclusions.push(exclusion);
                     }
@@ -2463,6 +2492,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             expert.taskId = workflow.taskId;
                             expert.order = workflow.order;
                             expert.masterCompanyId = this.currentUserMasterCompanyId;
+                            expert.updatedBy = this.userName;
+                            expert.updatedDate = new Date();
                             expert.createdBy = this.userName;
                             expert.createdDate = new Date();
                         } else {
@@ -2470,6 +2501,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             expert.masterCompanyId = this.currentUserMasterCompanyId;
                             expert.updatedBy = this.userName;
                             expert.updatedDate = new Date();
+                            expert.createdBy = this.userName;
+                            expert.createdDate = new Date();
                         }
                         this.sourceWorkFlow.expertise.push(expert);
                     }
@@ -2484,12 +2517,17 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             // material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.createdBy = this.userName;
                             material.createdDate = new Date();
+                            material.updatedBy = this.userName;
+                            material.updatedDate = new Date();
                         } else {
                             material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
                             // material.materialMandatoriesId = workflow.materialMandatoriesId;
+                            material.createdBy = this.userName;
+                            material.createdDate = new Date();
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
+                            material.taskId = workflow.taskId ;
                         }
                         material.partNumber=material.partNumber.partName;
                         this.sourceWorkFlow.materialList.push(material);
@@ -2502,11 +2540,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             measurement.taskId = workflow.taskId;
                             measurement.order = workflow.order;
                             measurement.masterCompanyId = this.currentUserMasterCompanyId;
+                            measurement.updatedBy = this.userName;
+                            measurement.updatedDate = new Date();
                             measurement.createdBy = this.userName;
                             measurement.createdDate = new Date();
                         } else {
                             measurement.workflowMeasurementId = measurement.workflowMeasurementId > 0 ? measurement.workflowMeasurementId : 0;
                             measurement.masterCompanyId = this.currentUserMasterCompanyId;
+                            measurement.createdBy = this.userName;
+                            measurement.createdDate = new Date();
                             measurement.updatedBy = this.userName;
                             measurement.updatedDate = new Date();
                         }
@@ -2532,9 +2574,10 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         } else {
                             publication.id = publication.id > 0 ? publication.id : 0;
                             publication.masterCompanyId = this.currentUserMasterCompanyId;
-                            publication.createdBy = this.userName;
-                            publication.createdDate = new Date();
+                         
                         }
+                        publication.createdBy = this.userName;
+                        publication.createdDate = new Date();
                         publication.updatedBy = this.userName;
                         publication.updatedDate = new Date();
                         publication.masterCompanyId = this.currentUserMasterCompanyId;
@@ -2602,14 +2645,12 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         this.sourceWorkFlow.expertise.push(expert);
                     }
                 }
-                console.log("part material",workflow.materialList)
                 if (workflow.materialList != undefined) {
                     for (let material of workflow.materialList) {
                         material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                         material.workflowId = workflow.workflowId;
                         material.taskId = workflow.taskId;
                         material.partNumber= (typeof material.partNumber == 'string') ? material.partNumber:   material.partNumber.partName;
-                       console.log("material",material)
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }
@@ -2623,7 +2664,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 }
                 if (workflow.publication != undefined) {
                     for (let publication of workflow.publication) {
-                        publication.id = publication.id > 0 ? publication.id : 0;
+                        // publication.id = publication.id > 0 ? publication.id : 0;
                         publication.workflowId = workflow.workflowId;
                         publication.taskId = workflow.taskId;
                         if (publication.workflowPublicationDashNumbers != undefined) {
@@ -2652,8 +2693,14 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 createdate: new Date(),
                 updatdate: new Date(),
                 isActive: true,
-                IsDeleted: false,
+                // isDeleted: false,
                 masterCompanyId: this.currentUserMasterCompanyId,
+            }
+
+            if (data.measurements && data.measurements.length != 0) {
+                data.measurements.forEach(element => {
+                    delete element.partName
+                });
             }
 
             const saveWorkFlowWorkOrderData = {
@@ -2664,18 +2711,20 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 workOrderPartNoId: this.workOrderPartNumberId,
                 existingWorkFlowId: this.sourceWorkFlow.workflowId,
-                charges: data.charges.map(x => { return { ...x, workflowChargesListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                directions: data.directions.map(x => { return { ...x, workflowDirectionId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                equipments: data.equipments.map(x => { return { ...x, workflowEquipmentListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                exclusions: data.exclusions.map(x => { return { ...x, workflowExclusionId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                expertise: data.expertise.map(x => { return { ...x, workflowExpertiseListId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                // workflowChargesListId: 0,workflowDirectionId: 0, workflowEquipmentListId: 0,workflowExclusionId: 0,workflowExpertiseListId: 0,
+                // workflowMaterialListId: 0,workflowMeasurementId: 0,
+                charges: data.charges.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                directions: data.directions.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                equipments: data.equipments.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                exclusions: data.exclusions.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                expertise: data.expertise.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 materialList: data.materialList.map(x => { return {
-                     ...x, workflowMaterialListId: 0,
+                     ...x, 
                       workOrderId: this.savedWorkOrderData.workOrderId,
                     //   partNumber:x.partNumber.partName,
                       partNumber: (typeof x.partNumber == 'string') ? x.partNumber:   x.partNumber.partName,
                       ...excessParams } }),
-                measurements: data.measurements.map(x => { return { ...x, workflowMeasurementId: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                measurements: data.measurements.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 publication: data.publication.map(x => { return { ...x, Id: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } })
             }
 
@@ -2686,157 +2735,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             else {
                 this.savedWorkFlowWorkOrderData.emit(saveWorkFlowWorkOrderData);
             }
-        }
-    }
-
-    resetPage(): void {
-        this.selectedItems = [];
-        this.workFlowList = [];
-        this.currenttaskId = "0";
-        this.showMainPage = false;
-        this.showActionAttribute = false;
-    }
-
-    onDeSelect(item: any) {
-        var items = this.selectedItems.filter(x => x.Id != item.Id);
-        if (items != undefined && items.length > 0) {
-            this.selectedItems = items;
-            this.AddActionAttribute();
-            this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
-        }
-        else {
-            this.selectedItems = [];
-            this.AddActionAttribute();
-        }
-        this.workFlow.selectedItems = this.selectedItems;
-        this.resetWorkflowGrid();
-    }
-
-    onItemSelect(item: any) {
-        this.AddActionAttribute();
-    }
-
-    onSelectAll(items: any) {
-        this.selectedItems = items;
-        this.AddActionAttribute();
-        this.setCurrentPanel(this.selectedItems[this.selectedItems.length - 1].Name, this.selectedItems[this.selectedItems.length - 1].Id);
-        this.resetWorkflowGrid();
-    }
-
-    onDeSelectAll(items: any) {
-        this.selectedItems = [];
-        this.AddActionAttribute();
-        this.workFlow.selectedItems = [];
-        this.resetWorkflowGrid();
-    }
-
-    taskDeleteConfirmation(confirmDeleteTemplate: any, task: any): void {
-        // this.modal = this.modalService.open(confirmDeleteTemplate, { size: 'sm' });
-    }
-
-    removeTask(workFlow: any): void {
-        var index = this.workFlowList.indexOf(workFlow);
-        this.workFlowList.splice(index, 1);
-        if (index == 0 && this.workFlowList.length == 0) {
-            this.currenttaskId = "0";
-            this.selectedItems = [];
-        }
-        else {
-            this.workFlow = this.workFlowList[0];
-            this.currenttaskId = this.workFlowList[0].taskId;
-
-            this.SetCurrectTab(this.currenttaskId, 0);
-            this.setSelectedItems(this.workFlow);
-        }
-
-        this.tasksData = this.tasksData.filter(x => {
-            if (x.taskId !== workFlow.taskId) {
-                return x;
-            }
-        })
-
-        this.onActionChange();
-    }
-
-    dismissModel() {
-        this.modal.close();
-    }
-
-    private resetWorkflowGrid(): void {
-        for (let wf of this.workFlowList) {
-            if (wf.taskId == this.currenttaskId) {
-                var chargesItem = wf.selectedItems.filter(x => x.Name == "Charges");
-                if (chargesItem.length == 0) {
-                    wf.charges = [];
-                }
-
-                var directionsItem = wf.selectedItems.filter(x => x.Name == "Directions");
-                if (directionsItem.length == 0) {
-                    wf.directions = [];
-                }
-
-                var equipmentItem = wf.selectedItems.filter(x => x.Name == "Tools");
-                if (equipmentItem.length == 0) {
-                    wf.equipments = [];
-                }
-
-                var exclusionItem = wf.selectedItems.filter(x => x.Name == "Exclusions");
-                if (exclusionItem.length == 0) {
-                    wf.exclusions = [];
-                }
-
-                var expertiseItem = wf.selectedItems.filter(x => x.Name == "Expertise");
-                if (expertiseItem.length == 0) {
-                    wf.expertise = [];
-                }
-
-                var materialItem = wf.selectedItems.filter(x => x.Name == "Material List");
-                if (materialItem.length == 0) {
-                    wf.materialList = [];
-                }
-
-                var measurementItem = wf.selectedItems.filter(x => x.Name == "Measurements");
-                if (measurementItem.length == 0) {
-                    wf.measurements = [];
-                }
-
-                var measurementItem = wf.selectedItems.filter(x => x.Name == "Publications");
-                if (measurementItem.length == 0) {
-                    wf.publication = [];
-                }
-            }
-
-        }
-
-    }
-
-
-
-    saveBuildFromScratchData() {
-        this.saveData.emit(this.workFlowList);
-    }
-
-
-
-    onAddDescription(value) {
-        this.tempMemo = "";
-        this.tempMemo = this.sourceWorkFlow.memo;
-    }
-
-    onSaveDescription() {
-        this.sourceWorkFlow.memo = this.tempMemo;
-        if (this.UpdateMode) {
-            this.disableUpdateButton = false;
-        }
-        // this.enableUpdateButton = false;
-    }
-    parsedText(text) {
-        if (text) {
-            const dom = new DOMParser().parseFromString(
-                '<!doctype html><body>' + text,
-                'text/html');
-            const decodedString = dom.body.textContent;
-            return decodedString;
         }
     }
 }

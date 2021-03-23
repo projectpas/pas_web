@@ -15,25 +15,34 @@
                         <div class="form-row generalinfo-div">
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label>Legal Entity Code<span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="companyCode" (ngModelChange)="setvaliDate()" 
+                                        [(ngModel)]="generalInformation.companyCode" required />
+                                </div>
+                                <div class="form-group">
                                     <label>Legal Entity <span class="clr-red">*</span></label>
                                     <div class="inner-addon right-addon inline-block">
-                                        <p-autoComplete class="autocomp-customer-cstm" name="name"
-                                            [(ngModel)]="generalInformation.name" required (ngModelChange)="setvaliDate()"
+                                        <p-autoComplete 
+                                            class="autocomp-customer-cstm" name="name"
+                                            [(ngModel)]="generalInformation.name"                                              
+                                            (ngModelChange)="setvaliDate()"
                                             (onKeyUp)="checkCustomerNameExist($event.target.value)"
-                                            (onSelect)="selectedCustomerName($event)" [suggestions]="parentLegalEntity"
-                                            field="label" (completeMethod)="filterParentLegalEntity($event)" [size]="30"
-                                            [minLength]="1" [dropdown]="true">
-                                        </p-autoComplete>
+                                            (onChange)="checkCustomerNameExist($event.target.value)"
+                                            (onSelect)="selectedCustomerName($event)" 
+                                            [suggestions]="parentLegalEntity"
+                                            field="label" 
+                                            (completeMethod)="filterParentLegalEntity($event)" 
+                                            [size]="30"
+                                            [minLength]="1" 
+                                            [dropdown]="true" 
+                                            value="" autocomplete="new-password" 
+                                            required>
+                                        </p-autoComplete>                                        
                                         <div *ngIf="isEntityNameAlreadyExists" class="clr-red">
                                             Entry Already Exists
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Company Code <span class="clr-red">*</span></label>
-                                    <input class="form-control" type="text" name="companyCode" 
-                                        [(ngModel)]="generalInformation.companyCode" required [disabled]="true" />
-                                </div>
+                                </div>                                
                                 <div class="form-group">
                                     <label>Company Name <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="companyName" (ngModelChange)="setvaliDate()"
@@ -47,17 +56,17 @@
                                 <div class="form-group">
                                     <label>Address Line 1 <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="address1" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.address1" required />
+                                        [(ngModel)]="generalInformation.address1" required value="" autocomplete="new-password" />
                                 </div>
                                 <div class="form-group">
                                     <label>Address Line 2</label>
                                     <input class="form-control" type="text" name="address2" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.address2" />
+                                        [(ngModel)]="generalInformation.address2" value="" autocomplete="new-password"/>
                                 </div>
                                 <div class="form-group">
                                     <label>City <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" id="city" name="city" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.city" required />
+                                        [(ngModel)]="generalInformation.city" required value="" autocomplete="new-password"/>
                                 </div>
                                 <div class="form-group">
                                     <label>
@@ -65,13 +74,13 @@
                                         <span class="clr-red">*</span>
                                     </label> 
                                     <input class="form-control" type="text" name="stateOrProvince" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.stateOrProvince" required />
+                                        [(ngModel)]="generalInformation.stateOrProvince" required value="" autocomplete="new-password"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Postal <span class="clr-red">*</span></label>
                                     <!-- (keypress)="numberonly($event)" -->
                                     <input class="form-control"  type="text" name="postalCode" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.postalCode" required />
+                                        [(ngModel)]="generalInformation.postalCode" required value="" autocomplete="new-password"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Country <span class="clr-red">*</span></label>
@@ -80,7 +89,7 @@
                                             class="p-dropdown-100 form-control border_nne" (ngModelChange)="setvaliDate()"
                                             [options]="countryListOriginal" filter="true" field="label" required
                                             [(ngModel)]="generalInformation.countryId" name="countryLis3"
-                                            [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                            [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                     </div>
                                 </div>
                             </div>
@@ -110,14 +119,14 @@
                                 <br />
                                 <div class="form-group"> 
                                     <label>Fax</label>
-                                    <input class="form-control" type="text" id="faxNumber" [pattern]="phonePattern" name="faxNumber" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.faxNumber" #faxPattren="ngModel"  (keypress)="numberonly($event)"/>
+                                    <input class="form-control" type="text" id="faxNumber" name="faxNumber" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.faxNumber"/>
                                 </div> 
-                                <div *ngIf="faxPattren.errors" [ngClass]="'error'">
+                                <!-- <div *ngIf="faxPattren.errors" [ngClass]="'error'">
                                     <div *ngIf="faxPattren.errors.pattern">
                                         <span class="clr-red">Please enter atleast 6 digits</span>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                 
                                     <div class="col-md-12 pl-0">
@@ -126,12 +135,12 @@
                                             <input type="text" id="phone" name="phone" [pattern]="phonePattern" (ngModelChange)="setvaliDate()"
                                                 #phoneNumberNg="ngModel" class="form-control" minlength="6"
                                                 maxlength="14" (keypress)="patternMobilevalidationWithSpl($event)"
-                                                [(ngModel)]="generalInformation.phoneNumber" required />
+                                                [(ngModel)]="generalInformation.phoneNumber" required value="" autocomplete="new-password"/>
                                         </div>
                                         <div class="col-md-6"> 
                                             <label>Ext </label>
                                             <input type="text" (keypress)="numberonly($event)" name="phoneExt" class="text-start" pInputText maxlength="15" (ngModelChange)="setvaliDate()"
-                                                [disabled]="!generalInformation.phoneNumber " [(ngModel)]="generalInformation.phoneExt" />
+                                                [disabled]="!generalInformation.phoneNumber " [(ngModel)]="generalInformation.phoneExt" value="" autocomplete="new-password"/>
                                         </div>
 
                                     </div>
@@ -207,12 +216,12 @@
                                         [(ngModel)]="generalInformation.cageCode" />
                                 </div>
                                 <div class="form-group">
-                                    <label>Faa Lic</label>
+                                    <label>FAA Lic / EASA Lic</label>
                                     <input class="form-control" type="text" id="faaLicense" name="faaLicense" (ngModelChange)="setvaliDate()"
                                         [(ngModel)]="generalInformation.faaLicense" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="tax-label">TAX Id</label>
+                                    <label class="tax-label">TAX ID</label>
                                     <input class="form-control" type="text" id="taxId" name="taxId" (ngModelChange)="setvaliDate()"
                                         [(ngModel)]="generalInformation.taxId" />
                                 </div>

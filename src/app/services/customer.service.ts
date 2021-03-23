@@ -15,6 +15,7 @@ import { CustomerEndpoint } from './customer-endpoint.service';
 import { Customer } from '../models/customer.model';
 import { DiscountValue } from '../models/discountvalue';
 import { MarkUpPercentage } from '../models/markUpPercentage.model';
+import { ICustomerInvoiceSearchParameters } from '../models/sales/ICustomerInvoiceSearchParameters';
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = { roles: Role[] | string[], operation: RolesChangedOperation };
 @Injectable()
@@ -688,4 +689,10 @@ export class CustomerService {
 
     //    return this.customerEndpoint.deleteContact(CustomerId, updatedBy);
     //}
+    customerInvoiceSearch(
+        customerInvoiceSearchParameters: ICustomerInvoiceSearchParameters) {
+        return Observable.forkJoin(
+          this.customerEndpoint.customerInvoiceSearch(customerInvoiceSearchParameters)
+        );
+      }
 }

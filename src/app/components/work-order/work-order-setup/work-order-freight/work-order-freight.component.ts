@@ -43,7 +43,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     cols = [
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Weight' ,isRequired:false},
+        { field: 'weight', header: 'Weight' ,isRequired:false,width:"60px"},
         { field: 'uom', header: 'UOM',isRequired:false },
     ]
 
@@ -55,11 +55,33 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         { field: 'length', header: 'Qty',isRequired:false },
         { field: 'height', header: 'Ref Num',isRequired:false },
         { field: 'width', header: 'Unit Cost',isRequired:false },
-        { field: 'dimensionUOM', header: 'Extented Cost',isRequired:false },
-        { field: 'currency', header: 'Vendor Name',isRequired:false },
-        { field: 'amount', header: 'Vendor Name',isRequired:true },
-        { field: 'memo', header: 'Vendor Name',isRequired:false },
+        { field: 'dimensionUOM', header: 'Dimension UOM',isRequired:false },
+        { field: 'currency', header: 'Currency',isRequired:false },
+        { field: 'amount', header: 'Amount',isRequired:true },
         { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'memo', header: 'Memo',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+      auditHistoryQuoteHeaders = [
+        { field: 'taskName', header: 'Task',isRequired:false },
+        { field: 'shipVia', header: 'Ship Via',isRequired:true },
+        { field: 'weight', header: 'Gl Account Name',isRequired:false },
+        { field: 'uom', header: 'Description',isRequired:false },
+        { field: 'length', header: 'Qty',isRequired:false },
+        { field: 'height', header: 'Ref Num',isRequired:false },
+        { field: 'width', header: 'Unit Cost',isRequired:false },
+        { field: 'dimensionUomName', header: 'Dimension UOM',isRequired:false },
+        { field: 'currency', header: 'Currency',isRequired:false },
+        { field: 'amount', header: 'Amount',isRequired:true },
+        { field: 'memo', header: 'Memo',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:false },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+
         { field: 'createdDate', header: 'Created Date',isRequired:false },
         { field: 'createdBy', header: 'Created By',isRequired:false },
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
@@ -101,7 +123,14 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             }
         }
     }
+    originalList:any=[]
     ngOnChanges() {
+        this.originalList=this.workOrderFreightList;
+        if(this.originalList && this.originalList[0].workOrderQuoteDetailsId){
+            this.disableFrt=true;
+        }else{
+            this.disableFrt=false;
+        }
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
@@ -209,7 +238,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         newFreight.isShowDelete=false;
         newFreight.amount = this.formateCurrency(newFreight.amount);
         const taskId = this.taskList.filter(x => x.description.toLowerCase() == 'shipping');
-        console.log("taskId",taskId)
+
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [newFreight];
 
@@ -217,7 +246,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     addNewRow() { 
         let newFreight = new Freight();
         const taskId = this.taskList.filter(x => x.description === 'shipping');
-        console.log("taskId",taskId)
+
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [...this.freightForm, newFreight];
     }
@@ -330,6 +359,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 $('#addNewFreight').modal('hide');
             }
         }
+        this.disableFrt=false;
     }
 
     createFreightsQuote() {
@@ -372,8 +402,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             return { ...f, headerMarkupId: Number(this.overAllMarkup), markupFixedPrice: this.costPlusType }
         })
         let result = {'data': sendData, 'taskSum': WorkOrderQuoteTask, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType}
-      console.log("emitzz")
+
         this.saveFreightListForWO.emit(result);
+        this.disableFrt=true;
     }
     currentRow:any={};
     openDelete(content, row) {
@@ -390,6 +421,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.currentRow.isDeleted = true;
             $('#addNewFreight').modal('hide');
             this.isEdit = false;
+            this.disableFrt=false;
         }
         else {
             const workOrderFreightId  = this.isSubWorkOrder ? this.currentRow.subWorkOrderFreightId :this.currentRow.workOrderFreightId;
@@ -546,18 +578,40 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     historyData: any = [];
     getAuditHistoryById(rowData) {
+        if(this.isQuote){
+  if(rowData.workOrderQuoteFreightId){
+    this.workOrderService.getquoteFreightsHistory(rowData.workOrderQuoteFreightId).subscribe(res => {
+        this.historyData = res;
+//         this.historyData = res.forEach(element => {
+//             element.amount=element.amount ?  formatNumberAsGlobalSettingsModule(element.amount, 2) : '0.00';
+//             element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+//            element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+//    });
+        this.triggerHistory();
+
+      })
+  }else{
+    this.historyData = [];
+    this.triggerHistory();
+  }
+  this.auditHistoryHeaders=this.auditHistoryQuoteHeaders;
+        }else{
         this.workOrderService.getFreightHistory(this.isSubWorkOrder, this.isSubWorkOrder == true ? rowData.subWorkOrderFreightId : rowData.workOrderFreightId).subscribe(res => {
           this.historyData = res.reverse();
           this.auditHistoryHeaders=this.auditHistoryHeaders;
-          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-       
-          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
-          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
-          this.modal.componentInstance.auditHistory = this.historyData;
-          
-          this.modal.result.then(() => {
-          }, () => { })
+          this.triggerHistory();
         })
+        }
+      }
+      triggerHistory(){
+       
+      this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = this.historyData;
     
+      }
+      disableFrt:boolean=false;
+      getValidFrt(){
+          this.disableFrt=false;
       }
 }

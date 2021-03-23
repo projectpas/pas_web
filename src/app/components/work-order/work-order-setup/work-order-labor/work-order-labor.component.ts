@@ -5,6 +5,8 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { CommonService } from '../../../../services/common.service';
 import { getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 declare var $: any;
 @Component({
   selector: 'app-work-order-labor',
@@ -62,8 +64,9 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   taskIndexToggle: any;
   labourHeader: any;
   disabledUpdatebtn:boolean=true; 
+  modal: NgbModalRef;
   constructor(private workOrderService: WorkOrderService,
-    private authService: AuthService,
+    private authService: AuthService,private modalService: NgbModal,
     private commonService: CommonService) { }
  
   ngOnInit() {
@@ -137,6 +140,7 @@ laborTaskData:any;
     if (!this.isQuote) {
       this.getEmployeeData();
     }
+    this.selectedItems =[];
     this.laborForm.costPlusType = 'Mark Up'
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     if (this.laborForm['workOrderHoursType']) {
@@ -151,13 +155,15 @@ laborTaskData:any;
         this.laborForm.workFloworSpecificTaskorWorkOrder = "workOrder";
       }
     }
+    this.selectedItems = [];
     for (let tData in this.laborForm.workOrderLaborList[0]) {
       if (this.laborForm.workOrderLaborList[0][tData].length == 0) {
         delete this.laborForm.workOrderLaborList[0][tData]
       }
       else {
         for (let task in this.taskListForHeader) {
-          if (tData == this.taskListForHeader[task]['description']) {
+          if (tData == this.taskListForHeader[task]['description']) 
+          {
             this.selectedItems = [...this.selectedItems, {
               "taskId": this.taskListForHeader[task]['taskId'],
               "description": this.taskListForHeader[task]['description']
@@ -681,7 +687,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
               "LaborCost": this.getTotalLabourCost(this.laborForm.workOrderLaborList[0][task.description]),
               "LaborBilling": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
               "LaborRevenue": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
-              "masterCompanyId": task.masterCompany.masterCompanyId,
+              "masterCompanyId": this.authService.currentUser.masterCompanyId,
               "CreatedBy": "admin",
               "UpdatedBy": "admin",
               "CreatedDate": new Date().toDateString(),
@@ -690,7 +696,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
               "isDeleted": false
             }
             WorkOrderQuoteTask.push(data)
-            task.masterCompany.masterCompanyId
+            this.authService.currentUser.masterCompanyId
           } else {
             const data = {
               "WorkOrderQuoteTaskId": 0,
@@ -726,10 +732,14 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
       isActive: true,
     }
 
+
     let tasksData = this.laborForm.workOrderLaborList[0];
     let formedData = {}
     for (let tdata in tasksData) {
-      if (tdata != 'length') {
+      if (tdata != 'length') 
+      {
+
+
         formedData[tdata] = tasksData[tdata].map(x => {
           return {
             ...x,
@@ -859,6 +869,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
   currentRecord:any={};
   showDeleteLabourPopup(taskName, res, index) {
     this.currentRecord=res;
+    console.log("hello", this.currentRecord)
     this.deletingLabourObj = {
       taskName: taskName,
       index: index
@@ -1298,4 +1309,58 @@ this.commonfunctionHandler();
     headerMaintanance(){
       // this.refreshLabor.emit(true);
     }
+    historyData:any=[];
+    // auditHistoryHeaders:any=[];
+    auditHistoryHeaders = [
+        { field: 'taskName', header: 'Task' ,isRequired:false},
+        { field: 'expertise', header: 'Expertise',isRequired:false },
+        { field: 'billabletype', header: 'Billable /NonBillable',isRequired:false },
+        { field: 'hours', header: 'Hours',isRequired:false },
+        { field: 'directLaborOHCost', header: 'Direct Labor',isRequired:false },
+        { field: 'uomName', header: 'Burden Rate %',isRequired:false },
+        { field: 'burdaenRatePercentage', header: 'Burden Rate %',isRequired:false },
+        { field: 'burdenRateAmount', header: 'Burden Rate Amount',isRequired:false },
+        { field: 'totalCostPerHour', header: 'Labor Cost/Hr',isRequired:false },
+        { field: 'totalCost', header: 'Total Direct Cost',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:false },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+    getAuditHistoryById(rowData) { 
+      console.log("roeData",rowData)
+        if(rowData.workOrderQuoteLaborId){
+        this.workOrderService.getquoteLaborHistory(rowData.workOrderQuoteLaborId).subscribe(res => {
+          this.historyData = res;
+        //   this.historyData = res.forEach(element => {
+        //     element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+        //     element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
+        //     element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+
+        //     element.burdaenRatePercentage=element.burdaenRatePercentage ?  formatNumberAsGlobalSettingsModule(element.burdaenRatePercentage, 2) : '0.00';
+        //     element.burdenRateAmount=element.burdenRateAmount ?  formatNumberAsGlobalSettingsModule(element.burdenRateAmount, 2) : '0.00';
+        //     element.totalCostPerHour=element.totalCostPerHour ?  formatNumberAsGlobalSettingsModule(element.totalCostPerHour, 2) : '0.00';
+          
+        //     element.totalCost=element.totalCost ?  formatNumberAsGlobalSettingsModule(element.totalCost, 2) : '0.00';
+        // });
+          this.auditHistoryHeaders=this.auditHistoryHeaders;
+          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+       
+          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+          this.modal.componentInstance.auditHistory = this.historyData;
+          
+        })
+    }else{
+        this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = [];  
+    }
+      }
+
 }

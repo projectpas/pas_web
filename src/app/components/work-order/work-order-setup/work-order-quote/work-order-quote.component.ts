@@ -19,11 +19,14 @@ import { getObjectById, formatNumberAsGlobalSettingsModule } from '../../../../g
 import { DBkeys } from '../../../../services/db-Keys';
 import { ApprovalProcessEnum } from "../../../sales/quotes/models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../sales/quotes/models/approval-status-enum";
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
 @Component({
     selector: 'app-work-order-quote',
     templateUrl: './work-order-quote.component.html',
     styleUrls: ['./work-order-quote.component.scss']
 })
+
 export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteForm: WorkOrderQuote;
     @Input() quoteListViewData: any = {};
@@ -45,6 +48,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     customerContact: string;
     customerRef: any;
     quoteDueDate: Date = new Date();
+    isDetailedView: boolean;
     validFor: number;
     expirationDate: Date;
     sentDate: Date;
@@ -131,7 +135,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     conditions: any[];
     unitOfMeasuresList: any[];
     employeesOriginalData: any[];
-    materialFlatBillingAmount: any;
+    materialFlatBillingAmount: any="0.00";
     buildMethodDetails: any;
     approvalGridActiveTab: string = 'mpns';
     internalApproversList: any = [];
@@ -141,12 +145,14 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     isSpinnerVisible: boolean = false;
     cusContactList: any[];
     saveType: string = '';
+    currentWarningMessage:any;
     fields = ['partsCost', 'partsRevPercentage', 'laborCost', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
     currentApprover: any;
     isCurrentUserApprovalLimitExceeded: boolean = true;
     quotestatusofCurrentPart: string = '';
     isViewForApprovedPart: boolean = false;
     defaultContactId: any;
+    modal: NgbModalRef;
     woQuoteListHeader = [
         {
             header: 'Action',
@@ -201,40 +207,53 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             field: 'partsRevPercentage'
         }, {
             header: 'Labour Cost',
-            field: 'laborCost'
+            field: 'laborCost',
+            width:"60px",
         }, {
             header: 'Labour Revenue %',
-            field: 'laborRevPercentage'
+            field: 'laborRevPercentage',
+            width:"60px",
         }, {
             header: 'Overhead Cost',
-            field: 'overHeadCost'
+            field: 'overHeadCost',
+            width:"60px",
         }, {
             header: 'Overhead Cost %',
-            field: 'overHeadPercentage'
+            field: 'overHeadPercentage',
+            width:"60px",
         }, {
             header: 'Charges Cost',
-            field: 'chargesCost'
+            field: 'chargesCost',
+            width:"60px",
         }, {
             header: 'Freight Cost',
-            field: 'freightCost'
-        }, {
-            header: 'Exclusion Cost',
-            field: 'exclusionCost'
-        }, {
+            field: 'freightCost',
+            width:"60px",
+        }, 
+        // {
+        //     header: 'Exclusion Cost',
+        //     field: 'exclusionCost'
+        // },
+         {
             header: 'Direct Cost',
-            field: 'directCost'
+            field: 'directCost',
+            width:"60px",
         }, {
             header: 'Direct Cost %',
-            field: 'directCostPercentage'
+            field: 'directCostPercentage',
+            width:"60px",
         }, {
             header: 'Revenue',
-            field: 'revenue'
+            field: 'revenue',
+            width:"60px",
         }, {
             header: 'Margin',
-            field: 'margin'
+            field: 'margin',
+            width:"60px",
         }, {
             header: 'Margin %',
-            field: 'marginPercentage'
+            field: 'marginPercentage',
+            width:"60px",
         } 
     ]
     woQuoteAnalysisHeader = [
@@ -328,7 +347,46 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     memoPopupContent: any;
     selectall: any;
     cols: any;
-    constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
+    pageIndex: number = 0;
+    totalRecords: number=0;
+    totalPages: number;
+    pageSize: number = 10;
+    deleteRowRecord:any={};
+    msId:any;
+    selectedquotePn: any;
+    showDisplayData:boolean=false;
+    customerWarningsList: any;
+    textAreaInfo: any;
+    memoIndex;
+    setEditArray:any=[];
+    upDateDisabeldbutton:any;
+    disableForMemo:boolean=false;
+    tempMemo:any;
+    originlaMlist:any=[];
+    historyData:any=[];
+    auditHistoryHeaders = [
+        { field: 'taskName', header: 'Task' ,isRequired:true},
+        { field: 'partNumber', header: 'PN',isRequired:true },
+        { field: 'partDescription', header: 'PN Description',isRequired:false },
+        { field: 'provision', header: 'Provision',isRequired:false },
+        { field: 'quantity', header: 'Qty',isRequired:true },
+        { field: 'uomName', header: 'UOM',isRequired:false },
+        { field: 'conditiontype', header: 'Cond Type',isRequired:true },
+        { field: 'stocktype', header: 'Stock Type',isRequired:false },
+        { field: 'unitCost', header: 'Unit Cost',isRequired:false },
+        { field: 'totalPartCost', header: 'Total Part Cost',isRequired:false },
+        { field: 'billingName', header: 'Billing Method',isRequired:true },
+        { field: 'markUp', header: 'Mark Up',isRequired:false },
+        { field: 'billingRate', header: 'Billing Rate',isRequired:false },
+        { field: 'billingAmount', header: 'Billing Amount',isRequired:false },
+        { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'createdDate', header: 'Created Date',isRequired:false },
+        { field: 'createdBy', header: 'Created By',isRequired:false },
+        { field: 'updatedDate', header: 'Updated Date',isRequired:false },
+        { field: 'updatedBy', header: 'Updated By',isRequired:false },
+      ]
+    constructor(private router: ActivatedRoute,private modalService: NgbModal, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,private purchaseOrderService: PurchaseOrderService) { }
+    
     ngOnInit() {
         this.employeeName= this.authService.currentEmployee.name;
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -370,17 +428,17 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             this.getAllEmailType();
             this.getAllWorkOrderStatus('');
         }
-        console.log("hell9 ng On Ints ") 
     }
+
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
-if (property == 'selectedDisplayType') {
-    this.workOrderId=this.workorderid;
-    if(this.workOrderId){
+            if (property == 'selectedDisplayType') {        
+                this.workOrderId=this.workorderid;
+                if(this.workOrderId){
 
-        this.getEmployeeList(this.workOrderId);
-    }
-// selectedDisplayType
+                    this.getEmployeeList(this.workOrderId);
+                }
+            // selectedDisplayType
             }
         }
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -393,14 +451,13 @@ if (property == 'selectedDisplayType') {
     refresh( isView = false) {
         this.isSpinnerVisible = true;
         this.isViewMode = isView;
-
     }
+
     getInternalSentDateEnableStatus(approver) {
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SentForInternalApproval;
     }
 
     getinternalStatusIdEnableStatus(approver) {
-        debugger;
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitInternalApproval;
     }
 
@@ -409,9 +466,9 @@ if (property == 'selectedDisplayType') {
     }
 
     getcustomerStatusIdEnableStatus(approver) {
-        debugger;
         return !approver.isSelected || approver.approvalActionId != ApprovalProcessEnum.SubmitCustomerApproval;
     }
+
     getApprovalActionInternalStatus(approver) {
         if (approver.isSelected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
             return true;
@@ -439,11 +496,11 @@ if (property == 'selectedDisplayType') {
                     this.customerContact = res.customerDetails.customerContact;
                     this.customerRef = res.customerDetails.customerRef;
                     this.csr = res.customerDetails.csrName;
+                    this.salesPerson=res.salesPerson?res.salesPerson.name : '' ;
                     this.customerEmail = res.customerDetails.customerEmail;
                     this.customerPhone = res.customerDetails.customerPhone;
-this.creditTerms=res.creditTerm;
-
-                    this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 0);
+                    this.creditTerms=res.creditTerm;
+                    this.creditLimit = formatNumberAsGlobalSettingsModule(res.creditLimit, 2);
                     this.workOrderNumber = res.workOrderNum;
                     this.quoteForm.WorkOrderId = res.workOrderId;
                     this.quoteForm.WorkFlowWorkOrderId = res["workFlowWorkOrderId"];
@@ -457,6 +514,7 @@ this.creditTerms=res.creditTerm;
                     this.quoteForm.masterCompanyId = res['masterCompanyId'];
                     this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
                     this.quoteForm['versionNo'] = 'V1';
+                    this.salesPerson = res.salesPerson.name;
                     this.workOrderService.getWorkOrderQuoteDetail(res.workOrderId, res["workFlowWorkOrderId"])
                         .subscribe(
                             (res: any) => {
@@ -488,6 +546,7 @@ this.creditTerms=res.creditTerm;
                                     this.currency = res.workOrderQuote.currencyId;
                                     this.accountsReceivableBalance = res.workOrderQuote.accountsReceivableBalance;
                                     this.warnings = res.warnings;
+                                    this.salesPerson=res.salesPersonName;
                                     this.memo = res.memo;
                                     this.approvedDate = new Date(res.approvedDate);
                                     this.sentDate = new Date(res.sentDate);
@@ -532,6 +591,7 @@ this.creditTerms=res.creditTerm;
                     // this.getCreditTerms(res.creditTermsId);
                     this.setEmpAndSalesPersonName(res.employeeId, res.salesPersonId);
                     this.getMPNList(res.workOrderId);
+                    this.customerWarnings(this.quoteForm['customerId']);
                 }
                 else{
                     this.isSpinnerVisible = false;
@@ -543,13 +603,11 @@ this.creditTerms=res.creditTerm;
             })
         }
     }
-    deleteRowRecord:any={};
+    
     deleteMemoConfirmation(mainIndex, subIndex,obj){
         this.mainIndex = mainIndex;
         this.subIndex = subIndex;
         this.deleteRowRecord=obj
-        console.log("obj",obj)
-        // $('#deleteRowConfirmation').modal('show');
     }
 
     saveApprovalMemo(data){
@@ -576,6 +634,7 @@ this.creditTerms=res.creditTerm;
     getInternalApprovedMaxDate(){
         return new Date();
     }
+
     getCustomerSentMinDate(intApprovedDate){
         if(intApprovedDate){
             return new Date(intApprovedDate);
@@ -592,29 +651,15 @@ this.creditTerms=res.creditTerm;
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-                    this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
-
+            this.commonService.autoSuggestionSmartDropDownList('condition', 'conditionId', 'description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
                     res = res.map(x => { return {'conditionId': x.value, 'description': x.label} })
-                    this.conditions = res;
+                    this.conditions = res;        
                 },
                 err => {
                     this.errorHandling(err);
                 }
             )
     }
-    // getUnitOfMeasure() {
-    //     this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName')
-    //         .subscribe(
-    //             (res: any[]) => {
-    //                 res = res.map(x=>{ return {'unitOfMeasureId': x.value, "shortName": x.label, "description": x.label}})
-    //                 this.unitOfMeasuresList = res;
-    //             },
-    //             err => {
-    //                 this.errorHandling(err);
-    //             }
-    //         )
-    // }
-
     calculateExpiryDate() {
         if (this.validFor && this.quoteDueDate) {
             this.expirationDate = new Date();
@@ -628,8 +673,7 @@ this.creditTerms=res.creditTerm;
         }
         else{
             this.saveQuoteAPI()
-        }
-        
+        }        
     }
 
     saveQuoteAPI(){
@@ -755,35 +799,14 @@ this.creditTerms=res.creditTerm;
             this.saveFreights();
         }
     }
-
-    // getCreditTerms(ctermId) {
-        
-    //     this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name')
-    //         .subscribe(
-    //             (creditTermList: any[]) => {
-
-    //                 for (let cTerm of creditTermList) {
-    //                     if (cTerm.value == ctermId) {
-    //                         this.creditTerms = cTerm.label;
-    //                     }
-    //                 }
-                    
-    //             },
-    //             err => {
-    //                 this.errorHandling(err);
-    //             }
-    //         )
-    // }
-    msId:any;
     getEmployeeList(woId) { 
-                        this.setEditArray.push(0);
-                        this.msId = this.authService.currentUser
+            this.setEditArray.push(0);
+            this.msId = this.authService.currentUser
                 ? this.authService.currentUser.managementStructureId
                 : null;
                     const strText = '';
+                    this.isSpinnerVisible = true;
                     this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(employeeList => {
-
-
                     this.employeeList = employeeList;
                     this.employeesOriginalData = employeeList;
                     this.getWorkOrderInfo(woId);
@@ -791,6 +814,7 @@ this.creditTerms=res.creditTerm;
                     
                 },
                 err => {
+                    this.isSpinnerVisible = false;
                     this.errorHandling(err);
                 }
             )
@@ -802,18 +826,15 @@ this.creditTerms=res.creditTerm;
                 this.employeeName = emp.label;
                 this.quoteForm['employeeId'] = { label: emp.label, value: empId };
             }
-            if (emp.value == salesPerId) {
-                this.salesPerson = emp.label;
-            }
+            // if (emp.value == salesPerId) {
+            //     this.salesPerson = emp.label;
+            // }
         }
     }
 
-    getMPNList(workOrderId) {
-        
+    getMPNList(workOrderId) {        
         if(workOrderId && workOrderId != 0){
-
-            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {
-                
+            this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {                
                 this.workOrderWorkFlowOriginalData = res;
                 this.mpnPartNumbersList = res.map(x => {
                     return {
@@ -836,7 +857,7 @@ this.creditTerms=res.creditTerm;
                         label: x.partNumber
                     }
                 });
-                console.log("this.mpnPartNumbersList",this.mpnPartNumbersList)
+
                 if (this.savedWorkOrderData && this.savedWorkOrderData.isSinglePN) {
                     this.selectedPartNumber = this.mpnPartNumbersList[0].value;
                     this.selectedquotePn = this.mpnPartNumbersList[0].label
@@ -851,10 +872,9 @@ this.creditTerms=res.creditTerm;
             })
         }
     }
-    selectedquotePn: any;
+    
     partNumberSelected(data) {
         this.selectedPartNumber = data;
-        // this.gridActiveTab = '';
         this.quotestatusofCurrentPart=data.quoteStatus;
         this.isViewForApprovedPart = false;
         if(this.quotestatusofCurrentPart == 'Approved'){
@@ -877,22 +897,9 @@ this.creditTerms=res.creditTerm;
             msId = data.masterPartId;
             this.labor.workFlowWorkOrderId = data;
             this.workFlowWorkOrderId = data.workOrderWorkFlowId;
-            this.selectedWorkFlowWorkOrderId = data.workOrderWorkFlowId;
-
-            // }
-
-            // this.mpnPartNumbersList.forEach((mpn)=>{
-            // if(mpn.label == this.selectedPartNumber){
-            //   this.selectedPartDescription = mpn.value.partDescription;
-            //   this.selectedStockLineNumber = mpn.value.stockLineNumber;
-            //   msId = mpn.value.masterPartId;
-            //   this.labor.workFlowWorkOrderId = mpn;
-            //   this.workFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
-            //   this.selectedWorkFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
-            // this.getTabDataFromWorkOrder();
- this.getBuildMethodDetails();
+            this.selectedWorkFlowWorkOrderId = data.workOrderWorkFlowId;            
+            this.getBuildMethodDetails();
         }
-        // })
         this.savedWorkOrderData.partNumbers.forEach((pns) => {
             if (msId == pns['masterPartId']) {
                 this.laborPayload.IsDER = this.exclusionPayload.IsDER = this.chargesPayload.IsDER = this.materialListPayload.IsDER = this.quoteFreightListPayload.IsDER = pns['isDER'];
@@ -911,12 +918,13 @@ this.creditTerms=res.creditTerm;
         // }
 
     }
+
     getBuildMethodDetails(){
-    this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId)
-    .subscribe((res) => {
+        this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId ? this.selectedWorkFlowWorkOrderId : this.workOrderQuoteDetailsId)
+            .subscribe((res) => {
             this.buildMethodDetails = res;
             if (res) {
-                this.costPlusType = res['materialBuildMethod'].toString();
+                this.costPlusType = res['materialBuildMethod']? res['materialBuildMethod'].toString(): '';
                 this.materialFlatBillingAmount = res['materialFlatBillingAmount'];
             }
             if (res && res['workOrderQuoteDetailsId']) {
@@ -947,6 +955,11 @@ this.creditTerms=res.creditTerm;
                 // this.selectedBuildMethod = "";
                 // this.currenttaskId = 0;
             }
+            if (this.workOrderQuoteDetailsId == 0) {
+                this.isDetailedView = false;
+            } else {
+                this.isDetailedView = true;
+            }
         },
         err => {
             this.errorHandling(err);
@@ -958,6 +971,9 @@ this.creditTerms=res.creditTerm;
             .subscribe(
                 (workOrderParts: partsDetail[]) => {
                     this.workOrderPartsDetail = workOrderParts;
+                    this.workOrderPartsDetail.forEach(element => {
+                        element.iscontract=element.contract=='No'? false:true;
+                    });
                 },
                 err => {
                     this.errorHandling(err);
@@ -976,13 +992,13 @@ this.creditTerms=res.creditTerm;
         else if (buildType == 'use historical wos') {
             this.labor.workFloworSpecificTaskorWorkOrder = 'specificTasks';
         }
-        console.log("this.gridActiveTab",this.gridActiveTab)
+
         if(!this.gridActiveTab || this.gridActiveTab=='materialList' ){
             this.gridTabChange('materialList');
         }
 
     }
-    showDisplayData:boolean=false;
+    
     getDisplayData(buildType) {
         this.showDisplayData=false;
         this.displayType = buildType;
@@ -999,7 +1015,8 @@ this.creditTerms=res.creditTerm;
                     "filters": {
                         "ItemMasterId": partId,
                         "WorkScopeId": workScopeId,
-                        "statusId": Number(this.type)
+                        "statusId": Number(this.type),
+                        "masterCompanyId":this.authService.currentUser.masterCompanyId
                     },
                     "globalFilter": null
                 }
@@ -1009,18 +1026,32 @@ this.creditTerms=res.creditTerm;
                 if (buildType == 'historical WO quotes') {
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrderQuote(partId, workScopeId, payLoad)
                         .subscribe(
-                            (res: any[]) => {
-                                this.buildHistoricalList = res;
+                            (res:any) => {
+                                this.buildHistoricalList =res['results']; 
                                 this.showDisplayData=true;
+                                if (res['results'].length > 0) {
+                                    this.totalRecords = res.totalRecordsCount;
+                                        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                                      }else {
+                                        this.totalRecords = 0;
+                                        this.totalPages = 0;
+                                    }
                             }
                         )
                 }
                 else if (buildType == 'use historical wos') {
                     this.workOrderService.getBuildDetailsFromHistoricalWorkOrder(partId, workScopeId, payLoad)
                         .subscribe(
-                            (res: any[]) => {
-                                this.buildHistoricalList = res;
+                            (res: any) => {
+                                this.buildHistoricalList = res['results'];
                                 this.showDisplayData=true;
+                                if (res['results'].length > 0) {
+                                    this.totalRecords = res.totalRecordsCount;
+                                        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                                      }else {
+                                        this.totalRecords = 0;
+                                        this.totalPages = 0;
+                                    }
                             }
                         )
                 }
@@ -1036,7 +1067,6 @@ this.creditTerms=res.creditTerm;
             return true;
     }
 
-
     checkForAllEmpty(){
         let result = true;
         for(let x of this.labor.workOrderLaborList[0]){
@@ -1046,6 +1076,7 @@ this.creditTerms=res.creditTerm;
         }
         return result;
     }
+
     //not used
     getQuoteInfo(data) {
         this.selectedWorkFlowOrWorkOrder = data;
@@ -1142,14 +1173,12 @@ this.creditTerms=res.creditTerm;
     }
 
     saveWorkOrderFreightsList(e) {
-        console.log("dfdsfsdfsdfdsfsdfdsfsdf",e)
         this.quoteFreightListPayload.BuildMethodId = this.getBuildMethodId();
         this.quoteFreightListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.quoteFreightListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.quoteFreightListPayload['createdDate'] = (e.createdDate) ? e.createdDate : new Date();
         this.quoteFreightListPayload.masterCompanyId = this.quotationHeader.masterCompanyId;
         this.quoteFreightListPayload.SelectedId = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
-        console.log("hello ",this.quoteFreightListPayload);
         this.quoteFreightListPayload.WorkOrderQuoteFreight = e['data'].map(fre => {
             if (fre.workOrderQuoteDetailsId && fre.workOrderQuoteDetailsId != 0) {
                 this.quoteFreightListPayload.WorkOrderQuoteDetailsId = fre.workOrderQuoteDetailsId
@@ -1208,10 +1237,11 @@ this.creditTerms=res.creditTerm;
     }
 
     saveFreights(){
+        this.isSpinnerVisible=true;
         this.workOrderService.saveFreightsListQuote(this.quoteFreightListPayload)
         .subscribe(
             (res) => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['freight'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteFreightListByWorkOrderQuoteId();
@@ -1224,13 +1254,14 @@ this.creditTerms=res.creditTerm;
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
     }
 
     createMaterialQuote() {
+        this.disableMat=true;
         this.materialListPayload.BuildMethodId = this.getBuildMethodId();
         this.materialListPayload["taskId"] = (this.selectedBuildMethod == 'build from scratch') ? this.currenttaskId : 0;
         this.materialListPayload['WorkflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
@@ -1326,10 +1357,11 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialList(){ 
+        this.isSpinnerVisible=true;
         this.workOrderService.saveMaterialListQuote(this.materialListPayload)
         .subscribe(
             res => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['materialList'] = true;
                 this.updateWorkOrderQuoteDetailsId(res.workOrderQuoteDetailsId);
                 this.getQuoteMaterialListByWorkOrderQuoteId();
@@ -1341,7 +1373,7 @@ this.creditTerms=res.creditTerm;
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -1377,14 +1409,14 @@ this.creditTerms=res.creditTerm;
         )
     }
 
-    createLaborQuote() {
+    createLaborQuote() { 
         this.laborPayload['workflowWorkOrderId'] = this.selectedWorkFlowWorkOrderId;
         this.laborPayload['SelectedId'] = (this.selectedBuildMethod == "use work flow") ? this.woWorkFlowId : (this.selectedBuildMethod == "use historical wos") ? this.historicalWorkOrderId : 0;
-        
+        this.isSpinnerVisible=true;
         this.workOrderService.saveLaborListQuote(this.laborPayload)
             .subscribe(
                 res => {
-                    
+                    this.isSpinnerVisible=false;
                     if (res) {
                         this.tabQuoteCreated['labor'] = true;
                         let laborList = this.labor.workOrderLaborList;
@@ -1406,7 +1438,7 @@ this.creditTerms=res.creditTerm;
                     );
                 },
                 err =>{
-                    
+                    this.isSpinnerVisible=false;
                     this.errorHandling(err)
                 }
             )
@@ -1477,10 +1509,11 @@ this.creditTerms=res.creditTerm;
     }
 
     saveCharges(){
+        this.isSpinnerVisible=true;
         this.workOrderService.saveChargesQuote(this.chargesPayload)
         .subscribe(
             res => {
-                
+                this.isSpinnerVisible=false;
                 this.tabQuoteCreated['charges'] = true;
                 this.workOrderChargesList = res.workOrderQuoteCharges;
                 for (let charge in this.workOrderChargesList) {
@@ -1499,7 +1532,7 @@ this.creditTerms=res.creditTerm;
                 this.updateQuotationHeader()
             },
             err =>{
-                
+                this.isSpinnerVisible=false;
                 this.errorHandling(err)
             }
         )
@@ -1543,6 +1576,7 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
+
     getTaskList(value) {
         if (this.labor == undefined) {
             this.labor = new WorkOrderLabor()
@@ -1570,15 +1604,13 @@ this.creditTerms=res.creditTerm;
             )
     }
 
- 
-
     createNew(type) {
-        // this.isEdit = false;
         this.editData = undefined;
         if (type == 'add') {
             this.fromquote = true;
         }
     }
+
     edit(rowData, i) {
         this.isEditMode=true;
         this.editingIndex = i;
@@ -1668,7 +1700,7 @@ this.creditTerms=res.creditTerm;
                     "CreatedBy": "admin",
                     "UpdatedBy": "admin",
                     "IsActive": true,
-                    "IsDeleted": labor.IsDeleted,
+                    "IsDeleted": labor.isDeleted,
                     "BurdaenRatePercentageId": labor.burdaenRatePercentageId,
                     "BurdenRateAmount": labor.burdenRateAmount,
                     "TotalCostPerHour": labor.totalCostPerHour,
@@ -1699,19 +1731,15 @@ this.creditTerms=res.creditTerm;
         }
         else if (id == 2) {
             this.selectedBuildMethod = 'use work flow';
-            // this.buildMethodSelected('use work flow');
         }
         else if (id === 3) {
             this.selectedBuildMethod = 'use historical wos';
-            // this.buildMethodSelected('use historical wos');
         }
         else if (id === 4) {
             this.selectedBuildMethod = 'build from scratch';
-            // this.buildMethodSelected('build from scratch');
         }
         else if (id === 5) {
             this.selectedBuildMethod = 'display 3rd party';
-            // this.buildMethodSelected('display 3rd party');
         }
     }
 
@@ -1863,7 +1891,7 @@ this.creditTerms=res.creditTerm;
     }
 
     saveMaterialListForWO(data) {
-        console.log("data",data)
+        this.disableMat=true;
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1901,7 +1929,6 @@ this.creditTerms=res.creditTerm;
                 // this.workOrderExclusionsList = [...this.workOrderExclusionsList, ...this.workOrderExclusionsLists[x].map(da=>{ return {...da, taskId:x}})]
                 this.materialListQuotation.push(temp[x]);
             }
-            console.log(" this.materialListQuotation", this.materialListQuotation);
         }
         else {
             this.editMatData = [];
@@ -1917,7 +1944,8 @@ this.creditTerms=res.creditTerm;
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        // this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join()).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
             }
@@ -2000,19 +2028,23 @@ this.creditTerms=res.creditTerm;
     }
 
     editMaterialList(matData) {
+        this.editMatData=[]
+        matData.unitOfMeasure=matData.uom;
         const eData=[matData]
         this.editMatData = [...eData];
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].mandatoryOrSupplemental;
         this.editMatData[0].partNumber= { partId:this.editMatData[0].itemMasterId, partName:this.editMatData[0].partNumber }
-        console.log("this.edit",this.editMatData); 
     }
 
     deleteMaterialList(mainIndex, subIndex) {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
+        this.disableMat=true;
     }
+
     updateWorkOrderChargesList(data) {
     }
+
     checkValidQuote() {
         if (this.quoteDueDate && this.validFor && this.currency) {
             return false;
@@ -2030,6 +2062,7 @@ this.creditTerms=res.creditTerm;
         this.materialListPayload.WorkOrderQuoteDetailsId = id;
         this.quoteFreightListPayload.WorkOrderQuoteDetailsId = id;
     }
+
     setWorkOrderQuoteId(id) {
         this.laborPayload.WorkOrderQuoteId = id;
         this.exclusionPayload.WorkOrderQuoteId = id;
@@ -2123,7 +2156,7 @@ this.creditTerms=res.creditTerm;
                 total += Number(this.totalTaskMaterialBillingAmount(material));
             }
         )
-        this.materialFlatBillingAmount = total.toFixed(2);
+        this.materialFlatBillingAmount = total? total.toFixed(2):'0.00';
         return total.toFixed(2);
         }
     }
@@ -2174,8 +2207,6 @@ this.creditTerms=res.creditTerm;
         }
     }
 
-
-
     updateExclusionsList(event) {
         if (this.isQuote && this.isEdit) {
             this.workOrderExclusionsList[this.editingIndex] = event.exclusions[0];
@@ -2225,9 +2256,9 @@ this.creditTerms=res.creditTerm;
             this.customerPhone = this.quoteListViewData.customerPhone;
             this.customerRef = this.quoteListViewData.customerRef;
             this.accountsReceivableBalance = this.quoteListViewData.arBalance;
-            this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 0);
+            this.creditLimit = formatNumberAsGlobalSettingsModule(this.quoteListViewData.creditLimit, 2);
             this.creditTerms = this.quoteListViewData.creditTerms;
-            this.salesPerson = this.quoteListViewData.salesPerson;
+            // this.salesPerson = this.quoteListViewData.salesPerson;
             this.csr = this.quoteListViewData.csr;
             this.employeeName = this.quoteListViewData.employee;
             this.currency = this.quoteListViewData.currency;
@@ -2244,6 +2275,7 @@ this.creditTerms=res.creditTerm;
     createQuote() {
         window.open(` /workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workorderid}`);
     }
+
     filterEmployee(event): void {
         this.employeeList = this.employeesOriginalData;
         if (event.query !== undefined && event.query !== null) {
@@ -2264,7 +2296,7 @@ this.creditTerms=res.creditTerm;
 
     noBack(data) {
     }
-    customerWarningsList: any;
+    
     getCustomerWarningsList(): void {
         this.commonService.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name').subscribe(res => {
             res.forEach(element => {
@@ -2277,14 +2309,15 @@ this.creditTerms=res.creditTerm;
             this.errorHandling(err);
         })
     }
+
     customerWarnings(customerId) {
         this.commonService.customerWarnings(customerId, this.createQuoteListID).subscribe((res: any) => {
             if (res) {
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
+                this.currentWarningMessage= res.warningMessage;
                 this.customerResctrictions(customerId, this.warningMessage, this.createQuoteListID);
             }
-
         },
         err => {
             this.errorHandling(err);
@@ -2298,8 +2331,6 @@ this.creditTerms=res.creditTerm;
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
-
-
                 if (this.warningID != 0 && this.restrictID == 0) {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
                 } else if (this.warningID == 0 && this.restrictID != 0) {
@@ -2311,8 +2342,8 @@ this.creditTerms=res.creditTerm;
                 }
             }
         })
-
     }
+
     showAlertMessage(warningMessage, restrictMessage) {
         $('#warnRestrictMesg').modal("show");
         //   this.modal.close();
@@ -2320,13 +2351,12 @@ this.creditTerms=res.creditTerm;
 
     WarnRescticModel() {
         // this.modal.close();
-        if (this.restrictID == 0) {
-            window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
-        }
+        // if (this.restrictID == 0) {
+        //     window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+        // }
         $('#warnRestrictMesg').modal("hide");
         this.warningMessage = '';
         this.restrictMessage = '';
-
     }
 
     approvalGridActiveTabChange(val) {
@@ -2408,12 +2438,12 @@ this.creditTerms=res.creditTerm;
             }
         }
     }
+
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
     getPartToDisableOrNot(part) {
-
         if (part.actionStatus != 'Approved') {
             if (part.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
                 return true;
@@ -2467,6 +2497,21 @@ this.creditTerms=res.creditTerm;
 
                     res.forEach(
                         (x)=>{
+                            x.marginPercentage=x.marginPercentage ? formatNumberAsGlobalSettingsModule(x.marginPercentage, 2) : '0.00';
+                            x.margin= x.margin ? formatNumberAsGlobalSettingsModule(x.margin, 2): '0.00';
+                            x.revenue= x.revenue ? formatNumberAsGlobalSettingsModule(x.revenue, 2): '0.00';
+                            x.directCostPercentage= x.directCostPercentage ? formatNumberAsGlobalSettingsModule(x.directCostPercentage, 2): '0.00';
+                            x.directCost= x.directCost ? formatNumberAsGlobalSettingsModule(x.directCost, 2): '0.00';
+                            x.freightCost= x.freightCost ? formatNumberAsGlobalSettingsModule(x.freightCost, 2): '0.00';
+                            x.chargesCost= x.chargesCost ? formatNumberAsGlobalSettingsModule(x.chargesCost, 2): '0.00';
+                            x.overHeadCost= x.overHeadCost ? formatNumberAsGlobalSettingsModule(x.overHeadCost, 2): '0.00';
+
+                            x.overHeadPercentage= x.overHeadPercentage ? formatNumberAsGlobalSettingsModule(x.overHeadPercentage, 2): '0.00';
+                            x.laborRevPercentage= x.laborRevPercentage ? formatNumberAsGlobalSettingsModule(x.laborRevPercentage, 2): '0.00';
+                            x.laborCost= x.laborCost ? formatNumberAsGlobalSettingsModule(x.laborCost, 2): '0.00';
+                            x.partsCost= x.partsCost ? formatNumberAsGlobalSettingsModule(x.partsCost, 2): '0.00';
+                            x.partsRevPercentage= x.partsRevPercentage ? formatNumberAsGlobalSettingsModule(x.partsRevPercentage, 2): '0.00';
+
                             if(x.internalSentDate){
                                 x.internalSentDate = new Date(x.internalSentDate);
                                 if(!x.internalApprovedDate){
@@ -2508,6 +2553,7 @@ this.creditTerms=res.creditTerm;
                 }
             )
     }
+
     getApproverStatusList() {
         this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
             this.statusList = res.map(x => {
@@ -2520,6 +2566,7 @@ this.creditTerms=res.creditTerm;
             this.setStatusListForApproval(this.statusList);
         })
     }
+
     setStatusListForApproval(statusList) {
         let tempList = [];
 
@@ -2552,15 +2599,33 @@ this.creditTerms=res.creditTerm;
         this.workOrderService.getWOQuoteAnalysisList(this.savedWorkOrderData.workOrderId)
             .subscribe(
                 (res) => {
-                    this.woQuoteAnalysisList = res;
+             if(res && res.length !=0){
+                this.woQuoteAnalysisList = res.map(x =>{ return {
+                    ...x,
+                    marginPercentage:x.marginPercentage ? formatNumberAsGlobalSettingsModule(x.marginPercentage, 2) : '0.00',
+                    margin: x.margin ? formatNumberAsGlobalSettingsModule(x.margin, 2): '0.00',
+                    revenue: x.revenue ? formatNumberAsGlobalSettingsModule(x.revenue, 2): '0.00',
+                    directCostRevenuePercentage: x.directCostRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.directCostRevenuePercentage, 2): '0.00',
+                    directCost: x.directCost ? formatNumberAsGlobalSettingsModule(x.directCost, 2): '0.00',
+                    freightCost: x.freightCost ? formatNumberAsGlobalSettingsModule(x.freightCost, 2): '0.00',
+                   chargesCost: x.chargesCost ? formatNumberAsGlobalSettingsModule(x.chargesCost, 2): '0.00',
+                    overHeadCost: x.overHeadCost ? formatNumberAsGlobalSettingsModule(x.overHeadCost, 2): '0.00',
+                   overHeadCostRevenuePercentage: x.overHeadCostRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.overHeadCostRevenuePercentage, 2): '0.00',
+                   laborRevenuePercentage: x.laborRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.laborRevenuePercentage, 2): '0.00',
+                  laborCost: x.laborCost ? formatNumberAsGlobalSettingsModule(x.laborCost, 2): '0.00',
+                    materialCost: x.materialCost ? formatNumberAsGlobalSettingsModule(x.materialCost, 2): '0.00',
+                   materialRevenuePercentage: x.materialRevenuePercentage ? formatNumberAsGlobalSettingsModule(x.materialRevenuePercentage, 2): '0.00',
+                   totalLaborCost  : x.totalLaborCost ? formatNumberAsGlobalSettingsModule(x.totalLaborCost, 2): '0.00'
+                }});
+             }else{
+                this.woQuoteAnalysisList=[];
+             }
                 },
                 (err) => {
                     this.errorHandling(err);
                 }
             )
     }
-
-
 
     selectAllApproval(type, isSelected) {
         this.woQuoteApprovalList.forEach(
@@ -2726,9 +2791,7 @@ this.creditTerms=res.creditTerm;
         )
         return result;
     }
-
-    textAreaInfo: any;
-    memoIndex;
+    
     onAddTextAreaInfo(intApproval, index) {
         this.memoIndex = index;
         this.textAreaInfo = intApproval.internalMemo;
@@ -2741,12 +2804,15 @@ this.creditTerms=res.creditTerm;
         }
         $("#textarea-popupintmemo").modal("hide");
     }
+
     onCloseTextAreaInfo() {
         $("#textarea-popupintmemo").modal("hide");
     }
+
     errorHandling(err){
         this.isSpinnerVisible=false
     }
+
     checkValidEmails(){
         let result = false;
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -2794,34 +2860,36 @@ this.creditTerms=res.creditTerm;
                         }
                     }
                 );
-
-
             },
             err => {
                 this.errorHandling(err);
             })
     } 
+
     contactSelected(event){
         this.toEmail = event.email;
     }
+
     showEle(){
         $('#emailDetails').modal('show');
     }
+
     selectedCustomer(){
         this.cusContactList = this.customerContactList;
     }
+
     filterCustomerContact(event): void {
         this.cusContactList = this.customerContactList;
-        if (event.query !== undefined && event.query !== null) {
+        if (event.query !== undefined && event.query !== null && event.query !== '') {
             const customers = [...this.customerContactList.filter(x => {
                 return x.contactName.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.cusContactList = customers;
         }else{
             this.cusContactList = this.customerContactList; 
-        }
-        
+        }        
     }
+
     hideModal(modalName){
         $(`#${modalName}`).modal('hide');
     }
@@ -2847,17 +2915,19 @@ this.creditTerms=res.creditTerm;
 
     formateCurrency(value){
         if(value){
- value = (Number(value.toString().split(',').join(''))).toFixed(2);
+            value = (Number(value.toString().split(',').join(''))).toFixed(2);
             let result = formatNumberAsGlobalSettingsModule(value, 0.00);
             return `${result}.00`;
         }
         return value;
-}
-calculatebCost(value,material): void {
-  setTimeout(() => {
-    material.billingAmount = value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
-  }, 500);
-}
+    }
+
+    calculatebCost(value,material): void {
+        setTimeout(() => {
+            material.billingAmount = value ? formatNumberAsGlobalSettingsModule(value, 2) : '0.00';
+        }, 500);
+    }
+
     updateQuotationHeader(){
         this.workOrderService.getWorkOrderQuoteDetail(this.workOrderId, this.workFlowWorkOrderId)
         .subscribe(
@@ -2885,7 +2955,7 @@ calculatebCost(value,material): void {
     onFilterTangible(value) {
         this.getAllWorkOrderStatus(value);
     }
-    setEditArray:any=[];
+    
     getAllWorkOrderStatus(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
@@ -2900,9 +2970,11 @@ calculatebCost(value,material): void {
             }
         })
     }
+
     onFilterCurrency(value) {
         this.loadCurrency(value);
     }
+
     loadCurrency(value) {
         this.setEditArray = [];
         if (this.isEditMode == true) {
@@ -2917,23 +2989,23 @@ calculatebCost(value,material): void {
             }
         })
     }
-    upDateDisabeldbutton:any;
+    
     getValid(){
         this.upDateDisabeldbutton=false;
     }
-    disableForMemo:boolean=false;
-    tempMemo:any;
+    
     onAddDescription(value) {
         this.disableForMemo = true;
         this.type = value;
         this.tempMemo = "";
             this.tempMemo = this.memo;
     }
+
     onSaveDescription() {
             this.memo = this.tempMemo;
-
         this.upDateDisabeldbutton = false;
     }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -2943,6 +3015,7 @@ calculatebCost(value,material): void {
             return decodedString;
         }
     }
+
     memoValidate() {
         this.disableForMemo = false;
     }
@@ -2952,6 +3025,7 @@ calculatebCost(value,material): void {
         this.workorderMainService.getWorkOrderMaterialList(this.workFlowWorkOrderId, this.workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.workOrderMaterialList = res; 
+         
             if (res.length > 0) {
                 this.materialListQuotation = res;
                 if (this.materialListQuotation && this.materialListQuotation.length > 0) {
@@ -3073,6 +3147,7 @@ calculatebCost(value,material): void {
             this.isSpinnerVisible = false;
         })
     }
+
     getWOFrieghtsList(){
         // ,false,0 handle for sub work order handle both apis in end point
        this.workorderMainService.getWorkOrderFrieghtsList(this.workFlowWorkOrderId, this.workOrderId,false,0,false,this.authService.currentUser.masterCompanyId).subscribe((res: any[]) => {
@@ -3084,6 +3159,7 @@ calculatebCost(value,material): void {
            }
        }) 
    }
+
     gridTabChange(value) {
         this.gridActiveTab = value;
         if(value == 'materialList'){
@@ -3147,7 +3223,7 @@ calculatebCost(value,material): void {
             this.getWOExclusionsList();
         }
     }
-    originlaMlist:any=[];
+    
     getQuoteMaterialListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) {
             this.isSpinnerVisible = true;
@@ -3155,6 +3231,7 @@ calculatebCost(value,material): void {
                 this.isSpinnerVisible = false;
                 this.materialListQuotation = res;
                 this.originlaMlist=res;
+                this.disableMat=true;
               this.getCondition('');
                 this.materialListQuotation.forEach(element => {
                     return{
@@ -3181,17 +3258,6 @@ calculatebCost(value,material): void {
                 }
                 let temp = []
                 let formedData = [];
-                // this.materialListQuotation.forEach(
-                //     (x) => {
-                //         formedData = [...formedData, ...x];
-                //     }
-                // )
-
-                  // this.materialListQuotation.forEach(
-                //     (x) => {
-                //         formedData = [...formedData, ...x];
-                //     }
-                // )
                 formedData=[...this.materialListQuotation]
                 temp = formedData.reduce(function (r, a) {
                     r[a['taskId']] = r[a['taskId']] || [];
@@ -3277,6 +3343,7 @@ calculatebCost(value,material): void {
             this.getWOChargesList();
         }
     }
+
     getQuoteLaborListByWorkOrderQuoteId() {
         if (this.workOrderQuoteDetailsId) { 
             this.isSpinnerVisible = true;
@@ -3331,5 +3398,48 @@ calculatebCost(value,material): void {
             this.getWOLabourList();
         }
 
+    }
+
+    toggleDisplayMode(): void {
+        this.isDetailedView = !this.isDetailedView;
+    }
+  
+    getAuditHistoryById(rowData) { 
+        if(rowData.workOrderQuoteMaterialId){
+        this.workorderMainService.getquoteMaterialHistory(rowData.workOrderQuoteMaterialId).subscribe(res => {
+            this.historyData = res;
+        //     this.historyData = res.forEach(element => {
+        //       element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+        //       element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
+        //       element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+        //       element.unitCost=element.unitCost ?  formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+        //       element.totalPartCost=element.totalPartCost ?  formatNumberAsGlobalSettingsModule(element.totalPartCost, 2) : '0.00';
+        //   });
+          this.auditHistoryHeaders=this.auditHistoryHeaders;
+          // this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+       
+          this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+          this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+          this.modal.componentInstance.auditHistory = this.historyData;
+          
+        })
+    }else{
+        this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
+        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+        this.modal.componentInstance.auditHistory = [];  
+    }
+      }
+      triggerWoQuoteView(rowData){
+        this.selectedHistoricalWorkOrder=undefined;
+        this.selectedHistoricalCustomerId=undefined;
+        this.selectedHistoricalWorkOrder = rowData.workOrderId; 
+        this.selectedHistoricalCustomerId = rowData.customerId
+      }
+      getPageCount(totalNoofRecords, pageSize) {
+        return Math.ceil(totalNoofRecords / pageSize)
+    }
+    disableMat:boolean=false;
+    getValidMat(){
+        this.disableMat=false;
     }
 }

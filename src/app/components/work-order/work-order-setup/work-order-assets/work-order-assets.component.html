@@ -122,7 +122,7 @@
     </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
           <colgroup>
-              <col *ngFor="let col of columns" class="table-column-width" />
+              <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
           </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -155,9 +155,11 @@
           let-columns="columns">
           <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
               (dblclick)="openViewOnDbl(rowData)">
-              <td *ngFor="let col of columns" class="ui-resizable-column wauto"
+              <ng-container *ngFor="let col of columns">
+              <td 
+              *ngIf="col.field != 'quantity'" class="ui-resizable-column wauto"
               pReorderableRowHandle>
-               <ng-container>
+             
                 
                     {{
                       col.field == 'createdDate'
@@ -166,9 +168,14 @@
                         ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                         : rowData[col.field] 
                     }}
-              </ng-container>
+            
         
           </td> 
+   
+          <td style="text-align: right !important;" *ngIf="col.field == 'quantity'">
+          {{rowData[col.field]}}
+          </td>
+        </ng-container>
               <td class="action-icons-cstm table-column-width" >
                   <div *ngIf="currentDeletedstatus == false">
                     <span data-target="#addNewEquipments" *ngIf="!isView" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
@@ -198,7 +205,7 @@
                   
                      
                       <span *ngIf="!isView">
-                          <a class="btn nobg" (click)="restore(restoreIdWo,rowData);"
+                          <a class="btn nobg btn-users-cstm" (click)="restore(restoreIdWo,rowData);"
                               matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                   aria-hidden="true"></i></a>
                       </span>

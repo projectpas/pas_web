@@ -1,4 +1,4 @@
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="height:380px;">
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="max-height:380px;">
   <div class="header-div">
     <span class="cat-heading cat4">Add Directions<i (click)="addRow()" class="fa fa-plus"></i></span>
   </div>
@@ -7,13 +7,13 @@
     <tr>
       <th><label>Action<span class="clr-red">*</span></label></th>
       <th><label>Description </label></th>
-      <th><label>Sequence</label></th>
+      <th style="width:60px !important"><label>Sequence</label></th>
       <th style="z-index: 1;"><label>Memo</label></th>
       <th><label>Action</label></th>
     </tr>
     </thead>
     <tbody>
-    <tr [hidden]="direction.isDelete" *ngFor="let direction of workFlow.directions; let i = index">
+    <tr [hidden]="direction.isDeleted" *ngFor="let direction of workFlow.directions; let i = index">
       <td>
         <input type="text" value="{{ direction.action }}" [(ngModel)]="direction.action" class="form-control"
           required />

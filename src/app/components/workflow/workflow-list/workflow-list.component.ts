@@ -516,24 +516,35 @@ export class WorkflowListComponent implements OnInit {
         for (let charges of this.sourceWorkFlow.charges) {
             this.TotalCharges += charges.extendedCost != undefined ? charges.extendedCost : 0.00;
         }
+      const mdata=this.sourceWorkFlow;
+      mdata.materialList.forEach(element => {
+          return{
+              ...element,
+              extendedCost: element.extendedCost != undefined ?  parseFloat(element.extendedCost.toFixed(2))  : 0
+          }
+      });
 
-        for (let material of this.sourceWorkFlow.materialList) {
-            this.MaterialCost += material.extendedCost != undefined ? material.extendedCost : 0.00;
-            const percentValue = parseFloat(this.sourceWorkFlow.percentageOfMaterial.toString().replace(/\,/g, ''));
-            if(percentValue > 0)
-            {
-                const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
-                const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
-                this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
-            }
+        for (let material of mdata.materialList) {
+            this.MaterialCost +=  material.extendedCost;
         }
+        //     const percentValue = parseFloat(this.sourceWorkFlow.percentageOfMaterial.toString().replace(/\,/g, ''));
+
+        //     if(percentValue > 0)
+        //     {
+        //         const MaterialCost = this.MaterialCost;
+        //         const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
+        //         this.MaterialCost = formatNumberAsGlobalSettingsModule(MaterialCost, 2);
+        //     }
+        
         for (let expertise of this.sourceWorkFlow.expertise) {
             this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
        }
         this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
-        const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
+        const MaterialCost = this.MaterialCost;
+        // parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const val0 = ((MaterialCost / 100) *  this.sourceWorkFlow.percentageOfMaterial) + MaterialCost;
         this.MaterialCost = formatNumberAsGlobalSettingsModule(val0, 2);
+
 
 
         this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise == -1 || this.sourceWorkFlow.percentageOfExpertise == "-1" ? 0 : this.sourceWorkFlow.percentageOfExpertise;
@@ -576,6 +587,7 @@ export class WorkflowListComponent implements OnInit {
         }
 
         this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : 0.00;
+
     }
 
     private getUniqueTask(): any[] {
@@ -690,6 +702,7 @@ export class WorkflowListComponent implements OnInit {
                 for (let attr of actions) {
                     this.tasks.push({ Id: attr.taskId, Name: attr.description, Description: "", Memo: "" })
                 }
+                this.tasks = this.tasks.sort((a, b) => a.Name.localeCompare(b.Name, 'es', {sensitivity: 'base'}))
                 this.organiseTaskAndTaskAttributes();
                 // this.loadPublicationTypes();
             },
@@ -750,12 +763,7 @@ export class WorkflowListComponent implements OnInit {
             var totalDirectLabourAndOHCost = 0;
             task.expertise = this.sourceWorkFlow.expertise.filter(x => {
                 if (x.taskId == task.Id) {
-                    // totalEstimatedHours += x.estimatedHours == undefined && x.estimatedHours == '' ? 0 : x.estimatedHours;
-
-                // this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
-                // this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 || this.sourceWorkFlow.percentageOfMaterial == "-1" ? 0 : this.sourceWorkFlow.percentageOfMaterial;
-                // const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
-                    totalEstimatedHours += x.estimatedHours;
+                   totalEstimatedHours += x.estimatedHours;
                     totalDirectLaborCost += x.directLaborRate == undefined && x.directLaborRate == '' ? 0 : x.directLaborRate;
                     totalOHCost += x.overheadCost == undefined && x.overheadCost == '' ? 0 : x.overheadCost;
                     totalDirectLabourAndOHCost += x.laborOverheadCost == undefined && x.laborOverheadCost == '' ? 0 : x.laborOverheadCost;
@@ -769,11 +777,7 @@ export class WorkflowListComponent implements OnInit {
            task.expertiseTotalDirectLaborCost=totalDirectLaborCost;
            task.expertiseTotalOHCost=totalOHCost;
            task.expertiseTotalDirectLabourAndOHCost=totalDirectLabourAndOHCost;
-
-            // task.expertiseTotalEstimatedHours = task.expertiseTotalEstimatedHours?  formatNumberAsGlobalSettingsModule( task.expertiseTotalEstimatedHours, 2) :0.00;
-            // task.expertiseTotalDirectLaborCost = task.expertiseTotalDirectLaborCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLaborCost, 2) : 0.00;
-            // task.expertiseTotalOHCost = totalOHCost ? formatNumberAsGlobalSettingsModule(totalOHCost, 2) : null;
-            task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
+   task.expertiseTotalDirectLabourAndOHCost = task.expertiseTotalDirectLabourAndOHCost ? formatNumberAsGlobalSettingsModule(task.expertiseTotalDirectLabourAndOHCost, 2) : 0.00;
             var materialTotalQty = 0;
             var materialTotalExtendedCost = 0;
             var materialTotalPrice = 0;

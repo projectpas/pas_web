@@ -1,8 +1,4 @@
-﻿
-
-
-
-<div class="card p-t-5">
+﻿<div class="card p-t-5">
     <div class="form-row status-radio">
         <div class="col-md-8">
             <div class="form-group">
@@ -43,8 +39,6 @@
     
     <form #addItemMasterStockForm="ngForm" (submit)="saveItemMasterGeneralInformation(addItemMasterStockForm)" id="add-customerwork" name="" class="form-horizontal add-custustomer">
         <div>
-            <!--class="tab-content form-bg margin0 padding0 "-->
-
             <div class="" id="menu3">
                 <div class="clear"></div>
                 <div class="md-stepper-horizontal orange new-stepper-align">
@@ -119,7 +113,6 @@
                         <div class="md-step-circle"><span>8</span></div>
                         <div class="md-step-title">Export Info</div>
                         <div class="md-step-bar-left"></div>
-                        <!-- <div class="md-step-bar-right"></div> -->
                     </div>
 
                     <div class="pheading">
@@ -468,28 +461,6 @@
                                         <div class="clear"></div>
                                     </div>
                                     <!--/Expiration Date-->
-                                    <!--Shelf Life-->
-                                    <!-- <div class="inline-block display-flex">
-                                        <label class="control-label control-label-check">Shelf Life</label>
-                                        <div class="form-group"
-                                             style="margin-top: 6px;">
-                                            <div class="checkbox-cstm">
-                                                <label>
-                                                    <input type="checkbox"
-                                                           name="shelfLife"  (ngModelChange)="getmemo()"
-                                                           [(ngModel)]="sourceItemMaster.shelfLife" />
-                                                    <span class="cr">
-                                                        <i class="cr-icon pi pi-check"></i>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        &nbsp;
-                                        <input *ngIf="sourceItemMaster.shelfLife"  (ngModelChange)="getmemo()"
-                                               class="form-control shelf1 number exp-date-inputs w50" type="number" maxlength="5" pKeyFilter="int" name="shelfDescription" [(ngModel)]="sourceItemMaster.shelfLifeAvailable" required>
-                                        <span class="shelf"><span *ngIf="sourceItemMaster.shelfLife">Days</span></span>
-                                    </div> -->
-                                    <!--/Shelf Life-->
                                 </div>
                             </div>
                             <div class="col-md-9 general-info-columns-four">
@@ -781,14 +752,14 @@
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.overhaulHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.rpHours">
                                                                 </td>
@@ -796,13 +767,13 @@
                                                                     <strong>Hours</strong>
                                                                     <br />
                                                                     <input type="number" pKeyFilter="int" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;" class="form-control w50 time control-bottom"
-                                                                           [ngModelOptions]="{standalone: true}"
+                                                                           [ngModelOptions]="{standalone: true}" (ngModelChange)="getmemo()"
                                                                            [(ngModel)]="sourceItemMaster.testHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Hours</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.mfgHours">
                                                                 </td>
@@ -834,28 +805,28 @@
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeOverhaulHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeRepairHours">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeBenchTest">
                                                                 </td>
                                                                 <td>
                                                                     <strong>Days</strong>
                                                                     <br />
-                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom"
+                                                                    <input type="number" pKeyFilter="int" class="form-control w50 time control-bottom" (ngModelChange)="getmemo()"
                                                                            [ngModelOptions]="{standalone: true}" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==5) return false;"
                                                                            [(ngModel)]="sourceItemMaster.turnTimeMfg">
                                                                 </td>
@@ -1064,16 +1035,6 @@
                               </div>
                             </div>
                         </div>
-                        <!-- <div class="col-md-12" style="display: flex;">
-                            <h4 class="po-head-sm">
-                                Add Aircraft Information
-                                <a class="plusicon-cstm" href="#" data-toggle="modal" data-target="#ModalDashNumber"
-                                 matTooltip="Add Aircraft Information" matTooltipPosition="above"><i class="fa fa-plus-circle fa-lg"></i></a>
-                            </h4>
-                            <hr />
-                        </div> -->
-                        
-                         <!--/advance-search-card-->
 
                         <p-table #dt
                                  [value]="aircraftListDataValues"
@@ -1231,7 +1192,6 @@
                                                pInputText
                                                type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                                                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-                                               <!-- <input type="text" class="table-header-input-width" (input)="dt.filter($event.target.value,col.field,'contains')" *ngIf=" col.field != 'fileCreatedDate' && col.field != 'fileUpdatedDate'" pInputText > -->
                                                <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
               name="createdDate" (change)="dt.filter($event.target.value, col.field)" />
             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
@@ -1335,13 +1295,6 @@
             <div [ngClass]="{hideTab : currentTab !== 'Atachapter'}">
                 <div class="stock-padding-5">
                     <div class="card new-card" >
-                        <!-- <div class="col-md-12 " style="display: flex;">
-                            <h4 class="po-head-sm">
-                                ATA Information
-                                <a class="plusicon-cstm" href="#" data-toggle="modal" data-target="#ATAADD" matTooltip="Add ATA Information" matTooltipPosition="above" (click)="addNewATA()"><i class="fa fa-plus-circle fa-lg"></i></a>
-                            </h4>
-                            <hr />
-                        </div> -->
                         <div class="card-header header" >
                             <div class="row">
                               <div class="col">
@@ -3153,20 +3106,6 @@
           <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
         </div>
         <div class="modal-body">
-          <!-- <table class="table table-bordered table-fixed workflow-table-material">
-            <thead>
-              <th style="color: #fff;">{{textAreaLabel}}</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="max-width: 440px;">
-                  <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" 
-                  [style]="{'height':'320px'}" name="textAreaInfo" 
-                  required></p-editor>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
           <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" 
           [style]="{'height':'320px'}" name="textAreaInfo" 
           required></p-editor>
@@ -4247,23 +4186,6 @@
       <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>  <!--[disabled]="!salesPersonForm.valid" -->
     </div>
   </ng-template>
-<!-- <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
-      <h4 class="modal-title">Confirmation</h4>
-    </div>
-    <div class="modal-body">
-      <h6 class="text-center">
-        Are you sure you want to go to {{nextOrPreviousTab}} tab? Unsaved changes will be lost.
-      </h6>
-    </div>
-    <div class="modal-footer">
-  
-      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
-    </div>
-  </ng-template> -->
-
   <div id="purchaseSaleDelete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -1,9 +1,17 @@
+
+<div class="header" >
+  <div class="row">
+      <div class="col">
+          <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Labor</h4>
+      </div>
+  </div>
+</div>
 <div class="card">
   <div class="card-body padding-10" *ngIf="!frombilling">
     <div class="form-row" >
       <div class="col-md-12">
         <div class="col-md-12 display-flex" *ngIf="!hideHeader">
-          <div class="col-md-3">
+          <div class="col-md-3" *ngIf="!isQuote">
             <!-- <div class="form-group" *ngIf="!isQuote">
               <label for="woID">WO ID </label>
               <p-autoComplete
@@ -63,7 +71,7 @@
             </div> -->
           </div>
           <!-- *ngIf="!isQuote" -->
-          <div class="col-md-3 col-offset-3 task-detail" >
+          <div class="col-md-3 col-offset-3 task-detail" [ngClass]="{'col-offset-3' :!isQuote}">
               <div class="form-row" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
                 <div >
                   <!-- <p-radioButton  (ngModelChange)="checkValid(4)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="HoursorClockorScan" label="Labour hours" [value]="1"
@@ -82,7 +90,7 @@
                         [(ngModel)]="laborForm.hoursorClockorScan">
                         Labour hours
                 </label>
-                <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                <label class="wauto" style="margin-left:10px" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
                     matTooltip="Multiple MPN">
                     <input type="radio" (change)="headerMaintanance()" (ngModelChange)="checkValid(5)" [value]=2 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
                         class="radio_adjust"
@@ -90,7 +98,7 @@
                         >
                         Labour Clock In/Out
                 </label>
-                <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+                <label class="wauto" matTooltipPosition="above" style="margin-left:10px" [ngClass]="{pointerEvents :isView}"
                 matTooltip="Multiple MPN">
                 <input type="radio" (change)="headerMaintanance()" (ngModelChange)="checkValid(6)" [value]=3 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
                     class="radio_adjust"
@@ -144,13 +152,13 @@
       </div>
     </div>   
   </div>
-  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))"
+  <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" *ngIf="(isQuote || (laborForm.expertiseId && laborForm.employeeId))"
     [ngStyle]="isQuote ? {'margin-top' : '-10px'} : ''">
     <div class="tableFixHead">
     <table class="table table-bordered  lastcol-fix mpn-list-table">
       <thead>
         <tr *ngIf="isQuote" class="background-white">
-          <td colspan="4" class="table-header-col2" *ngIf="
+          <td colspan="5" class="table-header-col2" *ngIf="
                 !laborForm.hoursorClockorScan || laborForm.hoursorClockorScan == 1
               ">
               &nbsp;
@@ -161,10 +169,10 @@
             <td colspan="6" class="table-header-col2" *ngIf="laborForm.hoursorClockorScan == 3">
               &nbsp;
             </td>
-            <td colspan="5" class="table-header-col1">
+            <td colspan="4" class="table-header-col1">
               &nbsp;
             </td>
-            <td colspan="4" class="labour-radio-buttons">
+            <td colspan="5" class="labour-radio-buttons">
               <div class="display-flex">
                 <div class="form-group labour-radio-buttons-align" >
                   <p-radioButton (ngModelChange)="checkValid(11)" class="p-radiobutton-label-horizontal p-radiobutton-label-w125 radio-margin-top" name="costPlusType"
@@ -216,11 +224,11 @@
           <tr>
             <th class="text-center padding-td tasks-th">Tasks</th>
             <th class="text-center expertise-th">Expertise</th>
-            <th class="text-center employee-th" *ngIf="!isQuote">
+            <th class="text-center employee-th" style="width:200px" *ngIf="!isQuote">
               Employee
             </th>
             <th class="text-center th-zindex-2">Billable /NonBillable</th>
-            <th class="text-center" *ngIf="
+            <th class="text-center" style="width:70px !important" *ngIf="
                 laborForm.hoursorClockorScan &&
                 laborForm.hoursorClockorScan !== 1 &&
                 laborForm.hoursorClockorScan !== 3
@@ -237,10 +245,10 @@
               ">
             End Date and Time
           </th>
-          <th class="text-center">Hours</th>
+          <th class="text-center" style="width:70px !important">Hours</th>
           <ng-container *ngIf="!isQuote">
-            <th class="text-center">Adjustments</th>
-            <th class="text-center">Adjusted Hours</th>
+            <th class="text-center" style="width:70px !important">Adjustments</th>
+            <th class="text-center" style="width:70px !important">Adjusted Hours</th>
           </ng-container>
           <ng-container *ngIf="isQuote">
             <th>
@@ -269,10 +277,10 @@
               Billing Amount
             </th>
           </ng-container>
-          <th class="text-center memo-th" *ngIf="!isQuote">
+          <th class="text-center memo-th" style="width:250px !important" *ngIf="!isQuote">
             Memo
           </th>
-          <th *ngIf="!isView">Actions</th>
+          <th style="width:130px !important" *ngIf="!isView">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -348,7 +356,7 @@
                     class="float-right float-right fa fa-plus-circle fa-lg labor_ico "
                     (click)="addNewTask(task.description)"></i> -->
                 </td>
-                <td class="emp-labour-cstm" *ngIf="!isQuote">
+                <td  *ngIf="!isQuote">
               
 
                   <p-autoComplete field="label" (ngModelChange)="checkValid(16)" [(ngModel)]="rec.employeeId" #salesPerson="ngModel"
@@ -390,7 +398,7 @@
                     showTime="true" hourFormat="12" class="w150 pcalendar-wo-labor model_view" [minDate]="rec.endDate"
                     (onClose)="calculateWorkingHoursandMins(rec);calculateTaskHours(task);" [disabled]="isView || !rec.endDate"></p-calendar>
                 </td>
-                <td *ngIf="
+                <td style="width:70px !important;text-align:right !important" *ngIf="
                     laborForm.hoursorClockorScan &&
                     laborForm.hoursorClockorScan !== 1
                   ">
@@ -422,7 +430,7 @@
                       <input type="number" class="form-control" (ngModelChange)="checkValid(22)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView
                       "/>
                   </td>
-                  <td class="content-to-end">
+                  <td class="content-to-end" style="width:70px !important;text-align:right !important">
                       {{ rec.adjustedHours }}
                   </td>
                 </ng-container>
@@ -438,13 +446,13 @@
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>
                   </td>
-                  <td class="content-to-end">
+                  <td class="content-to-end" style="text-align:right !important">
                     {{(rec.burdenRateAmount)?formateCurrency(rec.burdenRateAmount):0.00}}
                   </td>
-                  <td class="content-to-end">
+                  <td class="content-to-end" style="text-align:right !important">
                     {{ (rec.totalCostPerHour)?formateCurrency(rec.totalCostPerHour):0.00 }}
                   </td>
-                  <td class="content-to-end">
+                  <td class="content-to-end" style="text-align:right !important">
                     {{ formateCurrency(rec.totalCost) }}
                   </td>
                   <td>
@@ -467,7 +475,7 @@
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
                     </select>
                   </td>
-                  <td class="content-to-end">{{ formateCurrency(rec.billingRate) }}</td>
+                  <td class="content-to-end" style="text-align:right !important">{{ formateCurrency(rec.billingRate) }}</td>
                   <td>
                     <input class="form-control text-right" type="text" (ngModelChange)="checkValid(27)" pInputText pKeyFilter="money" (change)="rec.billingAmount = formateCurrency(rec.billingAmount)" [(ngModel)]="rec.billingAmount" [disabled]="isView || rec.billingMethodId != 2"/> <!--class="width-unset"-->
                   </td>
@@ -487,10 +495,15 @@
                 </div>
                
                 </td>
-                <td *ngIf="!isView" class="text-center">
-                    <span><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
+                <td  class="text-center">
+                    <span *ngIf="!isView"><button type="button"  class="btn nobg btn-delete-cstm" mat-icon-button matTooltip="Delete" matTooltipPosition="above"
                       (click)="showDeleteLabourPopup(task.description,rec, i)"><i class="fa fa-trash"></i></button> </span>
-                </td>
+                      <!-- <span *ngIf="isQuote">
+                        <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rec)"
+                            matTooltip="History" matTooltipPosition="above"><i
+                                class="fa fa-history"></i></a>
+                    </span> -->
+                    </td>
               </tr>
               <div class="modal fade" id="textarea-popup5" role="dialog" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
@@ -597,21 +610,21 @@
               <!-- {{(laborForm.totalWorkHours)?laborForm.totalWorkHours.toFixed(2):0.00}} -->
               <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled />
             </td>
-            <td *ngIf="isQuote" class="content-to-end">
+            <td *ngIf="isQuote" class="content-to-end" style="text-align:right !important">
               {{laborForm.totalWorkHours}}
             </td>
-            <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
-            <td class="content-to-end"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
+            <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
+            <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
             <td></td>
             <ng-container *ngIf="isQuote">
               <td></td>
-              <td class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
+              <td class="content-to-end" style="text-align:right !important"><b>{{ formateCurrency(getOverAlltotal('Cost')) }}</b></td>
               <td></td>
               <td></td>
               <td></td>
             </ng-container>
             <ng-container *ngIf="laborForm.costPlusType != 3">
-              <td *ngIf="isQuote" class="content-to-end"><b>{{ formateCurrency(getOverAlltotal('BillingAmount')) }}</b>
+              <td *ngIf="isQuote" class="content-to-end" style="text-align:right !important"><b>{{ formateCurrency(getOverAlltotal('BillingAmount')) }}</b>
               </td>
             </ng-container>
             <ng-container *ngIf="laborForm.costPlusType == 3 && isQuote">
@@ -674,10 +687,14 @@
                   </button>
               </div>
               <div class="modal-body">
-                <strong>
-                    PN:
+                <strong *ngIf="!isQuote">
+                    Employee Name:
                     <span class="new-label" *ngIf="currentRecord && currentRecord.employeeId">{{currentRecord.employeeId.label}}</span>
                 </strong>
+                <strong *ngIf="isQuote">
+                  Task Name:
+                  <span class="new-label" *ngIf="currentRecord && currentRecord.task">{{currentRecord.task}}</span>
+              </strong>
             </div> 
               <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteLabor(deletingLabourObj.taskName, deletingLabourObj.index)">Yes</button>

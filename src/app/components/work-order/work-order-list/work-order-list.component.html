@@ -112,7 +112,7 @@
                 </ng-template>
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
-                        <col *ngFor="let col of columns" class="table-column-width" />
+                        <col *ngFor="let col of columns" class="table-column-width"  [ngStyle]="{'width': col.width}" />
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
@@ -317,7 +317,10 @@
                 <h4 class="modal-title">Are You Sure Want to Delete?</h4>
             </div>
             <div class="modal-body">
-                <h6 class="modal-body">WO Number : {{rowDataToDelete.workOrderNum}}</h6>
+                <strong>
+                    WO Number : 
+                    <span class="new-label">{{rowDataToDelete.workOrderNum}}</span>
+                </strong>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="deleteWO(); closeDeleteModal();">Yes</button>

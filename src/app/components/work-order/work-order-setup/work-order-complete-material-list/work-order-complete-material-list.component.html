@@ -41,14 +41,14 @@
     </div>
 </div> 
 <div>
-    <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10 Materials_wo" id="custome_material" [columns]="cols" #materialTble
+    <p-table class="rpo-table-cstm rro-table-cstm ptable-f10" id="custome_material" [columns]="cols" #materialTble
         [value]="workOrderMaterialList" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20,50, 100]"
         (onPage)="pageIndexChange($event)">
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th class="table-column-width"></th>
+                <th class="table-column-icon-width"></th>
                 <!-- [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" -->
-                <th class="table-column-width" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
+                <th class="table-column-width" [ngStyle]="{'width': col.width}" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
                     {{col.header}} 
                 </th>
                 <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
@@ -57,25 +57,34 @@
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
             <!-- [ngClass]="{'color_pick': rowData.isRoleUp==false }" -->
             <tr>
-                <td class="table-column-width">
-                    <span *ngIf="rowData.partStatusId !=0">
-                        <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" 
-                        class="fa fa-plus btn btn-success plus-success"  matTooltip="Show stock line details"
-                         matTooltipPosition="above"
-                         (click)="getRollupMaterialList(rowData,i)" ></i> 
+                <td class="table-column-icon-width">
+                    <!-- *ngIf="rowData.partStatusId !=0" -->
+                    <!-- [disabled]="rowData.partStatusId==0" -->
+                    <span >
+                     
                     </span>
-                     <i *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false"
-                      class="fa fa-minus btn-danger plus-danger"  matTooltip="Show stock line details" 
-                      matTooltipPosition="above"  (click)="removeRollUpList(rowData,i)"></i>   
+                   
+
+                      <button type="button"  (click)="getRollupMaterialList(rowData,i)"  *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==true" class="btn btn-primary roleUpd" [disabled]="rowData.partStatusId==0"   matTooltip="Show stock line details"
+                      matTooltipPosition="above">
+                        <i    class="fa fa-plus mr-0"  
+                        ></i>
+                      </button>
+                      <button type="button" class="btn btn-danger roleUpd" *ngIf="rowData.isRoleUp==false && rowData.isShowPlus ==false"  matTooltip="Show stock line details" 
+                      matTooltipPosition="above"  (click)="removeRollUpList(rowData,i)">
+                      <i 
+                      class="fa fa-minus mr-0" ></i>  
+                    </button>
+
                 </td> 
                 <td class="table-column-width" *ngFor="let col of columns">
-                    <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " class="m-0 p-0"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
-                    <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" class="m-0 p-0 text-right" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
-                    <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" class="m-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
-                    <p *ngIf=" col.field =='controlNo'" [matTooltip]="rowData.controlNo"  [matTooltipDisabled]="rowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" class="m-0 p-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{rowData.isMultipleControlNo== 'Single' ? rowData[col.field] : rowData.isMultipleControlNo  }}</p>
-                    <p *ngIf=" col.field =='controlId'" [matTooltip]="rowData.controlId"  [matTooltipDisabled]="rowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" class="m-0 p-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplecontrolId== 'Single' ? rowData[col.field] : rowData.isMultiplecontrolId }}</p>
-                    <p *ngIf=" col.field =='receiver'" [matTooltip]="rowData.receiver"  [matTooltipDisabled]="rowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" class="m-0 p-0" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplereceiver== 'Single' ? rowData[col.field] : rowData.isMultiplereceiver }}</p>
-                    <p *ngIf="col.field =='altEquiv'">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
+                    <p *ngIf="col.field !='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver' && col.field !='altEquiv' " style="margin:0px !important"  [ngClass]="{align_rightset : (col && col.align ==1)}">  {{rowData[col.field]}}</p>
+                    <p *ngIf="col.field =='line' && col.field !='memo' && col.field !='defered' && col.field !='stockLineNumber' && col.field !='controlNo' && col.field !='controlId' && col.field !='receiver'" style="margin:0px !important" class=" p-0 text-right" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.line == undefined ?( i + 1):rowData.line }}</p>
+                    <p *ngIf="col.field =='stockLineNumber' " [matTooltip]="rowData.stockLineNumber"  [matTooltipDisabled]="rowData.isMultipleStockLine == 'Single'" matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultipleStockLine== 'Single' ? rowData[col.field] : rowData.isMultipleStockLine}}</p>
+                    <p *ngIf=" col.field =='controlNo'" [matTooltip]="rowData.controlNo"  [matTooltipDisabled]="rowData.isMultipleControlNo == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{rowData.isMultipleControlNo== 'Single' ? rowData[col.field] : rowData.isMultipleControlNo  }}</p>
+                    <p *ngIf=" col.field =='controlId'" [matTooltip]="rowData.controlId"  [matTooltipDisabled]="rowData.isMultiplecontrolId == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplecontrolId== 'Single' ? rowData[col.field] : rowData.isMultiplecontrolId }}</p>
+                    <p *ngIf=" col.field =='receiver'" [matTooltip]="rowData.receiver"  [matTooltipDisabled]="rowData.isMultiplereceiver == 'Single'"  matTooltipPosition="above" style="margin:0px !important" [ngClass]="{align_rightset : (col && col.align ==1)}"> {{ rowData.isMultiplereceiver== 'Single' ? rowData[col.field] : rowData.isMultiplereceiver }}</p>
+                    <p *ngIf="col.field =='altEquiv'" style="margin:0px !important">{{rowData.isAltPart ? 'Alternative' : rowData.isEquPart ? 'Equivalent' : '-'}}</p>
                     <input type="checkbox" name="contract {{i}}" #contract="ngModel" *ngIf="col.field =='defered'"
                     class="form-control w60 defered-check" [(ngModel)]="rowData.defered">
                     <span *ngIf="col.field =='memo'" [innerHTML]="rowData[col.field]" class="p_textEditor"></span>
@@ -109,7 +118,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
-            <label id="footer" class="footer">Total:</label>
+            <label id="footer" class="footer" style="background: #fff !important;">Total:</label>
             <input class="footer-input-width" [(ngModel)]="materialTble._totalRecords" [disabled]="true" pInputText
                 type="text" />
             &nbsp;&nbsp;
@@ -136,15 +145,15 @@
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 2">Issued Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 4">Un Issue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 5">Un Reserve Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 4">UnIssue Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 5">UnReserve Parts</h4>
                 <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter | formatTime}}</p>
             </div>
             <div class="form-row mar-left-15" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
                 <div class="col-md-2">
                     <p-checkbox class="p-checkbox-label-womaterial" name="task" binary="false" 
                         label="Include Alternate PN" (onChange)="resetAlternateParts($event)" [(ngModel)]="isShowAlternatePN">
-                    </p-checkbox>
+                    </p-checkbox> 
                 </div>
                 <div class="col-md-4">
                     <p-checkbox class="p-checkbox-label-womaterial" name="task" binary="false" label="Include Eq PN"
@@ -184,8 +193,8 @@
                                     <th class="text-center" style="min-width: 96px;"> Alternate PN For</th>
                                     <th class="text-center"> Cond Type</th>
                                     <th class="text-center width-50"> Stk Type</th>
-                                    <th class="text-center width-50">Qty Req</th> 
-                                    <th class="text-center width-50">Qty Res</th>
+                                    <th class="text-center width-50" style="width:60px !important">Qty Req</th> 
+                                    <th class="text-center width-50" style="width:60px !important">Qty Res</th>
                                     <th class="text-center" >  Qty To Be Reserved</th>
                                     <th class="text-center" >
                                         <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
@@ -224,6 +233,8 @@
                                     <td class="text-center">
                                       <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 1 || statusId === 5)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityReserved==0">
+
+
                                             <input type="checkbox" name="isParentSelected{{i}}" *ngIf="(statusId === 2 || statusId === 3 || statusId === 4)"
                                             [(ngModel)]="x.isParentSelected" (change)="selectedParts(x,$event)" [disabled]="x.quantityIssued==0">
                                         </td>
@@ -292,13 +303,13 @@
                                         errorMessage="Records not found" [forceSelection]="true"
                                         [dropdown]="true" [suggestions]="employeeList"
                                         (completeMethod)="filterEmployee($event)"
-                                        (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
+                                        (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )" appendTo='body' [baseZIndex]="9999"
                                         [size]="30" [minLength]="1" [dropdown]="true"
                                         class="p-autoComplete-ctsm"  [required]="x.isParentSelected" [disabled]="!x.isParentSelected">
                                     </p-autoComplete>
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
-                                       <p-autoComplete field="name"
+                                       <p-autoComplete field="name" appendTo='body' [baseZIndex]="9999"
                                         [(ngModel)]="x.issuedById"
                                         name="issuedBy{{i}}" #issuedBy="ngModel"
                                         errorMessage="Records not found" [forceSelection]="true"
@@ -381,7 +392,7 @@
                                         errorMessage="Records not found" [forceSelection]="true"
                                         [dropdown]="true" [suggestions]="employeeList"
                                         (completeMethod)="filterEmployee($event)"
-                                        (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
+                                        (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )" appendTo='body' [baseZIndex]="9999"
                                         [size]="30" [minLength]="1" [dropdown]="true"
                                         class="p-autoComplete-ctsm"   [required]="b.isChildSelected"  [disabled]="!b.isChildSelected">
                                     </p-autoComplete>
@@ -397,7 +408,7 @@
                                          (completeMethod)="filterEmployee($event)"
                                          (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
                                          [size]="30" [minLength]="1" [dropdown]="true"
-                                         class="p-autoComplete-ctsm"   [required]="b.isChildSelected"  [disabled]="!b.isChildSelected">
+                                         class="p-autoComplete-ctsm"  appendTo='body' [baseZIndex]="9999"  [required]="b.isChildSelected"  [disabled]="!b.isChildSelected">
                                      </p-autoComplete>
 
                                     </td>
@@ -452,12 +463,12 @@
                                     </td>
                                     <td *ngIf="statusId != 2 && statusId != 3 && statusId != 4">
                                         <p-calendar [showIcon]="true" class="calender-cstm" name="reservedDateEq{{i}}"
-                                            #reservedDateEq="ngModel" [required]="c.isChildSelected" [maxDate]="minDateValue" disabled
+                                            #reservedDateEq="ngModel" [required]="c.isChildSelected" [maxDate]="minDateValue" disabled appendTo='body' [baseZIndex]="9999"
                                             [(ngModel)]="c.reservedDate"></p-calendar>
                                     </td>
                                     <td *ngIf="statusId != 1 &&  statusId != 5 ">
-                                       <p-calendar [showIcon]="true" class="calender-cstm" name="issuedDateEq{{z}}"
-                                            #issuedDateEq="ngModel" [(ngModel)]="c.issuedDate" [maxDate]="minDateValue" disabled
+                                       <p-calendar [showIcon]="true" class="calender-cstm" name="issuedDateEq{{z}}" appendTo="body"
+                                            #issuedDateEq="ngModel" [(ngModel)]="c.issuedDate" [maxDate]="minDateValue" disabled appendTo='body' [baseZIndex]="9999"
                                             [required]="c.isChildSelected"  >
                                         </p-calendar>
                                     </td>
@@ -468,13 +479,13 @@
                                          errorMessage="Records not found" [forceSelection]="true"
                                          [dropdown]="true" [suggestions]="employeeList"
                                          (completeMethod)="filterEmployee($event)"
-                                         (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"
+                                         (onClear)="clearautoCompleteInput(workOrderGeneralInformation, 'employeeId' )"appendTo='body' [baseZIndex]="9999"
                                          [size]="30" [minLength]="1" [dropdown]="true"
                                          class="p-autoComplete-ctsm"  [required]="c.isChildSelected"  [disabled]="!c.isChildSelected">
                                      </p-autoComplete>
                                     </td>
                                     <td *ngIf="statusId != 1 && statusId != 5 ">
-                                      <p-autoComplete field="name"
+                                      <p-autoComplete field="name" appendTo='body' [baseZIndex]="9999"
                                         [(ngModel)]="c.issuedById"
                                         name="issuedByEq{{z}}" #issuedByEq="ngModel"
                                          errorMessage="Records not found" [forceSelection]="true"
@@ -501,8 +512,8 @@
                     <span *ngIf="statusId === 1">Reserve</span>
                     <span *ngIf="statusId === 2">Issue</span>
                     <span *ngIf="statusId === 3">Reserve & Issue</span>
-                    <span *ngIf="statusId === 4"> Un Issue</span>
-                    <span *ngIf="statusId === 5">Un Reserve</span>
+                    <span *ngIf="statusId === 4"> UnIssue</span>
+                    <span *ngIf="statusId === 5">UnReserve</span>
                     </button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()">Cancel</button>
                 </div>
