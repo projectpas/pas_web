@@ -36,6 +36,7 @@
         this.isMPNContract=false;
         this.contractNo='';
         this.workOrderId=0;
+        this.partTechnicianId=0;
     }
 
     updatedDate: Date;
@@ -71,4 +72,5 @@
     conditionId: number;
     receivedDate: string;
     workOrderId: any;
+    partTechnicianId:any;
 }

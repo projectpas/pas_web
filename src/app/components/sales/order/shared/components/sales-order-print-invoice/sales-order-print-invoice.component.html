@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="second-block">
-                        <h5>
+                        <h5 style="line-height: 25px; margin-left: 42%;">
                             <b>INVOICE</b>
                         </h5>
                         <div class="second-block-div">
@@ -159,31 +159,40 @@
                                     <b> Ship To:</b>
                                 </label>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.siteName : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.siteName : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.addressLine1 : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.addressLine1 : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.addressLine2 : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.addressLine2 : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.city : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.city : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.state : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.state : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.postalCode : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.postalCode : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.country : ''}}</label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled>{{this.salesOrderInvoice.shipToAddress ? this.salesOrderInvoice.shipToAddress.country : ''}}</label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled></label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled></label>
                                 </div>
                                 <div class="ship-block-div">
-                                    <label class="col-sm-6 first-block-label" style="text-align: left;" disabled></label>
+                                    <label class="col-sm-6 first-block-label" style="text-align: left;"
+                                        disabled></label>
                                 </div>
                             </div>
                         </div>
@@ -240,32 +249,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
-                                    <td rowspan="3">{{this.salesOrderInvoice.itemNo}}</td>
-                                    <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
-                                        <br />
-                                        PN Description: {{child.pnDescription}}
-                                        <br />
-                                        Serial Num SN: {{child.serialNumber}}
-                                    </td>
-                                    <td> {{child.uom}}</td>
-                                    <td>{{child.cond}}</td>
-                                    <td> - </td>
-                                    <td>{{child.qtyShipped}}</td>
-                                    <td style="text-align: right;">{{child.unitPrice}}</td>
-                                    <td style="text-align: right;">{{child.amount}}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6" rowspan="2">Notes</td>
-                                </tr>
-                                <tr></tr>
-                                <tr>
-                                    <td colspan="7"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr></tr>
+                                <ng-container *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
+                                    <tr>
+                                        <td rowspan="3">{{child.itemNo}}</td>
+                                        <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
+                                            <br />
+                                            PN Description: {{child.pnDescription}}
+                                            <br />
+                                            Serial Num SN: {{child.serialNumber}}
+                                        </td>
+                                        <td> {{child.uom}}</td>
+                                        <td>{{child.cond}}</td>
+                                        <td> - </td>
+                                        <td>{{child.qtyShipped}}</td>
+                                        <td style="text-align: right;">{{child.unitPrice}}</td>
+                                        <td style="text-align: right;">{{child.amount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" rowspan="2">Notes</td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <td colspan="7"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr></tr>
+                                </ng-container>
                                 <tr>
                                 <tr>
                                     <td colspan="7"></td>
@@ -283,30 +294,31 @@
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">TAX RATE</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.taxRate}}</td>
+                                    <td style="text-align: right;">
+                                        {{this.salesOrderInvoice.taxRate | number : '1.2-2'}} %</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">SALES TAX</td>
-                                    <td style="text-align: right;"> 0.00 </td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.tax | number : '1.2-2'}} </td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">OTHER TAX</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.otherTax}}</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.otherTax | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">MISC CHARGES</td>
-                                    <td style="text-align: right;"> 0.00</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.miscCharges | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">FREIGHT</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.freight}}</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.freight | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">
                                         <b>TOTAL</b>
                                     </td>
                                     <td style="text-align: right;">
-                                        <b> {{this.salesOrderInvoice.total}}</b>
+                                        <b> {{this.salesOrderInvoice.total | number : '1.2-2'}}</b>
                                     </td>
                                 </tr>
                                 <tr></tr>
@@ -349,7 +361,9 @@
                                     <td class="border-transparent" colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" rowspan="3" style="width: 18%; vertical-align: bottom; text-align: center;">Barcode <br /><img src="{{this.salesOrderInvoice.barcode}}" alt="barcode" /></td>
+                                    <td colspan="2" rowspan="3"
+                                        style="width: 18%; vertical-align: bottom; text-align: center;">Barcode
+                                        <br /><img src="{{this.salesOrderInvoice.barcode}}" alt="barcode" /></td>
                                     <td class="border-transparent" colspan="2">USA</td>
                                     <td class="border-transparent" colspan="3">Account Name: PowerAeroSuites.com
                                     </td>

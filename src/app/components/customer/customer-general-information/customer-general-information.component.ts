@@ -599,6 +599,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.itemMasterIdPMA = 0;
                     this.disableAddPMA = false;
                     this.isSpinnerVisible = false;
+                    this.disableSaveForEdit = false;
                     this.alertService.showMessage(
                         'Success',
                         `Please Click on Save/Update to store in Database`,
@@ -718,6 +719,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.itemMasterIdDER = 0;
                     this.disableAddDER = false;
                     this.isSpinnerVisible = false;
+                    this.disableSaveForEdit = false;
                     this.alertService.showMessage(
                         'Success',
                         `Please Click on Save/Update to store in Database`,
@@ -957,12 +959,24 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     `Integration with Selection is Required. When Customer Type is Internal Or Affliliate.`,
                     MessageSeverity.error)
                 return;
-            }
+            }            
+        }        
+        if (this.disableAddPMA) {
+            this.alertService.showMessage(
+                'Warning',
+                `Please hit add button to add PMA.`,
+                MessageSeverity.error)
+            return;
         }
-
+        if (this.disableAddDER) {
+            this.alertService.showMessage(
+                'Warning',
+                `Please hit add button to add DER.`,
+                MessageSeverity.error)
+            return;
+        }
         this.isSpinnerVisible = true;
         this.stopmulticlicks = true;
-
         if (!this.isEdit) {
             this.customerService.newAction({
                 ...this.generalInformation,
@@ -1136,7 +1150,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     nextClick(nextOrPrevious) {
         this.nextOrPreviousTab = nextOrPrevious;
-        if (this.formdata.form.dirty) {
+        if (!this.disableSaveForEdit) {
             let content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: "sm" });
         }
@@ -1150,9 +1164,23 @@ export class CustomerGeneralInformationComponent implements OnInit {
     }
 
     ngOnDestroy() {		
-		if (this.formdata.form.dirty) {
+		if (!this.disableSaveForEdit) {
             let content = this.tabRedirectConfirmationModal;
             this.modal = this.modalService.open(content, { size: "sm" });
+        }
+        if (this.disableAddPMA) {
+            this.alertService.showMessage(
+                'Warning',
+                `Please hit add button to add PMA.`,
+                MessageSeverity.error)
+            return;
+        }
+        if (this.disableAddDER) {
+            this.alertService.showMessage(
+                'Warning',
+                `Please hit add button to add DER.`,
+                MessageSeverity.error)
+            return;
         }
 	}
 

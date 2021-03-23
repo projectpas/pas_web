@@ -83,6 +83,7 @@ export class SalesOrderShippingComponent {
     ModuleID: Number;
     isEditModeAdd: boolean = false;
     modal: NgbModalRef;
+    isMultipleSelected: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -151,6 +152,9 @@ export class SalesOrderShippingComponent {
         this.currQtyToShip = rowData.qtyToShip;
         this.salesOrderPartId = rowData.salesOrderPartId;
         this.partSelected = true;
+        this.isMultipleSelected = false;
+        this.isView = false;
+        this.clearData();
         this.bindData();
     }
 
@@ -478,8 +482,32 @@ export class SalesOrderShippingComponent {
     }
 
     save() {
+        let shippingItems: ShippingItems[] = [];
+
+        if (this.isMultipleSelected) {
+            this.shippingList.filter(a => {
+                for (let i = 0; i < a.soshippingchildviewlist.length; i++) {
+                    if (a.soshippingchildviewlist[i].selected == true) {
+                        var p = new ShippingItems;
+                        p.SOPickTicketId = a.soshippingchildviewlist[i].soPickTicketId;
+                        p.currQtyToShip = a.soshippingchildviewlist[i].qtyToShip;
+                        p.salesOrderPartId = a.soshippingchildviewlist[i].salesOrderPartId;
+
+                        shippingItems.push(p);
+                    }
+                }
+            });
+        }
+        else {
+            var p = new ShippingItems;
+            p.SOPickTicketId = this.currSOPickTicketId;
+            p.currQtyToShip = this.currQtyToShip;
+            p.salesOrderPartId = this.salesOrderPartId;
+
+            shippingItems.push(p);
+        }
+
         this.shippingHeader['salesOrderId'] = this.salesOrderId;
-        this.shippingHeader['salesOrderPartId'] = this.salesOrderPartId;
         this.shippingHeader['masterCompanyId'] = this.salesOrder['masterCompanyId'];
         this.shippingHeader['createdBy'] = this.userName;
         this.shippingHeader['updatedBy'] = this.userName;
@@ -488,8 +516,7 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['shipToName'] = this.shippingHeader.shipToCustomerId.userName;
         this.shippingHeader['shipToCustomerId'] = editValueAssignByCondition('userID', this.shippingHeader['shipToCustomerId']);
         this.shippingHeader['soldToName'] = this.shippingHeader.soldToName.userName;
-        this.shippingHeader['sOPickTicketId'] = this.currSOPickTicketId;
-        this.shippingHeader['qtyShipped'] = this.currQtyToShip;
+        this.shippingHeader['shippingItems'] = shippingItems;
         this.isSpinnerVisible = true;
 
         this.salesOrderService.createShipping(this.shippingHeader)
@@ -1208,4 +1235,45 @@ export class SalesOrderShippingComponent {
                 this.isSpinnerVisible = false;
             });
     }
+
+    PerformShipping() {
+        this.clearData();
+        this.isView = false;
+        this.isMultipleSelected = true;
+        this.partSelected = true;
+        this.bindData();
+    }
+
+    clearData() {
+        this.clearShipToAddress();
+        this.clearOriginAddress();
+        this.clearSoldToAddress();
+        this.isEditModeAdd = false;
+        this.shippingHeader.airwayBill = '';
+        this.shippingHeader.weight = 0;
+        this.shippingHeader.shipWeight = 0;
+        this.shippingHeader.shipWeightUnit = 0;
+        this.shippingHeader.shipSizeLength = 0;
+        this.shippingHeader.shipSizeWidth = 0;
+        this.shippingHeader.shipSizeHeight = 0;
+        this.shippingHeader.shipSizeUnitOfMeasureId = 0;
+        this.shippingHeader.salesOrderShippingId = 0;
+        this.shippingHeader['salesOrderCustomsInfo']['entryType'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['entryNumber'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['commodityCode'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['epu'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['ucr'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['masterUCR'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['movementRefNo'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['customsValue'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['netMass'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['vatValue'] = '';
+        this.shippingHeader['salesOrderCustomsInfo']['salesOrderCustomsInfoId'] = 0;
+    }
+}
+
+export class ShippingItems {
+    SOPickTicketId: number;
+    currQtyToShip: number;
+    salesOrderPartId: number;
 }

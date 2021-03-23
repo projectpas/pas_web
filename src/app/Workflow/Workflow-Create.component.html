@@ -1,4 +1,4 @@
-<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<p-breadcrumb [model]="breadcrumbs" *ngIf="!isWorkOrder || isView"></p-breadcrumb>
 <div class="x_content margin-bottom-0">
     <div class="card" *ngIf="!isQuote">
         <div class="card-header header">
@@ -11,7 +11,7 @@
                         </button>
                     </h4>
                 </div>
-                <div>
+                <div *ngIf="!isWorkOrder || isView">
                     <button type="button" class="btn-sm header-button pull-right"
                         [routerLink]="['/workflowmodule/workflowpages/app-workflow-list']">
                         Workflow List
@@ -398,7 +398,7 @@
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
                                         <select (ngModelChange)="checkEnableUpdate()"
-                                            [(ngModel)]="sourceWorkFlow.percentageOfMaterial" class="form-control"
+                                            [(ngModel)]="sourceWorkFlow.percentageOfMaterial" class="form-control select_align_right"
                                             (change)="onMaterialCostChange(sourceWorkFlow.percentageOfMaterial,'html');">
                                             <option value="-1">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
@@ -409,7 +409,7 @@
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
                                         <select (ngModelChange)="checkEnableUpdate()"
-                                            [(ngModel)]="sourceWorkFlow.percentageOfExpertise" class="form-control"
+                                            [(ngModel)]="sourceWorkFlow.percentageOfExpertise" class="form-control select_align_right"
                                             (change)="onExpertiseCostChange(sourceWorkFlow.percentageOfExpertise,'html');">
                                             <option value="-1">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
@@ -420,7 +420,7 @@
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
                                         <select (ngModelChange)="checkEnableUpdate()"
-                                            [(ngModel)]="sourceWorkFlow.percentageOfCharges" class="form-control"
+                                            [(ngModel)]="sourceWorkFlow.percentageOfCharges" class="form-control select_align_right"
                                             (change)="onChargesChange(sourceWorkFlow.percentageOfCharges,'html');">
                                             <option value="-1">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
@@ -430,8 +430,8 @@
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
-                                        <select (ngModelChange)="checkEnableUpdate()"
-                                            [(ngModel)]="sourceWorkFlow.percentageOfOthers" class="form-control"
+                                        <select (ngModelChange)="checkEnableUpdate()" [disabled]="sourceWorkFlow.otherCost==0"
+                                            [(ngModel)]="sourceWorkFlow.percentageOfOthers" class="form-control select_align_right"
                                             (change)="onOtherChange(sourceWorkFlow.percentageOfOthers,'html');">
                                             <option value="-1">--Select--</option>
                                             <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
@@ -445,8 +445,8 @@
                                             [(ngModel)]="sourceWorkFlow.totPer" disabled />
                                     </div>
                                 </div>
-                                <div class="col-md-2 m-t-5">
-                                    <div class="form-group">
+                                <div class="col-md-3 m-t-5">
+                                    <div class="form-group adjustTher">
                                         <span class="label"><b>% of BER Threshold </b></span>
                                         <!-- <label><b>% of BER Threshold</b></label> -->
                                     </div>

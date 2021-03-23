@@ -36,8 +36,8 @@
                     <div class="mt-2">
                         <ul class="nav nav-pills">
                             <li><button class="btn banking-tab-buttons"  (click)="Lockbox()" [class.extraclass]="LockboxStyle">Lockbox</button></li>
-                            <li><button class="btn banking-tab-buttons" (click)="DomesticWire()" [class.extraclass]="domesticWireStyle">Domestic Wire</button></li>
-                            <li><button class="btn banking-tab-buttons" (click)="InternationalWire()" [class.extraclass]="internationalStyle">International Wire</button></li>
+                            <!-- <li><button class="btn banking-tab-buttons" (click)="DomesticWire()" [class.extraclass]="domesticWireStyle">Domestic Wire</button></li> -->
+                            <li><button class="btn banking-tab-buttons" (click)="InternationalWire()" [class.extraclass]="internationalStyle">Wire Transfers</button></li>
                             <li><button class="btn banking-tab-buttons" (click)="ACH()" [class.extraclass]="ACHStyle">ACH</button></li>
                         </ul>
                     </div>
@@ -62,28 +62,25 @@
                                                     </h6><br>
                                                     <div class="col-md-3 col-lg-3  ">
                                                         <div class="form-group">
-                                                            <label class="lable-Adjust">PO Box <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control"   (ngModelChange)="getmemo()" required name="poBox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.poBox">
+                                                            <label class="lable-Adjust">PO Box <span class="clr-red"></span></label>
+                                                            <input type="text" class="form-control" (ngModelChange)="getmemo()" name="poBox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.poBox" value="" autocomplete="new-password">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="lable-Adjust" >Street Address Line 1 <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control"   required name=" Line 1" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankStreetaddress1">
+                                                            <input type="text" class="form-control"   required name=" Line 1" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankStreetaddress1" value="" autocomplete="new-password">
                                                         </div>
-
                                                         <div class="form-group">
-                                                            <label class="lable-Adjust"  >Street Address Line 2  <span class="clr-red">*</span></label>
-                                                             <input type="text" class="form-control"   name=" Line 2" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankStreetaddress2">
-                                                        </div>
-                                                    
+                                                            <label class="lable-Adjust"  >Street Address Line 2  <span class="clr-red"></span></label>
+                                                             <input type="text" class="form-control"   name=" Line 2" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankStreetaddress2" value="" autocomplete="new-password">
+                                                        </div>                                                    
                                                         <div class="form-group">
                                                             <label class="lable-Adjust">City <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control"   name="City" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankCity">
+                                                            <input type="text" class="form-control"   name="City" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankCity" value="" autocomplete="new-password">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="lable-Adjust" >Province/State <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control"   name="Province" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankProvince">
-                                                        </div>
-                                                     
+                                                            <input type="text" class="form-control"   name="Province" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankProvince" value="" autocomplete="new-password">
+                                                        </div>                                                     
                                                         <div class="form-group">
                                                             <label class="lable-Adjust">Country <span class="clr-red">*</span></label>
                                                             <div class="inner-addon right-addon inline-block">
@@ -93,13 +90,11 @@
                                                                     [(ngModel)]="sourceLegalEntity.bankcountryId" name="bankcountry"
                                                                     [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                                             </div> 
-
                                                         </div>
-
                                                         <div class="form-group">
                                                             <!-- (keypress)="numberonly($event)" -->
                                                             <label class="lable-Adjust">Postal Code <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control"  required   name="Postal" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode">
+                                                            <input type="text" class="form-control"  required   name="Postal" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode" value="" autocomplete="new-password">
                                                         </div>
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-primary" [disabled]="!locksave"
@@ -107,10 +102,6 @@
                                                              {{ !isLockBox ? 'Update' : 'Save' }}</button>
                                                         </div>
                                                     </div> 
-
-
-                                                   
-
                                                 </div>
                                                 <div class="clear"></div>
                                                 <!-- <hr class="hr-light-grey">
@@ -121,7 +112,8 @@
 
                                             </div>
                                         </div>
-                                        <div *ngIf="domesticWireValue" class="tab-pane active">
+                                        <!--removed tab by client -->
+                                        <div *ngIf="domesticWireValue" class="tab-pane active">  
                                             <div class="clear"></div>
                                             <h6 data-toggle="modal" *ngIf="!isDomesticWire" data-target="#contentHist" class="history_crd"> Domestic Wire History
                                                 <a class="btn nobg" (click)="getAuditHistoryById(2)" matTooltipPosition="above" matTooltip="History">
@@ -212,57 +204,79 @@
                                                     <div class="col-md-3 col-lg-3  ">
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
-                                                     <input type="text" (ngModelChange)="internationalval()" #bankbibb="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Bank Name" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankName" required> 
-                                                     <div *ngIf="bankbibb.errors" [ngClass]="'error'">
+                                                     <input type="text" (ngModelChange)="internationalval()" #bankbibb="ngModel" 
+                                                     class="form-control"   name="Bank Name" [ngModelOptions]="{standalone: true}" 
+                                                     [(ngModel)]="sourceLegalEntity.internationalBankName" required> 
+                                                     <!-- <div *ngIf="bankbibb.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbibb.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
-                                                    </div>
-                                                    </div>
+                                                    </div> -->
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Location 1 <span class="clr-red"></span></label>
+                                                     <input type="text" (ngModelChange)="internationalval()" 
+                                                     class="form-control" name="BankLocation1" [ngModelOptions]="{standalone: true}" 
+                                                     [(ngModel)]="sourceLegalEntity.bankLocation1">                                                     
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Location 2 <span class="clr-red"></span></label>
+                                                     <input type="text" (ngModelChange)="internationalval()" 
+                                                     class="form-control" name="BankLocation1" [ngModelOptions]="{standalone: true}" 
+                                                     [(ngModel)]="sourceLegalEntity.bankLocation2">                                                     
+                                                </div>
                                                 <!-- <div class="form-group">
                                                     <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
                                                     <input type="text" (ngModelChange)="internationalval()"   class="form-control"   name="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalIntermediateBank" required>
                                                 </div> -->
-
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
-                                                    <input type="text" (ngModelChange)="internationalval()"  #bankintb="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Bank Address" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalIntermediateBank" required>
-                                                    <div *ngIf="bankintb.errors" [ngClass]="'error'">
+                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red"></span></label>
+                                                    <input type="text" (ngModelChange)="internationalval()"  #bankintb="ngModel"  class="form-control"  
+                                                     name="Intermediate Bank" [ngModelOptions]="{standalone: true}" 
+                                                    [(ngModel)]="sourceLegalEntity.internationalIntermediateBank">
+                                                    <!-- <div *ngIf="bankintb.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankintb.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Benficiary<span class="clr-red">*</span></label>
-                                                     <input type="text" (ngModelChange)="internationalval()" #bankbenf="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Benficiary" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBenficiaryBankName" required>  
-                                                     <div *ngIf="bankbenf.errors" [ngClass]="'error'">
+                                                    <label class="lable-Adjust">Beneficiary Bank<span class="clr-red">*</span></label>
+                                                     <input type="text" (ngModelChange)="internationalval()" #bankbenf="ngModel" class="form-control"   
+                                                     name="Benficiary" [ngModelOptions]="{standalone: true}" 
+                                                     [(ngModel)]="sourceLegalEntity.internationalBenficiaryBankName" required>  
+                                                     <!-- <div *ngIf="bankbenf.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbenf.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
-                                                    </div>
-                                                    </div>
+                                                    </div> -->
+                                                </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Account Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)"  (ngModelChange)="internationalval()"  class="form-control text-end-align"   name="Account Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required> 
+                                                    <input type="text" maxlength="20"                                                     
+                                                    (ngModelChange)="internationalval()"  class="form-control"   
+                                                    name="Account Number" [ngModelOptions]="{standalone: true}" 
+                                                    [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required> 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
-                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" (ngModelChange)="internationalval()"   class="form-control text-end-align"   name="ABA Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.aba" required> 
+                                                    <input type="text" maxlength="20" (ngModelChange)="internationalval()"   
+                                                     class="form-control" name="ABA Number" [ngModelOptions]="{standalone: true}"
+                                                     [(ngModel)]="sourceLegalEntity.aba" required> 
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
-                                                   <input type="text" (ngModelChange)="internationalval()"  class="form-control"   name="SWIFT Code" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalSWIFTID" required>  
+                                                    <label class="lable-Adjust">SWIFT Code / IBAN Code <span class="clr-red"></span></label>
+                                                   <input type="text" (ngModelChange)="internationalval()"  class="form-control"   
+                                                   name="SWIFT Code" [ngModelOptions]="{standalone: true}" 
+                                                   [(ngModel)]="sourceLegalEntity.internationalSWIFTID">  
                                                 </div>
-
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary" [disabled]="!internationalvalid" (click)="savebankinternationalwire()">
-                                                        {{ !isInternationalWire ? 'Update' : 'Save' }}</button> 
-                                                    
+                                                    <button type="submit" class="btn btn-primary" [disabled]="!internationalvalid" 
+                                                    (click)="savebankinternationalwire()">
+                                                    {{ !isInternationalWire ? 'Update' : 'Save' }}
+                                                    </button>                                                     
                                                 </div>
                                                 </div>
-
-
                                                 <!--<div class="form-group col-sm-12">
                                                     <button type="submit" class="btn btn-primary pull-right" (click)="savebankinternationalwire()">Save</button>
                                                 </div>-->
@@ -288,44 +302,54 @@
                                                  <div class="col-md-3 col-lg-3  ">
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
-                                                    <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel"  [pattern]="titlePattern" class="form-control"    name="Bank n" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
-                                                    <div *ngIf="bankNmae.errors" [ngClass]="'error'">
+                                                    <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel" class="form-control" name="Bank n" 
+                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
+                                                    <!-- <div *ngIf="bankNmae.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankNmae.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
-                                                   <input type="text" (ngModelChange)="achval()" #interbankNmae="ngModel"  [pattern]="titlePattern" class="form-control"   name="Intermediate b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achIntermediateBank" required>  
-                                                   <div *ngIf="interbankNmae.errors" [ngClass]="'error'">
+                                                   <label class="lable-Adjust">Intermediate Bank <span class="clr-red"></span></label>
+                                                   <input type="text" (ngModelChange)="achval()" #interbankNmae="ngModel"  
+                                                   class="form-control"   name="Intermediate b" 
+                                                   [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achIntermediateBank"
+                                                   >  
+                                                   <!-- <div *ngIf="interbankNmae.errors" [ngClass]="'error'">
                                                     <div *ngIf="interbankNmae.errors.pattern">
                                                       <span class="clr-red">At least One Alphabet is Required.</span>
                                                     </div> 
-                                                </div>
+                                                    </div> -->
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Benficiary Bank Name <span class="clr-red">*</span></label>
-                                                      <input type="text"  (ngModelChange)="achval()"  #ibenfbankNmae="ngModel"  [pattern]="titlePattern" class="form-control"   name="Benficiary b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBenficiaryBankName" required> 
-                                                      <div *ngIf="ibenfbankNmae.errors" [ngClass]="'error'">
+                                                    <label class="lable-Adjust">Beneficiary Bank Name <span class="clr-red"></span></label>
+                                                      <input type="text"  (ngModelChange)="achval()"  #ibenfbankNmae="ngModel"  
+                                                      class="form-control"   name="Benficiary b" [ngModelOptions]="{standalone: true}"
+                                                       [(ngModel)]="sourceLegalEntity.achBenficiaryBankName" > 
+                                                      <!-- <div *ngIf="ibenfbankNmae.errors" [ngClass]="'error'">
                                                         <div *ngIf="ibenfbankNmae.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
                                                         </div>
-                                                    </div> 
-                                                    </div>
+                                                    </div>  -->
+                                                </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control text-end-align"  name="Account Nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  (ngModelChange)="achval()" > 
+                                                    <input type="text" maxlength="30"  class="form-control"  name="Account Nb" 
+                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  
+                                                    (ngModelChange)="achval()" > 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
-                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control text-end-align"   name="ABA nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" required  (ngModelChange)="achval()">
+                                                    <input type="text" maxlength="30" class="form-control" name="ABA nb" 
+                                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" 
+                                                    required  (ngModelChange)="achval()">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
-                                                     <input type="text" class="form-control"   name="SWIFT b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achSWIFTID" required  (ngModelChange)="achval()">  
+                                                    <label class="lable-Adjust">SWIFT Code / IBAN Code  <span class="clr-red"></span></label>
+                                                     <input type="text" class="form-control"   name="SWIFT b" [ngModelOptions]="{standalone: true}" 
+                                                     [(ngModel)]="sourceLegalEntity.achSWIFTID" (ngModelChange)="achval()">  
                                                 </div>
-
                                                 <div class="form-group">
                                                     <button type="submit" *ngIf="isAch" class="btn btn-primary" (click)="savebankACH()" [disabled]="!achvalid">
                                                    Save
