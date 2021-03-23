@@ -289,13 +289,12 @@
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                            
+                                                <label for="credit">
+                                                    Credit Limit &amp; Term
+                                                    <span class="clr-red">*</span>
+                                                </label>
                                                 <div class="col-md-12 set_padNone">
                                                     <div class="col-md-6">
-                                                        <label for="credit">
-                                                            Credit Limit
-                                                            <span class="clr-red">*</span>
-                                                        </label>
                                                         <input type="text" class="form-control wo-input text_right"
                                                             name="creditLimit" #creditLimit="ngModel"
                                                             [(ngModel)]="workOrderGeneralInformation.creditLimit"
@@ -303,10 +302,6 @@
                                                     </div>
 
                                                     <div class="col-md-6">
-                                                        <label for="credit">
-                                                            Credit  Term
-                                                            <span class="clr-red">*</span>
-                                                        </label>
                                                         <input type="text" class="form-control wo-input"
                                                             name="creditTerm" #creditTerm="ngModel"
                                                             [(ngModel)]="workOrderGeneralInformation.creditTerm"
@@ -469,12 +464,12 @@
                                 <tr class="mpn-row" style="display: table-row;"
                                     *ngFor="let workOrderPartNumber of workOrderGeneralInformation.partNumbers; let i=index;">
                                     <td>
-                                        <!-- workOrderQuoteId  getWorkFlowByPNandScope(workOrderPartNumber);-->
+                                        <!-- workOrderQuoteId -->
                                         <p-autoComplete field="partNumber"
                                                         [(ngModel)]="workOrderPartNumber.masterPartId" name="mpn{{i}}" 
                                                         #mpn="ngModel" errorMessage="Records not found" [forceSelection]="true"
                                                         [dropdown]="true" [suggestions]="partNumberList" (ngModelChange)="getValid()"
-                                                        (onSelect)="onSelectedPartNumber($event, workOrderPartNumber, i);  getStockLineByItemMasterIdOnChangePN(workOrderPartNumber,i);"
+                                                        (onSelect)="onSelectedPartNumber($event, workOrderPartNumber, i); getWorkFlowByPNandScope(workOrderPartNumber); getStockLineByItemMasterIdOnChangePN(workOrderPartNumber,i);"
                                                         (completeMethod)="filterPartNumber($event)" emptyMessage=" "
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'masterPartId' )"
                                                         [size]="30" [minLength]="1"
@@ -504,7 +499,7 @@
                                         <p-dropdown filter="true" placeholder="Select" name="scope{{i}}" #scope="ngModel"
                                         [options]="workScopesList" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
                                         [(ngModel)]="workOrderPartNumber.workOrderScopeId" [disabled]="isView || quotestatusofCurrentPart =='Approved'"
-                                        (onChange)="getWorkFlowByPNandScope($event.value,workOrderPartNumber,'html',i)" required appendTo="body">
+                                        (onChange)="getWorkFlowByPNandScope($event.value,workOrderPartNumber,'html')" required appendTo="body">
                             </p-dropdown>
                                     </td>
                                     <td>
