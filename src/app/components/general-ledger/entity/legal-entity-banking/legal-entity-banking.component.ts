@@ -513,7 +513,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.isInternationalWire = false;
 				this.alertService.showMessage(
 					'Success',
-					'International Saved Successfully',
+					'Wire Transfer Saved Successfully',
 					MessageSeverity.success
 				);
 
@@ -530,7 +530,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.internationalvalid=false;
 				this.alertService.showMessage(
 					'Success',
-					'International Updated Successfully',
+					'Wire Transfer Updated Successfully',
 					MessageSeverity.success
 				);
 			}, err => {
