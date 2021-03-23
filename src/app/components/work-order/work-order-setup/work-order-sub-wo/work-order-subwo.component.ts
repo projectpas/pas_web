@@ -4,7 +4,7 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { CommonService } from '../../../../services/common.service';
 import { MessageSeverity, AlertService } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';
-import { getValueFromArrayOfObjectById, editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
+import {   editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
 import * as moment from 'moment';
 import { SubWorkOrderPartNumber } from '../../../../models/sub-work-order-partnumber.model';
 import { Location } from '@angular/common';
@@ -80,10 +80,10 @@ export class SubWorkOrderComponent implements OnInit {
         //grid calls
         this.getConditionsList();
         this.getAllTecStations();
-        this.getAllPriority();
+     
         this.getSubWorkOrderEditData();
         this.getAllWorkOrderStages(); // for stages dropdown
-        this.getAllWorkOrderStatus();
+        // this.getAllWorkOrderStatus();
         this.getSubWorOrderMpns();
         this.getAllWorkScpoes('');
 
@@ -94,6 +94,7 @@ export class SubWorkOrderComponent implements OnInit {
     }
     getSubWorOrderMpns() {
         this.subWorkOrderPartNumbers = [];
+        console.log("this.subWorkOrderId",this.subWorkOrderId)
         if (this.subWorkOrderId != 0) {
             this.workOrderService.getSubWorOrderMpnsById(this.subWorkOrderId).subscribe(res => {
                 if (res && res.length == 0) {
@@ -127,6 +128,7 @@ export class SubWorkOrderComponent implements OnInit {
                         if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
                             this.getAllWorkScpoes('');
                             this.workOrderStatus();
+                            this.getAllPriority('');
                         }
                     }
                 }
@@ -172,7 +174,7 @@ export class SubWorkOrderComponent implements OnInit {
         }, error => {
 
         })
-    }
+    } 
     saveSubWorkOrderParts() {
         const subWorkOrder = this.subWorkOrderPartNumbers;
         subWorkOrder.map((x, index) => {
@@ -184,7 +186,8 @@ export class SubWorkOrderComponent implements OnInit {
                 x.estimatedCompletionDate = (x.estimatedCompletionDate) ? new Date(x.estimatedCompletionDate) : new Date(x.customerRequestDate),
                 x.estimatedShipDate = (x.estimatedShipDate) ? new Date(x.estimatedShipDate) : new Date(x.customerRequestDate),
                 x.promisedDate = (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate)
-        })
+                x.technicianId=x.partTechnicianId
+            })
         this.workOrderService.createSubWorkOrderGrid(subWorkOrder).subscribe(res => {
             this.location.replaceState(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${this.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}`);
             this.mpnGridUpdated = true;
@@ -246,12 +249,37 @@ export class SubWorkOrderComponent implements OnInit {
                 }
             });
         })
-    }
+    } 
+    // getAllWorkOrderStatus(): void {
+    //     this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').subscribe(res => {
+    //         this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
+    //     })
+    // }
+
+
     getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').subscribe(res => {
-            this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
-        })
+        this.allValuesSame = this.subWorkOrderGeneralInformation.partNumbers.every((val, i, arr) => val.workOrderStatusId === arr[0].workOrderStatusId);
+        if (this.allValuesSame) {
+            this.statusId = this.subWorkOrderGeneralInformation.partNumbers[0].workOrderStatusId;
+            this.subWorkOrderGeneralInformation.workOrderStatusId = this.statusId;
+        } else {
+            this.statusId = 1;
+            this.subWorkOrderGeneralInformation.workOrderStatusId = this.statusId;
+        }
+        if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
+            this.workOrderStatusList.forEach(element => {
+                if (element.value == this.statusId) {
+                    this.workOrderNumberStatus = element.label;
+                    this.subWorkOrderGeneralInformation.workOrderStatusId = this.statusId;
+                }
+            });
+        } else {
+            this.workOrderNumberStatus = 'Open';
+            this.subWorkOrderGeneralInformation.workOrderStatusId = 1;
+        }
     }
+
+
     saveSubWorkOrder() {
         const data = {
             workOrderMaterialsId: this.workOrderMaterialsId,
@@ -396,26 +424,25 @@ export class SubWorkOrderComponent implements OnInit {
         });
         this.workOrderStatus();
     }
-    workOrderStatus() {
-        if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
-
-            this.allValuesSame = this.subWorkOrderPartNumbers.every((val, i, arr) => val.subWorkOrderStatusId === arr[0].subWorkOrderStatusId);
-        }
-        if (this.allValuesSame) {
-            this.statusId = this.subWorkOrderPartNumbers[0].subWorkOrderStatusId;
-        } else {
-            this.statusId = 1;
-        }
-        if (this.workOrderStatusList && this.workOrderStatusList.length > 0) {
-            this.workOrderStatusList.forEach(element => {
-                if (element.value == this.statusId) {
-                    this.workOrderNumberStatus = element.label;
+    workOrderStatus(): void {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+                if(element.workOrderStatusId){
+                    this.setEditArray.push(element.workOrderStatusId)
                 }
             });
+            if(this.setEditArray && this.setEditArray.length==0){
+                this.setEditArray.push(0);  
+            }
         } else {
-            this.workOrderNumberStatus = 'Open';
+            this.setEditArray.push(0); 
         }
-    }
+        const strText ='';
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+         this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
+        })
+    } 
     async getPartPublicationByItemMasterId(currentRecord, itemMasterId) {
         await this.workOrderService.getPartPublicationByItemMaster(itemMasterId).subscribe(res => {
             this.cmmList = res.map(x => {
@@ -431,11 +458,37 @@ export class SubWorkOrderComponent implements OnInit {
         })
     }
     priorityList: any = [];
-    getAllPriority() {
-        this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').subscribe(res => {
+    // getAllPriority() {
+    //     this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').subscribe(res => {
+    //         this.priorityList = res;
+    //     })
+    // }
+
+    getAllPriority(value) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+                if (element.workOrderPriorityId) {
+                    this.setEditArray.push(element.workOrderPriorityId)
+                }
+            });
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
+            }
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
             this.priorityList = res;
         })
     }
+
+
+
+
+
+
     expertiseTypeList: any = [];
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser

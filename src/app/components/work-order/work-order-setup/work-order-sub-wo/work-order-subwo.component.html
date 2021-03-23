@@ -1,14 +1,26 @@
-<div class="card-header bg-primary">
+<!-- <div class="card-header bg-primary">
   <div class="row">
     <div class="col">
       <h4 class="new-card-heading">
         {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>
     </div>
     <div>
-      <button type="button" class="btn-sm new-btn-primary" (click)="navigateToWo()">
+      <button type="button" class="btn-sm header-button " (click)="navigateToWo()">
         Redirect to Work Order
       </button>
     </div>
+  </div>
+</div>  -->
+<div class="header">
+  <div class="row">
+      <div class="col">
+          <h4 class="header-name"> {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>
+      </div>
+      <div>
+        <button type="button" class="btn-sm header-button " (click)="navigateToWo()">
+          Redirect to Work Order
+        </button>
+      </div>
   </div>
 </div>
 <div class="card">
@@ -121,7 +133,7 @@
               <th rowspan="2">Tech Station</th>
               <th rowspan="2" style="display:none">Tear Down Report</th>
             </tr>
-          </thead>
+          </thead> 
           <tbody>
             <tr class="mpn-row" style="display: table-row;"
               *ngFor="let workOrderPartNumber of subWorkOrderPartNumbers; let i=index;">
@@ -198,7 +210,7 @@
                   [(ngModel)]="workOrderPartNumber.subWorkOrderStageId" required [disabled]="isView" appendTo="body">
                 </p-dropdown>
               </td>
-              <td>
+              <td> 
                 <p-dropdown [options]="workOrderStatusList" placeholder="Select" name="status{{i}}" #status="ngModel"
                   class="p-dropdown-custom-md custome_pd-totext p-dropdown-mh120"
                   [(ngModel)]="workOrderPartNumber.subWorkOrderStatusId" disabled required appendTo="body">
