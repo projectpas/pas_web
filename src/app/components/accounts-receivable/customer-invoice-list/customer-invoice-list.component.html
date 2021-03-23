@@ -10,11 +10,11 @@
         </div>
     </div>
     <div class="card-body header-body">
-        <p-table #dt [value]="customerInvoices" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
-            [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
-            selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
-            (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
-            [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
+        <p-table #dt [value]="customerInvoices" [first]="0" [rows]="pageSize" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
+            [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true" (onLazyLoad)="loadData($event)"
+            [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
+            [style]="{ width: '100%' }">
             <ng-template pTemplate="caption">
                 <div class="row">
                     <div class="col">
@@ -42,7 +42,7 @@
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="currentStatusSo" class="form-control" value="1"
                                                 [(ngModel)]="currentStatus" checked="{{currentStatus == 1}}"
-                                                (change)="changeOfStatus(1, '')">
+                                                (change)="changeOfStatus(1)">
                                             <span class="checkmark"></span>Open
                                         </label>
                                     </div>
@@ -50,7 +50,7 @@
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="currentStatusSo" class="form-control" value="2"
                                                 [(ngModel)]="currentStatus" checked="{{currentStatus == 2}}"
-                                                (change)="changeOfStatus(2, '')">
+                                                (change)="changeOfStatus(2)">
                                             <span class="checkmark"></span>Close
                                         </label>
                                     </div>
@@ -58,7 +58,7 @@
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="currentStatusSo" class="form-control" value="0"
                                                 [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}"
-                                                (change)="changeOfStatus(0, '')">
+                                                (change)="changeOfStatus(0)">
                                             <span class="checkmark"></span>All
                                         </label>
                                     </div>
@@ -82,42 +82,13 @@
                 <tr>
                     <th class="table-column-width" [ngStyle]="{'width': col.width}" *ngFor="let col of columns"
                         [ngSwitch]="col.field">
-                        <ng-container *ngIf="col.field == 'status'">
-                            <input *ngIf="col.field !== 'quoteDate' 
-                            && col.field !== 'openDate'
-                            && col.field !== 'requestedDateType' 
-                            && col.field !== 'estimatedShipDateType' 
-                            && col.field !== 'createdDate'
-                            && col.field !== 'updatedDate'" #filterStatusInput
-                                [disabled]="col.field == 'status' &&  currentStatus !='0'" style="width:100%;"
-                                pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-                        </ng-container>
-                        <ng-container *ngIf="col.field != 'status'">
-                            <input *ngIf="col.field !== 'quoteDate'
-                            && col.field !== 'openDate'
-                            && col.field !== 'requestedDateType' 
-                            && col.field !== 'estimatedShipDateType'  
-                            && col.field !== 'createdDate'
-                            && col.field !== 'updatedDate'" [disabled]="col.field == 'status' &&  currentStatus !='0'"
-                                style="width:100%;" pInputText type="text"
-                                (input)="dt.filter($event.target.value, col.field, 'contains')">
-                        </ng-container>
-                        <input type="date" *ngIf="col.field == 'quoteDate'" name="quoteDate"
+                        <input *ngIf="col.field !== 'invDueDate'
+                            && col.field !== 'invoiceDate'" style="width:100%;" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input type="date" *ngIf="col.field == 'invDueDate'" name="invDueDate"
                             class="table-header-input-width"
                             (change)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate"
-                            class="table-header-input-width"
-                            (change)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                            class="table-header-input-width"
-                            (change)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'openDate'" name="openDate"
-                            class="table-header-input-width"
-                            (change)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'requestedDateType'" name="requestedDateType"
-                            class="table-header-input-width"
-                            (change)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDateType"
+                        <input type="date" *ngIf="col.field == 'invoiceDate'" name="invoiceDate"
                             class="table-header-input-width"
                             (change)="dt.filter($event.target.value, col.field, 'contains')">
                     </th>
@@ -128,26 +99,15 @@
                 let-columns="columns">
                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle
                     [pSelectableRowDblClick]="rowData">
-                    <!-- <td *ngFor="let col of columns" class="table-column-width"
-                        [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
-                        [matTooltipDisabled]="rowData['partDescriptionType'] != 'Multiple' ||
-                                rowData['partNumberType'] != 'Multiple'  || 
-                                rowData['requestedDateType'] != 'Multiple'||
-                                    rowData['estimatedShipDateType'] != 'Multiple'||
-                                    rowData['priorityType'] != 'Multiple'"
-                        [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
-                        <span
-                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field != 'openDate'">
+                    <td *ngFor="let col of columns" class="table-column-width">
+                        <span *ngIf="col.field != 'invDueDate' && col.field != 'invoiceDate'">
                             {{convertDate(col.field , rowData) == '01-01-0001' ? '' : convertDate(col.field , rowData)}}
                         </span>
-                        <span *ngIf="col.field == 'openDate'">
+                        <span *ngIf="col.field == 'invDueDate' || col.field == 'invoiceDate'">
                             {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy'}}
                         </span>
-                        <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-                            {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy h:mm a '}}
-                        </span>
                     </td>
-                    <td class="action-icons-cstm table-column-width">
+                    <!--<td class="action-icons-cstm table-column-width">
                         <div *ngIf="currentDeletedstatus==false">
                             <span>
                                 <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
@@ -206,5 +166,19 @@
                 <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
             </ng-template>
         </p-table>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </div>

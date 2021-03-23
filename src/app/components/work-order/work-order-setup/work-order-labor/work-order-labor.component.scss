@@ -123,6 +123,12 @@ p-radioButton label{
   background-color: transparent !important;
   border: none;
 }
+input[type=radio] {
+  margin: 0px 0px 0 2px;
+  clear: none;
+  float: left;
+  width: 16px !important;
+}
 .task-detail{
   display: grid;
   p-checkbox {

@@ -69,34 +69,34 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'stockLineNumber', header: 'SL Num',align: 0 },
         { field: 'mandatoryOrSupplemental', header: 'Request Type',align: 0 },
         { field: 'provision', header: 'Provision' ,align: 0},
-        { field: 'quantity', header: 'Qty Req', align: 1 },
-        { field: 'quantityReserved', header: 'Qty Res', align: 1 },
-        { field: 'quantityIssued', header: 'Qty Iss', align: 1 },
-        { field: 'qunatityTurnIn', header: 'Qty Turned In' ,align: 1},
-        { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 },
-        { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 },
-        { field: 'qunatityRemaining', header: 'Qty Rem', align: 1 },
+        { field: 'quantity', header: 'Qty Req', align: 1 ,width:"60px"},
+        { field: 'quantityReserved', header: 'Qty Res', align: 1 ,width:"60px"},
+        { field: 'quantityIssued', header: 'Qty Iss', align: 1,width:"60px" },
+        { field: 'qunatityTurnIn', header: 'Qty Turned In' ,align: 1,width:"60px"},
+        { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 ,width:"60px"},
+        { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 ,width:"60px"},
+        { field: 'qunatityRemaining', header: 'Qty Rem', align: 1,width:"60px" },
         { field: 'uom', header: 'UOM',align: 0 },
         { field: 'stockType', header: 'Stk Type',align: 0 }, //oem
         { field: 'altEquiv', header: 'Alt/Equiv',align: 0 },
         { field: 'itemClassification', header: 'Classification',align: 0 },
-        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1 },
-        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1 },
+        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"60px" },
+        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1,width:"60px" },
         { field: 'needDate', header: 'Need Date',align: 0 },
         { field: 'controlNo', header: 'Cntl Num' ,align: 0},
         { field: 'controlId', header: 'Cntl ID',align: 0 },
-        { field: 'currency', header: 'Curr' ,align: 1},
-        { field: 'unitCost', header: 'Unit Cost', align: 1 },
-        { field: 'extendedCost', header: 'Extended Cost', align: 1 },
+        { field: 'currency', header: 'Cur' ,align: 1},
+        { field: 'unitCost', header: 'Unit Cost', align: 1 ,width:"60px"},
+        { field: 'extendedCost', header: 'Extended Cost', align: 1 ,width:"60px"},
         { field: 'costDate', header: 'Cost Date',align: 0 },
-        { field: 'purchaseOrderNumber', header: 'PO Num' ,align: 0},
+        { field: 'purchaseOrderNumber', header: 'PO Num' ,align: 0,width:"60px"},
         { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date',align: 0 },
-        { field: 'repairOrderNumber', header: 'RO Num',align: 0 },
+        { field: 'repairOrderNumber', header: 'RO Num',align: 0 ,width:"60px"},
         { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' ,align: 0},
-        { field: 'receiver', header: 'Rec Num',align: 0 },
-        { field: 'workOrderNumber', header: 'WO Num',align: 0 },
-        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 },
-        { field: 'salesOrder', header: 'SO Num',align: 0 },
+        { field: 'receiver', header: 'Rec Num',align: 0 ,width:"60px"},
+        { field: 'workOrderNumber', header: 'WO Num',align: 0 ,width:"60px"},
+        { field: 'subWorkOrder', header: 'Sub-WO Num',align: 0 ,width:"60px"},
+        { field: 'salesOrder', header: 'SO Num',align: 0 ,width:"60px"},
         { field: 'figure', header: 'Figure',align: 0 },
         { field: 'site', header: 'Site' ,align: 0},
         { field: 'wareHouse', header: 'Warehouse',align: 0 },
@@ -260,7 +260,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             },
                 err => {
                 })
-        } else {
+        } else { 
             this.isSpinnerVisible = true;
             this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
                 res.forEach((element, index) => {
@@ -474,7 +474,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     allowAll(value) {
-        if (value) {
+        if (value==true) {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                     x.woReservedIssuedAltParts.map(x => {
@@ -485,13 +485,22 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                         x.isChildSelected = true;
                     })
                 }
+                if(value==true && (this.statusId === 1 || this.statusId === 5)&& x.quantityReserved !=0){
+                    x.isParentSelected = true;
+                 }
+                 if(value==true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4 )&& x.quantityIssued !=0){
+                    x.isParentSelected = true;
+                 }
+                // })
                 return {
                     ...x,
-                    isParentSelected: true,
+                    // isParentSelected: true,
+                    
                 }
             });
 
             this.isAllow = value;
+            this.savebutonDisabled = true;
         } else {
             this.reservedList = this.reservedList.map(x => {
                 if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
@@ -506,11 +515,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                 return {
                     ...x,
                     isParentSelected: false,
+                    
                 }
+                
             });
             this.isAllow = value;
+            this.savebutonDisabled = false;
         }
-        this.savebutonDisabled = true;
+       
     }
 
     filterEmployee(event): void {
@@ -540,7 +552,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
                if(res && res.length !=0){
                 this.reservedList = res.map(x => {
-                    x.masterCompanyId = this.authService.currentUser.masterCompanyId
+                    x.masterCompanyId = this.authService.currentUser.masterCompanyId;
+                    x.createdBy = x.createdBy? x.createdBy :this.authService.currentUser.userName;
+                    x.updatedBy = this.authService.currentUser.userName;
                        this.setdefaultValues(x);
                        if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
                            this.savebutonDisabled = true;
@@ -577,6 +591,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                                    reservedById: this.authService.currentEmployee,
                                    issuedById: this.authService.currentEmployee,
                                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                                   createdBy : y.createdBy? y.createdBy :this.authService.currentUser.userName,
+                                   updatedBy : this.authService.currentUser.userName
                                }
                            }),
                            woReservedIssuedEquParts: x.woReservedIssuedEquParts.map(y => {
@@ -588,6 +604,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                                    reservedById: this.authService.currentEmployee,
                                    issuedById: this.authService.currentEmployee,
                                    masterCompanyId: this.authService.currentUser.masterCompanyId,
+                                   createdBy : y.createdBy? y.createdBy :this.authService.currentUser.userName,
+                                   updatedBy : this.authService.currentUser.userName
                                }
                            })
                        }

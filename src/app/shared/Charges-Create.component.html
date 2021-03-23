@@ -5,7 +5,7 @@
   style="height:380px;"> -->
  
   <form #chargesCreateForm="ngForm">
-    <div class="table-responsive table-overflow header-table-width">
+    <div class="table-responsive table-overflow">
       <div class="tableFixHead">
     <table class="table table-bordered lastcol-fix">
       <thead>
@@ -14,10 +14,10 @@
         <th><label>Charge Type <span class="clr-red">*</span></label></th>
         <th *ngIf="isWorkOrder || isQuote"><label>Gl Account</label></th>
         <th><label>Description</label></th>
-        <th><label>Qty <span class="clr-red">*</span></label></th>
+        <th style="width:60px"><label>Qty <span class="clr-red">*</span></label></th>
         <th *ngIf="isWorkOrder || isQuote"><label>Ref Num</label></th>
-        <th><label>Unit Cost<span class="clr-red">*</span> </label></th>
-        <th><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
+        <th style="width:60px"><label>Unit Cost<span class="clr-red">*</span> </label></th>
+        <th style="width:60px"><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
         <th style="z-index:1"><label>Vendor Name</label></th>
         <th *ngIf="!isQuote && !isEdit">
           <label class="text-left">Actions </label>

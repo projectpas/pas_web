@@ -903,5 +903,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getActive() {
         this.disableUpdateButton = false;
     }
-    
+    // closeMaterial(){
+    // this.editData=[];
+    // }
 } 

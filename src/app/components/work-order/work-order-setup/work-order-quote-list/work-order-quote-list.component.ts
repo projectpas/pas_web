@@ -42,9 +42,9 @@ export class WorkOrderQuoteListComponent implements OnInit {
     { field: 'estCompletionDate', header: 'Est. Comp Date' },
     { field: 'quoteStatus', header: 'Quote Status' },
     { field: "createdDate", header: "Created Date", width: "130px" },
-    { field: "createdBy", header: "CreatedBy", width: "130px" },
+    { field: "createdBy", header: "Created By", width: "130px" },
     { field: "updatedDate", header: "Updated Date", width: "130px" },
-    { field: "updatedBy", header: "UpdatedBy", width: "130px" }
+    { field: "updatedBy", header: "Updated By", width: "130px" }
 ]
   selectedColumns = this.headers;
   pageIndex: number = 0;

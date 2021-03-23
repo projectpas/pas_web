@@ -841,15 +841,15 @@
                                                 <i class="fa fa-history"></i>
                                             </a>
                                         </h6><br>
-                                        <p><span class="label"><b>PO Box <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.poBox}}</span></p>
+                                        <p><span class="label"><b>PO Box <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.poBox}}</span></p>
                                         <p><span class="label"><b>Bank Street Address line 1 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress1}}</span></p>
-                                        <p><span class="label"><b>Bank Street Address line 2 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress2}}</span></p>
+                                        <p><span class="label"><b>Bank Street Address line 2 <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.bankStreetaddress2}}</span></p>
                                         <p><span class="label"><b>City <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankCity}}</span></p>
                                         <p><span class="label"><b>State <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankProvince}}</span></p>
                                         <p><span class="label"><b>Country <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankcountry}}</span></p>
                                         <p><span class="label"><b>Postal Code <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankpostalCode}}</span></p>
                                     </div>
-                                    <div class="bg-block2">
+                                    <!-- <div class="bg-block2">
                                         <h3>Domestic Wire</h3>
                                         <br>
                                         <h6  *ngIf="!isDomesticWire"  class="history_crd col-Tec">  History
@@ -862,9 +862,9 @@
                                         <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBenficiaryBankName}}</span></p>
                                         <p><span class="label"><b>Bank Account Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBankAccountNumber}}</span></p>
                                         <p><span class="label"><b>ABA Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticABANumber}}</span></p>
-                                    </div>
+                                    </div> -->
                                     <div class="bg-block2">
-                                        <h3>International Wire</h3>
+                                        <h3>Wire Transfers</h3>
                                         <br>
                                         <h6  *ngIf="!isInternationalWire"  class="history_crd col-Tec">  History
                                             <a class="btn nobg" (click)="getAuditHistoryByIdbanking(contentHist,3)" matTooltipPosition="above" matTooltip="History">
@@ -872,10 +872,12 @@
                                             </a>
                                         </h6><br>
                                         <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankName}}</span></p>
-                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalIntermediateBank}}</span></p>
-                                        <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
+                                        <p><span class="label"><b>Bank Location 1 <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.bankLocation1}}</span></p>
+                                        <p><span class="label"><b>Bank Location 2 <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.bankLocation2}}</span></p>
+                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.internationalIntermediateBank}}</span></p>
+                                        <p><span class="label"><b>Beneficiary Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
                                         <p><span class="label"><b>Bank Account Number  <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankAccountNumber}}</span></p>
-                                        <p><span class="label"><b>SWIFT Code <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalSWIFTID}}</span></p>
+                                        <p><span class="label"><b>SWIFT Code / IBAN Code <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.internationalSWIFTID}}</span></p>
                                     </div>
                                     <div class="bg-block2">
                                         <h3>ACH</h3>
@@ -886,11 +888,11 @@
                                             </a>
                                         </h6><br>
                                         <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankName}}</span></p>
-                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achIntermediateBank}}</span></p>
-                                        <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBenficiaryBankName}}</span></p>
+                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.achIntermediateBank}}</span></p>
+                                        <p><span class="label"><b>Beneficiary Bank Name <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.achBenficiaryBankName}}</span></p>
                                         <p><span class="label"><b>Bank Account Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankAccountNumber}}</span></p>
                                         <p><span class="label"><b>ABA Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achABANumber}}</span></p>
-                                        <p><span class="label"><b>SWIFT Code <span class="clr-red">*</span>: </b></span><span class="value">{{lockboxing.achSWIFTID}}</span></p>
+                                        <p><span class="label"><b>SWIFT Code / IBAN Code  <span class="clr-red"></span>: </b></span><span class="value">{{lockboxing.achSWIFTID}}</span></p>
                                     </div>
                                     <!-- <div  class="modal" id="contentHist" role="dialog"  data-keyboard="false"> -->
                                         <!-- <div class="modal-dialog modal-xlg"> -->
@@ -922,32 +924,27 @@
                                                     </div> -->
                                                     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                                         <div class="tableFixHead">
-                                                            <table class="table table-bordered header-table-width" >
+                                                            <table class="table table-bordered header-table-width">
                                                             <thead>
                                                                 <tr>
-                                                                    <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
-                                                                    
+                                                                    <th *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='intermediateBankName' && audit.field!='beneficiaryBankName' && audit.field!='intermediaryBank' && audit.field!='swiftCode' &&  audit.field!='poBox' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>                                                                    
                                                                 </tr>
                                                             </thead>
                                                             <tbody *ngIf="auditHistoryList.length> 0">
-                                                                <tr *ngFor="let audit of auditHistoryList; let i = index;">
-                                    
+                                                                <tr *ngFor="let audit of auditHistoryList; let i = index;">                                    
                                                                     <td *ngFor="let auditHead of auditHistoryHeaders; let j = index;" >
                                                                         <span [ngStyle]="{'color':  getColorCodeForHistoryBanking(i, auditHead.field, audit[auditHead.field])  ? 'black' : 'red'  }">
                                                                      <span *ngIf="auditHead.field=='createdDate' || auditHead.field=='updatedDate'">  {{audit[auditHead.field] | date: 'MM/dd/yyyy h:mm a'}}</span>  
                                                                      <span *ngIf="auditHead.field!='createdDate' && auditHead.field!='updatedDate'">  {{audit[auditHead.field] }}</span></span>
                                                                     </td>
-                                                       </tr>
+                                                                </tr>
                                                             </tbody>
-                                    
-                                    
                                                         </table>
                                                         </div>
                                                         <ng-template #noDatavailable>
                                                             <div class="text-center">
                                                                 <h4 class="no-history-found-msg">No History Found </h4>
-                                                            </div>
-                                    
+                                                            </div>                                    
                                                         </ng-template>
                                                     </div>
                                                 </div>

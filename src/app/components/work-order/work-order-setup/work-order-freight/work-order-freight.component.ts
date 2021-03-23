@@ -43,7 +43,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     cols = [
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Weight' ,isRequired:false},
+        { field: 'weight', header: 'Weight' ,isRequired:false,width:"60px"},
         { field: 'uom', header: 'UOM',isRequired:false },
     ]
 
@@ -58,8 +58,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         { field: 'dimensionUOM', header: 'Dimension UOM',isRequired:false },
         { field: 'currency', header: 'Currency',isRequired:false },
         { field: 'amount', header: 'Amount',isRequired:true },
-        { field: 'memo', header: 'Memo',isRequired:false },
         { field: 'isDeleted', header: 'Is Deleted',isRequired:false },
+        { field: 'memo', header: 'Memo',isRequired:false },
         { field: 'createdDate', header: 'Created Date',isRequired:false },
         { field: 'createdBy', header: 'Created By',isRequired:false },
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
@@ -125,9 +125,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     originalList:any=[]
     ngOnChanges() {
-        console.log("gffsas",this.workOrderFreightList[0])
         this.originalList=this.workOrderFreightList;
-        console.log("gffsas",this.originalList[0])
         if(this.originalList && this.originalList[0].workOrderQuoteDetailsId){
             this.disableFrt=true;
         }else{
@@ -161,7 +159,6 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 this.freightFlatBillingAmount = this.formateCurrency(this.buildMethodDetails['freightFlatBillingAmount']);
             }
         }
-        console.log("gffsas",this.workOrderFreightList)
     }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -241,7 +238,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         newFreight.isShowDelete=false;
         newFreight.amount = this.formateCurrency(newFreight.amount);
         const taskId = this.taskList.filter(x => x.description.toLowerCase() == 'shipping');
-        console.log("taskId",taskId)
+
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [newFreight];
 
@@ -249,7 +246,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     addNewRow() { 
         let newFreight = new Freight();
         const taskId = this.taskList.filter(x => x.description === 'shipping');
-        console.log("taskId",taskId)
+
         newFreight = { ...newFreight, taskId: taskId[0].taskId }
         this.freightForm = [...this.freightForm, newFreight];
     }
@@ -405,7 +402,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             return { ...f, headerMarkupId: Number(this.overAllMarkup), markupFixedPrice: this.costPlusType }
         })
         let result = {'data': sendData, 'taskSum': WorkOrderQuoteTask, 'freightFlatBillingAmount': this.formateCurrency(this.freightFlatBillingAmount), 'FreightBuildMethod': this.costPlusType}
-      console.log("emitzz")
+
         this.saveFreightListForWO.emit(result);
         this.disableFrt=true;
     }
@@ -581,7 +578,6 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     historyData: any = [];
     getAuditHistoryById(rowData) {
-        console.log("roe",rowData)
         if(this.isQuote){
   if(rowData.workOrderQuoteFreightId){
     this.workOrderService.getquoteFreightsHistory(rowData.workOrderQuoteFreightId).subscribe(res => {

@@ -710,7 +710,8 @@
                         <input type="checkbox" disabled [checked]="sourceViewforShipping.isActive === true"
                          />
                     </span></p>
-                    <p><span class="label"><b>Site Name<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforShipping.siteName}}</span></p>
+                    <p><span class="label"><b>Site Name<span class="clr-red"></span> : </b></span><span class="value">{{sourceViewforShipping.siteName}}</span></p>
+                    <p><span class="label"><b>Attention<span class="clr-red"></span> : </b></span><span class="value">{{sourceViewforShipping.attention}}</span></p>
                     <p><span class="label"><b>Address 1<span class="clr-red">*</span> :   </b></span><span class="value">{{sourceViewforShipping.address1}}</span></p>
                     <p><span class="label"><b>Address 2: </b></span><span class="value">{{sourceViewforShipping.address2}}</span></p>
                     <p style="display:none"><span class="label"><b>Address 3: </b></span><span class="value">{{sourceViewforShipping.address3}}</span></p>
@@ -778,9 +779,21 @@
                                 <!-- <input autocomplete="off" class="form-control" type="text" id="vssitename" name="siteName" [(ngModel)]="domesticShippingInfo.siteName" (ngModelChange)="enableSave()" required> -->
                                 <p-autoComplete class="autocomp-customer-cstm"
                                 [(ngModel)]="domesticShippingInfo.siteName" name="siteNameDomestic" field="label" [suggestions]="sitesNamesListDomestic" (completeMethod)="filterSiteNamesDomestic($event)" [size]="30"
-                                [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}" (onSelect)="onSiteNameSelectedDomestic()" (onKeyUp)=checkfirstNameExistDomestic($event.target.value) required (ngModelChange)="enableSave()">
+                                [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}" 
+                                (onSelect)="onSiteNameSelectedDomestic()" (onKeyUp)=checkfirstNameExistDomestic($event.target.value) 
+                                (ngModelChange)="enableSave()">
                                  </p-autoComplete>
                                <div *ngIf="showExistMsg" class="clr-red">Already Exists</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label>Attention<span class="clr-red"></span></label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="Attention11" 
+                                type="text" name="Attention111" [(ngModel)]="domesticShippingInfo.attention" 
+                                (ngModelChange)="enableSave()">
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -2214,7 +2227,8 @@
             <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
-                        <th>Site Name <span class="clr-red">*</span></th>
+                        <th>Site Name <span class="clr-red"></span></th>
+                        <th>Attention<span class="clr-red"></span></th>
                         <th>Address1 <span class="clr-red">*</span></th>
                         <th>Address2</th>
                         <th>City <span class="clr-red">*</span></th>
@@ -2232,6 +2246,7 @@
                 </thead>
                 <tr *ngFor="let audit of shippingauditHisory; let i = index;">
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">{{audit.siteName}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'attention', audit.attention)  ? 'black' : 'red'  }">{{audit.attention}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'address1', audit.address1)  ? 'black' : 'red'  }">{{audit.address1}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'address2', audit.address2)  ? 'black' : 'red'  }">{{audit.address2}}</td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'city', audit.city)  ? 'black' : 'red'  }">{{audit.city}}</td>
@@ -2244,9 +2259,8 @@
                               <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
                           </label>
                         </span>
-                      </td>
-                    
-                      <td class="text-center">
+                    </td>                    
+                    <td class="text-center">
                         <span class="value">
                           <label class="wauto">
                               <input type="checkbox" name="isPrimary" [checked]="audit.isPrimary== true" disabled>
@@ -2430,7 +2444,7 @@
         <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
-  </ng-template> 
+</ng-template> 
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
