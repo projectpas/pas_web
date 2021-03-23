@@ -53,6 +53,8 @@ export class EntityShippingComponent implements OnInit {
 
     domesticShippingHeaders = [
         { field: 'siteName', header: 'Site Name' },
+        { field: 'attention', header: 'Attention' },
+
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
 
@@ -149,7 +151,6 @@ export class EntityShippingComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
         if (this.isViewMode == false) {
             if (this.editMode) {
                 this.id = this.editGeneralInformationData.legalEntityId;
@@ -198,6 +199,13 @@ export class EntityShippingComponent implements OnInit {
             this.getAllSites('');
         }
     }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
+
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
             if (property == 'selectedlegalEntityTab') {
@@ -234,7 +242,7 @@ export class EntityShippingComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.shipViaDropdownList = res.map(x => {
                 return {
                     ...x,
@@ -243,22 +251,17 @@ export class EntityShippingComponent implements OnInit {
                 }
             });
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible=false;
         });
-
-
     }
 
     enableSave() {
-
         if (this.internationalShippingInfo.startDate != null || this.internationalShippingInfo.startDate != undefined) {
             this.mindate = this.internationalShippingInfo.startDate;
         }
-
         this.disableSave = false;
-
     }
+
     closeMyModel(type) {
         $(type).modal("hide");
         this.disableSave = true;
@@ -270,11 +273,9 @@ export class EntityShippingComponent implements OnInit {
 
     filterCountries(event) {
         this.countrycollection = this.countryListOriginal;
-
         this.countrycollection = [...this.countryListOriginal.filter(x => {
             return x.nice_name.toLowerCase().includes(event.query.toLowerCase())
         })]
-
     }
     // save Domestic Shipping 
     saveDomesticShipping() {
@@ -282,7 +283,7 @@ export class EntityShippingComponent implements OnInit {
             ...this.domesticShippingInfo,
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: 1,
+            masterCompanyId: this.currentUserMasterCompanyId,
             legalEntityId: this.id
         }
         // create shipping 
@@ -299,8 +300,7 @@ export class EntityShippingComponent implements OnInit {
                 );
                 this.geListByStatusForDomestic(this.statusForDomestic);
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         } else {
             // update shipping 
@@ -316,36 +316,28 @@ export class EntityShippingComponent implements OnInit {
                 );
                 this.geListByStatusForDomestic(this.statusForDomestic);
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
 
         $("#addShippingInfo").modal("hide");
         this.disableSave = true;
-
     }
-
-
 
     // View Details  data
     openShippinggView(rowData) {
         this.sourceViewforShipping = rowData;
     }
 
-
     patternMobilevalidationWithSpl(event: any) {
         const pattern = /[0-9\+\-()\ ]/;
-
         let inputChar = String.fromCharCode(event.charCode);
         if (event.keyCode != 8 && !pattern.test(inputChar)) {
             event.preventDefault();
         }
-
     }
+
     editisPrimary: boolean = false;
-
-
     // edit Domestic details data 
     openEditDomestic(rowData) {
         this.editisPrimary = rowData.isPrimary;
@@ -353,7 +345,6 @@ export class EntityShippingComponent implements OnInit {
         this.domesticShippingInfo = rowData;
         this.domesticShippingInfo = {
             ...rowData, stateOrProvince: rowData.state, countryId: rowData.countryid
-
         };
         this.legalEntityShippingAddressId = rowData.legalEntityShippingAddressId;
         if (this.isViewMode == false) {
@@ -361,11 +352,13 @@ export class EntityShippingComponent implements OnInit {
             this.getAllSites(this.domesticShippingInfo.siteName);
         }
     }
+
     addDomesticShipping() {
         this.editisPrimary = false;
         this.isEditDomestic = false;
         this.domesticShippingInfo = new legalEntityShippingModel();
     }
+
     addInternationalShipping() {
         this.editisPrimary2 = false;
         this.isEditInternational = false;
@@ -378,15 +371,13 @@ export class EntityShippingComponent implements OnInit {
             this.isDeleteMode = true;
             this.selectedRowForDelete = rowData;
             this.selectedRowForDelete.updatedBy = this.userName,
-                this.legalEntityShippingAddressId = rowData.legalEntityShippingAddressId
-
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
-        }
+            this.legalEntityShippingAddressId = rowData.legalEntityShippingAddressId
+            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });        }
         else {
             $('#deleteoopsShipping').modal('show');
         }
     }
+
     deleteItemAndCloseModel() {
         const obj = {
             isActive: false,
@@ -394,19 +385,16 @@ export class EntityShippingComponent implements OnInit {
             updatedBy: this.userName,
             legalEntityShippingAddressId: this.legalEntityShippingAddressId
         }
-
         if (this.legalEntityShippingAddressId > 0) {
-
             this.legalEntityService.updateStatusHipping(this.selectedRowForDelete).subscribe(
-                response => this.saveCompleted(this.sourcelegalEntity), err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
-                });
+            response => this.saveCompleted(this.sourcelegalEntity), err => {
+                this.isSpinnerVisible = false;
+            });
         }
         this.modal.close();
     }
-    private saveCompleted(user?: any) {
 
+    private saveCompleted(user?: any) {
         if (this.isDeleteMode == true) {
             this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
             this.isDeleteMode = false;
@@ -417,38 +405,36 @@ export class EntityShippingComponent implements OnInit {
         }
         this.geListByStatusForDomestic(this.statusForDomestic);
     }
-    private saveFailedHelper(error: any) {
 
+    private saveFailedHelper(error: any) {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
+
     deleteInternationalShipping(content, rowData) {
         if (!rowData.isPrimary) {
             this.isDeleteMode = true;
             this.selectedRowForDeleteInter = rowData;
             this.internationalShippingId = rowData.legalEntityInternationalShippingId
-
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
         }
         else {
             $('#deleteoopsShipping').modal('show');
         }
     }
-    deleteItemAndCloseModel1() {
 
+    deleteItemAndCloseModel1() {
         if (this.internationalShippingId > 0) {
 
             this.legalEntityService.deleteInternationalShipping(this.internationalShippingId, this.userName).subscribe(
                 response => this.saveCompleted1(this.sourcelegalEntity), err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
+                    this.isSpinnerVisible = false;
                 });
         }
         this.modal.close();
     }
-    private saveCompleted1(user?: any) {
 
+    private saveCompleted1(user?: any) {
         if (this.isDeleteMode == true) {
             this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
             this.isDeleteMode = false;
@@ -459,8 +445,8 @@ export class EntityShippingComponent implements OnInit {
         }
         this.geListByStatusForInternational(this.currentStatusForInternational);
     }
-    private saveFailedHelper1(error: any) {
 
+    private saveFailedHelper1(error: any) {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
@@ -471,28 +457,24 @@ export class EntityShippingComponent implements OnInit {
             this.selectedRowForDeleteVia = rowData;
             this.legalEntityShippingAddressId = rowData.legalEntityShippingAddressId;
             this.legalEntityShippingId = rowData.legalEntityShippingId
-
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
         }
         else {
             $('#deleteoopsShipping').modal('show');
         }
     }
+
     deleteItemAndCloseModel2() {
-
         if (this.legalEntityShippingId > 0) {
-
             this.legalEntityService.deleteShipViaDetails(this.legalEntityShippingId, this.userName).subscribe(
-                response => this.saveCompleted2(this.sourcelegalEntity), err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
-                });
+            response => this.saveCompleted2(this.sourcelegalEntity), err => {
+                this.isSpinnerVisible = false;
+            });
         }
         this.modal.close();
     }
-    private saveCompleted2(user?: any) {
 
+    private saveCompleted2(user?: any) {
         if (this.isDeleteMode == true) {
             this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
             this.isDeleteMode = false;
@@ -503,40 +485,35 @@ export class EntityShippingComponent implements OnInit {
         }
         this.geListByStatusForDomesticShipVia(this.statusForDomesticVia);
     }
-    private saveFailedHelper2(error: any) {
 
+    private saveFailedHelper2(error: any) {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
 
     deleteInternationalShippingVia(content, rowData) {
-
         if (!rowData.isPrimary) {
             this.isDeleteMode = true;
             this.selectedRowForDeleteInterVia = rowData;
             this.shippingViaDetailsId = rowData.shippingViaDetailsId;
-
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
         }
         else {
             $('#deleteoopsShipping').modal('show');
         }
     }
+
     deleteItemAndCloseModel3() {
-
         if (this.shippingViaDetailsId > 0) {
-
             this.legalEntityService.deleteInternationalShipViaId(this.shippingViaDetailsId, this.userName).subscribe(
                 response => this.saveCompleted3(this.sourcelegalEntity), err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
-                });
+                    this.isSpinnerVisible = false;
+            });
         }
         this.modal.close();
     }
-    private saveCompleted3(user?: any) {
 
+    private saveCompleted3(user?: any) {
         if (this.isDeleteMode == true) {
             this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
             this.isDeleteMode = false;
@@ -547,8 +524,8 @@ export class EntityShippingComponent implements OnInit {
         }
         this.geListByStatusForinternationalShipVia(this.statusForinternationalVia);
     }
-    private saveFailedHelper3(error: any) {
 
+    private saveFailedHelper3(error: any) {
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
@@ -556,20 +533,20 @@ export class EntityShippingComponent implements OnInit {
     dismissModel() {
         this.modal.close();
     }
-    openTag1(content) {
 
+    openTag1(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     saveInternationalShipping() {
         const data = {
             ...this.internationalShippingInfo,
             createdBy: this.userName,
             updatedBy: this.userName,
-            masterCompanyId: 1,
+            masterCompanyId: this.currentUserMasterCompanyId,
             isActive: true,
             isDeleted: false,
             legalEntityId: this.id
-
         }
         if (!this.isEditInternational) {
             // save International SDhipping 
@@ -582,8 +559,7 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         } else {
             // update international 
@@ -597,25 +573,20 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
-
-        }
+        }        
         $("#addInternationalShippingInfo").modal("hide");
         this.disableSave = true;
     }
 
-
     openTag2(content) {
-
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
-
 
     internationalShippingPagination(event: { first: any; rows: number }) {
         const pageIndex = parseInt(event.first) / event.rows;
@@ -624,7 +595,6 @@ export class EntityShippingComponent implements OnInit {
     }
 
     async updateActiveorInActiveForIS(rowData) {
-
         rowData.status = rowData.isActive == true ? 'Active' : 'InActive';
         await this.legalEntityService.updateStatusForInternationalShippings(rowData.legalEntityInternationalShippingId, rowData.status, this.userName).subscribe(res => {
 
@@ -635,33 +605,29 @@ export class EntityShippingComponent implements OnInit {
                 MessageSeverity.success
             );
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         })
     }
+
     async updateActiveorInActiveShipViaForIS(rowData) {
         rowData.status = rowData.isActive == true ? 'Active' : 'InActive';
-
         await this.legalEntityService.updateStatusForInternationalShippingsVia(rowData.shippingViaDetailsId, rowData.status, this.userName).subscribe(res => {
             this.geListByStatusForinternationalShipVia(this.statusForinternationalVia);
-
             this.alertService.showMessage(
                 'Success',
                 `Sucessfully Updated  International Shipping Via Status`,
                 MessageSeverity.success
             );
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         })
     }
-    openTag3(content) {
 
+    openTag3(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    async updateActiveorInActiveForS(rowData) {
 
-        // alert(JSON.stringify(rowData.isActive));
+    async updateActiveorInActiveForS(rowData) {        
         rowData.status = rowData.isActive == true ? 'Active' : 'InActive';
         await this.legalEntityService.Shippingdetailsviastatus(rowData.legalEntityShippingId, rowData.status, this.userName).subscribe(res => {
             this.geListByStatusForDomesticShipVia(this.statusForDomesticVia);
@@ -671,19 +637,22 @@ export class EntityShippingComponent implements OnInit {
                 MessageSeverity.success
             );
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         })
     }
+
     openInterShippingView(rowData) {
         this.sourceViewforInterShipping = rowData;
     }
+
     openInterShippingViewVia(rowData) {
         this.sourceViewforInterShippingVia = rowData;
     }
+
     openDomesticShippingViewVia(rowData) {
         this.sourceViewforDomesticShippingVia = rowData;
     }
+
     viewSelectedRowdbl(data) {
         this.sourceViewforShipping = data;
         $('#viewShipping').modal('show');
@@ -692,23 +661,22 @@ export class EntityShippingComponent implements OnInit {
     viewInterShipping(data) {
         this.sourceViewforInterShipping = data;
         $('#viewInter').modal('show');
-
     }
 
     toggledbldisplay(data) {
         this.sourceViewforDomesticShippingVia = data;
         $('#viewDomesticVia').modal('show');
-
     }
+
     toggledbldisplayShipVia(data) {
         this.sourceViewforInterShippingVia = data;
         $('#viewInterVia').modal('show');
-
     }
-    openTag4(content) {
 
+    openTag4(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
+
     editisPrimary2: boolean = false;
     getInternationalShippingById(rowData) {
         this.legalEntityService.getInternationalShippingById(rowData.legalEntityInternationalShippingId).subscribe(res => {
@@ -724,10 +692,10 @@ export class EntityShippingComponent implements OnInit {
             };
             this.CountryData('');
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         })
     }
+
     selectedInternationalShipForShipVia(rowData) {
         this.selectedShipViaInternational = rowData;
         this.editisPrimary4 = false;
@@ -736,6 +704,7 @@ export class EntityShippingComponent implements OnInit {
         this.currentDeletedstatusinternationalShipVia = false;
         this.geListByStatusForinternationalShipVia(this.statusForinternationalVia);
     }
+
     selectedDomesticForShipVia(rowData) {
         this.editisPrimary3 = false;
         this.selectedShipViaDomestic = rowData;
@@ -743,27 +712,27 @@ export class EntityShippingComponent implements OnInit {
         this.currentDeletedstatusShipVia = false;
         this.statusForDomesticVia = 'Active';
         this.geListByStatusForDomesticShipVia(this.currentStatusForDomesticShipVia);
-
     }
+
     closeInternationalModal() {
         $("#viewInter").modal("hide");
         this.isEditInternational = false;
         this.internationalShippingInfo = new legalEntityInternationalShippingModel()
     }
+
     closeDomesticSipViaView() {
         $("#viewDomesticVia").modal("hide");
     }
+
     async saveshipViaInternational() {
         const data = {
             ...this.shipViaInternational,
             legalEntityInternationalShippingId: this.selectedShipViaInternational.legalEntityInternationalShippingId,
             legalEntityId: this.id,
-            masterCompanyId: 1,
+            masterCompanyId: this.currentUserMasterCompanyId,
             createdBy: this.userName,
             updatedBy: this.userName,
-
         }
-
         if (!this.isEditInternationalShipVia) {
             await this.legalEntityService.postInternationalShipVia(data).subscribe(res => {
                 this.geListByStatusForinternationalShipVia(this.statusForinternationalVia);
@@ -775,15 +744,13 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         } else {
             this.disableShipVia = true;
             await this.legalEntityService.updateShipViaInternational(data).subscribe(res => {
                 this.geListByStatusForinternationalShipVia(this.statusForinternationalVia);
                 this.isEditInternationalShipVia = false;
-
                 this.shipViaInternational = new legalEntityInternationalShipVia()
                 this.alertService.showMessage(
                     'Success',
@@ -791,12 +758,10 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
         this.editisPrimary4 = false;
-
     }
 
     async saveshipViaDomestic() {
@@ -804,10 +769,9 @@ export class EntityShippingComponent implements OnInit {
             ...this.shipViaDomestic,
             legalEntityShippingAddressId: this.selectedShipViaDomestic.legalEntityShippingAddressId,
             legalEntityId: this.id,
-            masterCompanyId: 1,
+            masterCompanyId: this.currentUserMasterCompanyId,
             createdBy: this.userName,
             updatedBy: this.userName,
-
         }
         if (!this.isEditDomesticShipVia) {
             await this.legalEntityService.newShippingViaAdd(data).subscribe(res => {
@@ -820,8 +784,7 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         } else {
             this.disableShipVia = true;
@@ -836,77 +799,73 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
         this.editisPrimary3 = false;
     }
 
-
-
-
-
     internationalShippingViaPagination(event: { first: any; rows: number }) {
-
         const pageIndex = parseInt(event.first) / event.rows;
         this.pageIndexForInternationalShipVia = pageIndex;
         this.pageSizeForInternationalShipVia = this.pageSizeForInternationalShipVia;
-
     }
+
     editisPrimary4: boolean = false;
     editInternationalShipVia(rowData) {
         this.editisPrimary4 = rowData.isPrimary;
         this.disableShipVia = true;
         this.isEditInternationalShipVia = true;
         this.shipViaInternational = { ...rowData, shippingAccountInfo: rowData.shipAccountinfo, shipViaId: rowData.shipviaId };
-
-
-
     }
-    editisPrimary3: boolean = false;
 
+    editisPrimary3: boolean = false;
     editDomesticShipVia(rowData) {
         this.editisPrimary3 = rowData.isPrimary;
         this.disableShipVia = true;
         this.isEditDomesticShipVia = true;
         this.shipViaDomestic = { ...rowData, shippingAccountInfo: rowData.shipAccountinfo, shipViaId: rowData.shipviaId };
-
-
     }
+
     closeInternationalModalView() {
         $("#viewInterViaView").modal("hide");
     }
+
     closeInternationalModalShiVia() {
         $("#addInternationShipVia").modal("hide");
     }
+
     closIntSHipVia() {
         $("#interSipvia").modal("hide");
     }
+
     resetShipViaInternational() {
         $("#addInternationShipVia").modal("hide");
         this.shipViaInternational = new legalEntityInternationalShipVia();
     }
+
     resetShipViaDomestic() {
         this.shipViaDomestic = new legalEntityInternationalShipVia();
         $("#addDomesticShipVia").modal("hide");
     }
+
     closeDomesticViaModel() {
         $("#addDomesticShipVia").modal("hide");
     }
+
     closeDomesticView() {
         $("#viewShipping").modal("hide");
     }
+
     nextClick() {
         this.tab.emit('Documents');
     }
+
     backClick() {
         this.tab.emit('Billing');
     }
 
-
     async updateActiveorInActiveForShipping(rowData) {
-
         rowData.status = rowData.isActive == true ? 'Active' : 'InActive';
         await this.legalEntityService.updateStatusForShippingDetails(rowData.legalEntityShippingAddressId, rowData.status, this.userName).subscribe(res => {
             this.geListByStatusForDomestic(this.statusForDomestic);
@@ -916,25 +875,20 @@ export class EntityShippingComponent implements OnInit {
                 MessageSeverity.success
             );
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         })
     }
-    openShipaddressHistory(content, row) {
 
+    openShipaddressHistory(content, row) {
         this.legalEntityService.getlegalEntityShippingHistory(this.id, row.legalEntityShippingAddressId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content), err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
+                this.isSpinnerVisible = false;
+        });
     }
+
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
-
-
         this.shippingauditHisory = auditHistory;
-
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -950,17 +904,15 @@ export class EntityShippingComponent implements OnInit {
     }
 
     openInterShippingHistory(content, row) {
-
         this.legalEntityService.getlegalEntityInterShippingHistory(this.id, row.legalEntityInternationalShippingId).subscribe(
             results => this.onInterAuditHistoryLoadSuccessful(results, content), err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
+                this.isSpinnerVisible = false;
+        });
     }
+
     private onInterAuditHistoryLoadSuccessful(auditHistory, content) {
         this.interShippingauditHisory = auditHistory;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-
     }
 
     getColorCodeForInterHistory(i, field, value) {
@@ -976,20 +928,15 @@ export class EntityShippingComponent implements OnInit {
     }
 
     openShipViaHistory(content, rowData) {
-
         this.legalEntityService.getlegalEntityShipViaHistory(this.id, rowData.legalEntityShippingAddressId, rowData.legalEntityShippingId).subscribe(
             results => this.onAuditShipViaHistoryLoadSuccessful(results, content), err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
+                this.isSpinnerVisible = false;
+        });
     }
+
     private onAuditShipViaHistoryLoadSuccessful(auditHistory, content) {
-
-
         this.shippingViaauditHisory = auditHistory;
-
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-
     }
 
     getColorCodeForShipViaHistory(i, field, value) {
@@ -1007,17 +954,13 @@ export class EntityShippingComponent implements OnInit {
     openInterShipViaHistory(content, rowData) {
         this.legalEntityService.getlegalEntityInterShipViaHistory(this.id, rowData.legalEntityInternationalShippingId, rowData.shippingViaDetailsId).subscribe(
             results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content), err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
+                this.isSpinnerVisible = false;
+        });
     }
+
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
-
-
         this.intershippingViaauditHisory = auditHistory;
-
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-
     }
 
     getColorCodeForInterShipViaHistory(i, field, value) {
@@ -1031,22 +974,23 @@ export class EntityShippingComponent implements OnInit {
             }
         }
     }
+
     sampleExcelDownload() {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=legalEntityShippingAddress&fileName=legalEntityShippingAddress.xlsx`;
         window.location.assign(url);
     }
+
     customShippingExcelUpload(event) {
         const file = event.target.files;
-
         if (file.length > 0) {
             this.formData.append('file', file[0])
-            this.formData.append('masterCompanyId', this.authService.currentUser.masterCompanyId.toString())
+            this.formData.append('masterCompanyId', this.currentUserMasterCompanyId.toString())
             this.formData.append('createdBy', this.userName);
             this.formData.append('updatedBy', this.userName);
             this.formData.append('isActive', 'true');
             this.formData.append('isDeleted', 'false');
             const data = {
-                'masterCompanyId': this.authService.currentUser.masterCompanyId,
+                'masterCompanyId': this.currentUserMasterCompanyId,
                 'createdBy': this.userName,
                 'updatedBy': this.userName,
                 'isActive': true,
@@ -1062,8 +1006,7 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
     }
@@ -1072,18 +1015,18 @@ export class EntityShippingComponent implements OnInit {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=LegalEntityInternationalShippingAddress&fileName=LegalEntityInternationalShippingAddress.xlsx`;
         window.location.assign(url);
     }
+
     customInternationalShippingExcelUpload(event) {
         const file = event.target.files;
-
         if (file.length > 0) {
             this.formData.append('file', file[0])
-            this.formData.append('masterCompanyId', this.authService.currentUser.masterCompanyId.toString())
+            this.formData.append('masterCompanyId', this.currentUserMasterCompanyId.toString())
             this.formData.append('createdBy', this.userName);
             this.formData.append('updatedBy', this.userName);
             this.formData.append('isActive', 'true');
             this.formData.append('isDeleted', 'false');
             const data = {
-                'masterCompanyId': this.authService.currentUser.masterCompanyId,
+                'masterCompanyId': this.currentUserMasterCompanyId,
                 'createdBy': this.userName,
                 'updatedBy': this.userName,
                 'isActive': true,
@@ -1099,15 +1042,16 @@ export class EntityShippingComponent implements OnInit {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
     }
+
     setEditArray: any = [];
     onFilterCountry(value) {
         this.CountryData(value);
     }
+
     CountryData(value) {
         if (this.isViewMode == false) {
             this.setEditArray = [];
@@ -1119,8 +1063,8 @@ export class EntityShippingComponent implements OnInit {
                 this.setEditArray.push(0);
             }
             const strText = value ? value : '';
-            this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
-                // this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            //this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.countryListOriginal = res.map(x => {
                     return {
                         ...x,
@@ -1129,8 +1073,7 @@ export class EntityShippingComponent implements OnInit {
                     }
                 });;
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             });
         }
     }
@@ -1147,7 +1090,6 @@ export class EntityShippingComponent implements OnInit {
     isSpinnerVisible: boolean = false;
     loadDataForDomestic(event) {
         this.lazyLoadEventData = event;
-
         const pageIndex = parseInt(event.first) / event.rows;;
         this.pageIndex = pageIndex;
         this.pageSize = event.rows;
@@ -1167,9 +1109,9 @@ export class EntityShippingComponent implements OnInit {
         }
         // }
     }
+
     first: any = 0;
     geListByStatusForDomestic(status) {
-
         const pageIndex = 0;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput ? this.lazyLoadEventDataInput.rows : 10;
@@ -1182,6 +1124,7 @@ export class EntityShippingComponent implements OnInit {
         PagingData.page = 1;
         this.getListForDomestic(PagingData);
     }
+
     globalSearchForDomestic(value) {
         this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
         this.pageSize = this.lazyLoadEventDataInput.rows;
@@ -1192,8 +1135,8 @@ export class EntityShippingComponent implements OnInit {
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForDomestic };
         this.getListForDomestic(this.lazyLoadEventDataInput);
     }
-    getDeleteListByStatusForDomestic(value) {
 
+    getDeleteListByStatusForDomestic(value) {
         this.currentDeletedstatus = true;
         const pageIndex = 0;
         this.pageIndex = pageIndex;
@@ -1202,18 +1145,15 @@ export class EntityShippingComponent implements OnInit {
         if (value == true) {
             this.currentDeletedstatus = true;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForDomestic };
-
             this.getListForDomestic(this.lazyLoadEventDataInput);
         } else {
             this.currentDeletedstatus = false;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForDomestic };
-
             this.getListForDomestic(this.lazyLoadEventDataInput);
         }
     }
 
     getListForDomestic(data) {
-
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters), legalEntityId: this.id }
@@ -1239,16 +1179,12 @@ export class EntityShippingComponent implements OnInit {
                     this.totalPages = 0;
                 }
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
     }
 
     restorerecord: any = {}
-
-
-
     closeHistoryModal() {
         $("#legalEntityHistory").modal("hide");
     }
@@ -1264,7 +1200,6 @@ export class EntityShippingComponent implements OnInit {
             } else if (field == 'updatedDate') {
                 this.dateObject = { 'updatedDate': date }
             }
-
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForDomestic(PagingData);
@@ -1280,21 +1215,12 @@ export class EntityShippingComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForDomestic(PagingData);
         }
-
     }
-
-
-
-
-
 
     //International shipping
 
-
-
     statusForInternational: string = 'Active';
     currentStatusForInternational: string = 'Active';
-
     currentDeletedstatusForInternational: boolean = false;
     loadDataForInternational(event) {
         this.lazyLoadEventData = event;
@@ -1329,6 +1255,7 @@ export class EntityShippingComponent implements OnInit {
         PagingData.page = 1;
         this.getListForInternational(PagingData);
     }
+
     globalSearchForInternational(value) {
         this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
         this.pageSize = this.lazyLoadEventDataInput.rows;
@@ -1339,6 +1266,7 @@ export class EntityShippingComponent implements OnInit {
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForInternational };
         this.getListForInternational(this.lazyLoadEventDataInput);
     }
+
     getDeleteListByStatusForInternational(value) {
         this.currentDeletedstatusForInternational = true;
         const pageIndex = 0;
@@ -1348,12 +1276,10 @@ export class EntityShippingComponent implements OnInit {
         if (value == true) {
             this.currentDeletedstatusForInternational = true;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForInternational };
-
             this.getListForInternational(this.lazyLoadEventDataInput);
         } else {
             this.currentDeletedstatusForInternational = false;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForInternational };
-
             this.getListForInternational(this.lazyLoadEventDataInput);
         }
     }
@@ -1363,8 +1289,8 @@ export class EntityShippingComponent implements OnInit {
         k = event.charCode;
         return ((k >= 48 && k <= 57));
     }
-    getListForInternational(data) {
 
+    getListForInternational(data) {
         const isdelete = this.currentDeletedstatusForInternational ? true : false;
         data.filters.isDeleted = isdelete
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters), legalEntityId: this.id }
@@ -1391,14 +1317,10 @@ export class EntityShippingComponent implements OnInit {
                     this.totalPages = 0;
                 }
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
     }
-
-
-
 
     dateFilterForTableForInternational(date, field) {
         this.dateObject = {}
@@ -1413,7 +1335,6 @@ export class EntityShippingComponent implements OnInit {
             } else if (field == 'expirationDate') {
                 this.dateObject = { 'expirationDate': date }
             }
-
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForInternational(PagingData);
@@ -1435,14 +1356,9 @@ export class EntityShippingComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForInternational(PagingData);
         }
-
     }
 
-
-
     //Domestic shipping  Via 
-
-
     loadDataForDomesticShipVia(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;;
@@ -1455,7 +1371,6 @@ export class EntityShippingComponent implements OnInit {
             ...this.lazyLoadEventDataInput.filters,
             status: this.statusForDomestic ? this.statusForDomestic : 'Active',
         }
-
         //  if(this.isViewMode==false){
         if (this.filterText == '') {
             this.getListForDomesticShipVia(this.lazyLoadEventDataInput);
@@ -1464,6 +1379,7 @@ export class EntityShippingComponent implements OnInit {
         }
         //  }
     }
+
     currentStatusForDomesticShipVia: any = 'Active';
     statusForDomesticVia: string = 'Active';
     currentDeletedstatusShipVia: boolean = false;
@@ -1481,6 +1397,7 @@ export class EntityShippingComponent implements OnInit {
         PagingData.page = 1;
         this.getListForDomesticShipVia(PagingData);
     }
+
     globalSearchForDomesticShipVia(value) {
         this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
         this.pageSize = this.lazyLoadEventDataInput.rows;
@@ -1491,8 +1408,8 @@ export class EntityShippingComponent implements OnInit {
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForDomesticVia };
         this.getListForDomesticShipVia(this.lazyLoadEventDataInput);
     }
-    getDeleteListByStatusForDomesticShipVia(value) {
 
+    getDeleteListByStatusForDomesticShipVia(value) {
         this.currentDeletedstatusShipVia = true;
         const pageIndex = 0;
         this.pageIndex = pageIndex;
@@ -1501,19 +1418,17 @@ export class EntityShippingComponent implements OnInit {
         if (value == true) {
             this.currentDeletedstatusShipVia = true;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForDomesticVia };
-
             this.getListForDomesticShipVia(this.lazyLoadEventDataInput);
         } else {
             this.currentDeletedstatusShipVia = false;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForDomesticVia };
-
             this.getListForDomesticShipVia(this.lazyLoadEventDataInput);
         }
     }
+
     isSpinnerVisibleDomesticShivia: boolean = false;
     totalRecordsForDomesticShipVia: any;
     getListForDomesticShipVia(data) {
-
         const isdelete = this.currentDeletedstatusShipVia ? true : false;
         data.filters.isDeleted = isdelete
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters), legalEntityShippingAddressId: this.selectedShipViaDomestic.legalEntityShippingAddressId }
@@ -1539,8 +1454,7 @@ export class EntityShippingComponent implements OnInit {
                 }
             }, err => {
                 this.isSpinnerVisibleDomesticShivia = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
     }
@@ -1554,7 +1468,6 @@ export class EntityShippingComponent implements OnInit {
             } else if (field == 'updatedDate') {
                 this.dateObject = { 'updatedDate': date }
             }
-
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForDomesticShipVia(PagingData);
@@ -1570,8 +1483,6 @@ export class EntityShippingComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForDomesticShipVia(PagingData);
         }
-
-
     }
     //International  shipping  Via 
 
@@ -1594,6 +1505,7 @@ export class EntityShippingComponent implements OnInit {
             this.globalSearchForinternationalShipVia(this.filterText);
         }
     }
+
     currentStatusForinternationalShipVia: any = 'Active';
     statusForinternationalVia: string = 'Active';
     currentDeletedstatusinternationalShipVia: boolean = false;
@@ -1616,8 +1528,8 @@ export class EntityShippingComponent implements OnInit {
         PagingData.page = 1;
         this.getListForinternationalShipVia(PagingData);
     }
-    globalSearchForinternationalShipVia(value) {
 
+    globalSearchForinternationalShipVia(value) {
         this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = this.pageIndex;
@@ -1626,13 +1538,9 @@ export class EntityShippingComponent implements OnInit {
         this.filterText = value;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForinternationalVia };
         this.getListForinternationalShipVia(this.lazyLoadEventDataInput);
-
-
-
-
     }
+    
     getDeleteListByStatusForinternationalShipVia(value) {
-
         this.currentDeletedstatusinternationalShipVia = true;
         const pageIndex = 0;
         this.pageIndex = pageIndex;
@@ -1641,21 +1549,19 @@ export class EntityShippingComponent implements OnInit {
         if (value == true) {
             this.currentDeletedstatusinternationalShipVia = true;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForinternationalVia };
-
             this.getListForinternationalShipVia(this.lazyLoadEventDataInput);
         } else {
             this.currentDeletedstatusinternationalShipVia = false;
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForinternationalVia };
-
             this.getListForinternationalShipVia(this.lazyLoadEventDataInput);
         }
     }
+
     isSpinnerVisibleInernShipVia: any = false;
     totalRecordsForInterShipVia: any;
     getListForinternationalShipVia(data) {
         const isdelete = this.currentDeletedstatusinternationalShipVia ? this.currentDeletedstatusinternationalShipVia : false;
-        data.filters.isDeleted = isdelete;
-        // debugger;
+        data.filters.isDeleted = isdelete;     
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters), legalEntityInternationalShippingId: this.selectedShipViaInternational.legalEntityInternationalShippingId }
         if (this.selectedShipViaInternational && this.selectedShipViaInternational.legalEntityInternationalShippingId != undefined) {
             this.isSpinnerVisibleInernShipVia = true;
@@ -1679,8 +1585,7 @@ export class EntityShippingComponent implements OnInit {
                 }
             }, err => {
                 this.isSpinnerVisibleInernShipVia = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             })
         }
     }
@@ -1694,7 +1599,6 @@ export class EntityShippingComponent implements OnInit {
             } else if (field == 'updatedDate') {
                 this.dateObject = { 'updatedDate': date }
             }
-
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForinternationalShipVia(PagingData);
@@ -1710,14 +1614,11 @@ export class EntityShippingComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getListForinternationalShipVia(PagingData);
         }
-
     }
-
 
     tableName: any;
     tableColumnId: any;
     restoreIdForGet;
-
     restoreRecord() {
         if (this.restoreTypeId == 1) {
             this.tableName = "LegalEntityShippingAddress";
@@ -1745,13 +1646,10 @@ export class EntityShippingComponent implements OnInit {
                 } else if (this.restoreTypeId == 4) {
                     this.getDeleteListByStatusForinternationalShipVia(true);
                 }
-
-
                 this.modal.close();
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             });
         } else {
             this.legalEntityService.restoreDomesticShippingRecord(this.restoreIdForGet, this.userName).subscribe(res => {
@@ -1759,27 +1657,21 @@ export class EntityShippingComponent implements OnInit {
                 this.modal.close();
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;
             });
         }
     }
     onChangeCertDefaultCost() {
         this.internationalShippingInfo.amount = this.internationalShippingInfo.amount ? formatNumberAsGlobalSettingsModule(this.internationalShippingInfo.amount, 2) : '0.00';
     }
+
     restoreTypeId: any;
     restore(content, rowData, type) {
         this.restoreTypeId = type;
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-
-    }
-
-
+    
     filterSiteNamesDomestic(event) {
         this.sitesNamesListDomestic = this.sitesOriginalDomestic ? this.sitesOriginalDomestic : [];
         if (event.query != undefined && event.query != "") {
@@ -1811,35 +1703,29 @@ export class EntityShippingComponent implements OnInit {
                                 this.domesticShippingInfo.siteName = element
                             }
                         });
-
                     }
 
-
                 }, err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
+                    this.isSpinnerVisible = false;
                 });
             }
         }
     }
 
-
     showExistMsg: any = false;
     onSiteNameSelectedDomestic() {
         this.showExistMsg = true;
     }
-    checkfirstNameExistDomestic(event) {
 
+    checkfirstNameExistDomestic(event) {
         if (this.domesticShippingInfo.siteName == '') {
             this.showExistMsg = false;
         }
-
         if (event) {
             if (event == "") {
                 this.showExistMsg = false;
             }
         }
-
         if (event != "") {
             this.sitesNamesListDomestic.forEach(element => {
                 if (element.label == event) {
@@ -1850,12 +1736,13 @@ export class EntityShippingComponent implements OnInit {
             });
         }
     }
+
     disableShipVia: boolean = false;
     enableSave2() {
         this.disableShipVia = false;
     }
-    parsedText(text) {
 
+    parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
                 '<!doctype html><body>' + text,
@@ -1870,7 +1757,6 @@ export class EntityShippingComponent implements OnInit {
         this.textDomesticMemo = '';
         this.disableShipVia = false;
         $("#textarea-popup1").modal("hide");
-
     }
 
     onSaveInternationalMemo() {
@@ -1879,14 +1765,15 @@ export class EntityShippingComponent implements OnInit {
         $("#textarea-popup2").modal("hide");
         this.disableShipVia = false;
     }
+
     onAddDomesticMemo() {
         this.textDomesticMemo = this.shipViaDomestic.memo;
         this.disableEditor = true;
     }
+
     onAddInternationalmemo() {
         this.textInternationalMemo = this.shipViaInternational.memo;
         this.disableEditor = true;
-
     }
 
     disableEditor: any = true;

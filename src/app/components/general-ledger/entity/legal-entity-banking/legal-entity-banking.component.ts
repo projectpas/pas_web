@@ -144,6 +144,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 	}
+
 	public allWorkFlows: any[] = [];
 	makeNestedObj(arr, parent) {
 		var out = []
@@ -166,7 +167,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = true;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -186,14 +186,13 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.locksave = false;
 		this.getEntityLockBoxDataById(this.id);
 	}
+
 	DomesticWire() {
 		this.GeneralInformationValue = false;
-
 		this.LockboxValue = false;
 		this.domesticWireValue = true;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = true;
@@ -201,15 +200,14 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.ACHStyle = false;
 		this.domesticvalid = false;
 		this.getEntityDomesticwireDataById(this.id);
-
 	}
+
 	InternationalWire() {
 		this.GeneralInformationValue = false;
 		this.LockboxValue = false;
 		this.domesticWireValue = false;
 		this.internationalValue = true;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -218,6 +216,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.internationalvalid = false;
 		this.getInternationalwireDataById(this.id);
 	}
+
 	ACH() {
 		this.isAchValueUpdate = true;
 		this.GeneralInformationValue = false;
@@ -225,7 +224,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = true;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -234,6 +232,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.achvalid = false;
 		this.getEntityACHDataById(this.id)
 	}
+
 	showDomesticWire() {
 		this.DomesticWire();
 	}
@@ -259,7 +258,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					bankpostalCode: res[0].postalCode,
 					bankcountryId: res[0].countryId
 				};				
-				//this.CountryData('')
+				this.CountryData(res[0].country)
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -290,6 +289,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.isSpinnerVisible = false;
 		})
 	}
+	
 	isLockBox: boolean = false;
 	isDomesticWire: boolean = false;
 	isInternationalWire: boolean = false;
@@ -384,8 +384,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	achval() {
 		if (this.sourceLegalEntity.achBankName != null && 			
 			this.sourceLegalEntity.achBankAccountNumber != null && 
-			this.sourceLegalEntity.achABANumber != null && 
-			this.sourceLegalEntity.achSWIFTID != null
+			this.sourceLegalEntity.achABANumber != null 
 		) {
 			this.achvalid = true;
 			this.isAchValueUpdate = false;
