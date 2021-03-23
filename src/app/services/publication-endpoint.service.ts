@@ -115,6 +115,7 @@ export class PublicationEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getpublicationEndpoint());
       });
   }
+
   getpublicationbyIdEndpoint<T>(id): Observable<T> {
     return this.http
       .get<T>(`${this._publicationGetByIdUrl}/${id}`, this.getRequestHeaders())
@@ -123,14 +124,12 @@ export class PublicationEndpointService extends EndpointFactory {
       });
   }
 
-
-
   getNewpublicationEndpoint<T>(file: any): Observable<T> {
     const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-    return this.http
-      .post<T>(`${this._publicationUrlNew}`, file)
-
-
+    return this.http.post<T>(`${this._publicationUrlNew}`, file)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getNewpublicationEndpoint(file));
+    });
     // return this.http
     //   .post<T>(
     //     this._publicationUrlNew,
@@ -629,6 +628,9 @@ export class PublicationEndpointService extends EndpointFactory {
 
   publicationCustomUpload(file) {
     return this.http.post(`${this.configurations.baseUrl}${this._excelUpload}`, file)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.publicationCustomUpload(file));
+    });
   }
 
   getPublicationAuditDetails<T>(Id: number): Observable<T> {
@@ -649,11 +651,20 @@ export class PublicationEndpointService extends EndpointFactory {
   }
   getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId, idList?) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftlistbypublicationidanditemmasterid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&idList=${idList !== undefined ? idList : '0'}`)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId, idList));
+    });
   }
   getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId, idList?) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftmodelslistbyitemmasteridandaircrafttypeid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&aircraftTypeId=${aircraftTypeId}&idList=${idList !== undefined ? idList : '0'}`)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId, idList));
+    });
   }
   getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId, idList?) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftmodelslistbyitemmasteridandaircraftmodelid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&aircraftTypeId=${aircraftTypeId}&aircraftModelId=${aircraftModelId}&idList=${idList !== undefined ? idList : '0'}`)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId,aircraftModelId, idList));
+    });
   }
 }

@@ -62,11 +62,11 @@ export class WorkOrderAssetsComponent implements OnInit {
         { header: "Notes", field: "notes" },
     ]
     headers = [
-        { field: 'name', header: 'Tool Name' },
-        { field: 'assetId', header: 'Tool Id' },
-        { field: 'description', header: 'Tool Description' },
-        { field: 'assetTypeName', header: 'Tool Class' },
-        { field: 'quantity', header: 'Qty' },
+        { field: 'name', header: 'Tool Name' ,width:"130px"},
+        { field: 'assetId', header: 'Tool Id',width:"130px" },
+        { field: 'description', header: 'Tool Description',width:"130px" },
+        { field: 'assetTypeName', header: 'Tool Class' ,width:"130px"},
+        { field: 'quantity', header: 'Qty',width:"60px" },
         { field: "createdDate", header: "Created Date", width: "130px" },
         { field: "createdBy", header: "CreatedBy", width: "130px" },
         { field: "updatedDate", header: "Updated Date", width: "130px" },
