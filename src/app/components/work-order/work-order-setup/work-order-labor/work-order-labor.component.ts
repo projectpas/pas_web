@@ -687,7 +687,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
               "LaborCost": this.getTotalLabourCost(this.laborForm.workOrderLaborList[0][task.description]),
               "LaborBilling": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
               "LaborRevenue": this.getTotalBillingAmount(this.laborForm.workOrderLaborList[0][task.description]),
-              "masterCompanyId": task.masterCompany.masterCompanyId,
+              "masterCompanyId": this.authService.currentUser.masterCompanyId,
               "CreatedBy": "admin",
               "UpdatedBy": "admin",
               "CreatedDate": new Date().toDateString(),
@@ -696,7 +696,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
               "isDeleted": false
             }
             WorkOrderQuoteTask.push(data)
-            task.masterCompany.masterCompanyId
+            this.authService.currentUser.masterCompanyId
           } else {
             const data = {
               "WorkOrderQuoteTaskId": 0,
