@@ -219,7 +219,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.publicationDropdown = res;
 if(this.publicationDropdown && this.publicationDropdown.length==1){
     // this.onPublicationChange(event, this.workFlow.publication[0], 0);
-    this.workFlow.publication[0].publicationId=this.publicationDropdown[0].publicationRecordId
+    this.workFlow.publication[0].publicationId=this.publicationDropdown?this.publicationDropdown[0].publicationRecordId: '';
     this.loadPublicationById(this.workFlow.publication[0], true);
     const pubData = this.publicationDropdown;
     for (var i = 0; i < pubData.length; i++) {

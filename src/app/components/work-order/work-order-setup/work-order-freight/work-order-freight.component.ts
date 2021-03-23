@@ -43,7 +43,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     cols = [
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Weight' ,isRequired:false},
+        { field: 'weight', header: 'Weight' ,isRequired:false,width:"60px"},
         { field: 'uom', header: 'UOM',isRequired:false },
     ]
 

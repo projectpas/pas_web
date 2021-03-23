@@ -30,7 +30,7 @@ export class WorkOrderLabourAnalysisComponent implements OnInit, OnChanges {
         { field: 'partDescription', header: 'PN Description' },
         { field: 'action', header: 'Task' },
         { field: 'expertise', header: 'Tech' },
-        { field: 'hours', header: 'Hours' },
+        { field: 'hours', header: 'Hours',width:"60px" },
         { field: 'customer', header: 'Customer' },
         { field: 'workOrderNum', header: 'WO Num' },
         { field: 'stage', header: 'Stage' },

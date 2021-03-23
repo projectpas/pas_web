@@ -1036,7 +1036,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
 				{ header: 'Bank Account Number', field: 'accountNumber' },
 				{ header: 'ABA Number', field: 'aba' },
-				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },

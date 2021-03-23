@@ -207,22 +207,28 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             field: 'partsRevPercentage'
         }, {
             header: 'Labour Cost',
-            field: 'laborCost'
+            field: 'laborCost',
+            width:"60px",
         }, {
             header: 'Labour Revenue %',
-            field: 'laborRevPercentage'
+            field: 'laborRevPercentage',
+            width:"60px",
         }, {
             header: 'Overhead Cost',
-            field: 'overHeadCost'
+            field: 'overHeadCost',
+            width:"60px",
         }, {
             header: 'Overhead Cost %',
-            field: 'overHeadPercentage'
+            field: 'overHeadPercentage',
+            width:"60px",
         }, {
             header: 'Charges Cost',
-            field: 'chargesCost'
+            field: 'chargesCost',
+            width:"60px",
         }, {
             header: 'Freight Cost',
-            field: 'freightCost'
+            field: 'freightCost',
+            width:"60px",
         }, 
         // {
         //     header: 'Exclusion Cost',
@@ -230,19 +236,24 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         // },
          {
             header: 'Direct Cost',
-            field: 'directCost'
+            field: 'directCost',
+            width:"60px",
         }, {
             header: 'Direct Cost %',
-            field: 'directCostPercentage'
+            field: 'directCostPercentage',
+            width:"60px",
         }, {
             header: 'Revenue',
-            field: 'revenue'
+            field: 'revenue',
+            width:"60px",
         }, {
             header: 'Margin',
-            field: 'margin'
+            field: 'margin',
+            width:"60px",
         }, {
             header: 'Margin %',
-            field: 'marginPercentage'
+            field: 'marginPercentage',
+            width:"60px",
         } 
     ]
     woQuoteAnalysisHeader = [

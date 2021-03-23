@@ -32,6 +32,7 @@ export class EntityBillingComponent {
     billingInfoList: any = [];
     billingInfoTableHeaders = [
         { field: 'siteName', header: 'Site Name' },
+        { field: 'attention', header: 'Attention' },
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
         { field: 'city', header: 'City' },
@@ -66,9 +67,7 @@ export class EntityBillingComponent {
     isViewMode: boolean = false;
     constructor(public legalEntityService: LegalEntityService, private datePipe: DatePipe, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal, private commonService: CommonService, public workFlowtService: LegalEntityService,) {
-
     }
-
 
     ngOnInit(): void {
         if (this.isViewMode == false) {
@@ -147,6 +146,11 @@ export class EntityBillingComponent {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
 
     saveBillingInformation() {
         const data = {
@@ -154,10 +158,9 @@ export class EntityBillingComponent {
             createdBy: this.userName,
             updatedBy: this.userName,
             // countryId: getValueFromObjectByKey('countries_id', this.billingInfo.countryId),
-            masterCompanyId: 1,
+            masterCompanyId: this.currentUserMasterCompanyId,
             isActive: true,
             legalEntityId: this.id
-
         }
         if (!this.isEditMode) {
             if (data.siteName && typeof data.siteName != 'string') {
@@ -173,8 +176,7 @@ export class EntityBillingComponent {
                 );
                 // this.getBillingDataById();
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             })
         } else {
             // update shipping 
@@ -190,8 +192,7 @@ export class EntityBillingComponent {
                 );
                 // this.getBillingDataById();
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             })
         }
         $("#addBillingInfo").modal("hide");
@@ -201,6 +202,7 @@ export class EntityBillingComponent {
     dismissModelView() {
         $("#view").modal("hide");
     }
+
     addBillingIfo() {
         this.editisPrimary = false;
         this.isEditMode = false;
@@ -211,6 +213,7 @@ export class EntityBillingComponent {
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
+
     pageIndexChange(event) {
         this.pageSize = event.rows;
     }
@@ -223,16 +226,20 @@ export class EntityBillingComponent {
             this.isSpinnerVisibleView = false;
         }, 1000);
     }
+
     toggledbldisplay(data) {
         this.viewData = data;
         $('#view').modal('show');
     }
+
     nextClick() {
         this.tab.emit('Shipping');
     }
+
     backClick() {
         this.tab.emit('Banking');
     }
+
     editisPrimary: boolean = false
     openEdit(rowData) {
         this.editisPrimary = rowData.isPrimary;
@@ -249,26 +256,21 @@ export class EntityBillingComponent {
 
     enableSave() {
         this.disableSave = false;
-
     }
+
     getlegalEntityBillingHistory(content, row) {
         const { legalEntityBillingAddressId } = row;
         this.alertService.startLoadingMessage();
-
         this.legalEntityService.getlegalEntityBillingHistory(this.id, legalEntityBillingAddressId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content), err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             });
     }
+
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
-
-
         this.billingauditHisory = auditHistory;
-
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
-
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -283,11 +285,8 @@ export class EntityBillingComponent {
         }
     }
 
-
-
     async updateActiveorInActiveForBilling(rowData) {
         if (!rowData.isPrimary) {
-
             const status = rowData.isActive == true ? 'Active' : 'InActive';
             await this.legalEntityService.legalEntitysBillingUpdateforActive(rowData.legalEntityBillingAddressId, status, this.userName).subscribe(res => {
                 this.geListByStatusForBillingList(this.billingStatus);
@@ -298,8 +297,7 @@ export class EntityBillingComponent {
                     MessageSeverity.success
                 );
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             })
         }
     }
@@ -307,19 +305,18 @@ export class EntityBillingComponent {
     dismissModel() {
         this.modal.close();
     }
+
     deleteBillingInfo(content, rowData) {
         if (!rowData.isPrimary) {
             this.selectedRowForDelete = rowData;
             this.isDeleteMode = true;
-
-
             this.legalEntityBillingAddressId = rowData.legalEntityBillingAddressId;
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
         } else {
             $('#deleteoopsBilling').modal('show');
         }
     }
+
     deleteItemAndCloseModel() {
         const obj = {
             isActive: false,
@@ -327,22 +324,19 @@ export class EntityBillingComponent {
             updatedBy: this.userName,
             legalEntityBillingAddressId: this.legalEntityBillingAddressId
         }
-
         if (this.legalEntityBillingAddressId > 0) {
-
             this.legalEntityService.updateDeleteBillinginfo(obj.legalEntityBillingAddressId, this.userName).subscribe(
                 response => {
                     this.saveCompleted(this.sourcelegalEntity)
                     this.geListByStatusForBillingList(this.billingStatus);
                 }, err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
+                    this.isSpinnerVisible = false
                 });
         }
         this.modal.close();
     }
-    private saveCompleted(user?: any) {
 
+    private saveCompleted(user?: any) {
         if (this.isDeleteMode == true) {
             this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
             this.isDeleteMode = false;
@@ -353,30 +347,29 @@ export class EntityBillingComponent {
         }
         // this.getBillingDataById();
     }
-    private saveFailedHelper(error: any) {
 
+    private saveFailedHelper(error: any) {
         this.alertService.stopLoadingMessage();
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
 
-
     sampleExcelDownload() {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=legalEntityBillingAddress&fileName=legalEntityBillingAddress.xlsx`;
         window.location.assign(url);
     }
+
     customExcelUpload(event) {
         const file = event.target.files;
-
         if (file.length > 0) {
             this.formData.append('file', file[0])
-            this.formData.append('masterCompanyId', this.authService.currentUser.masterCompanyId.toString())
+            this.formData.append('masterCompanyId', this.currentUserMasterCompanyId.toString())
             this.formData.append('createdBy', this.userName);
             this.formData.append('updatedBy', this.userName);
             this.formData.append('isActive', 'true');
             this.formData.append('isDeleted', 'false');
             const data = {
-                'masterCompanyId': this.authService.currentUser.masterCompanyId,
+                'masterCompanyId': this.currentUserMasterCompanyId,
                 'createdBy': this.userName,
                 'updatedBy': this.userName,
                 'isActive': true,
@@ -384,7 +377,6 @@ export class EntityBillingComponent {
             }
             this.legalEntityService.BillingFileUpload(this.formData, this.id).subscribe(res => {
                 event.target.value = '';
-
                 this.formData = new FormData();
                 // this.getBillingDataById();
                 this.alertService.showMessage(
@@ -394,20 +386,11 @@ export class EntityBillingComponent {
                 );
                 this.geListByStatusForBillingList(this.billingStatus);
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             })
         }
-
     }
-
-    // closeMyModel() {
-    //     this.modal.close();
-    // 	//$("#addContactDetails").modal("hide");
-    // 	 this.disableSave = true;
-    // }
-
-
+    
     closeMyModel(type) {
         $(type).modal("hide");
         this.disableSave = true;
@@ -432,7 +415,6 @@ export class EntityBillingComponent {
             ...this.lazyLoadEventDataInput.filters,
             status: this.billingStatus ? this.billingStatus : 'Active',
         }
-
         // if(this.isViewMode==false){
         if (this.filterText == '') {
             this.getList(this.lazyLoadEventDataInput);
@@ -441,6 +423,7 @@ export class EntityBillingComponent {
         }
         // }
     }
+
     first: any = 0;
     billingStatus: any = 'Active'
     geListByStatusForBillingList(status) {
@@ -457,6 +440,7 @@ export class EntityBillingComponent {
         PagingData.page = 1;
         this.getList(PagingData);
     }
+
     globalSearch(value) {
         // this.isSpinnerVisible = true;
         this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
@@ -468,8 +452,8 @@ export class EntityBillingComponent {
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.billingStatus };
         this.getList(this.lazyLoadEventDataInput);
     }
-    getDeleteListByStatusBilling(value) {
 
+    getDeleteListByStatusBilling(value) {
         this.currentDeletedstatusBilling = true;
         const pageIndex = 0;
         this.pageIndex = pageIndex;
@@ -487,6 +471,7 @@ export class EntityBillingComponent {
             this.getList(this.lazyLoadEventDataInput);
         }
     }
+
     getList(data) {
         const isdelete = this.currentDeletedstatusBilling ? true : false;
         data.filters.isDeleted = isdelete
@@ -513,12 +498,11 @@ export class EntityBillingComponent {
                     this.totalPages = 0;
                 }
             }, err => {
-                this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false;               
             })
         }
     }
+
     exportCSV(dt) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatusBilling ? true : false;
@@ -527,7 +511,6 @@ export class EntityBillingComponent {
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
         });
-
         this.legalEntityService.getBillingList(PagingData).subscribe(res => {
             this.alertService.stopLoadingMessage();
             const data = res;
@@ -552,14 +535,11 @@ export class EntityBillingComponent {
                 this.totalPages = 0;
             }
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         })
     }
 
     restorerecord: any = {}
-
     restoreRecord() {
         this.legalEntityService.restorebillingRecord(this.restorerecord.legalEntityBillingAddressId, this.userName).subscribe(res => {
             this.getDeleteListByStatusBilling(true)
@@ -567,8 +547,7 @@ export class EntityBillingComponent {
             this.modal.close();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
+            this.isSpinnerVisible = false;            
         });
     }
 
@@ -614,9 +593,7 @@ export class EntityBillingComponent {
     onFilterCountry(value) {
         this.CountryData(value);
     }
-    // restDropDown(){
-    //     this.CountryData('');
-    // }
+    
     setEditArray: any = [];
     countrycollection: any = []
     CountryData(value) {
@@ -632,22 +609,13 @@ export class EntityBillingComponent {
                 // this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
                 this.countrycollection = res;
             }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                this.isSpinnerVisible = false
             });
         }
     }
-    openTag(content) {
 
+    openTag(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-    }
-    errorMessageHandler(log) {
-        this.isSpinnerVisible = false;
-        // this.alertService.showMessage(
-        //     'Error',
-        //     log,
-        //     MessageSeverity.error
-        // ); 
     }
 
     filterSiteNames(event) {
@@ -683,36 +651,33 @@ export class EntityBillingComponent {
                             }
                         });
                     }
-
                 }, err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
+                    this.isSpinnerVisible = false
                 });
             }
-        }
-        // }
+        }       
     }
+
     checkvalid(event) {
         var k;
         k = event.charCode;
         return ((k >= 48 && k <= 57));
     }
+
     showExistMsg: any = false;
     onSiteNameSelected() {
         this.showExistMsg = true;
     }
-    checkfirstNameExist(event) {
 
+    checkfirstNameExist(event) {
         if (this.billingInfo.siteName == '') {
             this.showExistMsg = false;
         }
-
         if (event) {
             if (event == "") {
                 this.showExistMsg = false;
             }
         }
-
         if (event != "") {
             this.sitesNamesList.forEach(element => {
                 if (element.label == event) {
