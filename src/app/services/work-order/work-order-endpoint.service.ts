@@ -249,10 +249,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getWorkOrderAssetList(isSubWorkOrder,data) {
-        if(isSubWorkOrder==true){
-    //         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist?subWOPartNoId=${subWOPartNoId}`, this.getRequestHeaders()).catch(error => {
-    //   return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder));
-    // });
+        if(isSubWorkOrder==true)
+        {
+            return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(isSubWorkOrder,data));
+              });
+      
         }else{
             return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/workorderassetlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(isSubWorkOrder,data));
@@ -585,7 +587,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
     deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy,isSubWorkOrder) {
         if(isSubWorkOrder==true){
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deletesubworkorderasset?workOrderAssetId=${workOrderAssetId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deletesubworkorderasset?subWorkOrderAssetId=${workOrderAssetId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
                 return this.handleErrorCommon(error, () => this.deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy,isSubWorkOrder));
             });
         }else{

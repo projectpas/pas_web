@@ -527,6 +527,10 @@ viewAsstesInventory(rowData){
         data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         // data.filters.employeeId= this.employeeId;
         data.filters.workOrderWfId = this.workFlowWorkOrderId;
+        if(this.isSubWorkOrder)
+        {
+            data.filters.SubWOPartNoId = this.subWOPartNoId;
+        }
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderAssetList(this.isSubWorkOrder, PagingData).subscribe(res => {
