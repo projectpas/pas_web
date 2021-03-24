@@ -1011,7 +1011,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 let payLoad = {
                     "first": 0,
                     "rows": 10,
-                    "sortOrder": 1,
+                    "sortOrder": 1, 
                     "filters": {
                         "ItemMasterId": partId,
                         "WorkScopeId": workScopeId,
@@ -1312,7 +1312,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             x => {
                 temp = [...temp, ...x];
             }
-        )
+        ) 
         this.materialListPayload['WorkOrderQuoteTask'] = WorkOrderQuoteTask;
         this.materialListPayload.WorkOrderQuoteMaterial = temp.map(mList => {
             // if(mList.workOrderQuoteDetailsId && mList.workOrderQuoteDetailsId != 0){
@@ -1338,7 +1338,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 "markupPercentageId": mList.markupPercentageId,
                 "TotalPartsCost": 155,
                 "Markup": mList.markup,
-                "masterCompanyId": (mList.masterCompanyId == '') ? 0 : mList.masterCompanyId,
+                "masterCompanyId": (mList.masterCompanyId == '') ? 1 : mList.masterCompanyId,
                 "TaskId": (typeof mList.taskId === 'object')?mList.taskId.taskId :mList.taskId,
                 "BillingMethodId": mList.billingMethodId? Number(mList.billingMethodId):this.costPlusType,
                 "BillingRate": mList.billingRate,
@@ -1891,7 +1891,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveMaterialListForWO(data) {
-        this.disableMat=true;
+        this.disableMat=false;
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1901,7 +1901,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     mData.unitCost = Number(mData.unitCost.toString().split(',').join('')).toFixed(2);
                 }
                 mData['billingAmount'] = (mData.quantity * Number(mData.billingRate.toString().split(',').join(''))).toFixed(2);
-                mData.partNumber= mData.partNumber.partName;
+                mData.partNumber= mData.partItem.partName;
                 mData.taskId=(typeof mData.taskId == 'object')? mData.taskId.taskId:mData.taskId;
                 mData.taskName=(typeof mData.taskId == 'object')?mData.taskId.description:mData.taskName;
                 mData.billingMethodId=this.costPlusType ? this.costPlusType :0;
@@ -2034,7 +2034,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.editMatData = [...eData];
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].materialMandatoriesId;
         // this.editMatData[0].materialMandatoriesId=this.editMatData[0].mandatoryOrSupplemental;
-        this.editMatData[0].partNumber= { partId:this.editMatData[0].itemMasterId, partName:this.editMatData[0].partNumber }
+        this.editMatData[0].partItem= { partId:this.editMatData[0].itemMasterId, partName:this.editMatData[0].partNumber }
+
     }
 
     deleteMaterialList(mainIndex, subIndex) {
