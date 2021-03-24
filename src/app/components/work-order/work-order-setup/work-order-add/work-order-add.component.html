@@ -1,5 +1,5 @@
 ﻿<div [@fadeInOut] class="page-content work_order_cont">
-    <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isView"></p-breadcrumb>
+    <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isSubWorkOrder && !isView"></p-breadcrumb>
     <div class="right_col" role="main">
         <form #workOrderForm="ngForm">
             <div class="x_content">
@@ -418,7 +418,7 @@
                     </div>
                     <div>
                     </div>
-                    <div class=" wid_cal">
+                    <div class=" wid_cal"  *ngIf="!isSubWorkOrder">
                         <div >
                     <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="!hideWOHeader">
                         <div class="tableFixHead">

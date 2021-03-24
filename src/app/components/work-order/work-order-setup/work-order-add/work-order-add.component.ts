@@ -1511,7 +1511,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.disableSaveForEdit = false;
     }
 
-    saveWorkOrderMaterialList(data) {
+    saveWorkOrderMaterialList(data) { 
         if (this.isSubWorkOrder == true) {
             const materialArr = data.materialList.map(x => {
                 return {
