@@ -21,7 +21,7 @@
           <div class="card-header header">
             <div class="row">
               <div class="col">
-                <h4 class="header-name"> Banking Information</h4>
+                <h4 class="header-name">Receipt Banking Information</h4>
               </div>
             </div>
           </div>
@@ -60,7 +60,12 @@
                                                             <i class="fa fa-history"></i>
                                                         </a>
                                                     </h6><br>
-                                                    <div class="col-md-3 col-lg-3  ">
+                                                    <div class="col-md-3 col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">Payee Name<span class="clr-red"></span></label>
+                                                            <input type="text" class="form-control" (ngModelChange)="getmemo()" name="poBox" [ngModelOptions]="{standalone: true}" 
+                                                            [(ngModel)]="sourceLegalEntity.payeeName" value="" autocomplete="new-password">
+                                                        </div>
                                                         <div class="form-group">
                                                             <label class="lable-Adjust">PO Box <span class="clr-red"></span></label>
                                                             <input type="text" class="form-control" (ngModelChange)="getmemo()" name="poBox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.poBox" value="" autocomplete="new-password">
@@ -94,7 +99,25 @@
                                                         <div class="form-group">
                                                             <!-- (keypress)="numberonly($event)" -->
                                                             <label class="lable-Adjust">Postal Code <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control"  required   name="Postal" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode" value="" autocomplete="new-password">
+                                                            <input type="text" class="form-control"  required   
+                                                            name="Postal" (ngModelChange)="getmemo()" 
+                                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode" value="" autocomplete="new-password">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">GL Account <span class="clr-red"></span></label>
+                                                            <div>
+                                                                <p-dropdown 
+                                                                class="p-dropdown-100"  
+                                                                (ngModelChange)="getmemo()" 
+                                                                [options]="allGlInfo" 
+                                                                filter="true" 
+                                                                [(ngModel)]="sourceLegalEntity.glAccountId" 
+                                                                name="glAccountId" 
+                                                                [resetFilterOnHide]="true" 
+                                                                placeholder="-- Select --" 
+                                                                [showClear]="true">
+                                                                </p-dropdown>
+                                                            </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-primary" [disabled]="!locksave"
@@ -203,10 +226,10 @@
                                                 <div class="form-row">
                                                     <div class="col-md-3 col-lg-3  ">
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
+                                                    <label class="lable-Adjust">Payee Name<span class="clr-red">*</span></label>
                                                      <input type="text" (ngModelChange)="internationalval()" #bankbibb="ngModel" 
                                                      class="form-control"   name="Bank Name" [ngModelOptions]="{standalone: true}" 
-                                                     [(ngModel)]="sourceLegalEntity.internationalBankName" required> 
+                                                     [(ngModel)]="sourceLegalEntity.internationalBankName" required value="" autocomplete="new-password"> 
                                                      <!-- <div *ngIf="bankbibb.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbibb.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
@@ -217,13 +240,13 @@
                                                     <label class="lable-Adjust">Bank Location 1 <span class="clr-red"></span></label>
                                                      <input type="text" (ngModelChange)="internationalval()" 
                                                      class="form-control" name="BankLocation1" [ngModelOptions]="{standalone: true}" 
-                                                     [(ngModel)]="sourceLegalEntity.bankLocation1">                                                     
+                                                     [(ngModel)]="sourceLegalEntity.bankLocation1" value="" autocomplete="new-password">                                                     
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">Bank Location 2 <span class="clr-red"></span></label>
                                                      <input type="text" (ngModelChange)="internationalval()" 
                                                      class="form-control" name="BankLocation1" [ngModelOptions]="{standalone: true}" 
-                                                     [(ngModel)]="sourceLegalEntity.bankLocation2">                                                     
+                                                     [(ngModel)]="sourceLegalEntity.bankLocation2" value="" autocomplete="new-password">                                                     
                                                 </div>
                                                 <!-- <div class="form-group">
                                                     <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
@@ -233,7 +256,7 @@
                                                     <label class="lable-Adjust">Intermediate Bank <span class="clr-red"></span></label>
                                                     <input type="text" (ngModelChange)="internationalval()"  #bankintb="ngModel"  class="form-control"  
                                                      name="Intermediate Bank" [ngModelOptions]="{standalone: true}" 
-                                                    [(ngModel)]="sourceLegalEntity.internationalIntermediateBank">
+                                                    [(ngModel)]="sourceLegalEntity.internationalIntermediateBank" value="" autocomplete="new-password">
                                                     <!-- <div *ngIf="bankintb.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankintb.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
@@ -241,10 +264,10 @@
                                                     </div> -->
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Beneficiary Bank<span class="clr-red">*</span></label>
+                                                    <label class="lable-Adjust">Beneficiary Bank<span class="clr-red"></span></label>
                                                      <input type="text" (ngModelChange)="internationalval()" #bankbenf="ngModel" class="form-control"   
                                                      name="Benficiary" [ngModelOptions]="{standalone: true}" 
-                                                     [(ngModel)]="sourceLegalEntity.internationalBenficiaryBankName" required>  
+                                                     [(ngModel)]="sourceLegalEntity.internationalBenficiaryBankName" value="" autocomplete="new-password">  
                                                      <!-- <div *ngIf="bankbenf.errors" [ngClass]="'error'">
                                                         <div *ngIf="bankbenf.errors.pattern">
                                                           <span class="clr-red">At least One Alphabet is Required.</span>
@@ -256,19 +279,35 @@
                                                     <input type="text" maxlength="20"                                                     
                                                     (ngModelChange)="internationalval()"  class="form-control"   
                                                     name="Account Number" [ngModelOptions]="{standalone: true}" 
-                                                    [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required> 
+                                                    [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required value="" autocomplete="new-password">  
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
                                                     <input type="text" maxlength="20" (ngModelChange)="internationalval()"   
                                                      class="form-control" name="ABA Number" [ngModelOptions]="{standalone: true}"
-                                                     [(ngModel)]="sourceLegalEntity.aba" required> 
+                                                     [(ngModel)]="sourceLegalEntity.aba" required value="" autocomplete="new-password"> 
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="lable-Adjust">SWIFT Code / IBAN Code <span class="clr-red"></span></label>
                                                    <input type="text" (ngModelChange)="internationalval()"  class="form-control"   
                                                    name="SWIFT Code" [ngModelOptions]="{standalone: true}" 
-                                                   [(ngModel)]="sourceLegalEntity.internationalSWIFTID">  
+                                                   [(ngModel)]="sourceLegalEntity.internationalSWIFTID" value="" autocomplete="new-password">  
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">GL Account <span class="clr-red"></span></label>
+                                                    <div>
+                                                        <p-dropdown 
+                                                        class="p-dropdown-100"  
+                                                        (ngModelChange)="internationalval()" 
+                                                        [options]="allGlInfo" 
+                                                        filter="true" 
+                                                        [(ngModel)]="sourceLegalEntity.interglAccountId" 
+                                                        name="glAccountId" 
+                                                        [resetFilterOnHide]="true" 
+                                                        placeholder="-- Select --" 
+                                                        [showClear]="true">
+                                                        </p-dropdown>
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary" [disabled]="!internationalvalid" 
@@ -301,7 +340,7 @@
                                                 <div class="form-row"> 
                                                  <div class="col-md-3 col-lg-3  ">
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
+                                                    <label class="lable-Adjust">Payee Name <span class="clr-red">*</span></label>
                                                     <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel" class="form-control" name="Bank n" 
                                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
                                                     <!-- <div *ngIf="bankNmae.errors" [ngClass]="'error'">
@@ -351,8 +390,25 @@
                                                      [(ngModel)]="sourceLegalEntity.achSWIFTID" (ngModelChange)="achval()">  
                                                 </div>
                                                 <div class="form-group">
+                                                    <label class="lable-Adjust">GL Account <span class="clr-red"></span></label>
+                                                    <div>
+                                                        <p-dropdown 
+                                                        class="p-dropdown-100"  
+                                                        (ngModelChange)="achval()" 
+                                                        [options]="allGlInfo" 
+                                                        filter="true" 
+                                                        [(ngModel)]="sourceLegalEntity.achglAccountId" 
+                                                        name="glAccountId" 
+                                                        [resetFilterOnHide]="true" 
+                                                        placeholder="-- Select --" 
+                                                        [showClear]="true">
+                                                        </p-dropdown>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
                                                     <button type="submit" *ngIf="isAch" class="btn btn-primary" (click)="savebankACH()" [disabled]="!achvalid">
-                                                   Save
+                                                       Save
                                                     </button>
                                                     <button type="submit" *ngIf="!isAch" class="btn btn-primary" (click)="savebankACH()" [disabled]="isAchValueUpdate">
                                                        Update 
@@ -405,23 +461,19 @@
                                                             <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='poBox' && audit.field!='line2' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
-                                                                        
+                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='glAccount' && audit.field!='payeeName' &&  audit.field!='intermediaryBank' && audit.field!='beneficiaryBank' &&  audit.field!='poBox' && audit.field!='line2' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>                                                                        
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody *ngIf="auditHistory.length> 0">
-                                                                    <tr *ngFor="let audit of auditHistory; let i = index;">
-                                        
+                                                                    <tr *ngFor="let audit of auditHistory; let i = index;">                                        
                                                                         <td *ngFor="let auditHead of auditHistoryHeaders; let j = index;" >
                                                                             <span [ngStyle]="{'color':  getColorCodeForHistory(i, auditHead.field, audit[auditHead.field])  ? 'black' : 'red'  }">
                                                                          <span *ngIf="auditHead.field=='createdDate' || auditHead.field=='updatedDate'">  {{audit[auditHead.field] | date: 'MM/dd/yyyy h:mm a'}}</span>  
                                                                          <span *ngIf="auditHead.field!='createdDate' && auditHead.field!='updatedDate'">  {{audit[auditHead.field] }}</span></span>
                                                                          <!-- <span *ngIf="auditHead.field!='createdDate' && auditHead.field!='updatedDate'">  {{audit[auditHead.field] }}</span></span> -->
                                                                         </td>
-                                                           </tr>
+                                                                    </tr>
                                                                 </tbody>
-                                        
-                                        
                                                             </table>
                                                             </div>
                                                             <ng-template #noDatavailable>
