@@ -37,7 +37,6 @@ import { SalesOrderShipping } from "../models/sales/salesOrderShipping";
 import { SalesOrderBillingAndInvoicing } from "../models/sales/salesOrderBillingAndInvoicing";
 import { formatStringToNumber } from "../generic/autocomplete";
 import { SOPickTicket } from "../models/sales/SOPickTicket";
-
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
@@ -57,6 +56,7 @@ export class SalesOrderService {
   isEditSOSettingsList = false;
   soSettingsData;
   public salesOrderReferenceSubj$ = this.salesOrderReferenceSubj.asObservable();
+
   constructor(private salesOrderEndPointSevice: SalesOrderEndpointService, private workorderservice: WorkOrderService) {
     this.salesOrderQuote = new SalesOrderQuote();
     this.salesOrderReference = new SalesOrderReference();
@@ -66,7 +66,6 @@ export class SalesOrderService {
   setReferenceObject(data: SalesOrderReference) {
     this.salesOrderReferenceSubj.next(data);
     this.salesOrderReference = data;
-    // this.salesOrderReferenceSubj.complete();
   }
   getSelectedParts() {
     return Observable.create(observer => {
@@ -76,9 +75,6 @@ export class SalesOrderService {
   }
 
   getReferenceObject(): Observable<SalesOrderReference> {
-    // this.salesOrderReferenceSubj.next(data);
-    // return this.salesOrderReference;
-    // this.salesOrderReferenceSubj.complete();
     return this.salesOrderReferenceSubj.asObservable();
   }
 
@@ -370,6 +366,10 @@ export class SalesOrderService {
 
   getSalesQuoteCharges(id, isDeleted) {
     return this.salesOrderEndPointSevice.getSalesOrderCharges(id, isDeleted);
+  }
+
+  getSalesOrderChargesById(id, isDeleted) {
+    return this.salesOrderEndPointSevice.getSalesOrderChargesById(id, isDeleted);
   }
 
   createSOMarginSummary(marginSummary: MarginSummary) {

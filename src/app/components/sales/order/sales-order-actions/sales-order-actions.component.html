@@ -5,7 +5,8 @@
     </button>
     <p-splitButton label="Payment" styleClass="btn btn-primary" [model]="paymentItems">
     </p-splitButton>
-    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.NewSalesOrder)">New SO</button>
+    <button type="button" class="btn btn-primary btnAction" (click)="onClick(salesOrderActionType.NewSalesOrder)">New
+        SO</button>
     <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Print"
         styleClass="btn btn-primary" [model]="printItems">
     </p-splitButton>
@@ -21,3 +22,6 @@
         SO
     </button>
 </div>
+<ng-template #payment let-c="close" let-d="dismiss" tabindex="-1">
+    <app-invoice-payment (close)="dismissModel()"></app-invoice-payment>
+</ng-template>

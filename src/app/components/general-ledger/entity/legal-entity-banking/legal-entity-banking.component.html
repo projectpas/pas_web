@@ -194,7 +194,7 @@
 
                                         <div *ngIf="internationalValue" class="tab-pane active">
                                             <div class="clear"></div>
-                                            <h6 data-toggle="modal" *ngIf="!isInternationalWire" data-target="#contentHist" class="history_crd"> International Wire History
+                                            <h6 data-toggle="modal" *ngIf="!isInternationalWire" data-target="#contentHist" class="history_crd"> Wire Transfer History
                                                 <a class="btn nobg" (click)="getAuditHistoryById(3)" matTooltipPosition="above" matTooltip="History">
                                                     <i class="fa fa-history"></i>
                                                 </a>
@@ -405,7 +405,7 @@
                                                             <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
+                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='poBox' && audit.field!='line2' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
                                                                         
                                                                     </tr>
                                                                 </thead>

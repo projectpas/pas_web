@@ -1,0 +1,11 @@
+button {
+  border-radius: 5px;
+}
+
+label {
+  width: 100%;
+}
+
+div.row {
+  padding: 10px;
+}
