@@ -352,7 +352,7 @@ if(!this.isWorkOrder){
 
     berDetermination(value,from): any {
         if(from=='html'){
-            this.sourceWorkFlow.fixedAmount=value;
+            // this.sourceWorkFlow.fixedAmount=value;
         setTimeout(() => {
             this.validateCOstflow()
         }, 1000);
@@ -1204,7 +1204,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 this.TotalCharges += (wf.extendedCostSummation != undefined && wf.extendedCostSummation != "") ? parseFloat(wf.extendedCostSummation.toString().replace(/\,/g, '')) : 0;
                 this.TotalExpertiseCost += (wf.totalExpertiseCost != undefined && wf.totalExpertiseCost != "") ? parseFloat(wf.totalExpertiseCost.toString().replace(/\,/g, '')) : 0;
             }
-        }
+        } 
         // laborOverheadCost
         this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : '0.00';
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
@@ -2038,6 +2038,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
 
     showVersionUpdate() {
         $('#quoteVer').modal("show");
+        this.calculateTotalWorkFlowCost(true)
     }
     resetPage(): void {
         this.selectedItems = [];
@@ -2192,7 +2193,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
     addWorkFlow(isHeaderUpdate: boolean): void {
         this.isheadUpdate = isHeaderUpdate;
         this.sourceWorkFlow.workflowId = undefined;
-
+        this.calculateTotalWorkFlowCost(true)
 this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
 // this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
         if (!this.validateWorkFlowHeader()) {
@@ -2289,7 +2290,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             });
     }
     upDateDataCancel() {
-        $('#UpdateConfirm').modal("hide");
+        $('#UpdateConfirm').modal("hide"); 
     }
     updateConfirmation() {
         this.modifyForSaveUpdateApis();
@@ -2362,7 +2363,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             });
         }
         delete    souceData.customerName
-        this.actionService.getNewWorkFlow(souceData).subscribe( 
+        console.log("sourceData",souceData)
+        this.actionService.getNewWorkFlow(souceData).subscribe(  
             result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow updated successfully.", MessageSeverity.success);
@@ -2529,7 +2531,13 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             material.updatedDate = new Date();
                             material.taskId = workflow.taskId ;
                         }
-                        material.partNumber=material.partNumber.partName;
+                        console.log("hello material",material)
+                        if(typeof material.partNumber=='object'){
+                            material.partNumber= typeof
+                            material.partNumber.partName =='object' ? material.partNumber.partName.partName : material.partNumber.partName;
+                        }
+                      
+                        console.log("hello material",material)
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }

@@ -263,22 +263,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.editData.extendedCost = this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
             this.workFlow.materialList = this.editData;
         }
-        else if (this.isQuote) {
-            this.workFlow.materialList = [];
-            this.addRow();
-        }
-        this.getMaterailMandatories();
-
-        if (this.isWorkOrder || this.isQuote) {
-            this.provisionList();
-            this.getConditionsList();
-        }
-        this.disableUpdateButton = true;
-    }
-    ngOnChanges() {
         if (this.workFlow) {
-            this.getConditionsList();
+            // this.getConditionsList();
             if (this.workFlow.materialList.length > 0) {
+                // console.log("this.workFlow.materialList",this.workFlow.materialList)
                 this.workFlow.materialList = this.workFlow.materialList.map(x => {
                     return {
                         ...x,
@@ -292,15 +280,42 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 })
             }
         }
+        else if (this.isQuote) {
+            this.workFlow.materialList = [];
+            this.addRow();
+        }
+        this.getMaterailMandatories();
+
+        if (this.isWorkOrder || this.isQuote) {
+            this.provisionList();
+            this.getConditionsList();
+        }
+        this.disableUpdateButton = true;
+  
+    }
+    ngOnChanges() {
+        if (this.workFlow) {
+            this.getConditionsList();
+            if (this.workFlow.materialList.length > 0) {
+                // console.log("this.workFlow.materialList",this.workFlow.materialList)
+                this.workFlow.materialList = this.workFlow.materialList.map(x => {
+                    return {
+                        ...x,
+                        quantity: x.quantity ? formatNumberAsGlobalSettingsModule(x.quantity, 0) : '0',
+                        unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+                        extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
+                        price: x.price ? formatNumberAsGlobalSettingsModule(x.price, 2) : '0.00',
+                        extendedPrice: x.extendedPrice ? formatNumberAsGlobalSettingsModule(x.extendedPrice, 2) : '0.00',
+                        // partNumber: { partId: x.itemMasterId, partName: x.partNumber }
+                    }
+                })
+            }
+        }
         if (this.UpdateMode) {
             this.reCalculate(); 
         }
         if (this.isQuote && this.editData.length > 0) {
-            // this.editData[0].quantity= this.editData[0].quantity ? formatNumberAsGlobalSettingsModule(this.editData[0].quantity, 0) : '0',
-            // this.editData[0].unitCost= this.editData[0].unitCost ? formatNumberAsGlobalSettingsModule(this.editData[0].unitCost, 2) : '0.00',
-            // this.editData[0].extendedCost= this.editData[0].extendedCost ? formatNumberAsGlobalSettingsModule(this.editData[0].extendedCost, 2) : '0.00',
-          const data=[...this.editData];
-        //    data[0].partNumber= { partId:data[0].itemMasterId, partName:data[0].partNumber }
+         const data=[...this.editData];
             this.workFlow.materialList =data;
         }
         else if (this.isQuote && (!this.editData || this.editData.length <= 0)) {
