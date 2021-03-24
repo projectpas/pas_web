@@ -13,6 +13,7 @@ import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
+import { AddPaymentComponent } from "../../shared/components/payment/invoice-payment.component";
 
 @Component({
   selector: "app-sales-order-actions",
@@ -35,10 +36,11 @@ export class SalesOrderActionsComponent implements OnInit {
   communicationItems: MenuItem[];
   paymentItems: MenuItem[];
   actionItems: MenuItem[];
-  @ViewChild("salesOrderConfirmationModal",{static:false})
+  @ViewChild("salesOrderConfirmationModal", { static: false })
   public salesOrderConfirmationModal: ElementRef;
-  @ViewChild("printPickTicketModal",{static:false})
+  @ViewChild("printPickTicketModal", { static: false })
   public printPickTicketModal: ElementRef;
+  @ViewChild("payment", { static: false }) payment: ElementRef;
   modal: NgbModalRef;
   salesOrderActionType = SalesOrderActionType;
   actionType: SalesOrderActionType = SalesOrderActionType.None;
@@ -85,6 +87,21 @@ export class SalesOrderActionsComponent implements OnInit {
 
   onConfirm(eventArgs: SalesOrderEventArgs): void {
     this.onActionClick.emit(eventArgs);
+  }
+
+  openPaymentModal() {
+    this.modal = this.modalService.open(this.payment, { size: "lg", backdrop: 'static', keyboard: false });
+
+    // this.modal = this.modalService.open(AddPaymentComponent, { size: "sm" });
+    // let instance: AddPaymentComponent = (<AddPaymentComponent>this.modal.componentInstance)
+    // instance.modalReference = this.modal;
+
+    // instance.onConfirm.subscribe($event => {
+    //   this.navigate($event);
+    // });
+
+    // instance.salesOrderCopyParameters.customerId = this.customerId;
+    // instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
   }
 
   initPrintActions(): void {
@@ -138,7 +155,8 @@ export class SalesOrderActionsComponent implements OnInit {
     this.paymentItems = [
       {
         label: 'Make Payment', command: () => {
-          this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.MakePayment, SalesOrderConfirmationType.None));
+          //this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.MakePayment, SalesOrderConfirmationType.None));
+          this.openPaymentModal();
         }
       },
       {

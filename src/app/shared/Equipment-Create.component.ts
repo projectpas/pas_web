@@ -92,8 +92,12 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         if (this.isWorkOrder) {
             this.workFlow = this.workFlowObject;
             this.workFlow.equipments = [];
-            this.row = this.workFlow.equipments[0];
+            this.row = this.workFlow.equipments[0]; 
             this.addRow();
+        }else{
+            this.workFlow.equipments.forEach(ev=>{
+                ev.partNumber={name:ev.assetName,assetId:ev.assetId}
+            })
         }
     }
 
