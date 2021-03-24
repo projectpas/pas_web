@@ -42,9 +42,9 @@ export class UserRoleService {
             this.userRoleEndpoint.getAllUsers<User[]>());
     }
 
-    getAllUserRole() {
+    getAllUserRole(masterCompanyId?) {
         return Observable.forkJoin(
-            this.userRoleEndpoint.getAllUserRole<UserRole[]>());
+            this.userRoleEndpoint.getAllUserRole<UserRole[]>(masterCompanyId));
     }
     
     getUserRoleByUserId(userId:string) {
