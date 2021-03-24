@@ -458,22 +458,7 @@ private defaultEmployeeDetails= new Subject<any>()
         return  this.localStorage.getData("UserRoleModule");
       }
 
-      public checkPermission(permissionName:string):boolean{
-        let isAllowed:boolean = true;
-        // if(this.currentUser && this.currentUser.permissionName!=null){
-            
-        //     let getData=this.currentUser.permissionName.filter(function(value){
-        //             return value==permissionName;
-        //     });
-        //     isAllowed=getData.length>0;
-        
-           
-        // }
-        
-        return isAllowed;
-      }
-
-      public checkPermissionCustomer(permissionName:string[]):boolean{
+      public checkPermission(permissionName:string[]):boolean{
         let isAllowed:boolean = false;
         if(this.currentUser && this.currentUser.permissionName!=null){
             

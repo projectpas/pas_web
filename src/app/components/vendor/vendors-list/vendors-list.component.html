@@ -71,7 +71,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Data"
@@ -83,7 +83,7 @@
               (click)="selectedOnly = false; targetData = dt;" 
               data-toggle="modal" data-target="#downloadConfirmation"
             ></button>
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary exports-button"
               matTooltip="Download Selected Data"
@@ -220,7 +220,7 @@
           <td class="action-icons-cstm table-column-width" style="width:200px !important">
               <div *ngIf="currentDeletedstatus == false">
                   <ng-container *ngIf="!isCreatePO && !isCreateRO">
-                      <p-inputSwitch [(ngModel)]="rowData['isActive']"
+                      <p-inputSwitch [(ngModel)]="rowData['isActive']"  *ngIf="isActive"
                                      name="isActive{{ rowIndex }}"
                                      matTooltip="{{
                     rowData['isActive'] ? 'Active' : 'In Active'
@@ -247,7 +247,7 @@
                   ><i class="fa fa-pencil"></i
                 ></a>
               </span>              
-              <span
+              <span *ngIf="isShowCap"
                 ><a
                   class="btn nobg btn-users-cstm"
                   (click)="openVendorCapesList(contentvendorcapes, rowData)"
@@ -321,7 +321,7 @@
                   </span>
               </div>
             <div *ngIf="currentDeletedstatus == true">
-              <p-inputSwitch
+              <p-inputSwitch  *ngIf="isActive"
                 [(ngModel)]="rowData['isActive']"
                 name="isActive{{ rowIndex }}"
                 matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
@@ -339,7 +339,7 @@
                 ></a>
               </span>
               <span
-                ><a
+                ><a  *ngIf="isActive"
                   class="btn nobg btn-users-cstm"
                   (click)="restore(restoreId, rowData)"
                   matTooltip="Restore Record"

@@ -99,9 +99,9 @@ export class CustomerBillingInformationComponent {
         private router: ActivatedRoute ) 
         {
             this.id = this.router.snapshot.params['id'];
-            this.isAdd=this.authService.checkPermissionCustomer([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermissionCustomer([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
-		this.isDelete=this.authService.checkPermissionCustomer([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Delete])
+            this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
+		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Delete])
         }
 
     ngOnInit(): void {

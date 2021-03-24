@@ -42,7 +42,14 @@ export class EmployeeStepsPrimeNgComponent implements OnInit{
 			this.activeIndex = value;
 
 		});
-		this.isView=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.View);
+		this.isView=this.authService.checkPermission([ModuleConstants.EmployeesList+'.'+PermissionConstants.View]);
+	}
+
+	isShowTab(value){
+		console.log(value);
+		var isShow=this.authService.ShowTab('Create Employee',value);
+		return isShow;
+	
 	}
 
 	ngOnInit() {

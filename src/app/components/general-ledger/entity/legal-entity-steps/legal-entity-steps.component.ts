@@ -77,7 +77,7 @@ export class LegalEntityStepsComponent {
         public legalEntityService: LegalEntityService,private authService:AuthService
 	) {		
 		// console.log(location.path());
-		this.isView=this.authService.checkPermission(ModuleConstants.Organization+'.'+PermissionConstants.View);
+		this.isView=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.View]);
 	}
 
 	ngOnInit() { 
