@@ -458,22 +458,7 @@ private defaultEmployeeDetails= new Subject<any>()
         return  this.localStorage.getData("UserRoleModule");
       }
 
-      public checkPermission(permissionName:string):boolean{
-        let isAllowed:boolean = true;
-        // if(this.currentUser && this.currentUser.permissionName!=null){
-            
-        //     let getData=this.currentUser.permissionName.filter(function(value){
-        //             return value==permissionName;
-        //     });
-        //     isAllowed=getData.length>0;
-        
-           
-        // }
-        
-        return isAllowed;
-      }
-
-      public checkPermissionCustomer(permissionName:string[]):boolean{
+      public checkPermission(permissionName:string[]):boolean{
         let isAllowed:boolean = false;
         if(this.currentUser && this.currentUser.permissionName!=null){
             
@@ -497,8 +482,9 @@ private defaultEmployeeDetails= new Subject<any>()
         });
 
         if(parentModule!=undefined){
+           
             Menus.forEach(el => {
-                if(el.parentId==parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3))
+                if(el.ParentID==parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3))
                 {
                   isAllowed = true;
                 }

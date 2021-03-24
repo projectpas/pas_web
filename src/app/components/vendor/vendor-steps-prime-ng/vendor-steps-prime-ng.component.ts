@@ -6,6 +6,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
+
 @Component({
 	selector: 'app-vendor-steps-prime-ng',
 	templateUrl: './vendor-steps-prime-ng.component.html',
@@ -31,13 +32,20 @@ export class VendorStepsPrimeNgComponent implements OnInit {
 	constructor(private router: ActivatedRoute,
 		private _changeDetectionRef: ChangeDetectorRef,
 		private route: Router, public vendorService: VendorService,private authService:AuthService) {
-			this.isView=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.View);
+			this.isView=this.authService.checkPermission([ModuleConstants.VendorsList+'.'+PermissionConstants.View]);
 		if(this.vendorService.vendorId){
 			this.vendorId = this.vendorService.vendorId;
 		}
 		this.vendorService.activeStep.subscribe(activeIndex => {
 			this.changeStep(activeIndex);
 		})
+	}
+
+	isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Vendor',value);
+		return isShow;
+	
 	}
 	ngOnInit() {
 		if(this.vendorService.vendorId){

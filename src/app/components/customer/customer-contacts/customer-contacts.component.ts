@@ -189,7 +189,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.isAdd=this.authService.checkPermissionCustomer([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
 		this.isEdit=this.authService.checkPermissionCustomer([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])
 		this.isDelete=this.authService.checkPermissionCustomer([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Delete])
-		debugger;
+		
 		this.isATA=this.authService.ShowTab('Create Customer','ATA Chapters');
 	}
 

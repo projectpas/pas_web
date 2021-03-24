@@ -135,9 +135,9 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		private configurations: ConfigurationService,
 		private datePipe: DatePipe) {
 
-			this.isAdd=this.authService.checkPermission(ModuleConstants.Organization+'.'+PermissionConstants.Add);
-        this.isEdit=this.authService.checkPermission(ModuleConstants.Organization+'.'+PermissionConstants.Update);
-        this.isDelete=this.authService.checkPermission(ModuleConstants.Organization+'.'+PermissionConstants.Delete);
+			this.isAdd=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Delete]);
 		this.dataSource = new MatTableDataSource();
 		if (this.entityService.listCollection != null && this.entityService.isEditMode == true) {
 			this.sourceLegalEntity = this.entityService.listCollection;

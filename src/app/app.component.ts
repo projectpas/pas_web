@@ -205,13 +205,15 @@ export class AppComponent implements OnInit, AfterViewInit {
         id, label, icon, routerLink, automationId, items: automationId == null ? [this.getDataByParentId(data, id)] : this.getDataByParentId(data, id),
         command: label == "Create Vendor" ? (event?: any) => {
           this.newVendorClick();
-        } : null
+        } : label == "Create Employee" ? (event?: any) => {
+          this.newEmployeeClick();
+        }:null
       })
     );
   }
 
   ngOnInit() {
-    debugger;
+   
     // console.log(this.authService.currentUser.roleID);
     // this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
     //   console.log(data[0]);
