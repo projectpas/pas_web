@@ -268,9 +268,14 @@ body {
 
 .bhoechie-tab-menu .list-group {
 	margin-bottom: 0;
-	background: #e6e6e6;
+	background: #f1f1f1;
 }
-
+.list-group-item i:hover{
+	color: red;
+}
+.list-group-item:hover{
+    background: #f7f7f7 !important;
+}
 	.bhoechie-tab-menu .list-group > a {
 		margin-bottom: 0;
 		font-size: 11px;
@@ -923,4 +928,8 @@ li.active.ng-star-inserted {
     margin-top: 4px;
     font-weight: 400;
     color: #757575;
+}
+.adjustTher{
+	position: relative;
+    top: 20px;
 }

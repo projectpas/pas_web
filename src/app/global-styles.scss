@@ -56,6 +56,9 @@
   width: 35px !important;
   text-align: center !important;
 }
+.select_align_right{
+  text-align-last: right;
+}
   .adj_width1{
     width: 150px !important;
   }
@@ -670,4 +673,7 @@ margin-top:-3px !important;
 }
 .width-60{
 width:60px !important;
+}
+.min-width-60{
+  min-width:60px !important;
 }

@@ -458,7 +458,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    modifyWorkorderdata() {
+    modifyWorkorderdata() { 
         if (!this.isEdit) { // create new WorkOrder
             this.isEditLabor = true;
             if (this.recCustomerId == 0 || this.recCustomerId == undefined || this.recCustomerId == null) {
@@ -517,7 +517,7 @@ export class WorkOrderAddComponent implements OnInit {
                     this.getStockLineByItemMasterId(x.masterPartId, x.conditionId, index);
                     this.calculatePartTat(x);
                     this.getPartPublicationByItemMasterId(x, x.masterPartId);
-                    this.getWorkFlowByPNandScope(null,x,'onload');
+                    this.getWorkFlowByPNandScope(null,x,'onload',index);
                     return {
                         ...x,
                         
@@ -557,37 +557,6 @@ export class WorkOrderAddComponent implements OnInit {
                 this.showTabsGrid = false;
             this.getEmployeeData();
         }
-    }
-
-    workorderByIdCall() {
-        this.recCustomerId = this.recCustomerId ? this.recCustomerId : 0;
-        this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.isDeleteMpnPart = false;
-            const data = {
-                ...res,
-                workOrderNumber: res.workOrderNum,
-                openDate: new Date(res.openDate),
-                customerId: res.customerId,
-                partNumbers: res.partNumbers.map(x => {
-                    return {
-                        ...x,
-                        promisedDate: this.recCustomerId == 0 ? new Date(x.promisedDate) : null,
-                        estimatedCompletionDate: this.recCustomerId == 0 ? new Date(x.estimatedCompletionDate) : null,
-                        estimatedShipDate: this.recCustomerId == 0 ? new Date(x.estimatedShipDate) : null,
-                        receivedDate: this.recCustomerId == 0 && res.receivingCustomerWorkId == null ? null : new Date(x.receivedDate)
-                    }
-
-                })
-            }
-            this.workOrderGeneralInformation = data;
-            this.modifyWorkorderdata();
-        },
-            err => {
-                this.handleError(err);
-                this.isSpinnerVisible = false;
-            })
     }
 
     getEmployeeData() {
@@ -850,6 +819,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     // added new MPN
     addMPN() {
+  
         if (!this.workOrderGeneralInformation.isSinglePN && this.workorderSettings) {
             const workOrderSettingsAdded = new WorkOrderPartNumber();
             workOrderSettingsAdded.workOrderStageId = this.workorderSettings.defaultStageCodeId;
@@ -962,6 +932,7 @@ export class WorkOrderAddComponent implements OnInit {
     saveWorkOrder(): void {
         this.mpnPartNumbersList = [];
         const generalInfo = this.workOrderGeneralInformation;
+ 
         const data1 = {
             ...generalInfo,
             customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
@@ -1063,6 +1034,8 @@ export class WorkOrderAddComponent implements OnInit {
             this.showTabsGrid = true;  // Show Grid Boolean
             this.workOrderPartNumberId = result.partNumbers[0].id;
             this.workFlowId = result.partNumbers[0].workflowId;
+    
+            
             this.workFlowWorkOrderId = result.workFlowWorkOrderId;
             this.workScope = result.partNumbers[0].workScope;
             this.showGridMenu = true;
@@ -1102,6 +1075,7 @@ export class WorkOrderAddComponent implements OnInit {
     }
 
     onSelectedPartNumber(object, currentRecord, index) {
+        
         if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
@@ -1124,7 +1098,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
         // currentRecord.masterPartId=object.itemMasterId;
         currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined) ? currentRecord.workOrderScopeId :object.workOderScopeId;
-        this.getWorkFlowByPNandScope(null,currentRecord,'onload');
+        this.getWorkFlowByPNandScope(null,currentRecord,'onload',index);
         currentRecord.description = object.partDescription
         currentRecord.isPMA = object.pma == null ? false : object.pma;
         currentRecord.isDER = object.der == null ? false : object.der;
@@ -1266,7 +1240,7 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    getWorkFlowByPNandScope(value,workOrderPart,form) {
+    getWorkFlowByPNandScope(value,workOrderPart,form,index) {
         if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
         }
@@ -1284,15 +1258,20 @@ export class WorkOrderAddComponent implements OnInit {
                         value: x.workFlowId
                     }
                 })
+                workOrderPart.workflowId = this.workFlowList[0].value;
+                this.workFlowId=this.workFlowList[0].value;
+                this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
              }else{
                 this.workFlowList=[];
+                // workOrderPart.workflowId = null;
              }
         
-                if (this.workFlowList && this.workFlowList.length > 0) {
-                    workOrderPart.workflowId = this.workFlowList[0].value;
-                } else {
-                    workOrderPart.workflowId = null;
-                }
+                // if (this.workFlowList && this.workFlowList.length > 0) {
+
+                //     workOrderPart.workflowId = this.workFlowList[0].value;
+                // } else {
+                //     workOrderPart.workflowId = null;
+                // }
             },
                 err => {
                     this.handleError(err);
@@ -1432,7 +1411,6 @@ export class WorkOrderAddComponent implements OnInit {
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
             this.isSpinnerVisible = false;
             this.workFlowWorkOrderData = res;
-            // this._workflowService.currentWorkFlowId=
             this.workFlowWorkOrderId = res.workFlowWorkOrderId;
             if (this.workFlowWorkOrderId !== 0) {
                 this.isDisabledSteps = true;
@@ -1446,9 +1424,9 @@ export class WorkOrderAddComponent implements OnInit {
             );
             setTimeout(
                 () => {
-                    this.workOrderGeneralInformation.partNumbers.forEach(
-                        (workorderpn) => {
-                            this.getWorkFlowByPNandScope(null,workorderpn,'onload');
+                    this.workOrderGeneralInformation.partNumbers.map(
+                        (workorderpn,index) => {
+                            this.getWorkFlowByPNandScope(null,workorderpn,'onload',index);
                         }
                     )
                     this.editWorkFlowData = undefined;
@@ -1533,7 +1511,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.disableSaveForEdit = false;
     }
 
-    saveWorkOrderMaterialList(data) {
+    saveWorkOrderMaterialList(data) { 
         if (this.isSubWorkOrder == true) {
             const materialArr = data.materialList.map(x => {
                 return {
