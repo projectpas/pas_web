@@ -211,7 +211,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    debugger;
+   
     // console.log(this.authService.currentUser.roleID);
     // this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
     //   console.log(data[0]);
