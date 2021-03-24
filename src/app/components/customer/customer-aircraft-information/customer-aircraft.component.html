@@ -28,7 +28,7 @@
       <div class="col">
         <h4 class="header-name"> Inventory</h4>
       </div>
-      <div>
+      <div *ngIf="isAdd">
         <a *ngIf="isViewMode == false" href="javascript:void(0)">
           <button type="button" class="btn-sm header-button"  matTooltip="Add Inventory" matTooltipPosition="above" (click)="openAddInventoryPopup(addInventory);">
             Add Inventory
@@ -184,16 +184,16 @@
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">
           <div *ngIf="currentDeletedstatus==false">
-            <span data-toggle="modal" data-target="#viewAircraft">
+            <span  data-toggle="modal" data-target="#viewAircraft">
               <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openAircraftView(rowData)"
                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
             </span>
   
-            <span data-toggle="modal" data-target="#editAirCraftDetails"><a class="btn nobg"
+            <span *ngIf="isEdit" data-toggle="modal" data-target="#editAirCraftDetails"><a class="btn nobg"
                 (click)="editAirCraft(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a>
             </span>
-            <span data-toggle="modal" data-target="#delete"><a class="btn nobg"
+            <span *ngIf="isDelete" data-toggle="modal" data-target="#delete"><a class="btn nobg"
                 (click)="deleteAircraftMappedInventory(deleteContent, rowData);dt.reset()" matTooltip="Delete"
                 matTooltipPosition="above"><i class="fa fa-trash"></i></a>
             </span>

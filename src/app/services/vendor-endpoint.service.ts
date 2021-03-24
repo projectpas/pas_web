@@ -1945,6 +1945,7 @@ export class VendorEndpointService extends EndpointFactory {
 	}
 
 	getAllVendorList(data) {
+		console.log("test");
 		return this.http.post(this.vendorListUrl, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getAllVendorList(data));
