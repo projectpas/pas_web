@@ -1,16 +1,3 @@
-<!-- <div class="card-header bg-primary">
-  <div class="row">
-    <div class="col">
-      <h4 class="new-card-heading">
-        {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>
-    </div>
-    <div>
-      <button type="button" class="btn-sm header-button " (click)="navigateToWo()">
-        Redirect to Work Order
-      </button>
-    </div>
-  </div>
-</div>  -->
 <div class="header">
   <div class="row">
       <div class="col">
@@ -251,7 +238,7 @@
 
               </td>
               <td>
-                <p-autoComplete field="name" [(ngModel)]="workOrderPartNumber.partTechnicianId" name="technician{{i}}"
+                <p-autoComplete field="name" required [(ngModel)]="workOrderPartNumber.partTechnicianId" name="technician{{i}}"
                   #technician="ngModel" errorMessage="Records not found" [forceSelection]="true" [dropdown]="true"
                   [suggestions]="technicianList" (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                   (completeMethod)="filterTechnician($event)" [size]="30" [minLength]="1"
