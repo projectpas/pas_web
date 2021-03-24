@@ -202,7 +202,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
       
         // rowData.materialMandatoriesId=rowData.materialMandatoriesId;
 
-        this.editData = { ...rowData, unitOfMeasure: rowData.uom,partNumber:{partId:rowData.itemMasterId,partName:rowData.partNumber} };
+        this.editData = { ...rowData, unitOfMeasure: rowData.uom,partItem:{partId:rowData.itemMasterId,partName:rowData.partNumber} };
     }
     openDelete(content, row) {
         this.currentRow = row;
