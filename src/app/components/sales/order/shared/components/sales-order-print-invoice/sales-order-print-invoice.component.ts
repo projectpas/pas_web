@@ -17,6 +17,7 @@ export class SalesOrderPrintInvoiceComponent implements OnInit {
     salesOrderInvoice: any = [];
     endPointURL: any;
     isSpinnerVisible: boolean = false;
+    salesOrderCharges: any = [];
 
     constructor(private salesOrderService: SalesOrderService) {
     }
@@ -30,6 +31,17 @@ export class SalesOrderPrintInvoiceComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.salesOrderService.getSalesOrderBillingInvoicingData(this.salesOrderbillingInvoicingId).subscribe(res => {
             this.salesOrderInvoice = res[0];
+            this.getSalesOrderCharges();
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        })
+    }
+
+    getSalesOrderCharges() {
+        this.isSpinnerVisible = true;
+        this.salesOrderService.getSalesOrderChargesById(this.salesOrderId, false).subscribe(res => {
+            this.salesOrderCharges = res;
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
