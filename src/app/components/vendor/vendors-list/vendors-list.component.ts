@@ -20,6 +20,7 @@ import { CommonService } from '../../../services/common.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+
 declare var $ : any;
 
 
@@ -207,7 +208,35 @@ export class VendorsListComponent implements OnInit {
     isAdd:boolean=true;
     isEdit:boolean=true;
     isDelete: boolean = true;
+    isDownload:boolean=true;
+    isShowCap:boolean=true;
     moduleNameVendor: any;
+    permissionAddCheck=[ModuleConstants.Vendore+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_ATAChapter+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_Documents+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_FinancialInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_GeneralInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_Memos+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_PaymentInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Vendors_ShippingInformation+"."+PermissionConstants.Add,
+        ModuleConstants.Vendors_Warnings+"."+PermissionConstants.Add];
+    permissionUpdateCheck=[ModuleConstants.Vendore+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_ATAChapter+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_Documents+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_FinancialInformation+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_GeneralInformation+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_Memos+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_PaymentInformation+'.'+PermissionConstants.Update,
+    ModuleConstants.Vendors_ShippingInformation+"."+PermissionConstants.Update,
+    ModuleConstants.Vendors_Warnings+"."+PermissionConstants.Update];
     constructor(private router: ActivatedRoute, private route: Router, private datePipe: DatePipe, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, private vendorCapesService: VendorCapabilitiesService, public commonService: CommonService) {
         
         // router.params.subscribe(async val => {
@@ -216,9 +245,13 @@ export class VendorsListComponent implements OnInit {
         //         this.route.navigate(['/unauthorized-access']);
         //     }
         //   });
-        this.isAdd=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.Add);
-        this.isEdit=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.Update);
-        this.isDelete=this.authService.checkPermission(ModuleConstants.Vendore+'.'+PermissionConstants.Delete);
+        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+        //this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
+        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isActive=this.authService.checkPermission([ModuleConstants.Vendore+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendore+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.VendorsList+'.'+PermissionConstants.Download]);
+this.isShowCap=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+"."+PermissionConstants.View])
         this.local = this.vendorService.financeCollection;
         this.dataSource = new MatTableDataSource();
         this.vendorService.listCollection = null;

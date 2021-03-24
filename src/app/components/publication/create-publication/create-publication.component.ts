@@ -249,7 +249,7 @@ export class CreatePublicationComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private modalService: NgbModal
   ) { 
-    this.isView=this.authService.checkPermission(ModuleConstants.Publication+'.'+PermissionConstants.View);
+    this.isView=this.authService.checkPermission([ModuleConstants.Publication+'.'+PermissionConstants.View]);
   }
 
 

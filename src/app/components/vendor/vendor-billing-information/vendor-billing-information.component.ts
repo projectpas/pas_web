@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare const google: any;
 @Component({
     selector: 'app-vendor-billing-information',
@@ -136,6 +137,12 @@ export class VendorBillingInformationComponent {
     editSiteName: string = '';
     arrayTagNamelist:any=[];
     tagNamesList:any=[];
+    
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isDownload:boolean=true;
+    isUpload:boolean=true;
 
     constructor(private http: HttpClient, private router: Router,private activeRoute: ActivatedRoute,
         private authService: AuthService, private modalService: NgbModal,
@@ -204,6 +211,12 @@ export class VendorBillingInformationComponent {
             this.viewName = "Edit";
             this.local = this.vendorService.listCollection;
         }
+
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Update])
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Delete])
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Download])
+        this.isUpload=this.authService.checkPermission([ModuleConstants.Vendors_BillingInformation+'.'+PermissionConstants.Upload])
     }
 
     ngOnInit() {

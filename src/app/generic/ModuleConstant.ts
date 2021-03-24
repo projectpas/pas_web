@@ -1,8 +1,8 @@
 export class ModuleConstants
 {
-    static Vendore:string = "Vendor";
+    
     static Customer:string = "Customers";
-    static Employee:string="Employees";
+    
     static  Organization:string = "Organization";
     static Publication:string = "Publications";
     static CustomerList:string = "CustomersList";
@@ -18,11 +18,26 @@ export class ModuleConstants
     static Customers_Documents:string = "Customers_Documents";
 
     static Employees:string = "Employees";
-        static EmployeesList:string = "EmployeesList";
+       static EmployeesList:string = "EmployeesList";
         static Employees_GeneralInformation:string = "Employees_GeneralInformation";
         static Employees_Certification:string = "Employees_Certification";
         static Employees_Training:string = "Employees_Training";
         static Employees_ManagementStructure:string = "Employees_ManagementStructure";
+
+        static Vendore:string = "Vendors";
+        static VendorsList:string = "VendorsList";
+        static Vendors_GeneralInformation:string = "Vendors_GeneralInformation";
+        static Vendors_Contacts:string = "Vendors_Contacts";
+        static Vendors_FinancialInformation:string = "Vendors_FinancialInformation";
+        static Vendors_PaymentInformation:string = "Vendors_PaymentInformation";
+        static Vendors_ShippingInformation:string = "Vendors_ShippingInformation";
+        static Vendors_Warnings:string = "Vendors_Warnings";
+        static Vendors_BillingInformation:string = "Vendors_BillingInformation";
+        static Vendors_Capabilities:string = "Vendors_Capabilities";
+        static Vendors_ATAChapter:string = "Vendors_ATAChapter";
+        static Vendors_Memos:string = "Vendors_Memos";
+        static Vendors_Documents:string="Vendors_Documents";
+    
 }
 
 export class PermissionConstants

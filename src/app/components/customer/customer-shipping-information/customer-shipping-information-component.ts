@@ -175,9 +175,9 @@ export class CustomerShippingInformationComponent implements OnInit {
         private router: ActivatedRoute
     ) { 
         this.id = this.router.snapshot.params['id'];
-        this.isAddDomestic=this.authService.checkPermissionCustomer([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
-		this.isUpdateDomestic=this.authService.checkPermissionCustomer([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])
-		this.isDeleteDomestic=this.authService.checkPermissionCustomer([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Delete])
+        this.isAddDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
+		this.isUpdateDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])
+		this.isDeleteDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Delete])
     }
     ngOnInit() {
         if (this.editMode) {

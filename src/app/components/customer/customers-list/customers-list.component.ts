@@ -225,12 +225,12 @@ export class CustomersListComponent implements OnInit {
         private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
         //this.isAdd=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Add);
-        this.isAdd=this.authService.checkPermissionCustomer(this.permissionAddCheck);
+        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
         //this.isEdit=this.authService.checkPermission(ModuleConstants.Customer+'.'+PermissionConstants.Update);
-        this.isEdit=this.authService.checkPermissionCustomer(this.permissionUpdateCheck);
-        this.isActive=this.authService.checkPermissionCustomer([ModuleConstants.Customer+'.'+PermissionConstants.Update]);
-        this.isDelete=this.authService.checkPermissionCustomer([ModuleConstants.Customer+'.'+PermissionConstants.Delete]);
-        this.isDownload=this.authService.checkPermissionCustomer([ModuleConstants.CustomerList+'.'+PermissionConstants.Download]);
+        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isActive=this.authService.checkPermission([ModuleConstants.Customer+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Customer+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.CustomerList+'.'+PermissionConstants.Download]);
     }
 
     ngOnInit() {

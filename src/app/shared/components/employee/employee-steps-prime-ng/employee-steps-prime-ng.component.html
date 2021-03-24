@@ -18,7 +18,7 @@
 </div>
         <div class="md-stepper-horizontal orange new-stepper-align" *ngIf="showComponentPTab">
 				<ng-container *ngFor="let item of items;">
-					<div
+					<div *ngIf="isShowTab(item.label)"
 						class="md-step"
 						[ngClass]="{
 						  active: activeIndex >= item.index,
