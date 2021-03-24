@@ -221,9 +221,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.updateWorkOrderStatus(data, login));
     });
     }
-    deleteWorkOrder(workOrderId) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/deleteworkorder?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.deleteWorkOrder(workOrderId));
+    deleteWorkOrder(workOrderId,login) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/deleteworkorder?workOrderId=${workOrderId}&updatedBy=${login}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.deleteWorkOrder(workOrderId,login));
     });
     }
 

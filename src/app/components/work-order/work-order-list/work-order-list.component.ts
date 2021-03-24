@@ -522,7 +522,7 @@ export class WorkOrderListComponent implements OnInit {
 
     deleteWO() {
         this.isSpinnerVisible = false;
-        this.workOrderService.deleteActionforWorkOrder(this.rowDataToDelete.workOrderId).subscribe(res => {
+        this.workOrderService.deleteActionforWorkOrder(this.rowDataToDelete.workOrderId,this.userName).subscribe(res => {
             this.getAllWorkOrderList(this.lazyLoadEventData);
             this.isSpinnerVisible = false;
             this.alertService.showMessage("Success", `Records Was Deleted Successfully.`, MessageSeverity.success);
