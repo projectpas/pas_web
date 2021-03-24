@@ -111,9 +111,9 @@ export class CustomerAircraftComponent implements OnInit {
     ) {
         this.stopmulticlicks = false;
         this.id = this.route.snapshot.params['id'];
-        this.isAdd=this.authService.checkPermissionCustomer([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermissionCustomer([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
-		this.isDelete=this.authService.checkPermissionCustomer([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Delete])
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
+		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Delete])
     }
     ngOnInit() {
 

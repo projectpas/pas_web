@@ -55,7 +55,7 @@ export class CustomerStepsPrimengComponent {
 		public creditTermService: CreditTermsService,
 		private authService: AuthService,
 	) {
-		this.isView=this.authService.checkPermissionCustomer([ModuleConstants.CustomerList+'.'+PermissionConstants.View]);
+		this.isView=this.authService.checkPermission([ModuleConstants.CustomerList+'.'+PermissionConstants.View]);
 	}
 
 	isShowTab(value){

@@ -459,6 +459,7 @@ console.log(this.sortedHierarchy)
             return;
         }
 
+
         this.currentUserRole.masterCompanyId = this.currentUserMasterCompanyId;
         this.userRoleService.add(this.currentUserRole).subscribe(
             result => {

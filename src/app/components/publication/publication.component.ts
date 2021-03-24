@@ -208,10 +208,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
         this.sourceAction = new Publication();
-        this.isAdd=this.authService.checkPermission(ModuleConstants.Publication+'.'+PermissionConstants.Add);
-        this.isEdit=this.authService.checkPermission(ModuleConstants.Publication+'.'+PermissionConstants.Update);
-        this.isDelete=this.authService.checkPermission(ModuleConstants.Publication+'.'+PermissionConstants.Delete);
-        this.isView=this.authService.checkPermission(ModuleConstants.Publication+'.'+PermissionConstants.View);
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Publication+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Publication+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Publication+'.'+PermissionConstants.Delete]);
+        this.isView=this.authService.checkPermission([ModuleConstants.Publication+'.'+PermissionConstants.View]);
     }
 
     ngOnInit(): void {

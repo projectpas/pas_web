@@ -261,6 +261,19 @@ export class EmployeesListComponent implements OnInit {
     isAdd:boolean=true;
     isEdit:boolean=true;
     isDelete: boolean = true;
+    isDownLoad:boolean=true;
+    permissionAddCheck=[ModuleConstants.Employees+'.'+PermissionConstants.Add,
+    ModuleConstants.EmployeesList+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_Certification+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_GeneralInformation+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_ManagementStructure+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_Training+'.'+PermissionConstants.Add];
+permissionUpdateCheck=[ModuleConstants.Employees+'.'+PermissionConstants.Update,
+ModuleConstants.EmployeesList+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_Certification+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_GeneralInformation+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_ManagementStructure+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
     /** employees-list ctor */
     constructor(private modalService: NgbModal,
         private translationService: AppTranslationService,
@@ -274,10 +287,10 @@ export class EmployeesListComponent implements OnInit {
         this.translationService.closeCmpny = false;
         this.activeIndex = 0;
         this.empService.listCollection = null;
-        this.isAdd=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.Add);
-        this.isEdit=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.Update);
-        this.isDelete=this.authService.checkPermission(ModuleConstants.Employee+'.'+PermissionConstants.Delete);
-
+        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Employees+'.'+PermissionConstants.Delete]);
+        this.isDownLoad=this.authService.checkPermission([ModuleConstants.EmployeesList+"."+PermissionConstants.Download]);
     }
     private onDataLoadSuccessful(allWorkFlows: any[]) {
         //this.alertService.stopLoadingMessage();

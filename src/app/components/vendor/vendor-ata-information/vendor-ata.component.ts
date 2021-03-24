@@ -11,6 +11,7 @@ import { CommonService } from '../../../services/common.service';
 declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // import { DTCheckbox } from 'primeng/datatable';
 @Component({
     selector: 'app-vendor-ata',
@@ -73,7 +74,7 @@ export class VendorATAInformationComponent implements OnInit {
     vendorData: any = {};
     auditHistoryATA:any=[];
     vendorCodeandName: any;
-
+    isDownload:boolean=true;
     constructor(
         private atasubchapter1service: AtaSubChapter1Service,
         private atamain: AtaMainService,
@@ -112,6 +113,7 @@ export class VendorATAInformationComponent implements OnInit {
             this.getVendorCodeandNameByVendorId();
         }
         this.stopmulticlicks = false;
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_ATAChapter+"."+PermissionConstants.Download])
     }
 
     ngOnInit() {
