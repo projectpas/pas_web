@@ -14,7 +14,7 @@ import { Currency } from '../../../../models/currency.model';
 import { TreeNode } from 'primeng/api';
 import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
-import { editValueAssignByCondition } from '../../../../generic/autocomplete';
+import { editValueAssignByCondition,getObjectById } from '../../../../generic/autocomplete';
 import { titlePattern } from '../../../../validations/validation-pattern';
 // declare var $ : any;
 declare var $ : any;
@@ -133,11 +133,18 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.CountryData('')
 	}
 
+	get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
+
 	modal: NgbModalRef;
 	modal1: NgbModalRef;
 
 	ngAfterViewInit() {
 	}
+
 	public allWorkFlows: any[] = [];
 	makeNestedObj(arr, parent) {
 		var out = []
@@ -160,7 +167,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = true;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -180,14 +186,13 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.locksave = false;
 		this.getEntityLockBoxDataById(this.id);
 	}
+
 	DomesticWire() {
 		this.GeneralInformationValue = false;
-
 		this.LockboxValue = false;
 		this.domesticWireValue = true;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = true;
@@ -195,15 +200,14 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.ACHStyle = false;
 		this.domesticvalid = false;
 		this.getEntityDomesticwireDataById(this.id);
-
 	}
+
 	InternationalWire() {
 		this.GeneralInformationValue = false;
 		this.LockboxValue = false;
 		this.domesticWireValue = false;
 		this.internationalValue = true;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -212,6 +216,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.internationalvalid = false;
 		this.getInternationalwireDataById(this.id);
 	}
+
 	ACH() {
 		this.isAchValueUpdate = true;
 		this.GeneralInformationValue = false;
@@ -219,7 +224,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = true;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -228,6 +232,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.achvalid = false;
 		this.getEntityACHDataById(this.id)
 	}
+
 	showDomesticWire() {
 		this.DomesticWire();
 	}
@@ -235,7 +240,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	getEntityLockBoxDataById(id) {
 		this.isSpinnerVisible = true;
 		this.workFlowtService.getEntityLockboxDataById(id).subscribe(res => {
-
 			if (Array.isArray(res) == true && res.length == 0) {
 				this.isLockBox = true;
 			} else {
@@ -244,7 +248,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.isSpinnerVisible = false;
 			if (res != null && res && res.length != 0) {
 				this.legalentitylockingboxid = res[0].legalEntityBankingLockBoxId;
-
 				this.sourceLegalEntity = {
 					...this.sourceLegalEntity,
 					poBox: res[0].poBox,
@@ -254,14 +257,11 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					bankProvince: res[0].stateOrProvince,
 					bankpostalCode: res[0].postalCode,
 					bankcountryId: res[0].countryId
-				};
-				this.CountryData('')
+				};				
+				this.CountryData(res[0].country)
 			}
-
-
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		})
 	}
 
@@ -286,10 +286,10 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			}
 
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		})
 	}
+	
 	isLockBox: boolean = false;
 	isDomesticWire: boolean = false;
 	isInternationalWire: boolean = false;
@@ -308,6 +308,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.sourceLegalEntity = {
 					...this.sourceLegalEntity,
 					internationalBankName: res[0].bankName,
+					bankLocation1: res[0].bankLocation1,
+					bankLocation2: res[0].bankLocation2,
 					internationalIntermediateBank: res[0].intermediaryBank,
 					internationalBenficiaryBankName: res[0].beneficiaryBank,
 					internationalBankAccountNumber: res[0].beneficiaryBankAccount,
@@ -316,13 +318,14 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				}
 			}
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		})
 	}
+
 	backClick() {
 		this.tab.emit('Contacts');
 	}
+
 	getEntityACHDataById(id) {
 		this.workFlowtService.getEntityAchDataById(id).subscribe(res => {
 			if (Array.isArray(res) == true && res.length == 0) {
@@ -345,18 +348,21 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				}
 			}
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		})
 	}
+
 	getmemo() {
-		if (this.sourceLegalEntity.poBox != null && this.sourceLegalEntity.bankStreetaddress1 != null &&
-			this.sourceLegalEntity.bankCity != null && this.sourceLegalEntity.bankProvince != null && this.sourceLegalEntity.bankcountryId != null
+		if (this.sourceLegalEntity.bankStreetaddress1 != null &&
+			this.sourceLegalEntity.bankCity != null && 
+			this.sourceLegalEntity.bankProvince != null &&
+			 this.sourceLegalEntity.bankcountryId != null
 			&& this.sourceLegalEntity.bankpostalCode != null && this.sourceLegalEntity.bankcountryId != null
 		) {
 			this.locksave = true;
 		}
 	}
+
 	domesticval() {
 		if (this.sourceLegalEntity.domesticBankName != null && this.sourceLegalEntity.domesticIntermediateBank != null &&
 			this.sourceLegalEntity.domesticBenficiaryBankName != null && this.sourceLegalEntity.domesticBankAccountNumber != null && this.sourceLegalEntity.domesticABANumber != null
@@ -364,22 +370,27 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.domesticvalid = true;
 		}
 	}
+
 	internationalval() {
-		if (this.sourceLegalEntity.internationalBankName != null && this.sourceLegalEntity.internationalIntermediateBank != null &&
-			this.sourceLegalEntity.internationalBenficiaryBankName != null && this.sourceLegalEntity.internationalBankAccountNumber != null && this.sourceLegalEntity.internationalSWIFTID != null
+		if (this.sourceLegalEntity.internationalBankName != null && 			
+			this.sourceLegalEntity.internationalBenficiaryBankName != null && 
+			this.sourceLegalEntity.internationalBankAccountNumber != null
 		) {
 			this.internationalvalid = true;
 		}
 	}
+
 	isAchValueUpdate: any = false;
 	achval() {
-		if (this.sourceLegalEntity.achBankName != null && this.sourceLegalEntity.achIntermediateBank != null &&
-			this.sourceLegalEntity.achBenficiaryBankName != null && this.sourceLegalEntity.achBankAccountNumber != null && this.sourceLegalEntity.achABANumber != null && this.sourceLegalEntity.achSWIFTID != null
+		if (this.sourceLegalEntity.achBankName != null && 			
+			this.sourceLegalEntity.achBankAccountNumber != null && 
+			this.sourceLegalEntity.achABANumber != null 
 		) {
 			this.achvalid = true;
 			this.isAchValueUpdate = false;
 		}
 	}
+
 	savebanklockingbox() {
 		const data = {
 			LegalEntityId: this.id,
@@ -391,7 +402,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			CountryId: editValueAssignByCondition('value', this.sourceLegalEntity.bankcountryId),
 			PostalCode: this.sourceLegalEntity.bankpostalCode,
 			LegalEntityBankingLockBoxId: this.legalentitylockingboxid,
-			MasterCompanyId: 1,
+			MasterCompanyId: this.currentUserMasterCompanyId,
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName
 		}
@@ -408,8 +419,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 		else {
@@ -424,11 +434,11 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 	}
+
 	savebankdomesticwire() {
 		const data = {
 			LegalEntityId: this.id,
@@ -437,7 +447,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			BenificiaryBankName: this.sourceLegalEntity.domesticBenficiaryBankName,
 			AccountNumber: this.sourceLegalEntity.domesticBankAccountNumber,
 			ABA: this.sourceLegalEntity.domesticABANumber,
-			MasterCompanyId: 1,
+			MasterCompanyId: this.currentUserMasterCompanyId,
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName,
 			domesticWirePaymentId: this.legalentitydomesticid,
@@ -457,8 +467,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 		else {
@@ -473,11 +482,11 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			});
 		}
 	}
+
 	savebankinternationalwire() {
 		const data = {
 			LegalEntityId: this.id,
@@ -486,7 +495,9 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			BeneficiaryBank: this.sourceLegalEntity.internationalBenficiaryBankName,
 			BeneficiaryBankAccount: this.sourceLegalEntity.internationalBankAccountNumber,
 			SwiftCode: this.sourceLegalEntity.internationalSWIFTID,
-			MasterCompanyId: 1,
+			BankLocation1: this.sourceLegalEntity.bankLocation1,
+			BankLocation2: this.sourceLegalEntity.bankLocation2,			
+			MasterCompanyId: this.currentUserMasterCompanyId,
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName,
 			LegalEntityInternationalWireBankingId: this.LegalEntityInternationalWireBankingId,
@@ -507,11 +518,9 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				);
 
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
-
 		else {
 			this.isSpinnerVisible = true;
 			this.workFlowtService.updateLegalInternational(data).subscribe(res => {
@@ -525,8 +534,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 	}
@@ -540,7 +548,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			AccountNumber: this.sourceLegalEntity.achBankAccountNumber,
 			ABA: this.sourceLegalEntity.achABANumber,
 			SwiftCode: this.sourceLegalEntity.achSWIFTID,
-			MasterCompanyId: 1,
+			MasterCompanyId: this.currentUserMasterCompanyId,
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName,
 			ACHId: this.LegalACHId
@@ -558,8 +566,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 		else {
@@ -575,14 +582,15 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					MessageSeverity.success
 				);
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;
 			})
 		}
 	}
+
 	next() {
 		this.tab.emit('Billing');
 	}
+
 	open(content) {
 		this.GeneralInformation();
 		this.sourceLegalEntity = {};
@@ -591,9 +599,11 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.entityName = "";
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
 	}
+
 	get userName(): string {
 		return this.authService.currentUser ? this.authService.currentUser.userName : "";
 	}
+
 	openCurrency(content) {
 		this.isEditMode = false;
 		this.isDeleteMode = false;
@@ -603,13 +613,14 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.currencyName = "";
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
+
 	saveGeneralInformation() {
 		this.isSaving = true;
 		if (this.editGeneralInformationData.name && this.editGeneralInformationData.reportingCurrencyId) {
 			if (!this.editGeneralInformationData.legalEntityId) {
 				this.sourceLegalEntity.createdBy = this.userName;
 				this.sourceLegalEntity.updatedBy = this.userName;
-				this.sourceLegalEntity.masterCompanyId = 1;
+				this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
 				this.workFlowtService.getNewACHLegalEntity(this.sourceLegalEntity).subscribe(data => {
 					this.alertService.showMessage(
 						'Success',
@@ -622,14 +633,13 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					this.isEdit = true;
 
 				}, err => {
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 			}
 			else {
 				this.sourceLegalEntity.createdBy = this.userName;
 				this.sourceLegalEntity.updatedBy = this.userName;
-				this.sourceLegalEntity.masterCompanyId = 1;
+				this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
 				this.workFlowtService.updateEntity(this.sourceLegalEntity).subscribe(data => {
 					this.alertService.showMessage(
 						'Success',
@@ -654,6 +664,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	dismissModelWarning() {
 		this.displayWarningModal = true;
 	}
+
 	private saveCompleted(user?: any) {
 		this.isSaving = false;
 		if (this.isDeleteMode == true) {
@@ -670,8 +681,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.isEditMode = false;
 		if (this.modal) { this.modal.close(); }
 		if (this.modal1) { this.modal1.close(); }
-
 	}
+
 	nextClick(nextOrPrevious, event) {
 		this.tabscreen = event;
 		this.nextOrPreviousTab = nextOrPrevious;
@@ -693,6 +704,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.Lockbox();
 		}
 	}
+
 	redirectToTab() {
 		this.dismissModel();
 		if (this.tabscreen == 'domesticWireValue') {
@@ -710,8 +722,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		if (this.tabscreen == 'LockboxValue') {
 			this.Lockbox();
 		}
-
 	}
+
 	openContentEdit(content, row) {
 		this.isEditMode = true;
 		this.GeneralInformation();
@@ -720,19 +732,17 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.sourceLegalEntity.createdDate = new Date(row.createdDate);
 		this.sourceLegalEntity.modifiedDate = new Date(row.updatedDate);
 		this.modal1 = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-
 	}
+
 	openEdit(content, row) {
 		this.GeneralInformation();
 		this.sourceLegalEntity = {};
 		this.sourceLegalEntity = row;
-
-
 		this.isSaving = true;
 		this.sourceLegalEntity.parentId = row.legalEntityId;
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-
 	}
+
 	openDelete(content, row) {
 		this.sourceLegalEntity = row;
 		this.isEditMode = false;
@@ -740,26 +750,28 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 
 	}
+
 	deleteItemAndCloseModel() {
 		this.isSaving = true;
 		this.sourceLegalEntity.updatedBy = this.userName;
 		this.workFlowtService.updateEntitydelete(this.sourceLegalEntity.legalEntityId).subscribe(
 			data => {
 			}, err => {
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible =false;
 			})
 		this.modal.close();
 	}
+
 	openHist(content, row) {
 		this.sourceLegalEntity = row;
-
 	}
+
 	pattrenValidate(event) {
 		var k;
 		k = event.charCode;
 		return ((k >= 48 && k <= 57));
 	}
+
 	toggleIsActive(rowData, e) {
 		if (e.checked == false) {
 			this.sourceLegalEntity = rowData;
@@ -768,8 +780,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.sourceLegalEntity.isActive == false;
 			this.workFlowtService.updateLegalEntityForActive(this.sourceLegalEntity).subscribe(
 				response => this.saveCompleted(this.sourceLegalEntity), err => {
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 		}
 		else {
@@ -779,14 +790,12 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.sourceLegalEntity.isActive == true;
 			this.workFlowtService.updateLegalEntityForActive(this.sourceLegalEntity).subscribe(
 				response => this.saveCompleted(this.sourceLegalEntity), err => {
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 		}
-
 	}
-	openView(content, row) {
 
+	openView(content, row) {
 		this.entityViewFeilds.name = row.name;
 		this.entityViewFeilds.description = row.description;
 		this.entityViewFeilds.doingLegalAs = row.doingLegalAs;
@@ -827,11 +836,12 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.entityViewFeilds.achBankAccountNumber = row.achBankAccountNumber;
 		this.entityViewFeilds.achABANumber = row.achABANumber;
 		this.entityViewFeilds.achSWIFTID = row.achSWIFTID;
-
 	}
+
 	onFilterCountry(value) {
 		this.CountryData(value);
 	}
+
 	setEditArray: any = [];
 	CountryData(value) {
 		this.setEditArray = [];
@@ -841,18 +851,18 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.setEditArray.push(0);
 		}
 		const strText = value ? value : '';
-		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
-			// this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+		//this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			this.countrycollection = res;
 		}, err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;
 		});
 	}
+
 	errorMessageHandler(log) {
 		this.isSpinnerVisible = false;
-
 	}
+
 	auditHistoryHeaders: any = [];
 	auditHistory: any = [];
 	isSpinnerVisibleHistory: boolean = false;
@@ -866,8 +876,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisibleHistory = false;
 				}, err => {
 					this.isSpinnerVisibleHistory = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
 				{ header: 'PO Box', field: 'poBox' },
@@ -889,10 +898,9 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				res => {
 					this.auditHistory = res;
 					this.isSpinnerVisibleHistory = false;
-				}, err => {
-					const errorLog = err;
+				}, err => {					
 					this.isSpinnerVisibleHistory = false;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
 				{ header: 'Bank Name', field: 'bankName' },
@@ -912,10 +920,9 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				res => {
 					this.auditHistory = res;
 					this.isSpinnerVisibleHistory = false;
-				}, err => {
-					const errorLog = err;
+				}, err => {					
 					this.isSpinnerVisibleHistory = false;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
 				{ header: 'Bank Name', field: 'bankName' },
@@ -936,10 +943,9 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				res => {
 					this.auditHistory = res;
 					this.isSpinnerVisibleHistory = false;
-				}, err => {
-					const errorLog = err;
+				}, err => {					
 					this.isSpinnerVisibleHistory = false;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
 				{ header: 'Bank Name', field: 'bankName' },
@@ -955,9 +961,11 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			];
 		}
 	}
+
 	CloserCOnatcHistory() {
 		$("#contentHist").modal("hide");
 	}
+
 	getColorCodeForHistory(i, field, value) {
 
 		const data = this.auditHistory;

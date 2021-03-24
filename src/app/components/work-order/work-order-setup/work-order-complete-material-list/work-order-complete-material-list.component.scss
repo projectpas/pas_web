@@ -5,7 +5,10 @@
   font-size: 10px !important;
   padding: 5px !important;
 }
-
+.mr-0{
+  margin:0px;
+  color: #fff !important;
+}
 //  work flow css
 .dtHorizontalExampleWrapper {
   max-width: 150px;
@@ -38,7 +41,13 @@ font-size: 10px !important;
 .defered-check{
   pointer-events: none !important;margin-left: 43% !important;
 }
-
+.roleUpd{
+  width: 24px !important;
+  height: 20px !important;
+  color: #fff !important;
+  text-align: center;
+  padding: 3px;
+}
 table {
   display: block;
   overflow: scroll;
@@ -87,6 +96,10 @@ input[type='number']::-webkit-outer-spin-button {
 
 .clr-red {
   color: red;
+}
+.mr_o{
+  margin: 0px;
+  color: #fff !important;
 }
 
 .text-align {

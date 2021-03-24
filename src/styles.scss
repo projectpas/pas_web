@@ -13698,6 +13698,15 @@ body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
   border: 1px solid #007ad9 !important;
 }
 
+body .ui-accordion .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
+  background-color: #337ab7 !important;
+  border: 1px solid #007ad9 !important;
+  color: #ffffff;
+  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
 body .ui-inputswitch .ui-inputswitch-slider:before {
   height: 11px;
   width: 11px;
@@ -17067,10 +17076,10 @@ ng-multiselect-dropdown{
   min-width: 120px !important;
 }
 // below two calsses for work order material list
-.Materials_wo .adj_width1{
+ .adj_width1{
   width: 150px !important;
 }
-.Materials_wo .adj_width2{
+ .adj_width2{
   width: 190px !important;
 }
 .pickticket .ui-chkbox .ui-chkbox-box {

@@ -8,9 +8,9 @@
 </div>
 <div class="modal-body" >
 <div class="tableFixHead history_hg">
-<table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+<table class="table table-bordered" *ngIf="auditHistory && auditHistory.length> 0 else noDatavailable">
     <thead>
-        <tr>
+        <tr> 
             <ng-container *ngFor="let headername of auditHistoryHeader; let z = index;">
                 <th *ngIf="headername.isRequired == true">{{headername.header}}<span style="color: #ff0000;">*</span></th>
                 <th *ngIf="headername.isRequired == false">{{headername.header}}</th>
@@ -25,11 +25,16 @@
                 {{audit[headername.field]}}</td>
                 <td *ngIf="headername.field == 'createdDate' || headername.field == 'updatedDate'  "
                 [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
-                {{audit[headername.field] | date: 'MM/dd/yyyy h:mm:ss a'}}</td>
+                {{audit[headername.field] | date: 'MM/dd/yyyy h:mm a'}}</td> 
                 <td *ngIf="headername.field == 'isDeleted'">
                     <p style="background-color: #fff !important;"> <input type="checkbox"
                                             name="isDeleted" [checked]="audit[headername.field]" disabled></p>
                 </td>
+                <!-- <td *ngIf="headername.field == 'Memo'" [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
+                    <p class="m-0 p-0" [innerHTML]="audit[headername.field]"></p>
+              
+                </td> -->
+            
             </ng-container>
         </tr>
     </tbody>

@@ -45,7 +45,7 @@
 
 <div>
 
-  <p-table #dt1 class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10" [columns]="cols" [value]="workOrderChargesList"  (onPage)="pageIndexChange($event)"
+  <p-table #dt1 class="rpo-table-cstm rro-table-cstm lastcol-fix pub-ptable-cstm ptable-f10" [columns]="cols" [value]="workOrderChargesList"  (onPage)="pageIndexChange($event)"
   [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [totalRecords]="totalRecords" [rows]="10">
     <ng-template pTemplate="caption">
         <div class="checkbox-cstm pull-right checkbox-align" *ngIf="isQuote==false">
@@ -61,7 +61,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr class="tr-color" *ngIf="isQuote">
         <th colspan="9" class="th-color">&nbsp;</th>
-            <th colspan="5" class="isview-th" *ngIf="isView">
+            <th colspan="5" class="freight-isview-th" *ngIf="isView">
                 <!-- <div class="form-group" style="text-align: center;">
                       <p-radioButton
                         class="p-radiobutton-label-horizontal p-radio-custom"
@@ -81,24 +81,24 @@
                     </div> -->
       
                 <div class="display-flex">
-                  <div class="form-group radios-align">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top " name="costPlusType"
+                  <div class="form-group freight-isview-div">
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div> 
-                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                      <select (ngModelChange)="getValidCrg()"  class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                         [disabled]="isView || costPlusType != 1" >
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
                     </div>
                   </div>
-                  <div class="radios-margin">
-                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top " name="costPlusType" value="2"
+                  <div class="radio-align">
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal radio-margin-top " name="costPlusType"
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal " name="costPlusType"
                       value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
@@ -124,12 +124,12 @@
                     </div> -->
       
                 <div class="display-flex">
-                  <div class="form-group radios-align">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                  <div class="form-group freight-isview-div">
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal p-radiobutton-label-w92 radio-margin-top" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                     <div>
-                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                      <select (ngModelChange)="getValidCrg()" class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
                         [disabled]="isView || costPlusType != 1">
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
@@ -137,23 +137,24 @@
                     </div>
                   </div>
                   <div class="radios-margin">
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType"
+                    <p-radioButton (ngModelChange)="getValidCrg()" class="p-radiobutton-label-horizontal radio-margin-top" name="costPlusType"
                       value="3" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                 </div>
               </th>
+              
               <!-- <th style="background: #fff; border: 1px solid #fff;"></th> -->
               <!-- <th colspan="8"></th>
               <th colspan="4"></th> -->
             </tr>
       <tr>
-        <th class="table-column-width">Task <span style="color: #ff0000;">*</span></th>
-        <th class="table-column-width" *ngFor="let col of columns">
+        <th style="width:180px !important">Task <span style="color: #ff0000;">*</span></th>
+        <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns">
           {{ col.header }} <span style="color: #ff0000;" *ngIf="col.isRequired == true">*</span>
         </th>
         <ng-container *ngIf="isQuote">
@@ -176,7 +177,7 @@
       <ng-container *ngFor="let dt of rowData; let subIndex = index">
         <!-- *ngIf="!dt['isDeleted']" --> 
           <tr >
-            <td class="table-column-width">
+            <td style="width:180px !important">
               <!-- <select class="form-control select-read-only" [(ngModel)]="dt.taskId" disabled>
                 <option value="">Select</option>
                 <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
@@ -184,7 +185,7 @@
               <p class="mr_o">{{dt.taskName}}</p>
             </td>
             <ng-container *ngFor="let col of columns">
-              <td class="table-column-width" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
+              <td style="width:180px !important;" *ngIf="col.field != 'roNumberId'" [ngClass]="{'content-to-end': col.field == 'unitCost' || col.field == 'extendedCost' || col.field == 'quantity' || col.field == 'extendedPrice' || col.field == 'unitPrice'}">
                 <!-- {{ (col.field == 'unitPrice' || col.field == 'extendedPrice' || col.field == 'unitCost' || col.field == 'extendedCost')?formateCurrency(dt[col.field]):dt[col.field] }} -->
                 {{dt[col.field]}}
               </td>
@@ -200,14 +201,14 @@
             </ng-container>
             <ng-container *ngIf="isQuote">
               <td class="table-column-width">
-                <select class="form-control" [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
+                <select class="form-control" (ngModelChange)="getValidCrg()"  [(ngModel)]="dt.billingMethodId" [disabled]="isView || costPlusType == 3" (change)="dt.markupPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
                   <option value="">Select</option>
                   <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
                     [value]="bm.value">{{bm.label}}</option>
                 </select>
               </td>
               <td class="table-column-width">
-                <select class="form-control select-markup" (change)="markupChanged(dt, 'row')"
+                <select class="form-control select-markup" (ngModelChange)="getValidCrg()"  (change)="markupChanged(dt, 'row')"
                   [(ngModel)]="dt.markupPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
                   <option value="">Select</option>
                   <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
@@ -219,7 +220,7 @@
               </td> -->
               <td class="content-to-end table-column-width">{{ formateCurrency(dt.billingRate) }}</td>
               <td class="table-column-width">
-                <input type="text" class="form-control text-right" pInputText pKeyFilter="money" (change)="calculatebCost($event.target.value,dt)" [(ngModel)]="dt.billingAmount"
+                <input type="text" class="form-control text-right" (ngModelChange)="getValidCrg()"  pInputText pKeyFilter="money" (change)="calculatebCost($event.target.value,dt)" [(ngModel)]="dt.billingAmount"
                   [disabled]="isView || dt.billingMethodId != '2'" />
               </td>
             </ng-container>
@@ -229,7 +230,7 @@
                 (click)="edit(dt, mainIndex, subIndex)" *ngIf="!isView" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
             <span *ngIf="!isView"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,dt)"  matTooltip="Delete"><i
                   class="fa fa-trash"></i></a> </span> 
-                  <span>
+                  <span *ngIf="!isQuote">
                     <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(dt)"
                         matTooltip="History" matTooltipPosition="above"><i
                             class="fa fa-history"></i></a>
@@ -302,14 +303,14 @@
           <td class="content-to-end"><strong>{{ getTotalBillingAmount()}} </strong></td>
         </ng-container>
         <ng-container *ngIf="costPlusType == 3">
-            <input type="number" [(ngModel)]="chargesFlatRateBillingAmount" [disabled]="isView" />
+            <input type="number" [(ngModel)]="chargesFlatRateBillingAmount" (ngModelChange)="getValidCrg()"  [disabled]="isView" />
         </ng-container>
         <td *ngIf="isQuote">&nbsp;</td>
         <td *ngIf="!isView">&nbsp;</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary" id="footer" *ngIf="!isQuote">
-      <label id="footer" class="footer">Total:</label>
+      <label id="footer" class="footer" style="background:#fff">Total:</label>
       <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
       &nbsp;&nbsp;
       <label id="footer" class="footer1">Pages Count:</label>
@@ -337,8 +338,8 @@
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>
-  <button class="btn btn-primary pull-right" (click)="createChargeQuote()" *ngIf="isQuote && !isView">
-    Save Charges
+  <button class="btn btn-primary pull-right" (click)="createChargeQuote()" [disabled]="disableCrg" *ngIf="isQuote && !isView">
+    {{workOrderQuoteDetailsId ? 'Update': 'Save'}}   Charges
   </button>
 </div>
 <ng-template #content let-c="close" let-d="dismiss">

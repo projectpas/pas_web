@@ -44,10 +44,10 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     { field: 'chargeType', header: 'Charge Type' ,isRequired:true},
     { field: 'glAccountName', header: 'Gl Account Name',isRequired:false },
     { field: 'description', header: 'Description',isRequired:false },
-    { field: 'quantity', header: 'Qty',isRequired:true },
+    { field: 'quantity', header: 'Qty',isRequired:true ,width:"60px"},
     { field: 'refNum', header: 'Ref Num',isRequired:false },
-    { field: 'unitCost', header: 'Unit Cost',isRequired:true },
-    { field: 'extendedCost', header: 'Extented Cost',isRequired:false },
+    { field: 'unitCost', header: 'Unit Cost',isRequired:true ,width:"60px"},
+    { field: 'extendedCost', header: 'Extented Cost',isRequired:false ,width:"60px"},
     { field: 'vendorName', header: 'Vendor Name',isRequired:false },
   ]
   auditHistoryHeaders = [
@@ -97,14 +97,22 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   addNewCharges: boolean = false;
   workOrderChargesLists: any;
   chargesFlatRateBillingAmount: any;
+  workOrderQuoteDetailsId: any;
 
   constructor(private workOrderService: WorkOrderService, private authService: AuthService,
     private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef, private commonService: CommonService) {
 
 
   }
+  originalList:any=[];
+  ngOnChanges() { 
+    this.originalList=this.workOrderChargesList;
+    // if(this.workOrderChargesList && this.workOrderChargesList[0].workOrderQuoteDetailsId !=0){
+    //   this.disableCrg=true;
+    // }else{
+    //   this.disableCrg=false;
+    // }
 
-  ngOnChanges() {
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].headerMarkupId) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
@@ -146,8 +154,17 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     //   this.cols = [...this.cols, { field: 'extendedPrice', header: 'Extended Price' }, { field: 'unitPrice', header: 'Unit Price' },]
     // }
     if (this.buildMethodDetails) {
+      this.workOrderQuoteDetailsId=this.buildMethodDetails['workOrderQuoteDetailsId'];
       this.costPlusType = this.buildMethodDetails['chargesBuildMethod'];
       this.chargesFlatRateBillingAmount = this.buildMethodDetails['chargesFlatBillingAmount'];
+      if(this.buildMethodDetails.workOrderQuoteDetailsId !=0){
+      this.disableCrg=true;
+    }else{
+      this.disableCrg=false;
+    }
+    }
+    else{
+      this.disableCrg=false;
     }
   }
 
@@ -184,7 +201,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.cdRef.detectChanges();
     this.isEdit = true;
     this.addNewCharges = true;
-    this.editData = rowData;
+    this.editData = rowData; 
   }
   currentRow: any = {};
   openDelete(content, row) {
@@ -215,6 +232,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
         this.modal.close();
       })
     }
+    this.disableCrg=false;
   }
   calculatebCost(value,currentObj): void {
     setTimeout(() => {
@@ -236,33 +254,43 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
     });
   }
-
   restorerecord: any = {};
   historyData: any = [];
   restore(content, rowData) {
     this.restorerecord = rowData;
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
   }
-
   getAuditHistoryById(rowData) {
-    console.log("roe",rowData)
-    debugger
     if(this.isQuote){
       if(rowData.workOrderQuoteChargesId){
       this.workOrderService.getquoteChargesHistory(rowData.workOrderQuoteChargesId).subscribe(res => {
-        this.historyData = res;
-
+        this.historyData = res
+      //   this.historyData = res.forEach(element => {
+      //     element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+      //     element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
+      //     element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+      //     element.unitCost=element.unitCost ?  formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+      //     element.extendedCost=element.extendedCost ?  formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+      // });
+      this.auditHistoryHeaders=this.auditHistoryQuoteHeaders;
   this.triggerHistory();
       })
-
     }else{
       this.historyData = [];
+      this.auditHistoryHeaders=this.auditHistoryQuoteHeaders;
       this.triggerHistory();
     }
-    this.auditHistoryHeaders=this.auditHistoryQuoteHeaders;
+
     }else{
       this.workOrderService.getChargesHistory(this.isSubWorkOrder, this.isSubWorkOrder == true ? rowData.subWorkOrderChargesId : rowData.workOrderChargesId).subscribe(res => {
         this.historyData = res.reverse();
+        this.historyData.forEach(element => {
+          element.billingAmount=element.billingAmount ?  formatNumberAsGlobalSettingsModule(element.billingAmount, 2) : '0.00';
+          element.billingRate=element.billingRate ?  formatNumberAsGlobalSettingsModule(element.billingRate, 2) : '0.00';
+          element.markUp=element.markUp ?  formatNumberAsGlobalSettingsModule(element.markUp, 2) : '0.00';
+          element.unitCost=element.unitCost ?  formatNumberAsGlobalSettingsModule(element.unitCost, 2) : '0.00';
+          element.extendedCost=element.extendedCost ?  formatNumberAsGlobalSettingsModule(element.extendedCost, 2) : '0.00';
+      });
         this.auditHistoryHeaders=this.auditHistoryHeaders;
   this.triggerHistory();
       })
@@ -278,6 +306,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
 
   }
   saveChargesList(event) {
+
     event['charges'].forEach(
       x => {
         x.billingAmount = Number(x.extendedCost.toString().split(',').join('')).toFixed(2);
@@ -287,9 +316,15 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     )
     this.saveChargesListForWO.emit(event);
     $('#addNewCharges').modal('hide');
+      this.disableCrg=false;
+    
+  setTimeout(() => {
+    this.getValidCrg()
+  }, 2000);
   }
 
   updateChargesList(event) {
+    this.disableCrg=false;
     if (this.isQuote && this.isEdit) {
       this.workOrderChargesList[this.mainEditingIndex][this.subEditingIndex] = event.charges[0];
       $('#addNewCharges').modal('hide');
@@ -300,6 +335,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       $('#addNewCharges').modal('hide');
       this.isEdit = false;
     }
+    setTimeout(() => {
+      this.getValidCrg()
+    }, 2000);
   }
 
   getTaskName(id) {
@@ -353,6 +391,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     })
     let result = { 'data': sendData, 'taskSum': WorkOrderQuoteTask, 'chargesFlatRateBillingAmount': this.chargesFlatRateBillingAmount, 'ChargesBuildMethod': this.costPlusType }
     this.createQuote.emit(result);
+    this.disableCrg=true;
   }
 
   markupChanged(matData, type) {
@@ -519,4 +558,9 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   pageIndexChange(event) {
     this.pageSize = event.rows;
   }
+  disableCrg:boolean=false;
+  getValidCrg(){
+      this.disableCrg=false;
+  }
 }
+

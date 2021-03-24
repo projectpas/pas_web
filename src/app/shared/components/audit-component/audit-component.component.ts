@@ -12,7 +12,7 @@ export class AuditComponentComponent implements OnInit {
     data:any;
     constructor( private activeModal: NgbActiveModal,) { } 
 
-    ngOnInit() {
+    ngOnInit() { 
     }
 
     getColorCodeForHistory(i, field, value) {

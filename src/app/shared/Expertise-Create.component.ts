@@ -100,7 +100,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         newRow.overheadCost = "";
         newRow.standardRate = "";
         newRow.memo = "";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
         this.workFlow.expertise.push(newRow);
     }
 
@@ -224,7 +224,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.expertise[this.deletedRowIndex].isDeleted = true;
-            this.workFlow.expertise[this.deletedRowIndex].isDelete = true;
+            this.workFlow.expertise[this.deletedRowIndex].isDeleted = true;
         }
         this.reCalculate();
         this.dismissModel();

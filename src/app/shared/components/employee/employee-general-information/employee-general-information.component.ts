@@ -1137,25 +1137,15 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.isSpinnerVisible = false;
             return;
         }
-
-        if (this.sourceEmployee.currencyId == 0 || this.sourceEmployee.currencyId == null) {
-            this.alertService.showMessage(
-                "Validation Failed",
-                "Currency is require",
-                MessageSeverity.error
-            );
-            this.isSpinnerVisible = false;
-            return;
-        }
-        if (this.sourceEmployee.email == 0) {
-            this.alertService.showMessage(
-                "Validation Failed",
-                "Email is require",
-                MessageSeverity.error
-            );
-            this.isSpinnerVisible = false;
-            return;
-        }
+        // if (this.sourceEmployee.currencyId == 0 || this.sourceEmployee.currencyId == null) {
+        //     this.alertService.showMessage(
+        //         "Validation Failed",
+        //         "Currency is require",
+        //         MessageSeverity.error
+        //     );
+        //     this.isSpinnerVisible = false;
+        //     return;
+        // }
         this.sourceEmployee.jobTitleId = this.sourceEmployee.jobTitleId;
         this.sourceEmployee.employeeExpertiseId = this.sourceEmployee.employeeExpertiseId;
         this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay ? this.sourceEmployee.hourlyPay : null;

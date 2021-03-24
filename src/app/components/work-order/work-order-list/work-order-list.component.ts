@@ -54,20 +54,20 @@ export class WorkOrderListComponent implements OnInit {
     lazyLoadEventData: any;
     workFlowWorkOrderId: any
     headers = [
-        { field: 'workOrderNum', header: 'WO NO' },
-        { field: 'partNoType', header: 'MPN' },
-        { field: 'pnDescriptionType', header: 'MPN Description' },
-        { field: 'workScopeType', header: 'Work Scope' },
-        { field: 'priorityType', header: 'Priority' },
-        { field: 'customerName', header: 'Customer Name' },
-        { field: 'customerType', header: 'Customer Type' },
-        { field: 'openDate', header: 'Open Date' },
-        { field: 'customerRequestDateType', header: 'Cust Req Date' },
-        { field: 'promisedDateType', header: 'Promise Date' },
-        { field: 'estimatedShipDateType', header: 'Est. Ship Date' },
-        { field: 'estimatedCompletionDateType', header: 'Shipped Date' },
-        { field: 'stageType', header: 'Stage Code' },
-        { field: 'workOrderStatusType', header: 'Status' },
+        { field: 'workOrderNum', header: 'WO NO', width: "130px"},
+        { field: 'partNoType', header: 'MPN',width:"200px" },
+        { field: 'pnDescriptionType', header: 'MPN Description',width:"200px " },
+        { field: 'workScopeType', header: 'Work Scope',  width: "130px"},
+        { field: 'priorityType', header: 'Priority', width: "130px" },
+        { field: 'customerName', header: 'Customer Name',width:"200px" },
+        { field: 'customerType', header: 'Customer Type', width: "130px" },
+        { field: 'openDate', header: 'Open Date', width: "130px" },
+        { field: 'customerRequestDateType', header: 'Cust Req Date', width: "130px" },
+        { field: 'promisedDateType', header: 'Promise Date' , width: "130px"},
+        { field: 'estimatedShipDateType', header: 'Est. Ship Date',  width: "130px"},
+        { field: 'estimatedCompletionDateType', header: 'Shipped Date',  width: "130px"},
+        { field: 'stageType', header: 'Stage Code', width: "200px" },
+        { field: 'workOrderStatusType', header: 'Status', width: "130px" },
         { field: "createdDate", header: "Created Date", width: "130px" },
         { field: "createdBy", header: "CreatedBy", width: "130px" },
         { field: "updatedDate", header: "Updated Date", width: "130px" },
@@ -504,6 +504,7 @@ export class WorkOrderListComponent implements OnInit {
                         promisedDate: x.promisedDate ? this.datePipe.transform(x.promisedDate, 'MMM-dd-yyyy hh:mm a') : '',
                         promisedDateType: x.promisedDateType ? this.datePipe.transform(x.promisedDateType, 'MMM-dd-yyyy hh:mm a') : '',
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
 

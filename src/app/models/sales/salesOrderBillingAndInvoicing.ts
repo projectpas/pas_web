@@ -41,6 +41,7 @@ export class SalesOrderBillingAndInvoicing {
     isDeleted: boolean;
     createdDate: Date;
     updatedDate: Date;
+    billingItems: any;
 }
 // {
 //     soBillingInvoicingId: 0;

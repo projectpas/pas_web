@@ -55,7 +55,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             this.row = this.workFlow.charges[0];
             if (this.isEdit) {
                 this.workFlow.charges = [];
-                console.log("edit data",this.editData)
                 const data = {
                     ...this.editData,
 
@@ -273,13 +272,18 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         newRow.vendorId = "";
         newRow.vendorName = "";
         newRow.workflowChargeTypeId = "0";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
+        newRow.updatedBy = this.userName;
+        newRow.createdBy = this.userName;
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
         // newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
         this.workFlow.charges.push(newRow);
 
     
     }
-
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
     // calculate row wise extended cost
     calculateExtendedCost(charge): void {
         charge.unitCost = charge.unitCost ? formatNumberAsGlobalSettingsModule(charge.unitCost, 2) : '';
@@ -315,7 +319,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
 
     // sum of the qty
     calculateQtySummation() {
-        var charges = this.workFlow.charges.filter(x => x.isDelete != true);
+        var charges = this.workFlow.charges.filter(x => x.isDeleted != true);
         this.workFlow.qtySummation = charges.reduce((acc, x) => {
             return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
         }, 0);
@@ -325,7 +329,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
 
     // sum of extended cost 
     calculateExtendedCostSummation() {
-        var charges = this.workFlow.charges.filter(x => x.isDelete != true);
+        var charges = this.workFlow.charges.filter(x => x.isDeleted != true);
         this.workFlow.extendedCostSummation = charges.reduce((acc, x) => {
             return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
         }, 0);
@@ -335,7 +339,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
 
     // sum of extended price
     calculateExtendedPriceSummation() {
-        var charges = this.workFlow.charges.filter(x => x.isDelete != true);
+        var charges = this.workFlow.charges.filter(x => x.isDeleted != true);
         this.workFlow.totalChargesCost = charges.reduce((acc, x) => {
             //return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g, ''))
             return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
@@ -442,7 +446,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.charges[this.deletedRowIndex].isDeleted = true;
-            this.workFlow.charges[this.deletedRowIndex].isDelete = true;
+            this.workFlow.charges[this.deletedRowIndex].isDeleted = true;
         }
         this.reCalculate();
         this.dismissModel();

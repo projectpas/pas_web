@@ -448,10 +448,7 @@ console.log(this.sortedHierarchy)
     addUserRole(): void {
         this.isSpinnerVisible=true;
         this.currentUserRole.name = this.roleForm.value.name;
-        this.currentUserRole.memo = this.roleForm.value.description;
-        console.log(this.currentUserRole.name);
-        console.log(this.currentUserRole.memo);
-        //return;
+        this.currentUserRole.memo = this.roleForm.value.description;       
         if (this.currentUserRole.name == null) {
             this.isSpinnerVisible=false;
             this.alertService.showMessage(
@@ -461,6 +458,8 @@ console.log(this.sortedHierarchy)
             );
             return;
         }
+
+
         this.currentUserRole.masterCompanyId = this.currentUserMasterCompanyId;
         this.userRoleService.add(this.currentUserRole).subscribe(
             result => {
