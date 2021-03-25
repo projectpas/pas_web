@@ -446,7 +446,6 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     getInternationalShippingByCustomerId<T>(customerId) {
-        debugger;
         return this.http.get<T>(`${this.InternationalShippingList}?customerId=${customerId}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getInternationalShippingByCustomerId(customerId));

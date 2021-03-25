@@ -1,181 +1,166 @@
 ﻿<style type="text/css">
     .level1 td {
-    background-color: #7cb5d2;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    font-weight: bold;
+        background-color: #7cb5d2;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
     }
+
     .level2 td {
-    background-color: #bc94b7;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    font-weight: bold;
+        background-color: #bc94b7;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
     }
+
     .level3 td {
-    background-color: #fde05e;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    font-weight: bold;
+        background-color: #fde05e;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
     }
+
     .level4 td {
-    background-color: #f68e51;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    font-weight: bold;
+        background-color: #f68e51;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
     }
+
     .level5 td {
-    background-color: #bcd74a;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    font-weight: bold;
+        background-color: #bcd74a;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
     }
+
     .level6 td {
-    background-color: #f8e0c8;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    font-weight: bold;
+        background-color: #f8e0c8;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
     }
+
     .level1 {
     }
+
     .level2 td:first-child {
-    padding-left: 25px;
+        padding-left: 25px;
     }
+
     .level3 td:first-child {
-    padding-left: 50px;
+        padding-left: 50px;
     }
+
     .level4 td:first-child {
-    padding-left: 75px;
+        padding-left: 75px;
     }
+
     .level5 td:first-child {
-    padding-left: 100px;
+        padding-left: 100px;
     }
+
     .level6 td:first-child {
-    padding-left: 125px;
+        padding-left: 125px;
     }
- </style>
- <div>
+
+    
+</style>
+<div>
     <div class="col-md-12">
-       <div class="x_panel" style="">
-          <div class="x_content">
-             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                   <li class="breadcrumb-item" aria-current="page">Admin</li>
-                   <li class="breadcrumb-item" aria-current="page">Roles</li>
-                   <li class="breadcrumb-item active" aria-current="page">Create Role</li>
-                </ol>
-             </nav>
-             <div class="card new-card">
-                <div class="card-header header">
-                   <div class="row">
-                      <div class="col">
-                         <h4 class="header-name">Add New Role</h4>
-                      </div>
-                   </div>
+        <div class="x_panel" style="">
+            <div class="x_content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item" aria-current="page">Admin</li>
+                        <li class="breadcrumb-item" aria-current="page">Roles</li>
+                        <li class="breadcrumb-item active" aria-current="page">Create Role</li>
+                    </ol>
+                </nav>
+                <div class="pheading">
+                    <h4 class="page-heading">Add New Role</h4>
+                    <!--<form id="" class="lgrey-bg div8 filters" name="" action="#" method="post" onsubmit="return false;">-->
+                        <div class="col-sm-3 emp-filter">
+                            <label>Role Name</label>
+                            <br>
+                            <input type="text" [(ngModel)]="currentUserRole.name" class="form-control">
+                        </div>
+                        <div class="col-sm-3 emp-filter">
+                            <label>Memo</label>
+                            <br>
+                            <input type="text" [(ngModel)]="currentUserRole.memo" class="form-control">
+                        </div>
+                    <!--</form>-->
                 </div>
-                <div class="card-body new-card-body">
-                   <!--<form id="" class="lgrey-bg div8 filters" name="" action="#" method="post" onsubmit="return false;">-->
-                   <form [formGroup]="roleForm">
-                   <div class="form-group col-sm-3 emp-filter">
-                      <label style="text-align: left;">Role Name</label>
-                      <br>
-                      <input type="text" formControlName="name" class="form-control" required>
-                   </div>
-                   <div *ngIf="name.invalid && (name.dirty || name.touched)"
-                      class="alert alert-danger alert-danger-cstm">
-                      <div *ngIf="name.errors.required">
-                         <small> Role Name is required </small>
-                      </div>
-                   </div>
-                   <div class="col-sm-3 emp-filter">
-                      <label style="width:100%;text-align: left;">Role Description</label>
-                      <br>
-                      <input type="text" formControlName="description" class="form-control">
-                   </div>
-                   <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
-                      <div class="x_panel">
-                         <div class="tab-content">
-                            <div id="" class="table-responsive default-bg clear pas-table-cstm poro-table-cstm parts-list-table-align">
-                               <div class="tableFixHead">
-                                  <table class="table table-bordered header-table-width table-striped role-setup-table">
-                                     <thead>
-                                        <tr>
-                                            <th>
-                                                Module Name
-                                            </th>
-                                           <th *ngFor="let module of permissionMaster;index as i">
-                                              {{module.permissionName}}
-                                           </th>
-                                        </tr>
-                                     </thead>
-                                     <tbody>
-                                        <ng-container *ngFor="let module of sortedHierarchy;index as i">
-                                           <tr class="level{{module.level}}" [hidden]="!module.visible">
-                                              <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
-                                                 {{module.name}}
-                                                 <i  *ngIf="module.hasChildren"  class="fa fa-caret-down cls{{module.parentId}}"></i>
-                                              </td>
-                                              <td *ngFor="let permission of permissionMaster; index as i">
-                                                 <!-- <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="module.rolePermission.isSelect" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" /> -->
-                                                 <input type="checkbox" id="{{permission.permissionID}}_{{i}}" [checked]="getChecked(module, permission.permissionID)" (change)="permissionChecked($event,module,permission.permissionID)"  name="{{permission.permissionID}}_{{i}}" />
-                                              </td>
-                                              <!-- <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
-                                              </td>
-                                              <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
-                                              </td>
-                                              <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
-                                              </td>
-                                              <td>
-                                                 <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
-                                              </td>
-                                              <td>
-                                                 <input *ngIf="!module.isPage" type="checkbox" />
-                                              </td>
-                                              <td>
-                                                 <input *ngIf="!module.isPage" type="checkbox" />
-                                              </td>
-                                              <td>
-                                                 <input *ngIf="!module.isPage" type="checkbox" />
-                                              </td> -->
-                                           </tr>
-                                        </ng-container>
-                                     </tbody>
-                                  </table>
-                               </div>
-                            </div>
-                         </div>
-                      </div>
-                   </div>
-                   </form>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
+        <div class="x_panel">
+            <div class="tab-content">
+                <div id="" class="table-responsive default-bg clear">
+                    <table class="table table-bordered table-striped role-setup-table">
+                        <thead>
+                            <tr>
+                                <th>Modules</th>
+                                <th>View</th>
+                                <th>Add</th>
+                                <th>Delete</th>
+                                <th>Update</th>
+                                <th>Reports</th>
+                                <th>Excell Upload</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let module of sortedHierarchy;index as i">
+                                <tr class="level{{module.level}}" [hidden]="!module.visible">
+                                    <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
+                                        {{module.name}}
+
+                                        <i  *ngIf="!module.isPage"  class="fa fa-caret-down"></i>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
+                                    </td>
+                                    <td>
+                                        <input *ngIf="!module.isPage" type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <input *ngIf="!module.isPage" type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <input *ngIf="!module.isPage" type="checkbox" />
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <div class="clear"></div>
+                    <div style="margin-top: 10px;"></div>
+                    <button class="btn btn-success pull-right" (click)="addUserRole()">Add Role Details</button>
+                    <div class="clear"></div>
+                    <br>
+                    <div class="padding5">
+                        <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
+                    </div>
                 </div>
-             </div>
-             <div class="clear"></div>
-             <div class="clear"></div>
-             <div style="margin-top: 10px;"></div>
-             <button class="btn btn-primary pull-right" (click)="addUserRole()">Add Role Details</button>
-             <div class="clear"></div>
-          </div>
-       </div>
+            </div>
+            <div class="clear"></div>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
     </div>
- </div>
- <br>
- <div class="padding5">
-    <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
- </div>
- <div class="clear"></div>
- <div class="preloader" *ngIf="isSpinnerVisible">
-    <div class="loading">
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  </div>
+</div>

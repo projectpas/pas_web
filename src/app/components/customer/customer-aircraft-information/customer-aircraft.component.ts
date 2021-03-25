@@ -12,7 +12,6 @@ import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-
 
 declare var $ : any;
 import { Table } from 'primeng/table';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-customer-aircraft',
     templateUrl: './customer-aircraft.component.html',
@@ -95,9 +94,7 @@ export class CustomerAircraftComponent implements OnInit {
     stopmulticlicks: boolean;
     currentDeletedstatus:boolean=false;
     restorerecord:any={}
-    isAdd:boolean=true;
-    isEdit:boolean=true;
-    isDelete:boolean=true;
+
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,
@@ -111,9 +108,6 @@ export class CustomerAircraftComponent implements OnInit {
     ) {
         this.stopmulticlicks = false;
         this.id = this.route.snapshot.params['id'];
-        this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
-		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Delete])
     }
     ngOnInit() {
 

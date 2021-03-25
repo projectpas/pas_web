@@ -28,7 +28,7 @@
               <div class="col">
                 <h4 class="header-name"> Billing Information</h4>
               </div>
-              <div *ngIf="isAdd">
+              <div>
                 <a *ngIf="isViewMode == false" 
                  data-toggle="modal" data-target="#addBillingInfo">
                   <button type="button" class="btn-sm header-button"  matTooltip="Add Billing Information" matTooltipPosition="above" (click)="addBillingIfo();">
@@ -187,7 +187,7 @@
 
               <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false">
                 <div *ngIf="currentDeletedstatus==false">
-                  <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true"
+                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true"
                    
                     name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForBilling(rowData)"></p-inputSwitch> 
@@ -196,17 +196,17 @@
                     matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                 </span>
 
-                <span *ngIf="isEdit" data-target="#addBillingInfo" data-toggle="modal"><a class="btn nobg" (click)="openEdit(rowData)"
+                <span data-target="#addBillingInfo" data-toggle="modal"><a class="btn nobg" (click)="openEdit(rowData)"
                     matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
 
-                <span *ngIf="isDelete"><a class="btn nobg" (click)="deleteBillingInfo(deleteContent, rowData); dt.reset()"
+                <span><a class="btn nobg" (click)="deleteBillingInfo(deleteContent, rowData); dt.reset()"
                     matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
 
                 <span><a class="btn nobg" (click)="getCustomerBillingHistory(contentAuditHist, rowData)"
                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                 </div>
                 <div *ngIf="currentDeletedstatus==true">
-                  <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForBilling(rowData)"></p-inputSwitch> 
                   <span data-toggle="modal" data-target="#viewBilling">
                     <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openBillingView(rowData)"

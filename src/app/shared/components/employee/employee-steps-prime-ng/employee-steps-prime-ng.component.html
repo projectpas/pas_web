@@ -7,7 +7,7 @@
 				</h4>
 			</div>
 			<div>
-				<button type="button" *ngIf="isView"
+				<button type="button"
 						class="btn-sm header-button"
 						[routerLink]="['/employeesmodule/employeepages/app-employees-list']">
 					Employee List
@@ -18,7 +18,7 @@
 </div>
         <div class="md-stepper-horizontal orange new-stepper-align" *ngIf="showComponentPTab">
 				<ng-container *ngFor="let item of items;">
-					<div *ngIf="isShowTab(item.label)"
+					<div
 						class="md-step"
 						[ngClass]="{
 						  active: activeIndex >= item.index,
