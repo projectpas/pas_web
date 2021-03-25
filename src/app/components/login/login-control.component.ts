@@ -11,11 +11,6 @@ import { AuthService } from "../../services/auth.service";
 import { ConfigurationService } from '../../services/configuration.service';
 import { Utilities } from '../../services/utilities';
 import { UserLogin } from '../../models/user-login.model';
-import {MasterComapnyService} from '../../services/mastercompany.service';
-import * as $ from 'jquery';
-import { MasterCompany } from 'src/app/models/mastercompany.model';
-import { Router } from '@angular/router';
-
 declare var $ : any;
 @Component({
     selector: "app-login-control",
@@ -30,8 +25,6 @@ export class LoginControlComponent implements OnInit, OnDestroy {
     modalClosedCallback: () => void;
     loginStatusSubscription: any;
 
-    masterCompanyList:MasterCompany[] = [];
-
     @Input()
     isModal = false;
 
@@ -39,9 +32,7 @@ export class LoginControlComponent implements OnInit, OnDestroy {
         private alertService: AlertService,
         private authService: AuthService,
         private configurations: ConfigurationService,
-        private formBuilder: FormBuilder,
-        private masterCompanyService:MasterComapnyService,
-        private router:Router) {
+        private formBuilder: FormBuilder) {
         this.buildForm();
     }
 
@@ -49,27 +40,9 @@ export class LoginControlComponent implements OnInit, OnDestroy {
         this.loginForm.setValue({
             userName: '',
             password: '',
-            masterCompanyId:1,
             rememberMe: this.authService.rememberMe
         });
-        
-        this.loadMasterCompanies();
 
-        
-    }
-
-    private loadMasterCompanies() {
-        this.masterCompanyService.getMasterCompanies().subscribe(
-            results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    
-    }
-
-    private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
-        // alert('success');
-       //alert(allComapnies);
-        this.masterCompanyList = allComapnies;
         if (this.getShouldRedirect()) {
             this.authService.redirectLoginUser();
         }
@@ -81,13 +54,8 @@ export class LoginControlComponent implements OnInit, OnDestroy {
                     }
                 });
         }
-
     }
 
-    private onDataLoadFailed(error: any) {
-console.log(error);
-    }
-    
     ngOnDestroy() {
         if (this.loginStatusSubscription) {
             this.loginStatusSubscription.unsubscribe();
@@ -98,7 +66,6 @@ console.log(error);
         this.loginForm = this.formBuilder.group({
             userName: ['', Validators.required],
             password: ['', Validators.required],
-            masterCompanyId: ['', Validators.required],
             rememberMe: ''
         });
     }
@@ -106,8 +73,6 @@ console.log(error);
     get userName() { return this.loginForm.get('userName'); }
 
     get password() { return this.loginForm.get('password'); }
-
-    get masterCompanyId(){return this.loginForm.get('masterCompanyId');}
 
     getShouldRedirect() {
         return !this.isModal && this.authService.isLoggedIn && !this.authService.isSessionExpired;
@@ -125,7 +90,7 @@ console.log(error);
 
     getUserLogin(): UserLogin {
         const formModel = this.loginForm.value;
-        return new UserLogin(formModel.userName, formModel.password, formModel.rememberMe,formModel.masterCompanyId);
+        return new UserLogin(formModel.userName, formModel.password, formModel.rememberMe);
     }
     
  
@@ -139,10 +104,7 @@ console.log(error);
             user => {
               
                 const userLoginDetails = localStorage.getItem('current_user') === null || localStorage.getItem('current_user') == undefined ?    sessionStorage.getItem('current_user')  :  localStorage.getItem('current_user');
-                console.log(userLoginDetails);console.log(this.authService.currentUser.isResetPassword);
-                if(this.authService.currentUser.isResetPassword=="False"){
-                this.router.navigateByUrl('/UpdatePassword');
-                }
+            
                 //this.getEmployeeDetailsByEmployeeId(userLoginDetails);
                 setTimeout(() => {
                     this.alertService.stopLoadingMessage();

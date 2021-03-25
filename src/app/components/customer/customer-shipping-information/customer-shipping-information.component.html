@@ -35,7 +35,7 @@
             <div id="step1" class="panel-collapse collapse">
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
-                      <div class="text-right" *ngIf="isAddDomestic">
+                      <div class="text-right">
                         <a *ngIf="isViewMode == false" 
                           data-toggle="modal" data-target="#addShippingInfo">
                           <button type="button" class="btn-sm header-button add-shipping-button"  matTooltip="Add Domestic Shipping Information" matTooltipPosition="above" (click)="addDomesticShipping();">
@@ -176,7 +176,7 @@
                               </td>
                               <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == false">
                                   <div *ngIf="currentDeletedstatus1==false">
-                                  <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
             
                                 <span data-toggle="modal" data-target="#viewShipping">
@@ -185,13 +185,13 @@
                                       class="fa fa-eye"></i></a>
                                 </span>
             
-                                <span *ngIf="isUpdateDomestic" data-toggle="modal" data-target="#addShippingInfo"><a class="btn nobg"
+                                <span data-toggle="modal" data-target="#addShippingInfo"><a class="btn nobg"
                                     (click)="openEditDomestic(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                                       class="fa fa-pencil"></i></a> </span>
-                                <span *ngIf="isDeleteDomestic"><a class="btn nobg"
+                                <span><a class="btn nobg"
                                     (click)="deleteDomesticShipping(deleteContent, rowData);domestictable.reset()"
                                     matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-                                <button *ngIf="isAddDomestic" class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via"
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via"
                                   matTooltipPosition="above" data-original-title="View Shipping Via Information"
                                   style="padding: 0;">
                                   <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal"
@@ -201,7 +201,7 @@
                                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                               </div>
                                 <div *ngIf="currentDeletedstatus1==true">
-                                  <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
             
                                 <span data-toggle="modal" data-target="#viewShipping">
@@ -211,7 +211,7 @@
                                 </span>
                                 <span><a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist, rowData)"
                                   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                  <span *ngIf="isDeleteDomestic"><a class="btn nobg" (click)="restore1(restoreId1,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                  <span ><a class="btn nobg" (click)="restore1(restoreId1,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
                               <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
@@ -220,7 +220,7 @@
                                     (click)="openShippinggView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                       class="fa fa-eye"></i></a>
                                 </span>
-                                <button *ngIf="isAddDomestic" class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via"
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via"
                                   matTooltipPosition="above" data-original-title="View Shipping Via Information"
                                   style="padding: 0;">
                                   <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal"
@@ -265,7 +265,7 @@
             <div id="step2" class="panel-collapse  collapse">
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
-                      <div class="text-right" *ngIf="isAddDomestic">
+                      <div class="text-right">
                         <a *ngIf="isViewMode == false" 
                          data-toggle="modal" data-target="#addInternationalShippingInfo">
                           <button type="button"  class="btn-sm header-button add-shipping-button"  matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="addInternationalShipping();">
@@ -428,7 +428,7 @@
                               <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == false" >
                                 
                                 <div *ngIf="currentDeletedstatus2==false">
-                                <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                 matTooltipPosition="above" (onChange)="updateActiveorInActiveForIS(rowData)"></p-inputSwitch> 
             
                                 <span data-toggle="modal" data-target="#viewInter">
@@ -437,15 +437,15 @@
                                       class="fa fa-eye"></i></a>
                                 </span>
             
-                                <span *ngIf="isUpdateDomestic" data-toggle="modal" data-target="#addInternationalShippingInfo"><a class="btn nobg"
+                                <span data-toggle="modal" data-target="#addInternationalShippingInfo"><a class="btn nobg"
                                     (click)="openEditIntenational(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                                       class="fa fa-pencil"></i></a> </span>
             
-                                <span *ngIf="isDeleteDomestic"><a class="btn nobg"
+                                <span><a class="btn nobg"
                                     (click)="deleteInternationalShipping(deleteContent1, rowData);intlShippingTable.reset()"
                                     matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
             
-                                <button *ngIf="isAddDomestic" class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via "
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via "
                                   matTooltipPosition="above" data-original-title="View Shipping Via Info" style="padding: 0;">
                                   <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
                                     (click)="selectedInternationalShipForShipVia(rowData)"></i>
@@ -456,7 +456,7 @@
                                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                 </div>
                                 <div *ngIf="currentDeletedstatus2==true">
-                                  <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                  <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                   matTooltipPosition="above" (onChange)="updateActiveorInActiveForIS(rowData)"></p-inputSwitch> 
               
                                   <span data-toggle="modal" data-target="#viewInter">
@@ -466,7 +466,7 @@
                                   </span>
                                   <span><a class="btn nobg" (click)="openInterShippingHistory(contentAuditHistInter, rowData)"
                                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
-                                  <span *ngIf="isDeleteDomestic"><a class="btn nobg" (click)="restore2(restoreId2,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                  <span ><a class="btn nobg" (click)="restore2(restoreId2,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                   </div>
                               </td>
                               <td class="action-icons-cstm table-column-width text-center" *ngIf="isViewMode == true">
@@ -475,7 +475,7 @@
                                     (click)="openInterShippingView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                       class="fa fa-eye"></i></a>
                                 </span>
-                                <button *ngIf="isAddDomestic" class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via "
+                                <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Ship Via "
                                   matTooltipPosition="above" data-original-title="View Shipping Via Info">
                                   <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal"
                                     (click)="selectedInternationalShipForShipVia(rowData)"></i>

@@ -5,7 +5,7 @@
         <h4 class="header-name">Publications List</h4>
       </div>
       <div>
-        <button type="button" class="btn-sm header-button" *ngIf="isAdd"
+        <button type="button" class="btn-sm header-button"
           [routerLink]="['/singlepages/singlepages/app-create-publication']">
           Add Publication
         </button>
@@ -196,7 +196,7 @@
               <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData,$event)"></p-inputSwitch>
-              <span *ngIf="isView">
+              <span>
                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" data-target="#view"
                   data-toggle="modal" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                     class="fa fa-eye"></i></a>
@@ -206,10 +206,10 @@
                   matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
               </span>
 
-              <span *ngIf="isEdit"><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+              <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                     class="fa fa-pencil"> </i></a>
               </span>
-              <span *ngIf="isDelete">
+              <span>
                 <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
                   matTooltipPosition="above">
                   <i class="fa fa-trash"></i></a>

@@ -23,8 +23,6 @@ import { UserRole, ModuleHierarchyMaster, RolePermission } from '../components/u
 import { UserRoleService } from '../components/user-role/user-role-service';
 import { AccountService } from './account.service';
 import { CommonService } from './common.service';
-import { decode } from 'punycode';
-import { BehaviorSubject } from 'rxjs';
 // import { AccountService } from "../services/account.service";
 
 @Injectable()
@@ -42,9 +40,6 @@ export class AuthService {
     private previousIsLoggedInCheck = false;
 
     private _loginStatus = new Subject<boolean>();
-
-    public ModuleInfo: BehaviorSubject<Array<ModuleHierarchyMaster>> = new BehaviorSubject([]);
-
 private defaultEmployeeDetails= new Subject<any>()
     constructor(private router: Router, private configurations: ConfigurationService, private endpointFactory: EndpointFactory, private localStorage: LocalStoreManager,private userRoleService:UserRoleService ,private commonService:CommonService) {
         this.initializeLoginStatus();
@@ -55,14 +50,6 @@ private defaultEmployeeDetails= new Subject<any>()
             this.reevaluateLoginStatus();
         });
     }
-
-    public SetMenuInfo(newValue: ModuleHierarchyMaster[]): void {
-        this.ModuleInfo.next(Object.assign([], newValue));
-        this.localStorage.saveSyncedSessionData(newValue, "UserRoleModule");
-      }
-    //  public  removeMenuInfo() {
-    //     this.ModuleInfo.next([]);
-    //   }
 
     gotoPage(page: string, preserveParams = true) {
 
@@ -93,7 +80,7 @@ private defaultEmployeeDetails= new Subject<any>()
     redirectLogoutUser() {
         let redirect = this.logoutRedirectUrl ? this.logoutRedirectUrl : this.loginUrl;
         this.logoutRedirectUrl = null;
-        window.location.href=redirect;
+
         this.router.navigate([redirect]);
     }
 
@@ -123,7 +110,7 @@ private defaultEmployeeDetails= new Subject<any>()
         if (this.isLoggedIn)
             this.logout();
 
-        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password,user.masterCompanyId)
+        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password)
             .map(response => this.processLoginResponse(response, user.rememberMe));
     }
 
@@ -232,15 +219,12 @@ private defaultEmployeeDetails= new Subject<any>()
             decodedAccessToken.employeeId,
             decodedAccessToken.managementStructureId,
             decodedAccessToken.masterCompanyId,
-            decodedAccessToken.legalEntityId,
-            
+            decodedAccessToken.legalEntityId
             );
             console.log(user, "user++++")
         user.isEnabled = true;
-        user.isResetPassword=decodedAccessToken.isResetPassword,
-        user.roleName=decodedAccessToken.roleName;
-        user.permissionName=Array.isArray(decodedAccessToken.permissionName)?decodedAccessToken.permissionName:[decodedAccessToken.permissionName];
-        user.roleID=decodedAccessToken.roleID;
+
+
         this.saveUserDetails(user, permissions, accessToken, refreshToken, accessTokenExpiry, rememberMe);
         this.getUserRolePermissionByUserId(user.id);
         this.loadAllModulesNameToLocalStorage();
@@ -248,9 +232,7 @@ private defaultEmployeeDetails= new Subject<any>()
         this.loadGlobalSettings();
         this.getEmployeeDetails(user);
         this.getManagementstructureDetails(user);
-        // if(user.roleID!=undefined){
-        // this.TestROle(user.roleID);
-        // }
+
         return user;
     }
 
@@ -352,7 +334,6 @@ private defaultEmployeeDetails= new Subject<any>()
         this.localStorage.deleteData(DBkeys.GLOBAL_SETTINGS);
         this.localStorage.deleteData(DBkeys.EMPLOYEE);
         this.localStorage.deleteData(DBkeys.MANAGEMENTSTRUCTURE);
-        this.localStorage.deleteData("UserRoleModule");
         this.configurations.clearLocalChanges();
 
         this.reevaluateLoginStatus();
@@ -417,83 +398,7 @@ private defaultEmployeeDetails= new Subject<any>()
         return this.currentUser != null;
     }
 
-    get userRole():string{
-        if(this.currentUser!=null){
-            return this.currentUser.roleName;
-        }
-    }
-
     get rememberMe(): boolean {
         return this.localStorage.getDataObject<boolean>(DBkeys.REMEMBER_ME) == true;
     }
-
-    public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string):Promise<Boolean> {
-        debugger;
-        let Menus =this.getModuleByUserRole();// MenuInfo.getValue();
-        linkToCheck = linkToCheck.toLocaleLowerCase();
-        let isAllowed:Boolean = false;
-        if(Menus.length == 0){
-          let roleID =this.currentUser.roleID;
-          Menus= await this.getRolestypes(roleID);
-        }
-        Menus.forEach(el => {
-          if(el.RouterLink && el.RouterLink.toLocaleLowerCase().indexOf(linkToCheck) != -1)
-          {
-            isAllowed = true;
-          }
-        });
-        return isAllowed;
-      }
-
-      public async getRolestypes(roleID:string): Promise<Array<ModuleHierarchyMaster>> {
-        return new Promise((resolve) => {
-            this.userRoleService.getUserMenuByRoleId(roleID).subscribe(data=>{
-                resolve(data[0]);
-               
-            })
-        });
-      }
-
-      public getModuleByUserRole(){
-        return  this.localStorage.getData("UserRoleModule");
-      }
-
-      public checkPermission(permissionName:string[]):boolean{
-        let isAllowed:boolean = false;
-        if(this.currentUser && this.currentUser.permissionName!=null){
-            
-            let getData=this.currentUser.permissionName.filter((value)=>
-                permissionName.includes(value));
-            isAllowed=getData.length>0;
-        }
-        
-        return isAllowed;
-      }
-
-      public ShowTab(moduleName:string, tabName: string):Boolean {
-        let Menus= this.getModuleByUserRole();
-        //alert(Menus);
-        tabName = tabName.toLocaleLowerCase();
-         let isAllowed:Boolean = false;
-
-         if(this.currentUser.userName!='admin'){
-        var parentModule=Menus.filter(function(value){
-            return value.Name==moduleName;
-        });
-
-        if(parentModule!=undefined){
-           
-            Menus.forEach(el => {
-                if(el.ParentID==parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3))
-                {
-                  isAllowed = true;
-                }
-              });
-        }
-    }
-    else{
-        isAllowed=true;
-    }
-        return isAllowed;
-      }
 }
