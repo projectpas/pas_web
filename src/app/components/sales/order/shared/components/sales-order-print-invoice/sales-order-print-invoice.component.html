@@ -109,7 +109,7 @@
                             <input type="text" placeholder="1 of 1" value="" disabled />
                         </div> -->
                     </div>
-                    <div class="col-sm-12" style="margin-top:5%">
+                    <div class="col-sm-12">
                         <div class="first-block-sold col-sm-6">
                             <div class="first-block-sold-to">
                                 <label style="text-align: left; text-decoration: underline; padding-bottom: 10px;">
@@ -249,7 +249,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <ng-container *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
+                                <ng-container
+                                    *ngFor="let child of this.salesOrderInvoice.salesOrderListToPrint; let i = index;">
                                     <tr>
                                         <td rowspan="3">{{child.itemNo}}</td>
                                         <td colspan="3" rowspan="3"> PN: {{child.pNumber}}
@@ -262,13 +263,33 @@
                                         <td>{{child.cond}}</td>
                                         <td> - </td>
                                         <td>{{child.qtyShipped}}</td>
-                                        <td style="text-align: right;">{{child.unitPrice}}</td>
-                                        <td style="text-align: right;">{{child.amount}}</td>
+                                        <td style="text-align: right;">{{child.unitPrice | number : '1.2-2'}}</td>
+                                        <td style="text-align: right;">{{child.amount | number : '1.2-2'}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="6" rowspan="2">Notes</td>
                                     </tr>
                                     <tr></tr>
+                                    <tr>
+                                        <td colspan="7"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr></tr>
+                                </ng-container>
+                                <ng-container *ngFor="let child of this.salesOrderCharges; let i = index;">
+                                    <tr>
+                                        <td>NA</td>
+                                        <td colspan="3"> MISC:  {{child.chargeType}}
+                                        </td>
+                                        <td> - </td>
+                                        <td>{{child.cond}}</td>
+                                        <td> - </td>
+                                        <td>{{child.quantity}}</td>
+                                        <td style="text-align: right;">{{child.unitCost | number : '1.2-2'}}</td>
+                                        <td style="text-align: right;">{{child.billingAmount | number : '1.2-2'}}</td>
+                                    </tr>
                                     <tr>
                                         <td colspan="7"></td>
                                         <td></td>
@@ -287,7 +308,7 @@
                                 <tr></tr>
                                 <tr>
                                     <td rowspan="7" colspan="7">
-                                        Notes/Instructions
+                                        Notes/Instructions: <span>{{this.salesOrderInvoice.soNotes}}</span>
                                     </td>
                                     <td class="border-transparent" colspan="2">SUBTOTAL</td>
                                     <td style="text-align: right;"> {{this.salesOrderInvoice.subTotal}}</td>
@@ -299,19 +320,23 @@
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">SALES TAX</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.tax | number : '1.2-2'}} </td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.tax | number : '1.2-2'}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">OTHER TAX</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.otherTax | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">
+                                        {{this.salesOrderInvoice.otherTax | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">MISC CHARGES</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.miscCharges | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">
+                                        {{this.salesOrderInvoice.miscCharges | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">FREIGHT</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.freight | number : '1.2-2'}}</td>
+                                    <td style="text-align: right;">
+                                        {{this.salesOrderInvoice.freight | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">

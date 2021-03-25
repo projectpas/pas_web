@@ -152,7 +152,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="Customer Name">Customer Name<span class="clr-red">*</span>
+                                    <label for="Customer Name">Customer Name<span class="clr-red"></span>
                                     </label>
                                     <p class="c-workflow-select">
                                         <p-autoComplete appendTo="body" [(ngModel)]="sourceWorkFlow.customerName"
@@ -160,7 +160,7 @@
                                             [size]="32" [minLength]="1" [dropdown]="true" class="wf-header-select"
                                             #partNum="ngModel" errorMessage="Records not found" field="customerName"
                                             (onSelect)="onCustomerNameselected($event)" [forceSelection]="true"
-                                            title="customerName" required>
+                                            title="customerName">
                                         </p-autoComplete>
                                     </p>
                                 </div>

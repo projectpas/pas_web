@@ -116,8 +116,8 @@ export class WorkOrderService {
     updateActionforWorkOrder(action, login) {
         return this.workOrderEndpointService.updateWorkOrderStatus(action, login);
     }
-    deleteActionforWorkOrder(workOrderId) {
-        return this.workOrderEndpointService.deleteWorkOrder(workOrderId);
+    deleteActionforWorkOrder(workOrderId,login) {
+        return this.workOrderEndpointService.deleteWorkOrder(workOrderId,login);
     }
 
     getWorkOrderPartListByWorkOrderId(workOrderId) {
