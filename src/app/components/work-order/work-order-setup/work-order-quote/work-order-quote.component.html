@@ -1,5 +1,5 @@
 ﻿
-    <div *ngIf="selectedDisplayType != ''" style="color: red; font-size: 20px;">
+    <div *ngIf="selectedDisplayType != ''" class="wo-details">
         {{(selectedDisplayType == 'use historical wos')?'Work order details ':'Workorder quote Details of '+quoteForm.quoteNumber}}
     </div>
     <nav aria-label="breadcrumb" *ngIf="!isView">
@@ -45,7 +45,7 @@
                 </div>
            </div>
         </div>
-    <div class="card-body new-card-body">
+    <div class="card-body header-body">
         <div class="form-row" [hidden]="isDetailedView">
             <div class="col-md-3"> 
                 <div class="form-group ">
@@ -146,7 +146,7 @@
                             <div [innerHTML]="memo"
                                 [matTooltip]="parsedText(memo)"
                                 matTooltipPosition="above"
-                                class="form-control text_editor_box memo_cehck1" style="width: 100%;">
+                                class="form-control text_editor_box memo_cehck1" style="width: 100%;line-height:1.5;">
                             </div>
                         </div>
                     </span>
@@ -316,7 +316,7 @@
     <div class="card-body">
 
         <div class="card col-md-12 list_caps" id="approvalTabs">
-            <div class="form-group " style="margin:0px;">
+            <div class="form-group margin-0">
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'mpns'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('mpns');">MPNs</button>
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'internalApprovers'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('internalApprovers');">Internal Approvers</button>
                 <button type="button" class="btn" [ngClass]="approvalGridActiveTab === 'approvalProcess'?'btn-primary':'btn-light-cstm'" (click)="approvalGridActiveTabChange('approvalProcess');selectall = false;">Approval Process</button>
@@ -328,7 +328,7 @@
             </div>
         </div>
             <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'mpns'">
-                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                     <table class="table table-bordered lastcol-fix mpn-list-table"
                            id="mpn-list-table">
                         <thead>
@@ -401,22 +401,22 @@
                                 <td>
                                     <label>   {{workOrderPart['refNo']}}  </label>
                                 </td>
-                                <td style="min-width: 80px;">
+                                <td class="min-width-80">
                                     <label> {{workOrderPart['levelCode1'] }}  </label>
                                 </td>
-                                <td style="min-width: 80px;">
+                                <td class="min-width-80">
                                     <label>
 
                                         {{workOrderPart['levelCode2'] }}
                                     </label>
                                 </td>
-                                <td style="min-width: 80px;">
+                                <td class="min-width-80">
                                     <label>
 
                                         {{workOrderPart['levelCode3'] }}
                                     </label>
                                 </td>
-                                <td style="min-width: 80px;">
+                                <td class="min-width-80">
                                     <label>
 
                                         {{workOrderPart['levelCode4'] }}
@@ -522,7 +522,7 @@
                                 <!-- <label>{{workOrderPart['workScope']}}</label> -->
                                 <!-- <input [value]="workOrderPart['workScope']" readonly/> -->
                                 <!-- </td> -->
-                                <td class="flex_d table-actions-column1" style="height:41px !important;padding-top:8px;">
+                                <td class="flex_d table-actions-column1 mpn-table-buttons">
                                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
                     <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
@@ -533,7 +533,7 @@
             </div>
 
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'internalApprovers'">
-                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                     <table class="table table-bordered header-table-width"
                            id="mpn-list-table">
                         <thead>
@@ -587,7 +587,7 @@
            
             <div class="col-sm-12" *ngIf="approvalGridActiveTab === 'approvalProcess'">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
-                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                     <table class="table table-bordered"
                            id="mpn-list-table">
                         <thead>
@@ -629,7 +629,7 @@
                                     <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
                                         <label *ngIf="field.field != 'internalStatusId'"
                                           [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                                        <select style="width:150px;" [(ngModel)]="approver.internalStatusId"
+                                        <select class="width-150" [(ngModel)]="approver.internalStatusId"
                                           [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
                                           *ngIf="field.field == 'internalStatusId'">
                                           <option value='-1'>--Select</option>
@@ -641,7 +641,7 @@
                                       <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
                                         <label *ngIf="field.field != 'internalStatusId'"
                                           [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                                        <select style="width:150px;" [(ngModel)]="approver.internalStatusId"
+                                        <select class="width-150" [(ngModel)]="approver.internalStatusId"
                                           [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
                                           *ngIf="field.field == 'internalStatusId'">
                                           <option value='' selected>--Select</option>
@@ -650,7 +650,7 @@
                                           </option>
                                         </select>
                                       </td>
-                                    <td *ngIf="field.field == 'internalMemo'" class="col-sm-12" style="width: 200px;">
+                                    <td *ngIf="field.field == 'internalMemo'" class="col-sm-12 width-200">
                                         <div class="col-sm-11">
                                         <!-- <input type="text" [(ngModel)]="approver['internalMemo']" class="calender-cstm" style="width:200px;"
                                                [disabled]="!approver.isSelected || approver['approvalActionId'] != 2"
@@ -658,7 +658,7 @@
                                                <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['internalMemo']"></p>
                                                </div>
 
-                                               <div class="col-sm-1" style="margin-top: 4px;" *ngIf="getApprovalActionInternalStatus(approver)">
+                                               <div class="col-sm-1 m-t-4" *ngIf="getApprovalActionInternalStatus(approver)">
                                                <i class="fa fa-info-circle fa-lg" data-toggle="modal" 
                                                data-target="#memo-popup"
                                                  matTooltipPosition="above" matTooltip="Add Memo"
@@ -697,7 +697,7 @@
                                     </td>
                                     <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
                                         <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
-                                        <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                                        <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                                           [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
                                           *ngIf="field.field == 'customerStatusId'">
                                           <option value='-1'>--Select</option>
@@ -708,7 +708,7 @@
                                       </td>
                                       <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver)">
                                         <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
-                                        <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                                        <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                                           [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
                                           *ngIf="field.field == 'customerStatusId'">
                                           <option value='' selected>--Select</option>
@@ -717,13 +717,13 @@
                                           </option>
                                         </select>
                                       </td>
-                                    <td *ngIf="field.field == 'customerMemo'" class="col-sm-12" style="width: 200px;">
+                                    <td *ngIf="field.field == 'customerMemo'" class="col-sm-12 width-200">
                                         <div class="col-sm-11">
                                         <!-- <input type="text" [(ngModel)]="approver['customerMemo']" class="calender-cstm" style="width:200px;"
                                                [disabled]="!approver.isSelected || approver['approvalActionId'] != 4" /> -->
                                             <p class="m-0 p-0 p_textEditor" [innerHTML]="approver['customerMemo']"></p>
                                             </div>
-                                               <div class="col-sm-1" style="margin-top: 4px;" *ngIf="getApprovalActionCustomerStatus(approver)">
+                                               <div class="col-sm-1 m-t-4" *ngIf="getApprovalActionCustomerStatus(approver)">
                                                 <i class="fa fa-info-circle fa-lg" data-toggle="modal" 
                                                 data-target="#memo-popup"
                                                   matTooltipPosition="above" matTooltip="Add Memo"
@@ -743,7 +743,7 @@
                                         <label *ngIf="field.field != 'customerApprovedBy'" [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                                         <select *ngIf="field.field == 'customerApprovedBy'"
                                                 [(ngModel)]="approver['customerApprovedById']"
-                                                style="width:150px;"
+                                               class="width-150"
                                                 [disabled]="getcustomerStatusIdEnableStatus(approver)">
                                             <option value="">Select</option>
                                             <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.name}}</option>
@@ -755,7 +755,8 @@
                     </table>
                 </div>
                 </div>
-            <button *ngIf="!isViewMode" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"  [disabled]="!getAllPartsToDisableOrNot()" style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+            <button *ngIf="!isViewMode" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"  [disabled]="!getAllPartsToDisableOrNot()"
+             style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
 
             </div>
 
@@ -763,7 +764,7 @@
 
 
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="approvalGridActiveTab === 'workOrderQuoteAnalysis'">
-                <div class="tableFixHead" style="margin-top: 10px;" *ngIf="!isQuoteListView">
+                <div class="tableFixHead m-t-10" *ngIf="!isQuoteListView">
                     <table class="table table-bordered"
                            id="mpn-list-table">
                         <thead>
@@ -833,7 +834,7 @@
         </div>
     </div>
     <div class="card col-md-12 list_caps" *ngIf="selectedPartNumber != ''" id="quote-grid-tabs">
-        <div class="form-group " style="margin:0px;">
+        <div class="form-group margin-0">
             <button type="button" class="btn" [ngClass]="gridActiveTab == 'materialList'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('materialList');">Material List</button>
             <button type="button" class="btn" [ngClass]="gridActiveTab == 'labor'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('labor');">Labor</button>
             <button type="button" class="btn" [ngClass]="gridActiveTab == 'charges'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('charges');">Charges</button>
@@ -858,11 +859,11 @@
         <!-- <div *ngIf="!isView && !isViewForApprovedPart ">
             <button data-target="#addNewMaterials" data-toggle="modal" class="btn btn-primary" style="margin-left: 10px;">Add Part No</button>
         </div> -->
-        <div style="margin-top:0px " class="table-responsive table-overflow headertable-width">
+        <div class="table-responsive table-overflow headertable-width m-t-0">
             <div class="tableFixHead">
             <table class="table table-bordered lastcol-fix">
                 <thead>
-                    <tr style="color: #f1f1f1; background-color: #fff;">
+                    <tr class="tr-color">
                         <th colspan="10">&nbsp;</th>
                         <th colspan="5">
 
@@ -876,7 +877,8 @@
                                                    [disabled]="isView || isViewForApprovedPart"
                                                    (click)="(!isView)?tmchange():''"></p-radioButton>
                                     <div>
-                                        <select class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart" style="margin-top: 10px;">
+                                        <select class="form-control select-markup m-t-10" (ngModelChange)="getValidMat()" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1 || isViewForApprovedPart"
+                                        >
                                             <option value="">Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -920,7 +922,7 @@
                         <th>
                             Billing Amount
                         </th>
-                        <th style="width: 130px;" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
+                        <th class="width-130" *ngIf="!isView && !isViewForApprovedPart">Actions</th>
                         <!-- <th *ngIf="!isView"></th> -->
                     </tr>
                 </thead>
@@ -938,7 +940,7 @@
                                 <td><div style="min-width: 100px;">{{matQuotation.partNumber.partName?matQuotation.partNumber.partName :matQuotation.partNumber }}</div></td>
                                 <td>{{matQuotation.partDescription}}</td>
                                 <td>{{matQuotation.provision}}</td>
-                                <td class="content-to-end" style="text-align:right !important">{{matQuotation.quantity}}</td>
+                                <td class="content-to-end text-right">{{matQuotation.quantity}}</td>
                                 <td>
                                     {{matQuotation.uom}}
                                     <!-- <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.unitOfMeasureId" disabled>
@@ -953,10 +955,11 @@
                                     </select>
                                 </td>
                                 <td>{{matQuotation.stockType}}</td>
-                                <td class="content-to-end" style="text-align:right !important">{{formateCurrency(matQuotation.unitCost)}}</td>
-                                <td class="content-to-end" style="text-align:right !important">{{formateCurrency((matQuotation.quantity * matQuotation.unitCost).toFixed(2))}}</td>
+                                <td class="text-right">{{formateCurrency(matQuotation.unitCost)}}</td>
+                                <td class="text-right">{{formateCurrency((matQuotation.quantity * matQuotation.unitCost).toFixed(2))}}</td>
                                 <td>
-                                    <select class="form-control" (ngModelChange)="getValidMat()" [(ngModel)]="matQuotation.billingMethodId" style="width: 130px;" [disabled]="isView || costPlusType == 3 || isViewForApprovedPart">
+                                    <select class="form-control width-130" (ngModelChange)="getValidMat()" [(ngModel)]="matQuotation.billingMethodId"
+                                      [disabled]="isView || costPlusType == 3 || isViewForApprovedPart">
                                         <option value="">Select</option>
                                         <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]" [value]="bm.value">{{bm.label}}</option>
                                     </select>
@@ -967,7 +970,7 @@
                                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                     </select>
                                 </td>
-                                <td class="content-to-end" style="text-align:right !important">{{ formateCurrency(matQuotation.billingRate) }}</td>
+                                <td class="text-right">{{ formateCurrency(matQuotation.billingRate) }}</td>
                                 <td>
                                     <!-- <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" /> -->
                                     <input type="text" pInputText pKeyFilter="money" (ngModelChange)="getValidMat()" maxlength="15" class="form-control text-right" name="unitcost_{{mainIndex }}_{{subIndex}}" 
@@ -987,7 +990,7 @@
                             </tr>
                         </ng-container>
                         <tr class="task-total">
-                            <td style="padding: 4px;">
+                            <td class="padding-4">
                                 Total ({{mData[0].taskName}})
                             </td>
                             <td>&nbsp;</td>
@@ -1012,7 +1015,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="footer">
-                        <td style="padding: 4px;">
+                        <td class="padding-4">
                             <b>Total</b>
                         </td>
                         <td>&nbsp;</td>
@@ -1048,7 +1051,8 @@
     </div>
     <div>
         <ng-container *ngIf="gridActiveTab === 'materialList'">
-            <button class="btn btn-primary pull-right" (click)="createMaterialQuote()" *ngIf="!isView && !isViewForApprovedPart " style="margin-top: 10px; margin-bottom: 10px;" [disabled]="disableMat">{{workOrderQuoteDetailsId !=0 ? 'Update':'Save'}} Material List</button>
+            <button class="btn btn-primary pull-right" (click)="createMaterialQuote()" *ngIf="!isView && !isViewForApprovedPart "
+             style="margin-top: 10px; margin-bottom: 10px;" [disabled]="disableMat">{{workOrderQuoteDetailsId !=0 ? 'Update':'Save'}} Material List</button>
         </ng-container>
     </div>
 
@@ -1526,7 +1530,8 @@
              style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal" (click)="saveApprovalMemo(memoPopupContent)">
                Save
              </button>
-             <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal">
+             <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+              data-dismiss="modal">
                Close
              </button>
            </div>
@@ -1687,7 +1692,7 @@
                 </div>
                 <!-- *ngIf="showDisplayData==true" -->
                 <div class="modal-body table-responsive" *ngIf="quotationHeader">
-                    <div class="form-group" style="text-align: center; display: flex;" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
+                    <div class="form-group woq-radios" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
                         <p-radioButton class="p-radiobutton-label-horizontal"
                                        name="type"
                                        value=1
@@ -1757,7 +1762,7 @@
                             </tr>
                         </ng-template> 
                         <ng-template pTemplate="summary" id="footer">
-                            <label id="footer" class="footer" style="background:#fff !important">Total:</label>
+                            <label id="footer" class="footer background-white">Total:</label>
                             <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
@@ -1823,7 +1828,7 @@
                             </tr>
                         </ng-template> 
                         <ng-template pTemplate="summary" id="footer">
-                            <label id="footer" class="footer" style="background:#fff !important">Total:</label>
+                            <label id="footer" class="footer background-white">Total:</label>
                             <input class="footer-input-width" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
@@ -1839,7 +1844,7 @@
          class="modal fade"
          role="dialog"
          data-backdrop="static">
-        <div class="modal-dialog modal-sm" style="text-align: center;">
+        <div class="modal-dialog modal-sm text-center">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header text_start">
