@@ -79,8 +79,8 @@ export class WorkOrderService {
     getWorkFlowByPNandScope(itemMasterId, workScopeId) {
         return this.workOrderEndpointService.getWorkFlowByPNandScope(itemMasterId, workScopeId)
     }
-    getNTEandSTDByItemMasterId(itemMasterId, workScopeName) {
-        return this.workOrderEndpointService.getNTEandSTDByItemMasterId(itemMasterId, workScopeName)
+    getNTEandSTDByItemMasterId(itemMasterId, workScopeId) {
+        return this.workOrderEndpointService.getNTEandSTDByItemMasterId(itemMasterId, workScopeId)
     }
 
     getMultipleParts() {

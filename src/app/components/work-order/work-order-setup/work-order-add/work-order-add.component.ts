@@ -329,10 +329,12 @@ export class WorkOrderAddComponent implements OnInit {
             this.workOrderId = this.workOrderId;
             this.mainWorkOrderId = this.subWorkOrderDetails.workOrderid;
             this.subWorkOrderDetails.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId;
+            console.log("subwor korder details dd",  this.subWorkOrderDetails)
             this.savedWorkOrderData = {
                 workOrderId: this.workOrderId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId
             }
+           
         }
         if (!this.isSubWorkOrder) {
             this.workOrderStatus();
@@ -409,6 +411,7 @@ export class WorkOrderAddComponent implements OnInit {
         } else {
             this.moduleNamee = this.subWorkOrderModule;
         }
+        console.log("sub work order ",this.workOrderGeneralInformation)
     }
 
     dropdownlistSubWoMpn() {
@@ -1289,9 +1292,9 @@ export class WorkOrderAddComponent implements OnInit {
     getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
         if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
             const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
-            if (itemMasterId !== undefined && label !== undefined) {
+            if (itemMasterId !== undefined && currentRecord.workOrderScopeId !== undefined) {
                 this.isSpinnerVisible = true
-                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, label).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
                     if (res !== null) {
                         currentRecord.nte = res.nteHours;

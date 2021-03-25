@@ -155,9 +155,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
           });
     }
 
-    getNTEandSTDByItemMasterId(itemMasterId, workScopeName) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/ntestdvalues?itemMasterId=${itemMasterId}&workScope=${workScopeName}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getNTEandSTDByItemMasterId(itemMasterId, workScopeName));
+    getNTEandSTDByItemMasterId(itemMasterId, workScopeId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/ntestdvalues?itemMasterId=${itemMasterId}&workScopeId=${workScopeId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getNTEandSTDByItemMasterId(itemMasterId, workScopeId));
           });
     }
 
@@ -1203,7 +1203,7 @@ reserveSubWoAltPartData(data){
 
         if(isSubworkOrder)
         {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwoassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}&subWorkOrderId=${subWorkOrderId}&workOrderId=${workOrderId}&subWOPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwoassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}&subWorkOrderId=${subWorkOrderId}&subWOPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
                 return this.handleErrorCommon(error, () => this.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder));
             });
         }else
