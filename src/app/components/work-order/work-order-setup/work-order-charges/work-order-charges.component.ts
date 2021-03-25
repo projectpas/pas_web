@@ -248,7 +248,10 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.saveChargesListDeletedStatus.emit(this.currentDeletedstatus);
   }
   restoreRecord() {
-    this.commonService.updatedeletedrecords('WorkOrderCharges', 'WorkOrderChargesId', this.restorerecord.workOrderChargesId).subscribe(res => {
+    const table= this.isSubWorkOrder ? 'SubWorkOrderCharges':'WorkOrderCharges';
+    const columnId=this.isSubWorkOrder ? 'SubWorkOrderChargesId':'WorkOrderChargesId';
+    const currentId=this.isSubWorkOrder ? this.restorerecord.subWorkOrderChargesId :this.restorerecord.workOrderChargesId
+    this.commonService.updatedeletedrecords(table, columnId, currentId).subscribe(res => {
       this.saveChargesListDeletedStatus.emit(this.currentDeletedstatus);
       this.modal.close();
       this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);

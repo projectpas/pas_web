@@ -404,6 +404,11 @@ export class WorkOrderAddComponent implements OnInit {
                 }
             )
         }
+        if (!this.isSubWorkOrder) { 
+            this.moduleNamee = this.workOrderModule;
+        } else {
+            this.moduleNamee = this.subWorkOrderModule;
+        }
     }
 
     dropdownlistSubWoMpn() {
@@ -2397,6 +2402,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.getFreightListByWorkOrderId();
     }
     getFreightListByWorkOrderId() {
+        this.workOrderFreightList=[];
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId !=0) {
             this.isSpinnerVisible = true;
             // handle both sub and work order apis in end point using isSubWorkOrder Status and subWOPartNoId
