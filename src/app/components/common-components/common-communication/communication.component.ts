@@ -29,7 +29,7 @@ export class CommonCommunicationComponent implements OnInit, OnChanges {
         this.selectedTab(1);
         this.memoStyle=true;
         this.idForContact=this.idForContact;
-        
+        this.moduleName=this.moduleName;
     }
     ngOnChanges(): void {
         this.moduleName=this.moduleName;

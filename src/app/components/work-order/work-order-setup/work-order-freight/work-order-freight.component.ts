@@ -558,7 +558,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
        this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
     }
     restoreRecord() {
-      this.commonService.updatedeletedrecords('WorkOrderFreight', 'WorkOrderFreightId', this.restorerecord.workOrderFreightId).subscribe(res => {
+        const table= this.isSubWorkOrder ? 'SubWorkOrderFreight':'WorkOrderFreight';
+        const columnId=this.isSubWorkOrder ? 'SubWorkOrderFreightId':'WorkOrderFreightId';
+        const currentId=this.isSubWorkOrder ? this.restorerecord.subWorkOrderFreightId :this.restorerecord.workOrderFreightId
+      this.commonService.updatedeletedrecords(table, columnId, currentId).subscribe(res => {
         this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
           this.modal.close();
           this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);

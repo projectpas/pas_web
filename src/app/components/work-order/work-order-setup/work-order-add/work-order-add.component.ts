@@ -404,6 +404,11 @@ export class WorkOrderAddComponent implements OnInit {
                 }
             )
         }
+        if (!this.isSubWorkOrder) { 
+            this.moduleNamee = this.workOrderModule;
+        } else {
+            this.moduleNamee = this.subWorkOrderModule;
+        }
     }
 
     dropdownlistSubWoMpn() {
@@ -1527,7 +1532,7 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
-                    partNumber: x.partNumber.partName,
+                    partNumber: x.partItem.partName,
                     taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
@@ -1559,7 +1564,7 @@ export class WorkOrderAddComponent implements OnInit {
                     materialMandatoriesId :x.materialMandatoriesId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
-                    partNumber: x.partNumber.partName,
+                    partNumber: x.partItem.partName,
                     taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
@@ -1595,7 +1600,7 @@ export class WorkOrderAddComponent implements OnInit {
                     subWorkOrderId: this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
-                    partNumber: x.partNumber.partName
+                    partNumber: x.partItem.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -1624,7 +1629,7 @@ export class WorkOrderAddComponent implements OnInit {
                     workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
                     extendedCost:x.extendedCost? x.extendedCost : 0,
                     unitCost:x.unitCost?  x.unitCost: 0,
-                    partNumber: x.partNumber.partName
+                    partNumber: x.partItem.partName
                 }
             })
             this.isSpinnerVisible = true;
@@ -2397,6 +2402,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.getFreightListByWorkOrderId();
     }
     getFreightListByWorkOrderId() {
+        this.workOrderFreightList=[];
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId !=0) {
             this.isSpinnerVisible = true;
             // handle both sub and work order apis in end point using isSubWorkOrder Status and subWOPartNoId

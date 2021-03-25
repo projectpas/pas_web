@@ -101,9 +101,11 @@ export class SubWorkOrderComponent implements OnInit {
                     this.activeGridUpdateButton = false;
                     // for add subworkorder to existing sub workorder 
                     if (this.addToExisting == 1) {
+                        console.log("text 33")
                         this.subWorkOrderGridData();
                     }
                 } else {
+                    console.log("text 3355")
                     this.activeGridUpdateButton = true;
                     console.log("technision list", this.technicianByExpertiseTypeList);
                     res.map((x, index) => {
@@ -116,10 +118,10 @@ export class SubWorkOrderComponent implements OnInit {
                         x.partTechnicianId = getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
               
                         this.getWorkFlowByPNandScope(x, index);
-                    })
+                    }) 
 
                     this.subWorkOrderPartNumbers = res;
-                    console.log("exis44", this.addToExisting);
+                    console.log("exis44",this.subWorkOrderPartNumbers);
                     if (this.addToExisting == 1) {
                         console.log("existing sub work order")
                         this.subWorkOrderGridData();
@@ -275,8 +277,10 @@ export class SubWorkOrderComponent implements OnInit {
         })
     }
     getHeaderDetailsForCreateSubWO() {
+        console.log("textfffs")
         if (this.workOrderId && this.mpnId) {
             this.workOrderService.getSubWorkOrderHeaderByWorkOrderId(this.workOrderId, this.mpnId).subscribe(res => {
+                console.log("text gg")
                 this.subWorkOrderHeader = res;
                 this.workFlowWorkOrderId = res.workFlowWorkOrderId;
                 this.workOrderDetails = {
@@ -293,6 +297,7 @@ export class SubWorkOrderComponent implements OnInit {
         }
     }
     getDataFormating(res) {
+        console.log("text 34443")
         this.subWorkOrderGeneralInformation = {
             ...res,
             openDate: res.openDate !== undefined ? new Date(res.openDate) : new Date(),
@@ -340,11 +345,13 @@ export class SubWorkOrderComponent implements OnInit {
     getAllWorkScpoes(value): void {
         this.setEditArray = [];
         if (this.isEdit == true) {
+            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
             this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
                 if (element.workOrderScopeId) {
                     this.setEditArray.push(element.workOrderScopeId)
                 }
             });
+        }
             if (this.setEditArray && this.setEditArray.length == 0) {
                 this.setEditArray.push(0);
             }
@@ -422,11 +429,13 @@ export class SubWorkOrderComponent implements OnInit {
     workOrderStatus(): void {
         this.setEditArray = [];
         if (this.isEdit == true) {
+            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
             this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
                 if(element.workOrderStatusId){
                     this.setEditArray.push(element.workOrderStatusId)
                 }
             });
+        }
             if(this.setEditArray && this.setEditArray.length==0){
                 this.setEditArray.push(0);  
             }
@@ -451,16 +460,18 @@ export class SubWorkOrderComponent implements OnInit {
                 currentRecord.cmmId = this.cmmList[0].value;
             }
         })
-    }
+    } 
     priorityList: any = [];
     getAllPriority(value) {
         this.setEditArray = [];
         if (this.isEdit == true) {
+            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
             this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
                 if (element.workOrderPriorityId) {
                     this.setEditArray.push(element.workOrderPriorityId)
                 }
             });
+        }
             if (this.setEditArray && this.setEditArray.length == 0) {
                 this.setEditArray.push(0);
             }
