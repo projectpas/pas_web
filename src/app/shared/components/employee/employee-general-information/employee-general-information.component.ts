@@ -182,6 +182,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         companyId: new FormControl('companyId', [(Validators.required, Validators.minLength(1))]),
         startDate: new FormControl('startDate', Validators.minLength(1)),
         hourlyPay: new FormControl('hourlyPay', Validators.required),
+        email:new FormControl('email',Validators.required),
+        userName:new FormControl('userName',Validators.required),
     });
     employeeId: any;
     selectedLeaveValuesAssigned: any = [];
@@ -229,7 +231,8 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             'BusinessUnitId': [0],
             'divisionId': [0],
             'departmentId': [0],
-            'email': [null, Validators.compose([Validators.pattern('[a-zA-Z0-9.-]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{3,}')])],
+            'email': [null, Validators.compose([Validators.required,Validators.pattern('[a-zA-Z0-9.-]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{3,}')])],
+            'userName':[null, Validators.compose([Validators.required,Validators.pattern('/^[a-z\d]{5,12}$/i')])],
         });
         if (this.employeeService.listCollection != null && this.employeeService.isEditMode == true) {
             this.employeeDisplayView = 'Edit Employee';
@@ -279,6 +282,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         //this.multiLeavelist();
         // this.loadLegalEntityData();
         //this.getAllStationData('');
+        debugger;
         this.employeeid = this.employeeService.listCollection ? this.employeeService.listCollection.employeeId : this.employeeId;
         if (this.employeeid && this.employeeid != null && this.employeeid != 0) {
             this.isEnableNext = true;
@@ -1107,6 +1111,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         this.sourceEmpLast.lastName = res[0][0].lastName;
     }
     onSubmit2() {
+        console.log("On Submit date");
         this.isSpinnerVisible = true;
         this.enableSaveBtn = false;
         this.supervisorId;

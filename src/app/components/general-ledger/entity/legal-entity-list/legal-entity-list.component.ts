@@ -22,6 +22,7 @@ import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete
 // import { DataTable } from 'primeng/datatable';
 import * as moment from 'moment';
 import { ConfigurationService } from '../../../../services/configuration.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-legal-entity-list',
@@ -121,7 +122,9 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	referenceId: any;
 	pageNumber = 0;
 	isViewMode: boolean;
-
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -131,6 +134,10 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		private commonService: CommonService,
 		private configurations: ConfigurationService,
 		private datePipe: DatePipe) {
+
+			this.isAdd=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Delete]);
 		this.dataSource = new MatTableDataSource();
 		if (this.entityService.listCollection != null && this.entityService.isEditMode == true) {
 			this.sourceLegalEntity = this.entityService.listCollection;
@@ -696,13 +703,15 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				this.isLockBox = false;
 				this.lockboxing = {
 					...this.lockboxing,
+					payeeName: res[0].payeeName,
 					poBox: res[0].poBox,
 					bankStreetaddress1: res[0].address1,
 					bankStreetaddress2: res[0].address2,
 					bankCity: res[0].city,
 					bankProvince: res[0].stateOrProvince,
 					bankcountry: res[0].country,
-					bankpostalCode: res[0].postalCode
+					bankpostalCode: res[0].postalCode,
+					glAccount: res[0].glAccount
 				};
 			} else {
 				this.isLockBox = true;
@@ -743,7 +752,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					internationalIntermediateBank: res[0].intermediaryBank,
 					internationalBenficiaryBankName: res[0].beneficiaryBank,
 					internationalBankAccountNumber: res[0].beneficiaryBankAccount,
-					internationalSWIFTID: res[0].swiftCode
+					internationalSWIFTID: res[0].swiftCode,
+					interglAccount : res[0].glAccount
 				}
 			} else {
 				this.isInternationalWire = true;
@@ -766,6 +776,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					achBankAccountNumber: res[0].accountNumber,
 					achABANumber: res[0].aba,
 					achSWIFTID: res[0].swiftCode,
+					achglAccount: res[0].glAccount,
 				}
 			} else {
 				this.isAch = true;
@@ -965,6 +976,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.errorMessageHandler(errorLog);
 				});
 			this.auditHistoryHeaders = [
+				{ header: 'Payee Name', field: 'payeeName' },
 				{ header: 'PO Box', field: 'poBox' },
 				{ header: 'Street Address Line 1', field: 'line1' },
 				{ header: 'Street Address Line 2', field: 'line2' },
@@ -972,6 +984,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				{ header: 'Province/State', field: 'stateOrProvince' },
 				{ header: 'Country', field: 'countries_name' },
 				{ header: 'Postal Code', field: 'postalCode' },
+				{ header: 'GL Account', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -1009,12 +1022,13 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisibleHistory = false;					
 				});
 			this.auditHistoryHeaders = [
-				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
 				{ header: 'Beneficiary Bank', field: 'beneficiaryBank' },
 				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
 				{ header: 'ABA Number', field: 'aba' },
 				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GL Account', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -1031,12 +1045,13 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisibleHistory = false;					
 				});
 			this.auditHistoryHeaders = [
-				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
 				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
 				{ header: 'Bank Account Number', field: 'accountNumber' },
 				{ header: 'ABA Number', field: 'aba' },
 				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GL Account', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },

@@ -31,7 +31,7 @@
       </div>
       <div>
         <a class="plusicon-cstm" *ngIf="!isViewMode" data-toggle="modal">
-          <button type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus"
+          <button *ngIf="isAdd" type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus"
             (click)="addFieldValue()">
             Add Capabilities
           </button>
@@ -52,18 +52,18 @@
                                           (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
                                         pButton icon="fa-download" iconPos="left" label="Export Data"  -->
                 <div class="excel-upload  excel-upload-cstm">
-                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                  <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                     matTooltipPosition="above" data-toggle="modal" (click)="exportCSV()">
                     Export Data
                   </button>
 
-                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
+                  <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
                     matTooltipPosition="above" (click)="sampleExcelDownload()">
                     Sample File Download
                   </button>
                   <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event,contentVendorCapesExist)"
                     class="uploaddoc upload-file" accept=".xlsx, .xls, .csv">
-                  <label for="upload">
+                  <label *ngIf="isUpload" for="upload">
                     <span style="margin-bottom:-10px" matTooltip="Upload Data (Excel)" matTooltipPosition="above">
                       <i class="fa fa-upload"></i>
                     </span>
