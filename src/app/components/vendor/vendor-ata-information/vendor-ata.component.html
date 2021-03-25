@@ -66,13 +66,13 @@
                     </div>
                     <div class="row">
                         <div class="col" *ngIf="isViewMode == false">
-                            <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
+                            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                                     label="Export All Data" matTooltip="Download  Data"
                                      matTooltipPosition="above"
                                      data-toggle="modal" 
                                      (click)="selectedOnly = false; targetData = dt;"
                                       data-target="#downloadConfirmation"></button>
-                            <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
+                            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                                     label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                                     (click)="dt.exportCSV({ selectionOnly: true })"></button>
                             <button class="btn btn-primary btn-sm exports-button"

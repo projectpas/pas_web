@@ -23,8 +23,6 @@ import { emailPattern, urlPattern, titlePattern, phonePattern, mobilePattern } f
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { AtaMainService } from '../../../services/atamain.service';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
-import { PermissionMaster } from '../../user-role/ModuleHierarchyMaster.model';
 
 @Component({
 	selector: 'app-customer-contacts',
@@ -164,10 +162,7 @@ export class CustomerContactsComponent implements OnInit {
 	restoreATArecord: any = {}
 	arrayContactlist: any[] = [];
 	resetinputmodel: any;
-	isAdd:boolean=true;
-	isEdit:boolean=true;
-	isDelete:boolean=true;
-	isATA:Boolean=true;
+
 	constructor(private router: ActivatedRoute,
 		private route: Router,
 		private authService: AuthService,

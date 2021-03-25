@@ -116,8 +116,8 @@ export class WorkOrderService {
     updateActionforWorkOrder(action, login) {
         return this.workOrderEndpointService.updateWorkOrderStatus(action, login);
     }
-    deleteActionforWorkOrder(workOrderId) {
-        return this.workOrderEndpointService.deleteWorkOrder(workOrderId);
+    deleteActionforWorkOrder(workOrderId,login) {
+        return this.workOrderEndpointService.deleteWorkOrder(workOrderId,login);
     }
 
     getWorkOrderPartListByWorkOrderId(workOrderId) {
@@ -254,8 +254,8 @@ export class WorkOrderService {
     assetsCheckOutByWorkOrderAssetsId(assetcheckout) {
         return this.workOrderEndpointService.assetsCheckOutByWorkOrderAssetsId(assetcheckout);
     }
-    assetsHistoryByWorkOrderAssetId(workOrderAssetId){
-        return this.workOrderEndpointService.assetsHistoryByWorkOrderAssetId(workOrderAssetId);
+    assetsHistoryByWorkOrderAssetId(workOrderAssetId,isSubWorkOrder){
+        return this.workOrderEndpointService.assetsHistoryByWorkOrderAssetId(workOrderAssetId,isSubWorkOrder);
     }
     deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy,isSubWorkOrder) {
         return this.workOrderEndpointService.deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy,isSubWorkOrder);
@@ -563,11 +563,11 @@ export class WorkOrderService {
     getWorkOrderAssetListForDropDown() {
         return this.workOrderEndpointService.getWorkOrderAssetListForDropDown();
     }
-    checkInAseetInventoryList(workOrderAssetId){
-        return this.workOrderEndpointService.checkInAseetInventoryList(workOrderAssetId);
+    checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder){
+        return this.workOrderEndpointService.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder);
     }
-    checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId){
-        return this.workOrderEndpointService.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId);
+    checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder){
+        return this.workOrderEndpointService.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder);
     }
 
     releaseAssetInventoryList(AssetData){

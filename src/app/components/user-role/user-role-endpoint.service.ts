@@ -18,8 +18,6 @@ export class UserRoleEndPointService extends EndpointFactory {
     private readonly getUserRolesByUserIdURL: string = environment.baseUrl + "/api/userrolepermission/getUserRolesByUserId";
     private readonly getSavedCountryDataURL: string = environment.baseUrl + "/api/globalsettings/globalsettings?masterCompanyId="
     private readonly getSavedEmployeeDataURL: string = environment.baseUrl + "/api/common/loginuserdetails"
-    private readonly getAllPermissionURL: string = environment.baseUrl + "/api/userrolepermission/getPermission";
-    private readonly getUserMenuByRoleIdURL: string = environment.baseUrl + "/api/userrolepermission/geMenuListByRoleID";
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
     }
@@ -27,12 +25,6 @@ export class UserRoleEndPointService extends EndpointFactory {
     getAllModuleHierarchies<T>(): Observable<T> {
         return this.http.get<T>(this.getAllModuleURL, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getAllModuleHierarchies());
-        });
-    }
-
-    getAllPermission<T>(): Observable<T> {
-        return this.http.get<T>(this.getAllPermissionURL, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getAllPermission());
         });
     }
     
@@ -83,13 +75,6 @@ export class UserRoleEndPointService extends EndpointFactory {
         let endpointUrl = `${this.getSavedCountryDataURL}${masterCompanyId}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getSavedCountryDataEndPoint(masterCompanyId));
-        });
-    }
-
-    getUserMenuByRoleId<T>(roleID: string): Observable<T> {
-        let endpointUrl = `${this.getUserMenuByRoleIdURL}/${roleID}`;
-        return this.http.get<T>(endpointUrl, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getUserMenuByRoleId(roleID));
         });
     }
 //     getEmployeeData(masterCompanyId:any,employeeId:any) {

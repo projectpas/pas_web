@@ -248,7 +248,6 @@ export class VendorGeneralInformationComponent implements OnInit {
     AuditModuleName:any="VendorAudit";
     referenceId:any; 
     uploadDocs: Subject<boolean> = new Subject();
-    isView:boolean=true;
     constructor(public vendorclassificationService: VendorClassificationService,
         private http: HttpClient,
         private changeDetectorRef: ChangeDetectorRef,
@@ -270,7 +269,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.stopmulticlicks = false;
         this.vendorId = this.acRouter.snapshot.params['id'];
         this.countrylist();
-        
         if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
             if(this.acRouter.snapshot.params['id']){

@@ -19,10 +19,6 @@ import { AccountService, RolesChangedEventArg } from "../services/account.servic
 import { AlertService, DialogType, MessageSeverity } from '../services/alert.service';
 import { fadeInOut } from '../services/animations';
 import { Utilities } from '../services/utilities';
-import { AuthService } from '../services/auth.service';
-import { UserRoleService } from '../components/user-role/user-role-service';
-import { UserRole } from '../components/user-role/ModuleHierarchyMaster.model';
-
 
 @Component({
     selector: 'settings',
@@ -45,23 +41,19 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private route: ActivatedRoute,
         private translationService: AppTranslationService,
-        private accountService: AccountService,
-        private authService:AuthService,
-        private userService:UserRoleService
+        private accountService: AccountService
     ) { }
 
     ngOnInit() {
-        // this.fragmentSubscription = this.route.fragment.subscribe(anchor => {
-        //     switch (anchor) {
-        //         case 'preferences':
-        //             console.log(this.preferencesPanel);
-        //             this.preferencesPanel.open();
-        //             break;
-        //         default:
-        //             console.log(this.profilePanel);
-        //             this.profilePanel.open();
-        //     }
-        // });
+        this.fragmentSubscription = this.route.fragment.subscribe(anchor => {
+            switch (anchor) {
+                case 'preferences':
+                    this.preferencesPanel.open();
+                    break;
+                default:
+                    this.profilePanel.open();
+            }
+        });
     }
 
     ngAfterViewInit() {
@@ -73,7 +65,7 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy() {
-        //this.fragmentSubscription.unsubscribe();
+        this.fragmentSubscription.unsubscribe();
     }
 
     public navigateToFragment(fragment: string) {
@@ -84,30 +76,22 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private loadCurrentUserData() {
         this.alertService.startLoadingMessage();
-        //var userId=this.authService.currentUser.userName;
+
         if (this.canViewRoles) {
-            this.userService.getAllUserRole().subscribe(roles=>{
-                
-                this.accountService.getUserAndRoles().subscribe(
-                    results => this.onCurrentUserDataLoadSuccessful(results[0], roles[0]),
-                    error => this.onCurrentUserDataLoadFailed(error)
-                );
-            });
-            
+            this.accountService.getUserAndRoles().subscribe(
+                results => this.onCurrentUserDataLoadSuccessful(results[0], results[1]),
+                error => this.onCurrentUserDataLoadFailed(error)
+            );
         }
         else {
             this.accountService.getUser().subscribe(
-                user => {
-                    let role=user.roleName;
-                    this.onCurrentUserDataLoadSuccessful(user)
-                },
-                error => {
-                    this.onCurrentUserDataLoadFailed(error)
-                });
+                user => this.onCurrentUserDataLoadSuccessful(user, user.roles.map(r => new Role(r))),
+                error => this.onCurrentUserDataLoadFailed(error)
+            );
         }
     }
 
-    private onCurrentUserDataLoadSuccessful(user: User, roles: UserRole[]=[]) {
+    private onCurrentUserDataLoadSuccessful(user: User, roles: Role[]) {
         this.alertService.stopLoadingMessage();
         this.userProfile.setUser(user, roles);
     }

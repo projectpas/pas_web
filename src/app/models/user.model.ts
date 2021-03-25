@@ -46,8 +46,4 @@ export class User
     public managementStructureId: number;
     public masterCompanyId: number;
     public legalEntityId: number;
-    public isResetPassword:string;
-    public roleName:string;
-    public permissionName:string[];
-    public roleID:string;
 }

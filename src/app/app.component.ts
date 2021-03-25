@@ -8,7 +8,6 @@
   AfterViewInit,
   Injectable,
   HostListener,
-  AfterContentChecked,
 } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Router, NavigationStart } from '@angular/router';
@@ -46,8 +45,6 @@ import { StocklineReferenceStorage } from './components/stockline/shared/stockli
 import { SalesOrderReferenceStorage } from './components/sales/shared/sales-order-reference-storage';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserRoleService } from './components/user-role/user-role-service';
-import { ModuleHierarchyMaster } from './components/user-role/ModuleHierarchyMaster.model';
 environment
 @Component({
   selector: 'quickapp-pro-app',
@@ -76,9 +73,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   closeCmpny: boolean = true;
   step: number;
   managementStructure: any = {};
-  moduleHierarchy: ModuleHierarchyMaster[];
-  childMenu: MenuItem[] = [];
-  menuArray=[];
   setStep(index: number) {
     this.step = index;
   }
@@ -126,8 +120,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private crmService: CrmService,
     private globals: Globals,
     private stocklineReferenceStorage: StocklineReferenceStorage,
-    private salesOrderReferenceStorage: SalesOrderReferenceStorage,
-    private userRoleService: UserRoleService
+    private salesOrderReferenceStorage: SalesOrderReferenceStorage
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -141,10 +134,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.toastyConfig.showClose = true;
     this.routeActive = 'active';
     this.appTitleService.appName = this.appTitle;
-  
   }
- 
-  
   showthis() {
     this.translationService.closeCmpny = true;
   }
@@ -156,73 +146,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() { }
-
-  dynamicMenu() {
-    this.megaMenuItems = [];
-    for (let module of this.menuArray) {
-      var menu: MenuItem = {};
-      menu.label = module.Name;
-      menu.icon = module.ModuleIcon;
-      menu.routerLink = module.RouterLink;
-      menu.id = String(module.ID);
-      menu.automationId = module.ParentID;
-      if(this.megaMenuItems.length==0){
-        this.megaMenuItems.push(menu);
-      }
-      else{
-        var isDuplicate=this.megaMenuItems.filter(function(item){
-          return item.label==menu.label
-        })
-        if(isDuplicate.length==0){
-          this.megaMenuItems.push(menu);
-        }
-
-      }
-      
-    }
-    
-    // console.log(this.getDataByParentId(this.megaMenuItems,null));
-    
-    
-    //this.megaMenuItems= this.getDataByParentId(this.megaMenuItems,null);
-
-    var r = this.getDataByParentId(this.megaMenuItems, null);
-
-    this.megaMenuItems = r;
-  }
-
-
-  getDataByParentId(data, parent): MenuItem[] {
-    const result = data
-      .filter(d => d.automationId == parent);
-
-    if (!result && !result.length) {
-      return null;
-    }
-
-    return result.map(({ id, label, icon, routerLink, automationId }) =>
-      ({
-        id, label, icon, routerLink, automationId, items: automationId == null ? [this.getDataByParentId(data, id)] : this.getDataByParentId(data, id),
-        command: label == "Create Vendor" ? (event?: any) => {
-          this.newVendorClick();
-        } : label == "Create Employee" ? (event?: any) => {
-          this.newEmployeeClick();
-        }:null
-      })
-    );
-  }
-
   ngOnInit() {
-   
-    // console.log(this.authService.currentUser.roleID);
-    // this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
-    //   console.log(data[0]);
-    //   this.moduleHierarchy = data[0];
-
-    //   this.dynamicMenu();
-    // }
-    // );
-
     this.megaMenuItems = [
       {
         label: 'Dashboard',
@@ -245,12 +169,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 {
                   label: 'Create Customer',
-
                   routerLink:
                     '/customersmodule/customerpages/app-customer-create',
                 },
               ],
-
             },
             {
               label: 'Invoice',
@@ -1059,6 +981,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Item Aging', routerLink: '/#' },
                 { label: 'Slow Moving Stock', routerLink: '/#' },
                 { label: 'Hot List', routerLink: '/#' },
+                // {
+                //   label: 'Stock Line Report',
+                //   routerLink:
+                //     '/stocklinemodule/stocklinepages/app-stock-line-report-view',
+                //     http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render
+                // },
                 {
                   label: 'Stock Line', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl + '/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
@@ -1707,8 +1635,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.managementStructure.departmentId = this.authService.currentManagementStructure.level4;
     }
 
-    
-    this.isUserLoggedIn = this.authService.isLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False");
+    this.isUserLoggedIn = this.authService.isLoggedIn;
 
     this.isAppLoaded = true;
     this.removePrebootScreen = true;
@@ -1729,7 +1656,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.authService.reLoginDelegate = () => this.showLoginDialog();
 
     this.authService.getLoginStatusEvent().subscribe((isLoggedIn) => {
-      this.isUserLoggedIn = isLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False");
+      this.isUserLoggedIn = isLoggedIn;
 
       if (this.isUserLoggedIn) {
         this.initNotificationsLoading();
@@ -1737,29 +1664,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.unsubscribeNotifications();
       }
 
-      if (this.authService.currentUser != null) {
-        if(this.authService.currentUser.roleID!=undefined){
-          if(this.authService .currentUser.userName!="admin"){
-        this.userRoleService.getUserMenuByRoleId(this.authService.currentUser.roleID).subscribe(data => {
-          console.log(data[0]);
-          this.menuArray = data[0];
-          this.authService.SetMenuInfo(data[0]);
-          this.dynamicMenu();
-        });
-          //  this.moduleHierarchy = this.authService.getModuleByUserRole();
-          //  alert(this.moduleHierarchy);
-          //  this.dynamicMenu();
-        //console.log(this.authService.getModuleByUserRole());
-      }
-      
-      }
-      else{
-        this.megaMenuItems=[];
-      }
-      }
-
       setTimeout(() => {
-        if (!this.isUserLoggedIn && (this.authService.currentUser != null && this.authService.currentUser.isResetPassword != "False")) {
+        if (!this.isUserLoggedIn) {
           this.alertService.showMessage(
             'Session Ended!',
             '',
@@ -1770,7 +1676,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.subscription = this.router.events.subscribe((event) => {
-     
       if (event instanceof NavigationStart) {
         let url = (<NavigationStart>event).url;
 
@@ -1784,7 +1689,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  
+
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     this.unsubscribeNotifications();
@@ -1985,12 +1890,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   logout() {
-    this.authService.logout();this.authService.redirectLogoutUser();
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
-    
-    
+    this.authService.logout();
+    this.authService.redirectLogoutUser();
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 

@@ -5,7 +5,7 @@
         <h4 class="header-name">Employee List</h4>
       </div>
       <div>
-        <button *ngIf="isAdd"
+        <button
           type="button"
           class="btn-sm header-button"
           (click)="navigateTogeneralInfo()">
@@ -63,7 +63,7 @@
               </div>
               <div class="row">
                   <div class="col">
-                      <button *ngIf="isDownLoad"
+                      <button
                               type="button"
                               class="btn btn-primary exports-button"
                               matTooltip="Download Data"
@@ -74,7 +74,7 @@
                               label="Export Data"
                               data-toggle="modal" (click)="selectedOnly = false; targetData = dt;" data-target="#downloadConfirmation"
                               ></button>
-                      <button *ngIf="isDownLoad"
+                      <button
                               type="button"
                               class="btn btn-primary exports-button"
                               matTooltip="Download Selected Data"
@@ -257,7 +257,7 @@
                           <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch> -->
-                          <p-inputSwitch *ngIf="isEdit"
+                          <p-inputSwitch
                                          [(ngModel)]="rowData['isActive']"
                                          name="isActive{{ rowIndex }}"
                                          matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
@@ -273,7 +273,7 @@
                                  ><i class="fa fa-eye"></i
                               ></a>
                           </span>
-                          <span *ngIf="isEdit"><a class="btn nobg"
+                          <span><a class="btn nobg"
                                  (click)="openEdit(rowData)"
                                  matTooltip="Edit"
                                  matTooltipPosition="above"
@@ -283,7 +283,7 @@
                                       (click)="openEdit(rowData)" matTooltip="Edit">
                                           <mat-icon>edit</mat-icon>
                                       </button> -->
-                          <span *ngIf="isDelete">
+                          <span>
                               <a
                                  class="btn nobg"
                                  (click)="openDelete(content, rowData)"
@@ -314,7 +314,7 @@
                                       </button> -->
                       </div>
                       <div *ngIf="currentDeletedstatus == true">
-                          <p-inputSwitch *ngIf="isEdit"
+                          <p-inputSwitch
                                          [(ngModel)]="rowData['isActive']"
                                          [disabled]="true"
                                          name="isActive{{ rowIndex }}"
@@ -331,7 +331,7 @@
                                  ><i class="fa fa-eye"></i
 ></a>
                           </span>
-                          <span *ngIf="isDelete"
+                          <span
                                 ><a
                                  class="btn nobg"
                                  (click)="restore(restoreId,rowData)"

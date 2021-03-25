@@ -245,7 +245,7 @@ export class AssetCapesComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', strText, true, 20, this.setEditArray.join()).subscribe(res => {
             this.capabilityTypeData = res;
         }, err => {
             const errorLog = err;
