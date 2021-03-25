@@ -1,4 +1,4 @@
-﻿﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+﻿﻿﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card new-card">
     <div class="card-header header">
         <div class="row">
@@ -6,7 +6,7 @@
                 <h4 class="header-name">Legal Entity List</h4>
             </div>
             <div>
-                <button type="button" *ngIf="isAdd"
+                <button type="button"
                         class="btn-sm header-button"
                         (click)="navigateTogeneralInfo()">
                     Add Legal Entity
@@ -213,12 +213,12 @@
                          <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"  (onChange)="toggleIsActive(rowData,$event)" [disabled]="rowData.isPrimary || isViewMode==true"></p-inputSwitch> 
                             <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                            <span *ngIf="isEdit"> 
+                            <span> 
                                 <a class="btn nobg"
                                    (click)="openContentEdit(rowData)" matTooltip="Edit"
                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
-                            <span *ngIf="isDelete">
+                            <span>
                                 <a class="btn nobg"
                                    (click)="openDelete(content,rowData)"
                                    matTooltip="Delete" matTooltipPosition="above">
@@ -841,6 +841,7 @@
                                                 <i class="fa fa-history"></i>
                                             </a>
                                         </h6><br>
+                                        <p><span class="label"><b>Payee Name <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.payeeName}}</span></p>
                                         <p><span class="label"><b>PO Box <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.poBox}}</span></p>
                                         <p><span class="label"><b>Bank Street Address line 1 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress1}}</span></p>
                                         <p><span class="label"><b>Bank Street Address line 2 <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.bankStreetaddress2}}</span></p>
@@ -848,6 +849,8 @@
                                         <p><span class="label"><b>State <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankProvince}}</span></p>
                                         <p><span class="label"><b>Country <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankcountry}}</span></p>
                                         <p><span class="label"><b>Postal Code <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankpostalCode}}</span></p>
+                                        <p><span class="label"><b>GL Account <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.glAccount}}</span></p>
+                                        
                                     </div>
                                     <!-- <div class="bg-block2">
                                         <h3>Domestic Wire</h3>
@@ -871,13 +874,14 @@
                                                 <i class="fa fa-history"></i>
                                             </a>
                                         </h6><br>
-                                        <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankName}}</span></p>
+                                        <p><span class="label"><b>Payee Name<span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankName}}</span></p>
                                         <p><span class="label"><b>Bank Location 1 <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.bankLocation1}}</span></p>
                                         <p><span class="label"><b>Bank Location 2 <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.bankLocation2}}</span></p>
                                         <p><span class="label"><b>Intermediate Bank <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.internationalIntermediateBank}}</span></p>
-                                        <p><span class="label"><b>Beneficiary Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
+                                        <p><span class="label"><b>Beneficiary Bank <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
                                         <p><span class="label"><b>Bank Account Number  <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankAccountNumber}}</span></p>
                                         <p><span class="label"><b>SWIFT Code / IBAN Code <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.internationalSWIFTID}}</span></p>
+                                        <p><span class="label"><b>GL Account <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.interglAccount}}</span></p>
                                     </div>
                                     <div class="bg-block2">
                                         <h3>ACH</h3>
@@ -887,12 +891,13 @@
                                                 <i class="fa fa-history"></i>
                                             </a>
                                         </h6><br>
-                                        <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankName}}</span></p>
+                                        <p><span class="label"><b>Payee Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankName}}</span></p>
                                         <p><span class="label"><b>Intermediate Bank <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.achIntermediateBank}}</span></p>
                                         <p><span class="label"><b>Beneficiary Bank Name <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.achBenficiaryBankName}}</span></p>
                                         <p><span class="label"><b>Bank Account Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankAccountNumber}}</span></p>
                                         <p><span class="label"><b>ABA Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achABANumber}}</span></p>
                                         <p><span class="label"><b>SWIFT Code / IBAN Code  <span class="clr-red"></span>: </b></span><span class="value">{{lockboxing.achSWIFTID}}</span></p>
+                                        <p><span class="label"><b>GL Account <span class="clr-red"></span> : </b></span><span class="value">{{lockboxing.achglAccount}}</span></p>
                                     </div>
                                     <!-- <div  class="modal" id="contentHist" role="dialog"  data-keyboard="false"> -->
                                         <!-- <div class="modal-dialog modal-xlg"> -->
@@ -927,7 +932,7 @@
                                                             <table class="table table-bordered header-table-width">
                                                             <thead>
                                                                 <tr>
-                                                                    <th *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='intermediateBankName' && audit.field!='beneficiaryBankName' && audit.field!='intermediaryBank' && audit.field!='swiftCode' &&  audit.field!='poBox' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>                                                                    
+                                                                    <th *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='glAccount' && audit.field!='intermediateBankName' && audit.field!='beneficiaryBankName' && audit.field!='intermediaryBank' && audit.field!='swiftCode' &&  audit.field!='poBox' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>                                                                    
                                                                 </tr>
                                                             </thead>
                                                             <tbody *ngIf="auditHistoryList.length> 0">

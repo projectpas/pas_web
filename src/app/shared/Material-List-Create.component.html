@@ -20,12 +20,12 @@
           <th style="z-index:1">Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
           <th class="min-width-90" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
-          <th style="width:60px">Qty<span class="clr-red">*</span></th>
+          <th style="min-width:60px">Qty<span class="clr-red">*</span></th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th class="min-width-90">Stk Type</th>
-          <th style="width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
-          <th style="width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
+          <th style="min-width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
+          <th style="min-width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="width:60px">Deferred</th>
           <th style="z-index:1">Memo</th>
           <th>Actions</th>
@@ -53,9 +53,9 @@
             class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
               errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage=" "
               (completeMethod)="filterpartItems($event)"  [size]="30" [minLength]="1" [forceSelection]="true"
-              [(ngModel)]="material.partNumber"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >
+              [(ngModel)]="material.partItem"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >
           </p-autoComplete> 
-              <div *ngIf="material.partNumber !== null && material.partNumber !== '' ">
+              <div *ngIf="material.partItem !== null && material.partItem !== '' ">
                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View" tooltipPosition="bottom" title=""
                   class="btn  nobg" data-original-title="View" (click)="openView(material)" class="view_content">
                   <i class="fa fa-eye view_icon_adjust"></i>

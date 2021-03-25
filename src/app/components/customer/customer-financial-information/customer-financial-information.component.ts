@@ -399,6 +399,9 @@ export class CustomerFinancialInformationComponent implements OnInit {
     //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.percentageList = res;
+      this.percentageList.sort(function(a, b) {
+        return parseFloat(a.label) - parseFloat(b.label);
+      });
     }, error => { this.isSpinnerVisible = false });
   }
 
@@ -551,6 +554,9 @@ export class CustomerFinancialInformationComponent implements OnInit {
     //this.commonservice.smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.discountList1 = res;
+      this.discountList1.sort(function(a, b) {
+        return parseFloat(a.label) - parseFloat(b.label);
+      });
     }, error => { this.isSpinnerVisible = false });
   }
 

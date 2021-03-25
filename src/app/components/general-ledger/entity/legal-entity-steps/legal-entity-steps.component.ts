@@ -7,8 +7,6 @@ import { CustomerService } from '../../../../services/customer.service';
 import { MessageSeverity, AlertService } from '../../../../services/alert.service';
 import { CommonService } from '../../../../services/common.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // import { CommonDocumentsComponent } from '../../../common-components/common-documents/common-documents.component';
 // CommonDocumentsComponent
 @Component({
@@ -68,16 +66,14 @@ export class LegalEntityStepsComponent {
     Active: string;
 	entityViewFeilds: any = {};
 	moduleName:any="LegalEntity"
-	isView:boolean=true;
 	constructor(private customerService: CustomerService,
 		private acRouter: ActivatedRoute, private router: Router,
 		private alertService: AlertService,
         location: Location,
 		private commonservice: CommonService,
-        public legalEntityService: LegalEntityService,private authService:AuthService
+        public legalEntityService: LegalEntityService,
 	) {		
 		// console.log(location.path());
-		this.isView=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.View]);
 	}
 
 	ngOnInit() { 

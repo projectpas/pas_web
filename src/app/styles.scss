@@ -12274,16 +12274,14 @@ h6 {
 }
 
 .mat-expansion-panel .mat-expansion-panel-header.mat-expanded {
-  background: #337ab7 !important;
+  background: #0d57b0 !important;
   color: #fff !important;
-  height:35px !important;
 }
 
 .mat-expansion-panel-header {
   font-size: 11px !important;
   font-family: sans-serif;
   font-weight: bold;
-  height:35px !important;
 }
 
 .mat-expanded .mat-expansion-panel-header-title {
@@ -12338,12 +12336,11 @@ mat-expansion-panel.mat-expansion-panel {
 }
 
 .mat-expansion-panel-content .mat-expansion-panel-body {
-  background: #fff !important;
+  background: #636363 !important;
 }
 
 .mat-expansion-panel-content .mat-expansion-panel-content .mat-expansion-panel-body {
-  // background: #9c9c9c !important;
-  background: #fff !important;
+  background: #9c9c9c !important;
 }
 
 .mat-expansion-panel-body a.active {
@@ -12352,7 +12349,7 @@ mat-expansion-panel.mat-expansion-panel {
 
 .mat-expansion-panel-content .mat-expansion-panel-content .mat-expansion-panel-body a.active {
   color: #0f478c !important;
-  background-color: #fff !important;
+  background-color: #9c9c9c !important;
 }
 
 /* MODAL STYLES
@@ -14083,7 +14080,7 @@ body .ui-steps:before {
   border: 1px solid #e6dcdc;
   margin: 5px;
   border-radius: 4px;
-  height: 320px;
+  height: 400px;
   position: relative;
   h3 {
     font-size: 17px;
