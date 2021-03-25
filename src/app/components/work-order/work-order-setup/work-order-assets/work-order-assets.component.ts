@@ -98,8 +98,10 @@ export class WorkOrderAssetsComponent implements OnInit {
     editData: any;
     assetAuditHistory: any;
     addNewEquipment: boolean = false;
+    //customerName:any;
 
     ngOnInit(): void {
+       // this.customerName="A Pusapkraj";
     }
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
         private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {
@@ -155,7 +157,7 @@ viewAsstesInventory(rowData){
                 }
             })
         } else if (this.status == 'checkOut') {
-            this.workOrderService.checkOutAseetInventoryList(this.currentRecord.workOrderAssetId, this.workOrderId, this.workOrderPartNumberId, this.currentRecord.assetRecordId, 'admin', 1).subscribe(res => {
+            this.workOrderService.checkOutAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.workOrderId,this.isSubWorkOrder ? this.currentRecord.subWOPartNoId : this.workOrderPartNumberId, this.currentRecord.assetRecordId, this.authService.currentUser.userName, 1,this.isSubWorkOrder ? this.currentRecord.subWorkOrderId : this.workOrderId,this.isSubWorkOrder).subscribe(res => {
                 this.workOrderCheckInCheckOutList = res;
                 if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
                     this.workOrderCheckInCheckOutList.map(element => {
@@ -313,7 +315,8 @@ viewAsstesInventory(rowData){
     }
     getAuditHistoryById(rowData) {
         const { workOrderAssetId } = rowData;
-        this.workOrderService.assetsHistoryByWorkOrderAssetId(workOrderAssetId).subscribe(res => {
+        const { subWorkOrderAssetId } = rowData;
+        this.workOrderService.assetsHistoryByWorkOrderAssetId(this.isSubWorkOrder ? subWorkOrderAssetId: workOrderAssetId,this.isSubWorkOrder).subscribe(res => {
             this.assetAuditHistory = res;
 
         },
