@@ -696,13 +696,15 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				this.isLockBox = false;
 				this.lockboxing = {
 					...this.lockboxing,
+					payeeName: res[0].payeeName,
 					poBox: res[0].poBox,
 					bankStreetaddress1: res[0].address1,
 					bankStreetaddress2: res[0].address2,
 					bankCity: res[0].city,
 					bankProvince: res[0].stateOrProvince,
 					bankcountry: res[0].country,
-					bankpostalCode: res[0].postalCode
+					bankpostalCode: res[0].postalCode,
+					glAccount: res[0].glAccount
 				};
 			} else {
 				this.isLockBox = true;
@@ -743,7 +745,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					internationalIntermediateBank: res[0].intermediaryBank,
 					internationalBenficiaryBankName: res[0].beneficiaryBank,
 					internationalBankAccountNumber: res[0].beneficiaryBankAccount,
-					internationalSWIFTID: res[0].swiftCode
+					internationalSWIFTID: res[0].swiftCode,
+					interglAccount : res[0].glAccount
 				}
 			} else {
 				this.isInternationalWire = true;
@@ -751,7 +754,6 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		})
 		this.getEntityACHDataById(legalEntityId);
 	}
-
 
 	getEntityACHDataById(legalEntityId) {
 		this.entityService.getEntityAchDataById(legalEntityId).subscribe(res => {
@@ -766,6 +768,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					achBankAccountNumber: res[0].accountNumber,
 					achABANumber: res[0].aba,
 					achSWIFTID: res[0].swiftCode,
+					achglAccount: res[0].glAccount,
 				}
 			} else {
 				this.isAch = true;
@@ -949,7 +952,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 
 	auditHistoryHeaders: any = [];
 	auditHistoryList: any = [];
-	// isSpinnerVisibleHistory: boolean = false;
+	// isSpinnerVisibleHistory: boolean = false;	
 	getAuditHistoryByIdbanking(content, type) {
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 		if (type == 1) {
@@ -965,6 +968,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.errorMessageHandler(errorLog);
 				});
 			this.auditHistoryHeaders = [
+				{ header: 'Payee Name', field: 'payeeName' },
 				{ header: 'PO Box', field: 'poBox' },
 				{ header: 'Street Address Line 1', field: 'line1' },
 				{ header: 'Street Address Line 2', field: 'line2' },
@@ -972,6 +976,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				{ header: 'Province/State', field: 'stateOrProvince' },
 				{ header: 'Country', field: 'countries_name' },
 				{ header: 'Postal Code', field: 'postalCode' },
+				{ header: 'GL Account', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -1009,12 +1014,13 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisibleHistory = false;					
 				});
 			this.auditHistoryHeaders = [
-				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
 				{ header: 'Beneficiary Bank', field: 'beneficiaryBank' },
 				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
 				{ header: 'ABA Number', field: 'aba' },
 				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GL Account', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -1031,12 +1037,13 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisibleHistory = false;					
 				});
 			this.auditHistoryHeaders = [
-				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
 				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
 				{ header: 'Bank Account Number', field: 'accountNumber' },
 				{ header: 'ABA Number', field: 'aba' },
 				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GL Account', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },

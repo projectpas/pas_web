@@ -311,7 +311,7 @@ export class VendorCapesComponent implements OnInit {
         if(this.arraylistCapabilityTypeId.length == 0) {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 2000, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.CapesTypelistCollection = res;
             this.isSpinnerVisible = false;
         },err => {

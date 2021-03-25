@@ -737,7 +737,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     getCapabilityTypesList() {   
         if(this.arraylistCapabilityTypeId.length == 0) {
 			this.arraylistCapabilityTypeId.push(0); }
-        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 100, this.arraylistCapabilityTypeId.join()).subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 100, this.arraylistCapabilityTypeId.join()).subscribe(res => {
             this.capabalityTypeList = res;
         },err => {
 			const errorLog = err;
