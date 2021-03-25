@@ -272,6 +272,10 @@ import{AssetInventoryViewComponent} from "./components/Asset-Management/asset-in
 import { CalendarModule } from "primeng/calendar";
 import { SafePipe } from './pipes/safe.pipe';
 import { AuditComponentComponent } from './shared/components/audit-component/audit-component.component';
+import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
+//import {AllViewComponent  } from './shared/components/all-view/all-view.component';
+
+ 
 @NgModule({
   imports: [
     CardModule,
@@ -331,7 +335,8 @@ import { AuditComponentComponent } from './shared/components/audit-component/aud
     EntityViewComponent,
     StocklineViewComponent,
     StocklineHistoryComponent,
-    RefreshAlert, 
+      RefreshAlert, 
+      UpdatepasswordComponent,
     AssetInventoryViewComponent,
     SafePipe,
     AuditComponentComponent
@@ -544,6 +549,7 @@ import { AuditComponentComponent } from './shared/components/audit-component/aud
     CommunicationService
   ],
   entryComponents: [
+    LoginComponent,
     LoginDialogComponent,
     AddTaskDialogComponent,
     CustomerViewComponent,

@@ -30,7 +30,7 @@
                         <div id="stepd1" class="panel-collapse collapse">
                             <div class="panel-body m-lr-7">
                                 <div class="col-sm-12">
-                                    <div style="text-align: right;">
+                                    <div style="text-align: right;" *ngIf="isAdd">
                                         <a *ngIf="isViewMode == false"
                                            data-toggle="modal" data-target="#addShippingInfoDomestic">
                                             <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"
@@ -79,13 +79,13 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                                                        <button  *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                                                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                                                 label="Export Data"
                                                                 data-toggle="modal" (click)="selectedOnly = false; targetData = domesticShipInfo;"
                                                                data-target="#downloadDomesticConfirmation"></button>
                                                                 <!-- (click)="domesticShipInfo.exportCSV()" -->
-                                                        <button type="button" class="btn btn-primary exports-button"
+                                                        <button  *ngIf="isDownload" type="button" class="btn btn-primary exports-button"
                                                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                                                 icon="fa-download" iconPos="left" label="Export Selected Data"
                                                                 (click)="domesticShipInfo.exportCSV({selectionOnly:true})"
@@ -183,7 +183,7 @@
                                                     <td class="action-icons-cstm table-column-width" style="width:150px !important">
                                                         <div *ngIf="currentDeletedstatusDomestic==false">
                                                             <ng-container *ngIf="!isViewMode">
-                                                                <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                                                <p-inputSwitch  *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                                                matTooltipPosition="above" (onChange)="handleChanges(rowData, $event)"></p-inputSwitch>
 
                                                             </ng-container>
@@ -195,19 +195,19 @@
                                                                 </a>
                                                             </span>
                                                             <span *ngIf="!isViewMode" data-target="#addShippingInfoDomestic" data-toggle="modal">
-                                                                <a class="btn nobg"
+                                                                <a class="btn nobg"  *ngIf="isEdit"
                                                                    (click)="openEdit(rowData)" matTooltip="Edit"
                                                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                                             </span>
                                                             <span *ngIf="!isViewMode" requirePermission="canDelete">
-                                                                <a class="btn nobg"
+                                                                <a class="btn nobg"  *ngIf="isDelete"
                                                                         (click)=" openDelete(deleteContent, rowData);domesticShipInfo.reset();"
                                                                         matTooltip="Delete"
                                                                         matTooltipPosition="above">
                                                                     <i class="fa fa-trash"></i>
                                                             </a>
                                                             </span>
-                                                            <button (click)="openShipVia(rowData)" data-target="#contentDomesticShipVia"
+                                                            <button  *ngIf="isAdd" (click)="openShipVia(rowData)" data-target="#contentDomesticShipVia"
                                                                     data-toggle="modal" class="btn btn-danger nobg" style="padding: 0px;"
                                                                     matTooltip="{{ !isViewMode ? 'Add Ship Via' : 'Ship Via'}}" matTooltipPosition="above">
                                                                 <i class="fa fa-truck"></i>
@@ -221,7 +221,7 @@
                                                         </div>
                                                         <div *ngIf="currentDeletedstatusDomestic==true">
                                                             <ng-container *ngIf="!isViewMode">
-                                                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                                            <p-inputSwitch  *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                                            matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch>
                                                             </ng-container>
                                                             <span data-toggle="modal" data-target="#view">
@@ -238,7 +238,7 @@
                                                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                             </span>
                                                             <ng-container *ngIf="!isViewMode">
-                                                                <span><a class="btn nobg btn-users-cstm" (click)="restoreDomesticShipping(restoreDomesticShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                                <span><a   *ngIf="isEdit" class="btn nobg btn-users-cstm" (click)="restoreDomesticShipping(restoreDomesticShippingId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                             </ng-container>                                                            
                                                         </div>
                                                     </td>                                                    
@@ -1276,7 +1276,7 @@
                                     <div style="text-align: right;">
                                         <a *ngIf="isViewMode == false"
                                            data-toggle="modal" data-target="#addInternationalShippingInfo">
-                                            <button type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"
+                                            <button  *ngIf="isAdd" type="button" style="background-color: #337ab7 !important;" class="btn-sm header-button"
                                                     matTooltip="Add International Shipping Information" matTooltipPosition="above" (click)="onAddShippingInfo();">
                                                 Add International Shipping Information
                                             </button>
@@ -1313,14 +1313,14 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+                                                        <button  *ngIf="isDownload" type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                                                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                                                 label="Export Data" 
                                                                 data-toggle="modal" 
                                                                 (click)="selectedOnly = false; targetData = interShipInfo;"
                                                                  data-target="#downloadInternConfirmation"></button>
                                                                 <!-- (click)="interShipInfo.exportCSV()" -->
-                                                        <button type="button" class="btn btn-primary exports-button"
+                                                        <button  *ngIf="isDownload" type="button" class="btn btn-primary exports-button"
                                                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                                                 icon="fa-download" iconPos="left" label="Export Selected Data"
                                                                 (click)="interShipInfo.exportCSV({selectionOnly:true})"></button>
@@ -1451,7 +1451,7 @@
                                                     <td class="action-icons-cstm table-column-width" style="width:150px !important">
                                                         <div *ngIf="currentDeletedstatusIntenational==false">
                                                             <ng-container *ngIf="!isViewMode">
-                                                                <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                                                <p-inputSwitch  *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                                                matTooltipPosition="above" (onChange)="changeOfStatusForInternationalShipping(rowData,$event)"></p-inputSwitch>
                                                             </ng-container>
 
@@ -1461,12 +1461,12 @@
                                                             </span>
 
                                                             <span *ngIf="!isViewMode" data-target="#addInternationalShippingInfo" data-toggle="modal">
-                                                                <a class="btn nobg"
+                                                                <a  *ngIf="isEdit" class="btn nobg"
                                                                    (click)="getInternationalShippingById(rowData)" matTooltip="Edit"
                                                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                                             </span>
                                                             <span *ngIf="!isViewMode" requirePermission="canDelete">
-                                                                <a class="btn nobg"
+                                                                <a  *ngIf="isDelete" class="btn nobg"
                                                                         (click)="deleteVendorInterShipping(rowData);interShipInfo.reset()" matTooltip="Delete" 
                                                                         matTooltipPosition="above">
                                                                     <i class="fa fa-trash"></i>
@@ -1487,7 +1487,7 @@
                                                         </div>
                                                         <div *ngIf="currentDeletedstatusIntenational==true">
                                                             <ng-container *ngIf="!isViewMode">
-                                                                <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                                                <p-inputSwitch  *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                                            matTooltipPosition="above" ></p-inputSwitch>
                                                             </ng-container>
                                                             <span data-toggle="modal" data-target="#viewInter">
@@ -1501,7 +1501,7 @@
                                                                     <i class="fa fa-history"></i>
                                                                 </a>
                                                             </span>
-                                                            <span *ngIf="!isViewMode"><a class="btn nobg btn-users-cstm" (click)="restoreInternationalShipping(restoreInternationalShippingId,rowData);" 
+                                                            <span *ngIf="!isViewMode"><a   *ngIf="isEdit" class="btn nobg btn-users-cstm" (click)="restoreInternationalShipping(restoreInternationalShippingId,rowData);" 
                                                                 matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                         </div>
                                                     </td>
