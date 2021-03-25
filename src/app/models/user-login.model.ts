@@ -5,16 +5,14 @@
 
 export class UserLogin
 {
-    constructor(userName?: string, password?: string, rememberMe?: boolean,masterCompanyId?:number)
+    constructor(userName?: string, password?: string, rememberMe?: boolean)
     {
         this.userName = userName;
         this.password = password;
         this.rememberMe = rememberMe;
-        this.masterCompanyId=masterCompanyId;
     }
 
     userName: string;
     password: string;
     rememberMe: boolean;
-    masterCompanyId:number;
 }

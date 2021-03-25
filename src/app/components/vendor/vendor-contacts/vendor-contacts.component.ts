@@ -21,7 +21,6 @@ declare var $ : any;
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import { CommonService } from '../../../services/common.service';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-vendor-contacts',
@@ -194,11 +193,6 @@ export class VendorContactsComponent implements OnInit {
     status:any="Active";
     restorerecord:any={};
     vendorCodeandName: any;
-    isAdd:boolean=true;
-    isEdit:boolean=true;
-    isDelete:boolean=true;
-    isDownload:boolean=true;
-    isATA:Boolean=true;
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -266,12 +260,6 @@ export class VendorContactsComponent implements OnInit {
         if (this.vendorService.listCollection && this.vendorService.listCollection != undefined && this.vendorService.isEditMode == true) {
             this.local = this.vendorService.listCollection;
         }
-
-        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Update])
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Delete])
-        this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Download])
-		this.isATA=this.authService.ShowTab('Create Vendor','ATA Chapter');
         this.alertService.stopLoadingMessage();
     }
     ngOnInit(): void {

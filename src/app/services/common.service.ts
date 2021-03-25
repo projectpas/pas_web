@@ -562,9 +562,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  getGlAccountList(masterCompanyId?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getglaccountlist/${masterCompanyId!==undefined?masterCompanyId:1}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getGlAccountList(masterCompanyId));
+  getGlAccountList() {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getglaccountlist`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getGlAccountList());
     });
   }
 

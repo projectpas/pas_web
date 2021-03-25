@@ -16,7 +16,6 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { DatePipe } from '@angular/common';
 import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-vendor-capes',
@@ -68,7 +67,7 @@ export class VendorCapesComponent implements OnInit {
     CapesTypelistCollection: any[];
     CapesTypelistCollectionOriginal: any[];
     itemMasterId: number;
-    //isEdit: boolean = false;
+    isEdit: boolean = false;
     addList: any = [];
     textAreaLabel: any;
     textAreaInfo: any;
@@ -95,11 +94,7 @@ export class VendorCapesComponent implements OnInit {
         memo: null,
         isEditable: false,
     }
-    isAdd:boolean=true;
-    isEdit:boolean=true;
-    isDelete:boolean=true;
-    isDownload:boolean=true;
-    isUpload:boolean=true;
+    isAdd: boolean;
 
     constructor(public vendorService: VendorService, private datePipe: DatePipe, private configurations: ConfigurationService, private modalService: NgbModal, private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private alertService: AlertService) {
         if(window.localStorage.getItem('vendorService')){
@@ -133,12 +128,6 @@ export class VendorCapesComponent implements OnInit {
         if (this.vendorService.listCollection) {
             this.vendorId = this.vendorService.listCollection.vendorId;
         }
-
-        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Update])
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Delete])
-        this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Download])
-        this.isUpload=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Upload])
     }
 
     ngOnInit() {
