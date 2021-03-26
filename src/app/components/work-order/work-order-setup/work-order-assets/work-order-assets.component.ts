@@ -211,6 +211,51 @@ viewAsstesInventory(rowData){
             employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),
         }
         this.quantitySelected = 0;
+       if(this.isSubWorkOrder){
+           console.log("check in ")
+        if (this.status === 'checkIn') {
+            formData.forEach(element => {
+                element.checkInById = element.checkInById.value;
+                element.createdBy = this.userName;
+                element.UpdatedBy = this.userName;
+                element.masterCompanyId = 1;
+                if (element.isChecked == true) {
+                    this.finalAssetArray.push(element);
+                }
+            });
+            if (this.finalAssetArray && this.finalAssetArray.length != 0) {
+                this.workOrderService.savesubwocheckininventory(this.finalAssetArray).subscribe(res => {
+                    // this.refreshData.emit();
+            
+                    this.alertService.showMessage(
+                        '',
+                        'Inventory Checked-In successfully!',
+                        MessageSeverity.success
+                    );
+                },
+                    err => {
+                    })
+            }
+        } else {
+            formData.forEach(element => {
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
+                    this.finalAssetArray.push(element);
+                }
+            });
+            if (this.finalAssetArray && this.finalAssetArray.length != 0) {
+                this.workOrderService.savesubwocheckoutinventory(this.finalAssetArray).subscribe(res => {
+                    // this.refreshData.emit();
+                    this.alertService.showMessage(
+                        '',
+                        'Inventory Checked-Out successfully!',
+                        MessageSeverity.success
+                    );
+                },
+                    err => { })
+            }
+        }
+       }else{
         if (this.status === 'checkIn') {
             formData.forEach(element => {
                 element.checkInById = element.checkInById.value;
@@ -232,16 +277,6 @@ viewAsstesInventory(rowData){
                     );
                 },
                     err => {
-                    //     if (err && err.error.text == 'Inventory Checked-In successfully!') {
-                    //         this.alertService.showMessage(
-                    //             '',
-                    //             'Inventory Checked-In successfully!',
-                    //             MessageSeverity.success
-                    //         );
-                    //         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
-                    // this.getAllWorkOrderList(this.lazyLoadEventData);
-                    //     } else {
-                    //     }
                     })
             }
         } else {
@@ -260,41 +295,48 @@ viewAsstesInventory(rowData){
                         MessageSeverity.success
                     );
                 },
-                    err => {
-                    //     if (err && err.error.text == 'Inventory Checked-Out successfully!') {
-                    //         this.alertService.showMessage(
-                    //             '',
-                    //             'Inventory Checked-Out successfully!',
-                    //             MessageSeverity.success
-                    //         );
-                    //         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
-                    // this.getAllWorkOrderList(this.lazyLoadEventData);
-                    //     } else {
-                    //     }
-
-                    })
+                    err => { })
             }
         }
+       }
     }
     releaseData: any = [];
     releaseInventory() {
         this.releaseData = [];
         this.quantitySelected = 0;
-        if (this.assetsform.assetStatus == 'checkOut') {
+   if(this.isSubWorkOrder){
+    if (this.assetsform.assetStatus == 'checkOut') {
 
-            if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
-                this.workOrderCheckInCheckOutList.forEach(element => {
-                    element.checkOutById = element.checkOutById.value;
-                    if (element.inventoryStatus == 'Available') {
-                        this.releaseData.push(element);
-                    }
-                });
-                if (this.releaseData && this.releaseData.length != 0) {
-                    this.workOrderService.releaseAssetInventoryList(this.releaseData).subscribe(res => {
-                    });
+        if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+            this.workOrderCheckInCheckOutList.forEach(element => {
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
+                    this.releaseData.push(element);
                 }
+            });
+            if (this.releaseData && this.releaseData.length != 0) {
+                this.workOrderService.releasesubwocheckoutinventory(this.releaseData).subscribe(res => {
+                });
             }
         }
+    }
+   }else{
+    if (this.assetsform.assetStatus == 'checkOut') {
+
+        if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+            this.workOrderCheckInCheckOutList.forEach(element => {
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
+                    this.releaseData.push(element);
+                }
+            });
+            if (this.releaseData && this.releaseData.length != 0) {
+                this.workOrderService.releaseAssetInventoryList(this.releaseData).subscribe(res => {
+                });
+            }
+        }
+    }
+   }
     }
     closeAddNew() {
         this.addNewEquipment = false;
@@ -476,7 +518,10 @@ viewAsstesInventory(rowData){
     }
 
     restoreRecord() {
-        this.commonService.updatedeletedrecords('WorkOrderAssets', 'workOrderAssetId', this.restorerecord.workOrderAssetId).subscribe(res => {
+        const table= this.isSubWorkOrder? 'SubWorkOrderAsset' :'WorkOrderAssets';
+       const column= this.isSubWorkOrder? 'SubWorkOrderAssetId' : 'workOrderAssetId';
+       
+        this.commonService.updatedeletedrecords(table, column, this.isSubWorkOrder? this.restorerecord.subWorkOrderAssetId : this.restorerecord.workOrderAssetId).subscribe(res => {
             this.getDeleteListByStatus(true)
             this.modal.close();
             this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
