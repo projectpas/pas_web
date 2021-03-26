@@ -15,7 +15,21 @@
     position: relative  !important;
     width: auto  !important;
   }
-
+  .submit-btn-margin{
+    margin-top: 10px !important; margin-bottom: 10px !important;
+  }
+  .width-140{
+    width:140px !important;
+  }
+  .pencil-div{
+    margin-top: 4px !important;float: right !important;
+  }
+  .width-130{
+    width:130px !important;
+  }
+.float-left{
+  float: left !important;
+}
   ::ng-deep .ui-calendar-button{
       height: 24px !important;
   }

@@ -155,7 +155,7 @@
                         label="Include Alternate PN" (onChange)="resetAlternateParts($event)" [(ngModel)]="isShowAlternatePN">
                     </p-checkbox> 
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="margin-left:-50px !important">
                     <p-checkbox class="p-checkbox-label-womaterial" name="task" binary="false" label="Include Eq PN"
                         (onChange)="resetEqParts($event)" [(ngModel)]="isShowEqPN"></p-checkbox>
                 </div> 
@@ -213,18 +213,18 @@
                                     <th class="text-center width-50"> Qty Avail </th>
                                     <th class="text-center"> Qty on Order </th>
                                     <th class="text-center" *ngIf="statusId === 1 || statusId === 5 ">
-                                        {{statusId == 1 ? 'Reserved' : 'UnReserved'  }} Date</th>
+                                        {{statusId == 1 ? 'Reserved' : 'UnReserved'  }} Date <span class="clr-red">*</span></th>
                                         <th class="text-center" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                             {{statusId === 2  ? 'Issued'  : 
                                         statusId === 3 ? 'Reserved & Issued'  
                                         : 'UnIssued' 
                                          }}
-                                            Date</th>
+                                            Date <span class="clr-red">*</span></th>
                                     <th class="text-center" *ngIf="statusId === 1 || statusId === 5">
-                                        {{statusId === 1 ? 'Reserved' : 'UnReserved'}} By</th>
+                                        {{statusId === 1 ? 'Reserved' : 'UnReserved'}} By <span class="clr-red">*</span></th>
                                     <th class="text-center" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                         {{statusId === 2  ? 'Issued' : statusId === 3 ? 'Reserved & Issued'  :'UnIssued'  }}
-                                        By</th>
+                                        By <span class="clr-red">*</span></th>
                                 </tr>
                             </thead>
                             <tbody>

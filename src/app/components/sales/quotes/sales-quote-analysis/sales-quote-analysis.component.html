@@ -127,10 +127,10 @@
                 || col.field == 'freight'
                 || col.field == 'taxAmount'
                 || col.field == 'totalRevenue'
-                || col.field == 'marginPercentage'" style="float: right !important;">
+                || col.field == 'marginPercentage'" class="float-right">
               {{convertDate(col.field , rowData) | twoDecimalGlobalNumberFormatPipe}}
             </span>
-            <span *ngIf="col.field == 'qtyQuoted'" style="float: right !important;">
+            <span *ngIf="col.field == 'qtyQuoted'" class="float-right">
               {{convertDate(col.field , rowData) | globalNmberFormat}}
             </span>
             <span *ngIf="col.field == 'notes'" [innerHTML]="rowData.notes"></span>
@@ -162,31 +162,31 @@
           </td>
           <td class="table-column-width"><label>Total</label>
           </td>
-          <td class="table-column-width"><label style="margin: 0">{{getTotalAmount('markupExtended')}}</label>
+          <td class="table-column-width"><label class="margin-0">{{getTotalAmount('markupExtended')}}</label>
           </td>
-          <td class="table-column-width"><label style="margin: 0">{{getTotalAmount('grossSalePrice')}}</label>
+          <td class="table-column-width"><label class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
           </td>
-          <td class="table-column-width"><label style="margin: 0">{{getTotalAmount('salesDiscountExtended')}}</label>
+          <td class="table-column-width"><label class="margin-0">{{getTotalAmount('salesDiscountExtended')}}</label>
           </td>
-          <td class="table-column-width"><label style="margin: 0">{{getTotalAmount('netSales')}}</label>
+          <td class="table-column-width"><label class="margin-0">{{getTotalAmount('netSales')}}</label>
           </td>
-          <td class="table-column-width"><label style="margin: 0">{{getTotalAmount('misc')}}</label>
+          <td class="table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label style="margin: 0">{{getTotalAmount('totalSales')}}</label>
+          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
           </td>
           <td>&nbsp;
           </td>
-          <td class="table-column-width" class="content-to-end"><label style="margin: 0">{{getTotalAmount('unitCostExtended')}}</label>
+          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label style="margin: 0">{{getTotalAmount('marginAmountExtended')}}</label>
+          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label style="margin: 0">{{getPercentage('marginPercentage')}}</label>
+          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getPercentage('marginPercentage')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label style="margin: 0">{{getTotalAmount('freight')}}</label>
+          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('freight')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label style="margin: 0">{{getTotalAmount('taxAmount')}}</label>
+          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
           </td>
-          <td class="table-column-width content-to-end"><label style="margin: 0">{{getTotalAmount('totalRevenue')}}</label>
+          <td class="table-column-width content-to-end"><label class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
           </td>
           <td>&nbsp;
           </td>
@@ -196,29 +196,29 @@
           </td>
           <td class="table-column-width"><label>Total</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('markupExtended')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('markupExtended')}}</label>
           </td>
-          <td class="table-column-width content-to-end"><label style="margin: 0">{{getTotalAmount('grossSalePrice')}}</label>
+          <td class="table-column-width content-to-end"><label class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('salesDiscountExtended')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('salesDiscountExtended')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('netSales')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('netSales')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('misc')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('totalSales')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('unitCostExtended')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('marginAmountExtended')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getPercentage('marginPercentage')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getPercentage('marginPercentage')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('freight')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('freight')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('taxAmount')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label style="margin: 0">{{getTotalAmount('totalRevenue')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
           </td>
         </tr>
       </ng-template>
