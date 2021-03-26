@@ -1025,7 +1025,7 @@
             </div> 
             <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                 <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)" [workOrderPartNumberId]="workOrderPartNumberId"
-                    (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)" [woNumber]="workOrderGeneralInformation.workOrderNum" [customerName]="isSubWorkOrder?subWorkOrderDetails.customerName:  workOrderGeneralInformation.customerDetails.customerName" [woOperDate]="workOrderGeneralInformation.openDate"
+                    (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)" [woNumber]="isSubWorkOrder? subWorkOrderDetails.workOrderNum : workOrderGeneralInformation.workOrderNum" [customerName]="isSubWorkOrder?subWorkOrderDetails.customerName:  workOrderGeneralInformation.customerDetails.customerName" [woOperDate]="workOrderGeneralInformation.openDate"
                     (refreshData)="getEquipmentByWorkOrderId($event)" [employeesOriginalData]="employeesOriginalData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [isWorkOrder]="isWorkOrder" [workFlowObject]="workFlowObject"  [workOrderId]="workOrderId"
                     [workOrderAssetList]="workOrderAssetList" [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData" [isView]="isView"> 
