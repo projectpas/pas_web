@@ -618,7 +618,7 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	getStockLineDetailsById(stockLineId) {
-		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {
+		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {			
 			this.loadPOData(res.itemMasterId);
 			this.loadROData(res.itemMasterId);
 			this.loadNHAData(res.itemMasterId);
@@ -663,7 +663,7 @@ export class StockLineSetupComponent implements OnInit {
 					quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '0',
 					purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '0.00',
 					repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '0.00',
-					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',
+					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',					
 					coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '0.00',
 					lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '0.00',
 					purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
@@ -1051,10 +1051,9 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadTLAData(itemMasterId);
 		this.getUnitCostSalePrice();
 		this.sourceTimeLife = {};
-		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {
+		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
 			const partDetails = res;
 			this.stockLineForm.oem = partDetails.isOEM.toString();
-
 			if (res.isOemPNId > 0) {
 				this.arrayItemMasterlist.push(res.isOemPNId);
 				this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
@@ -1081,7 +1080,10 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.nationalStockNumber = partDetails.nationalStockNumber;
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
 			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
-			this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice;
+			// this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice;
+			// this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost;
+			this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
+		    this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice ? formatNumberAsGlobalSettingsModule(partDetails.unitSalesPrice, 2) : '0.00';
 			this.stockLineForm.conditionId = partDetails.conditionId;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
@@ -1127,7 +1129,7 @@ export class StockLineSetupComponent implements OnInit {
 	onPartNumberSelectedOnEdit(itemMasterId) {
 		this.sourceTimeLife = {};
 		this.disableManufacturer = false;
-		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {
+		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
 			const partDetails = res;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
@@ -1151,7 +1153,7 @@ export class StockLineSetupComponent implements OnInit {
 			const itemMasterId = getValueFromObjectByKey('value', this.stockLineForm.itemMasterId);
 			const conditionId = this.stockLineForm.conditionId;
 			this.commonService.getPriceDetailsByCondId(itemMasterId, conditionId).subscribe(res => {
-				if (res) {
+				if (res) {					
 					this.stockLineForm.purchaseOrderUnitCost = res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00';
 					this.stockLineForm.unitSalesPrice = res.salePrice ? formatNumberAsGlobalSettingsModule(res.salePrice, 2) : '0.00';
 				}
