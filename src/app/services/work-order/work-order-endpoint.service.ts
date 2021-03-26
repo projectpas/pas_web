@@ -1230,6 +1230,11 @@ reserveSubWoAltPartData(data){
             return this.handleErrorCommon(error, () => this.releaseAssetInventoryList(AssetData));
         });
     }
+    releasesubwocheckoutinventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/releasesubwocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.releasesubwocheckoutinventory(AssetData));
+        });
+    }
     saveCheckOutInventory(AssetData){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savewocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.saveCheckOutInventory(AssetData));
@@ -1238,6 +1243,16 @@ reserveSubWoAltPartData(data){
     saveCheckInInventory(AssetData){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savewocheckininventory`, AssetData, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.saveCheckInInventory(AssetData));
+        });
+    }
+    savesubwocheckoutinventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savesubwocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.savesubwocheckoutinventory(AssetData));
+        });
+    }
+    savesubwocheckininventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savesubwocheckininventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.savesubwocheckininventory(AssetData));
         });
     }
     getWoAssetInventoryHistory(workOrderAssetId){

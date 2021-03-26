@@ -573,11 +573,21 @@ export class WorkOrderService {
     releaseAssetInventoryList(AssetData){
         return this.workOrderEndpointService.releaseAssetInventoryList(AssetData);
     }
+    releasesubwocheckoutinventory(AssetData){
+        return this.workOrderEndpointService.releasesubwocheckoutinventory(AssetData);
+    }
+    
     saveCheckOutInventory(AssetData) {
         return this.workOrderEndpointService.saveCheckOutInventory(AssetData);
     }
     saveCheckInInventory(AssetData){
         return this.workOrderEndpointService.saveCheckInInventory(AssetData);
+    }
+    savesubwocheckoutinventory(AssetData){
+        return this.workOrderEndpointService.savesubwocheckoutinventory(AssetData);
+    }
+    savesubwocheckininventory(AssetData){
+        return this.workOrderEndpointService.savesubwocheckininventory(AssetData);
     }
     getWoAssetInventoryHistory(workOrderAssetId){
         return this.workOrderEndpointService.getWoAssetInventoryHistory(workOrderAssetId);
