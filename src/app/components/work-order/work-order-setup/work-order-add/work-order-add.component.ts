@@ -317,7 +317,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.getTaskList();
         this.createModeData();
         this.workOrderService.creditTerms = this.creditTerms;
-        this.mpnFlag = true;
+        this.mpnFlag = true; 
         // this.isDetailedView = true;
         this.selectedCustomer = new Customer();
         if (!this.isSubWorkOrder) { // subWorkOrder false
@@ -450,7 +450,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     changeofMPNForSubWo(data) {
 
-        this.workFlowId = data.workFlowId;
+        this.workFlowId =  data.workFlowId !=0 || data.workFlowId !=null ? 0: data.workFlowId;
         this.subWOPartNoId = data.subWOPartNoId;
         this.workOrderPartNumberId = data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId = data.workFlowId;
