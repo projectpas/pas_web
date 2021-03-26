@@ -644,7 +644,7 @@
                                   
                                     
                                     <td class="text_center">
-                                        <input type="checkbox" class="form-control w60 pointer_event_none" name="isPMA{{i}}"
+                                        <input type="checkbox" class="form-control 6w0 pointer_event_none" name="isPMA{{i}}"
                                                #isPMA="ngModel" [(ngModel)]="workOrderPartNumber.isPMA" >
                                     </td>
                                     <td class="text_center">
@@ -1025,7 +1025,7 @@
             </div> 
             <div *ngIf="(gridActiveTab == 'equipment')" [ngClass]="{hidedata : gridActiveTab !== 'equipment'}">
                 <app-work-order-assets (saveEquipmentListForWO)="saveWorkOrderEquipmentList($event)" [workOrderPartNumberId]="workOrderPartNumberId"
-                    (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)" [woNumber]="workOrderGeneralInformation.workOrderNum" [customerName]="workOrderGeneralInformation.customerDetails.customerName" [woOperDate]="workOrderGeneralInformation.openDate"
+                    (updateEquipmentListForWO)="updateWorkOrderEquipmentList($event)" [woNumber]="workOrderGeneralInformation.workOrderNum" [customerName]="isSubWorkOrder?subWorkOrderDetails.customerName:  workOrderGeneralInformation.customerDetails.customerName" [woOperDate]="workOrderGeneralInformation.openDate"
                     (refreshData)="getEquipmentByWorkOrderId($event)" [employeesOriginalData]="employeesOriginalData" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [isWorkOrder]="isWorkOrder" [workFlowObject]="workFlowObject"  [workOrderId]="workOrderId"
                     [workOrderAssetList]="workOrderAssetList" [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData" [isView]="isView"> 
@@ -1079,7 +1079,7 @@
             </div>
      <!-- <p style="color: red;">       {{workOrderGeneralInformation.customerId}}</p> -->
             <div *ngIf="(gridActiveTab == 'communication')" [ngClass]="{hidedata : gridActiveTab !== 'communication'}">
-                <app-communication [isViewMode]="isView"   [idForContact]="workOrderGeneralInformation.customerId.customerId" [type]="1" 
+                <app-communication [isViewMode]="isView"   [idForContact]="isSubWorkOrder? subWorkOrderDetails.customerId :workOrderGeneralInformation.customerId.customerId" [type]="1" 
                 [moduleName]="moduleNamee"  [referenceId]="isSubWorkOrder ==true ?subWOPartNoId :workFlowWorkOrderId"></app-communication>
             </div>
             <div *ngIf="documents && (gridActiveTab == 'documents')"
