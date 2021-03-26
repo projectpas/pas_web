@@ -317,7 +317,7 @@ export class WorkOrderAddComponent implements OnInit {
         this.getTaskList();
         this.createModeData();
         this.workOrderService.creditTerms = this.creditTerms;
-        this.mpnFlag = true;
+        this.mpnFlag = true; 
         // this.isDetailedView = true;
         this.selectedCustomer = new Customer();
         if (!this.isSubWorkOrder) { // subWorkOrder false
@@ -329,15 +329,17 @@ export class WorkOrderAddComponent implements OnInit {
             this.workOrderId = this.workOrderId;
             this.mainWorkOrderId = this.subWorkOrderDetails.workOrderid;
             this.subWorkOrderDetails.subWorkOrderId = this.subWorkOrderDetails.subWorkOrderId ? this.subWorkOrderDetails.subWorkOrderId : this.workOrderId;
+            console.log("subwor korder details dd",  this.subWorkOrderDetails)
             this.savedWorkOrderData = {
                 workOrderId: this.workOrderId,
                 workFlowWorkOrderId: this.workFlowWorkOrderId
             }
+           
         }
         if (!this.isSubWorkOrder) {
             this.workOrderStatus();
-            this.loadcustomerData();
-            this.getLegalEntity();
+            // this.loadcustomerData();
+            // this.getLegalEntity();
         }
         if (!this.isEdit && this.workOrderGeneralInformation) {
             this.workOrderGeneralInformation.partNumbers.forEach(
@@ -409,6 +411,7 @@ export class WorkOrderAddComponent implements OnInit {
         } else {
             this.moduleNamee = this.subWorkOrderModule;
         }
+        console.log("sub work order ",this.workOrderGeneralInformation)
     }
 
     dropdownlistSubWoMpn() {
@@ -447,7 +450,7 @@ export class WorkOrderAddComponent implements OnInit {
 
     changeofMPNForSubWo(data) {
 
-        this.workFlowId = data.workFlowId;
+        this.workFlowId =  data.workFlowId !=0 || data.workFlowId !=null ? 0: data.workFlowId;
         this.subWOPartNoId = data.subWOPartNoId;
         this.workOrderPartNumberId = data.subWOPartNoId;
         this.savedWorkOrderData.workFlowId = data.workFlowId;
@@ -1289,9 +1292,9 @@ export class WorkOrderAddComponent implements OnInit {
     getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
         if (currentRecord.workOrderScopeId !== null && currentRecord.workOrderScopeId !== '' && currentRecord.workOrderScopeId > 0) {
             const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
-            if (itemMasterId !== undefined && label !== undefined) {
+            if (itemMasterId !== undefined && currentRecord.workOrderScopeId !== undefined) {
                 this.isSpinnerVisible = true
-                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, label).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
                     if (res !== null) {
                         currentRecord.nte = res.nteHours;
@@ -3142,26 +3145,26 @@ export class WorkOrderAddComponent implements OnInit {
         }
     }
 
-    filterNames(event) {
-        this.customerNames = this.allCustomers;
+    // filterNames(event) {
+    //     this.customerNames = this.allCustomers;
 
-        if (event.query !== undefined && event.query !== null) {
-            const customers = [...this.allCustomers.filter(x => {
-                return x.label.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.customerNames = customers;
-        }
-    }
+    //     if (event.query !== undefined && event.query !== null) {
+    //         const customers = [...this.allCustomers.filter(x => {
+    //             return x.label.toLowerCase().includes(event.query.toLowerCase())
+    //         })]
+    //         this.customerNames = customers;
+    //     }
+    // }
 
-    loadcustomerData() {
-        this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(response => {
-            this.allCustomers = response;
-        },
-            err => {
-                this.isSpinnerVisible = false;
-                this.handleError(err);
-            });
-    }
+    // loadcustomerData() {
+    //     this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(response => {
+    //         this.allCustomers = response;
+    //     },
+    //         err => {
+    //             this.isSpinnerVisible = false;
+    //             this.handleError(err);
+    //         });
+    // }
 
     clearInputOnClickUserIdShipTo() {
         this.sourcePoApproval.shipToAddressId = "null";
@@ -3235,46 +3238,46 @@ export class WorkOrderAddComponent implements OnInit {
         this.enableAddSaveBtn = true;
     }
 
-    filterCustomerContactsForShipTo(event) {
-        this.firstNamesShipTo = this.shipToContactData;
+    // filterCustomerContactsForShipTo(event) {
+    //     this.firstNamesShipTo = this.shipToContactData;
 
-        if (event.query !== undefined && event.query !== null) {
-            const customerContacts = [...this.shipToContactData.filter(x => {
-                return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-            })]
-            this.firstNamesShipTo = customerContacts;
-        }
-    }
-
-
-    filterCompanyNameforBilling(event) {
-        this.legalEntityList_ForBilling = this.legalEntity;
-        const legalFilter = [...this.legalEntity.filter(x => {
-            return x.label.toLowerCase().includes(event.query.toLowerCase())
-        })]
-
-        this.legalEntityList_ForBilling = legalFilter;
-    }
-
-    filterCompanyNameforShipping(event) {
-        this.legalEntityList_ForShipping = this.legalEntity;
+    //     if (event.query !== undefined && event.query !== null) {
+    //         const customerContacts = [...this.shipToContactData.filter(x => {
+    //             return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+    //         })]
+    //         this.firstNamesShipTo = customerContacts;
+    //     }
+    // }
 
 
-        const legalFilter = [...this.legalEntity.filter(x => {
-            return x.label.toLowerCase().includes(event.query.toLowerCase())
-        })]
+    // filterCompanyNameforBilling(event) {
+    //     this.legalEntityList_ForBilling = this.legalEntity;
+    //     const legalFilter = [...this.legalEntity.filter(x => {
+    //         return x.label.toLowerCase().includes(event.query.toLowerCase())
+    //     })]
 
-        this.legalEntityList_ForShipping = legalFilter;
-    }
+    //     this.legalEntityList_ForBilling = legalFilter;
+    // }
 
-    getLegalEntity() {
-        this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(res => {
-            this.legalEntity = res;
-        },
-            err => {
-                this.handleError(err);
-            })
-    }
+    // filterCompanyNameforShipping(event) {
+    //     this.legalEntityList_ForShipping = this.legalEntity;
+
+
+    //     const legalFilter = [...this.legalEntity.filter(x => {
+    //         return x.label.toLowerCase().includes(event.query.toLowerCase())
+    //     })]
+
+    //     this.legalEntityList_ForShipping = legalFilter;
+    // }
+
+    // getLegalEntity() {
+    //     this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(res => {
+    //         this.legalEntity = res;
+    //     },
+    //         err => {
+    //             this.handleError(err);
+    //         })
+    // }
 
     errorHandling(err) {
         this.handleError(err);

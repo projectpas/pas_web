@@ -407,14 +407,17 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getAllTaxRates() {
     //this.commonservice.smartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate').subscribe((res) => {
-    this.commonservice.autoSuggestionSmartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('[TaxRate]', 'TaxRateId', 'TaxRate', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.taxRatesList = res;
+      this.taxRatesList.sort(function(a, b) {
+        return parseFloat(a.label) - parseFloat(b.label);
+      });
     }, error => { this.isSpinnerVisible = false });
   }
 
   getAllTaxTypes() {
     //this.commonservice.smartDropDownList('TaxType', 'TaxTypeId', 'Description').subscribe((res) => {
-    this.commonservice.autoSuggestionSmartDropDownList('TaxType', 'TaxTypeId', 'Description', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('TaxType', 'TaxTypeId', 'Description', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.taxTypeList = res;
     }, error => { this.isSpinnerVisible = false });
   }
