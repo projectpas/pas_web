@@ -265,7 +265,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				setTimeout(() => {
 					this.CountryData(res[0].country)
 					this.glList();
-				}, 200)					
+				}, 500)					
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -326,7 +326,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				}
 				setTimeout(() => {				
 					this.glList();
-				}, 200)	
+				}, 500)	
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -359,7 +359,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				}
 				setTimeout(() => {				
 					this.glList();
-				}, 200)	
+				}, 500)	
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
