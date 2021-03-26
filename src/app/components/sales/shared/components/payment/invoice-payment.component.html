@@ -71,12 +71,12 @@
       <div class="col-10 column">
         <div class="form-group">
           <p-radioButton name="groupname1" value="1" label="Single Payment Method" (ngModelChange)="enableSave()"
-            class="p-radiobutton-label-horizontal p-radiobutton-cstm" [(ngModel)]="paymentMethod"
-            (click)="onPaymentMethodClick(1)">
+            class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+            [(ngModel)]="objInvoicePayment.isMultiplePaymentMethod" (click)="onPaymentMethodClick(1)">
           </p-radioButton>
           <p-radioButton name="groupname1" value="2" label="Multiple Payment Methods" (ngModelChange)="enableSave()"
-            class="p-radiobutton-label-horizontal p-radiobutton-cstm" [(ngModel)]="paymentMethod"
-            (click)="onPaymentMethodClick(2)">
+            class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+            [(ngModel)]="objInvoicePayment.isMultiplePaymentMethod" (click)="onPaymentMethodClick(2)">
           </p-radioButton>
         </div>
       </div>
@@ -108,22 +108,22 @@
         <div class="form-group" style="display: inline-flex; width: 100%;">
           <label style="width: 15%;">
             <input type="checkbox" id="cparent" name="check" (click)="onDepositeClick()" (ngModelChange)="enableSave()"
-              [(ngModel)]="chkCheck" />
+              [(ngModel)]="objInvoicePayment.isCheckPayment" />
             Check
           </label>
           <label style="width: 22%;">
             <input type="checkbox" id="cparent" name="check" (click)="onDepositeClick()" (ngModelChange)="enableSave()"
-              [(ngModel)]="chkWireTransfer" />
+              [(ngModel)]="objInvoicePayment.isWireTransfer" />
             Wire Transfer
           </label>
           <label style="width: 17%;">
             <input type="checkbox" id="cparent" name="check" (click)="onDepositeClick()" (ngModelChange)="enableSave()"
-              [(ngModel)]="chkEFT" />
+              [(ngModel)]="objInvoicePayment.isEFT" />
             EFT
           </label>
           <label style="width: 100%;">
             <input type="checkbox" id="cparent" name="check" (click)="onDepositeClick()" (ngModelChange)="enableSave()"
-              [(ngModel)]="chkCC" />
+              [(ngModel)]="objInvoicePayment.isCCDCPayment" />
             Credit Card/Debit Card
           </label>
         </div>
@@ -133,14 +133,15 @@
   <ng-container>
     <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
       <p-tabPanel header="Check" [selected]="true" *ngIf="(IsSingleOption && chkPaymentMethod == 1) ||
-      (!IsSingleOption && chkCheck)">
+      (!IsSingleOption && objInvoicePayment.IsCheckPayment)">
         <div class="card new-card">
           <div class="card-body header-body">
             <div class="col-sm-3 w250 payment-blocks check-block" style="display: block;">
               <div class="form-group col-sm-12">
                 <label>Check Date<span class="clr-red">*</span></label>
                 <p-calendar name="checkDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                  [(ngModel)]="payment.checkDate" [showIcon]="true" id="checkDate" #checkDate="ngModel" required>
+                  [(ngModel)]="objInvoicePayment.checkPayments.checkDate" [showIcon]="true" id="checkDate"
+                  #checkDate="ngModel" required>
                 </p-calendar>
                 <div *ngIf="checkDate.invalid && (checkDate.dirty || checkDate.touched)"
                   class="alert alert-danger alert-danger-cstm">
@@ -152,14 +153,14 @@
               <div class="form-group col-sm-12">
                 <label>Amount<span class="clr-red">*</span></label>
                 <input type="text" class="form-control" style="text-align:right;" name="checkAmount"
-                  [ngModel]="payment.checkAmount | twoDecimalGlobalNumberFormatPipe"
-                  (ngModelChange)="payment.checkAmount=$event" required />
+                  [ngModel]="objInvoicePayment.checkPayments_Amount | twoDecimalGlobalNumberFormatPipe"
+                  (ngModelChange)="objInvoicePayment.checkPayments.amount=$event" required />
               </div>
               <div class="form-group col-sm-12">
-                <label for="quoteTypeId">Currency <span class="clr-red">*</span></label>
-                <select name="quoteTypeId" [(ngModel)]="payment.currencyId" required id="currencyId"
-                  #currencyId="ngModel">
-                  <option *ngFor="let item of soTypeList" [ngValue]="item.value">
+                <label for="currencyId">Currency <span class="clr-red">*</span></label>
+                <select name="currencyId" [(ngModel)]="objInvoicePayment.checkPayments.currencyId" required
+                  id="currencyId" #currencyId="ngModel">
+                  <option *ngFor="let item of currencyList" [ngValue]="item.value">
                     {{ item.label }}</option>
                 </select>
                 <div *ngIf="currencyId.invalid && (currencyId.dirty || currencyId.touched)"
@@ -171,8 +172,8 @@
               </div>
               <div class="form-group col-sm-12">
                 <label>Check Number <span class="clr-red">*</span></label>
-                <input type="text" class="form-control" name="checkNumber" [(ngModel)]="payment.checkNumber"
-                  [disabled]="true" #checkNumber="ngModel" id="checkNumber" />
+                <input type="text" class="form-control" name="checkNumber"
+                  [(ngModel)]="objInvoicePayment.checkPayments.checkNumber" #checkNumber="ngModel" id="checkNumber" />
                 <div *ngIf="checkNumber.invalid && (checkNumber.dirty || checkNumber.touched)"
                   class="alert alert-danger alert-danger-cstm">
                   <div *ngIf="checkNumber.errors.required">
@@ -182,13 +183,13 @@
               </div>
               <div class="form-group col-sm-12">
                 <label class="control-label">Payor's Bank</label>
-                <input type="text" class="form-control" name="payorsBank" [(ngModel)]="payment.payorsBank"
-                  id="payorsBank" />
+                <input type="text" class="form-control" name="payorsBank"
+                  [(ngModel)]="objInvoicePayment.checkPayments.payorsBank" id="payorsBank" />
               </div>
               <div class="form-group col-sm-12">
                 <label>Bank Account <span class="clr-red">*</span></label>
-                <input type="text" class="form-control" name="bankAccount" [(ngModel)]="payment.bankAccount"
-                  #bankAccount="ngModel" id="bankAccount" />
+                <input type="text" class="form-control" name="bankAccount"
+                  [(ngModel)]="objInvoicePayment.checkPayments.bankAccount" #bankAccount="ngModel" id="bankAccount" />
                 <div *ngIf="bankAccount.invalid && (bankAccount.dirty || bankAccount.touched)"
                   class="alert alert-danger alert-danger-cstm">
                   <div *ngIf="bankAccount.errors.required">
@@ -198,7 +199,8 @@
               </div>
               <div class="form-group col-sm-12">
                 <label for="glAccountId">GL Cash Account <span class="clr-red">*</span></label>
-                <select name="glAccountId" [(ngModel)]="payment.glAccount" required id="glAccount" #glAccount="ngModel">
+                <select name="glAccountId" [(ngModel)]="objInvoicePayment.checkPayments.glAccountNumber" required
+                  id="glAccount" #glAccount="ngModel">
                   <option *ngFor="let item of soTypeList" [ngValue]="item.value">
                     {{ item.label }}</option>
                 </select>
@@ -605,8 +607,7 @@
   </ng-container>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
-    (click)="onProcessPayment()">
+  <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" (click)="onProcessPayment()">
     Post Payment
   </button>
   <button type="button" (click)="onClose($event)" class="btn btn-danger">
