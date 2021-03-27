@@ -23,6 +23,7 @@ import { ConfigurationService } from '../../../../services/configuration.service
 import * as moment from 'moment';
 import { CommonService } from '../../../../services/common.service';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-legal-entity-contact',
@@ -122,6 +123,11 @@ export class EntityContactComponent implements OnInit {
 	@ViewChild('ATAADD', { static: false }) myModal;
 	isViewMode: boolean = false;
 
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
+	isDownload:boolean=true	;
+	
 	constructor(private router: ActivatedRoute,
 		public legalEntityService: LegalEntityService,
 		private route: Router,
@@ -137,6 +143,11 @@ export class EntityContactComponent implements OnInit {
 		private commonService: CommonService,
 		private masterComapnyService: MasterComapnyService,
 		private configurations: ConfigurationService) {
+
+			this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Add]);
+			this.isEdit=this.authService.checkPermission([ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Update]);
+			this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Delete]);
+			this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Download]);
 	}
 
 	ngOnInit() {

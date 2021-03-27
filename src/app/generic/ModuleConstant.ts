@@ -4,7 +4,6 @@ export class ModuleConstants
     static Customer:string = "Customers";
     
     static  Organization:string = "Organization";
-    static Publication:string = "Publications";
     static CustomerList:string = "CustomersList";
     static Customers_GeneralInformation:string = "Customers_GeneralInformation";
     static Customers_Contacts:string = "Customers_Contacts";
@@ -37,7 +36,22 @@ export class ModuleConstants
         static Vendors_ATAChapter:string = "Vendors_ATAChapter";
         static Vendors_Memos:string = "Vendors_Memos";
         static Vendors_Documents:string="Vendors_Documents";
+
+        static Publications:string = "Publications";
+       static PublicationsList:string = "PublicationsList";
+        static Publications_GeneralInformation:string = "Publications_GeneralInformation";
+        static Publications_PNMapping:string = "Publications_PNMapping";
+        static Publications_ViewAircraftInformation:string = "Publications_ViewAircraftInformation";
+        static Publications_ViewATAChapter:string = "Publications_ViewATAChapter";
     
+        static LegalEntity:string = "LegalEntity";
+        static LegalEntityList:string = "LegalEntityList";
+        static LegalEntity_GeneralInformation:string = "LegalEntity_GeneralInformation";
+        static LegalEntity_Contacts:string = "LegalEntity_Contacts";
+        static LegalEntity_BankingInformation:string = "LegalEntity_BankingInformation";
+        static LegalEntity_BillingInformation:string = "LegalEntity_BillingInformation";
+        static LegalEntity_ShippingInformation:string = "LegalEntity_ShippingInformation";
+        static LegalEntity_Documents:string = "LegalEntity_Documents";
 }
 
 export class PermissionConstants

@@ -125,6 +125,23 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	isAdd:boolean=true;
 	isEdit:boolean=true;
 	isDelete:boolean=true;
+	isDownload:boolean=true;
+	isActive:boolean=true;
+	permissionAddCheck=[ModuleConstants.LegalEntity+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_BankingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_Documents+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_GeneralInformation+'.'+PermissionConstants.Add,
+		ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Add];
+		
+    permissionUpdateCheck=[ModuleConstants.LegalEntity+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_BankingInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_Documents+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_GeneralInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Update];
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -135,9 +152,11 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		private configurations: ConfigurationService,
 		private datePipe: DatePipe) {
 
-			this.isAdd=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Add]);
-        this.isEdit=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Update]);
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Delete]);
+		this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+		this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+		this.isActive=this.authService.checkPermission([ModuleConstants.LegalEntity+'.'+PermissionConstants.Update])
+		this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity+'.'+PermissionConstants.Delete]);
+		this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntityList+'.'+PermissionConstants.Download]);
 		this.dataSource = new MatTableDataSource();
 		if (this.entityService.listCollection != null && this.entityService.isEditMode == true) {
 			this.sourceLegalEntity = this.entityService.listCollection;

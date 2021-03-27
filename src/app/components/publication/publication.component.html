@@ -38,11 +38,11 @@
         </div>
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+            <button *ngIf="isDownload" type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
               data-toggle="modal" (click)="selectedOnly = false; targetData = dt;" data-target="#downloadConfirmation">
             </button>
-            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+            <button *ngIf="isDownload" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
               (click)="dt.exportCSV({selectionOnly:true})">
             </button>
@@ -193,10 +193,10 @@
 
           <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
             <div *ngIf="currentDeletedstatus == false">
-              <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
+              <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData,$event)"></p-inputSwitch>
-              <span *ngIf="isView">
+              <span>
                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" data-target="#view"
                   data-toggle="modal" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                     class="fa fa-eye"></i></a>
@@ -219,7 +219,7 @@
                   <i class="fa fa-history"></i></a></span>
             </div>
             <div *ngIf="currentDeletedstatus == true">
-              <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
+              <p-inputSwitch *ngIf="isActive" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
                 matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData, $event)"></p-inputSwitch>
@@ -231,7 +231,7 @@
               <span data-target="#publicationHistory" data-toggle="modal"><a class="btn nobg"
                   (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
                   <i class="fa fa-history"></i></a></span>
-              <span><a class="btn nobg" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
+              <span *ngIf="isEdit"><a class="btn nobg" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                   matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
               </span>
             </div>
