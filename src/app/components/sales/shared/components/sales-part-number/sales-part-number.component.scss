@@ -116,3 +116,36 @@ button:disabled {
 .th-width{
   min-width: 40px !important; 
 }
+.sales-no-records-found{
+  color: red; font-weight: bold; text-align: left; text-transform: uppercase
+}
+.memo-buttons{
+  padding: 6px 12px !important;margin-top: 10px !important;
+}
+.padding-bottom-8{
+  padding-bottom: 8px !important;
+}
+.font-size-10{
+  font-size: 10px !important
+}
+.sales-part-action-column{
+  position: sticky !important; min-width: 100px !important;
+}
+.summary-column{
+  width:auto !important;background-color: #EAF2C5 !important;
+}
+.view-part-eye{
+  margin-left: 2px !important; padding-left: 2px !important; padding-right: 2px !important
+}
+.width-120{
+ width:120px !important;
+}
+.view-mode-button{
+  width:55px !important;height:20px !important;
+}
+.view-mode-div{
+  text-align:right ; width:100% !important; padding-top:5px !important;
+}
+.color-white{
+  color: #fff !important;
+}

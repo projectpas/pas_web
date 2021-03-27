@@ -398,7 +398,7 @@
               <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                 {{audit.updatedBy}}</td>
               <td>
-                <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
+                <p class="background-white"> <input type="checkbox" name="isDeleted"
                     [(ngModel)]="audit.isDeleted" disabled></p>
               </td>
             </tr>
@@ -406,8 +406,8 @@
         </table>
         <ng-template #noDatavailable>
           <div class="text-center">
-            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-            <h4 style="color: #ff5663;">No History Found </h4>
+            <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+            <h4 class="no-history-found-msg">No History Found </h4>
           </div>
         </ng-template>
       </div>
