@@ -5,7 +5,6 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { VendorService } from '../../../services/vendor.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare var $ : any;
 
 @Component({
@@ -38,7 +37,7 @@ export class VendorMemoComponent implements OnInit {
 	];
 	selectedColumns = this.memoCols;
 	memoPopupContent: any;
-	isDownload:boolean=true;
+
 	/** VendorMemo ctor */
 	constructor(public vendorService: VendorService,private activeRoute: ActivatedRoute, private router: Router, private alertService: AlertService, private authService: AuthService, ) {
 		if(window.localStorage.getItem('vendorService')){
@@ -71,7 +70,6 @@ export class VendorMemoComponent implements OnInit {
 		if (this.vendorService.listCollection && this.vendorService.isEditMode == true) {
 			this.local = this.vendorService.listCollection;
 		}
-		this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Memos+'.'+PermissionConstants.Download])
 	}
 
 	ngOnInit(): void {

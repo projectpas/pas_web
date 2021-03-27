@@ -22,7 +22,6 @@ import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete
 // import { DataTable } from 'primeng/datatable';
 import * as moment from 'moment';
 import { ConfigurationService } from '../../../../services/configuration.service';
-import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-legal-entity-list',
@@ -122,9 +121,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	referenceId: any;
 	pageNumber = 0;
 	isViewMode: boolean;
-	isAdd:boolean=true;
-	isEdit:boolean=true;
-	isDelete:boolean=true;
+
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -134,10 +131,6 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		private commonService: CommonService,
 		private configurations: ConfigurationService,
 		private datePipe: DatePipe) {
-
-			this.isAdd=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Add]);
-        this.isEdit=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Update]);
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Organization+'.'+PermissionConstants.Delete]);
 		this.dataSource = new MatTableDataSource();
 		if (this.entityService.listCollection != null && this.entityService.isEditMode == true) {
 			this.sourceLegalEntity = this.entityService.listCollection;
@@ -762,7 +755,6 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		this.getEntityACHDataById(legalEntityId);
 	}
 
-
 	getEntityACHDataById(legalEntityId) {
 		this.entityService.getEntityAchDataById(legalEntityId).subscribe(res => {
 			const response = res;
@@ -960,7 +952,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 
 	auditHistoryHeaders: any = [];
 	auditHistoryList: any = [];
-	// isSpinnerVisibleHistory: boolean = false;
+	// isSpinnerVisibleHistory: boolean = false;	
 	getAuditHistoryByIdbanking(content, type) {
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 		if (type == 1) {

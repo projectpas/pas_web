@@ -134,7 +134,6 @@ export class EmployeeService {
 
 
     newAddEmployee(employee: any) {
-        console.log(employee);
         return this.employeeEndpoint.getNewEmployeeEndpoint<any>(employee);
     }
 
@@ -259,10 +258,6 @@ export class EmployeeService {
 
     downloadAllEmployeeList(employeeId) {
         return this.employeeEndpoint.downloadAllEmployeeList(employeeId);
-    }
-
-    updateEmployeePassword(password,employeeID){
-        return this.employeeEndpoint.getUpdateEmployeePasswordEndpoint(password,employeeID);
     }
 
 }

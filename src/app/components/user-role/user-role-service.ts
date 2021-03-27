@@ -8,8 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserRoleEndPointService } from './user-role-endpoint.service';
-import { ModuleHierarchyMaster, UserRole, User, UserRoleMapper, PermissionMaster } from './ModuleHierarchyMaster.model';
-import { MenuItem } from 'primeng/api';
+import { ModuleHierarchyMaster, UserRole, User, UserRoleMapper } from './ModuleHierarchyMaster.model';
 
 @Injectable()
 export class UserRoleService {
@@ -22,11 +21,6 @@ export class UserRoleService {
     getAllModuleHierarchies() {
         return Observable.forkJoin(
             this.userRoleEndpoint.getAllModuleHierarchies<ModuleHierarchyMaster[]>());
-    }
-
-    getAllPermission(){
-        return Observable.forkJoin(
-            this.userRoleEndpoint.getAllPermission<PermissionMaster[]>());
     }
 
     add(userRole: UserRole) {
@@ -42,9 +36,9 @@ export class UserRoleService {
             this.userRoleEndpoint.getAllUsers<User[]>());
     }
 
-    getAllUserRole() {
+    getAllUserRole(masterCompanyId?) {
         return Observable.forkJoin(
-            this.userRoleEndpoint.getAllUserRole<UserRole[]>());
+            this.userRoleEndpoint.getAllUserRole<UserRole[]>(masterCompanyId));
     }
     
     getUserRoleByUserId(userId:string) {
@@ -61,10 +55,5 @@ export class UserRoleService {
         return Observable.forkJoin(
             this.userRoleEndpoint.getSavedCountryDataEndPoint<any>(masterCompanyId));
         // return this.accountEndpoint.getSavedCountryDataEndPoint<any>(masterCompanyId);
-    }
-
-    getUserMenuByRoleId(roleID:string) {
-        return Observable.forkJoin(
-            this.userRoleEndpoint.getUserMenuByRoleId<ModuleHierarchyMaster[]>(roleID));
     }
 }
