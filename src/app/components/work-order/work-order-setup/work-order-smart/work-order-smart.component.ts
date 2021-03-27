@@ -257,8 +257,7 @@ export class WorkOrderSmartComponent implements OnInit {
         });
     }
     setEditArray: any = []
-    getAllWorkOrderTypes(): void {
-        console.log("hello edi tmode", this.editWorkOrderGeneralInformation)
+    getAllWorkOrderTypes(): void { 
         this.setEditArray = [];
         const strText = '';
         if (this.isEdit == true) {

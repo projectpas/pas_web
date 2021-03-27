@@ -41,11 +41,7 @@
               <option *ngFor="let task of taskList" [value]="task.taskId">{{
                 task.description
                 }}</option>
-            </select>
-            <!-- optionLabel="description" -->
-            <!-- <p-dropdown placeholder="--Select--" editable="true" required (ngModelChange)="getActive()"  #taskId="ngModel" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen1x{{ i }}" [options]="taskList"
-            class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.taskId">
-          </p-dropdown>  -->
+            </select> 
           </td>
           <td>
             <div style="display:inline-flex">
@@ -156,10 +152,7 @@
           <td>&nbsp;</td>
           <td class="text-right"><b>{{ workFlow.materialExtendedCostSummation }}</b></td>
           <td *ngIf="!isQuote"></td>
-          <td>&nbsp;</td>
-          <!-- <td *ngIf="!isQuote" class="text-right"><b>
-              {{ workFlow.materialExtendedPriceSummation }}</b>
-          </td> -->
+          <td>&nbsp;</td> 
           <td>&nbsp;</td>
         </tr>
       </tfoot>
@@ -206,8 +199,7 @@
     [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
     Save
   </button>
-  <!-- <button type="button" class="btn btn-danger" (click)="closeMaterial()" data-dismiss="modal">Close</button> -->
-  </div>
+   </div>
 
   <div *ngIf="isWorkOrder && isEdit" class="float-right">
     <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="updateMaterialsWorkOrder()"
