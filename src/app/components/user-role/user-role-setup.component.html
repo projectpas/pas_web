@@ -1,72 +1,59 @@
 ﻿<style type="text/css">
     .level1 td {
-        background-color: #7cb5d2;
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
-        font-weight: bold;
+    background-color: #7cb5d2;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-weight: bold;
     }
-
     .level2 td {
-        background-color: #bc94b7;
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
-        font-weight: bold;
+    background-color: #bc94b7;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-weight: bold;
     }
-
     .level3 td {
-        background-color: #fde05e;
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
-        font-weight: bold;
+    background-color: #fde05e;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-weight: bold;
     }
-
     .level4 td {
-        background-color: #f68e51;
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
-        font-weight: bold;
+    background-color: #f68e51;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-weight: bold;
     }
-
     .level5 td {
-        background-color: #bcd74a;
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
-        font-weight: bold;
+    background-color: #bcd74a;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-weight: bold;
     }
-
     .level6 td {
-        background-color: #f8e0c8;
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
-        font-weight: bold;
+    background-color: #f8e0c8;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-weight: bold;
     }
-
     .level1 {
     }
-
     .level2 td:first-child {
-        padding-left: 25px;
+    padding-left: 25px;
     }
-
     .level3 td:first-child {
-        padding-left: 50px;
+    padding-left: 50px;
     }
-
     .level4 td:first-child {
-        padding-left: 75px;
+    padding-left: 75px;
     }
-
     .level5 td:first-child {
-        padding-left: 100px;
+    padding-left: 100px;
     }
-
     .level6 td:first-child {
-        padding-left: 125px;
+    padding-left: 125px;
     }
-
-    
-</style>
-<div>
+ </style>
+ <div>
     <div class="col-md-12">
        <div class="x_panel" style="">
           <div class="x_content">
@@ -92,27 +79,22 @@
                       <label style="text-align: left;">Role Name</label>
                       <br>
                       <input type="text" formControlName="name" class="form-control" required>
-                      <div *ngIf="name.invalid && (name.dirty || name.touched)"
-                            class="alert alert-danger alert-danger-cstm">
-                           <div *ngIf="name.errors.required">
-                              <small> Role Name is required </small>
-                           </div>
-                        </div>
-                   </div>                   
+                   </div>
+                   <div *ngIf="name.invalid && (name.dirty || name.touched)"
+                      class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="name.errors.required">
+                         <small> Role Name is required </small>
+                      </div>
+                   </div>
                    <div class="col-sm-3 emp-filter">
                       <label style="width:100%;text-align: left;">Role Description</label>
                       <br>
                       <input type="text" formControlName="description" class="form-control">
                    </div>
-                   <div class="col-sm-3 emp-filter"> 
-                        <label style="width:100%;text-align: left;"></label>
-                        <br>                  
-                        <button class="btn btn-primary" [disabled]="roleForm.invalid" (click)="addUserRole()">Add Role Details</button>
-                   </div>
                    <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
                       <div class="x_panel">
                          <div class="tab-content">
-                            <div id="" style="max-height: 400px !important;" class="table-responsive default-bg clear pas-table-cstm poro-table-cstm parts-list-table-align">
+                            <div id="" class="table-responsive default-bg clear pas-table-cstm poro-table-cstm parts-list-table-align">
                                <div class="tableFixHead">
                                   <table class="table table-bordered header-table-width table-striped role-setup-table">
                                      <thead>
@@ -120,7 +102,7 @@
                                             <th>
                                                 Module Name
                                             </th>
-                                           <th  style="min-width: 50px !important;" *ngFor="let module of permissionMaster;index as i">
+                                           <th *ngFor="let module of permissionMaster;index as i">
                                               {{module.permissionName}}
                                            </th>
                                         </tr>
@@ -172,7 +154,7 @@
              <div class="clear"></div>
              <div class="clear"></div>
              <div style="margin-top: 10px;"></div>
-             <button class="btn btn-primary pull-right" [disabled]="roleForm.invalid" (click)="addUserRole()">Add Role Details</button>
+             <button class="btn btn-primary pull-right" (click)="addUserRole()">Add Role Details</button>
              <div class="clear"></div>
           </div>
        </div>
@@ -196,4 +178,4 @@
         <div></div>
       </div>
     </div>
-</div>
+  </div>

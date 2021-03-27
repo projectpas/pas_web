@@ -27,6 +27,7 @@ import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare const google: any;
 
 @Component({
@@ -160,7 +161,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	vendorCodeandName: any;
 	contact: any;
 	editSiteName: any
-
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
+	
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -262,6 +266,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.local = this.vendorService.listCollection;
 			//this.loadData();
 		}
+
+		this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation+'.'+PermissionConstants.Update])
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_PaymentInformation+'.'+PermissionConstants.Delete])
 	}
 
 	GetVendorGeneralAddress(event){

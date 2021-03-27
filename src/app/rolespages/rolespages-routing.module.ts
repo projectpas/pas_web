@@ -23,9 +23,8 @@ const rolesPagesRoutes: Routes = [
 			{ path: "app-roles-list", component: RolesListComponent, data: { title: "Roles List" } },
 			{ path: "app-roles-list-by-module", component: RolesListByModuleComponent, data: { title: "Roles List By Module" } },
             { path: "app-roles-setup", component: UserRolesSetupComponent, data: { title: "Roles Setup" } },
-            { path: "edit-app-roles", component: EditUserRolesComponent, data: { title: "Edit Roles" } },			
-			{ path: "edit-app-roles/:id", component: EditUserRolesComponent, data: { title: "Edit Roles" } },
-			{ path: "app-roles-management-structure", component: RolesManagementStructureComponent, data: { title: "Roles Management Structure" } },
+            { path: "edit-app-roles", component: EditUserRolesComponent, data: { title: "Edit Roles" } },
+            { path: "app-roles-management-structure", component: RolesManagementStructureComponent, data: { title: "Roles Management Structure" } },
             { path: "app-roles-mapping", component: UserRolesMappingComponent, data:{ title: "User Role Management" } }
 		]
 	}

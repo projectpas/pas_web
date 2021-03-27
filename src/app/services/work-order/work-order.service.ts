@@ -563,8 +563,8 @@ export class WorkOrderService {
     getWorkOrderAssetListForDropDown() {
         return this.workOrderEndpointService.getWorkOrderAssetListForDropDown();
     }
-    checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder){
-        return this.workOrderEndpointService.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder);
+    checkInAseetInventoryList(workOrderAssetId){
+        return this.workOrderEndpointService.checkInAseetInventoryList(workOrderAssetId);
     }
     checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder){
         return this.workOrderEndpointService.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder);

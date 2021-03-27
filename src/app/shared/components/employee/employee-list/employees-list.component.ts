@@ -32,6 +32,7 @@ import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { ThrowStmt } from '@angular/compiler';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare let $ : any;
 
 
@@ -257,7 +258,22 @@ export class EmployeesListComponent implements OnInit {
         // { field: 'delete', header: 'Delete' },
     ];
     currentDeletedstatus: boolean = false;
-
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete: boolean = true;
+    isDownLoad:boolean=true;
+    permissionAddCheck=[ModuleConstants.Employees+'.'+PermissionConstants.Add,
+    ModuleConstants.EmployeesList+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_Certification+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_GeneralInformation+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_ManagementStructure+'.'+PermissionConstants.Add,
+    ModuleConstants.Employees_Training+'.'+PermissionConstants.Add];
+permissionUpdateCheck=[ModuleConstants.Employees+'.'+PermissionConstants.Update,
+ModuleConstants.EmployeesList+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_Certification+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_GeneralInformation+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_ManagementStructure+'.'+PermissionConstants.Update,
+ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
     /** employees-list ctor */
     constructor(private modalService: NgbModal,
         private translationService: AppTranslationService,
@@ -266,11 +282,15 @@ export class EmployeesListComponent implements OnInit {
         private authService: AuthService,
         private datePipe: DatePipe,
         private alertService: AlertService, public commonService: CommonService, private configurations: ConfigurationService, public currencyService: CurrencyService, private legalEntityService: LegalEntityService, private itemser: ItemMasterService) {
+
         this.dataSource = new MatTableDataSource();
         this.translationService.closeCmpny = false;
         this.activeIndex = 0;
         this.empService.listCollection = null;
-
+        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Employees+'.'+PermissionConstants.Delete]);
+        this.isDownLoad=this.authService.checkPermission([ModuleConstants.EmployeesList+"."+PermissionConstants.Download]);
     }
     private onDataLoadSuccessful(allWorkFlows: any[]) {
         //this.alertService.stopLoadingMessage();

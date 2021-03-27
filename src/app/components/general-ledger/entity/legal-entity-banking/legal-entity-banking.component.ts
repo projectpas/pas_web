@@ -259,7 +259,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					bankCity: res[0].city,
 					bankProvince: res[0].stateOrProvince,
 					bankpostalCode: res[0].postalCode,
-					bankcountryId: res[0].countryId,					
+					bankcountryId: res[0].countryId,
+					//glAccountId: res[0].gLAccountId
 					glAccountId: res[0].glAccountId ? this.getInactiveObjectOnEdit('value', res[0].glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode'):null,
 				};
 				setTimeout(() => {

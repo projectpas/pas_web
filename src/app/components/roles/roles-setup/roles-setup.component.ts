@@ -78,12 +78,6 @@ export class RolesSetupComponent {
 	
 	}
 
-	get currentUserMasterCompanyId(): number {
-        return this.authService.currentUser
-            ? this.authService.currentUser.masterCompanyId
-            : null;
-    }
-
 	modal: NgbModalRef;
 	SetViewValue(type, rowNode) {
 		if (rowNode.node) {
@@ -466,7 +460,7 @@ export class RolesSetupComponent {
 			this.selectedRoles[i].createdBy = this.userName;
 			this.selectedRoles[i].updatedBy = this.userName;
 			this.selectedRoles[i].userRoleLevelId = this.userRolelevelId;
-			this.selectedRoles[i].masterCompanyId = this.currentUserMasterCompanyId;
+			this.selectedRoles[i].masterCompanyId = 1;
 			this.employeeService.AddRolesData(this.selectedRoles[i]).subscribe(data => {
 				
 
