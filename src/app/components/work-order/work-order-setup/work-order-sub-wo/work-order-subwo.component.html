@@ -282,9 +282,9 @@
   </div>
   <div
     *ngIf="subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
-    <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState" [subWoMpnGridUpdated]="mpnGridUpdated"
+    <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState" (setSubMPNDropDown)="subMPNDropDownUpdate($event)" [subWoMpnGridUpdated]="mpnGridUpdated"
       [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu"
       [subWorkOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"
       [conditionListfromSubWo]="conditionList"></app-work-order-smart>
   </div>
-</div> 
+</div>  

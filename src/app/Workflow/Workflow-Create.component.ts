@@ -2363,7 +2363,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             });
         }
         delete    souceData.customerName
-        console.log("sourceData",souceData)
         this.actionService.getNewWorkFlow(souceData).subscribe(  
             result => {
                 this.isSpinnerVisible = false;
@@ -2510,7 +2509,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                     }
                 }
                 if (workflow.materialList != undefined) {
-                    console.log("material list",workflow.materialList)
                     for (let material of workflow.materialList) {
                         if (material.workflowMaterialListId > 0) {
                             material.workflowId = workflow.workflowId;
@@ -2536,14 +2534,12 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             material.partNumber = material.partItem.partName;
                             }
                         }
-                        console.log("hello material",material)
 
                         // if(typeof material.partNumber=='object'){
                         //     material.partNumber= typeof
                         //     material.partNumber.partName =='object' ? material.partNumber.partName.partName : material.partNumber.partName;
                         // }
                       
-                        // console.log("hello material",material)
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }

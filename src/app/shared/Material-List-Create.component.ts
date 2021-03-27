@@ -227,14 +227,12 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         private masterComapnyService: MasterComapnyService,) {
     }
     ngOnInit(): void {
-        this.isSubWorkOrder = this.isSubWorkOrder;
-        // if (!this.isView) {
+        this.isSubWorkOrder = this.isSubWorkOrder; 
             this.getPartnumbers('');
-        // }
+   
         if (this.isWorkOrder) {
             this.row = this.workFlow.materialList[0];
-            if (this.isEdit) {
-                console.log("hello text",this.editData)
+            if (this.isEdit) { 
                 this.workFlow.materialList = [];
                 this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
                 this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
@@ -451,8 +449,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
             });
     }
-    onPartSelect(event, material, index) {
-        console.log("event",event,material)
+    onPartSelect(event, material, index) { 
         var materialObj = this.workFlow.materialList.find(x => x.partItem == event && x.taskId == this.workFlow.taskId);
         var itemMasterId = this.partCollection.find(x => {
             if (x.partName == event) {
@@ -865,29 +862,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         )
         return result;
     }
-    onDataLoadFailed(log) {
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
+ 
     onTaskChange(material) { }
     editorgetmemo(ev) {
         this.disableEditor = false;
