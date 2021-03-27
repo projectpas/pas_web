@@ -225,7 +225,8 @@ export class EntityContactComponent implements OnInit {
 		}
 		if (this.contactName != undefined) {
 			// this.commonService.autoSuggestionSmartDropDownList('Contact', 'ContactId', this.contactName, strText, true, 20, this.setEditArray.join()).subscribe(res => {
-			this.commonService.autoSuggestionSmartDropDownContactList(this.contactName, strText, true, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			//this.commonService.autoSuggestionSmartDropDownContactList(this.contactName, strText, true, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
+			this.commonService.autoSuggestionSmartDropDownSelfLEContactList(this.contactName, strText, true, this.setEditArray.join(),this.currentUserMasterCompanyId,this.id).subscribe(res => {
 				this.contactsListOriginal = res;
 				// .filter((v,i,a)=>a.findIndex(t=>(t.value == v.value))==i);
 				this.firstNamesList = [];
