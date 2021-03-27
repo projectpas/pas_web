@@ -137,7 +137,9 @@ viewAsstesInventory(rowData){
     workOrderCheckInCheckOutList: any = [];
     AvailableCount: any;
     showcheckInOutlist = false;
+    togglePlus:boolean=false;
     openGrid() {
+        this.togglePlus=true;
         this.showcheckInOutlist = true;
         this.workOrderCheckInCheckOutList = [];
         this.AvailableCount = 0;
@@ -175,6 +177,7 @@ viewAsstesInventory(rowData){
     }
 
     checkStatus(rowData, value) {
+        this.togglePlus=false;
         this.showcheckInOutlist = false;
         this.assetsform = {
             ...this.assetsform, description: rowData.description,
@@ -302,6 +305,7 @@ viewAsstesInventory(rowData){
     }
     releaseData: any = [];
     releaseInventory() {
+        this.togglePlus=false;
         this.releaseData = [];
         this.quantitySelected = 0;
    if(this.isSubWorkOrder){

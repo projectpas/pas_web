@@ -1,9 +1,3 @@
-<!-- <div>
-  <button data-target="#addNewEquipments" (click)="createNew()" data-toggle="modal" class="btn btn-primary btn-primary"
-    *ngIf="!isView">
-    Add Tools
-  </button>
-</div> -->
 <div class="card">
   <div class="header">
     <div class="row">
@@ -21,7 +15,6 @@
 </div>
 <div id="addNewEquipments" class="modal fade" role="dialog" data-backdrop="static">
   <div class="modal-dialog modal-xl">
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeAddNew()">
@@ -240,27 +233,12 @@
         <div class="tableFixHead">
         <table class="table table-bordered " >
           <thead>
-            <!-- <tr> -->
-              <!-- <th colspan="9" class="text-center">
-                                Equipment &nbsp; &nbsp;<a class="add-asset-checkin-checkout" data-toggle="modal"
-                                    data-target=".asset-checkin-checkout"><i class="fa fa-plus plus-icon"></i></a>
-                            </th> -->
-            <!-- </tr> -->
-            <!-- <tr *ngIf="!isView"> -->
-              <!-- <th colspan="4" class="text-center"></th> -->
-              <!-- <th colspan="2" class="text-center" *ngIf="!isView">Actions</th> -->
-              <!-- <th colspan="4" class="text-center"></th> -->
-            <!-- </tr> -->
             <tr>
               <th class="text-center">Tool Name</th>
               <th class="text-center">Tool Id</th>
               <th class="text-center">Tool Description</th>
               <th class="text-center">Tool Type</th>
               <th class="text-center">Qty</th>
-              <!-- <th class="text-center">Min</th>
-              <th class="text-center">Max</th> -->
-              <!-- <th class="text-center">Expected</th>
-              <th class="text-center">Findings</th> -->
               <th class="text-center" *ngIf="!isView">Actions</th>
             </tr>
           </thead>
@@ -271,36 +249,12 @@
               <td>{{ asset.description }}</td>
               <td>{{ asset.assetTypeName }}</td>
               <td class="text-right">{{ asset.quantity }}</td>
-              <!-- <td>
-                {{ asset.minQuantity }}
-              </td>
-              <td>
-                {{ asset.maxQuantity }}
-              </td> -->
-              <!-- <td>
-                {{ asset.expectedQuantity }}
-              </td> -->
-              <!-- <td>
-                {{ asset.findings }}
-              </td> -->
-              <!-- 
-              <td>
-                <a
-                  class="btn  boxed-float-btn nobg"
-                  data-toggle="modal"
-                  data-target="#view"
-                  (click)="viewAsstes(asset)"
-                >
-                  <i class="fa fa-eye"></i>
-                </a>
-              </td> -->
 
               <td class="text-center" *ngIf="!isView">
                 <span data-target="#addNewEquipments" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
                     (click)="edit(asset)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                 </span>
                 <span>
-                  <!-- *ngIf="asset.checkInOutStatus === 2" -->
                   <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkOut'); viewAsstes(asset)"
                     data-toggle="modal" data-target="#checkIn" matTooltipPosition="above"
                     matTooltip="Asset Checked-Out">
@@ -320,49 +274,8 @@
                 <span data-toggle="modal" data-target="#assetHistory">
                   <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(asset)" matTooltip="History"><i
                       class="fa fa-history"> </i></a></span>
-                <!-- <button class="btn-edit ptable-wo-btns" mat-icon-button data-target="#addNewEquipments"
-                  data-toggle="modal" (click)="edit(asset)" matTooltip="Edit" matTooltipPosition="above">
-                  <mat-icon>edit</mat-icon>
-                </button> -->
               </td>
-              <!-- <td *ngIf="asset.checkInOutStatus === 1">
-                <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkIn'); viewAsstes(asset)"
-                  data-toggle="modal" data-target="#checkIn" matTooltipPosition="above" matTooltip="Asset Checked-In">
-                  <i class="fa fa-sign-in clr-blue"></i>
-                </a>
-              </td> -->
-              <!-- <td *ngIf="asset.checkInOutStatus === 2">
-                <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkOut'); viewAsstes(asset)"
-                  data-toggle="modal" data-target="#checkIn" matTooltipPosition="above" matTooltip="Asset Checked-Out">
-                  <i class="fa fa-sign-out clr-red"></i>
-                </a>
-              </td> -->
-              <!-- <td>
-                <span data-toggle="modal" data-target="#assetHistory">
-                  <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(asset)" matTooltip="History"><i
-                      class="fa fa-history"> </i></a></span>
-              </td> -->
-              <!-- <td>
-                <button class="btn-delete ptable-wo-btns" mat-icon-button data-toggle="modal" (click)="delete(asset)">
-                  <mat-icon color="warn">delete</mat-icon>
-                </button>
-              </td> -->
-              <!--<td>
-                <span data-toggle="modal" data-target="#delete">
-                  <a
-                    class="btn btn-success boxed-float-btn nobg"
-                    data-toggle="tooltip"
-                    title="Delete Asset"
-                    ><i class="fa fa-trash"></i
-                  ></a>
-                </span>
-              </td>-->
             </tr>
-            <!-- <div class="text-right">
-                                <button class="btn btn-primary" (click)="saveAssets()" >
-                                        save Assets
-                                    </button>
-                        </div> -->
           </tbody>
           <tbody *ngIf="workOrderAssetList.length == 0">
             <tr>
@@ -408,8 +321,7 @@
 
 <div id="checkIn" class="modal fade" role="dialog" data-backdrop="static">
   <div class="modal-dialog modal-xl">
-    <!-- Modal content-->
-    <div class="modal-content">
+   <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="releaseInventory()">
           &times;
@@ -438,9 +350,7 @@
           <div class="col-md-3">
             <div class="form-group">
               <label class="input-width-100-percent">WO Open Date</label>
-              <!-- <input class="form-control" type="text" [(ngModel)]="woOperDate" name="woOperDate"
-                disabled /> -->
-              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+             <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
                 [(ngModel)]="woOperDate" disabled appendTo="body">
               </p-calendar>
             </div>
@@ -450,11 +360,7 @@
         <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <!-- <h4 class="panel-title">
-                    <input type="checkbox" name="contract2"  class="set_cds" disabled
-                    [(ngModel)]="saveTearDownData.isPmaDerBulletins">
-                  </h4> -->
-                  <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
+               <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
                   <div class="tableFixHead">
               <table class="asset_tablee table table-bordered tool-table">
                 <thead>
@@ -471,12 +377,17 @@
                 <tbody>
                   <tr>
                     <td class="width-36">
-                      <span>
+                      <span *ngIf="togglePlus ==false">
                         <a class="collapsed ac_cs" data-toggle="collapse" href="#step2">
                           <i class="fa fa-plus btn btn-success btn-cstm1 btn-xs1 step2-padding" matTooltip="Show Asset Inventory list"
-                            matTooltipPosition="above"  (click)="openGrid()"></i>
+                            matTooltipPosition="above"  (click)="openGrid()"></i> 
                         </a>
                       </span>
+
+                      <button type="button" class="btn btn-danger roleUpd" *ngIf="togglePlus ==true"  matTooltip="Show stock line details"  matTooltipPosition="above"  style="font-size: 10px !important;" >
+                      <i 
+                      class="fa fa-minus mr-0" ></i>  
+                    </button>
                     </td>
                     <td>
                       {{currentRecord.name}}
@@ -485,8 +396,6 @@
                       {{currentRecord.assetId}}
                     </td>
                     <td>
-                      <!-- {{currentRecord.quantitySelected}} -->
-                      <!-- {{currentRecord.inventoryNumber}} -->
                       Multiple
                     </td>
                     <td class="text-end">
@@ -496,7 +405,6 @@
                       {{quantitySelected}}
                     </td>
                     <td class="text-end">
-                      <!-- {{currentRecord.qyantityAvalilable}} -->
                       {{AvailableCount}}
                     </td>
                   </tr>
@@ -508,7 +416,6 @@
             <div id="step2" class="panel-collapse  collapse" *ngIf="showcheckInOutlist">
               <div class="panel-body m-lr-7">
                 <form #assetCheckForm="ngForm" class="back-white" >
-                  <!-- class="table-responsive" id="workflow-attributes-block" -->
                   <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">
                       <table class="table table-bordered table-border-modal1">
@@ -521,7 +428,6 @@
                         </tr>
                       </thead>
                       <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length !=0">
-                        <!-- <ng-container *ngFor="let x of reservedList; let i=index;" > -->
                         <tr *ngFor="let row of workOrderCheckInCheckOutList; let i = index" id="row_{{i}}">
                           <td style="min-width: 36px;"> 
                             <div *ngIf="assetsform.assetStatus == 'checkOut'">
@@ -573,8 +479,6 @@
                             <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>
                           </td>
                           <td>
-                             <!-- <i class="fa fa-info-circle fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" 
-                            matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(row,i)"></i> -->
                             <div class="align_adh">
                               <div [innerHTML]="row.notes"
                                   matTooltipPosition="above"
@@ -589,10 +493,6 @@
                           </td>
                           <td class="action-icons-cstm table-column-width "> 
                             <span> 
-                              <!-- data-toggle="modal" data-target="#view" -->
-                              <!-- <a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#checkInOutView"   matTooltip="Asset Inventory View" matTooltipPosition="above">
-                                  <i class="fa fa-eye"></i>
-                              </a> -->
                               <a
                               class="btn  boxed-float-btn nobg" matTooltip="Asset Inventory View" matTooltipPosition="above"
                            
@@ -601,14 +501,8 @@
                               <i class="fa fa-eye"></i>
                             </a>
                           </span>
-                          <!-- <span>
-                            <a class="btn nobg btn-delete-cstm" data-toggle="modal" data-target="#checkInOutHistory"  matTooltip="History" matTooltipPosition="above">
-                                <i class="fa fa-history"></i>
-                            </a>
-                        </span> -->
                           </td>
                         </tr>
-                        <!-- </ng-container> -->
                       </tbody>
                       <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length ==0">
                         <tr>
@@ -637,23 +531,6 @@
             </div>
           </div>   
         </div>
-        <!-- <div class="modal fade" id="assetInventView" role="dialog" data-backdrop="static" data-keyboard="false">
-          <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
-
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-                      <h4 class="modal-title">Details of Asset Inventory</h4>
-                  </div>
-                  <div class="modal-body">
-                    <app-asset-inventory-view [assetInventoryId]="assetRecordId"></app-asset-inventory-view>
-                      <div class="editor-buttons">
-                         <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div> -->
      
         <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
@@ -683,11 +560,6 @@
                 <button type="button" class="close" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title"></h4>
               </div>
-              <!-- <div class="modal-body" *ngIf="assetInventoryId!=0"> -->
-                <!-- [assetsId]="assetRecordId" -->
-                <!-- <app-asset-inventory-listing  [assetInventoryId]="assetInventoryId" [isWorkOrder]="isWorkOrder">
-                </app-asset-inventory-listing> -->
-              <!-- </div> -->
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo('')">Save</button>
                 <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>

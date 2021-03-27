@@ -405,14 +405,14 @@ export class WorkOrderListComponent implements OnInit {
         const { workOrderId } = rowData;
         const { customerId } = rowData;
         this.editMode = true;
-        this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderById(workOrderId, 0).subscribe(res => {
-            this.isSpinnerVisible = false;
+        // this.isSpinnerVisible = true;
+        // this.workOrderService.getWorkOrderById(workOrderId, 0).subscribe(res => {
+            // this.isSpinnerVisible = false;
             this.route.navigate([`workordersmodule/workorderspages/app-work-order-edit/${workOrderId}`]);
-        },
-            err => {
-                this.isSpinnerVisible = false;
-            })
+        // },
+            // err => {
+            //     this.isSpinnerVisible = false;
+            // })
     }
     
     getCustomerWarningsList(): void {
