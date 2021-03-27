@@ -9,7 +9,7 @@
   currencyId: number;
   checkNumber: string;
   payorsBank: string;
-  bankAccount: number;
+  bankAccount: string;
   glAccountNumber: number;
   memo: string;
   masterCompanyId: number;
