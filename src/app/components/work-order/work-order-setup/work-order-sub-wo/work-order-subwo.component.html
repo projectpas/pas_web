@@ -234,15 +234,6 @@
                 <input type="text" class="form-control w100" name="itemGroup{{i}}" #description="ngModel"
                   [(ngModel)]="workOrderPartNumber.itemGroup" disabled>
               </td>
-
-              <td>
-                <input type="text" class="form-control w100" name="controlNumber{{i}}" #controlNumber="ngModel"
-                  [(ngModel)]="workOrderPartNumber.controlNumber" disabled>
-              </td>
-              <td>
-                <input type="text" class="form-control w100" name="controlerId{{i}}" #controlerId="ngModel"
-                  [(ngModel)]="workOrderPartNumber.controlerId" disabled>
-              </td>
               <td>
                 <input type="text" class="form-control w100" name="stockLineNumber{{i}}" #serialNumber="ngModel"
                   [(ngModel)]="workOrderPartNumber.stockLineNumber" disabled>
@@ -251,6 +242,16 @@
                 <input type="text" class="form-control w50" [(ngModel)]="workOrderPartNumber.nte" name="nte{{i}}"
                   #nte="ngModel" disabled>
               </td>
+              <td>
+                <input type="text" class="form-control w100" name="controlNumber{{i}}" #controlNumber="ngModel"
+                  [(ngModel)]="workOrderPartNumber.controlNumber" disabled>
+              </td>
+              <td>
+                <input type="text" class="form-control w100" name="controlerId{{i}}" #controlerId="ngModel"
+                  [(ngModel)]="workOrderPartNumber.controlerId" disabled>
+              </td>
+           
+             
               
              
               <td>
