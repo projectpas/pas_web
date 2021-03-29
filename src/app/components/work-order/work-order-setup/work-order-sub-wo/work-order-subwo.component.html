@@ -1,16 +1,24 @@
-<div class="header">
+<div [@fadeInOut] class="page-content work_order_cont">
+  <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isView"></p-breadcrumb>
+  <div class="right_col" role="main">
+
+
+      <div class="x_content">
+          <div class="card new-card">
+<div class="card-header header">
   <div class="row">
       <div class="col">
           <h4 class="header-name"> {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>
       </div>
       <div>
-        <button type="button" class="btn-sm header-button " (click)="navigateToWo()">
+        <button type="button" class="btn-sm header-button pull-right" (click)="navigateToWo()">
           Redirect to Work Order
         </button>
       </div>
   </div>
 </div>
-<div class="card">
+<div class="clear"></div> 
+<div class="card card-border">
   <div class="card-body" *ngIf="subWorkOrderHeader">
     <div class="row labels-ctsm-align">
       <div class="col-md-3">
@@ -52,8 +60,9 @@
     </div>
   </div>
 </div>
+</div>
 <div *ngIf="workOrderDetails">
-  <div class="card">
+  <div class="card" style="margin-top:10px;margin-bottom: 10px;">
     <div class="card-body" *ngIf="subWorkOrderGeneralInformation">
       <form #subWoHeader="ngForm">
         <div class="form-row">
@@ -70,7 +79,7 @@
               <label for="opendate">Sub WO Open Date </label>
               <span class="clr-red">*</span>
               <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                [(ngModel)]="subWorkOrderGeneralInformation.openDate"></p-calendar>
+                [(ngModel)]="subWorkOrderGeneralInformation.openDate"  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
             </div>
           </div>
         </div>
@@ -87,29 +96,29 @@
       </form>
     </div>
   </div>
-  <div *ngIf="subWorkOrderId !=0">
+  <div style="padding:5px" *ngIf="subWorkOrderId !=0">
     <form #workOrderForm="ngForm">
       <div class="table-responsive add-wo-grid">
         <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table sub_wo_list"
           id="mpn-list-table ">
           <thead>
             <tr>
-              <th rowspan="2" style="min-width: 80px;">MPN *</th>
-              <th rowspan="2">MPN Description *</th>
+              <th rowspan="2" style="min-width: 80px;">MPN <span class="clr-red">*</span></th>
+              <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
               <th rowspan="2">Revised MPN</th>
               <th rowspan="2">Serial Num </th>
               <th rowspan="2">Qty</th>
-              <th rowspan="2">Rec'd Date *</th>
-              <th rowspan="2">Promised Date *</th>
-              <th rowspan="2">Est. Comp Date *</th>
-              <th rowspan="2">Est. Ship Date *</th>
-              <th rowspan="2">Stage *</th>
-              <th rowspan="2">Status *</th>
+              <th rowspan="2">Rec'd Date <span class="clr-red">*</span></th>
+              <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
+              <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
+              <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
+              <th rowspan="2">Stage <span class="clr-red">*</span></th>
+              <th rowspan="2">Status <span class="clr-red">*</span></th>
               <th rowspan="2">Tech Name</th>
               <th rowspan="2">Station Id</th>
-              <th rowspan="2">Work Scope *</th>
-              <th rowspan="2">Priority *</th>
-              <th rowspan="2">Condition *</th>
+              <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
+              <th rowspan="2">Priority <span class="clr-red">*</span></th>
+              <th rowspan="2">Condition <span class="clr-red">*</span></th>
               <th rowspan="2">CMM/Pub Ref</th>
               <th rowspan="2">Workflow ID </th>
               <th rowspan="2">Item Group</th>
@@ -148,21 +157,21 @@
               <td>
                 <p-calendar [showIcon]="true" name="customerRequestDate{{i}}" class="calender-cstm"
                   #customerRequestDate="ngModel" [(ngModel)]="workOrderPartNumber.customerRequestDate" required
-                  [disabled]="isView" appendTo="body"></p-calendar>
+                  [disabled]="isView" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" appendTo="body"></p-calendar>
               <td>
                 <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm" #promisedDate="ngModel"
-                  [(ngModel)]="workOrderPartNumber.promisedDate" required [disabled]="isView" appendTo="body">
+                  [(ngModel)]="workOrderPartNumber.promisedDate" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="isView" appendTo="body">
                 </p-calendar>
               <td>
                 <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}" class="calender-cstm"
                   #estimatedCompletionDate="ngModel" [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required
-                  [disabled]="isView" appendTo="body">
+                  [disabled]="isView" appendTo="body" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100">
                 </p-calendar>
               </td>
               <td>
                 <p-calendar [showIcon]="true" class="calender-cstm" name="estimatedShipDate{{i}}"
                   [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.receivedDate"
-                  #estimatedShipDate="ngModel" required [disabled]="isView" appendTo="body"></p-calendar>
+                  #estimatedShipDate="ngModel" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="isView" appendTo="body"></p-calendar>
               </td>
               <td>
                 <p-dropdown [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel" placeholder="Select"
@@ -288,3 +297,6 @@
       [conditionListfromSubWo]="conditionList"></app-work-order-smart>
   </div>
 </div>  
+</div>
+</div>
+</div>

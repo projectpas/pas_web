@@ -275,7 +275,7 @@
 						    <span>
 								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(viewRO,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
                             </span>
-							<span><a class="btn nobg" (click)="restore(restoreIdRo,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+							<span><a class="btn nobg btn-users-cstm" (click)="restore(restoreIdRo,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
 							<span *ngIf="isReceivingRolist == false" data-toggle="modal" data-target="#roHistory">
 								<a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
 								   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
