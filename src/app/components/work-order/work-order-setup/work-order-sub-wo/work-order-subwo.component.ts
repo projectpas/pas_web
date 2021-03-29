@@ -44,6 +44,7 @@ export class SubWorkOrderComponent implements OnInit {
     mpnGridUpdated: boolean = false;
     isView: boolean;
     tearDownReportList: any;
+    quantityValue:any=1;
     constructor(private router: Router,
         private commonService: CommonService,
         private acRouter: ActivatedRoute,

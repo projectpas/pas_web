@@ -142,8 +142,9 @@
               </td>
 
               <td>
+                <!-- workOrderPartNumber.quantity -->
                 <input type="number" class="form-control w100 text_right" name="quantity{{i}}"
-                  [(ngModel)]="workOrderPartNumber.quantity" disabled>
+                  [(ngModel)]="quantityValue" disabled>
               </td>
               <td>
                 <p-calendar [showIcon]="true" name="customerRequestDate{{i}}" class="calender-cstm"
