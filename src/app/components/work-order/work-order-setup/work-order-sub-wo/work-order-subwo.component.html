@@ -99,7 +99,8 @@
               <th rowspan="2">Revised MPN</th>
               <th rowspan="2">Serial Num </th>
               <th rowspan="2">Qty</th>
-              <th rowspan="2">Rec'd Date *</th>
+              <!-- <th rowspan="2">Rec'd Date *</th> -->
+              <th rowspan="2">Cust Req  Date *</th>
               <th rowspan="2">Promised Date *</th>
               <th rowspan="2">Est. Comp Date *</th>
               <th rowspan="2">Est. Ship Date *</th>
@@ -146,6 +147,11 @@
                 <input type="number" class="form-control w100 text_right" name="quantity{{i}}"
                   [(ngModel)]="quantityValue" disabled>
               </td>
+              <!-- <td>
+                <p-calendar [showIcon]="true" name="receivedDate{{i}}" class="calender-cstm"
+                  #receivedDate="ngModel" [(ngModel)]="workOrderPartNumber.receivedDate" required
+                  [disabled]="isView" appendTo="body"></p-calendar>
+              <td> -->
               <td>
                 <p-calendar [showIcon]="true" name="customerRequestDate{{i}}" class="calender-cstm"
                   #customerRequestDate="ngModel" [(ngModel)]="workOrderPartNumber.customerRequestDate" required
@@ -162,7 +168,7 @@
               </td>
               <td>
                 <p-calendar [showIcon]="true" class="calender-cstm" name="estimatedShipDate{{i}}"
-                  [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.receivedDate"
+                  [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.customerRequestDate"
                   #estimatedShipDate="ngModel" required [disabled]="isView" appendTo="body"></p-calendar>
               </td>
               <td>

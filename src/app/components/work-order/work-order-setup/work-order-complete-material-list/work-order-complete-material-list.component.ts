@@ -539,7 +539,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
  
-    partsIssueRI(statusId) {
+    partsIssueRI(statusId) { 
         this.savebutonDisabled=false;
         this.checkActiveStatus=true;
         this.countDown = null;
