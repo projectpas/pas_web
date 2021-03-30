@@ -1194,20 +1194,10 @@ reserveSubWoAltPartData(data){
             return this.handleErrorCommon(error, () => this.getWorkOrderAssetListForDropDown());
         });
     }
-    checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder){ 
-        if(isSubWorkOrder)
-        {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwocheckinassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}`).catch(error => {
-                return this.handleErrorCommon(error, () => this.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder));
-            });
-        }
-        else
-        {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/wocheckinassetinventorylist?workOrderAssetId=${workOrderAssetId}`).catch(error => {
-                return this.handleErrorCommon(error, () => this.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder));
-            });
-        }
-     
+    checkInAseetInventoryList(workOrderAssetId){ 
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/wocheckinassetinventorylist?workOrderAssetId=${workOrderAssetId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.checkInAseetInventoryList(workOrderAssetId));
+        });
     }
     checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder){
 

@@ -25,6 +25,7 @@ import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';
 import { MenuItem } from 'primeng/api';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 // import { truncate } from 'fs';
 
 @Component({
@@ -196,6 +197,21 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     currentstatus: string = 'Active';
     public allWorkFlows: Publication[] = [];
     restorerecord: any = {};
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isView:boolean=true;
+    isDownload:boolean=true;
+    permissionAddCheck=[ModuleConstants.Publications+'.'+PermissionConstants.Add,
+        ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Add,
+        ModuleConstants.Publications_ViewATAChapter+'.'+PermissionConstants.Add,
+        ModuleConstants.Publications_ViewAircraftInformation+'.'+PermissionConstants.Add];
+    permissionUpdateCheck=[ModuleConstants.Publications+'.'+PermissionConstants.Update,
+    ModuleConstants.Publications_GeneralInformation+'.'+PermissionConstants.Update,
+    ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Update,
+    ModuleConstants.Publications_ViewATAChapter+'.'+PermissionConstants.Update,
+    ModuleConstants.Publications_ViewAircraftInformation+'.'+PermissionConstants.Update];
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private configurations: ConfigurationService,
         private authService: AuthService, private datePipe: DatePipe, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public publicationService: PublicationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public employeeService: EmployeeService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Dashnumservice: DashNumberService, private ataMainSer: AtaMainService, private commonService: CommonService,
@@ -203,6 +219,12 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
         this.sourceAction = new Publication();
+        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isActive=this.authService.checkPermission([ModuleConstants.Publications+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Publications+'.'+PermissionConstants.Delete]);
+        
+        this.isDownload=this.authService.checkPermission([ModuleConstants.PublicationsList+'.'+PermissionConstants.Download])
     }
 
     ngOnInit(): void {

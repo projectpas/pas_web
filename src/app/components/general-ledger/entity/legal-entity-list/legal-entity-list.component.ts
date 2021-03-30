@@ -22,6 +22,7 @@ import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete
 // import { DataTable } from 'primeng/datatable';
 import * as moment from 'moment';
 import { ConfigurationService } from '../../../../services/configuration.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-legal-entity-list',
@@ -121,7 +122,26 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	referenceId: any;
 	pageNumber = 0;
 	isViewMode: boolean;
-
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
+	isDownload:boolean=true;
+	isActive:boolean=true;
+	permissionAddCheck=[ModuleConstants.LegalEntity+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_BankingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_Documents+'.'+PermissionConstants.Add,
+        ModuleConstants.LegalEntity_GeneralInformation+'.'+PermissionConstants.Add,
+		ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Add];
+		
+    permissionUpdateCheck=[ModuleConstants.LegalEntity+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_BankingInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_Contacts+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_Documents+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_GeneralInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Update];
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -131,6 +151,12 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		private commonService: CommonService,
 		private configurations: ConfigurationService,
 		private datePipe: DatePipe) {
+
+		this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+		this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+		this.isActive=this.authService.checkPermission([ModuleConstants.LegalEntity+'.'+PermissionConstants.Update])
+		this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity+'.'+PermissionConstants.Delete]);
+		this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntityList+'.'+PermissionConstants.Download]);
 		this.dataSource = new MatTableDataSource();
 		if (this.entityService.listCollection != null && this.entityService.isEditMode == true) {
 			this.sourceLegalEntity = this.entityService.listCollection;
@@ -755,6 +781,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		this.getEntityACHDataById(legalEntityId);
 	}
 
+
 	getEntityACHDataById(legalEntityId) {
 		this.entityService.getEntityAchDataById(legalEntityId).subscribe(res => {
 			const response = res;
@@ -952,7 +979,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 
 	auditHistoryHeaders: any = [];
 	auditHistoryList: any = [];
-	// isSpinnerVisibleHistory: boolean = false;	
+	// isSpinnerVisibleHistory: boolean = false;
 	getAuditHistoryByIdbanking(content, type) {
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 		if (type == 1) {

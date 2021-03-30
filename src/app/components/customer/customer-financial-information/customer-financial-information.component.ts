@@ -398,7 +398,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
   getAllPercentage() {
     //this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe((res) => {
     this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
-      this.percentageList = res;
+      this.percentageList = res;      
       this.percentageList.sort(function(a, b) {
         return parseFloat(a.label) - parseFloat(b.label);
       });
@@ -555,7 +555,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
   getAllDiscountList1() {
     //this.commonservice.smartDropDownList('[Discount]', 'DiscountId', 'DiscontValue').subscribe((res) => {
-    this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 20, '', this.currentUserMasterCompanyId).subscribe(res => {
+    this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue', '', '', 0, '', this.currentUserMasterCompanyId).subscribe(res => {
       this.discountList1 = res;
       this.discountList1.sort(function(a, b) {
         return parseFloat(a.label) - parseFloat(b.label);

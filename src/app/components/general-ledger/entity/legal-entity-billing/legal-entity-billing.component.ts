@@ -13,6 +13,7 @@ import { CommonService } from '../../../../services/common.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-legal-entity-billing',
     templateUrl: './legal-entity-billing.component.html',
@@ -65,8 +66,18 @@ export class EntityBillingComponent {
     totalPages: number;
     formData = new FormData();
     isViewMode: boolean = false;
+    isAdd: boolean= true;
+    isEdit: boolean= true;
+    isDelete: boolean= true;
+    isDownload: boolean= true;
     constructor(public legalEntityService: LegalEntityService, private datePipe: DatePipe, private authService: AuthService, private alertService: AlertService, private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal, private commonService: CommonService, public workFlowtService: LegalEntityService,) {
+
+            this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Add]);
+			this.isEdit=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Update]);
+			this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Delete]);
+			this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntity_BillingInformation+'.'+PermissionConstants.Download]);
+
     }
 
     ngOnInit(): void {

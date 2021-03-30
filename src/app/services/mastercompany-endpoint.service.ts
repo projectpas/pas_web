@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class MasterCompanyEndpoint extends EndpointFactory {
 
@@ -14,7 +15,7 @@ export class MasterCompanyEndpoint extends EndpointFactory {
     private readonly _actionsUrl: string = "/api/MasterCompany/Get";
     // private readonly _workflowActionsNewUrl: string = "/api/WorkflowAction/Get";
     private readonly _actionsUrlNew: string = "/api/MasterCompany/actions";
-    get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
+    get actionsUrl() { return environment.baseUrl + this._actionsUrl; }
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 

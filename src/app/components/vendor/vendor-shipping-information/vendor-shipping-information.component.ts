@@ -20,6 +20,7 @@ declare const google: any;
 import * as moment from 'moment';
 import { CommonService } from '../../../services/common.service';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-vendor-shipping-information',
     templateUrl: './vendor-shipping-information.component.html',
@@ -229,6 +230,10 @@ export class VendorShippingInformationComponent {
     editSiteName: string = '';
     arrayTagNamelist:any=[];
     tagNamesList:any=[];
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isDownload:boolean=true;
 
     constructor(private http: HttpClient, private router: Router,
         private authService: AuthService, private modalService: NgbModal,  private activeRoute: ActivatedRoute,    private commonService: CommonService, private configurations: ConfigurationService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private datePipe: DatePipe) {
@@ -290,6 +295,11 @@ export class VendorShippingInformationComponent {
             this.local = this.vendorService.listCollection;
             //this.loadData();
         }
+
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation+'.'+PermissionConstants.Update])
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation+'.'+PermissionConstants.Delete])
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_ShippingInformation+'.'+PermissionConstants.Download])
     }
 
     ngOnInit() {

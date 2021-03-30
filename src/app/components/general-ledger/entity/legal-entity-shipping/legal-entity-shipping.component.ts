@@ -13,6 +13,7 @@ import { CommonService } from '../../../../services/common.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 @Component({
     selector: 'app-legal-entity-shipping',
     templateUrl: './legal-entity-shipping.component.html',
@@ -143,11 +144,22 @@ export class EntityShippingComponent implements OnInit {
     auditHisory: any;
     isEditMode: boolean;
     sourceAction: any;
+    isAdd: boolean=true;
+    isEdit: boolean=true;
+    isDelete: boolean=true;
+    isDownload: boolean=true;
 
     constructor(private legalEntityService: LegalEntityService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService, private datePipe: DatePipe,
-    ) { }
+    ) { 
+        this.isAdd=this.authService.checkPermission([ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.LegalEntity_ShippingInformation+'.'+PermissionConstants.Download]);
+
+
+    }
 
     ngOnInit() {
         if (this.isViewMode == false) {

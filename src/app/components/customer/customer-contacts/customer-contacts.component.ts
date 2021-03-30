@@ -23,6 +23,8 @@ import { emailPattern, urlPattern, titlePattern, phonePattern, mobilePattern } f
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { AtaMainService } from '../../../services/atamain.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { PermissionMaster } from '../../user-role/ModuleHierarchyMaster.model';
 
 @Component({
 	selector: 'app-customer-contacts',
@@ -162,7 +164,10 @@ export class CustomerContactsComponent implements OnInit {
 	restoreATArecord: any = {}
 	arrayContactlist: any[] = [];
 	resetinputmodel: any;
-
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
+	isATA:Boolean=true;
 	constructor(private router: ActivatedRoute,
 		private route: Router,
 		private authService: AuthService,
@@ -181,6 +186,11 @@ export class CustomerContactsComponent implements OnInit {
 	) {
 		this.stopmulticlicks = false;
 		this.id = this.router.snapshot.params['id'];
+		this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])
+		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Delete])
+		
+		this.isATA=this.authService.ShowTab('Create Customer','ATA Chapters');
 	}
 
 	ngOnInit() {		

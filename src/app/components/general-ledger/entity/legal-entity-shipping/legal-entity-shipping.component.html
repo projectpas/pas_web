@@ -34,7 +34,7 @@
                             <a *ngIf="isViewMode == false"
                                data-toggle="modal"
                                data-target="#addShippingInfo">
-                                <button type="button" 
+                                <button type="button"  *ngIf="isAdd"
                                 style="background-color: #337ab7 !important;"
                                  class="btn-sm header-button" 
                                  matTooltipPosition="above"                                 
@@ -85,8 +85,8 @@
                               <div class="row">
                                 <div class="col">
 
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" (click)="openTag1(export1)" ></button>
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button>
+                                <span *ngIf="isDownload"><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" (click)="openTag1(export1)" ></button></span>
+                                <span *ngIf="isDownload"></span><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button></span>
                                 <ng-template #export1 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Are You Sure Want to Download?</h4>
@@ -200,22 +200,22 @@
                                 <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == false"
                                 >
                                     <div *ngIf="currentDeletedstatus==false">
-    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+    <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
                                     <span data-toggle="modal" data-target="#viewShipping"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openShippinggView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-                                    <span>
+                                    <span *ngIf="isEdit">
                                         <a class="btn nobg" data-target="#addShippingInfo" data-toggle="modal"
                                            (click)="openEditDomestic(rowData)" matTooltip="Edit"
                                            matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                     </span>
-                                    <span>
+                                    <span *ngIf="isDelete">
                                         <a class="btn nobg"
                                            (click)="deleteDomesticShipping(deleteContent,rowData)"
                                            matTooltip="Delete" matTooltipPosition="above">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </span>
-                                    <button style="padding:0%" class="btn btn-danger nobg" data-toggle="tooltip" matTooltipPosition="above"
+                                    <button *ngIf="isAdd" style="padding:0%" class="btn btn-danger nobg" data-toggle="tooltip" matTooltipPosition="above"
                                             matTooltip="Add Ship Via" data-original-title="View Shipping Via Information">
                                         <i class="fa fa-truck" data-target="#addDomesticShipVia"
                                            data-toggle="modal" (click)="selectedDomesticForShipVia(rowData)"></i>
@@ -229,12 +229,12 @@
                                     </span>
                                     </div>
                                     <div *ngIf="currentDeletedstatus==true">
-                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                        <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                         matTooltipPosition="above"></p-inputSwitch> 
                                         <span data-toggle="modal" data-target="#viewShipping"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openShippinggView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-                                        <span ><a class="btn nobg" (click)="restore(restoreId,rowData,1);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span ><a *ngIf="isEdit" class="btn nobg" (click)="restore(restoreId,rowData,1);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                         <span>
-                                            <a class="btn nobg" (click)="openShipaddressHistory(contentAuditHist,rowData)"
+                                            <a  class="btn nobg" (click)="openShipaddressHistory(contentAuditHist,rowData)"
                                                matTooltip="History" matTooltipPosition="above">
                                                 <i class="fa fa-history">
                                                 </i>
@@ -243,10 +243,10 @@
                                     </div>
                                 </td>
                                 <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == true">
-                                    <p-inputSwitch [(ngModel)]="rowData['isActive']"  [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                    <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']"  [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch> 
                                     <span data-toggle="modal" data-target="#viewShipping"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openShippinggView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-                                    <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltipPosition="above" matTooltip="Add Ship Via" data-original-title="View Shipping Via Information">
+                                    <button *ngIf="isAdd" class="btn btn-danger nobg" data-toggle="tooltip" matTooltipPosition="above" matTooltip="Add Ship Via" data-original-title="View Shipping Via Information">
                                         <i class="fa fa-truck" data-target="#addDomesticShipVia" data-toggle="modal" (click)="selectedDomesticForShipVia(rowData)"></i>
                                     </button>
                                     <span>
@@ -301,7 +301,7 @@
                         <a *ngIf="isViewMode == false"
                            data-toggle="modal"
                            data-target="#addInternationalShippingInfo">
-                            <button type="button"
+                            <button *ngIf="isAdd" type="button"
                             style="background-color: #337ab7 !important;" 
                             class="btn-sm header-button" 
                             matTooltipPosition="above"                            
@@ -351,9 +351,9 @@
                           </div>
                           <div class="row">
                             <div class="col">
-                                <button *ngIf="isViewMode == false" (click)="openTag2(export2)" type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data"></button>
-                                <button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="intlShippingTable.exportCSV({selectionOnly:true})"
-                                ></button>
+                                <span *ngIf="isDownlaod"><button *ngIf="isViewMode == false" (click)="openTag2(export2)" type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data"></button></span>
+                                <span *ngIf="isDownlaod"><button *ngIf="isViewMode == false" type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="intlShippingTable.exportCSV({selectionOnly:true})"
+                                ></button></span>
 
                                 <ng-template #export2 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
@@ -475,18 +475,18 @@
 
                                 <td class="action-icons-cstm table-column-width text-center" style="width:150px !important" *ngIf="isViewMode == false">
                                     <div *ngIf="currentDeletedstatusForInternational==false">
-                                    <p-inputSwitch [(ngModel)]="rowData['isActive']" (onChange)="updateActiveorInActiveForIS(rowData)" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                    <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" (onChange)="updateActiveorInActiveForIS(rowData)" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch>  
                                     <span data-toggle="modal" data-target="#viewInter"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openInterShippingView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
 
-                                    <span data-toggle="modal"
+                                    <span *ngIf="isEdit" data-toggle="modal"
                                           data-target="#addInternationalShippingInfo">
                                         <a class="btn nobg"
                                            (click)="getInternationalShippingById(rowData)" matTooltip="Edit"
                                            matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                     </span>
 
-                                    <span>
+                                    <span *ngIf="isDelete">
                                         <a class="btn nobg"
                                            (click)="deleteInternationalShipping(deleteContent1,rowData)"
                                            matTooltip="Delete" matTooltipPosition="above">
@@ -495,7 +495,7 @@
                                     </span>
 
                                 
-                                    <button class="btn btn-danger nobg" style="padding:0%" data-toggle="tooltip" matTooltipPosition="above" matTooltip="Add Ship Via " data-original-title="View Shipping Via Info">
+                                    <button *ngIf="isAdd" class="btn btn-danger nobg" style="padding:0%" data-toggle="tooltip" matTooltipPosition="above" matTooltip="Add Ship Via " data-original-title="View Shipping Via Info">
                                         <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal" (click)="selectedInternationalShipForShipVia(rowData)"></i>
                                     </button>
 
@@ -508,10 +508,10 @@
                                     </span>
                                 </div>
 <div *ngIf="currentDeletedstatusForInternational==true">
-    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+    <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
     matTooltipPosition="above" ></p-inputSwitch> 
     <span data-toggle="modal" data-target="#viewInter"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openInterShippingView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-    <span ><a class="btn nobg" (click)="restore(restoreId,rowData,2);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+    <span ><a *ngIf="isEdit" class="btn nobg" (click)="restore(restoreId,rowData,2);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
     <span>
         <a class="btn nobg"
            (click)="openInterShippingHistory(contentAuditHistInter,rowData)"
@@ -522,10 +522,10 @@
 </div>
                                 </td>
                                 <td *ngIf="isViewMode == true" class="action-icons-cstm table-column-width" style="width:150px !important">
-                                    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                    <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch> 
                                     <span data-toggle="modal" data-target="#viewInter"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openInterShippingView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-                                    <button class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via " data-original-title="View Shipping Via Info">
+                                    <button *ngIf="isAdd" class="btn btn-danger nobg" data-toggle="tooltip" matTooltip="Add Ship Via " data-original-title="View Shipping Via Info">
                                         <i class="fa fa-truck" data-target="#addInternationShipVia" data-toggle="modal" (click)="selectedInternationalShipForShipVia(rowData)"></i>
                                     </button>
                                     <span>

@@ -30,6 +30,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 declare var $: any;
 
@@ -226,7 +227,13 @@ export class CreatePublicationComponent implements OnInit {
   rowIndex: number;
   disabledPartNumber: boolean = true;
   disableGeneralInfoSave: boolean = true;
-
+  isView:boolean=true;
+  isPNAdd:boolean=true;
+  isDownload:boolean=true;
+  isPNDelete:boolean=true;
+  isPNUpdate:boolean=true;
+  isAircraftDownload:boolean=true;
+  isATADownload:boolean=true;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -247,8 +254,22 @@ export class CreatePublicationComponent implements OnInit {
     private configurations: ConfigurationService,
     private localStorage: LocalStoreManager,
     private modalService: NgbModal
-  ) { }
+  ) { 
+    this.isView=this.authService.checkPermission([ModuleConstants.PublicationsList+'.'+PermissionConstants.View]);
+    this.isPNAdd=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Add]);
+    this.isDownload=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Download]);
+    this.isPNUpdate=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Update]);
+    this.isPNDelete=this.authService.checkPermission([ModuleConstants.Publications_PNMapping+'.'+PermissionConstants.Delete]);
+   this.isAircraftDownload=this.authService.checkPermission([ModuleConstants.Publications_ViewAircraftInformation+'.'+PermissionConstants.Download]);
+   this.isATADownload=this.authService.checkPermission([ModuleConstants.Publications_ViewATAChapter+'.'+PermissionConstants.Download]);
+  }
 
+  isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Publications',value);
+		return isShow;
+	
+	}
 
   ngOnInit() {
     this.getGlobalDateFormat();

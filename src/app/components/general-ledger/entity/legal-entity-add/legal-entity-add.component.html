@@ -17,7 +17,7 @@
                                 <div class="form-group">
                                     <label>Legal Entity Code<span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="companyCode" (ngModelChange)="setvaliDate()" 
-                                        [(ngModel)]="generalInformation.companyCode" required value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.companyCode" required />
                                 </div>
                                 <div class="form-group">
                                     <label>Legal Entity <span class="clr-red">*</span></label>
@@ -46,12 +46,12 @@
                                 <div class="form-group">
                                     <label>Company Name <span class="clr-red">*</span></label>
                                     <input class="form-control" type="text" name="companyName" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.companyName" required value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.companyName" required />
                                 </div>
                                 <div class="form-group">
                                     <label>D/B/A</label>
                                     <input class="form-control" type="text" name="doingLegalAs" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.doingLegalAs" value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.doingLegalAs" />
                                 </div>
                                 <div class="form-group">
                                     <label>Address Line 1 <span class="clr-red">*</span></label>
@@ -120,7 +120,7 @@
                                 <div class="form-group"> 
                                     <label>Fax</label>
                                     <input class="form-control" type="text" id="faxNumber" name="faxNumber" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.faxNumber" value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.faxNumber"/>
                                 </div> 
                                 <!-- <div *ngIf="faxPattren.errors" [ngClass]="'error'">
                                     <div *ngIf="faxPattren.errors.pattern">
@@ -213,17 +213,17 @@
                                 <div class="form-group">
                                     <label class="m-t-5">Cage Code</label>
                                     <input class="form-control" type="text" id="cageCode" name="cageCode" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.cageCode" value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.cageCode" />
                                 </div>
                                 <div class="form-group">
                                     <label>FAA Lic / EASA Lic</label>
                                     <input class="form-control" type="text" id="faaLicense" name="faaLicense" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.faaLicense" value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.faaLicense" />
                                 </div>
                                 <div class="form-group">
                                     <label class="tax-label">TAX ID</label>
                                     <input class="form-control" type="text" id="taxId" name="taxId" (ngModelChange)="setvaliDate()"
-                                        [(ngModel)]="generalInformation.taxId" value="" autocomplete="new-password"/>
+                                        [(ngModel)]="generalInformation.taxId" />
                                 </div>
                             </div>
                             <div class="col-md-6 col-md-6-cstm">
