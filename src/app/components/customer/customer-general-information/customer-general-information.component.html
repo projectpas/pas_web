@@ -321,9 +321,8 @@
                               type="email"
                               pKeyFilter="email"
                               mask="email"
-                              [(ngModel)]="generalInformation.email"
-                              autocomplete="off"
-                              required
+                              [(ngModel)]="generalInformation.email"                              
+                              required (ngModelChange)="enableSave()"
                             />
                             <div *ngIf="userEmail.errors" [ngClass]="'error'">
                               <div *ngIf="userEmail.errors.pattern">

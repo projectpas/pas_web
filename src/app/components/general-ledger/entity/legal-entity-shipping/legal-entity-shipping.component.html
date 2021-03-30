@@ -761,14 +761,34 @@
                     <div class="form-group">
                         <div class="col-sm-12">
                             <div class="col-sm-4">
+                              <label for="tag">Tag <span class="clr-red"></span></label>
+                            </div>
+                            <div class="col-sm-5">
+                              <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="domesticShippingInfo.tagName"
+                                (ngModelChange)="enableSave()" name="tag" field="tagName" [suggestions]="tagNamesList"
+                                (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                [inputStyle]="{ width: '100%' }" [forceSelection]="true" autocomplete="off">
+                              </p-autoComplete>
+                            </div>
+                        </div>   
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label>Attention<span class="clr-red"></span></label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="Attention11" 
+                                type="text" name="Attention111" [(ngModel)]="domesticShippingInfo.attention" 
+                                (ngModelChange)="enableSave()">
+                            </div>
+                        </div>                      
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <label> Primary </label>
-
                             </div>
                             <div class="col-sm-5">
                                 <input type="checkbox" checked id="isPrimary2" name="isPrimary2" [disabled]="editisPrimary==true" [(ngModel)]="domesticShippingInfo.isPrimary"
                                        (ngModelChange)="enableSave()">
                                 <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
-
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -785,17 +805,7 @@
                                  </p-autoComplete>
                                <div *ngIf="showExistMsg" class="clr-red">Already Exists</div>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="col-sm-4">
-                                <label>Attention<span class="clr-red"></span></label>
-                            </div>
-                            <div class="col-sm-5">
-                                <input class="form-control" id="Attention11" 
-                                type="text" name="Attention111" [(ngModel)]="domesticShippingInfo.attention" 
-                                (ngModelChange)="enableSave()">
-                            </div>
-                        </div>
+                        </div>                        
                         <div class="col-sm-12">
                             <div class="col-sm-4">
                                 <label>Address 1 <span class="clr-red">*</span></label>

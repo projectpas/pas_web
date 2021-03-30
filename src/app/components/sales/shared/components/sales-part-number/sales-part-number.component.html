@@ -1,5 +1,5 @@
 <div class="form-group">
-    <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" style="padding-bottom: 8px;">
+    <div [ngClass]="(isViewMode == false) ? 'row' : 'row ui-tabview-panels'" class="padding-bottom-8">
         <button *ngIf="isViewMode == false" type="button" class="btn btn-primary" (click)="addPartNumber()"
             [disabled]="salesQuote.isApproved">
             Add PN
@@ -9,7 +9,7 @@
             <div class="tableFixHead">
                 <table class="table table-bordered" id="soq-table">
                     <!-- <tr class="header-table-width" style="font-size: 10px"> -->
-                    <tr style="font-size: 10px">
+                    <tr class="font-size-10">
                         <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
                             <ng-container *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                      || summaryColumn.field == 'customerRef'
@@ -23,7 +23,7 @@
                             </ng-container>
                         </th>
                         <th colspan="17"></th>
-                        <th *ngIf="isViewMode == false" style="position: sticky !important; min-width: 100px">Actions
+                        <th *ngIf="isViewMode == false" class="sales-part-action-column">Actions
                         </th>
                     </tr>
                     <ng-container *ngIf="summaryParts.length > 0">
@@ -31,7 +31,7 @@
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns"
-                                        style="width:auto;background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                        class="summary-column" pReorderableRowHandle>
                                         <!-- <span *ngIf="summaryColumn.field == 'count'">
                                             Item {{ rowIndex + 1 }}
                                         </span> -->
@@ -82,16 +82,14 @@
                                     </td>
                                     <td colspan="17" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" class="center">
-                                        <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="View Stock Line" matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                        <a class="btn nobg view-part-eye" (click)="viewPartNumber(summaryPart,rowIndex)"
+                                            matTooltip="View Stock Line" matTooltipPosition="above">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                             [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                            class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="Add/Edit PN" matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                            class="btn nobg view-part-eye" (click)="addPartNumber(summaryPart,rowIndex)"
+                                            matTooltip="Add/Edit PN" matTooltipPosition="above">
                                             <i class="fa fa-pencil"></i>
                                         </a>
                                         <a [class.disabled]="salesQuote.isApproved || isViewMode"
@@ -104,7 +102,7 @@
                                     </td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
-                                    <th style="background-color: #fff !important;"></th>
+                                    <th class="background-white"></th>
                                     <th>PN</th>
                                     <th>PN Description</th>
                                     <th>Priority<span class="clr-red">*</span></th>
@@ -307,7 +305,7 @@
                                     <td>
                                         {{ part.idNumber }}
                                     </td>
-                                    <td style="width:120px"
+                                    <td class="width-120"
                                         *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
                                         <div class="form-group notes-popup-cstm mat_emo"
                                             style="width: 120px; margin-bottom: 0;">
@@ -323,34 +321,30 @@
                                     </td>
                                     <td *ngIf="isViewMode == false" class="zui-sticky-col"
                                         style="width:107px !important">
-                                        <a class="btn nobg" data-toggle="tooltip"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px"
+                                        <a class="btn nobg view-part-eye" data-toggle="tooltip"
                                             (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <span *ngIf="!isEditDisabled(salesQuote, part)">
                                             <a [class.disabled]="isEditDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
-                                                class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit Price"
-                                                matTooltipPosition="above"
-                                                style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                                class="btn nobg view-part-eye" (click)="openPartToEdit(part)" matTooltip="Edit Price"
+                                                matTooltipPosition="above">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
                                         </span>
                                         <span>
                                             <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
-                                                class="btn nobg" (click)="openPartDelete(deleteContent,part)"
-                                                matTooltip="Delete" matTooltipPosition="above"
-                                                style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                                class="btn nobg view-part-eye" (click)="openPartDelete(deleteContent,part)"
+                                                matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </span>
                                         <span data-toggle="modal" data-target="#soqPartHistory">
                                             <a [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}"
-                                                class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(part)"
-                                                matTooltip="History" matTooltipPosition="above"
-                                                style="margin-left: 2px; padding-left: 2px; padding-right: 2px"><i
+                                                class="btn nobg btn-hist-cstm view-part-eye" (click)="getAuditHistoryById(part)"
+                                                matTooltip="History" matTooltipPosition="above"><i
                                                     class="fa fa-history"></i></a>
                                         </span>
                                     </td>
@@ -361,8 +355,7 @@
                     <ng-container *ngIf="summaryParts.length == 0">
                         <tbody>
                             <tr>
-                                <td colspan="37"
-                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                <td colspan="37" class="sales-no-records-found text-left" >
                                     No records found
                                 </td>
                             </tr>
@@ -374,7 +367,7 @@
     </div>
     <ng-template pTemplate="emptymessage" let-columns>
         <tr>
-            <td colspan="23" style="color: red; font-weight: bold; text-align: center">
+            <td colspan="23" class="sales-no-records-found">
                 No records found
             </td>
         </tr>
@@ -390,7 +383,7 @@
             <div class="modal-body">
                 <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
-                        <th style="color: #fff;">{{"Notes"}}</th>
+                        <th class="color-white">{{"Notes"}}</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -403,13 +396,13 @@
                         </tr>
                     </tbody>
                 </table>
-                <div style="float:right">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;"
+                <div class="float-right">
+                    <button type="button" class="btn btn-primary memo-buttons" data-dismiss="modal"
+                        
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                    <button type="button" class="btn btn-danger memo-buttons" 
                         data-dismiss="modal">
                         Close
                     </button>
@@ -418,13 +411,13 @@
         </div>
     </div>
 </div>
-<div *ngIf="isViewMode == false" style="text-align:right; width:100%; padding-top:5px;">
-    <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary"
-        style="width:55px;height:20px;" (click)="approve()">
+<div *ngIf="isViewMode == false" class="view-mode-div">
+    <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+        (click)="approve()">
         <span>Update</span>
     </button>
-    <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary"
-        style="width:55px;height:20px;" (click)="approve()">
+    <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary view-mode-button"
+     (click)="approve()">
         <span>Save</span>
     </button>
 </div>
@@ -646,7 +639,7 @@
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
                                     {{audit.updatedBy}}</td>
                                 <td>
-                                    <p style="background-color: #fff !important;"> <input type="checkbox"
+                                    <p class="background-white"> <input type="checkbox"
                                             name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
                                 </td>
                             </tr>
@@ -655,7 +648,7 @@
                     <ng-template #noDatavailable>
                         <div class="text-center">
                             <!-- <img src="../../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;"> -->
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
                     </ng-template>
                 </div>

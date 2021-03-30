@@ -144,7 +144,7 @@ export class CommonTeardownComponent implements OnInit {
         {
             if(this.arrayTechnicianlist.length == 0) 
             {	
-                if(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId != null)
+                if(this.getsaveTearDownData.workOrderPreAssmentResults != null && this.getsaveTearDownData.workOrderPreAssmentResults.technicianId != null)
                 {
                     if(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId.employeeId != null)
                     {
@@ -155,7 +155,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.technicianId);
                     }                    
                 }
-                if(this.getsaveTearDownData.workOrderDiscovery.technicianId != null && this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null)
+                if(this.getsaveTearDownData.workOrderDiscovery != null && this.getsaveTearDownData.workOrderDiscovery.technicianId != null && this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null)
                 {
                     if(this.getsaveTearDownData.workOrderDiscovery.technicianId.employeeId != null)
                     {
@@ -166,7 +166,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderDiscovery.technicianId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId != null)
+                if(this.getsaveTearDownData.workOrderPreAssemblyInspection != null && this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId != null)
                 {
                     if(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId.employeeId != null)
                     { iscall= true;
@@ -176,7 +176,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.technicianId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderWorkPerformed.technicianId != null)
+                if(this.getsaveTearDownData.workOrderWorkPerformed != null && this.getsaveTearDownData.workOrderWorkPerformed.technicianId != null)
                 {
                     if(this.getsaveTearDownData.workOrderWorkPerformed.technicianId.employeeId != null)
                     { iscall= true;
@@ -186,7 +186,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayTechnicianlist.push(this.getsaveTearDownData.workOrderWorkPerformed.technicianId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderFinalTest.technicianId != null)
+                if(this.getsaveTearDownData.workOrderFinalTest != null && this.getsaveTearDownData.workOrderFinalTest.technicianId != null)
                 {
                     if(this.getsaveTearDownData.workOrderFinalTest.technicianId.employeeId != null)
                     { iscall= true;
@@ -208,7 +208,7 @@ export class CommonTeardownComponent implements OnInit {
         {
             if(this.arrayInsectorlist.length == 0) 
             {	
-                if(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId != null)	
+                if(this.getsaveTearDownData.workOrderPreAssmentResults != null && this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId != null)	
                 {
                     if(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId.employeeId != null)
                     { iscall= true;
@@ -218,7 +218,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssmentResults.inspectorId);
                     }                  
                 }
-                if(this.getsaveTearDownData.workOrderDiscovery.inspectorId != null)	
+                if(this.getsaveTearDownData.workOrderDiscovery != null && this.getsaveTearDownData.workOrderDiscovery.inspectorId != null)	
                 {
                      if(this.getsaveTearDownData.workOrderDiscovery.inspectorId.employeeId != null)
                      { iscall= true;
@@ -228,7 +228,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderDiscovery.inspectorId );
                      } 
                 }
-                if(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId != null )	
+                if(this.getsaveTearDownData.workOrderPreAssemblyInspection != null && this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId != null )	
                 {
                     if(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId.employeeId != null)
                     { iscall= true;
@@ -238,7 +238,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderPreAssemblyInspection.inspectorId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId != null)	
+                if( this.getsaveTearDownData.workOrderWorkPerformed != null && this.getsaveTearDownData.workOrderWorkPerformed.inspectorId != null)	
                 {
                     if(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId.employeeId != null)
                     { iscall= true;
@@ -248,7 +248,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderWorkPerformed.inspectorId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderFinalTest.inspectorId != null)	
+                if(this.getsaveTearDownData.workOrderFinalTest != null && this.getsaveTearDownData.workOrderFinalTest.inspectorId != null)	
                 {
                     if(this.getsaveTearDownData.workOrderFinalTest.inspectorId.employeeId != null)
                     { iscall= true;
@@ -258,7 +258,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalTest.inspectorId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderFinalInspection.inspectorId != null)	
+                if( this.getsaveTearDownData.workOrderFinalInspection  != null && this.getsaveTearDownData.workOrderFinalInspection.inspectorId != null)	
                 {
                     if(this.getsaveTearDownData.workOrderFinalInspection.inspectorId.employeeId != null)
                     {iscall= true;
@@ -268,7 +268,7 @@ export class CommonTeardownComponent implements OnInit {
                         this.arrayInsectorlist.push(this.getsaveTearDownData.workOrderFinalInspection.inspectorId);
                     }
                 }
-                if(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId != null)	
+                if(this.getsaveTearDownData.workOrderPreliinaryReview != null && this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId != null)	
                 {
                     if(this.getsaveTearDownData.workOrderPreliinaryReview.inspectorId.employeeId != null)
                     {iscall= true;

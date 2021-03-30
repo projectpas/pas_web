@@ -1,9 +1,9 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
         <div class="row">
-            <div class="col-md-12" style="padding-left:25px; padding-top:5px;">
+            <div class="col-md-12 invoice-div">
                 <label></label>
-                <div class="form-group" style="margin-right: 10px;margin-bottom: 9px;float:right">
+                <div class="form-group invoice-button-div">
                     <button type="submit" class="btn  submit-btn btn btn-primary"
                         [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice</button>
                 </div>
@@ -13,7 +13,7 @@
             style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="so-table">
-                    <tr class="header-table-width" style="font-size: 10px">
+                    <tr class="header-table-width font-10">
                         <th *ngFor="let summaryColumn of headers">
                             <span>
                                 {{ summaryColumn.header }}
@@ -27,7 +27,7 @@
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of headers"
-                                        style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                        class="summary-column" pReorderableRowHandle>
                                         <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
@@ -36,7 +36,7 @@
                                     <td></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
-                                    <th style="background-color: #fff !important;"></th>
+                                    <th class="background-white"></th>
                                     <th>Ready?</th>
                                     <th>Invoice Date</th>
                                     <th>Invoice Num </th>
@@ -539,7 +539,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="float: right; margin-top: 10px;" *ngIf="!isViewMode">
+                <div class="bill-buttons-align" *ngIf="!isViewMode">
                     <button class="btn btn-primary pull-right" *ngIf="!isEditBilling && billingorInvoiceForm"
                         (click)="GenerateInvoice()" [disabled]="!billinForm.valid">Generate Invoice</button>
                     <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
