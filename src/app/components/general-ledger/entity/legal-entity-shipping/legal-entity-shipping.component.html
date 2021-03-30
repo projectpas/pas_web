@@ -86,7 +86,7 @@
                                 <div class="col">
 
                                 <span *ngIf="isDownload"><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" (click)="openTag1(export1)" ></button></span>
-                                <span *ngIf="isDownload"></span><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button></span>
+                                <span *ngIf="isDownload"><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button></span>
                                 <ng-template #export1 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Are You Sure Want to Download?</h4>
