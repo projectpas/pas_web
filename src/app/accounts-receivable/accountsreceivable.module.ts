@@ -21,6 +21,10 @@ import { AccountreceivableRoutingModule } from './accountreceivable-routing.modu
 import { OpenCloseArsubledgerComponent } from '../components/accounts-receivable/open-close-ar-subledger/open-close-ar-subledger.component';
 import { AccountsReceivableComponent } from './accounts-receivable.component';
 import { CustomerInvoiceListComponent } from '../components/accounts-receivable/customer-invoice-list/customer-invoice-list.component';
+import { CustomerPaymentListComponent } from '../components/accounts-receivable/customer-payment-listing/customer-payment-list.component';
+import { CustomerPaymentCreateComponent } from '../components/accounts-receivable/customer-payment-create/customer-payment-create.component';
+import { EditorModule } from 'primeng/editor';
+import { AppSharedModule } from '../app-shared.module';
 
 @NgModule({
     imports: [
@@ -39,12 +43,16 @@ import { CustomerInvoiceListComponent } from '../components/accounts-receivable/
         CheckboxModule,
         AutoCompleteModule
         , RadioButtonModule,
-        CalendarModule, StepsModule, BreadcrumbModule, DialogModule
+        CalendarModule, StepsModule, BreadcrumbModule, DialogModule,
+        AppSharedModule,
+        EditorModule
     ],
     declarations: [
         OpenCloseArsubledgerComponent,
         AccountsReceivableComponent,
-        CustomerInvoiceListComponent
+        CustomerInvoiceListComponent,
+        CustomerPaymentListComponent,
+        CustomerPaymentCreateComponent
     ],
     providers: [
 
