@@ -16,7 +16,7 @@ export class RolesGuardService implements CanActivate, CanActivateChild, CanLoad
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        debugger;
+        
         var moduleName = route.data["name"];
         var isTab = route.data["isTab"];
         var hasAccess = this.authService.checkUserAccessByModuleName(moduleName);
