@@ -13,8 +13,7 @@ import { Location } from '@angular/common';
     selector: 'app-sub-work-order',
     templateUrl: './work-order-subwo.component.html',
     styleUrls: ['./work-order-subwo.component.scss']
-})
-/** WorkOrderShipping component*/
+}) 
 export class SubWorkOrderComponent implements OnInit {
     @Input() isView: boolean = false;
     @Input() subWorkOrderIdForView;
@@ -45,8 +44,7 @@ export class SubWorkOrderComponent implements OnInit {
     subWOPartNoId: any;
     isSavedPartNumbers: boolean;
     addToExisting: any;
-    mpnGridUpdated: boolean = false;
-    // isView: boolean;
+    mpnGridUpdated: boolean = false; 
     tearDownReportList: any;
     quantityValue:any=1;
     constructor(private router: Router,
@@ -61,9 +59,7 @@ export class SubWorkOrderComponent implements OnInit {
     ngOnInit() {
         const queryParamsData = this.acRouter.snapshot.queryParams;
         this.workOrderId = parseInt(queryParamsData.workorderid);
-        // this.url=`/http://localhost:5050/workordersmodule/workorderspages/app-work-order-edit/${this.workOrderId}`;
-
-        this.subWorkOrderId = parseInt(queryParamsData.subworkorderid);
+       this.subWorkOrderId = parseInt(queryParamsData.subworkorderid);
         this.addToExisting = parseInt(queryParamsData.exist);
         if (this.subWorkOrderId != 0) {
             this.isSavedPartNumbers = true;
@@ -86,6 +82,7 @@ export class SubWorkOrderComponent implements OnInit {
             this.showTabsGrid = true;
             this.showGridMenu = true;
         }
+        this.getAllExpertiseType(); 
         this.getSubWorkOrderEditData();
         this.getSubWorOrderMpns();
 
@@ -117,8 +114,8 @@ export class SubWorkOrderComponent implements OnInit {
                         x.promisedDate = (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate);
                         x.createdDate = new Date(x.createdDate),
                             x.updatedDate = new Date(x.updatedDate)
-                        x.partTechnicianId = getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
-              
+                        x.partTechnicianId =   getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
+                        // {name:x.technicianName,employeeId:x.technicianId}
                         this.getWorkFlowByPNandScope(x, index);
                     }) 
 
@@ -132,7 +129,7 @@ export class SubWorkOrderComponent implements OnInit {
                             this.getAllWorkOrderStages();  
                             this.getAllWorkScpoes('');
                             this.getAllPriority('');
-                            this.getAllExpertiseType(); 
+                     
                             this.getConditionsList();
                             this.getAllTecStations();
                         }
@@ -142,8 +139,7 @@ export class SubWorkOrderComponent implements OnInit {
         }else{
             this.getAllWorkOrderStages();  
             this.getAllWorkScpoes('');
-            this.getAllPriority('');
-            this.getAllExpertiseType(); 
+            this.getAllPriority(''); 
             this.getConditionsList();
             this.getAllTecStations();
         }
@@ -239,8 +235,7 @@ export class SubWorkOrderComponent implements OnInit {
             if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
                 this.getAllWorkOrderStages();  
                 this.getAllWorkScpoes('');
-                this.getAllPriority('');
-                this.getAllExpertiseType(); 
+                this.getAllPriority(''); 
                 this.getConditionsList();
                 this.getAllTecStations();
                 if (this.addToExisting == NaN) {
@@ -359,9 +354,10 @@ export class SubWorkOrderComponent implements OnInit {
     setEditArray: any = [];
     getAllWorkScpoes(value): void {
         this.setEditArray = [];
+        console.log("workscopw",this.subWorkOrderPartNumbers )
         if (this.isEdit == true) {
-            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+            if(this.subWorkOrderPartNumbers   && this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
                 if (element.workOrderScopeId) {
                     this.setEditArray.push(element.workOrderScopeId)
                 }
@@ -444,8 +440,8 @@ export class SubWorkOrderComponent implements OnInit {
     workOrderStatus(): void {
         this.setEditArray = [];
         if (this.isEdit == true) {
-            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+            if(this.subWorkOrderPartNumbers  && this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
                 if(element.workOrderStatusId){
                     this.setEditArray.push(element.workOrderStatusId)
                 }
@@ -480,8 +476,8 @@ export class SubWorkOrderComponent implements OnInit {
     getAllPriority(value) {
         this.setEditArray = [];
         if (this.isEdit == true) {
-            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+            if(this.subWorkOrderPartNumbers  && this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
                 if (element.workOrderPriorityId) {
                     this.setEditArray.push(element.workOrderPriorityId)
                 }
@@ -567,12 +563,19 @@ export class SubWorkOrderComponent implements OnInit {
 
     getAllTecStations() {
         this.setEditArray = [];
+        console.log("edit mode",this.isEdit,this.subWorkOrderPartNumbers)
+        debugger;
         if (this.isEdit == true) {
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
-                if (element.partTechnicianId) {
-                    this.setEditArray.push(element.partTechnicianId.employeeId)
-                }
+            if(this.subWorkOrderPartNumbers &&  this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
+                // if (element.partTechnicianId !=undefined) {
+                //     this.setEditArray.push(element.partTechnicianId.employeeId)
+                // }else{
+                    
+                    this.setEditArray.push(element.techStationId)
+                // }
             });
+        }
             if (this.setEditArray && this.setEditArray.length == 0) {
                 this.setEditArray.push(0);
             }
