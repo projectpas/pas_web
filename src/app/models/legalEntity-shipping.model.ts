@@ -15,6 +15,8 @@
             this.legalEntityId = null;
             this.vendorId = null;
             this.isPrimary = false;
+            this.contactTagId = 0
+            this.tagName ="";
         }
 
         public siteName: string;
@@ -29,4 +31,6 @@
         public legalEntityId: number;
         public vendorId: number;
         public isPrimary: boolean;
+        public contactTagId : number;
+        public tagName:string
     }

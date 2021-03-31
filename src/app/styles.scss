@@ -17156,3 +17156,11 @@ ng-multiselect-dropdown{
   border-bottom: 0;
   border-left: 0.5em solid transparent !important;
 } 
+
+.multiselect-dropdown .dropdown-btn
+ .dropdown-multiselect--active
+ .dropdown-multiselect__caret {
+ 
+        margin-top: -14px !important;
+  
+}

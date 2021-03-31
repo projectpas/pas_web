@@ -272,6 +272,8 @@ import{AssetInventoryViewComponent} from "./components/Asset-Management/asset-in
 import { CalendarModule } from "primeng/calendar";
 import { SafePipe } from './pipes/safe.pipe';
 import { AuditComponentComponent } from './shared/components/audit-component/audit-component.component';
+import { InvoicePaymentService } from './services/invoice-payment-service';
+import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoint-service';
 @NgModule({
   imports: [
     CardModule,
@@ -541,7 +543,9 @@ import { AuditComponentComponent } from './shared/components/audit-component/aud
     SalesOrderEndpointService,
     SalesOrderReferenceStorage,
     StocklineReferenceStorage,
-    CommunicationService
+    CommunicationService,
+    InvoicePaymentService,
+    InvoicePaymentEndpointService
   ],
   entryComponents: [
     LoginDialogComponent,

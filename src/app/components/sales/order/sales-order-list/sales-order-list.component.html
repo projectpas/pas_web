@@ -215,7 +215,7 @@
                                 <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)"
                                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
-                            <span><a class="btn nobg" (click)="restore(restoreIdSo,rowData);"
+                            <span><a class="btn nobg btn-users-cstm" (click)="restore(restoreIdSo,rowData);"
                                     matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                                         aria-hidden="true"></i></a> </span>
                         </div>
@@ -396,8 +396,8 @@
                 </table>
                 <ng-template #noDatavailable>
                     <div class="text-center">
-                        <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                        <h4 style="color: #ff5663;">No History Found </h4>
+                        <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+                        <h4 class="no-history-found-msg">No History Found </h4>
                     </div>
                 </ng-template>
             </div>

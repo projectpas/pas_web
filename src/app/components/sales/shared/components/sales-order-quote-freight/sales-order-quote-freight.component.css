@@ -63,3 +63,46 @@ select.select-read-only {
 .sales-quote-radio .ui-radiobutton{
 /* margin-top:14px; */
 }
+.padding-0{
+  padding:0px !important;
+}
+.padding-10{
+  padding: 10px !important;
+}
+.circle-span{
+  margin-left:3px !important;cursor:pointer !important;
+}
+.pencil-span{
+  margin-left:0px !important;cursor:pointer !important;
+}
+.quote-freight-label{
+  width: auto !important;margin-top: 3px !important;
+}
+.color-white{
+  color: #fff !important;
+}
+.quote-th{
+  width:130px !important;color:#fff !important;
+}
+.quote-freight-colspan{
+  width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;
+}
+.quote-freight-th{
+  width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;
+}
+.quote-freight-radios{
+  text-align: center; display: flex;    margin-bottom: 0px;
+}
+.padding-left-10{
+  padding-left: 10px !important;
+}
+.actual-radio-div{
+  float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px
+}
+.freight-notview{
+  width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;
+}
+
+.notview-th{
+width:650px; color:#fff !important; border: 1px solid #e7ecf1;padding: 0;padding-left: 20px;
+}

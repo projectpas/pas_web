@@ -44,3 +44,18 @@ label {
 .approver-tab-cstm .form-row {
   margin-top: 10px;
 }
+.width-150{
+  width:150px !important;
+}
+.submit-button-margin{
+  margin-top: 20px !important; margin-bottom: 10px !important;
+}
+.pencil-div{
+  margin-top: 4px !important;float: right !important;
+}
+.float-left{
+  float: left !important;
+}
+.min-width-100{
+  min-width: 100px !important;
+}
