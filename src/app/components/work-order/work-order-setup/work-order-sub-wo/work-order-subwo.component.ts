@@ -8,13 +8,11 @@ import {   editValueAssignByCondition, getObjectById } from '../../../../generic
 import * as moment from 'moment';
 import { SubWorkOrderPartNumber } from '../../../../models/sub-work-order-partnumber.model';
 import { Location } from '@angular/common';
-
 @Component({
     selector: 'app-sub-work-order',
     templateUrl: './work-order-subwo.component.html',
     styleUrls: ['./work-order-subwo.component.scss']
-})
-/** WorkOrderShipping component*/
+}) 
 export class SubWorkOrderComponent implements OnInit {
     @Input() isView: boolean = false;
     @Input() subWorkOrderIdForView;
@@ -45,10 +43,18 @@ export class SubWorkOrderComponent implements OnInit {
     subWOPartNoId: any;
     isSavedPartNumbers: boolean;
     addToExisting: any;
-    mpnGridUpdated: boolean = false;
-    // isView: boolean;
+    mpnGridUpdated: boolean = false; 
     tearDownReportList: any;
     quantityValue:any=1;
+    subWorkOrderPartNumbers: any;
+    setEditArray: any = [];
+    subWorkOrderScopeId;
+    dybamicworkFlowList = {};
+    priorityList: any = [];
+    expertiseTypeList: any = [];
+    technicianByExpertiseTypeList: any = [];
+    technicianList: any = [];
+    techStationList: any = [];
     constructor(private router: Router,
         private commonService: CommonService,
         private acRouter: ActivatedRoute,
@@ -61,9 +67,7 @@ export class SubWorkOrderComponent implements OnInit {
     ngOnInit() {
         const queryParamsData = this.acRouter.snapshot.queryParams;
         this.workOrderId = parseInt(queryParamsData.workorderid);
-        // this.url=`/http://localhost:5050/workordersmodule/workorderspages/app-work-order-edit/${this.workOrderId}`;
-
-        this.subWorkOrderId = parseInt(queryParamsData.subworkorderid);
+       this.subWorkOrderId = parseInt(queryParamsData.subworkorderid);
         this.addToExisting = parseInt(queryParamsData.exist);
         if (this.subWorkOrderId != 0) {
             this.isSavedPartNumbers = true;
@@ -73,8 +77,7 @@ export class SubWorkOrderComponent implements OnInit {
             this.mpnGridUpdated = false;
         }
         this.workOrderMaterialsId = parseInt(queryParamsData.workordermaterialsid);
-        this.mpnId = parseInt(queryParamsData.mpnid);
-        // this.workOrderDetails = queryParamsData;
+        this.mpnId = parseInt(queryParamsData.mpnid); 
         console.log("sub work order id", this.subWorkOrderId)
         if(this.subWorkOrderIdForView){
             this.subWorkOrderId=this.subWorkOrderIdForView;
@@ -86,10 +89,19 @@ export class SubWorkOrderComponent implements OnInit {
             this.showTabsGrid = true;
             this.showGridMenu = true;
         }
+        this.getAllExpertiseType(); 
         this.getSubWorkOrderEditData();
         this.getSubWorOrderMpns();
 
 
+    }
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     navigateToWo() {
         this.router.navigateByUrl(`workordersmodule/workorderspages/app-work-order-edit/${this.workOrderId}`)
@@ -117,8 +129,8 @@ export class SubWorkOrderComponent implements OnInit {
                         x.promisedDate = (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate);
                         x.createdDate = new Date(x.createdDate),
                             x.updatedDate = new Date(x.updatedDate)
-                        x.partTechnicianId = getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
-              
+                        x.partTechnicianId =   getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
+                        // {name:x.technicianName,employeeId:x.technicianId}
                         this.getWorkFlowByPNandScope(x, index);
                     }) 
 
@@ -132,7 +144,7 @@ export class SubWorkOrderComponent implements OnInit {
                             this.getAllWorkOrderStages();  
                             this.getAllWorkScpoes('');
                             this.getAllPriority('');
-                            this.getAllExpertiseType(); 
+                     
                             this.getConditionsList();
                             this.getAllTecStations();
                         }
@@ -142,14 +154,53 @@ export class SubWorkOrderComponent implements OnInit {
         }else{
             this.getAllWorkOrderStages();  
             this.getAllWorkScpoes('');
-            this.getAllPriority('');
-            this.getAllExpertiseType(); 
+            this.getAllPriority(''); 
             this.getConditionsList();
             this.getAllTecStations();
         }
     }
-    subWorkOrderPartNumbers: any;
+    subWorkOrderGridData() {
+        this.workOrderService.getSubWorkOrderDataForMpnGrid(this.workOrderMaterialsId, this.mpnId).subscribe(res => {
+            console.log("grid Data", this.subWorkOrderId);
+            res.workOrderMaterialsId = this.workOrderMaterialsId;
+            res.conditionId = res.conditionCodeId;
+            res.createdBy = "admin",
+                res.updatedBy = "admin",
+                res.subWorkOrderId = this.subWorkOrderId;
+            if (this.addToExisting == NaN) {
+                this.subWorkOrderPartNumbers = [];
+            }
+            const subWoObj = new SubWorkOrderPartNumber();
+            const mylength = res.quantity==0 ? 1 : res.quantity;
+            for (let i = 0; i < mylength; i++) {
+                // res.quantity = 1;
+                const obj = JSON.parse(JSON.stringify(res))
+                obj.tempId = i;
+                obj.workOrderId = this.workOrderId;
+                obj.customerRequestDate = new Date(res.customerRequestDate);
+                obj.estimatedCompletionDate = new Date(res.estimatedCompletionDate);
+                obj.estimatedShipDate = new Date(res.estimatedShipDate);
+                obj.promisedDate = new Date(res.promisedDate);
+                obj.createdDate = new Date(),
+                    obj.updatedDate = new Date(),
+                    this.subWorkOrderPartNumbers.push({ ...subWoObj, ...obj });
+            }
+            if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
+                this.getAllWorkOrderStages();  
+                this.getAllWorkScpoes('');
+                this.getAllPriority(''); 
+                this.getConditionsList();
+                this.getAllTecStations();
+                if (this.addToExisting == NaN) {
+                    this.subWorkOrderPartNumbers.map((x, index) => {
+                        this.getWorkFlowByPNandScope(x, index);
+                    })
+                }
+            }
+        }, error => {
 
+        })
+    } 
     saveSubWorkOrder() {
         const data = {
             workOrderMaterialsId: this.workOrderMaterialsId,
@@ -210,49 +261,6 @@ export class SubWorkOrderComponent implements OnInit {
             })
         }
     }
-    subWorkOrderGridData() {
-        this.workOrderService.getSubWorkOrderDataForMpnGrid(this.workOrderMaterialsId, this.mpnId).subscribe(res => {
-            console.log("grid Data", this.subWorkOrderId);
-            res.workOrderMaterialsId = this.workOrderMaterialsId;
-            res.conditionId = res.conditionCodeId;
-            res.createdBy = "admin",
-                res.updatedBy = "admin",
-                res.subWorkOrderId = this.subWorkOrderId;
-            if (this.addToExisting == NaN) {
-                this.subWorkOrderPartNumbers = [];
-            }
-            const subWoObj = new SubWorkOrderPartNumber();
-            const mylength = res.quantity==0 ? 1 : res.quantity;
-            for (let i = 0; i < mylength; i++) {
-                // res.quantity = 1;
-                const obj = JSON.parse(JSON.stringify(res))
-                obj.tempId = i;
-                obj.workOrderId = this.workOrderId;
-                obj.customerRequestDate = new Date(res.customerRequestDate);
-                obj.estimatedCompletionDate = new Date(res.estimatedCompletionDate);
-                obj.estimatedShipDate = new Date(res.estimatedShipDate);
-                obj.promisedDate = new Date(res.promisedDate);
-                obj.createdDate = new Date(),
-                    obj.updatedDate = new Date(),
-                    this.subWorkOrderPartNumbers.push({ ...subWoObj, ...obj });
-            }
-            if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
-                this.getAllWorkOrderStages();  
-                this.getAllWorkScpoes('');
-                this.getAllPriority('');
-                this.getAllExpertiseType(); 
-                this.getConditionsList();
-                this.getAllTecStations();
-                if (this.addToExisting == NaN) {
-                    this.subWorkOrderPartNumbers.map((x, index) => {
-                        this.getWorkFlowByPNandScope(x, index);
-                    })
-                }
-            }
-        }, error => {
-
-        })
-    } 
     saveSubWorkOrderParts() {
         const subWorkOrder = this.subWorkOrderPartNumbers;
         subWorkOrder.map((x, index) => {
@@ -276,10 +284,6 @@ export class SubWorkOrderComponent implements OnInit {
                 MessageSeverity.success
             );
         })
-    }
-
-    get userName(): string {
-        return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     getSubWorkOrderEditData() {
         this.workOrderService.getSubWorkOrderDataBySubWorkOrderId(this.subWorkOrderId).subscribe(res => {
@@ -352,16 +356,15 @@ export class SubWorkOrderComponent implements OnInit {
             this.subWorkOrderGeneralInformation.workOrderStatusId = 1;
         }
     }
-
     updateURLParams() {
         window.history.replaceState({}, '', `/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${this.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}`);
     }
-    setEditArray: any = [];
     getAllWorkScpoes(value): void {
         this.setEditArray = [];
+        console.log("workscopw",this.subWorkOrderPartNumbers )
         if (this.isEdit == true) {
-            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+            if(this.subWorkOrderPartNumbers   && this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
                 if (element.workOrderScopeId) {
                     this.setEditArray.push(element.workOrderScopeId)
                 }
@@ -378,7 +381,6 @@ export class SubWorkOrderComponent implements OnInit {
             this.workScopesList = res;
         });
     }
-
     selectedCondition1(value, currentRecord, index,) {
         this.conditionList.forEach(element => {
             if (element.value == value) {
@@ -388,9 +390,6 @@ export class SubWorkOrderComponent implements OnInit {
         });
         this.workOrderStatus();
     }
-
-    subWorkOrderScopeId;
-    dybamicworkFlowList = {};
     getWorkFlowByPNandScope(workOrderPart, index) {
 
         const { subWorkOrderScopeId } = workOrderPart;
@@ -417,9 +416,22 @@ export class SubWorkOrderComponent implements OnInit {
         this.workOrderStatus();
         this.getAllPriority('');
     }
-
     getConditionsList() {
-        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(res => {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.subWorkOrderPartNumbers.forEach(element => {
+                if (element.conditionId) {
+                    this.setEditArray.push(element.conditionId)
+                }
+            });
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
+            }
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = ''; 
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.conditionList = res;
         })
     }
@@ -444,8 +456,8 @@ export class SubWorkOrderComponent implements OnInit {
     workOrderStatus(): void {
         this.setEditArray = [];
         if (this.isEdit == true) {
-            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+            if(this.subWorkOrderPartNumbers  && this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
                 if(element.workOrderStatusId){
                     this.setEditArray.push(element.workOrderStatusId)
                 }
@@ -476,12 +488,11 @@ export class SubWorkOrderComponent implements OnInit {
             }
         })
     } 
-    priorityList: any = [];
     getAllPriority(value) {
         this.setEditArray = [];
         if (this.isEdit == true) {
-            if(this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.partNumbers && this.subWorkOrderPartNumbers.partNumbers.length !=0){
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+            if(this.subWorkOrderPartNumbers  && this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
                 if (element.workOrderPriorityId) {
                     this.setEditArray.push(element.workOrderPriorityId)
                 }
@@ -498,18 +509,6 @@ export class SubWorkOrderComponent implements OnInit {
             this.priorityList = res;
         })
     }
-
-
-
-
-
-
-    expertiseTypeList: any = [];
-    get currentUserMasterCompanyId(): number {
-        return this.authService.currentUser
-            ? this.authService.currentUser.masterCompanyId
-            : null;
-    }
     getAllExpertiseType() {
         this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
 
@@ -522,7 +521,6 @@ export class SubWorkOrderComponent implements OnInit {
             });
         })
     }
-    technicianByExpertiseTypeList: any = [];
     getExpertiseEmployeeByExpertiseId(value) {
         this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
             this.technicianByExpertiseTypeList = res;
@@ -531,8 +529,6 @@ export class SubWorkOrderComponent implements OnInit {
             })
         })
     }
-
-    technicianList: any = [];
     filterTechnician(event) {
         this.technicianList = this.technicianByExpertiseTypeList;
         if (event.query !== undefined && event.query !== null) {
@@ -551,28 +547,16 @@ export class SubWorkOrderComponent implements OnInit {
         }
 
     }
-    techStationList: any = [];
-    // async getAllTecStations() {
-    //     await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(res => {
-    //         this.techStationList = res.map(x => {
-    //             return {
-    //                 ...x,
-    //                 techStationId: x.value,
-    //                 name: x.label
-    //             }
-    //         });
-    //     })
-    // }
-
-
     getAllTecStations() {
         this.setEditArray = [];
+        console.log("edit mode",this.isEdit,this.subWorkOrderPartNumbers)
+        debugger;
         if (this.isEdit == true) {
-            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
-                if (element.partTechnicianId) {
-                    this.setEditArray.push(element.partTechnicianId.employeeId)
-                }
+            if(this.subWorkOrderPartNumbers &&  this.subWorkOrderPartNumbers.length !=0){
+            this.subWorkOrderPartNumbers.forEach(element => {
+   this.setEditArray.push(element.techStationId)
             });
+        }
             if (this.setEditArray && this.setEditArray.length == 0) {
                 this.setEditArray.push(0);
             }
@@ -590,7 +574,4 @@ export class SubWorkOrderComponent implements OnInit {
             });
         })
     }
-
-
-
 }
