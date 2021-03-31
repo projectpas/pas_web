@@ -247,11 +247,12 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.isLockBox = false;
 			}
 			this.isSpinnerVisible = false;
-			if (res != null && res && res.length != 0) {
-				
+			if (res != null && res && res.length != 0) {				
 				this.legalentitylockingboxid = res[0].legalEntityBankingLockBoxId;
 				this.sourceLegalEntity = {
 					...this.sourceLegalEntity,
+					bankName: res[0].bankName,
+					bankAccountNumber: res[0].bankAccountNumber,
 					payeeName: res[0].payeeName,
 					poBox: res[0].poBox,
 					bankStreetaddress1: res[0].address1,
@@ -366,12 +367,14 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		})
 	}
 
-	getmemo() {
-		if (this.sourceLegalEntity.bankStreetaddress1 != null &&
+	getmemo() {		
+		if (this.sourceLegalEntity.bankName != null  &&
+			this.sourceLegalEntity.bankAccountNumber != null  &&
+			this.sourceLegalEntity.bankStreetaddress1 != null &&
 			this.sourceLegalEntity.bankCity != null && 
 			this.sourceLegalEntity.bankProvince != null &&
-			 this.sourceLegalEntity.bankcountryId != null
-			&& this.sourceLegalEntity.bankpostalCode != null && this.sourceLegalEntity.bankcountryId != null
+			this.sourceLegalEntity.bankcountryId != null && 
+			this.sourceLegalEntity.bankpostalCode != null 			
 		) {
 			this.locksave = true;
 		}
@@ -408,6 +411,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	savebanklockingbox() {
 		const data = {
 			LegalEntityId: this.id,
+			bankName:this.sourceLegalEntity.bankName,
+			bankAccountNumber:this.sourceLegalEntity.bankAccountNumber,
 			payeeName:this.sourceLegalEntity.payeeName,
 			poBox: this.sourceLegalEntity.poBox,			
 			address1: this.sourceLegalEntity.bankStreetaddress1,
@@ -900,6 +905,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				});
 			this.auditHistoryHeaders = [
 
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Bank Account Number', field: 'bankAccountNumber' },
 				{ header: 'Payee Name', field: 'payeeName' },
 				{ header: 'PO Box', field: 'poBox' },
 				{ header: 'Street Address Line 1', field: 'line1' },
