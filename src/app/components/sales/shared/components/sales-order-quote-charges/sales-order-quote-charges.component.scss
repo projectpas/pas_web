@@ -47,7 +47,7 @@ select:disabled{
 }
 
 .sales-quote-radio .ui-radiobutton{
-// margin-top:14px;
+margin-top:2px !important;
 }
 .p-radiobutton-label-horizontal .ui-radiobutton-label {
   width: unset !important;
@@ -82,4 +82,7 @@ select:disabled{
 }
 .freight-notview{
   width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;
+}
+.sales-quote-radio-view .ui-radiobutton{
+  margin-top:-9px !important;
 }

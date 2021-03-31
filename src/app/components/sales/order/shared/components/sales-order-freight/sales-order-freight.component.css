@@ -75,7 +75,10 @@ select.select-read-only {
   margin-left:0px !important;cursor:pointer !important;
 }
 .sales-quote-radio .ui-radiobutton{
-/* margin-top:14px; */
+margin-top:-9px !important;
+}
+.sales-quote-radio-view .ui-radiobutton{
+  margin-top:-9px !important;
 }
 
 
