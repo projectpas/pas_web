@@ -840,17 +840,19 @@ setTimeout(() => {
         this.subTabWorkFlow = value;
         if (value === 'editworkFlow') {
             this.editWorkFlowData = undefined;
-            this.isSpinnerVisible = true;
-            this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.workFlowtService.listCollection = res[0];
-                this.workFlowtService.enableUpdateMode = true;
-                this.workFlowtService.currentWorkFlowId = res[0].workflowId;
-                this.editWorkFlowData = res;
-            },
-                err => {
-                    this.handleError(err);
-                })
+            // this.isSpinnerVisible = true; 
+            this.workFlowtService.currentWorkFlowId = this.workFlowId;
+            this.workFlowtService.enableUpdateMode = true;
+            // this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            //     this.isSpinnerVisible = false;
+            //     this.workFlowtService.listCollection = res[0];
+            //     this.workFlowtService.enableUpdateMode = true;
+            //     this.workFlowtService.currentWorkFlowId = res[0].workflowId;
+            //     this.editWorkFlowData = res;
+            // },
+            //     err => {
+            //         this.handleError(err);
+            //     })
         }
         this.gridActiveTab = '';
         this.subTabOtherOptions = '';
@@ -860,8 +862,6 @@ setTimeout(() => {
     openDelete(content, index) {
         this.currentIndex = index;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        this.modal.result.then(() => {
-        }, () => { })
     }
 
     dismissModel() {
@@ -1278,7 +1278,7 @@ setTimeout(() => {
     getWorkFlowData() { 
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
         if (this.selectedWorkFlowId != null) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true; 
             this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
                     (workFlowData) => {
@@ -1402,7 +1402,7 @@ setTimeout(() => {
                         }
                     )
                     this.editWorkFlowData = undefined;
-                    this.isSpinnerVisible = true;
+                    this.isSpinnerVisible = true; 
                     this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                         this.isSpinnerVisible = false;
                         this.workFlowtService.listCollection = res[0];
@@ -3035,7 +3035,7 @@ setTimeout(() => {
         } else {
             this.setEditArray.push(0);
         }
-        const strText = '';
+        const strText = ''; 
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.conditionList = res;
         })
@@ -3120,4 +3120,4 @@ setTimeout(() => {
     memoValidate() {
         this.disableForMemo = false;
     }
-}  
+}   

@@ -112,6 +112,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.getUOMList('');
         this.getCurrencyList('');
         this.getCarrierList();
+        this.getTaskList();
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
@@ -251,7 +252,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.freightForm = [...this.freightForm, newFreight];
     }
     disableUpdate:boolean=true;
+    editData:any={};
     edit(rowData, mainIndex, subIndex) {
+        this.editData=rowData;
         this.mainEditingIndex = mainIndex;
         this.subEditingIndex = subIndex;
         this.isEdit = true;
@@ -259,6 +262,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.freightForm = [rowData];
         this.getCurrencyList('');
        this.getUOMList('');
+       this.getTaskList();
        this.disableUpdate=true;
     }
     checkAmount(){
@@ -617,4 +621,29 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       getValidFrt(){
           this.disableFrt=false;
       }
+      
+ 
+      getTaskList() {  
+        this.setEditArray=[]; 
+ 
+        if(this.isEdit){
+          this.setEditArray.push(this.editData.taskId ? this.editData.taskId : 0);
+        }else{
+          this.setEditArray.push(0)
+        }
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true,  0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+         this.taskList = res.map(x => {
+                return {
+                    id: x.value,
+                    description: x.label.toLowerCase(),
+                    taskId: x.value,
+                    label:x.label.toLowerCase(),
+                }
+            });
+    
+        },
+            err => { 
+            })
+    }
 }

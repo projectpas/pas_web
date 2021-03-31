@@ -28,7 +28,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   @Output() refreshData = new EventEmitter();
   @Output() createQuote = new EventEmitter();
   @Input() isView: boolean = false;
-  @Input() taskList: any = [];
+  // @Input() taskList: any = [];
   @Input() view: boolean = false;
   @Input() fromquote: boolean = false;
   @Input() buildMethodDetails: any = {};
@@ -146,6 +146,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   }
   ngOnInit() {
     this.getRONumberList();
+    this.getTaskList(); 
     if (this.workOrderChargesList && this.workOrderChargesList.length > 0 && this.workOrderChargesList[0].markupFixedPrice) {
       this.costPlusType = Number(this.workOrderChargesList[0].markupFixedPrice);
       this.overAllMarkup = this.workOrderChargesList[0].headerMarkupId;
@@ -202,6 +203,8 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
     this.isEdit = true;
     this.addNewCharges = true;
     this.editData = rowData; 
+    console.log("edit dataaaa",this.editData)
+    this.getTaskList();
   }
   currentRow: any = {};
   openDelete(content, row) {
@@ -565,5 +568,32 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
   getValidCrg(){
       this.disableCrg=false;
   }
-}
+  setEditArray:any=[];
+  taskList:any=[];
+  getTaskList() {  
+    this.setEditArray=[]; 
+    // console.log("taskId edit data",this.editData)
+    // this.isEdit = true;
+    // this.addNewCharges = true; 
+    if(this.isEdit){
+      this.setEditArray.push(this.editData.taskId ? this.editData.taskId : 0);
+    }else{
+      this.setEditArray.push(0)
+    }
+    const strText = '';
+    this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true,  0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+     this.taskList = res.map(x => {
+            return {
+                id: x.value,
+                description: x.label.toLowerCase(),
+                taskId: x.value,
+                label:x.label.toLowerCase(),
+            }
+        });
 
+    },
+        err => {
+            // this.handleError(err);
+        })
+}
+}

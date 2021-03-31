@@ -16,6 +16,10 @@ import { Location } from '@angular/common';
 })
 /** WorkOrderShipping component*/
 export class SubWorkOrderComponent implements OnInit {
+    @Input() isView: boolean = false;
+    @Input() subWorkOrderIdForView;
+    @Input() workOrderIdForView;
+    @Input() mpnIdForView;
     issubWorkOrderState: Boolean = true;
     subWorkOrderHeader: any;
     workOrderDetails: any;
@@ -42,8 +46,9 @@ export class SubWorkOrderComponent implements OnInit {
     isSavedPartNumbers: boolean;
     addToExisting: any;
     mpnGridUpdated: boolean = false;
-    isView: boolean;
+    // isView: boolean;
     tearDownReportList: any;
+    quantityValue:any=1;
     constructor(private router: Router,
         private commonService: CommonService,
         private acRouter: ActivatedRoute,
@@ -71,22 +76,19 @@ export class SubWorkOrderComponent implements OnInit {
         this.mpnId = parseInt(queryParamsData.mpnid);
         // this.workOrderDetails = queryParamsData;
         console.log("sub work order id", this.subWorkOrderId)
+        if(this.subWorkOrderIdForView){
+            this.subWorkOrderId=this.subWorkOrderIdForView;
+            this.workOrderId=this.workOrderIdForView;
+            this.mpnId=this.mpnIdForView;
+        }
         if (this.subWorkOrderId != 0) {
             this.isEdit = true;
             this.showTabsGrid = true;
             this.showGridMenu = true;
         }
-        this.getAllExpertiseType();
-        //grid calls
-        this.getConditionsList();
-        this.getAllTecStations();
-     
         this.getSubWorkOrderEditData();
-        this.getAllWorkOrderStages(); // for stages dropdown
-        // this.getAllWorkOrderStatus();
         this.getSubWorOrderMpns();
-        this.getAllWorkScpoes('');
-        this.getAllPriority('');
+
 
     }
     navigateToWo() {
@@ -127,13 +129,23 @@ export class SubWorkOrderComponent implements OnInit {
                         this.subWorkOrderGridData();
                     } else {
                         if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
+                            this.getAllWorkOrderStages();  
                             this.getAllWorkScpoes('');
-                            this.workOrderStatus();
                             this.getAllPriority('');
+                            this.getAllExpertiseType(); 
+                            this.getConditionsList();
+                            this.getAllTecStations();
                         }
                     }
                 }
             })
+        }else{
+            this.getAllWorkOrderStages();  
+            this.getAllWorkScpoes('');
+            this.getAllPriority('');
+            this.getAllExpertiseType(); 
+            this.getConditionsList();
+            this.getAllTecStations();
         }
     }
     subWorkOrderPartNumbers: any;
@@ -225,9 +237,12 @@ export class SubWorkOrderComponent implements OnInit {
                     this.subWorkOrderPartNumbers.push({ ...subWoObj, ...obj });
             }
             if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
+                this.getAllWorkOrderStages();  
                 this.getAllWorkScpoes('');
-                this.workOrderStatus();
                 this.getAllPriority('');
+                this.getAllExpertiseType(); 
+                this.getConditionsList();
+                this.getAllTecStations();
                 if (this.addToExisting == NaN) {
                     this.subWorkOrderPartNumbers.map((x, index) => {
                         this.getWorkFlowByPNandScope(x, index);
@@ -537,8 +552,35 @@ export class SubWorkOrderComponent implements OnInit {
 
     }
     techStationList: any = [];
-    async getAllTecStations() {
-        await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(res => {
+    // async getAllTecStations() {
+    //     await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(res => {
+    //         this.techStationList = res.map(x => {
+    //             return {
+    //                 ...x,
+    //                 techStationId: x.value,
+    //                 name: x.label
+    //             }
+    //         });
+    //     })
+    // }
+
+
+    getAllTecStations() {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+                if (element.partTechnicianId) {
+                    this.setEditArray.push(element.partTechnicianId.employeeId)
+                }
+            });
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
+            }
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.techStationList = res.map(x => {
                 return {
                     ...x,
@@ -548,4 +590,7 @@ export class SubWorkOrderComponent implements OnInit {
             });
         })
     }
+
+
+
 }

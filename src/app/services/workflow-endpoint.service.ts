@@ -153,7 +153,7 @@ export class WorkFlowEndpoint extends EndpointFactory {
 				return this.handleErrorCommon(error, () => this.getActionAttributesCollection());
 			});
 	}
-	getWorkFlowDataById(workFlowId) {
+	getWorkFlowDataById(workFlowId) { 
 		return this.http.get<any>(`${environment.baseUrl}/api/workflow/getWorkFlow/${workFlowId}`)
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getWorkFlowDataById(workFlowId));

@@ -1,11 +1,4 @@
-<div [@fadeInOut] class="page-content work_order_cont">
-  <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isView"></p-breadcrumb>
-  <div class="right_col" role="main">
-
-
-      <div class="x_content">
-          <div class="card new-card">
-<div class="card-header header">
+<div class="header" *ngIf="!isView">
   <div class="row">
       <div class="col">
           <h4 class="header-name"> {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>
@@ -78,12 +71,12 @@
             <div class="form-group">
               <label for="opendate">Sub WO Open Date </label>
               <span class="clr-red">*</span>
-              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required [disabled]="isView"
                 [(ngModel)]="subWorkOrderGeneralInformation.openDate"  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
             </div>
           </div>
         </div>
-        <div>
+        <div *ngIf="!isView">
           <button class="btn btn-primary pull-right" *ngIf="!isEdit" type="button" [disabled]="!subWoHeader.valid"
             (click)="saveSubWorkOrder()">
             Save
@@ -108,7 +101,7 @@
               <th rowspan="2">Revised MPN</th>
               <th rowspan="2">Serial Num </th>
               <th rowspan="2">Qty</th>
-              <th rowspan="2">Rec'd Date <span class="clr-red">*</span></th>
+              <th rowspan="2">Cust Rec'd Date <span class="clr-red">*</span></th>
               <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
               <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
               <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
@@ -151,9 +144,15 @@
               </td>
 
               <td>
+                <!-- workOrderPartNumber.quantity -->
                 <input type="number" class="form-control w100 text_right" name="quantity{{i}}"
-                  [(ngModel)]="workOrderPartNumber.quantity" disabled>
+                  [(ngModel)]="quantityValue" disabled>
               </td>
+              <!-- <td>
+                <p-calendar [showIcon]="true" name="receivedDate{{i}}" class="calender-cstm"
+                  #receivedDate="ngModel" [(ngModel)]="workOrderPartNumber.receivedDate" required
+                  [disabled]="isView" appendTo="body"></p-calendar>
+              <td> -->
               <td>
                 <p-calendar [showIcon]="true" name="customerRequestDate{{i}}" class="calender-cstm"
                   #customerRequestDate="ngModel" [(ngModel)]="workOrderPartNumber.customerRequestDate" required
@@ -167,10 +166,10 @@
                   #estimatedCompletionDate="ngModel" [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required
                   [disabled]="isView" appendTo="body" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100">
                 </p-calendar>
-              </td>
+              </td> 
               <td>
                 <p-calendar [showIcon]="true" class="calender-cstm" name="estimatedShipDate{{i}}"
-                  [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.receivedDate"
+                  [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.customerRequestDate"
                   #estimatedShipDate="ngModel" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="isView" appendTo="body"></p-calendar>
               </td>
               <td>
@@ -243,15 +242,6 @@
                 <input type="text" class="form-control w100" name="itemGroup{{i}}" #description="ngModel"
                   [(ngModel)]="workOrderPartNumber.itemGroup" disabled>
               </td>
-
-              <td>
-                <input type="text" class="form-control w100" name="controlNumber{{i}}" #controlNumber="ngModel"
-                  [(ngModel)]="workOrderPartNumber.controlNumber" disabled>
-              </td>
-              <td>
-                <input type="text" class="form-control w100" name="controlerId{{i}}" #controlerId="ngModel"
-                  [(ngModel)]="workOrderPartNumber.controlerId" disabled>
-              </td>
               <td>
                 <input type="text" class="form-control w100" name="stockLineNumber{{i}}" #serialNumber="ngModel"
                   [(ngModel)]="workOrderPartNumber.stockLineNumber" disabled>
@@ -260,6 +250,16 @@
                 <input type="text" class="form-control w50" [(ngModel)]="workOrderPartNumber.nte" name="nte{{i}}"
                   #nte="ngModel" disabled>
               </td>
+              <td>
+                <input type="text" class="form-control w100" name="controlNumber{{i}}" #controlNumber="ngModel"
+                  [(ngModel)]="workOrderPartNumber.controlNumber" disabled>
+              </td>
+              <td>
+                <input type="text" class="form-control w100" name="controlerId{{i}}" #controlerId="ngModel"
+                  [(ngModel)]="workOrderPartNumber.controlerId" disabled>
+              </td>
+           
+             
               
              
               <td>
@@ -277,7 +277,7 @@
           </tbody>
         </table>
       </div>
-      <div>
+      <div *ngIf="!isView">
         <button class="btn btn-primary pull-right" *ngIf="!activeGridUpdateButton" type="button"
           [disabled]="!workOrderForm.valid" (click)="saveSubWorkOrderParts()">
           Save
@@ -292,7 +292,7 @@
   <div
     *ngIf="subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
     <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState" (setSubMPNDropDown)="subMPNDropDownUpdate($event)" [subWoMpnGridUpdated]="mpnGridUpdated"
-      [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu"
+      [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu" [isView]="isView"
       [subWorkOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"
       [conditionListfromSubWo]="conditionList"></app-work-order-smart>
   </div>
