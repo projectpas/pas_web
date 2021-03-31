@@ -52,6 +52,8 @@ export class AddPaymentComponent implements OnInit {
   customerDetails: any;
   legalEntityData: any;
   legalEntityId: number;
+  openInvoices: any[] = [];
+  headers: any[];
 
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
@@ -71,6 +73,31 @@ export class AddPaymentComponent implements OnInit {
     this.objInvoicePayment.invoiceWireTransferPayment = new InvoiceWireTransferPayment();
     this.objInvoicePayment.invoiceEFTPayment = new InvoiceEFTPayment();
     this.objInvoicePayment.invoiceCreditDebitCardPayment = new InvoiceCreditDebitCardPayments();
+
+    this.headers = [
+      { field: "documentType", header: "Document Type", width: "130px" },
+      { field: "custName", header: "Cust Name", width: "180px" },
+      { field: "customerCode", header: "Cust Num", width: "130px" },
+      { field: "docNum", header: "Doc Num", width: "130px" },
+      { field: "invoiceDate", header: "Inv Date", width: "130px" },
+      { field: "wosoNum", header: "WO/SO Num", width: "130px" },
+      { field: "customerReference", header: "Cust Ref", width: "130px" },
+      { field: "currencyCode", header: "Currency Code", width: "180px" },
+      { field: "fxRate", header: "FX Rate", width: "100px" },
+      { field: "originalAmount", header: "Original Amount", width: "100px" },
+      { field: "remainingAmount", header: "Remaining Amount", width: "130px" },
+      { field: "invDueDate", header: "Inv Due Date", width: "130px" },
+      { field: "dsi", header: "DSI", width: "130px" },
+      { field: "dso", header: "DSO", width: "180px" },
+      { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
+      { field: "arBalance", header: "AR Bal", width: "130px" },
+      { field: "creditLimit", header: "Credit Limit", width: "130px" },
+      { field: "creditTermName", header: "Credit Term", width: "130px" },
+      { field: "co", header: "CO", width: "130px" },
+      { field: "bu", header: "BU", width: "130px" },
+      { field: "div", header: "Div", width: "130px" },
+      { field: "dept", header: "Dept", width: "130px" }
+    ];
   }
 
   arrayCurrencyList: any = [];
@@ -80,10 +107,12 @@ export class AddPaymentComponent implements OnInit {
     this.isSpinnerVisible = true;
     forkJoin(
       this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
-      this.legalEntityService.getManagemententity(this.masterCompanyId)
+      this.legalEntityService.getManagemententity(this.masterCompanyId),
+      this.customerService.getOpenInvoiceList()
     ).subscribe(result => {
       this.currencyList = result[0];
       this.legalEntityData = result[1];
+      this.openInvoices = result[2][0];
       this.getLegalEntityId();
       this.glList();
       this.bindCheckPayment();
@@ -328,4 +357,12 @@ export class AddPaymentComponent implements OnInit {
     this.dismissCCMemoModel();
   }
   /* Credit Debit Card Memo */
+
+  getPartToDisableOrNot(part) {
+  }
+
+  onApprovalSelected(approver, i) {
+  }
+
+  getAllPartsToDisableOrNot() {}
 }

@@ -629,6 +629,44 @@
       </p-tabPanel>
     </p-tabView>
   </ng-container>
+  <label class="attachments-label" style="float: left; text-align: left;">
+    <h5>Select Invoice to Apply Payment</h5>
+  </label>
+  <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex">
+    <div class="tableFixHead">
+      <table class="table table-bordered header-table-width" id="mpn-list-table">
+        <thead>
+          <tr class="pad_workflo">
+            <th class="approver-th-align th-width">
+              <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" />
+            </th>
+            <th *ngFor="let header of headers">{{header.header}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="!openInvoices || openInvoices.length == 0">
+            <tr>
+              <td colspan="21" class="no-records-cstm">
+                No records found
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="openInvoices">
+            <tr class="mpn-row" style="display: table-row;" *ngFor="let invoice of openInvoices; let i=index;">
+              <td>
+                <input type="checkbox" [(ngModel)]="invoice.selected" (click)="onApprovalSelected(invoice, i)" />
+              </td>
+              <ng-container *ngFor="let field of headers">
+                <td class="table-column-width">
+                  <span>{{invoice[field.field]}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" (click)="onProcessPayment()">
