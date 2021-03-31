@@ -86,17 +86,9 @@ export class SubWorkOrderComponent implements OnInit {
             this.showTabsGrid = true;
             this.showGridMenu = true;
         }
-        this.getAllExpertiseType();
-        //grid calls
-        this.getConditionsList();
-        this.getAllTecStations();
-     
         this.getSubWorkOrderEditData();
-        this.getAllWorkOrderStages(); // for stages dropdown
-        // this.getAllWorkOrderStatus();
         this.getSubWorOrderMpns();
-        this.getAllWorkScpoes('');
-        this.getAllPriority('');
+
 
     }
     navigateToWo() {
@@ -137,13 +129,23 @@ export class SubWorkOrderComponent implements OnInit {
                         this.subWorkOrderGridData();
                     } else {
                         if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
+                            this.getAllWorkOrderStages();  
                             this.getAllWorkScpoes('');
-                            this.workOrderStatus();
                             this.getAllPriority('');
+                            this.getAllExpertiseType(); 
+                            this.getConditionsList();
+                            this.getAllTecStations();
                         }
                     }
                 }
             })
+        }else{
+            this.getAllWorkOrderStages();  
+            this.getAllWorkScpoes('');
+            this.getAllPriority('');
+            this.getAllExpertiseType(); 
+            this.getConditionsList();
+            this.getAllTecStations();
         }
     }
     subWorkOrderPartNumbers: any;
@@ -235,9 +237,12 @@ export class SubWorkOrderComponent implements OnInit {
                     this.subWorkOrderPartNumbers.push({ ...subWoObj, ...obj });
             }
             if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
+                this.getAllWorkOrderStages();  
                 this.getAllWorkScpoes('');
-                this.workOrderStatus();
                 this.getAllPriority('');
+                this.getAllExpertiseType(); 
+                this.getConditionsList();
+                this.getAllTecStations();
                 if (this.addToExisting == NaN) {
                     this.subWorkOrderPartNumbers.map((x, index) => {
                         this.getWorkFlowByPNandScope(x, index);
@@ -547,8 +552,35 @@ export class SubWorkOrderComponent implements OnInit {
 
     }
     techStationList: any = [];
-    async getAllTecStations() {
-        await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(res => {
+    // async getAllTecStations() {
+    //     await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').subscribe(res => {
+    //         this.techStationList = res.map(x => {
+    //             return {
+    //                 ...x,
+    //                 techStationId: x.value,
+    //                 name: x.label
+    //             }
+    //         });
+    //     })
+    // }
+
+
+    getAllTecStations() {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.subWorkOrderPartNumbers.partNumbers.forEach(element => {
+                if (element.partTechnicianId) {
+                    this.setEditArray.push(element.partTechnicianId.employeeId)
+                }
+            });
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
+            }
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.techStationList = res.map(x => {
                 return {
                     ...x,
@@ -558,4 +590,7 @@ export class SubWorkOrderComponent implements OnInit {
             });
         })
     }
+
+
+
 }

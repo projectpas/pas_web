@@ -88,6 +88,7 @@ export class WorkOrderSmartComponent implements OnInit {
             // if(this.workOrderId)
         }
         if (this.workOrderId || this.recCustomerId) {
+            console.log("status stage if")
             this.ishowEditDiv=true;
             this.isEdit = true;
             if (this.recCustomerId) {
@@ -131,6 +132,7 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.getAllWorkOrderStatus();
             })
         } else {
+            console.log("status stage else")
             this.ishowEditDiv=false;
             this.getWorkOrderDefaultSetting();
             this.getAllWorkOrderTypes();

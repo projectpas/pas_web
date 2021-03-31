@@ -379,7 +379,7 @@
                                   
                                      <th colspan="2">TAT (Days)</th>
                                     <th rowspan="2" colspan="4">Management Structure </th>
-                                    <th rowspan="2" class="table-column-icon-width">Action</th>
+                                    <th rowspan="2" class="table-column-icon-width"  *ngIf="!isView">Action</th>
                                 </tr>
                                 <tr>
                                     <th style="min-width:60px !important">PMA</th>
@@ -595,8 +595,7 @@
                                         <span *ngIf="!workOrderGeneralInformation.isSinglePN " class="delete-row-btn" >
                                              <button type="button" class="btn nobg btn-delete-cstm" (click)="openDelete(content,i)"  [disabled]="quotestatusofCurrentPart =='Approved' || workOrderPartNumber==false" matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
-                                            </button> </span>
-             
+                                            </button> </span> 
                                         <span *ngIf="workOrderGeneralInformation.isSinglePN ">
                                          
                                             <button type="button" class="btn nobg btn-delete-cstm" disabled>
@@ -847,7 +846,7 @@
             </ul> 
             <br>
             <div *ngIf="isWorkOrderMainView && mainWorkOrderId !=0" [ngClass]="{hidedata :  gridActiveTab !== 'workOrderMain' }">
-                 <app-work-view-component [workOrderId]="mainWorkOrderId"></app-work-view-component> 
+                 <app-work-view-component [workOrderId]="mainWorkOrderId"></app-work-view-component>  
               </div>  
             <div [ngClass]="{hidedata :  subTabWorkFlow !== 'createworkFlow' }">
              </div> 

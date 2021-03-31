@@ -9,8 +9,7 @@ import { WorkOrderPartNumberService } from '../../../../services/work-order/work
 import { StocklineService } from '../../../../services/stockline.service';
 import { CommonService } from '../../../../services/common.service';
 import { AuthService } from '../../../../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
-import { getObjectById, getValueByFieldFromArrayofObject } from '../../../../generic/autocomplete';
+import { ActivatedRoute } from '@angular/router'; 
 import { workOrderGeneralInfo } from '../../../../models/work-order-generalInformation.model';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
@@ -26,8 +25,7 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
 export class WorkOrderViewComponent implements OnInit, OnChanges {
     @Input() workOrderId = 0;
     creditTerms: any;
-    techStationList: any;
-    // workScopesList: { label: string; value: number; }[];
+    techStationList: any; 
     workOrderStagesList: any;
     priorityList: any;
     workOrderTypes: any;
@@ -81,6 +79,8 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.getBasicDetails();
+        this.getAllWorkOrderStages();
+        this.getAllWorkOrderStatus();
     }
 
     ngOnChanges() {
@@ -91,41 +91,13 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
     getBasicDetails(){
-        // this.getConditionsList();
-        // this.getAllWorkOrderTypes();
-        // this.getAllWorkOrderStatus();
-        // this.getAllCreditTerms();
-      
-        // this.getAllTecStations();
-        // this.getJobTitles();
-      
-        // this.getAllWorkOrderStages();
-        // this.getAllExpertiseType();
-      
-     
-
-
-  // this.getAllPriority();
-        // this.getLegalEntity();
-          // this.getAllWorkScpoes();
-          // this.getAllCustomers();
-        // this.getAllEmployees();
-
-
-
+ 
             this.getMultiplePartsNumbers();
         if (this.workOrderId || this.recCustomerId) {
 
             this.recCustomerId = 0;
             this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerEnable = true;
-                //if (this.recCustomerId || (res.receivingCustomerWorkId != null && res.receivingCustomerWorkId > 0)) {
-                //    if(res.receivingCustomerWorkId > 0)
-                //        this.getPartNosByCustomer(res.customerId, res.workOrderId);
-                //    else
-                //        this.getPartNosByCustomer(res.customerId,0);
-                //}
-                // this.getPartNosByCustomer(res.customerId, 0);
+                this.isSpinnerEnable = true; 
                 this.isEdit = true;
 
 
@@ -160,22 +132,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 		  ? this.authService.currentUser.masterCompanyId
 		  : null;
     }
-    // getAllExpertiseType() {
-    //     this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => {
-
-    //       this.expertiseTypeList = res.map(x => {
-    //         if(x.empExpCode =='TECHNICIAN'){
-    //            this.getExpertiseEmployeeByExpertiseId(x.employeeExpertiseId);
-    //            return;
-    //         }
-    //       });
-    //     })
-    //   }
-    //   getExpertiseEmployeeByExpertiseId(value) {
-    //     this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
-    //       this.technicianByExpertiseTypeList = res;
-    //     })
-    //   }
+ 
     getWorkOrderDefaultSetting(value?) {
       const  value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
         this.commonService.workOrderDefaultSettings(this.masterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -187,12 +144,9 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
                     ...this.workOrderGeneralInformation,
                     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
                         return {
-                            ...x,
-                            // workOrderScopeId: data.defaultScopeId, // true
+                            ...x, 
                             workOrderStageId: data.defaultStageCodeId,
-                            workOrderPriorityId: data.defaultPriorityId, // true
-                            // workOrderStatusId: data.defaultStatusId, // status
-                            // conditionId: data.defaultConditionId
+                            workOrderPriorityId: data.defaultPriorityId, // true 
                         }
                     })
                 }
@@ -219,9 +173,11 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     }
 
 
-
-    getAllWorkOrderStatus(): void {
-        this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    setEditArray:any=[];
+    getAllWorkOrderStatus(): void { 
+        this.setEditArray.push(0);
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 0, this.setEditArray.join()).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }
@@ -236,63 +192,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     getJobTitles() {
         this.commonService.getJobTitles(this.currentUserMasterCompanyId).subscribe(res => {
             this.jobTitles = res;
-            // this.getSalesPersonList();
-            // this.getCSRList();
-            // this.getAgentsList();
-            // this.getTechnicianList();
-            // this.getInspectiorsList();
-            // this.getSalesAgentsList();
+  
         })
     }
-    // getSalesPersonList() {
-    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
-    //     if (id !== undefined) {
-    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-    //             this.salesPersonOriginalList = res;
-    //             this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
-    //         })
-    //     }
-    // }
-
-    // getCSRList() {
-    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
-    //     if (id !== undefined) {
-    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-    //             this.csrOriginalList = res;
-    //         })
-    //     }
-    // }
-
-    // getAgentsList() {
-    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
-    //     if (id !== undefined) {
-    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-    //             this.agentsOriginalList = res;
-    //             this.salesAgentsOriginalList = [...this.salesAgentsOriginalList, ...this.agentsOriginalList];
-    //         })
-    //     }
-    // }
-    // getTechnicianList() {
-    //     const id = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
-    //     if (id !== undefined) {
-    //         this.commonService.getEmployeesByCategory(id[0].jobTitleId).subscribe(res => {
-    //             this.technicianOriginalList = res;
-    //         })
-    //     }
-    // }
  
     employeesOriginalData:any=[];
-    // async getAllEmployees() {
-    //     await this.commonService.smartDropDownList('Employee', 'EmployeeId', 'FirstName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.employeesOriginalData = res.map(x => {
-    //             return {
-    //                 ...x,
-    //                 employeeId: x.value,
-    //                 name: x.label
-    //             }
-    //         });
-    //     })
-    // }
+ 
 
     async getAllTecStations() {
         await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -305,24 +210,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
             });
         })
     }
-
-    // getAllWorkScpoes(): void {
-    //     this.workOrderService.getAllWorkScopes().pipe(takeUntil(this.onDestroy$)).subscribe(
-    //         result => {
-    //             this.workScopesList = result.map(x => {
-    //                 return {
-    //                     label: x.description,
-    //                     value: x.workScopeId
-    //                 }
-    //             })
-    //         }
-    //     );
-    // }
+ 
 
 
     getAllWorkOrderStages(): void {
         this.workOrderService.getWorkOrderStageAndStatus().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            // this.workOrderOriginalStageList = res;
+   
             this.workOrderStagesList = res.map(x => {
                 return {
                     ...x,
@@ -332,13 +225,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
             });
         })
     }
-
-    // getAllPriority() {
-    //     this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.priorityList = res;
-    //     })
-    // }
-
+ 
 
     getMultiplePartsNumbers() {
         this.workOrderService.getMultipleParts().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -348,20 +235,12 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
 
 
     async getPartNosByCustomer(customerId, workOrderId) {
-        // this.partNumberOriginalData = null;
-        //this.workOrderService.getPartNosByCustomer(customerId).subscribe(res => {
-        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+       await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 
             this.partNumberOriginalData = res;
         });
     }
-
-    // getLegalEntity() {
-    //     this.commonService.getLegalEntityList().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-    //         this.legalEntityList = res;
-    //     })
-
-    // }
+ 
 
 
     getConditionsList() {
