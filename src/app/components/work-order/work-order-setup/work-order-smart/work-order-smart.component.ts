@@ -23,6 +23,7 @@ export class WorkOrderSmartComponent implements OnInit {
     @Input() subWoMpnGridUpdated;
     @Input() conditionListfromSubWo;
     @Input() setSubMPNDropDown: boolean = false;
+    @Input() isView:boolean=false;
     creditTerms: any;
     employeesOriginalData: any;
     techStationList: any;
@@ -80,6 +81,7 @@ export class WorkOrderSmartComponent implements OnInit {
 
         if (this.isSubWorkOrder) {
             this.subWorkOrderId = this.subWorkOrderId;
+            this.isView=this.isView;
         } else {
             this.workOrderId = this.acRouter.snapshot.params['id'];
             this.recCustomerId = this.acRouter.snapshot.params['rcustid'];

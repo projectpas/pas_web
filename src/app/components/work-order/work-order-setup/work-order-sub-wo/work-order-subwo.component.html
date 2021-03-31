@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header" *ngIf="!isView">
   <div class="row">
       <div class="col">
           <h4 class="header-name"> {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>
@@ -69,12 +69,12 @@
             <div class="form-group">
               <label for="opendate">Sub WO Open Date </label>
               <span class="clr-red">*</span>
-              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required [disabled]="isView"
                 [(ngModel)]="subWorkOrderGeneralInformation.openDate"></p-calendar>
             </div>
           </div>
         </div>
-        <div>
+        <div *ngIf="!isView">
           <button class="btn btn-primary pull-right" *ngIf="!isEdit" type="button" [disabled]="!subWoHeader.valid"
             (click)="saveSubWorkOrder()">
             Save
@@ -165,7 +165,7 @@
                   #estimatedCompletionDate="ngModel" [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required
                   [disabled]="isView" appendTo="body">
                 </p-calendar>
-              </td>
+              </td> 
               <td>
                 <p-calendar [showIcon]="true" class="calender-cstm" name="estimatedShipDate{{i}}"
                   [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.customerRequestDate"
@@ -276,7 +276,7 @@
           </tbody>
         </table>
       </div>
-      <div>
+      <div *ngIf="!isView">
         <button class="btn btn-primary pull-right" *ngIf="!activeGridUpdateButton" type="button"
           [disabled]="!workOrderForm.valid" (click)="saveSubWorkOrderParts()">
           Save
@@ -291,7 +291,7 @@
   <div
     *ngIf="subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
     <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState" (setSubMPNDropDown)="subMPNDropDownUpdate($event)" [subWoMpnGridUpdated]="mpnGridUpdated"
-      [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu"
+      [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu" [isView]="isView"
       [subWorkOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"
       [conditionListfromSubWo]="conditionList"></app-work-order-smart>
   </div>

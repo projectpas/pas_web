@@ -16,6 +16,10 @@ import { Location } from '@angular/common';
 })
 /** WorkOrderShipping component*/
 export class SubWorkOrderComponent implements OnInit {
+    @Input() isView: boolean = false;
+    @Input() subWorkOrderIdForView;
+    @Input() workOrderIdForView;
+    @Input() mpnIdForView;
     issubWorkOrderState: Boolean = true;
     subWorkOrderHeader: any;
     workOrderDetails: any;
@@ -42,7 +46,7 @@ export class SubWorkOrderComponent implements OnInit {
     isSavedPartNumbers: boolean;
     addToExisting: any;
     mpnGridUpdated: boolean = false;
-    isView: boolean;
+    // isView: boolean;
     tearDownReportList: any;
     quantityValue:any=1;
     constructor(private router: Router,
@@ -72,6 +76,11 @@ export class SubWorkOrderComponent implements OnInit {
         this.mpnId = parseInt(queryParamsData.mpnid);
         // this.workOrderDetails = queryParamsData;
         console.log("sub work order id", this.subWorkOrderId)
+        if(this.subWorkOrderIdForView){
+            this.subWorkOrderId=this.subWorkOrderIdForView;
+            this.workOrderId=this.workOrderIdForView;
+            this.mpnId=this.mpnIdForView;
+        }
         if (this.subWorkOrderId != 0) {
             this.isEdit = true;
             this.showTabsGrid = true;
