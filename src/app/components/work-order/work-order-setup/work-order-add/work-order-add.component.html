@@ -379,7 +379,7 @@
                                   
                                      <th colspan="2">TAT (Days)</th>
                                     <th rowspan="2" colspan="4">Management Structure </th>
-                                    <th rowspan="2" class="table-column-icon-width">Action</th>
+                                    <th rowspan="2" class="table-column-icon-width"  *ngIf="!isView">Action</th>
                                 </tr>
                                 <tr>
                                     <th style="min-width:60px !important">PMA</th>
@@ -595,8 +595,7 @@
                                         <span *ngIf="!workOrderGeneralInformation.isSinglePN " class="delete-row-btn" >
                                              <button type="button" class="btn nobg btn-delete-cstm" (click)="openDelete(content,i)"  [disabled]="quotestatusofCurrentPart =='Approved' || workOrderPartNumber==false" matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
-                                            </button> </span>
-             
+                                            </button> </span> 
                                         <span *ngIf="workOrderGeneralInformation.isSinglePN ">
                                          
                                             <button type="button" class="btn nobg btn-delete-cstm" disabled>
@@ -799,7 +798,7 @@
                             (click)="gridTabChange('shipping')">Shipping</a>
                     </li>
                     <li class="nav-item" *ngIf="!isSubWorkOrder">
-                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === ' '}"
+                        <a id="pills-contact-tab" role="tab" [ngClass]="{active : gridActiveTab === 'subWO'}"
                             (click)="gridTabChange('subWO')">Sub-WO</a> 
                     </li>
                     <li class="nav-item">
@@ -847,18 +846,18 @@
             </ul> 
             <br>
             <div *ngIf="isWorkOrderMainView && mainWorkOrderId !=0" [ngClass]="{hidedata :  gridActiveTab !== 'workOrderMain' }">
-                 <app-work-view-component [workOrderId]="mainWorkOrderId"></app-work-view-component>
+                 <app-work-view-component [workOrderId]="mainWorkOrderId"></app-work-view-component>  
               </div>  
             <div [ngClass]="{hidedata :  subTabWorkFlow !== 'createworkFlow' }">
              </div> 
-
-            <div *ngIf="workFlowId && subTabWorkFlow && editWorkFlowData"
+             <!-- && editWorkFlowData -->
+            <div *ngIf="workFlowId && subTabWorkFlow == 'editworkFlow'"
                 [ngClass]="{hidedata: subTabWorkFlow !== 'editworkFlow' }">
                 <wf-create [isWorkOrder]="isWorkOrder" [workOrderPartNumberId]="workOrderPartNumberId"
                     [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData" [workFlowId]="workFlowId"
                     (savedWorkFlowWorkOrderData)="savedWorkFlowData($event)"> </wf-create>
             </div>
-            <div *ngIf="workFlowId && subTabWorkFlow " class="wf-label-cstm"
+            <div *ngIf="workFlowId && subTabWorkFlow == 'viewworkFlow'" class="wf-label-cstm"
                 [ngClass]="{hidedata :  subTabWorkFlow !== 'viewworkFlow' }">
                 <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
                     [workFlowId]="workFlowId"></app-workflow-list>
@@ -968,7 +967,7 @@
                     (saveChargesListForWO)="saveWorkOrderChargesList($event)"  
                     (saveChargesListDeletedStatus)="getChargesDeletedStatus($event)" 
                     
-                    (updateChargesListForWO)="updateWorkOrderChargesList($event)" [taskList]="taskList"
+                    (updateChargesListForWO)="updateWorkOrderChargesList($event)"
                     (refreshData)="getChargesListByWorkOrderId()" [isView]="isView || isViewForApprovedPart"></app-work-order-charges>
             </div>
 
@@ -986,7 +985,7 @@
                 <app-work-order-freight  (saveFreightsListDeletedStatus)="getFreightssDeletedStatus($event)"  [freightForm]="freight" [workOrderFreightList]="workOrderFreightList" [isSubWorkOrder]="isSubWorkOrder" [subWOPartNoId]="subWOPartNoId" [subWorkOrderDetails]="subWorkOrderDetails"
                     [savedWorkOrderData]="savedWorkOrderData" (saveFreightListForWO)="saveWorkOrderFreightsList($event)"
                     (updateFreightListForWo)="updateWorkOrderFreightsList($event)"
-                    (refreshData)="getFreightListByWorkOrderId()" [taskList]="taskList" [isView]="isView || isViewForApprovedPart">
+                    (refreshData)="getFreightListByWorkOrderId()"   [isView]="isView || isViewForApprovedPart">
                 </app-work-order-freight>
             </div>
 

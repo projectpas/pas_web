@@ -49,10 +49,10 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     getActive(){
         this.disableUpdate=false;
       }
-    ngOnInit(): void {
-        this.loadAllVendors();
+    ngOnInit(): void { 
+        this.loadAllVendors(); 
         if (this.isWorkOrder) {
-            this.row = this.workFlow.charges[0];
+            this.row = this.workFlow.charges[0]; 
             if (this.isEdit) {
                 this.workFlow.charges = [];
                 const data = {
@@ -137,10 +137,27 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         if (this.UpdateMode) {
             this.reCalculate();
         }
-        if (!this.isWorkFlow) {
-            this.workFlow.charges = [];
+        if (!this.isWorkFlow && !this.isWorkOrder) {
+            this.workFlow.charges = []; 
             this.addRow();
         }
+        if (this.isWorkOrder) {
+            this.row = this.workFlow.charges[0]; 
+            if (this.isEdit) {
+                this.workFlow.charges = [];
+                const data = {
+                    ...this.editData,
+
+                    vendorId: this.editData.vendorId,
+                    vendorName: this.editData.vendorName, vendor: {
+                        vendorId: this.editData.vendorId,
+                        vendorName: this.editData.vendorName
+                    }
+                } 
+                this.workFlow.charges.push(data);
+                // this.reCalculate()
+                this.disableUpdate=true;
+            }}
     }
 
     reCalculate() {

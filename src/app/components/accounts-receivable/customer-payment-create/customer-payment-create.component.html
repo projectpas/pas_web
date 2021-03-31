@@ -1,0 +1,305 @@
+<div class="right_col" role="main">
+    <div class="x_content">
+        <div class="card new-card">
+            <div class="card-header header">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="header-name">Customer Receipt Information
+                            <!--  <button class="btn-sm header-button header-button-alignment"
+                                (click)="toggle_po_header=!toggle_po_header">
+                                {{toggle_po_header ? 'Collapse' : 'Expand'}}
+                            </button>-->
+                        </h4>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
+                            matTooltip="Customer Payment List"
+                            [routerLink]="['/accountreceivable/accountreceivablepages/app-customer-payment-list']">
+                            Customer Payment List
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-controls m-t-0">
+                <form #newSalesQuoteForm="ngForm" class="form-horizontal">
+                    <div class="card new-sales-card" *ngIf="toggle_po_header">
+                        <div class="mb-2">
+                            <div class="form-row">
+                                <div class="col-md-6 main_ar">
+                                    <div class="form-row">
+                                        <div class="col-md-6 padding-10">
+                                            <div class=" form-group">
+                                                <label for="receiptId">Receipt ID <span class="clr-red">*</span></label>
+                                                <input type="text" class="form-control" name="salesOrderNumber"
+                                                    [(ngModel)]=" customerPayment.receiptId" [disabled]="true"
+                                                    #receiptId="ngModel" id="receiptId" />
+                                                <div *ngIf="receiptId.invalid && (receiptId.dirty || receiptId.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="receiptId.errors.required">
+                                                        <small> Receipt Id is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group padding-top-5">
+                                                <label>Bank Name </label>
+                                                <input type="text" class="form-control" name="bankName"
+                                                    [(ngModel)]=" customerPayment.bankName" #bankName="ngModel"
+                                                    id="bankName" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Bank Acct Num</label>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]=" customerPayment.bankAcctNum" name="bankAcctNum" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Deposit Date</label>
+                                                <p-calendar name="depositDate" [yearNavigator]="true"
+                                                    [monthNavigator]="true" yearRange="1900:2100"
+                                                    [(ngModel)]=" customerPayment.openDate" [showIcon]="true" id="depositDate"
+                                                    #depositDate="ngModel" (onSelect)="onChangeOpenDate()">
+                                                </p-calendar>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Accting Period</label>
+                                                <select name="acctingPeriod" [(ngModel)]=" customerPayment.acctingPeriod"
+                                                    id="acctingPeriod" #acctingPeriod="ngModel">
+                                                    <option *ngFor="let item of accntPriodList"
+                                                        [ngValue]="item.value">
+                                                        {{ item.label }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select [(ngModel)]=" customerPayment.status"
+                                                    name="status" (change)="getDepartmentId( customerPayment.status)"
+                                                    (ngModelChange)="enableHeaderSave()">
+                                                    <option value="0">Select</option>
+                                                    <option *ngFor="let name of statusList" [ngValue]="name.value">
+                                                        {{name.label}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 padding-10">
+                                            <div class="form-group">
+                                                <label for="amount">Amount <span class="clr-red">*</span></label>
+                                                <input type="text" class="form-control text-right" [ngModel]=" customerPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                                                    name="amount" #amount="ngModel" />
+                                                <div *ngIf="amount.invalid && (amount.dirty || amount.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="amount.errors.required">
+                                                        <small> Account is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Amt Applied</label>
+                                                <input type="text" class="form-control text-right"
+                                                    [ngModel]=" customerPayment.amtApplied | twoDecimalGlobalNumberFormatPipe" name="amtApplied"
+                                                    #amtApplied="ngModel" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Amt Remaining</label>
+                                                <input type="text" class="form-control text-right"
+                                                    [ngModel]=" customerPayment.amtRemaining | twoDecimalGlobalNumberFormatPipe" name="amtRemaining"
+                                                    #amtRemaining="ngModel" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Reference</label>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]=" customerPayment.reference" name="reference" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Cntrl Num</label>
+                                                <input type="text" class="form-control text-right" name=" cntrlNum"
+                                                    [ngModel]=" customerPayment.cntrlNum"
+                                                    (ngModelChange)=" customerPayment.cntrlNum=$event" [disabled]="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 main_ar">
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <div class="card m-t-20" style="margin-bottom: 5px;">
+                                                    <div class="card-header mgmt-card-header">
+                                                        <h5 class="mgmt-label">Management
+                                                            Structure <span class="clr-red">*</span></h5>
+                                                    </div>
+                                                    <div class="card-body mgmt-card-body">
+                                                        <div class="form-group">
+                                                            <select
+                                                                [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''"
+                                                                 name="primaryCompany"
+                                                                [(ngModel)]=" customerPayment.companyId"
+                                                                (change)="getBUList( customerPayment.companyId); checkValidOnChange( customerPayment.companyId, 'companyId');"
+                                                                #mCompanyName (ngModelChange)="enableHeaderSave()"
+                                                                required>
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of maincompanylist"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                            <div *ngIf="mCompanyName.invalid && (mCompanyName.dirty || mCompanyName.touched)"
+                                                                class="alert alert-danger alert-danger-cstm">
+                                                                <div *ngIf="mCompanyName.errors.required">
+                                                                    <small> Company Name is required </small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select [(ngModel)]=" customerPayment.buId" name="primaryBU"
+                                                                (change)="getDivisionlist( customerPayment.buId)"
+                                                                (ngModelChange)="enableHeaderSave()">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of bulist"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select [(ngModel)]=" customerPayment.divisionId"
+                                                                name="primaryDivision"
+                                                                (change)="getDepartmentlist( customerPayment.divisionId)"
+                                                                (ngModelChange)="enableHeaderSave()">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of divisionlist"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select [(ngModel)]=" customerPayment.departmentId" name="primaryDept"
+                                                                (change)="getDepartmentId( customerPayment.departmentId)"
+                                                                (ngModelChange)="enableHeaderSave()">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of departmentList"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Open Date</label>
+                                                    <p-calendar name="OpenDate" [yearNavigator]="true"
+                                                        [monthNavigator]="true" yearRange="1900:2100"
+                                                        [(ngModel)]=" customerPayment.OpenDate" [showIcon]="true"
+                                                        id="OpenDate" #OpenDate="ngModel" required
+                                                        (onSelect)="onChangeOpenDate()">
+                                                    </p-calendar>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 padding-10">
+                                            <div class="form-group">
+                                                <label>Employee<span class="clr-red">*</span></label>
+                                                <p-autoComplete class="autocomp-customer-cstm" name="employeeId"
+                                                    [(ngModel)]=" customerPayment.employeeId" [suggestions]="firstCollection"
+                                                    [forceSelection]="true" #employeeId="ngModel"
+                                                    emptyMessage="No Match Found" field="label"
+                                                    (completeMethod)="filterfirstName($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true" required>
+                                                </p-autoComplete>
+                                                <div *ngIf="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="employeeId.errors.required">
+                                                        <small> Employee is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group memo-popup-cstm">
+                                                <label>
+                                                    Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                        data-target="#add-description" matTooltipPosition="above"
+                                                        matTooltip="Add Memo" (click)="onAddDescription('memo')"></i>
+                                                </label>
+                                                <span>
+                                                    <div class="form-group memo-popup-cstm">
+                                                        <div [innerHTML]=" customerPayment.memo"
+                                                            [matTooltip]="parsedText( customerPayment.memo)"
+                                                            matTooltipPosition="above" class="form-control"
+                                                            style="height: 100px !important; width:100%"
+                                                            class="text_editor_box">
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Posted Date</label>
+                                                <p-calendar name="postedDate" [yearNavigator]="true"
+                                                    [monthNavigator]="true" yearRange="1900:2100"
+                                                    [(ngModel)]=" customerPayment.postedDate" [showIcon]="true"
+                                                    id="postedDate" #OpenDate="ngModel" required
+                                                    (onSelect)="onChangeOpenDate()">
+                                                </p-calendar>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
+                                [disabled]="!newSalesQuoteForm.form.valid"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Submit
+                            </button>
+                            <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
+                                [disabled]="enableUpdateButton" (click)="onSubmit(true)"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
+            </div>
+            <div class="modal-body">
+                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
+                </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+                        (click)="onSaveDescription()">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #errorMessagePop let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
+        <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
+    </div>
+    <div class="modal-body">
+        <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
+    </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

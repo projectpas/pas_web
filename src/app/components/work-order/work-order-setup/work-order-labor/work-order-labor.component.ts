@@ -1363,4 +1363,30 @@ this.commonfunctionHandler();
     }
       }
 
+
+    //   getTaskList() {  
+    //     this.setEditArray=[]; 
+ 
+    //     if(this.isEdit){
+    //       this.setEditArray.push(this.editData.taskId ? this.editData.taskId : 0);
+    //     }else{
+    //       this.setEditArray.push(0)
+    //     }
+    //     const strText = '';
+    //     this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true,  0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+    //      this.taskList = res.map(x => {
+    //             return {
+    //                 id: x.value,
+    //                 description: x.label.toLowerCase(),
+    //                 taskId: x.value,
+    //                 label:x.label.toLowerCase(),
+    //             }
+    //         });
+    
+    //     },
+    //         err => { 
+    //         })
+    // }
+
+
 }
