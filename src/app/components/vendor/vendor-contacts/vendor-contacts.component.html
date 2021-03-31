@@ -283,7 +283,7 @@
                                   </div>
                                   <div *ngIf="currentDeletedstatus==true">
                                     <ng-container *ngIf="!isViewMode">
-                                      <span *ngIf="isEdit"
+                                      <span *ngIf="isEdit">
                                           <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ rowIndex }}" matTooltip="Active" 
                                           matTooltipPosition="above" onLabel="on" [disabled]="true" offLabel="off" 
                                           [(ngModel)]="rowData['isActive']">
