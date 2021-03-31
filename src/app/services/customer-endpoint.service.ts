@@ -164,6 +164,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _internationalShipViaByShippingIdList: string = '/api/Customer/getinternationalshippingviadetails';
     private readonly _customerContacATAHistory: string = '/api/Customer/getCustomerATAMappedAudit'
     private readonly _customerInvoiceSearch: string = environment.baseUrl + "/api/customer/SearchCustomerInvoice";
+    private readonly _getOpenInvoiceList: string = environment.baseUrl + "/api/customer/GetOpenInvoiceList";
 
     get globalSearch() { return this.configurations.baseUrl + this.getGlobalCustomer; }
     get paginate() { return this.configurations.baseUrl + this.getCustomer; }
@@ -1618,6 +1619,13 @@ export class CustomerEndpoint extends EndpointFactory {
         return this.http.post(this._customerInvoiceSearch, params, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.customerInvoiceSearch(customerInvoiceSearchParameters));
+            });
+    }
+
+    getOpenInvoiceList(): Observable<any> {
+        return this.http.get(this._getOpenInvoiceList)
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getOpenInvoiceList());
             });
     }
 }

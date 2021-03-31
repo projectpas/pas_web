@@ -49,7 +49,7 @@
                 <div class="form-group">
                     <label>
                         Site Name <span class="clr-red">*</span>
-                        <span style="margin-left:3px;cursor:pointer;"><a *ngIf="sourcePoApproval.billToUserId"
+                        <span class="circle-span"><a *ngIf="sourcePoApproval.billToUserId"
                                 class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above"
                                 data-toggle="modal" data-target="#createBillingSiteName"
                                 (click)="onClickBillSiteName('Add')"></a></span>
@@ -59,7 +59,7 @@
                             data-toggle="modal" data-target="#createBillingSiteName"
                              (click)="onClickBillSiteName('Edit', sourcePoApproval)"></a></span> -->
 
-                        <span style="margin-left:0px;cursor:pointer;"><a class="btn nobg" matTooltipPosition="above"
+                        <span class="pencil-span"><a class="btn nobg" matTooltipPosition="above"
                                 matTooltip="Edit Site Name"
                                 *ngIf="sourcePoApproval.billToUserId && sourcePoApproval.billToSiteId > 0"
                                 data-toggle="modal" data-target="#createBillingSiteName"
@@ -200,7 +200,7 @@
                 <div class="form-group">
                     <label>
                         Site Name <span class="clr-red">*</span>
-                        <span style="margin-left:3px;cursor:pointer;"><a *ngIf="sourcePoApproval.shipToUserId"
+                        <span class="circle-span"><a *ngIf="sourcePoApproval.shipToUserId"
                                 class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above"
                                 data-toggle="modal" data-target="#createPOSiteName"
                                 (click)="onClickShipSiteName('Add')"></a></span>
@@ -210,7 +210,7 @@
                             data-toggle="modal" data-target="#createPOSiteName" 
                             (click)="onClickShipSiteName('Edit',sourcePoApproval)"></a></span> -->
 
-                        <span style="margin-left:0px;cursor:pointer;"><a class="btn nobg"
+                        <span class="pencil-span"><a class="btn nobg"
                                 *ngIf="sourcePoApproval.shipToUserId && sourcePoApproval.shipToSiteId > 0"
                                 matTooltip="Edit Site Name" matTooltipPosition="above" data-toggle="modal"
                                 data-target="#createPOSiteName"
@@ -309,7 +309,7 @@
                     <div class="form-group">
                         <label>
                             Ship Via <span class="clr-red">*</span>
-                            <span style="margin-left:3px;cursor:pointer;"><a *ngIf="sourcePoApproval.shipToUserId"
+                            <span class="circle-span"><a *ngIf="sourcePoApproval.shipToUserId"
                                     class="fa fa-plus-circle fa-lg" matTooltip="Add Ship Via" matTooltipPosition="above"
                                     data-toggle="modal" data-target="#shipToShipVia"
                                     (click)="onEditShipVia('Add',0)"></a></span>
@@ -319,7 +319,7 @@
                                data-toggle="modal" data-target="#shipToShipVia" 
                                (click)="onEditShipVia('Edit',sourcePoApproval.shippingViaId)"></a></span> -->
 
-                            <span style="margin-left:0px;cursor:pointer;"><a class="btn nobg"
+                            <span class="pencil-span"><a class="btn nobg"
                                     *ngIf="sourcePoApproval.shipToUserId && sourcePoApproval.shippingViaId > 0"
                                     matTooltip="Edit Ship Via" matTooltipPosition="above" data-toggle="modal"
                                     data-target="#shipToShipVia"
@@ -624,8 +624,8 @@
                                                 matTooltipPosition="above"
                                                 (click)="onAddShipMemo()"></i>        -->
 
-                                    <i class="fa fa-pencil btn nobg pull-right"
-                                        style="margin-top:-25px;margin-right:-29px" data-toggle="modal"
+                                    <i class="fa fa-pencil btn nobg pull-right pencil-margin"
+                                        data-toggle="modal"
                                         data-target="#ship-via-memo" matTooltip="Memo" matTooltipPosition="above"
                                         (click)="onAddShipMemo()"></i>
                                 </div>

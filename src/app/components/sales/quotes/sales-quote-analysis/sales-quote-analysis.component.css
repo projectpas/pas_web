@@ -36,3 +36,6 @@ overflow: hidden;
 .label{
     margin-right:0px !important;
 }
+.margin-0{
+    margin: 0 !important;
+}

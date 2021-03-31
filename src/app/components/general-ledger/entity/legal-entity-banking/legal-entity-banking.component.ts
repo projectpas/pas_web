@@ -265,7 +265,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				setTimeout(() => {
 					this.CountryData(res[0].country)
 					this.glList();
-				}, 200)					
+				}, 500)					
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -326,7 +326,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				}
 				setTimeout(() => {				
 					this.glList();
-				}, 200)	
+				}, 500)	
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -359,7 +359,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				}
 				setTimeout(() => {				
 					this.glList();
-				}, 200)	
+				}, 500)	
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -974,7 +974,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			this.auditHistoryHeaders = [
 				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
-				{ header: 'Benficiary Bank Name', field: 'beneficiaryBankName' },
+				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
 				{ header: 'Bank Account Number', field: 'accountNumber' },
 				{ header: 'ABA Number', field: 'aba' },
 				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
