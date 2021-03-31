@@ -41,6 +41,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     overAllMarkup: any;
     costPlusType: number = 0;
     modal: NgbModalRef;
+    isSpinnerVisible: boolean = false;
     cols = [
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
         { field: 'weight', header: 'Weight' ,isRequired:false,width:"60px"},
@@ -424,9 +425,11 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.disableFrt=false;
         }
         else {
+            this.isSpinnerVisible = true;
             const workOrderFreightId  = this.isSubWorkOrder ? this.currentRow.subWorkOrderFreightId :this.currentRow.workOrderFreightId;
             this.workOrderService.deleteWorkOrderFreightList(workOrderFreightId, this.userName,this.isSubWorkOrder).subscribe(res => {
                 this.refreshData.emit();
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     '',
                     'Deleted WorkOrder Freight Successfully',
@@ -561,8 +564,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         const table= this.isSubWorkOrder ? 'SubWorkOrderFreight':'WorkOrderFreight';
         const columnId=this.isSubWorkOrder ? 'SubWorkOrderFreightId':'WorkOrderFreightId';
         const currentId=this.isSubWorkOrder ? this.restorerecord.subWorkOrderFreightId :this.restorerecord.workOrderFreightId
+        this.isSpinnerVisible= true
       this.commonService.updatedeletedrecords(table, columnId, currentId).subscribe(res => {
         this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
+        this.isSpinnerVisible= false
           this.modal.close();
           this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
       });
