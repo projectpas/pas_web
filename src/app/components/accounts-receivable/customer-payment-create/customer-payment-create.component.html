@@ -243,7 +243,7 @@
                             <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
                                 [disabled]="!newSalesQuoteForm.form.valid"
                                 class="btn pull-right submit-btn btn btn-primary">
-                                Submit
+                                Save
                             </button>
                             <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
                                 [disabled]="enableUpdateButton" (click)="onSubmit(true)"
