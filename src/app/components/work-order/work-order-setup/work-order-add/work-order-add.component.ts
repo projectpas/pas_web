@@ -1829,7 +1829,7 @@ setTimeout(() => {
         return this.result;
     }
 
-    saveReservedPartorIssue(alternatePartData) {
+    saveReservedPartorIssue(alternatePartData) { 
         if (this.isSubWorkOrder == true) {
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.alertService.showMessage(
