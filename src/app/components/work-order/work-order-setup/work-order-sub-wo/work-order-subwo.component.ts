@@ -54,7 +54,7 @@ export class SubWorkOrderComponent implements OnInit {
     expertiseTypeList: any = [];
     technicianByExpertiseTypeList: any = [];
     technicianList: any = [];
-    techStationList: any = [];
+    techStationList: any = []; 
     constructor(private router: Router,
         private commonService: CommonService,
         private acRouter: ActivatedRoute,
@@ -260,7 +260,7 @@ export class SubWorkOrderComponent implements OnInit {
             })
         }
     }
-    saveSubWorkOrderParts() {
+    saveSubWorkOrderParts() {  
         const subWorkOrder = this.subWorkOrderPartNumbers;
         subWorkOrder.map((x, index) => {
             if (this.activeGridUpdateButton == true) {

@@ -119,7 +119,9 @@
               <th rowspan="2">NTE</th>
               <th rowspan="2">Controller No</th>
               <th rowspan="2">Controller Id</th>
-              <th colspan="2">Restrictions</th>
+              <th rowspan="2"> PMA</th>
+              <th rowspan="2">  DER</th>
+              <!-- <th colspan="2">Restrictions</th> -->
          
               <!-- <th rowspan="2" style="display:none">Tear Down Report</th> -->
             </tr>
@@ -291,7 +293,7 @@
   </div>
   <div
     *ngIf="subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
-    <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState" (setSubMPNDropDown)="subMPNDropDownUpdate($event)" [subWoMpnGridUpdated]="mpnGridUpdated"
+    <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState"   [subWoMpnGridUpdated]="mpnGridUpdated"
       [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu" [isView]="isView"
       [subWorkOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"
       [conditionListfromSubWo]="conditionList"></app-work-order-smart>

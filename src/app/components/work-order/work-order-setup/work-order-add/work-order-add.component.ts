@@ -376,14 +376,14 @@ setTimeout(() => {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.subWoMpnGridUpdated) {
             this.subWoMpnGridUpdated = changes.subWoMpnGridUpdated.currentValue;
-            if (this.subWoMpnGridUpdated == true) {
+             if (this.subWoMpnGridUpdated == true) {
                 this.dropdownlistSubWoMpn();
             }
         }
-        if (changes.workorderSettings) {
+         if (changes.workorderSettings) {
             this.workorderSettings = this.workorderSettings;
         }
-
+        
         if (this.workOrderGeneralInformation && this.workOrderGeneralInformation.creditLimit) {
             this.workOrderGeneralInformation.creditLimit = (this.workOrderGeneralInformation.creditLimit) ? formatNumberAsGlobalSettingsModule(this.workOrderGeneralInformation.creditLimit, 2) : '0.00';
         }
