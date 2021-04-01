@@ -470,30 +470,25 @@ private defaultEmployeeDetails= new Subject<any>()
         return isAllowed;
       }
 
-      public ShowTab(moduleName:string, tabName: string):Boolean {
-        let Menus= this.getModuleByUserRole();
-        //alert(Menus);
+      public ShowTab(moduleName:string, tabName: string):Boolean {         
+        let Menus = this.getModuleByUserRole();
         tabName = tabName.toLocaleLowerCase();
-         let isAllowed:Boolean = false;
-
-         if(this.currentUser.userName!='admin'){
-        var parentModule=Menus.filter(function(value){
-            return value.Name==moduleName;
-        });
-
-        if(parentModule!=undefined){
-           
-            Menus.forEach(el => {
-                if(el.ParentID==parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3))
-                {
-                  isAllowed = true;
-                }
-              });
+        let isAllowed:Boolean = false;
+        if(this.currentUser.userName!='admin'){
+            var parentModule = Menus.filter(function(value){
+                return value.Name == moduleName;
+            });
+            if(parentModule!=undefined && parentModule.length > 0){           
+                Menus.forEach(el => {
+                    if(el.ParentID == parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3)){                    
+                        isAllowed = true;
+                    }
+                });
+            }
         }
-    }
-    else{
-        isAllowed=true;
-    }
+        else {
+            isAllowed=true;
+        }
         return isAllowed;
       }
 }

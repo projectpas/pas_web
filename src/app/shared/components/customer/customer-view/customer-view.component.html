@@ -38,7 +38,7 @@
          </button> 
     </div>
     <div class="panel-group mt-2" id="accordion">
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isGeneralInforView">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <div></div>
@@ -420,7 +420,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isContactView">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
@@ -435,7 +435,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isAircraftInfoView">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
@@ -450,7 +450,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isATAInfo">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step4">ATA Info</a>
@@ -557,7 +557,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isFinancialInfo">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step5">Financial Info</a>
@@ -868,7 +868,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isBillingInformation">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
@@ -883,7 +883,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isShippingInformation">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
@@ -899,7 +899,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" *ngIf="isSalesPersonAgentInfo">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step8">Sales Person/Agent Info</a>
@@ -963,7 +963,8 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-default">
+
+        <div class="panel panel-default" *ngIf="isWarningInfo">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step9">Warnings</a>
@@ -1067,7 +1068,8 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-default">
+
+        <div class="panel panel-default" *ngIf="isDocumentInfo">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>

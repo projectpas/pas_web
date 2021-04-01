@@ -10,6 +10,8 @@ import { LocalStoreManager } from '../../../../services/local-store-manager.serv
 import { DBkeys } from '../../../../services/db-Keys';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
+import { AuthService } from '../../../../services/auth.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-view',
@@ -161,14 +163,37 @@ export class CustomerViewComponent implements OnInit {
     globalSettings: any = {};
     global_lang: string;
     auditHistoryATA: any;
+    isGeneralInforView:boolean=true;  
+    isContactView:boolean=true; 
+    isAircraftInfoView:boolean=true; 
+    isATAInfo:boolean=true;
+    isFinancialInfo:boolean=true; 
+    isBillingInformation:boolean=true; 
+    isShippingInformation:boolean=true;
+    isSalesPersonAgentInfo:boolean=true;
+    isWarningInfo:boolean=true;
+    isDocumentInfo:boolean=true;
     constructor(public customerService: CustomerService, private commonService: CommonService,
-         private activeModal: NgbActiveModal,
-          private configurations: ConfigurationService,
-           public employeeService: EmployeeService,
+        private activeModal: NgbActiveModal,
+        private configurations: ConfigurationService,
+        public employeeService: EmployeeService,
         private localStorage: LocalStoreManager,
         private alertService: AlertService,
         private modalService: NgbModal,
-    ) {}
+        private authService: AuthService
+    ) {
+        this.isGeneralInforView = this.authService.checkPermission([ModuleConstants.Customers_GeneralInformation+'.'+PermissionConstants.View]);
+        this.isContactView = this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.View]);
+        this.isAircraftInfoView = this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.View]);
+        this.isATAInfo = this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.View]);
+        this.isFinancialInfo = this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.View]);
+        this.isBillingInformation = this.authService.checkPermission([ModuleConstants.Customers_BillingInformation +'.'+PermissionConstants.View]);
+        this.isShippingInformation = this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation +'.'+PermissionConstants.View]);        
+        this.isSalesPersonAgentInfo = this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation +'.'+PermissionConstants.View]);
+        this.isWarningInfo = this.authService.checkPermission([ModuleConstants.Customers_Warnings +'.'+PermissionConstants.View]);
+        this.isDocumentInfo = this.authService.checkPermission([ModuleConstants.Customers_Documents +'.'+PermissionConstants.View]);
+    }
+
     ngOnInit(): void {
 
         this.customerContactsColumns = [
@@ -210,12 +235,14 @@ export class CustomerViewComponent implements OnInit {
             this.isSpinnerVisible = false;
         })
     }
-    this.isSpinnerVisible = false;
+    //this.isSpinnerVisible = false;
     }
+
     getGlobalSettings() {
         this.globalSettings = this.localStorage.getDataObject<any>(DBkeys.GLOBAL_SETTINGS) || {};
         this.global_lang = this.globalSettings.cultureName;
     }
+
     formatCreditLimit(val){
         if(val){
             if(isNaN(val) ==  true){
@@ -226,9 +253,11 @@ export class CustomerViewComponent implements OnInit {
         }
         
     }
+
     pageIndexChange(event) {
         this.pageSize = event.rows;
     }
+
     pageIndexChange1(event) {
         this.pageSize = event.rows;
     }
@@ -296,8 +325,8 @@ export class CustomerViewComponent implements OnInit {
     }
 
     async getInternationalShippingByCustomerId(customerId) {
-        await this.customerService.getInternationalShippingByCustomerId(customerId).subscribe(res => {
-            this.internationalShippingData = res.paginationList || [];
+        await this.customerService.getInternationalShippingByCustomerId(customerId).subscribe(res => {           
+            this.internationalShippingData = res.paginationList || [];            
         }, err => {
         })
     }
@@ -330,20 +359,16 @@ export class CustomerViewComponent implements OnInit {
     async getMappedTaxTypeRateDetails(customerId) {
         await this.customerService.getMappedTaxTypeRateDetails(customerId, this.currentDeletedstatus).subscribe(res => {
             this.taxTypeRateMapping = res || [];
-
         })
     }
 
     getCustomerRestrictedPMAByCustomerId(customerId) {
-
         this.commonService.getRestrictedPartsWithDesc(1, customerId, 'PMA', this.currantDeletedStatusPMA).subscribe(res => {
             this.restrictedPMAParts = res || [];
         })
     }
 
-
     getCustomerRestrictedDERByCustomerId(customerId) {
-
         this.commonService.getRestrictedPartsWithDesc(1, customerId, 'DER', this.currantDeletedStatusDER).subscribe(res => {
             this.restrictedDERParts = res || [];
         })
@@ -370,7 +395,6 @@ export class CustomerViewComponent implements OnInit {
     }
 
     async getCustomerClassificationByCustomerId(customerId) {
-
         await this.customerService.getCustomerClassificationMapping(customerId).subscribe(res => {
             this.viewDataclassification = res.map(x => x.description + ' ');
         });

@@ -257,7 +257,7 @@ export class EditUserRolesComponent implements OnInit {
             case 1:
                 val.rolePermission.canAdd = value;
                 break;
-            case 2:
+            case 2:                
                 val.rolePermission.canView = value;
                 break;
             case 3:
@@ -322,8 +322,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
-        var value = event.target.checked;
-        
+        var value = event.target.checked;        
         if (value == false) {
             this.setPermissionByType(currentModule, type, value);
             if (currentModule.parentId != null)
@@ -488,9 +487,9 @@ export class EditUserRolesComponent implements OnInit {
     UpdateUserRole(): void {
         this.isSpinnerVisible=true;
         this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
-            x.userRoleId=this.currentUserRole.id;
+            x.userRoleId = this.currentUserRole.id;
             return x;
-        })
+        })        
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);
