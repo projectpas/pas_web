@@ -271,7 +271,7 @@
                   ><i class="fa fa-map" style="color: red;"></i
                 ></a>
               </span> -->
-              <span
+              <span *ngIf="isDocumentview"
                 ><a
                   class="btn nobg"
                   (click)="openDocumentsList(documentsContent, rowData)"

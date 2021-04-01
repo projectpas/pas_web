@@ -446,13 +446,13 @@ export class CustomerEndpoint extends EndpointFactory {
             });
     }
 
-    getInternationalShippingByCustomerId<T>(customerId) {
-       
-        return this.http.get<T>(`${this.InternationalShippingList}?customerId=${customerId}`)
+    getInternationalShippingByCustomerId(customerId) {
+        let url = `${this.InternationalShippingList}?customerId=${customerId}`;
+        return this.http.get<any>(url,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getInternationalShippingByCustomerId(customerId));
             });
-    }
+    }   
 
     postInternationalShippingPost<T>(postData): Observable<T> {
         return this.http.post<T>(this.InternationalShippingPost, JSON.stringify(postData), this.getRequestHeaders())
