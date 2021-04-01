@@ -51,11 +51,11 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     auditHistoryHeaders = [
         { field: 'taskName', header: 'Task',isRequired:false },
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Gl Account Name',isRequired:false },
-        { field: 'uom', header: 'Description',isRequired:false },
-        { field: 'length', header: 'Qty',isRequired:false },
-        { field: 'height', header: 'Ref Num',isRequired:false },
-        { field: 'width', header: 'Unit Cost',isRequired:false },
+        { field: 'weight', header: 'Weight',isRequired:false },
+        { field: 'uom', header: 'UOM',isRequired:false },
+        { field: 'length', header: 'Length',isRequired:false },
+        { field: 'height', header: 'Height',isRequired:false },
+        { field: 'width', header: 'Width',isRequired:false },
         { field: 'dimensionUOM', header: 'Dimension UOM',isRequired:false },
         { field: 'currency', header: 'Currency',isRequired:false },
         { field: 'amount', header: 'Amount',isRequired:true },
@@ -69,11 +69,11 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       auditHistoryQuoteHeaders = [
         { field: 'taskName', header: 'Task',isRequired:false },
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Gl Account Name',isRequired:false },
-        { field: 'uom', header: 'Description',isRequired:false },
-        { field: 'length', header: 'Qty',isRequired:false },
-        { field: 'height', header: 'Ref Num',isRequired:false },
-        { field: 'width', header: 'Unit Cost',isRequired:false },
+        { field: 'weight', header: 'Weight',isRequired:false },
+        { field: 'uom', header: 'UOM',isRequired:false },
+     { field: 'length', header: 'Length',isRequired:false },
+        { field: 'height', header: 'Height',isRequired:false },
+        { field: 'width', header: 'Width',isRequired:false },
         { field: 'dimensionUomName', header: 'Dimension UOM',isRequired:false },
         { field: 'currency', header: 'Currency',isRequired:false },
         { field: 'amount', header: 'Amount',isRequired:true },
@@ -618,7 +618,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       triggerHistory(){
        
       this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
-        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+      this.modal.componentInstance.auditHistoryHeader=[];
+      this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
         this.modal.componentInstance.auditHistory = this.historyData;
     
       }

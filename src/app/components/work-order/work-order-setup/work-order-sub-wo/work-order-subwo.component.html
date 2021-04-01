@@ -71,7 +71,7 @@
             <div class="form-group">
               <label for="opendate">Sub WO Open Date </label>
               <span class="clr-red">*</span>
-              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required [disabled]="isView"
+              <p-calendar [showIcon]="true" class="calender-cstm" (ngModelChange)="getActive()" name="openDate" #openDate="ngModel" required [disabled]="isView"
                 [(ngModel)]="subWorkOrderGeneralInformation.openDate"  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
             </div>
           </div>
@@ -81,7 +81,7 @@
             (click)="saveSubWorkOrder()">
             Save
           </button>
-          <button class="btn btn-primary pull-right" *ngIf="isEdit" type="button" [disabled]="!subWoHeader.valid"
+          <button class="btn btn-primary pull-right" *ngIf="isEdit" type="button" [disabled]="!subWoHeader.valid || disableUpdateButton"
             (click)="saveSubWorkOrder()">
             Update
           </button>
@@ -96,7 +96,7 @@
           id="mpn-list-table ">
           <thead>
             <tr>
-              <th rowspan="2" style="min-width: 80px;">MPN <span class="clr-red">*</span></th>
+              <th rowspan="2" style="min-width: 80px;">MPN <span class="clr-red">*</span></th> 
               <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
               <th rowspan="2">Revised MPN</th>
               <th rowspan="2">Serial Num </th>
@@ -119,7 +119,9 @@
               <th rowspan="2">NTE</th>
               <th rowspan="2">Controller No</th>
               <th rowspan="2">Controller Id</th>
-              <th colspan="2">Restrictions</th>
+              <th rowspan="2"> PMA</th>
+              <th rowspan="2">  DER</th>
+              <!-- <th colspan="2">Restrictions</th> -->
          
               <!-- <th rowspan="2" style="display:none">Tear Down Report</th> -->
             </tr>
@@ -154,39 +156,39 @@
                   [disabled]="isView" appendTo="body"></p-calendar>
               <td> -->
               <td>
-                <p-calendar [showIcon]="true" name="customerRequestDate{{i}}" class="calender-cstm"
+                <p-calendar [showIcon]="true" name="customerRequestDate{{i}}" class="calender-cstm" (ngModelChange)="getActiveMPN()"
                   #customerRequestDate="ngModel" [(ngModel)]="workOrderPartNumber.customerRequestDate" required
                   [disabled]="isView" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" appendTo="body"></p-calendar>
               <td>
-                <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm" #promisedDate="ngModel"
+                <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm" #promisedDate="ngModel" (ngModelChange)="getActiveMPN()"
                   [(ngModel)]="workOrderPartNumber.promisedDate" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="isView" appendTo="body">
                 </p-calendar>
               <td>
-                <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}" class="calender-cstm"
+                <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}" class="calender-cstm" (ngModelChange)="getActiveMPN()"
                   #estimatedCompletionDate="ngModel" [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required
                   [disabled]="isView" appendTo="body" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100">
                 </p-calendar>
               </td> 
               <td>
-                <p-calendar [showIcon]="true" class="calender-cstm" name="estimatedShipDate{{i}}"
+                <p-calendar [showIcon]="true" class="calender-cstm" name="estimatedShipDate{{i}}" (ngModelChange)="getActiveMPN()"
                   [(ngModel)]="workOrderPartNumber.estimatedShipDate" [minDate]="workOrderPartNumber.customerRequestDate"
                   #estimatedShipDate="ngModel" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [disabled]="isView" appendTo="body"></p-calendar>
               </td>
               <td>
-                <p-dropdown [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel" placeholder="Select"
+                <p-dropdown [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel" placeholder="Select" (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md p-dropdown-mh120"
                   (onChange)="selectedStage($event.value,workOrderPartNumber,i)"
                   [(ngModel)]="workOrderPartNumber.subWorkOrderStageId" required [disabled]="isView" appendTo="body">
                 </p-dropdown>
               </td>
               <td> 
-                <p-dropdown [options]="workOrderStatusList" placeholder="Select" name="status{{i}}" #status="ngModel"
+                <p-dropdown [options]="workOrderStatusList" placeholder="Select" name="status{{i}}" #status="ngModel" (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md custome_pd-totext p-dropdown-mh120"
                   [(ngModel)]="workOrderPartNumber.subWorkOrderStatusId" disabled required appendTo="body">
                 </p-dropdown>
               </td>
-              <td>
-                <p-autoComplete field="name" required [(ngModel)]="workOrderPartNumber.partTechnicianId" name="technician{{i}}"
+              <td> 
+                <p-autoComplete field="name" required [(ngModel)]="workOrderPartNumber.partTechnicianId" name="technician{{i}}" (ngModelChange)="getActiveMPN()"
                   #technician="ngModel" errorMessage="Records not found" [forceSelection]="true" [dropdown]="true"
                   [suggestions]="technicianList" (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                   (completeMethod)="filterTechnician($event)" [size]="30" [minLength]="1"
@@ -195,7 +197,7 @@
                 </p-autoComplete>
               </td>
               <td>
-                <p-dropdown placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel"
+                <p-dropdown placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel" (ngModelChange)="getActiveMPN()"
                   [options]="techStationList" class="p-dropdown-custom-md p-dropdown-mh120"
                   [(ngModel)]="workOrderPartNumber.techStationId" [disabled]="isView" appendTo="body">
                 </p-dropdown>
@@ -207,39 +209,39 @@
                 </p-dropdown>
               </td> -->
               <td>
-                <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel" [options]="workScopesList"
+                <p-dropdown placeholder="Select" name="scope{{i}}" #scope="ngModel" [options]="workScopesList" (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.subWorkOrderScopeId"
                   (onChange)="getWorkFlowByPNandScope(workOrderPartNumber,i)" required appendTo="body">
                 </p-dropdown>
               </td>
               <td>
-                <p-dropdown [options]="priorityList" placeholder="Select" name="priority{{i}}" #priority="ngModel"
+                <p-dropdown [options]="priorityList" placeholder="Select" name="priority{{i}}" #priority="ngModel" (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.subWorkOrderPriorityId"
                   required [disabled]="isView" appendTo="body">
                 </p-dropdown>
               </td>
               <td>
-                <p-dropdown placeholder="Select" [options]="conditionList" name="condition{{i}}" #condition="ngModel"
+                <p-dropdown placeholder="Select" [options]="conditionList" name="condition{{i}}" #condition="ngModel" (ngModelChange)="getActiveMPN()"
                   (onChange)="selectedCondition($event.value,workOrderPartNumber,i)" class="p-dropdown-custom-md"
                   [(ngModel)]="workOrderPartNumber.conditionId" required [disabled]="isView" appendTo="body">
                 </p-dropdown>
               </td>
               <td>
-                <p-dropdown class="min_selct_height" name="cmm{{i}}" #cmm="ngModel" [options]="cmmList"
+                <p-dropdown class="min_selct_height" name="cmm{{i}}" #cmm="ngModel" [options]="cmmList" (ngModelChange)="getActiveMPN()"
                   class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.cmmId"
                   [disabled]="isView" appendTo="body">
                 </p-dropdown>
               </td>
               <td>
                 <span class="inline-block">
-                  <p-dropdown [options]="dybamicworkFlowList[i]" name="workFlow{{i}}" #workFlow="ngModel"
+                  <p-dropdown [options]="dybamicworkFlowList[i]" name="workFlow{{i}}" #workFlow="ngModel" (ngModelChange)="getActiveMPN()"
                     class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.workflowId"
                     [disabled]="isView" appendTo="body">
                   </p-dropdown>
                 </span>
               </td>
               <td>
-                <input type="text" class="form-control w100" name="itemGroup{{i}}" #description="ngModel"
+                <input type="text" class="form-control w100" name="itemGroup{{i}}" #description="ngModel" 
                   [(ngModel)]="workOrderPartNumber.itemGroup" disabled>
               </td>
               <td>
@@ -283,7 +285,7 @@
           Save
         </button>
         <button class="btn btn-primary pull-right" *ngIf="activeGridUpdateButton" type="button"
-          [disabled]="!workOrderForm.valid" (click)="saveSubWorkOrderParts()">
+          [disabled]="!workOrderForm.valid || disableUpdateMpn" (click)="saveSubWorkOrderParts()">
           Update
         </button>
       </div>
@@ -291,7 +293,7 @@
   </div>
   <div
     *ngIf="subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
-    <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState" (setSubMPNDropDown)="subMPNDropDownUpdate($event)" [subWoMpnGridUpdated]="mpnGridUpdated"
+    <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState"   [subWoMpnGridUpdated]="mpnGridUpdated"
       [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu" [isView]="isView"
       [subWorkOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"
       [conditionListfromSubWo]="conditionList"></app-work-order-smart>

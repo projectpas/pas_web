@@ -40,6 +40,10 @@
                 ? (rowData[col.field] | date: 'MM/dd/yyyy')
                 : rowData[col.field] && col.field == 'needDate'
                 ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                : rowData[col.field] && col.field == 'createdDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a')
+                : rowData[col.field] && col.field == 'updatedDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a')
                 : rowData[col.field]
             }}
           </td>

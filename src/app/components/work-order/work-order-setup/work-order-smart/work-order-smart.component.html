@@ -1,6 +1,6 @@
 <div *ngIf="!isSpinnerEnable">
   <div *ngIf="isEdit">
-    <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [isView]="isView" [triggerSubWoMpn]="setSubMPNDropDown" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
+    <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [isView]="isView"   [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
       [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
       [jobTitles]="jobTitles" [workOrderStagesList]="workOrderStagesList"
       [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
@@ -10,7 +10,7 @@
     </app-work-order-add>
   </div>
   <div *ngIf="!isEdit"> 
-    <app-work-order-add [isEdit]="isEdit" [triggerSubWoMpn]="setSubMPNDropDown" [isView]="isView" [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
+    <app-work-order-add [isEdit]="isEdit"   [isView]="isView" [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
       [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
       [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" 
       [jobTitles]="jobTitles" [salesPersonOriginalList]="salesPersonOriginalList"

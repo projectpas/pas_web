@@ -1,9 +1,6 @@
 <div style="z-index: 1;width: 100% !important;" *ngIf="!isEdit">
   <span class="cat-heading cat4">Add Charges<i (click)="addRow()" class="fa fa-plus"></i></span>
-</div>
-<!-- <div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
-  style="height:380px;"> -->
- 
+</div> 
   <form #chargesCreateForm="ngForm">
     <div class="table-responsive table-overflow">
       <div class="tableFixHead">
@@ -57,7 +54,6 @@
           <input type="text" pInputText value="{{ charge.description }}" (ngModelChange)="getActive()" [(ngModel)]="charge.description"
             class="form-control" name="desc_{{i}}" />
         </td>
-
         <td>
           <input type="text" pInputText pKeyFilter="pnum" maxlength="15" (ngModelChange)="getActive()" class="form-control text-right"
             value="{{ charge.quantity }}" (change)="
@@ -86,8 +82,7 @@
             (completeMethod)="filterVendor($event)" appendTo='body' [baseZIndex]="9999" (onSelect)="onVendorSelected(charge, $event)" [dropdown]="true"
            [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
           </p-autoComplete>
-        </td>
-        <!-- [disabled]="!charge.isShowDelete"  -->
+        </td> 
         <td *ngIf="!isQuote &&  !isEdit" class="text-center">
           <button class="btn btn-danger nobg"  (click)="openDelete(content,charge,i)">
             <i class="fa fa-trash"></i>
@@ -103,22 +98,16 @@
         <td>&nbsp;</td>
         <td></td>
         <td *ngIf="isWorkOrder || isQuote">&nbsp;</td>
-        <td>&nbsp;</td>
-        <!-- *ngIf="!isQuote" -->
+        <td>&nbsp;</td> 
         <td  class="text-right"><b>{{ workFlow.extendedCostSummation }}</b></td>
         <td>&nbsp;</td>
-        <td></td>
-        <!-- <td *ngIf="!isQuote" class="align_rightset"><b>{{ workFlow.totalChargesCost }}</b></td> -->
-        <!-- <td>&nbsp;</td>
-        <td *ngIf="!isQuote || !isEdit">&nbsp;</td> -->
+        <td *ngIf="!isEdit"></td> 
       </tr>
       </tbody>
     </table>
   </div>
 </div>
   </form>
-
-
 <div *ngIf="isWorkOrder && !isEdit" class="float-right">
   <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="saveChargesWorkOrder()" [disabled]="!chargesCreateForm.valid">
     {{ isQuote ? 'Add' : 'Save' }}
@@ -127,7 +116,6 @@
     Close
   </button>
 </div>
-
 <div *ngIf="isWorkOrder && isEdit" class="float-right">
   <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="updateChargesWorkOrder()"
      [disabled]="disableUpdate">
