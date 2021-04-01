@@ -1823,11 +1823,14 @@
                                             <!-- Mark Up Amount -->
                                             <td>
                                                 <input type="text" class="input-field-value text-right input-width-100-percent"
-                                                 pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 1 ? 'input-background' : 'input-back-normal'"
+                                                 pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}"
+                                                  [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
                                             </td>
                                             <!-- Last Mark Up Date -->
                                             <td>
-                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
+                                                <input type="date" class="input-field-value input-width-100-percent" 
+                                                [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>

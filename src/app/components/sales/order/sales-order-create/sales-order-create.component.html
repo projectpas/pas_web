@@ -330,39 +330,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="padding:10px; padding-right:20px">
-                                            <div class="card">
-                                                <div class="card-header" style="padding:.3rem 1rem">
-                                                    <label style="text-align: center">Margin Summary</label>
-                                                </div>
-                                                <div>
-                                                    <label
-                                                       class="margin-summary-label">Sales<span
-                                                           class="float-right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                    <label
-                                                    class="margin-summary-label">Misc
-                                                        Amt<span
-                                                        class="float-right">{{marginSummary.misc| twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                    <label
-                                                    class="margin-summary-label">Net
-                                                        Sales<span
-                                                        class="float-right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                    <label
-                                                    class="margin-summary-label">Product
-                                                        Cost<span
-                                                        class="float-right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                    <label
-                                                    class="margin-summary-label">Margin
-                                                        Amt<span
-                                                        class="float-right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                    <label
-                                                    class="margin-summary-label">Margin
-                                                        %<span
-                                                        class="float-right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                </div>
-                                            </div>
-                                            <div style="padding-top: 10px"></div>
                                             <div>
-                                                <div class="card m-t-20">
+                                                <div class="card">
                                                     <div class="card-header mgmt-card-header">
                                                         <h5 class="mgmt-label">Management
                                                             Structure <span class="clr-red">*</span></h5>
@@ -421,12 +390,62 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class=" main_ar" style="padding-top:10px">
+                                                <div class="form-group memo-popup-cstm">
+                                                    <label>
+                                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                                            matTooltipPosition="above" matTooltip="Add Memo"
+                                                            (click)="onAddDescription('memo')"></i>
+                                                    </label>
+                                                    <span>
+                                                        <div class="form-group memo-popup-cstm mat_emo">
+                                                            <div [innerHTML]="salesQuote.memo"
+                                                                [matTooltip]="parsedText(salesQuote.memo)" matTooltipPosition="above"
+                                                                class="form-control" style="height: 100px !important;width:100%"
+                                                                class="text_editor_box">
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="card">
+                                                <div class="card-header" style="padding:.3rem 1rem">
+                                                    <label style="text-align: center">Margin Summary</label>
+                                                </div>
+                                                <div>
+                                                    <label
+                                                       class="margin-summary-label">Sales<span
+                                                           class="float-right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                    class="margin-summary-label">Misc
+                                                        Amt<span
+                                                        class="float-right">{{marginSummary.misc| twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                    class="margin-summary-label">Net
+                                                        Sales<span
+                                                        class="float-right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                    class="margin-summary-label">Product
+                                                        Cost<span
+                                                        class="float-right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                    class="margin-summary-label">Margin
+                                                        Amt<span
+                                                        class="float-right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                    class="margin-summary-label">Margin
+                                                        %<span
+                                                        class="float-right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                </div>
+                                            </div> -->
+                                            <!-- <div style="padding-top: 10px"></div> -->
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row mb-2">
+                        <div class="form-row mb-2" style="margin-top:-30px">
                             <div class="col-md-4 main_ar">
                                 <div class="form-group" style="padding-left: 5px;">
                                     <label>Customer Warning</label>
@@ -454,24 +473,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-4 main_ar">
-                                <div class="form-group memo-popup-cstm">
-                                    <label>
-                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                            matTooltipPosition="above" matTooltip="Add Memo"
-                                            (click)="onAddDescription('memo')"></i>
-                                    </label>
-                                    <span>
-                                        <div class="form-group memo-popup-cstm mat_emo">
-                                            <div [innerHTML]="salesQuote.memo"
-                                                [matTooltip]="parsedText(salesQuote.memo)" matTooltipPosition="above"
-                                                class="form-control" style="height: 100px !important;width:90%"
-                                                class="text_editor_box">
-                                            </div>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
+                           
                         </div>
                         <div class="col-md-12">
                             <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"

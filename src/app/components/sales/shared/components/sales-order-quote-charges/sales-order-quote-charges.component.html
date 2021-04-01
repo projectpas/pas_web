@@ -13,8 +13,8 @@
         </div>
       </div>
     </div>
-    <div [ngClass]="(isView) ? 'pull-right' : ''">
-      <div class="checkbox-cstm show_cst">
+    <div>
+      <div class="checkbox-cstm show_cst"  [ngClass]="(isView) ? 'pull-right' : ''">
         <label class="quote-show-list">
           <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
             (click)="getDeleteListByStatus($event.target.checked)" />
@@ -35,10 +35,10 @@
               &nbsp;
             </th>
             <ng-container *ngIf="isView">
-              <th colspan="4" class="quote-freight-th">
+              <th colspan="5" class="quote-freight-th">
                 <div class="display-flex padding-left-10">
                   <div class="form-group quote-freight-radios">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="tmchange()">
                     </p-radioButton>
@@ -52,21 +52,21 @@
                     </div>
                   </div>
                   <div class="actual-radio-div">
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2" label="Actual"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusType" value="2" label="Actual"
                       [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="3"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusType" value="3"
                       label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                 </div>
               </th>
-              <th class="quote-th"></th>
+              <!-- <th class="quote-th"></th> -->
             </ng-container>
             <ng-container *ngIf="!isView">
-              <th colspan="4" class="freight-notview">
+              <th colspan="5" class="freight-notview">
                 <div class="display-flex padding-left-10">
                   <div class="form-group quote-freight-radios">
                     <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
@@ -95,7 +95,7 @@
                   </div>
                 </div>
               </th>
-              <th class="quote-th"></th>
+              <!-- <th class="quote-th"></th> -->
             </ng-container>
           </tr>
           <tr>
