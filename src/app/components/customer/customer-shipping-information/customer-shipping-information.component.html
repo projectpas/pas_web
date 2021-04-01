@@ -581,6 +581,14 @@
                 </span>
               </p>
               <p>
+                <span class="label"><b>Tag: </b></span><span
+                  class="value">{{ sourceViewforShipping.tagName}}</span>
+              </p>
+              <p>
+                <span class="label"><b>Attention: </b></span><span
+                  class="value">{{ sourceViewforShipping.attention}}</span>
+              </p>
+              <p>
                 <span class="label"><b>Site Name<span class="clr-red">*</span> : </b></span><span
                   class="value">{{ sourceViewforShipping.siteName }}</span>
               </p>
@@ -754,6 +762,16 @@
 
                 <div class="col-sm-12">
                   <div class="col-sm-4">
+                    <label> Primary</label>
+                  </div>
+                  <div class="col-sm-5">
+                    <input type="checkbox" checked id="isPrimary" name="isPrimary"
+                      [disabled]="domesticShippingInfo.isPrimary && isEditDomestic && isprimarydomesticdata "
+                      [(ngModel)]="domesticShippingInfo.isPrimary" (ngModelChange)="enableSave()" />
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
                     <label for="tag">Tag <span class="clr-red"></span></label>
                   </div>
                   <div class="col-sm-5">
@@ -772,17 +790,8 @@
                     <input class="form-control" type="text" name="attention" (ngModelChange)="enableSave()"
                       [(ngModel)]="domesticShippingInfo.attention" value="" autocomplete="new-password" />
                   </div>               
-              </div>
-              <div class="col-sm-12">
-                <div class="col-sm-4">
-                  <label> Primary</label>
                 </div>
-                <div class="col-sm-5">
-                  <input type="checkbox" checked id="isPrimary" name="isPrimary"
-                    [disabled]="domesticShippingInfo.isPrimary && isEditDomestic && isprimarydomesticdata "
-                    [(ngModel)]="domesticShippingInfo.isPrimary" (ngModelChange)="enableSave()" />
-                </div>
-              </div>
+              
               <div class="col-sm-12">
                 <div class="col-sm-4">
                   <label>Site Name <span class="clr-red">*</span></label>
@@ -2538,6 +2547,8 @@
           <table class="table table-bordered header-table-width">
             <thead>
               <tr>
+                <th>Tag</th>
+                <th>Attention</th>
                 <th>Site Name</th>
                 <th>Address1</th>
                 <th>Address2</th>
@@ -2555,6 +2566,20 @@
               </tr>
             </thead>
             <tr *ngFor="let audit of shippingauditHisory; let i = index">
+              <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'tagName', audit.tagName)
+                  ? 'black'
+                  : 'red'
+              }">
+                {{audit.tagName}}
+              </td>
+              <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'attention', audit.attention)
+                  ? 'black'
+                  : 'red'
+              }">
+                {{audit.attention}}
+              </td>
               <td [ngStyle]="{
                 color: getColorCodeForHistory(i, 'siteName', audit.siteName)
                   ? 'black'

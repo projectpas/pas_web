@@ -21,8 +21,7 @@ export class WorkOrderSmartComponent implements OnInit {
     @Input() subWorkOrderId;
     @Input() workFlowWorkOrderId;
     @Input() subWoMpnGridUpdated;
-    @Input() conditionListfromSubWo;
-    @Input() setSubMPNDropDown: boolean = false;
+    @Input() conditionListfromSubWo; 
     @Input() isView:boolean=false;
     creditTerms: any;
     employeesOriginalData: any;
@@ -145,8 +144,8 @@ export class WorkOrderSmartComponent implements OnInit {
 
     }
     ngOnChanges(changes: SimpleChanges) {
-        this.subWoMpnGridUpdated = this.subWoMpnGridUpdated;
-        this.setSubMPNDropDown = this.setSubMPNDropDown;
+        this.subWoMpnGridUpdated = this.subWoMpnGridUpdated; 
+        console.log("current values dropsdf",this.subWoMpnGridUpdated)
     }
     ngOnDestroy(): void {
         this.onDestroy$.next();

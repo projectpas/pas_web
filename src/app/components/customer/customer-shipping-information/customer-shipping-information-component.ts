@@ -60,6 +60,8 @@ export class CustomerShippingInformationComponent implements OnInit {
     interShippingauditHisory: any[];
     formData = new FormData();
     domesticShippingHeaders = [
+        { field: 'tagName', header: 'Tag' },
+        { field: 'attention', header: 'Attention' },
         { field: 'siteName', header: 'Site Name' },
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },

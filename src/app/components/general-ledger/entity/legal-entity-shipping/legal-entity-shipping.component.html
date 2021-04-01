@@ -761,6 +761,16 @@
                     <div class="form-group">
                         <div class="col-sm-12">
                             <div class="col-sm-4">
+                                <label> Primary </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="checkbox" checked id="isPrimary2" name="isPrimary2" [disabled]="editisPrimary==true" [(ngModel)]="domesticShippingInfo.isPrimary"
+                                       (ngModelChange)="enableSave()">
+                                <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
                               <label for="tag">Tag <span class="clr-red"></span></label>
                             </div>
                             <div class="col-sm-5">
@@ -780,17 +790,7 @@
                                 type="text" name="Attention111" [(ngModel)]="domesticShippingInfo.attention" 
                                 (ngModelChange)="enableSave()">
                             </div>
-                        </div>                      
-                        <div class="col-sm-12">
-                            <div class="col-sm-4">
-                                <label> Primary </label>
-                            </div>
-                            <div class="col-sm-5">
-                                <input type="checkbox" checked id="isPrimary2" name="isPrimary2" [disabled]="editisPrimary==true" [(ngModel)]="domesticShippingInfo.isPrimary"
-                                       (ngModelChange)="enableSave()">
-                                <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
-                            </div>
-                        </div>
+                        </div> 
                         <div class="col-sm-12">
                             <div class="col-sm-4">
                                 <label>Site Name <span class="clr-red"></span></label>

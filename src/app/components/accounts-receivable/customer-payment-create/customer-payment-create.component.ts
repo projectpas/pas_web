@@ -5,7 +5,7 @@ import {
 } from "@angular/forms";
 import { CustomerService } from "../../../services/customer.service";
 import { Customer } from "../../../models/customer.model";
-import { AlertService } from "../../../services/alert.service";
+import { AlertService, MessageSeverity } from "../../../services/alert.service";
 import { ActivatedRoute } from "@angular/router";
 import { ISalesOrder } from "../../../models/sales/ISalesOrder.model";
 import { SalesOrder } from "../../../models/sales/SalesOrder.model";
@@ -22,6 +22,7 @@ import {
   getObjectById,
   editValueAssignByCondition,
   getValueFromArrayOfObjectById,
+  formatNumberAsGlobalSettingsModule,
 } from "../../../generic/autocomplete";
 import {
   NgbModal,
@@ -45,6 +46,10 @@ import { ISalesOrderCopyParameters } from "../../sales/order/models/isalesorder-
 import { PartDetail } from "../../sales/shared/models/part-detail";
 import { CustomerViewComponent } from "../../../shared/components/customer/customer-view/customer-view.component";
 import { IStatus } from "../../../models/sales/IStatus";
+import { ICustomerPayments } from "../../../models/sales/ICustomerPayments";
+import { CustomerPayments } from "../../../models/sales/CustomerPayments.model";
+import { SalesOrderService } from "../../../services/salesorder.service";
+import { CustomerPaymentsService } from "../../../services/customer-payment.service";
 
 @Component({
   selector: "app-customer-payment-create",
@@ -64,7 +69,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   customerPayment: any = {};
   defaultSettingPriority;
   soSettingsList: any = [];
-  salesOrder: ISalesOrder;
+  salesOrder: ICustomerPayments;
   customerDetails: any;
   salesOrderQuote: ISalesOrderQuote;
   enableUpdateButton = true;
@@ -171,13 +176,13 @@ export class CustomerPaymentCreateComponent implements OnInit {
   accntPriodList: any = [];
   addressType: any = 'SO';
   showAddresstab: boolean = false;
-
+  
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
     private route: ActivatedRoute,
     // private salesQuoteService: SalesQuoteService,
-    // private salesOrderService: SalesOrderService,
+    private customerPaymentsService: CustomerPaymentsService,
     private commonservice: CommonService,
     public currencyService: CurrencyService,
     public employeeService: EmployeeService,
@@ -281,21 +286,21 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   getSoInstance(initialCall = false) {
     if (this.copyMode) {
-      this.copySalesOrderInstance(this.salesOrderCopyParameters.salesOrderId);
+      //this.copySalesOrderInstance(this.salesOrderCopyParameters.salesOrderId);
     }
     else if (this.id) {
-      this.getSalesOrderInstance(this.id, initialCall);
-      this.getSOMarginSummary();
+      // this.getSalesOrderInstance(this.id, initialCall);
+      // this.getSOMarginSummary();
       this.isEdit = true;
       this.toggle_po_header = false;
     } else if (this.salesOrderView) {
-      this. customerPayment = this.salesOrderView.salesOrder
-      this.commonSalesOrderInstanceForConvertAndEdit(this.salesOrderView);
-      this.getSOMarginSummary();
+      // this.customerPayment = this.salesOrderView.salesOrder
+      // this.commonSalesOrderInstanceForConvertAndEdit(this.salesOrderView);
+      // this.getSOMarginSummary();
     }
     else {
       this.getNewSalesOrderInstance(this.customerId, initialCall);
-      this.marginSummary = new MarginSummary();
+      // this.marginSummary = new MarginSummary();
       this.isEdit = false;
     }
   }
@@ -344,7 +349,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   filterfirstName(event) {
     if (event.query !== undefined && event.query !== null) {
-      this.employeedata(event.query, this. customerPayment.managementStructureId);
+      this.employeedata(event.query, this.customerPayment.managementStructureId);
     }
     this.enableUpdateButton = false;
   }
@@ -457,7 +462,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
         for (let i = 0; i < this.customerContactList.length; i++) {
           let isDefaultContact = this.customerContactList[i].isDefaultContact;
           if (isDefaultContact) {
-            this. customerPayment.customerContactId = this.customerContactList[
+            this.customerPayment.customerContactId = this.customerContactList[
               i
             ].contactId;
           }
@@ -515,28 +520,28 @@ export class CustomerPaymentCreateComponent implements OnInit {
       partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
       this.selectedParts.push(partNumberObj);
     }
-    this. customerPayment.managementStructureId = this.salesOrderObj.managementStructureId;
+    this.customerPayment.managementStructureId = this.salesOrderObj.managementStructureId;
     this.managementStructureId = this.salesOrderObj.managementStructureId;
-    this. customerPayment.priorities = this.salesOrderView.priorities;
-    this. customerPayment.leadSources = this.salesOrderView.leadSources;
+    this.customerPayment.priorities = this.salesOrderView.priorities;
+    this.customerPayment.leadSources = this.salesOrderView.leadSources;
     this.status = this.salesOrderView.status && this.salesOrderView.status.length > 0 ? this.salesOrderView.status.slice(0) : [];
-    this. customerPayment.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
-    this. customerPayment.quoteTypeId = this.salesOrderObj.typeId;
-    this. customerPayment.statusId = this.salesOrderObj.statusId;
-    this. customerPayment.statusChangeDate = null;
-    this. customerPayment.openDate = new Date(this.salesOrderObj.openDate);
-    this. customerPayment.numberOfItems = this.salesOrderObj.numberOfItems;
-    this. customerPayment.salesOrderNumber = this.salesOrderObj.salesOrderNumber;
-    this. customerPayment.accountTypeId = this.salesOrderObj.accountTypeId;
-    this. customerPayment.customerId = this.salesOrderObj.customerId;
-    this. customerPayment.customerContactId = this.salesOrderObj.customerContactId;
-    this. customerPayment.customerReferenceName = this.salesOrderObj.customerReference;
-    this. customerPayment.quoteApprovedById = this.salesOrderObj.approvedById;
-    this. customerPayment.totalSalesAmount = this.salesOrderObj.totalSalesAmount;
-    this. customerPayment.customerHold = this.salesOrderObj.customerHold;
-    this. customerPayment.depositAmount = this.salesOrderObj.depositAmount;
-    this. customerPayment.balanceDue = this.salesOrderObj.balanceDue;
-    this. customerPayment.employeeName = getObjectById(
+    this.customerPayment.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
+    this.customerPayment.quoteTypeId = this.salesOrderObj.typeId;
+    this.customerPayment.statusId = this.salesOrderObj.statusId;
+    this.customerPayment.statusChangeDate = null;
+    this.customerPayment.openDate = new Date(this.salesOrderObj.openDate);
+    this.customerPayment.numberOfItems = this.salesOrderObj.numberOfItems;
+    this.customerPayment.salesOrderNumber = this.salesOrderObj.salesOrderNumber;
+    this.customerPayment.accountTypeId = this.salesOrderObj.accountTypeId;
+    this.customerPayment.customerId = this.salesOrderObj.customerId;
+    this.customerPayment.customerContactId = this.salesOrderObj.customerContactId;
+    this.customerPayment.customerReferenceName = this.salesOrderObj.customerReference;
+    this.customerPayment.quoteApprovedById = this.salesOrderObj.approvedById;
+    this.customerPayment.totalSalesAmount = this.salesOrderObj.totalSalesAmount;
+    this.customerPayment.customerHold = this.salesOrderObj.customerHold;
+    this.customerPayment.depositAmount = this.salesOrderObj.depositAmount;
+    this.customerPayment.balanceDue = this.salesOrderObj.balanceDue;
+    this.customerPayment.employeeName = getObjectById(
       "value",
       this.salesOrderObj.employeeId,
       this.allEmployeeList
@@ -544,18 +549,18 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
     this.salesOrderQuote.managementStructureId = this.salesOrderObj.managementStructureId;
     this.salesOrderQuote.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
-    this. customerPayment.creditLimit = this.salesOrderObj.creditLimit;
-    this. customerPayment.creditLimitTermsId = this.salesOrderObj.creditTermId;
-    this. customerPayment.restrictPMA = this.salesOrderObj.restrictPMA;
-    this. customerPayment.restrictDER = this.salesOrderObj.restrictDER;
+    this.customerPayment.creditLimit = this.salesOrderObj.creditLimit;
+    this.customerPayment.creditLimitTermsId = this.salesOrderObj.creditTermId;
+    this.customerPayment.restrictPMA = this.salesOrderObj.restrictPMA;
+    this.customerPayment.restrictDER = this.salesOrderObj.restrictDER;
     if (this.salesOrderObj.approvedDate)
-      this. customerPayment.approvedDate = new Date(
+      this.customerPayment.approvedDate = new Date(
         this.salesOrderObj.approvedDate
       );
-    this. customerPayment.currencyId = this.salesOrderObj.currencyId;
-    this. customerPayment.warningId = this.salesOrderObj.customerWarningId;
-    this. customerPayment.memo = this.salesOrderObj.memo;
-    this. customerPayment.notes = this.salesOrderObj.notes;
+    this.customerPayment.currencyId = this.salesOrderObj.currencyId;
+    this.customerPayment.warningId = this.salesOrderObj.customerWarningId;
+    this.customerPayment.memo = this.salesOrderObj.memo;
+    this.customerPayment.notes = this.salesOrderObj.notes;
   }
 
   getSalesOrderInstance(salesOrderId: number, initialCall = false) {
@@ -674,7 +679,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   getNewSalesOrderInstance(customerId: number, initialCall = false) {
-    this. customerPayment.receiptId = "Creating";
+    this.customerPayment.receiptNo = "Creating";
 
     // this.salesOrderService
     //   .getNewSalesOrderInstance(customerId)
@@ -705,19 +710,19 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   onChangeValidForDays() {
-    let od = new Date(this. customerPayment.openDate);
-    let validForDays = +this. customerPayment.validForDays;
-    let ed = new Date(this. customerPayment.openDate);
+    let od = new Date(this.customerPayment.openDate);
+    let validForDays = +this.customerPayment.validForDays;
+    let ed = new Date(this.customerPayment.openDate);
     ed.setDate(od.getDate() + validForDays);
-    this. customerPayment.quoteExpiryDate = ed;
+    this.customerPayment.quoteExpiryDate = ed;
   }
 
   onChangeOpenDate() {
-    let od = new Date(this. customerPayment.openDate);
-    let validForDays = +this. customerPayment.validForDays;
-    let ed = new Date(this. customerPayment.openDate);
+    let od = new Date(this.customerPayment.openDate);
+    let validForDays = +this.customerPayment.validForDays;
+    let ed = new Date(this.customerPayment.openDate);
     ed.setDate(od.getDate() + validForDays);
-    this. customerPayment.quoteExpiryDate = ed;
+    this.customerPayment.quoteExpiryDate = ed;
     this.enableUpdateButton = false;
   }
 
@@ -754,20 +759,20 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
     if (value == "notes") {
       this.tempMemoLabel = "Notes";
-      this.tempMemo = this. customerPayment.notes;
+      this.tempMemo = this.customerPayment.notes;
     }
     if (value == "memo") {
       this.tempMemoLabel = "Memo";
-      this.tempMemo = this. customerPayment.memo;
+      this.tempMemo = this.customerPayment.memo;
     }
   }
 
   onSaveDescription() {
     if (this.tempMemoLabel == "Notes") {
-      this. customerPayment.notes = this.tempMemo;
+      this.customerPayment.notes = this.tempMemo;
     }
     if (this.tempMemoLabel == "Memo") {
-      this. customerPayment.memo = this.tempMemo;
+      this.customerPayment.memo = this.tempMemo;
     }
     this.enableUpdateButton = false;
   }
@@ -779,34 +784,34 @@ export class CustomerPaymentCreateComponent implements OnInit {
   onSubmit(submitType: Boolean, createNewVersion: boolean = false) {
     this.errorMessages = [];
     let haveError = false;
-    if (this. customerPayment.quoteTypeId <= 0) {
-      this.errorMessages.push("Please select Type");
-      haveError = true;
-    }
-    if (!this. customerPayment.openDate) {
-      this.errorMessages.push("Please select Open Date");
-      haveError = true;
-    }
-    if (!this. customerPayment.creditLimit) {
-      this.errorMessages.push("Please select Credit Limit");
-      haveError = true;
-    }
-    if (!this. customerPayment.creditLimitTermsId) {
-      this.errorMessages.push("Please select Credit Terms");
-      haveError = true;
-    }
-    if (this. customerPayment.accountTypeId <= 0) {
-      this.errorMessages.push("Please select Account Type");
-      haveError = true;
-    }
-    if (this. customerPayment.customerContactId < 0) {
-      this.errorMessages.push("Please select Customer Contact");
-      haveError = true;
-    }
-    if (!this. customerPayment.employeeId) {
-      this.errorMessages.push("Please select employee");
-      haveError = true;
-    }
+    // if (this.customerPayment.quoteTypeId <= 0) {
+    //   this.errorMessages.push("Please select Type");
+    //   haveError = true;
+    // }
+    // if (!this.customerPayment.openDate) {
+    //   this.errorMessages.push("Please select Open Date");
+    //   haveError = true;
+    // }
+    // if (!this.customerPayment.creditLimit) {
+    //   this.errorMessages.push("Please select Credit Limit");
+    //   haveError = true;
+    // }
+    // if (!this.customerPayment.creditLimitTermsId) {
+    //   this.errorMessages.push("Please select Credit Terms");
+    //   haveError = true;
+    // }
+    // if (this.customerPayment.accountTypeId <= 0) {
+    //   this.errorMessages.push("Please select Account Type");
+    //   haveError = true;
+    // }
+    // if (this.customerPayment.customerContactId < 0) {
+    //   this.errorMessages.push("Please select Customer Contact");
+    //   haveError = true;
+    // }
+    // if (!this.customerPayment.employeeId) {
+    //   this.errorMessages.push("Please select employee");
+    //   haveError = true;
+    // }
 
     if (haveError) {
       let content = this.errorMessagePop;
@@ -816,85 +821,33 @@ export class CustomerPaymentCreateComponent implements OnInit {
     else {
       this.display = false;
       this.isSpinnerVisible = true;
-      this.salesOrder = new SalesOrder();
-      this.salesOrder.salesOrderId = this.id;
-      this.salesOrder.typeId = this. customerPayment.quoteTypeId;
-      this.salesOrder.openDate = this. customerPayment.openDate.toDateString();
-      this.salesOrder.numberOfItems = this. customerPayment.numberOfItems;
+      this.salesOrder = new CustomerPayments();
+      this.salesOrder.receiptNo = "Creating";
+      this.salesOrder.bankName = this.customerPayment.bankName;
+      this.salesOrder.bankAcctNum = this.customerPayment.bankAcctNum;
       this.salesOrder.masterCompanyId = this.masterCompanyId;
-      this.salesOrder.accountTypeId = this. customerPayment.accountTypeId;
-      this.salesOrder.customerId = this. customerPayment.customerId;
-      this.salesOrder.customerName = this. customerPayment.customerName;
-      this.salesOrder.customerCode = this. customerPayment.customerCode;
-      this.salesOrder.customerContactId = this. customerPayment.customerContactId;
-      this.salesOrder.customerReference = this. customerPayment.customerReferenceName;
-      this.salesOrder.customerReference = "SO";
-      this.salesOrder.currencyId = this. customerPayment.currencyId;
-      this.salesOrder.totalSalesAmount = this. customerPayment.totalSalesAmount;
-      this.salesOrder.customerHold = this. customerPayment.customerHold;
-      this.salesOrder.depositAmount = this. customerPayment.depositAmount;
-      this.salesOrder.balanceDue = this. customerPayment.balanceDue;
-      this.salesOrder.approvedById = this. customerPayment.quoteApprovedById;
-      if (this. customerPayment.approvedDate) {
-        this.salesOrder.approvedDate = this. customerPayment.approvedDate.toDateString();
-      }
-      this.salesOrder.priorityId = this. customerPayment.priorityId;
-      this.salesOrder.managementStructureId = this. customerPayment.managementStructureId;
-      this.salesOrder.creditLimit = this. customerPayment.creditLimit;
-      this.salesOrder.creditTermId = this. customerPayment.creditLimitTermsId;
-      this.salesOrder.restrictPMA = this. customerPayment.restrictPMA;
-      this.salesOrder.restrictDER = this. customerPayment.restrictDER;
-      if (this.customerWarning && this.customerWarning.customerWarningId) {
-        this.salesOrder.customerWarningId = this.customerWarning.customerWarningId;
-      } else {
-        this.salesOrder.customerWarningId = this. customerPayment.warningId;
-      }
-
-      this.salesOrder.contractReference = this. customerPayment.contractReferenceName;
-
-      this.salesOrder.salesPersonId = editValueAssignByCondition(
-        "employeeId",
-        this. customerPayment.salesPersonName
-      );
-      this.salesOrder.agentId = editValueAssignByCondition(
-        "employeeId",
-        this. customerPayment.agentId
-      );
-      this.salesOrder.agentName = editValueAssignByCondition(
-        "name",
-        this. customerPayment.agentId
-      );
-      this.salesOrder.customerSeviceRepId = editValueAssignByCondition(
-        "employeeId",
-        this. customerPayment.customerServiceRepName
-      );
+      this.salesOrder.depositDate = this.customerPayment.depositDate;
+      this.salesOrder.acctingPeriod = this.customerPayment.acctingPeriod;
+      this.salesOrder.amount = this.customerPayment.amount;
+      this.salesOrder.amtApplied = this.customerPayment.amtApplied;
+      this.salesOrder.amtRemaining = this.customerPayment.amount;
+      this.salesOrder.reference = this.customerPayment.reference;
+      this.salesOrder.cntrlNum = "cntrl";
+      this.salesOrder.openDate = this.customerPayment.openDate;
+      this.salesOrder.status = this.customerPayment.status;
+      this.salesOrder.postedDate = this.customerPayment.postedDate;
+      this.salesOrder.memo = this.customerPayment.memo;
+      this.salesOrder.managementStructureId = this.customerPayment.managementStructureId;
+      
       this.salesOrder.employeeId = editValueAssignByCondition(
         "value",
-        this. customerPayment.employeeId
+        this.customerPayment.employeeId
       );
 
-      if (this.id) {
-        this.salesOrder.statusId = this. customerPayment.statusId;
-        this.salesOrder.statusChangeDate = null;
-      }
-
-      this.salesOrderQuote.salesOrderQuoteId = null;
-      this.salesOrder.memo = this. customerPayment.memo;
-      this.salesOrder.notes = this. customerPayment.notes;
       this.salesOrder.createdBy = this.userName;
       this.salesOrder.updatedBy = this.userName;
-      this.salesOrder.createdOn = new Date().toDateString();
-      this.salesOrder.updatedOn = new Date().toDateString();
-      this.salesOrderView = new SalesOrderView();
-
-      if (this. customerPayment.salesOrderQuoteId) {
-        this.salesOrder.salesOrderQuoteId = this. customerPayment.salesOrderQuoteId;
-      }
-
-      this.salesOrderView.salesOrder = this.salesOrder;
-      let partList: any = [];
-      let invalidParts = false;
-      let invalidDate = false;
+      this.salesOrder.createdDate = new Date();
+      this.salesOrder.updatedDate = new Date();
 
       // for (let i = 0; i < this.selectedParts.length; i++) {
       //   let selectedPart = this.selectedParts[i];
@@ -935,7 +888,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       // this.salesOrderView.parts = partList;
       // this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesOrderView.parts, this.marginSummary);
 
-      // if (this.id) {
+     if (this.id) {
       //   if (invalidParts) {
       //     this.isSpinnerVisible = false;
       //     this.alertService.resetStickyMessage();
@@ -970,36 +923,30 @@ export class CustomerPaymentCreateComponent implements OnInit {
       //       this.toggle_po_header = true;
       //     });
       //   }
-      // } else {
-      //   this.salesOrderService.create(this.salesOrderView).subscribe(data => {
-      //     this.salesCreateHeaderOrderId = data[0].salesOrderId;
-      //     this.salesOrderView.salesOrder.salesOrderId = this.salesCreateHeaderOrderId;
-      //     this.isCreateModeHeader = true;
-      //     this.isHeaderSubmit = true;
-      //     this.isSpinnerVisible = false;
-      //     this.alertService.showMessage(
-      //       "Success",
-      //       `Sales Order created successfully.`,
-      //       MessageSeverity.success
-      //     );
-      //     this.toggle_po_header = false;
-      //     this.id = this.salesCreateHeaderOrderId;
-      //     if (this.salesCreateHeaderOrderId) {
-      //       this.router.navigateByUrl(
-      //         `salesmodule/salespages/sales-order-edit/${this.customerId}/${this.salesCreateHeaderOrderId}`
-      //       );
-      //     }
-      //     if (!this.isCreateModeHeader) {
-      //       this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
-      //     }
-      //   }, error => {
-      //     this.isSpinnerVisible = false;
-      //     this.toggle_po_header = true;
-      //   });
-      // }
+       } else {
+        this.customerPaymentsService.create(this.salesOrder).subscribe(data => {
+          this.isCreateModeHeader = true;
+          this.isHeaderSubmit = true;
+          this.isSpinnerVisible = false;
+          this.alertService.showMessage(
+            "Success",
+            `Payment Header Information updated successfully`,
+            MessageSeverity.success
+          );
+          this.toggle_po_header = false;
+          this.id = this.salesCreateHeaderOrderId;
+        }, error => {
+          this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
+        });
+      }
       // this.toggle_po_header = false;
     }
   }
+
+  onChangeAmount() {
+		this.customerPayment.amount = this.customerPayment.amount ? formatNumberAsGlobalSettingsModule(this.customerPayment.amount, 2) : '0.00';
+	}
 
   public onPartsApprovedEvent(): void {
     this.selectedParts = [];
@@ -1081,7 +1028,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.managementStructureId = managementStructureId;
 
     if (this.id) {
-      this.getManagementStructureDetails(this.managementStructureId, this.employeeId, this. customerPayment.managementStructureId);
+      this.getManagementStructureDetails(this.managementStructureId, this.employeeId, this.customerPayment.managementStructureId);
     } else {
       this.getManagementStructureDetails(this.managementStructureId, this.employeeId);
     }
@@ -1108,19 +1055,19 @@ export class CustomerPaymentCreateComponent implements OnInit {
         const result = response;
         if (result[0] && result[0].level == 'Level1') {
           this.maincompanylist = result[0].lstManagmentStrcture;
-          this. customerPayment.companyId = result[0].managementStructureId;
-          this. customerPayment.managementStructureId = result[0].managementStructureId;
-          this. customerPayment.buId = 0;
-          this. customerPayment.divisionId = 0;
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.companyId = result[0].managementStructureId;
+          this.customerPayment.managementStructureId = result[0].managementStructureId;
+          this.customerPayment.buId = 0;
+          this.customerPayment.divisionId = 0;
+          this.customerPayment.departmentId = 0;
           this.bulist = [];
           this.divisionlist = [];
           this.departmentList = [];
         } else {
-          this. customerPayment.companyId = 0;
-          this. customerPayment.buId = 0;
-          this. customerPayment.divisionId = 0;
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.companyId = 0;
+          this.customerPayment.buId = 0;
+          this.customerPayment.divisionId = 0;
+          this.customerPayment.departmentId = 0;
           this.maincompanylist = [];
           this.bulist = [];
           this.divisionlist = [];
@@ -1129,49 +1076,49 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
         if (result[1] && result[1].level == 'Level2') {
           this.bulist = result[1].lstManagmentStrcture;
-          this. customerPayment.buId = result[1].managementStructureId;
-          this. customerPayment.managementStructureId = result[1].managementStructureId;
-          this. customerPayment.divisionId = 0;
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.buId = result[1].managementStructureId;
+          this.customerPayment.managementStructureId = result[1].managementStructureId;
+          this.customerPayment.divisionId = 0;
+          this.customerPayment.departmentId = 0;
           this.divisionlist = [];
           this.departmentList = [];
         } else {
           if (result[1] && result[1].level == 'NEXT') {
             this.bulist = result[1].lstManagmentStrcture;
           }
-          this. customerPayment.buId = 0;
-          this. customerPayment.divisionId = 0;
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.buId = 0;
+          this.customerPayment.divisionId = 0;
+          this.customerPayment.departmentId = 0;
           this.divisionlist = [];
           this.departmentList = [];
         }
 
         if (result[2] && result[2].level == 'Level3') {
           this.divisionlist = result[2].lstManagmentStrcture;
-          this. customerPayment.divisionId = result[2].managementStructureId;
-          this. customerPayment.managementStructureId = result[2].managementStructureId;
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.divisionId = result[2].managementStructureId;
+          this.customerPayment.managementStructureId = result[2].managementStructureId;
+          this.customerPayment.departmentId = 0;
           this.departmentList = [];
         } else {
           if (result[2] && result[2].level == 'NEXT') {
             this.divisionlist = result[2].lstManagmentStrcture;
           }
-          this. customerPayment.divisionId = 0;
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.divisionId = 0;
+          this.customerPayment.departmentId = 0;
           this.departmentList = [];
         }
 
         if (result[3] && result[3].level == 'Level4') {
           this.departmentList = result[3].lstManagmentStrcture;;
-          this. customerPayment.departmentId = result[3].managementStructureId;
-          this. customerPayment.managementStructureId = result[3].managementStructureId;
+          this.customerPayment.departmentId = result[3].managementStructureId;
+          this.customerPayment.managementStructureId = result[3].managementStructureId;
         } else {
-          this. customerPayment.departmentId = 0;
+          this.customerPayment.departmentId = 0;
           if (result[3] && result[3].level == 'NEXT') {
             this.departmentList = result[3].lstManagmentStrcture;
           }
         }
-        this.employeedata('', this. customerPayment.managementStructureId);
+        this.employeedata('', this.customerPayment.managementStructureId);
       }
     }, err => {
       this.isSpinnerVisible = false;
@@ -1193,7 +1140,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.employeesList = res;
       this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
       if (!this.isEdit) {
-        this.getEmployeerOnLoad(this. customerPayment.employeeId ? this. customerPayment.employeeId.value : this.employeeId);
+        this.getEmployeerOnLoad(this.customerPayment.employeeId ? this.customerPayment.employeeId.value : this.employeeId);
       }
     }, err => {
       this.isSpinnerVisible = false;
@@ -1201,59 +1148,59 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   getEmployeerOnLoad(id) {
-    this. customerPayment.employeeId = getObjectById('value', id, this.allEmployeeList);
+    this.customerPayment.employeeId = getObjectById('value', id, this.allEmployeeList);
   }
 
   getBUList(legalEntityId) {
-    this. customerPayment.buId = 0;
-    this. customerPayment.divisionId = 0;
-    this. customerPayment.departmentId = 0;
+    this.customerPayment.buId = 0;
+    this.customerPayment.divisionId = 0;
+    this.customerPayment.departmentId = 0;
     this.bulist = [];
     this.divisionlist = [];
     this.departmentList = [];
     if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
-      this. customerPayment.managementStructureId = legalEntityId;
-      this. customerPayment.companyId = legalEntityId;
+      this.customerPayment.managementStructureId = legalEntityId;
+      this.customerPayment.companyId = legalEntityId;
       this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
         this.bulist = res;
-        this.employeedata('', this. customerPayment.managementStructureId);
+        this.employeedata('', this.customerPayment.managementStructureId);
       }, err => {
         this.isSpinnerVisible = false;
       });
     }
     else {
-      this. customerPayment.managementStructureId = 0;
-      this. customerPayment.companyId = 0;
+      this.customerPayment.managementStructureId = 0;
+      this.customerPayment.companyId = 0;
     }
   }
 
   getDivisionlist(buId) {
     this.divisionlist = [];
     this.departmentList = [];
-    this. customerPayment.divisionId = 0;
-    this. customerPayment.departmentId = 0;
+    this.customerPayment.divisionId = 0;
+    this.customerPayment.departmentId = 0;
 
     if (buId != 0 && buId != null && buId != undefined) {
-      this. customerPayment.managementStructureId = buId;
-      this. customerPayment.buId = buId;
+      this.customerPayment.managementStructureId = buId;
+      this.customerPayment.buId = buId;
       this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
       }, err => {
         this.isSpinnerVisible = false;
       });
     } else {
-      this. customerPayment.managementStructureId = this. customerPayment.companyId;
+      this.customerPayment.managementStructureId = this.customerPayment.companyId;
     }
 
-    this.employeedata('', this. customerPayment.managementStructureId);
+    this.employeedata('', this.customerPayment.managementStructureId);
   }
 
   getDepartmentlist(divisionId) {
-    this. customerPayment.departmentId = 0;
+    this.customerPayment.departmentId = 0;
     this.departmentList = [];
     if (divisionId != 0 && divisionId != null && divisionId != undefined) {
-      this. customerPayment.divisionId = divisionId;
-      this. customerPayment.managementStructureId = divisionId;
+      this.customerPayment.divisionId = divisionId;
+      this.customerPayment.managementStructureId = divisionId;
       this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
         this.departmentList = res;
       }, err => {
@@ -1261,24 +1208,24 @@ export class CustomerPaymentCreateComponent implements OnInit {
       });
     }
     else {
-      this. customerPayment.managementStructureId = this. customerPayment.buId;
-      this. customerPayment.divisionId = 0;
+      this.customerPayment.managementStructureId = this.customerPayment.buId;
+      this.customerPayment.divisionId = 0;
     }
 
-    this.employeedata('', this. customerPayment.managementStructureId);
+    this.employeedata('', this.customerPayment.managementStructureId);
   }
 
   getDepartmentId(departmentId) {
     if (departmentId != 0 && departmentId != null && departmentId != undefined) {
-      this. customerPayment.managementStructureId = departmentId;
-      this. customerPayment.departmentId = departmentId;
+      this.customerPayment.managementStructureId = departmentId;
+      this.customerPayment.departmentId = departmentId;
     }
     else {
-      this. customerPayment.managementStructureId = this. customerPayment.divisionId;
-      this. customerPayment.departmentId = 0;
+      this.customerPayment.managementStructureId = this.customerPayment.divisionId;
+      this.customerPayment.departmentId = 0;
     }
 
-    this.employeedata('', this. customerPayment.managementStructureId);
+    this.employeedata('', this.customerPayment.managementStructureId);
   }
 
   loadStatus() {
