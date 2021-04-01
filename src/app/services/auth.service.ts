@@ -93,7 +93,7 @@ private defaultEmployeeDetails= new Subject<any>()
     redirectLogoutUser() {
         let redirect = this.logoutRedirectUrl ? this.logoutRedirectUrl : this.loginUrl;
         this.logoutRedirectUrl = null;
-        window.location.href=redirect;
+        //window.location.href=redirect;
         this.router.navigate([redirect]);
     }
 

@@ -212,16 +212,27 @@ export class CustomerViewComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.customerService.getCustomerdataById(customerId).subscribe(res => {
             this.salesloader = false;
-            this.getMappedATAByCustomerId(customerId);
+            if(this.isATAInfo) {
+                this.getMappedATAByCustomerId(customerId);
+            }
+            if(this.isWarningInfo) {
             this.getCustomerWaringByCustomerId(customerId);
-            this.getMappedTaxTypeRateDetails(customerId);
+            }
+            if(this.isFinancialInfo){
+                this.getMappedTaxTypeRateDetails(customerId);
+            }
             this.getCustomerRestrictedPMAByCustomerId(customerId);
             this.getCustomerRestrictedDERByCustomerId(customerId);
             this.getCustomerClassificationByCustomerId(customerId);
             this.getCustomerIntegrationTypesByCustomerId(customerId);
+            if(this.isFinancialInfo) { 
             this.getFinanceInfoByCustomerId(customerId);
-            this.toGetCustomerFinanceDocumentsList(customerId);       
+            this.toGetCustomerFinanceDocumentsList(customerId); 
+            }
+           
+            if(this.isSalesPersonAgentInfo){     
             this.getSalesInfoByCustomerId(customerId);
+            }
             this.viewDataGeneralInformation = res[0];
             this.viewDataGeneralInformation.markUpPercentage=   this.viewDataGeneralInformation.markUpPercentage ? formatNumberAsGlobalSettingsModule( this.viewDataGeneralInformation.markUpPercentage, 2) : '';
             this.viewDataGeneralInformation.creditLimit=   this.viewDataGeneralInformation.creditLimit ? formatNumberAsGlobalSettingsModule( this.viewDataGeneralInformation.creditLimit, 2) : '';
