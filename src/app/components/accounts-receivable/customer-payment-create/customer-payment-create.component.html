@@ -31,7 +31,7 @@
                                             <div class=" form-group">
                                                 <label for="receiptId">Receipt ID <span class="clr-red">*</span></label>
                                                 <input type="text" class="form-control" name="salesOrderNumber"
-                                                    [(ngModel)]=" customerPayment.receiptId" [disabled]="true"
+                                                    [(ngModel)]="customerPayment.receiptId" [disabled]="true"
                                                     #receiptId="ngModel" id="receiptId" />
                                                 <div *ngIf="receiptId.invalid && (receiptId.dirty || receiptId.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
@@ -43,35 +43,35 @@
                                             <div class="form-group padding-top-5">
                                                 <label>Bank Name </label>
                                                 <input type="text" class="form-control" name="bankName"
-                                                    [(ngModel)]=" customerPayment.bankName" #bankName="ngModel"
+                                                    [(ngModel)]="customerPayment.bankName" #bankName="ngModel"
                                                     id="bankName" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Bank Acct Num</label>
                                                 <input type="text" class="form-control"
-                                                    [(ngModel)]=" customerPayment.bankAcctNum" name="bankAcctNum" />
+                                                    [(ngModel)]="customerPayment.bankAcctNum" name="bankAcctNum" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Deposit Date</label>
                                                 <p-calendar name="depositDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
-                                                    [(ngModel)]=" customerPayment.openDate" [showIcon]="true" id="depositDate"
-                                                    #depositDate="ngModel" (onSelect)="onChangeOpenDate()">
+                                                    [(ngModel)]="customerPayment.depositDate" [showIcon]="true"
+                                                    id="depositDate" #depositDate="ngModel"
+                                                    (onSelect)="onChangeOpenDate()">
                                                 </p-calendar>
                                             </div>
                                             <div class="form-group">
                                                 <label>Accting Period</label>
-                                                <select name="acctingPeriod" [(ngModel)]=" customerPayment.acctingPeriod"
+                                                <select name="acctingPeriod" [(ngModel)]="customerPayment.acctingPeriod"
                                                     id="acctingPeriod" #acctingPeriod="ngModel">
-                                                    <option *ngFor="let item of accntPriodList"
-                                                        [ngValue]="item.value">
+                                                    <option *ngFor="let item of accntPriodList" [ngValue]="item.value">
                                                         {{ item.label }}</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Status</label>
-                                                <select [(ngModel)]=" customerPayment.status"
-                                                    name="status" (change)="getDepartmentId( customerPayment.status)"
+                                                <select [(ngModel)]="customerPayment.status" name="status"
+                                                    (change)="getDepartmentId( customerPayment.status)"
                                                     (ngModelChange)="enableHeaderSave()">
                                                     <option value="0">Select</option>
                                                     <option *ngFor="let name of statusList" [ngValue]="name.value">
@@ -82,8 +82,9 @@
                                         <div class="col-md-6 padding-10">
                                             <div class="form-group">
                                                 <label for="amount">Amount <span class="clr-red">*</span></label>
-                                                <input type="text" class="form-control text-right" [ngModel]=" customerPayment.amount | twoDecimalGlobalNumberFormatPipe"
-                                                    name="amount" #amount="ngModel" />
+                                                <input type="text" class="form-control text-right"
+                                                    [(ngModel)]="customerPayment.amount" name="amount" #amount="ngModel"
+                                                    pKeyFilter="money" (change)="onChangeAmount()" />
                                                 <div *ngIf="amount.invalid && (amount.dirty || amount.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="amount.errors.required">
@@ -94,26 +95,27 @@
                                             <div class="form-group">
                                                 <label>Amt Applied</label>
                                                 <input type="text" class="form-control text-right"
-                                                    [ngModel]=" customerPayment.amtApplied | twoDecimalGlobalNumberFormatPipe" name="amtApplied"
-                                                    #amtApplied="ngModel" />
+                                                    [(ngModel)]="customerPayment.amtApplied" name="amtApplied"
+                                                    pKeyFilter="money" #amtApplied="ngModel" [disabled]="true" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Amt Remaining</label>
-                                                <input type="text" class="form-control text-right"
-                                                    [ngModel]=" customerPayment.amtRemaining | twoDecimalGlobalNumberFormatPipe" name="amtRemaining"
+                                                <input type="text" class="form-control text-right" pKeyFilter="money"
+                                                    [(ngModel)]="customerPayment.amtRemaining" name="amtRemaining"
                                                     #amtRemaining="ngModel" />
 
                                             </div>
                                             <div class="form-group">
                                                 <label>Reference</label>
                                                 <input type="text" class="form-control"
-                                                    [(ngModel)]=" customerPayment.reference" name="reference" />
+                                                    [(ngModel)]="customerPayment.reference" name="reference" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Cntrl Num</label>
                                                 <input type="text" class="form-control text-right" name=" cntrlNum"
                                                     [ngModel]=" customerPayment.cntrlNum"
-                                                    (ngModelChange)=" customerPayment.cntrlNum=$event" [disabled]="true" />
+                                                    (ngModelChange)="customerPayment.cntrlNum=$event"
+                                                    [disabled]="true" />
                                             </div>
                                         </div>
                                     </div>
@@ -131,8 +133,8 @@
                                                         <div class="form-group">
                                                             <select
                                                                 [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''"
-                                                                 name="primaryCompany"
-                                                                [(ngModel)]=" customerPayment.companyId"
+                                                                name="primaryCompany"
+                                                                [(ngModel)]="customerPayment.companyId"
                                                                 (change)="getBUList( customerPayment.companyId); checkValidOnChange( customerPayment.companyId, 'companyId');"
                                                                 #mCompanyName (ngModelChange)="enableHeaderSave()"
                                                                 required>
@@ -148,7 +150,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <select [(ngModel)]=" customerPayment.buId" name="primaryBU"
+                                                            <select [(ngModel)]="customerPayment.buId" name="primaryBU"
                                                                 (change)="getDivisionlist( customerPayment.buId)"
                                                                 (ngModelChange)="enableHeaderSave()">
                                                                 <option value="0">Select</option>
@@ -157,7 +159,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
-                                                            <select [(ngModel)]=" customerPayment.divisionId"
+                                                            <select [(ngModel)]="customerPayment.divisionId"
                                                                 name="primaryDivision"
                                                                 (change)="getDepartmentlist( customerPayment.divisionId)"
                                                                 (ngModelChange)="enableHeaderSave()">
@@ -167,7 +169,8 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
-                                                            <select [(ngModel)]=" customerPayment.departmentId" name="primaryDept"
+                                                            <select [(ngModel)]="customerPayment.departmentId"
+                                                                name="primaryDept"
                                                                 (change)="getDepartmentId( customerPayment.departmentId)"
                                                                 (ngModelChange)="enableHeaderSave()">
                                                                 <option value="0">Select</option>
@@ -181,7 +184,7 @@
                                                     <label>Open Date</label>
                                                     <p-calendar name="OpenDate" [yearNavigator]="true"
                                                         [monthNavigator]="true" yearRange="1900:2100"
-                                                        [(ngModel)]=" customerPayment.OpenDate" [showIcon]="true"
+                                                        [(ngModel)]="customerPayment.openDate" [showIcon]="true"
                                                         id="OpenDate" #OpenDate="ngModel" required
                                                         (onSelect)="onChangeOpenDate()">
                                                     </p-calendar>
@@ -192,9 +195,9 @@
                                             <div class="form-group">
                                                 <label>Employee<span class="clr-red">*</span></label>
                                                 <p-autoComplete class="autocomp-customer-cstm" name="employeeId"
-                                                    [(ngModel)]=" customerPayment.employeeId" [suggestions]="firstCollection"
-                                                    [forceSelection]="true" #employeeId="ngModel"
-                                                    emptyMessage="No Match Found" field="label"
+                                                    [(ngModel)]="customerPayment.employeeId"
+                                                    [suggestions]="firstCollection" [forceSelection]="true"
+                                                    #employeeId="ngModel" emptyMessage="No Match Found" field="label"
                                                     (completeMethod)="filterfirstName($event)" [size]="30"
                                                     [minLength]="1" [dropdown]="true" required>
                                                 </p-autoComplete>
@@ -213,7 +216,7 @@
                                                 </label>
                                                 <span>
                                                     <div class="form-group memo-popup-cstm">
-                                                        <div [innerHTML]=" customerPayment.memo"
+                                                        <div [innerHTML]="customerPayment.memo"
                                                             [matTooltip]="parsedText( customerPayment.memo)"
                                                             matTooltipPosition="above" class="form-control"
                                                             style="height: 100px !important; width:100%"
@@ -226,7 +229,7 @@
                                                 <label>Posted Date</label>
                                                 <p-calendar name="postedDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
-                                                    [(ngModel)]=" customerPayment.postedDate" [showIcon]="true"
+                                                    [(ngModel)]="customerPayment.postedDate" [showIcon]="true"
                                                     id="postedDate" #OpenDate="ngModel" required
                                                     (onSelect)="onChangeOpenDate()">
                                                 </p-calendar>
@@ -240,7 +243,7 @@
                             <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
                                 [disabled]="!newSalesQuoteForm.form.valid"
                                 class="btn pull-right submit-btn btn btn-primary">
-                                Submit
+                                Save
                             </button>
                             <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
                                 [disabled]="enableUpdateButton" (click)="onSubmit(true)"

@@ -25,6 +25,8 @@ import { CustomerPaymentListComponent } from '../components/accounts-receivable/
 import { CustomerPaymentCreateComponent } from '../components/accounts-receivable/customer-payment-create/customer-payment-create.component';
 import { EditorModule } from 'primeng/editor';
 import { AppSharedModule } from '../app-shared.module';
+import { CustomerPaymentsService } from '../services/customer-payment.service';
+import { CustomerPaymentsEndpointService } from '../services/customer-payments-endpoint.service';
 
 @NgModule({
     imports: [
@@ -55,7 +57,8 @@ import { AppSharedModule } from '../app-shared.module';
         CustomerPaymentCreateComponent
     ],
     providers: [
-
+        CustomerPaymentsService,
+        CustomerPaymentsEndpointService
     ],
 })
 export class AccountsreceivableModule {
