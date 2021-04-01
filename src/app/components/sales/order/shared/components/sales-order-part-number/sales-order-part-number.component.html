@@ -357,7 +357,7 @@
                                     </td>
                                     <td class="width-120"
                                         *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                        <div class="form-group notes-popup-cstm mat_emo"
+                                        <div class="form-group memo-popup-cstm mat_emo"
                                             style="width: 120px; display: inline-flex; margin-bottom: 0;">
                                             <div [innerHTML]="part.notes" class="text_editor_box"></div>
                                             <i class="fa fa-pencil" data-toggle="modal"
@@ -410,7 +410,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="48"
-                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    style="color: red; font-weight: bold; text-transform: uppercase;margin-left:-15%">
                                     No records found
                                 </td>
                             </tr>
@@ -438,10 +438,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit {{"Notes"}}</h4>
+                <h4 class="modal-title">Edit Notes</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th class="color-white">{{"Notes"}}</th>
                     </thead>
@@ -455,13 +455,16 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div class="float-right">
-                    <button type="button" class="btn btn-primary save-close-button" data-dismiss="modal"
+                </table> -->
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                required>
+            </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger save-close-button"
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
                         data-dismiss="modal">
                         Close
                     </button>
