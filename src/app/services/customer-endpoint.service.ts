@@ -1036,8 +1036,7 @@ export class CustomerEndpoint extends EndpointFactory {
         //let options = new RequestOptions({ headers: headers });  // create a request option
 
         // post request to create new book
-        return this.http
-            .post(this._shippingInfoUrl, body, this.getRequestHeaders())
+        return this.http.post(this._shippingInfoUrl, body, this.getRequestHeaders())
             .map((res: Response) => res)
             .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
     }
@@ -1497,7 +1496,7 @@ export class CustomerEndpoint extends EndpointFactory {
             });
     }
     getCustomerHistory(customerId) {
-        return this.http.get(`${this.configurations.baseUrl}/${this._customerHistory}?customerId=${customerId}`)
+        return this.http.get(`${this.configurations.baseUrl}/${this._customerHistory}?customerId=${customerId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerHistory(customerId));
             });
@@ -1512,26 +1511,26 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     getCustomerShippingHistory<T>(customerId, customerShippingAddressId): Observable<T> {
-        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerShippingHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/${this._customerShippingHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerShippingHistory(customerId, customerShippingAddressId));
             });
     }
     getCustomerInterShippingHistory<T>(customerId, customerInterShippingId): Observable<T> {
-        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerInterShippingHistory}?customerId=${customerId}&internationalShippingId=${customerInterShippingId}`)
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerInterShippingHistory}?customerId=${customerId}&internationalShippingId=${customerInterShippingId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerInterShippingHistory(customerId, customerInterShippingId));
             });
     }
 
     getCustomerShipViaHistory<T>(customerId, customerShippingAddressId, customerShippingId): Observable<T> {
-        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerShipViaHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}&customerShippingId=${customerShippingId}`)
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerShipViaHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}&customerShippingId=${customerShippingId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerShipViaHistory(customerId, customerShippingAddressId, customerShippingId));
             });
     }
     getCustomerInterShipViaHistory<T>(customerId, internationalShippingId, shippingViaDetailsId): Observable<T> {
-        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerInterShipViaHistory}?customerId=${customerId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`)
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerInterShipViaHistory}?customerId=${customerId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerInterShipViaHistory(customerId, internationalShippingId, shippingViaDetailsId));
             });
@@ -1572,7 +1571,7 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     getInternationalShipViaByInternationalShippingId<T>(id, isDeleted): Observable<T> {
-        return this.http.get<T>(`${this.InternatioanlShipViaByInternationalShippingId}?internationalShippingId=${id}&isDeleted=${isDeleted}`)
+        return this.http.get<T>(`${this.InternatioanlShipViaByInternationalShippingId}?internationalShippingId=${id}&isDeleted=${isDeleted}`,this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getInternationalShipViaByInternationalShippingId(id, isDeleted));
             });
