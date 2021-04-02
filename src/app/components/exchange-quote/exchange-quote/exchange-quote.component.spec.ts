@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ExchangeCreateComponent } from './exchange-create.component';
+import { ExchangeQuoteComponent } from './exchange-quote.component';
 
-describe('ExchangeCreateComponent', () => {
-  let component: ExchangeCreateComponent;
-  let fixture: ComponentFixture<ExchangeCreateComponent>;
+describe('ExchangeQuoteComponent', () => {
+  let component: ExchangeQuoteComponent;
+  let fixture: ComponentFixture<ExchangeQuoteComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExchangeCreateComponent ]
+      declarations: [ ExchangeQuoteComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExchangeCreateComponent);
+    fixture = TestBed.createComponent(ExchangeQuoteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
