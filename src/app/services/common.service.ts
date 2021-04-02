@@ -105,6 +105,11 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count, idList, masterCompanyId));
     });
   }
+  autoCompleteDropdownsWorkorderList(searchText, count?, idList?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsWorkorderList?searchText=${searchText}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkorderList(searchText, count, idList, masterCompanyId));
+    });
+  }
 
   autoCompleteSmartDropDownCustomerList(customerType, searchText, startWith, count?, idList?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownCustomerList?customerType=${customerType}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
