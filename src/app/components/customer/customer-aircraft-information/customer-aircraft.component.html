@@ -76,23 +76,26 @@
         </div>
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data"
+            <button type="button" *ngIf="isDownload" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data"
               matTooltip="Download  Data" matTooltipPosition="above"  data-toggle="modal" 
               (click)="selectedOnly = false; targetData = dt;"
                data-target="#downloadPopup"></button>
-            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
+
+            <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
               label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
               (click)="dt.exportCSV({ selectionOnly: true })"
               ></button>
+
             <button class="btn btn-primary exports-button "
               *ngIf="showAdvancedSearchCard == false" type="button" (click)="enableDisableAdvancedSearch(true)">
               Advanced Search <i class="fa fa-caret-down"></i>
             </button>
-            <button class="btn btn-primary exports-button" 
-            
+
+            <button class="btn btn-primary exports-button"
               *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
               Advanced Search <i class="fa fa-caret-up"></i>
             </button>
+            
           </div>
           <div class="col-md-4">
             <div class="checkbox-cstm pull-right checkbox-align">
@@ -242,11 +245,11 @@
   </p-table>
 
   <div class="m-t-10" *ngIf="isViewMode == false">
-    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+    <button type="button" *ngIf="((isAtaAdd || isAtaEdit) && (isEdit))" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
       [disabled]="stopmulticlicks">
       Next
     </button>
-    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+    <button type="button" *ngIf="isContactAdd || isContactEdit" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
       Previous
     </button>
   </div>

@@ -77,22 +77,26 @@
             </div>
             <div class="row">
               <div class="col">
-              <button type="button" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above"
+
+              <button type="button" *ngIf="isDownload" class="btn btn-primary exports-button" matTooltip="Download  Data" matTooltipPosition="above"
                 pButton icon="fa-download" iconPos="left" label="Export  Data"
                 data-toggle="modal" 
                 (click)="selectedOnly = false; targetData = dt;"
                  data-target="#downloadBilling"></button>
-              <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+
+              <button type="button" *ngIf="isDownload" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only"
                 (click)="dt.exportCSV({ selectionOnly: true })" 
                 ></button>
+
               <div class="excel-upload  excel-upload-cstm">
-                <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
+                <button type="button" *ngIf="isAdd" class="btn btn-primary exports-button" matTooltip="Download Sample File"
                   matTooltipPosition="above" (click)="sampleExcelDownload()" 
                   >
                   Sample File Download
                 </button>
-                <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
+
+                <input type="file" *ngIf="isAdd" name="upload[]" id="upload" (change)="customExcelUpload($event)"
                   class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
                 <label for="upload">
                   <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
@@ -245,10 +249,10 @@
           </ng-template>
         </p-table>
         <div class="m-t-10" *ngIf="isViewMode == false">
-          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
+          <button type="button" *ngIf="((isShippingInfoAdd || isShippingInfoEdit) && (isEdit))" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
             Next
           </button>
-          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
+          <button type="button" *ngIf="isFinancialInfoAdd || isFinancialInfoEdit" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
             Previous
           </button>
         </div>

@@ -514,11 +514,11 @@
         <div class="card new-card" style="padding: 10px" *ngIf="!collapsed">
           <div>
             <div class="margin-top: 10px">
-              <button type="button" *ngIf="isViewMode == false" class="btn btn-primary pull-right"
+              <button type="button" *ngIf="((isSalesPersonInfoAdd || isSalesPersonInfoEdit) && (isUpdateDomestic))" class="btn btn-primary pull-right"
                 (click)="nextClick('Next')">
                 Next
               </button>
-              <button type="button" *ngIf="isViewMode == false" class="btn btn-primary pull-right submit-btn"
+              <button type="button" *ngIf="isBillingInfoAdd || isBillingInfoEdit" class="btn btn-primary pull-right submit-btn"
                 (click)="nextClick('Previous')">
                 Previous
               </button>
@@ -1414,7 +1414,7 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <br />
-                  <button type="button" class="btn btn-primary"
+                  <button type="button" *ngIf="isAddDomestic && !isEditDomesticShipVia" class="btn btn-primary"
                     [disabled]="!addShippingVia.valid || disableSaveShipViaDomestic" (click)="saveshipViaDomestic()">
                     {{
                       isEditDomesticShipVia
@@ -1422,6 +1422,16 @@
                         : 'Save'
                     }}
                   </button>
+
+                  <button type="button" *ngIf="isUpdateDomestic && isEditDomesticShipVia" class="btn btn-primary"
+                  [disabled]="!addShippingVia.valid || disableSaveShipViaDomestic" (click)="saveshipViaDomestic()">
+                  {{
+                    isEditDomesticShipVia
+                      ? 'Update'
+                      : 'Save'
+                  }}
+                  </button>
+
                 </div>
               </div>
             </div>
@@ -1457,7 +1467,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -1534,34 +1543,42 @@
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
                   <div *ngIf="!currentDeletedstatusShipVia">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" matTooltip="Is Active" matTooltipPosition="above"
+                    <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" matTooltip="Is Active" matTooltipPosition="above"
                       name="isActiveIS{{ rowIndex }}" [disabled]="rowData.isPrimary == true"
                       (onChange)="updateActiveorInActiveForS(rowData)"></p-inputSwitch>
+
                     <span data-toggle="modal" data-target="#viewDomesticVia">
                       <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" matTooltip="View"
                         matTooltipPosition="above" (click)="openDomesticShippingViewVia(rowData)"><i
                           class="fa fa-eye"></i></a>
                     </span>
-                    <span data-toggle="modal"><a class="btn nobg" (click)="editDomesticShipVia(rowData)"
+
+                    <span data-toggle="modal"><a *ngIf="isUpdateDomestic" class="btn nobg" (click)="editDomesticShipVia(rowData)"
                         matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                    <span><a class="btn nobg" (click)="deleteShipVia(deleteContent2, rowData)" matTooltip="Delete"
+
+                    <span><a class="btn nobg" *ngIf="isDeleteDomestic" (click)="deleteShipVia(deleteContent2, rowData)" matTooltip="Delete"
                         matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+
                     <span><a class="btn nobg" (click)="openShipViaHistory(contentAuditHistShipVia, rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+
                   </div>
                   <div *ngIf="currentDeletedstatusShipVia">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" matTooltip="Is Active" matTooltipPosition="above"
+                    <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" matTooltip="Is Active" matTooltipPosition="above"
                       name="isActiveIS{{ rowIndex }}" [disabled]="true"
                       (onChange)="updateActiveorInActiveForS(rowData)"></p-inputSwitch>
+
                     <span data-toggle="modal" data-target="#viewDomesticVia">
                       <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" matTooltip="View"
                         matTooltipPosition="above" (click)="openDomesticShippingViewVia(rowData)"><i
                           class="fa fa-eye"></i></a>
                     </span>
+
                     <span><a class="btn nobg" (click)="openShipViaHistory(contentAuditHistShipVia, rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                         <span ><a class="btn nobg btn-users-cstm" (click)="restoreShipVia(restoreShipViaPopUp,rowData);" matTooltip="Restore Record"  
                           matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+
                   </div>
                 </td>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == true">
@@ -2028,7 +2045,7 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <br />
-                  <button type="button" class="btn btn-primary"
+                  <button type="button" *ngIf="isAddDomestic && !isEditInternationalShipVia" class="btn btn-primary"
                     [disabled]="!addInterShipVia.valid || disableSaveShipViaInternational"
                     (click)="saveshipViaInternational()">
                     {{
@@ -2037,6 +2054,18 @@
                         : 'Save'
                     }}
                   </button>
+
+                  <button type="button" *ngIf="isUpdateDomestic && isEditInternationalShipVia" class="btn btn-primary"
+                    [disabled]="!addInterShipVia.valid || disableSaveShipViaInternational"
+                    (click)="saveshipViaInternational()">
+                    {{
+                      isEditInternationalShipVia
+                        ? 'Update'
+                        : 'Save'
+                    }}
+                  </button>
+
+
                 </div>
               </div>
             </div>
@@ -2147,9 +2176,11 @@
                 </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
                   <div *ngIf="currentDeletedstatusIntShipVia == false">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
+
+                    <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
                       [disabled]="rowData.isPrimary == true" (onChange)="updateActiveorInActiveShipViaForIS(rowData)">
                     </p-inputSwitch>
+
                     <span data-toggle="modal" data-target="#viewInterVia">
                       <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                         (click)="openInterShippingViewVia(rowData)" matTooltip="View" matTooltipPosition="above"><i
@@ -2157,16 +2188,18 @@
                     </span>
 
                     <span data-toggle="modal">
-                      <a class="btn nobg" (click)="editInternationalShipVia(rowData)" matTooltip="Edit"
+                      <a class="btn nobg" *ngIf="isUpdateDomestic" (click)="editInternationalShipVia(rowData)" matTooltip="Edit"
                         matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                    <span><a class="btn nobg" (click)="deleteInternationalShippingVia(deleteContent3, rowData)"
+
+                    <span><a class="btn nobg" *ngIf="isDeleteDomestic" (click)="deleteInternationalShippingVia(deleteContent3, rowData)"
                         matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+
                     <span><a class="btn nobg" (click)="openInterShipViaHistory(contentAuditHistInterShipVia,rowData)"
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                   </div>
 
                   <div *ngIf="currentDeletedstatusIntShipVia == true">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
+                    <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
                       (onChange)="updateActiveorInActiveShipViaForIS(rowData)"></p-inputSwitch>
 
                     <span data-toggle="modal" data-target="#viewInterVia">
@@ -2182,8 +2215,9 @@
                 </td>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == true">
                   <div *ngIf="currentDeletedstatusIntShipVia == false">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
+                    <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
                       (onChange)="updateActiveorInActiveShipViaForIS(rowData)"></p-inputSwitch>
+
                     <span data-toggle="modal" data-target="#viewInterVia">
                       <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                         (click)="openInterShippingViewVia(rowData)" matTooltip="View" matTooltipPosition="above"><i
@@ -2193,7 +2227,7 @@
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                   </div>
                   <div *ngIf="currentDeletedstatusIntShipVia == true">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
+                    <p-inputSwitch *ngIf="isUpdateDomestic" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
                       (onChange)="updateActiveorInActiveShipViaForIS(rowData)"></p-inputSwitch>
 
                     <span data-toggle="modal" data-target="#viewInterVia">

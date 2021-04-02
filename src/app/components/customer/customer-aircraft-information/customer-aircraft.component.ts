@@ -98,6 +98,11 @@ export class CustomerAircraftComponent implements OnInit {
     isAdd:boolean=true;
     isEdit:boolean=true;
     isDelete:boolean=true;
+    isAtaAdd:Boolean=true;
+    isAtaEdit:Boolean=true;
+    isContactAdd:Boolean=true;
+    isContactEdit:Boolean=true;
+    isDownload:Boolean=true;
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,
@@ -113,10 +118,16 @@ export class CustomerAircraftComponent implements OnInit {
         this.id = this.route.snapshot.params['id'];
         this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
 		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
-		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Delete])
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Delete])
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Download])	
+        // next
+        this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
+        this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])	
+        // previous
+        this.isContactAdd=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Add])
+		this.isContactEdit=this.authService.checkPermission([ModuleConstants.Customers_Contacts+'.'+PermissionConstants.Update])
     }
     ngOnInit() {
-
         if (this.editMode) {
             //this.id = this.editGeneralInformationData.customerId;
             this.customerCode = this.editGeneralInformationData.customerCode;

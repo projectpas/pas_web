@@ -428,7 +428,7 @@ private defaultEmployeeDetails= new Subject<any>()
     }
 
     public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string):Promise<Boolean> {
-        debugger;
+        
         let Menus =this.getModuleByUserRole();// MenuInfo.getValue();
         linkToCheck = linkToCheck.toLocaleLowerCase();
         let isAllowed:Boolean = false;

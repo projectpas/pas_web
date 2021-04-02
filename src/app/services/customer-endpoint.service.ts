@@ -491,7 +491,7 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     getAuditHistoryForTaxType<T>(customerTaxTypeRateMappingId): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/Customer/CustomerTaxTypeRateAudit/${customerTaxTypeRateMappingId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/Customer/CustomerTaxTypeRateAudit/${customerTaxTypeRateMappingId}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAuditHistoryForTaxType(customerTaxTypeRateMappingId));
             });

@@ -322,7 +322,7 @@
                               pKeyFilter="email"
                               mask="email"
                               [(ngModel)]="generalInformation.email"                              
-                              required (ngModelChange)="enableSave()"
+                              required  (ngModelChange)="enableSave()"
                             />
                             <div *ngIf="userEmail.errors" [ngClass]="'error'">
                               <div *ngIf="userEmail.errors.pattern">
@@ -854,7 +854,7 @@
                         </div>
                       </div>
                       <div class="form-row pull-right mr-10">
-                        <button
+                        <button *ngIf="isAdd && !editMode"
                           type="submit"
                           class="btn btn-primary submit-btn new-footer-btn"
                           [disabled]=" 
@@ -863,13 +863,27 @@
                             disableSaveCustomerName ||
                             isCustomerCodeAlreadyExists ||
                             disableSaveParentName ||
-                            stopmulticlicks ||
-                            countryExistsNow ||
+                            stopmulticlicks ||                            
                             disableSaveForEdit" (click)="saveConformation()"
                         >                        
                         {{editMode ? 'Update' : 'Save' }}
                         </button>
-                        <button
+
+                        <button *ngIf="isUpdate && editMode"
+                          type="submit"
+                          class="btn btn-primary submit-btn new-footer-btn"
+                          [disabled]=" 
+                           !generalInfoForm.valid   ||                        
+                            isCustomerNameAlreadyExists ||
+                            disableSaveCustomerName ||
+                            isCustomerCodeAlreadyExists ||
+                            disableSaveParentName ||
+                            stopmulticlicks ||                           
+                            disableSaveForEdit" (click)="saveConformation()"
+                        >                        
+                        {{editMode ? 'Update' : 'Save' }}
+                        </button>                        
+                        <button *ngIf="((isContactAdd || isContactEdit) && (isUpdate && editMode))"
                           type="button"
                           [disabled]="!allowNextView"
                           class="btn btn-primary submit-btn new-footer-btn"

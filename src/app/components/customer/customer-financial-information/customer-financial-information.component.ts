@@ -45,6 +45,7 @@ import { LocalStoreManager } from '../../../services/local-store-manager.service
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Params, ActivatedRoute } from '@angular/router';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare var $: any;
 @Component({
   selector: 'app-customer-financial-information',
@@ -207,6 +208,14 @@ export class CustomerFinancialInformationComponent implements OnInit {
   disableTaxSave: boolean = true;
   moduleName: any = "CustomerFinance";
   referenceId: any;
+  isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
+  isATA:Boolean=true;
+  isAtaAdd:Boolean=true;
+  isAtaEdit:Boolean=true;
+  isBillingInfoAdd:Boolean=true;
+  isBillingInfoEdit:Boolean=true;
   constructor(
     public taxtypeser: TaxTypeService,
     public creditTermsService: CreditTermsService,
@@ -227,10 +236,19 @@ export class CustomerFinancialInformationComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private router: ActivatedRoute
   ) {
-    this.id = this.router.snapshot.params['id'];
+    this.id = this.router.snapshot.params['id'];    
+		this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add])
+		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update])
+    this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Delete]) 
+    //Next
+    this.isBillingInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
+    this.isBillingInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
+    //Previous
+    this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
+    this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])
   }
-  taxtypesList = [];
 
+  taxtypesList = [];
   ngOnInit(): void {
     this.savedGeneralInformationData = this.savedGeneralInformationData || {};
     this.savedGeneralInformationData.discountId = 0;
