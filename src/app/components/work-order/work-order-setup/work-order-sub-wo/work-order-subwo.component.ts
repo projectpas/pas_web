@@ -7,7 +7,7 @@ import { AuthService } from '../../../../services/auth.service';
 import {   editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
 import * as moment from 'moment';
 import { SubWorkOrderPartNumber } from '../../../../models/sub-work-order-partnumber.model';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 @Component({
     selector: 'app-sub-work-order',
     templateUrl: './work-order-subwo.component.html',
@@ -55,8 +55,10 @@ export class SubWorkOrderComponent implements OnInit {
     technicianByExpertiseTypeList: any = [];
     technicianList: any = [];
     techStationList: any = []; 
+    isGridShow:boolean=true;
     constructor(private router: Router,
         private commonService: CommonService,
+        private datePipe: DatePipe,
         private acRouter: ActivatedRoute,
         private alertService: AlertService,
         private authService: AuthService,
@@ -108,7 +110,9 @@ export class SubWorkOrderComponent implements OnInit {
     getSubWorOrderMpns() {
         this.subWorkOrderPartNumbers = []; 
         if (this.subWorkOrderId != 0) {
+            this.isSpinnerVisible=true;
             this.workOrderService.getSubWorOrderMpnsById(this.subWorkOrderId).subscribe(res => {
+                this.isSpinnerVisible=false;
                 if (res && res.length == 0) {
                     this.activeGridUpdateButton = false;
                     // for add subworkorder to existing sub workorder 
@@ -147,6 +151,8 @@ export class SubWorkOrderComponent implements OnInit {
                         }
                     }
                 }
+            },err=>{
+                this.isSpinnerVisible=false;
             })
         }else{
             this.getAllWorkOrderStages();  
@@ -157,8 +163,9 @@ export class SubWorkOrderComponent implements OnInit {
         }
     }
     subWorkOrderGridData() {
+        this.isSpinnerVisible=true;
         this.workOrderService.getSubWorkOrderDataForMpnGrid(this.workOrderMaterialsId, this.mpnId).subscribe(res => {
-  
+            this.isSpinnerVisible=false;
             res.workOrderMaterialsId = this.workOrderMaterialsId;
             res.conditionId = res.conditionCodeId;
             res.createdBy = "admin",
@@ -194,8 +201,8 @@ export class SubWorkOrderComponent implements OnInit {
                     })
                 }
             }
-        }, error => {
-
+        },err=>{
+            this.isSpinnerVisible=false;
         })
     } 
     saveSubWorkOrder() {
@@ -207,8 +214,8 @@ export class SubWorkOrderComponent implements OnInit {
             workFlowId: this.subWorkOrderGeneralInformation.workFlowId,
             workOrderPartNumberId: this.mpnId,
             subWorkOrderNo: this.subWorkOrderGeneralInformation.subWorkOrderNo,
-            openDate: this.subWorkOrderGeneralInformation.openDate,
-            needDate: this.subWorkOrderGeneralInformation.needDate,
+            openDate: this.subWorkOrderGeneralInformation.openDate ? this.datePipe.transform(this.subWorkOrderGeneralInformation.openDate, "MM/dd/yyyy") : null,
+            needDate: this.subWorkOrderGeneralInformation.needDate ? this.datePipe.transform(this.subWorkOrderGeneralInformation.needDate, "MM/dd/yyyy") : null,
             estCompDate: this.subWorkOrderGeneralInformation.estimatedCompletionDate,
             stageId: this.subWorkOrderGeneralInformation.stageId,
             statusId: this.subWorkOrderGeneralInformation.statusId,
@@ -224,7 +231,9 @@ export class SubWorkOrderComponent implements OnInit {
             isDeleted: false
         }
         if (!this.isEdit) {
+            this.isSpinnerVisible=true;
             this.workOrderService.createSubWorkOrderHeaderByWorkOrderId(data).subscribe(res => {
+                this.isSpinnerVisible=false;
                 this.disableUpdateButton=true;
                 this.isEdit = true;
                 this.showTabsGrid = true;
@@ -240,9 +249,13 @@ export class SubWorkOrderComponent implements OnInit {
                     'Sub WorkOrder Saved Successfully',
                     MessageSeverity.success
                 );
+            },err=>{
+                this.isSpinnerVisible=false;
             })
         } else {
+            this.isSpinnerVisible=true;
             this.workOrderService.createSubWorkOrderHeaderByWorkOrderId(data).subscribe(res => {
+                this.isSpinnerVisible=false;
                 this.disableUpdateButton=true;
                 this.isEdit = true;
                 this.showTabsGrid = true;
@@ -257,9 +270,12 @@ export class SubWorkOrderComponent implements OnInit {
                     'Sub WorkOrder Updated Successfully',
                     MessageSeverity.success
                 );
+            },err=>{
+                this.isSpinnerVisible=false;
             })
         }
     }
+    isSpinnerVisible:boolean=false;
     saveSubWorkOrderParts() {  
         const subWorkOrder = this.subWorkOrderPartNumbers;
         subWorkOrder.map((x, index) => {
@@ -273,7 +289,13 @@ export class SubWorkOrderComponent implements OnInit {
                 x.promisedDate = (x.promisedDate) ? new Date(x.promisedDate) : new Date(x.customerRequestDate)
                 x.technicianId=x.partTechnicianId.employeeId
             })
+            this.isSpinnerVisible=true;
         this.workOrderService.createSubWorkOrderGrid(subWorkOrder).subscribe(res => {
+            this.isGridShow=false;
+            setTimeout(() => {
+                this.isGridShow=true;
+                this.isSpinnerVisible=false;
+            }, 1000);
             this.activeGridUpdateButton = true;
             this.disableUpdateMpn= true;
             this.location.replaceState(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${this.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}`);
@@ -284,6 +306,8 @@ export class SubWorkOrderComponent implements OnInit {
                 'Sub WorkOrder Updated Successfully',
                 MessageSeverity.success
             );
+        },err=>{
+            this.isSpinnerVisible=false;
         })
     }
     getSubWorkOrderEditData() {

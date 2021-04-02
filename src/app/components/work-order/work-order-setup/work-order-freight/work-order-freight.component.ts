@@ -413,7 +413,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     currentRow:any={};
     openDelete(content, row) {
-  this.currentRow=row;
+  this.currentRow=row; 
       this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
       this.modal.result.then(() => { 
       }, () => {  })

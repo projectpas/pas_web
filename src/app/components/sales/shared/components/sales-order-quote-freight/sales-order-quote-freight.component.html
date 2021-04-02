@@ -431,7 +431,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <strong style="display: inline-flex;">
+    <!-- <strong style="display: inline-flex;">
       Ship Via:
       <span class="new-label">
         <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
@@ -440,7 +440,19 @@
           <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
         </select>
       </span>
-    </strong>
+    </strong> -->
+    <div class="form-row">
+      <div class="col-md-12 margin-right" style="display: inline-flex;">
+        <label class="fs12"> Ship Via: </label>
+        <span class="new-label"> 
+          <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+          [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
+          <option value="">Select</option>
+          <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+        </select>
+      </span>
+      </div>
+  </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="delete()">Yes</button>
