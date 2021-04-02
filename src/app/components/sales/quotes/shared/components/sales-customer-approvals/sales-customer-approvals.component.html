@@ -1,4 +1,4 @@
-<div class="approver-tab-cstm">
+<div class="form-group" style="margin-bottom: 5%;">
   <h5 class="po-head mt-2">Customer Approvals List</h5>
   <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
     <div class="tableFixHead">
@@ -169,9 +169,12 @@
       </table>
     </div>
   </div>
-  <button *ngIf="!isView" class="btn btn-primary pull-right submit-btn-margin" (click)="saveApprovalProcess()"
-    [disabled]="!getAllPartsToDisableOrNot()">Submit</button>
+  <div class="part-buttons">
+    <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
+      [disabled]="!getAllPartsToDisableOrNot()">Submit</button>
+  </div>
 </div>
+
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
     <div class="modal-content">
