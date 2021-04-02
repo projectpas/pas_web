@@ -1273,7 +1273,7 @@ this.commonfunctionHandler();
             const decodedString = dom.body.textContent;
             return decodedString;
     }
-      }
+      } 
       currentIndex:any;
       taskIndex:any;
       currentTaks:any;
