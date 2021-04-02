@@ -9,6 +9,9 @@
   padding: 5px 8px;
   margin-bottom: 5px;
 }
+.part-buttons{
+  text-align:right ; width:100% !important; padding-top:5px !important;
+}
 .sales-quote-approver-info{
 	display: flex;
     width: 85%;
