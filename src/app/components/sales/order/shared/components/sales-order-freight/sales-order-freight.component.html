@@ -547,12 +547,12 @@
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-        <button type="button" class="close" aria-label="Close" (click)="dismissModelAlett()">
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal" (click)="dismissModelAlett()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <strong style="display: inline-flex;">
+        <!-- <strong style="display: inline-flex;">
             Ship Via:
             <span class="new-label">
                 <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
@@ -561,10 +561,21 @@
                     <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
                 </select>
             </span>
-        </strong>
+        </strong> -->
+        <div class="form-row">
+            <div class="col-md-12 margin-right" style="display: inline-flex;">
+              <label class="fs12"> Ship Via: </label>
+              <span class="new-label"> 
+                <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+                [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
+                <option value="">Select</option>
+                <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+            </select></span>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="delete()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModelAlett()">No</button>
     </div>
 </ng-template>

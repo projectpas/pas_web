@@ -355,7 +355,7 @@
                     <ng-container *ngIf="summaryParts.length == 0">
                         <tbody>
                             <tr>
-                                <td colspan="37" class="sales-no-records-found text-left" >
+                                <td colspan="37" class="sales-no-records-found" style="margin-left:-15%" >
                                     No records found
                                 </td>
                             </tr>
@@ -378,10 +378,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit {{"Notes"}}</h4>
+                <h4 class="modal-title">Edit Notes</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th class="color-white">{{"Notes"}}</th>
                     </thead>
@@ -395,14 +395,17 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div class="float-right">
-                    <button type="button" class="btn btn-primary memo-buttons" data-dismiss="modal"
+                </table> -->
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                required>
+            </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
                         
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger memo-buttons" 
+                    <button type="button" class="btn btn-danger editor-buttons-margin" 
                         data-dismiss="modal">
                         Close
                     </button>

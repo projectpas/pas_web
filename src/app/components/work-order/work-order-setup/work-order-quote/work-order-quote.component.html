@@ -333,23 +333,23 @@
                            id="mpn-list-table">
                         <thead>
                             <tr class="pad_workflo">
-                                <th rowspan="2">MPN</th>
-                                <th rowspan="2">MPN Description</th>
+                                <th rowspan="2">MPN <span class="clr-red">*</span></th>
+                                <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                 <th rowspan="2">Revised MPN</th>
                                 <th rowspan="2">Serial Number</th>
                                 <th rowspan="2">QTY</th>
                                 <th rowspan="2">Rec'd Date</th>
-                                <th rowspan="2">Cust Req Date</th>
-                                <th rowspan="2">Promised Date</th>
-                                <th rowspan="2">Est. Comp Date</th>
-                                <th rowspan="2">Est. Ship Date</th>
-                                <th rowspan="2">WO Stage</th>
-                                <th rowspan="2">WO Status</th>
-                                <th rowspan="2">Tech Name</th>
+                                <th rowspan="2">Cust Req Date <span class="clr-red">*</span></th>
+                                <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
+                                <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
+                                <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
+                                <th rowspan="2">WO Stage <span class="clr-red">*</span></th>
+                                <th rowspan="2">WO Status <span class="clr-red">*</span></th>
+                                <th rowspan="2">Tech Name <span class="clr-red">*</span></th>
                                 <th rowspan="2">Station ID</th>
-                                <th rowspan="2">Work Scope </th>
-                                <th rowspan="2">Priority</th>
-                                <th rowspan="2">Condition </th>
+                                <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
+                                <th rowspan="2">Priority <span class="clr-red">*</span></th>
+                                <th rowspan="2">Condition <span class="clr-red">*</span></th>
                                 <th rowspan="2">CMM/Pub Ref</th>
                                 <th rowspan="2">Workflow ID </th>
                                 <th rowspan="2">Item Group</th>
@@ -1662,13 +1662,13 @@
                 <!-- *ngIf="showDisplayData==true" -->
                 <div class="modal-body table-responsive" *ngIf="quotationHeader">
                     <div class="form-group woq-radios" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
-                        <p-radioButton class="p-radiobutton-label-horizontal"
+                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
                                        name="type"
                                        value=1
                                        [label]="quotationHeader.customerName"
                                        [(ngModel)]="type"
                                        (click)="typeChange()"></p-radioButton>
-                        <p-radioButton class="p-radiobutton-label-horizontal"
+                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
                                        name="type"
                                        label="All"
                                        value=0
