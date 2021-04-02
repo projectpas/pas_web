@@ -1662,13 +1662,13 @@
                 <!-- *ngIf="showDisplayData==true" -->
                 <div class="modal-body table-responsive" *ngIf="quotationHeader">
                     <div class="form-group woq-radios" *ngIf="savedWorkOrderData && savedWorkOrderData.workOrderTypeId == 1">
-                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
+                        <p-radioButton class="p-radiobutton-label-horizontal woq-radio-align"
                                        name="type"
                                        value=1
                                        [label]="quotationHeader.customerName"
                                        [(ngModel)]="type"
                                        (click)="typeChange()"></p-radioButton>
-                        <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio"
+                        <p-radioButton class="p-radiobutton-label-horizontal woq-radio-align"
                                        name="type"
                                        label="All"
                                        value=0

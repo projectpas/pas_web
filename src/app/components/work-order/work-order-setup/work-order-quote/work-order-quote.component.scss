@@ -180,6 +180,11 @@ table thead tr th {
 .woq-radios{
   text-align: center !important; display: flex !important;
 }
-.sales-quote-radio .ui-radiobutton {
+p-radiobutton .ui-radiobutton {
   margin-top: -9px !important;
+}
+p-radiobutton .ui-radiobutton .ui-radiobutton-box {
+  width: 15px;
+  height: 15px;
+  margin-top: -4px;
 }
