@@ -155,9 +155,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
           });
     }
 
-    getNTEandSTDByItemMasterId(itemMasterId, workScopeName) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/ntestdvalues?itemMasterId=${itemMasterId}&workScope=${workScopeName}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getNTEandSTDByItemMasterId(itemMasterId, workScopeName));
+    getNTEandSTDByItemMasterId(itemMasterId, workScopeId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/ntestdvalues?itemMasterId=${itemMasterId}&workScopeId=${workScopeId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getNTEandSTDByItemMasterId(itemMasterId, workScopeId));
           });
     }
 
@@ -221,9 +221,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.updateWorkOrderStatus(data, login));
     });
     }
-    deleteWorkOrder(workOrderId) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/deleteworkorder?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.deleteWorkOrder(workOrderId));
+    deleteWorkOrder(workOrderId,login) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workOrder/deleteworkorder?workOrderId=${workOrderId}&updatedBy=${login}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.deleteWorkOrder(workOrderId,login));
     });
     }
 
@@ -249,10 +249,12 @@ export class WorkOrderEndpointService extends EndpointFactory {
     }
 
     getWorkOrderAssetList(isSubWorkOrder,data) {
-        if(isSubWorkOrder==true){
-    //         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist?subWOPartNoId=${subWOPartNoId}`, this.getRequestHeaders()).catch(error => {
-    //   return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(workFlowWorkOrderId, workOrderId,subWOPartNoId,isSubWorkOrder));
-    // });
+        if(isSubWorkOrder==true)
+        {
+            return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/subworkorderassetlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(isSubWorkOrder,data));
+              });
+      
         }else{
             return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/workorderassetlist`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getWorkOrderAssetList(isSubWorkOrder,data));
@@ -577,15 +579,26 @@ export class WorkOrderEndpointService extends EndpointFactory {
         });
     }
 
-    assetsHistoryByWorkOrderAssetId(workOrderAssetId) {
+    assetsHistoryByWorkOrderAssetId(workOrderAssetId,isSubWorkOrder) {
         // return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassethistory?workOrderAssetId=${workOrderAssetId}`, this.getRequestHeaders())
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassetinventoryhistory?workOrderAssetId=${workOrderAssetId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.assetsHistoryByWorkOrderAssetId(workOrderAssetId));
-        });
+        if(isSubWorkOrder==true)
+        {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/subwoassetinventoryhistory?subWorkOrderAssetId=${workOrderAssetId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.assetsHistoryByWorkOrderAssetId(workOrderAssetId,isSubWorkOrder));
+            });
+        }
+        else
+        {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woassetinventoryhistory?workOrderAssetId=${workOrderAssetId}`, this.getRequestHeaders()).catch(error => {
+                return this.handleErrorCommon(error, () => this.assetsHistoryByWorkOrderAssetId(workOrderAssetId,isSubWorkOrder));
+            });
+        }
+        
+       
     }
     deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy,isSubWorkOrder) {
         if(isSubWorkOrder==true){
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deletesubworkorderasset?workOrderAssetId=${workOrderAssetId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/deletesubworkorderasset?subWorkOrderAssetId=${workOrderAssetId}&updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
                 return this.handleErrorCommon(error, () => this.deleteWorkOrderAssetByAssetId(workOrderAssetId, updatedBy,isSubWorkOrder));
             });
         }else{
@@ -1181,19 +1194,45 @@ reserveSubWoAltPartData(data){
             return this.handleErrorCommon(error, () => this.getWorkOrderAssetListForDropDown());
         });
     }
-    checkInAseetInventoryList(workOrderAssetId){ 
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/wocheckinassetinventorylist?workOrderAssetId=${workOrderAssetId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.checkInAseetInventoryList(workOrderAssetId));
-        });
+    checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder){ 
+        if(isSubWorkOrder)
+        {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwocheckinassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}`).catch(error => {
+                return this.handleErrorCommon(error, () => this.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder));
+            });
+        }
+        else
+        {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/wocheckinassetinventorylist?workOrderAssetId=${workOrderAssetId}`).catch(error => {
+                return this.handleErrorCommon(error, () => this.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder));
+            });
+        }
+     
     }
-    checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId){
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/woassetinventorylist?workOrderAssetId=${workOrderAssetId}&workOrderId=${workOrderId}&woPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId));
-        });
+    checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder){
+
+        if(isSubworkOrder)
+        {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwoassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}&subWorkOrderId=${subWorkOrderId}&subWOPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
+                return this.handleErrorCommon(error, () => this.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder));
+            });
+        }else
+        {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/woassetinventorylist?workOrderAssetId=${workOrderAssetId}&workOrderId=${workOrderId}&woPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
+                return this.handleErrorCommon(error, () => this.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder));
+            });
+        }
+    
+      
     }
     releaseAssetInventoryList(AssetData){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/releasewocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.releaseAssetInventoryList(AssetData));
+        });
+    }
+    releasesubwocheckoutinventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/releasesubwocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.releasesubwocheckoutinventory(AssetData));
         });
     }
     saveCheckOutInventory(AssetData){
@@ -1204,6 +1243,16 @@ reserveSubWoAltPartData(data){
     saveCheckInInventory(AssetData){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savewocheckininventory`, AssetData, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.saveCheckInInventory(AssetData));
+        });
+    }
+    savesubwocheckoutinventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savesubwocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.savesubwocheckoutinventory(AssetData));
+        });
+    }
+    savesubwocheckininventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savesubwocheckininventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.savesubwocheckininventory(AssetData));
         });
     }
     getWoAssetInventoryHistory(workOrderAssetId){

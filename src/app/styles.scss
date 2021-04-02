@@ -14080,7 +14080,7 @@ body .ui-steps:before {
   border: 1px solid #e6dcdc;
   margin: 5px;
   border-radius: 4px;
-  height: 320px;
+  height: 480px;
   position: relative;
   h3 {
     font-size: 17px;
@@ -17156,3 +17156,14 @@ ng-multiselect-dropdown{
   border-bottom: 0;
   border-left: 0.5em solid transparent !important;
 } 
+
+.multiselect-dropdown .dropdown-btn
+ .dropdown-multiselect--active
+ .dropdown-multiselect__caret {
+ 
+        margin-top: -14px !important;
+  
+}
+.woq-radio-align .ui-radiobutton {
+  margin-top: -9px !important;
+}

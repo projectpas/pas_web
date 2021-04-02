@@ -13,9 +13,9 @@
         </div>
       </div>
     </div>
-    <div [ngClass]="(isView) ? 'pull-right' : ''">
-      <div class="checkbox-cstm show_cst">
-        <label style="width: auto !important;margin-top: 3px;">
+    <div>
+      <div class="checkbox-cstm show_cst"  [ngClass]="(isView) ? 'pull-right' : ''">
+        <label class="quote-show-list">
           <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
             (click)="getDeleteListByStatus($event.target.checked)" />
           <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -31,58 +31,58 @@
         <ng-template pTemplate="header" let-columns>
           <tr>
             <th colspan="7"
-              style="width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
+              class="quote-freight-colspan">
               &nbsp;
             </th>
             <ng-container *ngIf="isView">
-              <th colspan="4" style="width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
-                <div class="display-flex" style="padding-left: 10px;">
-                  <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+              <th colspan="5" class="quote-freight-th">
+                <div class="display-flex padding-left-10">
+                  <div class="form-group quote-freight-radios">
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92" name="costPlusType"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="tmchange()">
                     </p-radioButton>
                     <div>
-                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
+                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
                         [(ngModel)]="overAllMarkup" id="hideDisabled" [disabled]="isView || costPlusType != 1"
-                        style="margin-top: 10px;">
+                       >
                         <option value="" selected>Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
                     </div>
                   </div>
-                  <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2" label="Actual"
+                  <div class="actual-radio-div">
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusType" value="2" label="Actual"
                       [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="3"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusType" value="3"
                       label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                 </div>
               </th>
-              <th style="width:130px;color:#fff !important;"></th>
+              <!-- <th class="quote-th"></th> -->
             </ng-container>
             <ng-container *ngIf="!isView">
-              <th colspan="4" style="width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;">
-                <div class="display-flex" style=" padding-left: 10px;">
-                  <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
+              <th colspan="5" class="freight-notview">
+                <div class="display-flex padding-left-10">
+                  <div class="form-group quote-freight-radios">
                     <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
                       name="costPlusType" label="T&M - Mark Up" value="1" (ngModelChange)="validated()"
                       [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div>
-                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
+                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
                         [(ngModel)]="overAllMarkup" (ngModelChange)="validated()"
-                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                        [disabled]="isView || costPlusType != 1">
                         <option value="" selected>Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
                     </div>
                   </div>
-                  <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
+                  <div class="actual-radio-div">
                     <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType"
                       value="2" label="Actual" [(ngModel)]="costPlusType" (ngModelChange)="validated()"
                       [disabled]="isView" (click)="tmchange()"></p-radioButton>
@@ -95,7 +95,7 @@
                   </div>
                 </div>
               </th>
-              <th style="width:130px;color:#fff !important;"></th>
+              <!-- <th class="quote-th"></th> -->
             </ng-container>
           </tr>
           <tr>
@@ -129,16 +129,16 @@
             <td class="table-column-width">
               {{charge.description}}
             </td>
-            <td class="table-column-width" style="text-align: right;">
+            <td class="table-column-width text-right">
               {{charge.quantity | globalNmberFormat}}
             </td>
             <td class="table-column-width">
               {{charge.refNum}}
             </td>
-            <td class="table-column-width" style="text-align: right;">
+            <td class="table-column-width text-right">
               {{charge.unitCost | twoDecimalGlobalNumberFormatPipe}}
             </td>
-            <td class="table-column-width" style="text-align: right;">
+            <td class="table-column-width text-right">
               {{charge.extendedCost | twoDecimalGlobalNumberFormatPipe}}
             </td>
             <td class="table-column-width">
@@ -189,7 +189,7 @@
                   </a>
                 </span>
                 <span>
-                  <button class="btn  nobg grey_btn_icon" style="padding:0px"
+                  <button class="btn  nobg grey_btn_icon padding-0"
                     [disabled]="charge.salesOrderQuoteChargesId==0"
                     (click)="openInterShipViaHistory(contentAuditHist1,charge)" matTooltip="History"
                     matTooltipPosition="above">
@@ -203,7 +203,7 @@
                     matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
                       aria-hidden="true"></i></a> </span>
                 <span>
-                  <button class="btn  nobg grey_btn_icon" style="padding:0px"
+                  <button class="btn  nobg grey_btn_icon padding-0"
                     [disabled]="charge.salesOrderQuoteChargesId==0"
                     (click)="openInterShipViaHistory(contentAuditHist1,charge)" matTooltip="History"
                     matTooltipPosition="above">
@@ -233,7 +233,7 @@
             </ng-container>
             <ng-container *ngIf="costPlusType == 3">
               <td class="table-column-width">
-                <input type="text" pInputText pKeyFilter="money" style="text-align: right;"
+                <input type="text" pInputText pKeyFilter="money" class="text-right"
                   [ngModel]="chargesFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
                   [ngModelOptions]="{updateOn:'blur'}"
                   (ngModelChange)="chargesFlatBillingAmount=formatStringToNumberGlobal($event)"
@@ -247,7 +247,7 @@
       </p-table>
     </div>
   </div>
-  <div *ngIf="!isView" style="padding: 10px;">
+  <div *ngIf="!isView" class="padding-10">
     <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createChargesQuote()">
       <span *ngIf="isUpdate">Update</span>
       <span *ngIf="!isUpdate">Save</span>
@@ -290,8 +290,8 @@
                 <tbody>
                   <tr *ngFor="let charge of chargeForm; let i = index">
                     <td>
-                      <select class="form-control custom-select1 wf-pub-id" id="dllChargesType"
-                        [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" style="width: 130px;"
+                      <select class="form-control custom-select1 wf-pub-id table-column-width" id="dllChargesType"
+                        [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" 
                         name="type_{{i}}" required>
                         <option [value]="">Select</option>
                         <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
@@ -397,7 +397,7 @@
     <button type="button" class="btn btn-danger" (click)="dismissModelAlett()">No</button>
   </div>
 </ng-template>
-<ng-template #contentAuditHist1 let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist1 let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
   <div class="modal-header">
     <h4 class="modal-title">History of Charges</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModelHistory()">
@@ -451,7 +451,7 @@
           <td
             [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
             {{audit.billingAmount}}</td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                 <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
@@ -462,7 +462,7 @@
           <td>{{audit.createdBy}}</td>
           <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
           <td>{{audit.updatedBy}}</td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                 <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>

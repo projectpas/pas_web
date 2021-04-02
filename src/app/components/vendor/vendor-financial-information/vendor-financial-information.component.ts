@@ -860,6 +860,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
 			this.arrayListDiscountId.push(0); }
         this.commonservice.autoSuggestionSmartDropDownList('[Discount]', 'DiscountId', 'DiscontValue','',true,500,this.arrayListDiscountId.join(),this.currentUserMasterCompanyId).subscribe(response => {
             this.discountList = response;
+            this.discountList.sort(function(a, b) {
+                return parseFloat(a.label) - parseFloat(b.label);
+            });
             if(DiscountId > 0){
                 this.sourceVendor.discountId = DiscountId;
             }

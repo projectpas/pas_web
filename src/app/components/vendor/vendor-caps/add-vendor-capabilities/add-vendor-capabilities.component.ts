@@ -307,7 +307,7 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 	capabilityTypeListData(strText = ''){
 		if(this.arrayCapabilityTypelist.length == 0) {
 			this.arrayCapabilityTypelist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description',strText,true,200,this.arrayCapabilityTypelist.join()).subscribe(response => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc',strText,true,200,this.arrayCapabilityTypelist.join()).subscribe(response => {
 			this.capabilityTypeList = response;
 		},err => {
 			this.onDataLoadFailed(err);

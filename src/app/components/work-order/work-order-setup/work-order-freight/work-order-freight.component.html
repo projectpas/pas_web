@@ -41,7 +41,7 @@
               <div class="display-flex">
                 <div class="form-group freight-isview-div">
                   <p-radioButton  class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
-                    label="T&M - Mark Up" style="margin-top:-10px;" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                    label="T&M - Mark Up"  value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                   </p-radioButton>
                   <div>
                     <select  class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
@@ -53,11 +53,11 @@
                 </div>
                 <div class="radio-align">
                   <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
-                    label="Actual"  style="margin-top:-10px;" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
+                    label="Actual"   [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
                 </div>
                 <div>
                   <p-radioButton  class="p-radiobutton-label-horizontal" name="costPlusType"
-                    value="3" label="Flat Rate"  style="margin-top:-10px;" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                    value="3" label="Flat Rate"   [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                   </p-radioButton>
                 </div>
               </div>
@@ -114,7 +114,7 @@
         <th class="table-column-width" colspan="3">Dimensions</th>
         <th class="table-column-width" rowspan="2">UOM</th>
         <th class="table-column-width" rowspan="2">Currency</th>
-        <th rowspan="2" style="width:60px !important">Amount  <span style="color: #ff0000;">*</span></th>
+        <th rowspan="2" style="min-width:60px !important">Amount  <span style="color: #ff0000;">*</span></th>
         <th class="table-column-width" rowspan="2">Memo</th>
         <ng-container *ngIf="isQuote">
           <th class="table-column-width" rowspan="2">Billing Method</th>
@@ -518,7 +518,7 @@
     <strong>
       Ship Via :
         <span class="new-label" *ngIf="!isQuote">{{currentRow.shipVia}}</span>
-        <span class="new-label" *ngIf="isQuote">{{currentRow.shipViaName}}</span>
+        <span class="new-label" *ngIf="isQuote">{{currentRow.shipViaName }}</span>
     </strong>
 </div>
   <div class="modal-footer">
@@ -528,3 +528,9 @@
 
 
 </ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+</div>

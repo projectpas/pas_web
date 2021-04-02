@@ -20,12 +20,12 @@
           <th style="z-index:1">Cond<span class="clr-red">*</span></th>
           <th>Request Type</th>
           <th class="min-width-90" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
-          <th style="width:60px">Qty<span class="clr-red">*</span></th>
+          <th style="min-width:60px">Qty<span class="clr-red">*</span></th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th class="min-width-90">Stk Type</th>
-          <th style="width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
-          <th style="width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
+          <th style="min-width:60px">Unit Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
+          <th style="min-width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="width:60px">Deferred</th>
           <th style="z-index:1">Memo</th>
           <th>Actions</th>
@@ -41,11 +41,7 @@
               <option *ngFor="let task of taskList" [value]="task.taskId">{{
                 task.description
                 }}</option>
-            </select>
-            <!-- optionLabel="description" -->
-            <!-- <p-dropdown placeholder="--Select--" editable="true" required (ngModelChange)="getActive()"  #taskId="ngModel" [showClear]="true" (input)="onFilterTask($event.target.value)" filter="true" name="dimen1x{{ i }}" [options]="taskList"
-            class="p-dropdown-custom-md"  appendTo='body' [baseZIndex]="9999" [(ngModel)]="material.taskId">
-          </p-dropdown>  -->
+            </select> 
           </td>
           <td>
             <div style="display:inline-flex">
@@ -53,9 +49,9 @@
             class="p-autoComplete-ctsm workflow-measurement-select" field="partName"  name="partNumber_{{ i }}" [dropdown]="true"
               errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage=" "
               (completeMethod)="filterpartItems($event)"  [size]="30" [minLength]="1" [forceSelection]="true"
-              [(ngModel)]="material.partNumber"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >
+              [(ngModel)]="material.partItem"   appendTo='body' (onClear)="clearautoCompleteInput(material)" [baseZIndex]="9999"  #prellRevI="ngModel" >
           </p-autoComplete> 
-              <div *ngIf="material.partNumber !== null && material.partNumber !== '' ">
+              <div *ngIf="material.partItem !== null && material.partItem !== '' ">
                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View" tooltipPosition="bottom" title=""
                   class="btn  nobg" data-original-title="View" (click)="openView(material)" class="view_content">
                   <i class="fa fa-eye view_icon_adjust"></i>
@@ -156,10 +152,7 @@
           <td>&nbsp;</td>
           <td class="text-right"><b>{{ workFlow.materialExtendedCostSummation }}</b></td>
           <td *ngIf="!isQuote"></td>
-          <td>&nbsp;</td>
-          <!-- <td *ngIf="!isQuote" class="text-right"><b>
-              {{ workFlow.materialExtendedPriceSummation }}</b>
-          </td> -->
+          <td>&nbsp;</td> 
           <td>&nbsp;</td>
         </tr>
       </tfoot>
@@ -206,8 +199,7 @@
     [disabled]="!materialCreateForm.valid || checkQuantityAvailability()">
     Save
   </button>
-  <!-- <button type="button" class="btn btn-danger" (click)="closeMaterial()" data-dismiss="modal">Close</button> -->
-  </div>
+   </div>
 
   <div *ngIf="isWorkOrder && isEdit" class="float-right">
     <button *ngIf="isWorkOrder" class="btn btn-primary" (click)="updateMaterialsWorkOrder()"

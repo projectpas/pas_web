@@ -98,8 +98,10 @@ export class WorkOrderAssetsComponent implements OnInit {
     editData: any;
     assetAuditHistory: any;
     addNewEquipment: boolean = false;
+    //customerName:any;
 
     ngOnInit(): void {
+      // this.customerName="A Pusapkraj";
     }
     constructor(private workOrderService: WorkOrderService, private authService: AuthService, private datePipe: DatePipe, private commonService: CommonService,
         private alertService: AlertService, private modalService: NgbModal, private cdRef: ChangeDetectorRef) {
@@ -135,12 +137,14 @@ viewAsstesInventory(rowData){
     workOrderCheckInCheckOutList: any = [];
     AvailableCount: any;
     showcheckInOutlist = false;
+    togglePlus:boolean=false;
     openGrid() {
+        this.togglePlus=true;
         this.showcheckInOutlist = true;
         this.workOrderCheckInCheckOutList = [];
         this.AvailableCount = 0;
         if (this.status == 'checkIn') {
-            this.workOrderService.checkInAseetInventoryList(this.currentRecord.workOrderAssetId).subscribe(res => {
+            this.workOrderService.checkInAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.isSubWorkOrder).subscribe(res => {
                 this.workOrderCheckInCheckOutList = res;
                 if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
                     this.workOrderCheckInCheckOutList.map(element => {
@@ -155,7 +159,7 @@ viewAsstesInventory(rowData){
                 }
             })
         } else if (this.status == 'checkOut') {
-            this.workOrderService.checkOutAseetInventoryList(this.currentRecord.workOrderAssetId, this.workOrderId, this.workOrderPartNumberId, this.currentRecord.assetRecordId, 'admin', 1).subscribe(res => {
+            this.workOrderService.checkOutAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.workOrderId,this.isSubWorkOrder ? this.currentRecord.subWOPartNoId : this.workOrderPartNumberId, this.currentRecord.assetRecordId, this.authService.currentUser.userName, this.currentUserMasterCompanyId,this.isSubWorkOrder ? this.currentRecord.subWorkOrderId : this.workOrderId,this.isSubWorkOrder).subscribe(res => {
                 this.workOrderCheckInCheckOutList = res;
                 if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
                     this.workOrderCheckInCheckOutList.map(element => {
@@ -173,6 +177,7 @@ viewAsstesInventory(rowData){
     }
 
     checkStatus(rowData, value) {
+        this.togglePlus=false;
         this.showcheckInOutlist = false;
         this.assetsform = {
             ...this.assetsform, description: rowData.description,
@@ -209,6 +214,51 @@ viewAsstesInventory(rowData){
             employeeId: editValueAssignByCondition('value', this.assetsform.employeeId),
         }
         this.quantitySelected = 0;
+       if(this.isSubWorkOrder){
+           console.log("check in ")
+        if (this.status === 'checkIn') {
+            formData.forEach(element => {
+                element.checkInById = element.checkInById.value;
+                element.createdBy = this.userName;
+                element.UpdatedBy = this.userName;
+                element.masterCompanyId = 1;
+                if (element.isChecked == true) {
+                    this.finalAssetArray.push(element);
+                }
+            });
+            if (this.finalAssetArray && this.finalAssetArray.length != 0) {
+                this.workOrderService.savesubwocheckininventory(this.finalAssetArray).subscribe(res => {
+                    // this.refreshData.emit();
+            
+                    this.alertService.showMessage(
+                        '',
+                        'Inventory Checked-In successfully!',
+                        MessageSeverity.success
+                    );
+                },
+                    err => {
+                    })
+            }
+        } else {
+            formData.forEach(element => {
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
+                    this.finalAssetArray.push(element);
+                }
+            });
+            if (this.finalAssetArray && this.finalAssetArray.length != 0) {
+                this.workOrderService.savesubwocheckoutinventory(this.finalAssetArray).subscribe(res => {
+                    // this.refreshData.emit();
+                    this.alertService.showMessage(
+                        '',
+                        'Inventory Checked-Out successfully!',
+                        MessageSeverity.success
+                    );
+                },
+                    err => { })
+            }
+        }
+       }else{
         if (this.status === 'checkIn') {
             formData.forEach(element => {
                 element.checkInById = element.checkInById.value;
@@ -230,16 +280,6 @@ viewAsstesInventory(rowData){
                     );
                 },
                     err => {
-                    //     if (err && err.error.text == 'Inventory Checked-In successfully!') {
-                    //         this.alertService.showMessage(
-                    //             '',
-                    //             'Inventory Checked-In successfully!',
-                    //             MessageSeverity.success
-                    //         );
-                    //         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
-                    // this.getAllWorkOrderList(this.lazyLoadEventData);
-                    //     } else {
-                    //     }
                     })
             }
         } else {
@@ -258,41 +298,49 @@ viewAsstesInventory(rowData){
                         MessageSeverity.success
                     );
                 },
-                    err => {
-                    //     if (err && err.error.text == 'Inventory Checked-Out successfully!') {
-                    //         this.alertService.showMessage(
-                    //             '',
-                    //             'Inventory Checked-Out successfully!',
-                    //             MessageSeverity.success
-                    //         );
-                    //         this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
-                    // this.getAllWorkOrderList(this.lazyLoadEventData);
-                    //     } else {
-                    //     }
-
-                    })
+                    err => { })
             }
         }
+       }
     }
     releaseData: any = [];
     releaseInventory() {
+        this.togglePlus=false;
         this.releaseData = [];
         this.quantitySelected = 0;
-        if (this.assetsform.assetStatus == 'checkOut') {
+   if(this.isSubWorkOrder){
+    if (this.assetsform.assetStatus == 'checkOut') {
 
-            if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
-                this.workOrderCheckInCheckOutList.forEach(element => {
-                    element.checkOutById = element.checkOutById.value;
-                    if (element.inventoryStatus == 'Available') {
-                        this.releaseData.push(element);
-                    }
-                });
-                if (this.releaseData && this.releaseData.length != 0) {
-                    this.workOrderService.releaseAssetInventoryList(this.releaseData).subscribe(res => {
-                    });
+        if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+            this.workOrderCheckInCheckOutList.forEach(element => {
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
+                    this.releaseData.push(element);
                 }
+            });
+            if (this.releaseData && this.releaseData.length != 0) {
+                this.workOrderService.releasesubwocheckoutinventory(this.releaseData).subscribe(res => {
+                });
             }
         }
+    }
+   }else{
+    if (this.assetsform.assetStatus == 'checkOut') {
+
+        if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
+            this.workOrderCheckInCheckOutList.forEach(element => {
+                element.checkOutById = element.checkOutById.value;
+                if (element.inventoryStatus == 'Available') {
+                    this.releaseData.push(element);
+                }
+            });
+            if (this.releaseData && this.releaseData.length != 0) {
+                this.workOrderService.releaseAssetInventoryList(this.releaseData).subscribe(res => {
+                });
+            }
+        }
+    }
+   }
     }
     closeAddNew() {
         this.addNewEquipment = false;
@@ -313,7 +361,8 @@ viewAsstesInventory(rowData){
     }
     getAuditHistoryById(rowData) {
         const { workOrderAssetId } = rowData;
-        this.workOrderService.assetsHistoryByWorkOrderAssetId(workOrderAssetId).subscribe(res => {
+        const { subWorkOrderAssetId } = rowData;
+        this.workOrderService.assetsHistoryByWorkOrderAssetId(this.isSubWorkOrder ? subWorkOrderAssetId: workOrderAssetId,this.isSubWorkOrder).subscribe(res => {
             this.assetAuditHistory = res;
 
         },
@@ -473,7 +522,10 @@ viewAsstesInventory(rowData){
     }
 
     restoreRecord() {
-        this.commonService.updatedeletedrecords('WorkOrderAssets', 'workOrderAssetId', this.restorerecord.workOrderAssetId).subscribe(res => {
+        const table= this.isSubWorkOrder? 'SubWorkOrderAsset' :'WorkOrderAssets';
+       const column= this.isSubWorkOrder? 'SubWorkOrderAssetId' : 'workOrderAssetId';
+       
+        this.commonService.updatedeletedrecords(table, column, this.isSubWorkOrder? this.restorerecord.subWorkOrderAssetId : this.restorerecord.workOrderAssetId).subscribe(res => {
             this.getDeleteListByStatus(true)
             this.modal.close();
             this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
@@ -527,6 +579,10 @@ viewAsstesInventory(rowData){
         data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         // data.filters.employeeId= this.employeeId;
         data.filters.workOrderWfId = this.workFlowWorkOrderId;
+        if(this.isSubWorkOrder)
+        {
+            data.filters.SubWOPartNoId = this.subWOPartNoId;
+        }
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.isSpinnerVisible = true;
         this.workOrderService.getWorkOrderAssetList(this.isSubWorkOrder, PagingData).subscribe(res => {

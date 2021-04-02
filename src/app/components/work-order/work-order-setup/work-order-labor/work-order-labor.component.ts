@@ -363,7 +363,7 @@ laborTaskData:any;
         })
     }
   }
-  onDeSelect(item: any) {
+  onDeSelect(item: any) { 
     this.currentItem = item;
     this.type = "single";
     document.body.click();
@@ -515,7 +515,7 @@ laborTaskData:any;
       })]
       this.employeeList = employee;
     }
-  }
+  } 
   get currentUserMasterCompanyId(): number {
     return this.authService.currentUser
       ? this.authService.currentUser.masterCompanyId
@@ -524,9 +524,9 @@ laborTaskData:any;
   setEditArray:any=[];
   getAllExpertiseType(value?) {
     this.setEditArray = [];
-    this.setEditArray.push(this.laborForm.expertiseId ? this.laborForm.expertiseId : 0);
-if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.laborList.length !=0){
-  this.laborTaskData.laborList.forEach(element => {
+    this.setEditArray.push(this.laborForm.expertiseId ? this.laborForm.expertiseId : 0); 
+if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length !=0){
+  this.laborForm.laborList.forEach(element => {
     if(element.expertiseId !=0 || element.expertiseId !=null){
       this.setEditArray.push(element.expertiseId);
     }
@@ -868,8 +868,7 @@ if(this.laborTaskData && this.laborTaskData.laborList && this.laborTaskData.labo
   }
   currentRecord:any={};
   showDeleteLabourPopup(taskName, res, index) {
-    this.currentRecord=res;
-    console.log("hello", this.currentRecord)
+    this.currentRecord=res; 
     this.deletingLabourObj = {
       taskName: taskName,
       index: index
@@ -1274,14 +1273,14 @@ this.commonfunctionHandler();
             const decodedString = dom.body.textContent;
             return decodedString;
     }
-      }
+      } 
       currentIndex:any;
       taskIndex:any;
       currentTaks:any;
+      taskIndexMemo:any;
       onAddTextAreaInfo(material,taskName,index,track) {
         this.currentIndex=index;
-        this.taskIndex=track;
-        console.log("index,trek",index,track)
+        this.taskIndexMemo=track; 
         this.currentTaks=taskName;
         this.textAreaInfoLabor = material;
         this.disableEditor=true;
@@ -1332,8 +1331,7 @@ this.commonfunctionHandler();
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
         { field: 'updatedBy', header: 'Updated By',isRequired:false },
       ]
-    getAuditHistoryById(rowData) { 
-      console.log("roeData",rowData)
+    getAuditHistoryById(rowData) {  
         if(rowData.workOrderQuoteLaborId){
         this.workOrderService.getquoteLaborHistory(rowData.workOrderQuoteLaborId).subscribe(res => {
           this.historyData = res;
@@ -1362,5 +1360,31 @@ this.commonfunctionHandler();
         this.modal.componentInstance.auditHistory = [];  
     }
       }
+
+
+    //   getTaskList() {  
+    //     this.setEditArray=[]; 
+ 
+    //     if(this.isEdit){
+    //       this.setEditArray.push(this.editData.taskId ? this.editData.taskId : 0);
+    //     }else{
+    //       this.setEditArray.push(0)
+    //     }
+    //     const strText = '';
+    //     this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true,  0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+    //      this.taskList = res.map(x => {
+    //             return {
+    //                 id: x.value,
+    //                 description: x.label.toLowerCase(),
+    //                 taskId: x.value,
+    //                 label:x.label.toLowerCase(),
+    //             }
+    //         });
+    
+    //     },
+    //         err => { 
+    //         })
+    // }
+
 
 }

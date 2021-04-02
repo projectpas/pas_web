@@ -41,6 +41,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     overAllMarkup: any;
     costPlusType: number = 0;
     modal: NgbModalRef;
+    isSpinnerVisible: boolean = false;
     cols = [
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
         { field: 'weight', header: 'Weight' ,isRequired:false,width:"60px"},
@@ -50,11 +51,11 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     auditHistoryHeaders = [
         { field: 'taskName', header: 'Task',isRequired:false },
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Gl Account Name',isRequired:false },
-        { field: 'uom', header: 'Description',isRequired:false },
-        { field: 'length', header: 'Qty',isRequired:false },
-        { field: 'height', header: 'Ref Num',isRequired:false },
-        { field: 'width', header: 'Unit Cost',isRequired:false },
+        { field: 'weight', header: 'Weight',isRequired:false },
+        { field: 'uom', header: 'UOM',isRequired:false },
+        { field: 'length', header: 'Length',isRequired:false },
+        { field: 'height', header: 'Height',isRequired:false },
+        { field: 'width', header: 'Width',isRequired:false },
         { field: 'dimensionUOM', header: 'Dimension UOM',isRequired:false },
         { field: 'currency', header: 'Currency',isRequired:false },
         { field: 'amount', header: 'Amount',isRequired:true },
@@ -68,11 +69,11 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       auditHistoryQuoteHeaders = [
         { field: 'taskName', header: 'Task',isRequired:false },
         { field: 'shipVia', header: 'Ship Via',isRequired:true },
-        { field: 'weight', header: 'Gl Account Name',isRequired:false },
-        { field: 'uom', header: 'Description',isRequired:false },
-        { field: 'length', header: 'Qty',isRequired:false },
-        { field: 'height', header: 'Ref Num',isRequired:false },
-        { field: 'width', header: 'Unit Cost',isRequired:false },
+        { field: 'weight', header: 'Weight',isRequired:false },
+        { field: 'uom', header: 'UOM',isRequired:false },
+     { field: 'length', header: 'Length',isRequired:false },
+        { field: 'height', header: 'Height',isRequired:false },
+        { field: 'width', header: 'Width',isRequired:false },
         { field: 'dimensionUomName', header: 'Dimension UOM',isRequired:false },
         { field: 'currency', header: 'Currency',isRequired:false },
         { field: 'amount', header: 'Amount',isRequired:true },
@@ -112,6 +113,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.getUOMList('');
         this.getCurrencyList('');
         this.getCarrierList();
+        this.getTaskList();
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
@@ -251,7 +253,9 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.freightForm = [...this.freightForm, newFreight];
     }
     disableUpdate:boolean=true;
+    editData:any={};
     edit(rowData, mainIndex, subIndex) {
+        this.editData=rowData;
         this.mainEditingIndex = mainIndex;
         this.subEditingIndex = subIndex;
         this.isEdit = true;
@@ -259,6 +263,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.freightForm = [rowData];
         this.getCurrencyList('');
        this.getUOMList('');
+       this.getTaskList();
        this.disableUpdate=true;
     }
     checkAmount(){
@@ -408,7 +413,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     }
     currentRow:any={};
     openDelete(content, row) {
-  this.currentRow=row;
+  this.currentRow=row; 
       this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
       this.modal.result.then(() => { 
       }, () => {  })
@@ -424,9 +429,11 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.disableFrt=false;
         }
         else {
+            this.isSpinnerVisible = true;
             const workOrderFreightId  = this.isSubWorkOrder ? this.currentRow.subWorkOrderFreightId :this.currentRow.workOrderFreightId;
             this.workOrderService.deleteWorkOrderFreightList(workOrderFreightId, this.userName,this.isSubWorkOrder).subscribe(res => {
                 this.refreshData.emit();
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     '',
                     'Deleted WorkOrder Freight Successfully',
@@ -558,8 +565,13 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
        this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
     }
     restoreRecord() {
-      this.commonService.updatedeletedrecords('WorkOrderFreight', 'WorkOrderFreightId', this.restorerecord.workOrderFreightId).subscribe(res => {
+        const table= this.isSubWorkOrder ? 'SubWorkOrderFreight':'WorkOrderFreight';
+        const columnId=this.isSubWorkOrder ? 'SubWorkOrderFreightId':'WorkOrderFreightId';
+        const currentId=this.isSubWorkOrder ? this.restorerecord.subWorkOrderFreightId :this.restorerecord.workOrderFreightId
+        this.isSpinnerVisible= true
+      this.commonService.updatedeletedrecords(table, columnId, currentId).subscribe(res => {
         this.saveFreightsListDeletedStatus.emit(this.currentDeletedstatus);
+        this.isSpinnerVisible= false
           this.modal.close();
           this.alertService.showMessage("Success", `Record was Restored Successfully.`, MessageSeverity.success);
       });
@@ -606,7 +618,8 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       triggerHistory(){
        
       this.modal = this.modalService.open(AuditComponentComponent, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' });
-        this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
+      this.modal.componentInstance.auditHistoryHeader=[];
+      this.modal.componentInstance.auditHistoryHeader = this.auditHistoryHeaders;
         this.modal.componentInstance.auditHistory = this.historyData;
     
       }
@@ -614,4 +627,29 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
       getValidFrt(){
           this.disableFrt=false;
       }
+      
+ 
+      getTaskList() {  
+        this.setEditArray=[]; 
+ 
+        if(this.isEdit){
+          this.setEditArray.push(this.editData.taskId ? this.editData.taskId : 0);
+        }else{
+          this.setEditArray.push(0)
+        }
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true,  0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+         this.taskList = res.map(x => {
+                return {
+                    id: x.value,
+                    description: x.label.toLowerCase(),
+                    taskId: x.value,
+                    label:x.label.toLowerCase(),
+                }
+            });
+    
+        },
+            err => { 
+            })
+    }
 }

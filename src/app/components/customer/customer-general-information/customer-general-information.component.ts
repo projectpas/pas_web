@@ -1164,24 +1164,24 @@ export class CustomerGeneralInformationComponent implements OnInit {
     }
 
     ngOnDestroy() {		
-		if (!this.disableSaveForEdit) {
-            let content = this.tabRedirectConfirmationModal;
-            this.modal = this.modalService.open(content, { size: "sm" });
-        }
-        if (this.disableAddPMA) {
-            this.alertService.showMessage(
-                'Warning',
-                `Please hit add button to add PMA.`,
-                MessageSeverity.error)
-            return;
-        }
-        if (this.disableAddDER) {
-            this.alertService.showMessage(
-                'Warning',
-                `Please hit add button to add DER.`,
-                MessageSeverity.error)
-            return;
-        }
+		// if (!this.disableSaveForEdit) {
+        //     let content = this.tabRedirectConfirmationModal;
+        //     this.modal = this.modalService.open(content, { size: "sm" });
+        // }
+        // if (this.disableAddPMA) {
+        //     this.alertService.showMessage(
+        //         'Warning',
+        //         `Please hit add button to add PMA.`,
+        //         MessageSeverity.error)
+        //     return;
+        // }
+        // if (this.disableAddDER) {
+        //     this.alertService.showMessage(
+        //         'Warning',
+        //         `Please hit add button to add DER.`,
+        //         MessageSeverity.error)
+        //     return;
+        // }
 	}
 
     redirectToTabWithoutSave() {

@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body" style="padding-top: 5px; padding-bottom: 0px;" *ngIf="!toggle_po_header">
+            <div class="card-body toggle-div" *ngIf="!toggle_po_header">
                     <div class="form-row body-alignment">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -67,13 +67,13 @@
                         </div>
                     </div>
             </div>
-            <div class="form-controls" style="margin-top: 0px;">
+            <div class="form-controls margin-top-0">
                 <form #newSalesQuoteForm="ngForm" class="form-horizontal">
-                    <div class="card" style="padding: 5px; margin: 5px;" *ngIf="toggle_po_header">
+                    <div class="card sales-toggle" *ngIf="toggle_po_header">
                         <div class="form-row">
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6" style="padding:10px;">
+                                    <div class="col-md-6 padding-10">
                                         <div class="form-group">
                                             <label>Quote Type <span class="clr-red">*</span></label>
                                             <select name="quoteTypeId" required [(ngModel)]="salesQuote.quoteTypeId"
@@ -90,7 +90,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group" style="padding-top:5px;">
+                                        <div class="form-group padding-top-5">
                                             <label>SO Quote Num</label>
                                             <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
                                                 name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
@@ -159,7 +159,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" style="padding:10px">
+                                    <div class="col-md-6 padding-10">
                                         <div class="form-group">
                                             <label>Account Type <span class="clr-red">*</span></label>
                                             <select name="accountTypeId" required [(ngModel)]="salesQuote.accountTypeId"
@@ -229,7 +229,7 @@
                                         <div class="form-group">
                                             <label>Credit Limit &amp; terms</label>
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control" style="text-align:right;"
+                                                <input type="text" class="form-control text-right"
                                                     name="creditLimit"
                                                     [ngModel]="salesQuote.creditLimit | twoDecimalGlobalNumberFormatPipe"
                                                     (ngModelChange)="salesQuote.creditLimit=$event" [disabled]="true" />
@@ -262,8 +262,8 @@
                             </div>
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6" style="padding:10px; padding-top:5px">
-                                        <div class="form-group" style="padding:12px">
+                                    <div class="col-md-6 padding-10 padding-top-5">
+                                        <div class="form-group padding-12">
                                             <label></label>
                                             <div class="col-md-6">
                                                 <label>
@@ -280,7 +280,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="form-group" style="padding-top: 10px">
+                                        <div class="form-group padding-top-10">
                                             <label>Sales Person/Agent</label>
                                             <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
                                                 [(ngModel)]="salesQuote.salesPersonName"
@@ -291,7 +291,7 @@
                                                 [minLength]="1" [dropdown]="true">
                                             </p-autoComplete>
                                         </div>
-                                        <div class="form-group" style="padding-top:4px;">
+                                        <div class="form-group padding-top-4">
                                             <label>CSR</label>
                                             <p-autoComplete class=" autocomp-customer-cstm"
                                                 name="customerServiceRepName"
@@ -337,49 +337,49 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" style="padding:10px">
+                                    <div class="col-md-6 padding-10">
                                         <div class="card">
-                                            <div class="card-header" style="padding:.3rem 1rem">
-                                                <label style="text-align: center">Margin Summary</label>
+                                            <div class="card-header margin-summary-div">
+                                                <label class="text-center">Margin Summary</label>
                                             </div>
                                             <div>
                                                 <label
-                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Sales<span
-                                                        style="float: right">{{marginSummary.sales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    class="margin-summary-label">Sales<span
+                                                        class="float-right">{{marginSummary.sales | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                                 <label
-                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Misc
+                                                    class="margin-summary-label">Misc
                                                     Amt<span
-                                                        style="float: right">{{marginSummary.misc | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                        class="float-right">{{marginSummary.misc | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                                 <label
-                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Net
+                                                    class="margin-summary-label">Net
                                                     Sales<span
-                                                        style="float: right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                        class="float-right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                                 <label
-                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Product
+                                                    class="margin-summary-label">Product
                                                     Cost<span
-                                                        style="float: right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                        class="float-right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                                 <label
-                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Margin
+                                                    class="margin-summary-label">Margin
                                                     Amt<span
-                                                        style="float: right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                        class="float-right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                                 <label
-                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Margin
+                                                    class="margin-summary-label">Margin
                                                     %<span
-                                                        style="float: right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                        class="float-right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                             </div>
                                         </div>
-                                        <div style="padding: 10px"></div>
+                                        <div class="padding-10"></div>
                                         <div>
                                             <!-- <app-management-structure [salesQuote]="salesQuote"
                                                 [managementStructureId]="currentUserManagementStructureId">
                                             </app-management-structure> -->
-                                            <div class="card" style="margin-top: 20px;">
-                                                <div class="card-header" style="padding: 10px 12px;">
-                                                    <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure
+                                            <div class="card m-t-20">
+                                                <div class="card-header mgmt-card-header">
+                                                    <h5 class="mgmt-label">Management Structure
                                                         <span class="clr-red">*</span></h5>
 
                                                 </div>
-                                                <div class="card-body" style="padding: 12px 12px 4px;">
+                                                <div class="card-body mgmt-card-body">
                                                     <div class="form-group">
                                                         <select
                                                             [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''"
@@ -615,7 +615,7 @@
                         <div class="clearfix mb-1"></div>
                     </ng-container>
 
-                    <div class="card-footer" style="text-align: right;">
+                    <div class="card-footer text-right">
                         <div class="col-md-1 col-sm-1 col-1">
                             &nbsp;
                         </div>
@@ -750,7 +750,7 @@
     <div class="modal-body">
         <h6> If yes, please select below considerations.</h6>
 
-        <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+        <div class="form-group popup_checkbox_considerations m-t-5">
             <p-checkbox name="isPartsAllowForCopy" [(ngModel)]="copyConsiderations.isPartsAllowForCopy" binary="true"
                 label="Parts">
             </p-checkbox>
@@ -778,42 +778,42 @@
                     [(ngModel)]="salesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
             </div>
 
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+            <div class="form-group popup_checkbox_considerations m-t-5">
                 <p-checkbox name="selectAllForConversion"
                     (onChange)="onActionSelectAllforconvversion()"
                     [(ngModel)]="selectAllForConversion" binary="true" label="Select All">
                 </p-checkbox>
             </div>
 
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px; margin-left: 30px">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferStockline" [(ngModel)]="salesOrderConversionCriteriaObj.transferStockline"
                     binary="true" label="Transfer Stockline">
                 </p-checkbox>
             </div>
 
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px; margin-left: 30px">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="reserveStockline" [(ngModel)]="salesOrderConversionCriteriaObj.reserveStockline"
                     binary="true" label="Reserve Stockline">
                 </p-checkbox>
             </div>
 
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px; margin-left: 30px">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferNotes" [(ngModel)]="salesOrderConversionCriteriaObj.transferNotes"
                     binary="true" label="Transfer Notes">
                 </p-checkbox>
             </div>
 
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px; margin-left: 30px">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferMemos" [(ngModel)]="salesOrderConversionCriteriaObj.transferMemos"
                     binary="true" label="Transfer Memo">
                 </p-checkbox>
             </div>
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px; margin-left: 30px">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferFreight" [(ngModel)]="salesOrderConversionCriteriaObj.transferFreight"
                     binary="true" label="Transfer Freights">
                 </p-checkbox>
             </div>
-            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px; margin-left: 30px">
+            <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferCharges" [(ngModel)]="salesOrderConversionCriteriaObj.transferCharges"
                     binary="true" label="Transfer Charges">
                 </p-checkbox>

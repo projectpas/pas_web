@@ -311,7 +311,7 @@ export class VendorCapesComponent implements OnInit {
         if(this.arraylistCapabilityTypeId.length == 0) {
 			this.arraylistCapabilityTypeId.push(0); }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description', '', true, 200, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'CapabilityTypeDesc', '', true, 2000, this.arraylistCapabilityTypeId.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.CapesTypelistCollection = res;
             this.isSpinnerVisible = false;
         },err => {
@@ -684,19 +684,21 @@ export class VendorCapesComponent implements OnInit {
             }
             this.vendorService.uploadVendorCapabilitiesList(this.formData, this.vendorId, data).subscribe(res => {                
                 if(res){
-                   this.vendorCapasNotExistList = res;
-                   if(this.vendorCapasNotExistList){
+                    this.vendorCapasNotExistList = res;                   
+                    if(this.vendorCapasNotExistList.length > 0){
                         this.modal = this.modalService.open(tabRedirectConfirmationModal, { size: 'lg', backdrop: 'static', keyboard: false }); 
                     } 
+                    else{
+                        this.alertService.showMessage(
+                            'Success',
+                            `Capability List Uploaded Successfully  `,
+                            MessageSeverity.success
+                        );
+                    }
                 }
                 event.target.value = '';
                 this.formData = new FormData();
-                this.getVendorCapabilitylistId('all'); 
-                this.alertService.showMessage(
-                    'Success',
-                    `Capability List Uploaded Successfully  `,
-                    MessageSeverity.success
-                );
+                this.getVendorCapabilitylistId('all');                
             })
         }
     }

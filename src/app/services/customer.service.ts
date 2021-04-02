@@ -692,7 +692,19 @@ export class CustomerService {
     customerInvoiceSearch(
         customerInvoiceSearchParameters: ICustomerInvoiceSearchParameters) {
         return Observable.forkJoin(
-          this.customerEndpoint.customerInvoiceSearch(customerInvoiceSearchParameters)
+            this.customerEndpoint.customerInvoiceSearch(customerInvoiceSearchParameters)
         );
-      }
+    }
+
+    getOpenInvoiceList() {
+        return Observable.forkJoin(
+            this.customerEndpoint.getOpenInvoiceList()
+        );
+    }
+
+    getOpenInvoiceListByCustomerId(customerId: number) {
+        return Observable.forkJoin(
+            this.customerEndpoint.getOpenInvoiceListByCustomerId(customerId)
+        );
+    }
 }

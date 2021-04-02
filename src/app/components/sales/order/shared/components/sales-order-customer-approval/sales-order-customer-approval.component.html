@@ -1,8 +1,8 @@
-<div class="approver-tab-cstm">
+<div class="approver-tab-cstm form-group" style="margin-bottom: 5%;">
   <h5 class="po-head mt-2">Customer Approvals List</h5>
   <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
     <div class="tableFixHead">
-      <table class="table table-bordered header-table-width" id="mpn-list-table">
+      <table class="table table-bordered" id="mpn-list-table">
         <thead>
           <tr class="pad_workflo">
             <th class="approver-th-align th-width">
@@ -28,7 +28,7 @@
                   [(ngModel)]="approver.selected" (click)="onApprovalSelected(approver, i)" />
               </td>
               <ng-container *ngFor="let field of columns">
-                <td style="width: 130px !important;" *ngIf="field.field != 'internalSentDate'
+                <td class="table-column-width" *ngIf="field.field != 'internalSentDate'
                                       && field.field != 'internalApprovedDate'
                                       && field.field != 'customerSentDate'
                                       && field.field != 'customerApprovedDate'
@@ -51,7 +51,7 @@
 
                   <span>{{approver[field.field]}}</span>
                 </td>
-                <td style="text-align: right; width: 150px !important;" *ngIf="field.field == 'discount'
+                <td class="text-right" style="min-width:60px !important" *ngIf="field.field == 'discount'
                                       || field.field == 'markUpPercentage'
                                       || field.field == 'unitCostExtended'
                                       || field.field == 'discountAmount'
@@ -63,7 +63,7 @@
                                       || field.field == 'marginPercentage'">
                   <span>{{approver[field.field] | twoDecimalGlobalNumberFormatPipe}}</span>
                 </td>
-                <td *ngIf="field.field == 'qty'" style="text-align: right; width: 130px !important;">
+                <td *ngIf="field.field == 'qty'" class=" text-right" style="min-width:60px">
                   <span>{{approver[field.field] | globalNmberFormat}}</span>
                 </td>
                 <td *ngIf="field.field == 'internalSentDate'">
@@ -76,7 +76,7 @@
                 <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
                   <label *ngIf="field.field != 'internalStatusId'"
                     [ngClass]="columns.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                  <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
+                  <select class="width-150" [(ngModel)]="approver['internalStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2"
                     *ngIf="field.field == 'internalStatusId'">
@@ -89,7 +89,7 @@
                 <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
                   <label *ngIf="field.field != 'internalStatusId'"
                     [ngClass]="columns.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                  <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
+                  <select class="width-150" [(ngModel)]="approver['internalStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2"
                     *ngIf="field.field == 'internalStatusId'">
@@ -99,9 +99,9 @@
                     </option>
                   </select>
                 </td>
-                <td *ngIf="field.field == 'internalMemo'" style="min-width: 100px;">
-                  <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['internalMemo']"></p>
-                  <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionInternalStatus(approver)">
+                <td *ngIf="field.field == 'internalMemo'" class="min-width-100">
+                  <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['internalMemo']"></p>
+                  <div class="pencil-div" *ngIf="getApprovalActionInternalStatus(approver)">
                     <i class="fa fa-pencil fa-lg" data-toggle="modal" data-target="#memo-popup"
                       matTooltipPosition="above" matTooltip="Add Memo"
                       (click)="onAddTextAreaInfo('internalMemo',i)"></i>
@@ -123,7 +123,7 @@
                 </td>
                 <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
                   <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
-                  <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                  <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 4"
                     *ngIf="field.field == 'customerStatusId'">
@@ -135,7 +135,7 @@
                 </td>
                 <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver) ">
                   <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
-                  <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                  <select class="width-150" [(ngModel)]="approver['customerStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 4"
                     *ngIf="field.field == 'customerStatusId'">
@@ -145,9 +145,9 @@
                     </option>
                   </select>
                 </td>
-                <td *ngIf="field.field == 'customerMemo'" style="min-width: 100px;">
-                  <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['customerMemo']"></p>
-                  <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionCustomerStatus(approver)">
+                <td *ngIf="field.field == 'customerMemo'" class="min-width-100">
+                  <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['customerMemo']"></p>
+                  <div class="pencil-div" *ngIf="getApprovalActionCustomerStatus(approver)">
                     <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
                       matTooltipPosition="above" matTooltip="Add Memo"
                       (click)="onAddTextAreaInfo('customerMemo',i)"></i>
@@ -163,7 +163,7 @@
                 <td *ngIf="field.field == 'customerApprovedBy'">
                   <label *ngIf="field.field != 'customerApprovedBy'">{{approver[field.field]}}</label>
                   <select *ngIf="field.field == 'customerApprovedBy'" [(ngModel)]="approver['customerApprovedById']"
-                    style="width:150px;" [disabled]="!approver.selected || approver['approvalActionId'] != 4">
+                    class="width-150" [disabled]="!approver.selected || approver['approvalActionId'] != 4">
                     <option value="">Select</option>
                     <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.contactName}}</option>
                   </select>
@@ -175,9 +175,11 @@
       </table>
     </div>
   </div>
-  <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
-    style="margin-top: 20px; margin-bottom: 10px;" [disabled]="!getAllPartsToDisableOrNot()">Submit</button>
+  <div class="part-buttons">
+  <button *ngIf="!isView" class="btn btn-primary pull-right submit-button-margin" (click)="saveApprovalProcess()"
+    [disabled]="!getAllPartsToDisableOrNot()">Submit</button>
 </div>
+  </div>
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
     <div class="modal-content">

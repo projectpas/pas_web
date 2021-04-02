@@ -13,9 +13,9 @@
         </div>
       </div>
     </div>
-    <div [ngClass]="(isView) ? 'pull-right' : ''">
-      <div class="checkbox-cstm show_cst">
-        <label style="width: auto !important;margin-top: 3px;">
+    <div >
+      <div class="checkbox-cstm show_cst" [ngClass]="isView ? 'pull-right' : ''">
+        <label class="quote-freight-label">
           <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
             (click)="getDeleteListByStatus($event.target.checked)" />
           <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -35,28 +35,28 @@
               &nbsp;
             </th>
             <ng-container *ngIf="isView">
-              <th colspan="5" style="width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
+              <th colspan="5" style="width:519px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
                 <div class="display-flex" style="padding-left: 10px;">
                   <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
-                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusTypeSOQ"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view p-radiobutton-label-w92" name="costPlusTypeSOQ"
                       label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="tmchange()">
                     </p-radioButton>
                     <div>
-                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                        [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                      <select class="form-group select-markup m-t-10" (change)="markupChanged({}, 'all')"
+                        [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1">
                         <option value="" selected>Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
                     </div>
                   </div>
                   <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="2"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ" value="2"
                       label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                     </p-radioButton>
                   </div>
                   <div>
-                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="3"
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio-view" name="costPlusTypeSOQ" value="3"
                       label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
                       (click)="(!isView)?tmchange():''">
                     </p-radioButton>
@@ -67,7 +67,7 @@
             </ng-container>
             <ng-container *ngIf="!isView">
               <th colspan="5"
-                style="width:650px; color:#fff !important; border: 1px solid #e7ecf1;padding: 0;padding-left: 20px;">
+                style="width:519px; color:#fff !important; border: 1px solid #e7ecf1;padding: 0;padding-left: 20px;">
                 <div class="display-flex" style=" padding-left: 10px;">
                   <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
                     <p-radioButton (ngModelChange)="validated()"
@@ -76,9 +76,9 @@
                       [disabled]="isView" (click)="tmchange()">
                     </p-radioButton>
                     <div>
-                      <select (ngModelChange)="validated()" class="form-group select-markup"
+                      <select (ngModelChange)="validated()" class="form-group select-markup m-t-10"
                         (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                        [disabled]="isView || costPlusType != 1" >
                         <option value="" selected>Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
@@ -181,7 +181,7 @@
                   </a>
                 </span>
                 <span>
-                  <button class="btn  nobg grey_btn_icon" style="padding:0px"
+                  <button class="btn  nobg grey_btn_icon padding-0"
                     [disabled]="freight.salesOrderQuoteFreightId==0"
                     (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                     matTooltipPosition="above">
@@ -196,7 +196,7 @@
                       aria-hidden="true"></i></a>
                 </span>
                 <span>
-                  <button class="btn  nobg grey_btn_icon" style="padding:0px"
+                  <button class="btn  nobg grey_btn_icon padding-0"
                     [disabled]="freight.salesOrderQuoteFreightId==0"
                     (click)="openInterShipViaHistory(contentAuditHist,freight)" matTooltip="History"
                     matTooltipPosition="above">
@@ -227,7 +227,7 @@
             </ng-container>
             <ng-container *ngIf="costPlusType == 3">
               <td class="table-column-width">
-                <input type="text" pInputText pKeyFilter="money" style="text-align: right;"
+                <input type="text" pInputText pKeyFilter="money" class="text-right"
                   [ngModel]="freightFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
                   [ngModelOptions]="{updateOn:'blur'}"
                   (ngModelChange)="freightFlatBillingAmount=formatStringToNumberGlobal($event)"
@@ -241,7 +241,7 @@
       </p-table>
     </div>
   </div>
-  <div *ngIf="!isView" style="padding: 10px;">
+  <div *ngIf="!isView" class="padding-10">
     <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createFreightsQuote()">
       <span *ngIf="isUpdate">Update</span>
       <span *ngIf="!isUpdate">Save</span>
@@ -294,40 +294,40 @@
                         (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required
                         appendTo='body' [baseZIndex]="9999">
                       </p-dropdown>
-                      <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg"
+                      <span class="circle-span"><a class="fa fa-plus-circle fa-lg"
                           matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal"
                           data-target="#AddShipVia" (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
-                      <span style="margin-left:0px;cursor:pointer;"><a class="btn nobg" *ngIf="f.shipViaId > 0"
+                      <span class="pencil-span"><a class="btn nobg" *ngIf="f.shipViaId > 0"
                           matTooltip="Edit Ship Via" matTooltipPosition="above" data-toggle="modal"
                           data-target="#AddShipVia" (click)="onEditShipVia('Edit',f.shipViaId,i)"><i
                             class="fa fa-pencil"></i></a>
                       </span>
                     </td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                       <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel"
                         [(ngModel)]="f.weight" class="form-control w50" (onChange)="weightChange()" />
                     </td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()"
                         (input)="onFilterUom($event.target.value)" name="unitOfMeasureId{{ i }}"
                         [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
                         [(ngModel)]="f.uomId" filter="true" [required]="f.weight > 0">
                       </p-dropdown>
                     </td>
-                    <td style="text-align: center;"><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
+                    <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
                         [(ngModel)]="f.length" #length="ngModel" class="form-control w50" /></td>
-                    <td style="text-align: center;"><input type="number" (ngModelChange)="enableUpdate()" name="height{{ i }}" #height="ngModel"
+                    <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="height{{ i }}" #height="ngModel"
                         [(ngModel)]="f.height" class="form-control w50" /></td>
-                    <td style="text-align: center;"><input type="number" (ngModelChange)="enableUpdate()" name="width{{ i }}" #width="ngModel"
+                    <td class="text-center"><input type="number" (ngModelChange)="enableUpdate()" name="width{{ i }}" #width="ngModel"
                         [(ngModel)]="f.width" class="form-control w50" /></td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" filter="true"
                         (input)="onFilterUom($event.target.value)" name="dimensionUOMId{{ i }}"
                         [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
                         [(ngModel)]="f.dimensionUOMId" [required]="f.length > 0 || f.height > 0 || f.width > 0">
                       </p-dropdown>
                     </td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                       <p-dropdown placeholder="Select " (ngModelChange)="enableUpdate()" name="currencyId{{ i }}"
                         [options]="currencyList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md"
                         [(ngModel)]="f.currencyId" filter="true" (input)="onFilterCurrency($event.target.value)">
@@ -431,7 +431,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <strong style="display: inline-flex;">
+    <!-- <strong style="display: inline-flex;">
       Ship Via:
       <span class="new-label">
         <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
@@ -440,7 +440,19 @@
           <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
         </select>
       </span>
-    </strong>
+    </strong> -->
+    <div class="form-row">
+      <div class="col-md-12 margin-right" style="display: inline-flex;">
+        <label class="fs12"> Ship Via: </label>
+        <span class="new-label"> 
+          <select class="form-control select-read-only new-labelSelect" id="hideDisabled"
+          [(ngModel)]="selectedRowForDelete.shipViaId" disabled>
+          <option value="">Select</option>
+          <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+        </select>
+      </span>
+      </div>
+  </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="delete()">Yes</button>
@@ -471,7 +483,7 @@
     <button type="button" class="btn btn-danger" (click)="dismissModelAlettRestore()">No</button>
   </div>
 </ng-template>
-<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" class="wauto" data-backdrop="static">
   <div class="modal-header">
     <h4 class="modal-title">History of Freights</h4>
     <button type="button" class="close" aria-label="Close" (click)="dismissModelHistory()">
@@ -486,7 +498,7 @@
             <th rowspan="2">Ship Via <span class="clr-red">*</span></th>
             <th rowspan="2">Weight</th>
             <th rowspan="2">UOM</th>
-            <th colspan="4" style="text-align: center;">Dimensions</th>
+            <th colspan="4" class="text-center">Dimensions</th>
             <th rowspan="2">Currency</th>
             <th rowspan="2">Amount <span class="clr-red">*</span></th>
             <th rowspan="2">Memo</th>
@@ -535,7 +547,7 @@
           <td
             [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
             {{audit.billingAmount}}</td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                 <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
@@ -546,7 +558,7 @@
           <td>{{audit.createdBy}}</td>
           <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
           <td>{{audit.updatedBy}}</td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <span class="value">
               <label class="wauto">
                 <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>

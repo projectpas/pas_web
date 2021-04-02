@@ -186,7 +186,7 @@
                                     (onChange)="toggleIsActive(rowData, $event)">
                                 </p-inputSwitch>
                             <span data-toggle="modal" data-target="#view"
-                                (click)="onViewWFDetails(rowData)">
+                                (click)="onViewWFDetails(rowData,'html')">
                                 <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
                                     tooltipPosition="bottom" title="" class="btn  nobg"
                                     data-original-title="View">
@@ -1194,7 +1194,7 @@
 	</div>
 </div>
 
-<div *ngIf="isWorkOrder && responseDataForWorkFlow">
+<div *ngIf="isWorkOrder  ">
     <div class="card">
         <div class="card-header header">
             <!-- <nav class="pull-left" aria-label="breadcrumb">

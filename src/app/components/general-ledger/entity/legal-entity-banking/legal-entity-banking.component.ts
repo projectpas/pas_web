@@ -131,6 +131,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.sourceLegalEntity.isActive = true;
 		this.entityName = "";
 		this.CountryData('')
+		this.glList();
 	}
 
 	get currentUserMasterCompanyId(): number {
@@ -246,19 +247,26 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.isLockBox = false;
 			}
 			this.isSpinnerVisible = false;
-			if (res != null && res && res.length != 0) {
+			if (res != null && res && res.length != 0) {				
 				this.legalentitylockingboxid = res[0].legalEntityBankingLockBoxId;
 				this.sourceLegalEntity = {
 					...this.sourceLegalEntity,
+					bankName: res[0].bankName,
+					bankAccountNumber: res[0].bankAccountNumber,
+					payeeName: res[0].payeeName,
 					poBox: res[0].poBox,
 					bankStreetaddress1: res[0].address1,
 					bankStreetaddress2: res[0].address2,
 					bankCity: res[0].city,
 					bankProvince: res[0].stateOrProvince,
 					bankpostalCode: res[0].postalCode,
-					bankcountryId: res[0].countryId
-				};				
-				this.CountryData(res[0].country)
+					bankcountryId: res[0].countryId,					
+					glAccountId: res[0].glAccountId ? this.getInactiveObjectOnEdit('value', res[0].glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode'):null,
+				};
+				setTimeout(() => {
+					this.CountryData(res[0].country)
+					this.glList();
+				}, 500)					
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -314,8 +322,12 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					internationalBenficiaryBankName: res[0].beneficiaryBank,
 					internationalBankAccountNumber: res[0].beneficiaryBankAccount,
 					aba: res[0].aba,
-					internationalSWIFTID: res[0].swiftCode
+					internationalSWIFTID: res[0].swiftCode,
+					interglAccountId: res[0].glAccountId ? this.getInactiveObjectOnEdit('value', res[0].glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode') : null,				
 				}
+				setTimeout(() => {				
+					this.glList();
+				}, 500)	
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -335,7 +347,6 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			}
 			if (res != null && res && res.length != 0) {
 				const response = res;
-
 				this.LegalACHId = res[0].achId ? res[0].achId : 0;
 				this.sourceLegalEntity = {
 					...this.sourceLegalEntity,
@@ -345,19 +356,25 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					achBankAccountNumber: res[0].accountNumber,
 					achABANumber: res[0].aba,
 					achSWIFTID: res[0].swiftCode,
+					achglAccountId: res[0].glAccountId ? this.getInactiveObjectOnEdit('value', res[0].glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode') : null,				
 				}
+				setTimeout(() => {				
+					this.glList();
+				}, 500)	
 			}
 		}, err => {
 			this.isSpinnerVisible = false;
 		})
 	}
 
-	getmemo() {
-		if (this.sourceLegalEntity.bankStreetaddress1 != null &&
+	getmemo() {		
+		if (this.sourceLegalEntity.bankName != null  &&
+			this.sourceLegalEntity.bankAccountNumber != null  &&
+			this.sourceLegalEntity.bankStreetaddress1 != null &&
 			this.sourceLegalEntity.bankCity != null && 
 			this.sourceLegalEntity.bankProvince != null &&
-			 this.sourceLegalEntity.bankcountryId != null
-			&& this.sourceLegalEntity.bankpostalCode != null && this.sourceLegalEntity.bankcountryId != null
+			this.sourceLegalEntity.bankcountryId != null && 
+			this.sourceLegalEntity.bankpostalCode != null 			
 		) {
 			this.locksave = true;
 		}
@@ -372,9 +389,9 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	}
 
 	internationalval() {
-		if (this.sourceLegalEntity.internationalBankName != null && 			
-			this.sourceLegalEntity.internationalBenficiaryBankName != null && 
-			this.sourceLegalEntity.internationalBankAccountNumber != null
+		if (this.sourceLegalEntity.internationalBankName != null && 						
+			this.sourceLegalEntity.internationalBankAccountNumber != null &&
+			this.sourceLegalEntity.aba != null
 		) {
 			this.internationalvalid = true;
 		}
@@ -394,18 +411,23 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	savebanklockingbox() {
 		const data = {
 			LegalEntityId: this.id,
-			poBox: this.sourceLegalEntity.poBox,
+			bankName:this.sourceLegalEntity.bankName,
+			bankAccountNumber:this.sourceLegalEntity.bankAccountNumber,
+			payeeName:this.sourceLegalEntity.payeeName,
+			poBox: this.sourceLegalEntity.poBox,			
 			address1: this.sourceLegalEntity.bankStreetaddress1,
 			address2: this.sourceLegalEntity.bankStreetaddress2,
 			City: this.sourceLegalEntity.bankCity,
 			StateOrProvince: this.sourceLegalEntity.bankProvince,
 			CountryId: editValueAssignByCondition('value', this.sourceLegalEntity.bankcountryId),
+			glAccountId: this.sourceLegalEntity.glAccountId ? editValueAssignByCondition('value', this.sourceLegalEntity.glAccountId):null,
+			//glAccountId: this.getInactiveObjectOnEdit('value', this.sourceLegalEntity.glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode'),
 			PostalCode: this.sourceLegalEntity.bankpostalCode,
 			LegalEntityBankingLockBoxId: this.legalentitylockingboxid,
 			MasterCompanyId: this.currentUserMasterCompanyId,
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName
-		}
+		}		
 		if (this.isLockBox == true) {
 			this.isSpinnerVisible = true;
 			this.workFlowtService.newAddlockboxEntity(data).subscribe(res => {
@@ -415,7 +437,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.isSpinnerVisible = false;
 				this.alertService.showMessage(
 					'Success',
-					'Lock Box Saved Successfully',
+					'Lock Box Information Saved Successfully',
 					MessageSeverity.success
 				);
 			}, err => {
@@ -430,7 +452,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.locksave=false;
 				this.alertService.showMessage(
 					'Success',
-					'Lock Box Updated Successfully',
+					'Lock Box Information Updated Successfully',
 					MessageSeverity.success
 				);
 			}, err => {
@@ -502,7 +524,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			UpdatedBy: this.userName,
 			LegalEntityInternationalWireBankingId: this.LegalEntityInternationalWireBankingId,
 			internationalWirePaymentId: this.internalwire,
-			ABA: this.sourceLegalEntity.aba
+			ABA: this.sourceLegalEntity.aba,
+			glAccountId: this.sourceLegalEntity.interglAccountId ? editValueAssignByCondition('value', this.sourceLegalEntity.interglAccountId):null,
 		}
 		if (this.isInternationalWire == true) {
 			this.isSpinnerVisible = true;
@@ -513,7 +536,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.isInternationalWire = false;
 				this.alertService.showMessage(
 					'Success',
-					'International Saved Successfully',
+					'Wire Transfer Information Saved successfully ',
 					MessageSeverity.success
 				);
 
@@ -530,7 +553,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.internationalvalid=false;
 				this.alertService.showMessage(
 					'Success',
-					'International Updated Successfully',
+					'Wire Transfer Information updated successfully',
 					MessageSeverity.success
 				);
 			}, err => {
@@ -551,7 +574,8 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			MasterCompanyId: this.currentUserMasterCompanyId,
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName,
-			ACHId: this.LegalACHId
+			ACHId: this.LegalACHId,
+			glAccountId: this.sourceLegalEntity.achglAccountId ? editValueAssignByCondition('value', this.sourceLegalEntity.achglAccountId) : null,
 		}
 		if (this.isAch == true) {
 			this.isSpinnerVisible = true;
@@ -562,7 +586,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				this.isAch = false;
 				this.alertService.showMessage(
 					'Success',
-					'ACH Saved Successfully',
+					'ACH Information Saved successfully',
 					MessageSeverity.success
 				);
 			}, err => {
@@ -578,7 +602,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				const response = res;
 				this.alertService.showMessage(
 					'Success',
-					'ACH updated Successfully',
+					'ACH Information updated successfully',
 					MessageSeverity.success
 				);
 			}, err => {
@@ -867,6 +891,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	auditHistory: any = [];
 	isSpinnerVisibleHistory: boolean = false;
 	getAuditHistoryById(type) {
+		
 		if (type == 1) {
 			this.auditHistoryHeaders = [];
 			this.isSpinnerVisibleHistory = true;
@@ -879,6 +904,10 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
+
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Bank Account Number', field: 'bankAccountNumber' },
+				{ header: 'Payee Name', field: 'payeeName' },
 				{ header: 'PO Box', field: 'poBox' },
 				{ header: 'Street Address Line 1', field: 'line1' },
 				{ header: 'Street Address Line 2', field: 'line2' },
@@ -886,6 +915,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 				{ header: 'Province/State', field: 'stateOrProvince' },
 				{ header: 'Country', field: 'countries_name' },
 				{ header: 'Postal Code', field: 'postalCode' },
+				{ header: 'GLAccount', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -925,12 +955,13 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
-				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
-				{ header: 'Benficiary', field: 'beneficiaryBank' },
+				{ header: 'Benficiary Bank', field: 'beneficiaryBank' },
 				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
 				{ header: 'ABA Number', field: 'aba' },
-				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GLAccount', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -948,12 +979,13 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 					this.isSpinnerVisible = false;
 				});
 			this.auditHistoryHeaders = [
-				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Payee Name', field: 'bankName' },
 				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
-				{ header: 'Benficiary Bank Name', field: 'beneficiaryBankName' },
+				{ header: 'Beneficiary Bank Name', field: 'beneficiaryBankName' },
 				{ header: 'Bank Account Number', field: 'accountNumber' },
 				{ header: 'ABA Number', field: 'aba' },
-				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'SWIFT Code / IBAN Code', field: 'swiftCode' },
+				{ header: 'GLAccount', field: 'glAccount' },
 				{ header: 'Created Date', field: 'createdDate' },
 				{ header: 'Created By', field: 'createdBy' },
 				{ header: 'Updated Date', field: 'updatedDate' },
@@ -978,4 +1010,34 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 			}
 		}
 	}
+
+	allGlInfo: any[] = [];
+	private glList() {
+        this.commonService.getGlAccountList(this.currentUserMasterCompanyId).subscribe(res => {
+            this.allGlInfo = res;
+        })
+	}
+	
+	getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
+        if(id) {
+            for(let i=0; i < originalData.length; i++) {
+                if(originalData[i][string] == id) {
+                    return id;
+                } 
+            }
+            let obj: any = {};
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            obj = res[0];            
+            if(tableName == 'GLAccount') {
+                this.allGlInfo = [...originalData, obj];
+            }           
+            else if(tableName == 'Currency') {
+                this.allCurrencyInfo = [...originalData, obj];
+            }
+        });
+        return id;
+    } else {
+            return null;
+        }
+    }
 }

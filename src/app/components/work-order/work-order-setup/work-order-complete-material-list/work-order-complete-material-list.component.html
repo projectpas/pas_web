@@ -12,14 +12,13 @@
         Reserve & Issue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
          (click)="partsIssueRI(4)" data-toggle="modal" data-target="#reserve">
-        UnIssue </button>
+        Unissue </button>
     <button *ngIf="workOrderMaterialList && workOrderMaterialList.length > 0" class="btn btn-primary"
          (click)="partsIssueRI(5)" data-toggle="modal" data-target="#reserve">
-        UnReserve </button>
+        Unreserve </button>
 </div>
 <div id="addNewMaterials" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog modal-xlg">
-        <!-- Modal content-->
+    <div class="modal-dialog modal-xlg"> 
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -34,7 +33,7 @@
                     <grd-material [isEdit]="isEdit" [editData]="editData" [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder"
                         [workFlow]="workFlowObject" [taskList]="taskList"
                         (updateMaterialListForWO)="updateMaterialList($event)" [mpnPartNumbersList]="mpnPartNumbersList">
-                    </grd-material>
+                    </grd-material> 
                 </div>
             </div>
         </div> 
@@ -47,19 +46,15 @@
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th class="table-column-icon-width"></th>
-                <!-- [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" -->
-                <th class="table-column-width" [ngStyle]="{'width': col.width}" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
+                 <th class="table-column-width" [ngStyle]="{'width': col.width}" [ngClass]="{'adj_width1': col.header=='PN','adj_width2': (col.header=='PN Description' || col.header=='Classification') }" *ngFor="let col of columns" >
                     {{col.header}} 
                 </th>
                 <th class="table-actions-column" *ngIf="(fromWoList ==false || fromWoList ==undefined) && !isView">Actions </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-i="rowIndex" let-columns="columns">
-            <!-- [ngClass]="{'color_pick': rowData.isRoleUp==false }" -->
-            <tr>
-                <td class="table-column-icon-width">
-                    <!-- *ngIf="rowData.partStatusId !=0" -->
-                    <!-- [disabled]="rowData.partStatusId==0" -->
+             <tr>
+                <td class="table-column-icon-width"> 
                     <span >
                      
                     </span>
@@ -145,8 +140,8 @@
                 <h4 class="modal-title" *ngIf="statusId === 1">Reserved Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 2">Issued Parts</h4>
                 <h4 class="modal-title" *ngIf="statusId === 3">Reserve & Issue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 4">UnIssue Parts</h4>
-                <h4 class="modal-title" *ngIf="statusId === 5">UnReserve Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 4">Unissue Parts</h4>
+                <h4 class="modal-title" *ngIf="statusId === 5">Unreserve Parts</h4>
                 <p id="clockdiv" class="clockdiv" *ngIf="counter"> Session Expire in {{counter | formatTime}}</p>
             </div>
             <div class="form-row mar-left-15" *ngIf="statusId !== 2 && statusId !== 4 && statusId !== 5">
@@ -155,7 +150,7 @@
                         label="Include Alternate PN" (onChange)="resetAlternateParts($event)" [(ngModel)]="isShowAlternatePN">
                     </p-checkbox> 
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="margin-left:-50px !important">
                     <p-checkbox class="p-checkbox-label-womaterial" name="task" binary="false" label="Include Eq PN"
                         (onChange)="resetEqParts($event)" [(ngModel)]="isShowEqPN"></p-checkbox>
                 </div> 
@@ -177,7 +172,7 @@
                                 <tr>
                                     <th class="text-center select-all">
                                         Select All
-                                        <input type="checkbox" name="isSelectAll"
+                                        <input type="checkbox" name="isSelectAll" 
                                         [(ngModel)]="isAllow"  (change)="allowAll($event.target.checked)">
                                     </th>
                                     <th *ngIf="isShowAlternatePN && (statusId == 1 || statusId == 3) " class="text-center">
@@ -213,18 +208,18 @@
                                     <th class="text-center width-50"> Qty Avail </th>
                                     <th class="text-center"> Qty on Order </th>
                                     <th class="text-center" *ngIf="statusId === 1 || statusId === 5 ">
-                                        {{statusId == 1 ? 'Reserved' : 'UnReserved'  }} Date</th>
+                                        {{statusId == 1 ? 'Reserved' : 'UnReserved'  }} Date <span class="clr-red">*</span></th>
                                         <th class="text-center" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                             {{statusId === 2  ? 'Issued'  : 
                                         statusId === 3 ? 'Reserved & Issued'  
                                         : 'UnIssued' 
                                          }}
-                                            Date</th>
+                                            Date <span class="clr-red">*</span></th>
                                     <th class="text-center" *ngIf="statusId === 1 || statusId === 5">
-                                        {{statusId === 1 ? 'Reserved' : 'UnReserved'}} By</th>
+                                        {{statusId === 1 ? 'Reserved' : 'UnReserved'}} By <span class="clr-red">*</span></th>
                                     <th class="text-center" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                         {{statusId === 2  ? 'Issued' : statusId === 3 ? 'Reserved & Issued'  :'UnIssued'  }}
-                                        By</th>
+                                        By <span class="clr-red">*</span></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -498,7 +493,12 @@
                                     </td>
                                 </tr>
                             </ng-container>
-                        </ng-container>
+                        </ng-container> 
+                            <tr *ngIf="reservedList && reservedList.length ==0">
+                                <td colspan="18" class="no-records-msg no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr> 
                             </tbody>
                         </table>
                         </div>
@@ -507,13 +507,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <!-- || checkActiveStatus -->
                     <button class="btn btn-primary" data-dismiss="modal" (click)="saveRIPart()"
-                        [disabled]="!savebutonDisabled ">
+                        [disabled]="!savebutonDisabled">
                     <span *ngIf="statusId === 1">Reserve</span>
                     <span *ngIf="statusId === 2">Issue</span>
                     <span *ngIf="statusId === 3">Reserve & Issue</span>
-                    <span *ngIf="statusId === 4"> UnIssue</span>
-                    <span *ngIf="statusId === 5">UnReserve</span>
+                    <span *ngIf="statusId === 4"> Unissue</span>
+                    <span *ngIf="statusId === 5">Unreserve</span>
                     </button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeMaterial()">Cancel</button>
                 </div>

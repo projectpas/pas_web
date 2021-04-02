@@ -68,6 +68,12 @@ export class CommonService extends EndpointFactory {
     });
   }
 
+  autoSuggestionSmartDropDownSelfLEContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,legalentityId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownSelfLEContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&legalentityId=${legalentityId !== undefined ? legalentityId : 0} `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownSelfLEContactList(textColumn, searchText, startWith, idList,masterCompanyId,legalentityId));
+    });
+  }
+
   autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList?,masterCompanyId?,vendorId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownVendorContactList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}&masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}&vendorId=${vendorId !== undefined ? vendorId : 0} `, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.autoSuggestionSmartDropDownVendorContactList(textColumn, searchText, startWith, idList,masterCompanyId,vendorId));
@@ -561,10 +567,10 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.getAttachmentModuleIdByName(name));
     });
   }
-
-  getGlAccountList() {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getglaccountlist`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getGlAccountList());
+  
+  getGlAccountList(masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getglaccountlist/${masterCompanyId!==undefined?masterCompanyId:1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getGlAccountList(masterCompanyId));
     });
   }
 
