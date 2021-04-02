@@ -1235,8 +1235,8 @@ setTimeout(() => {
         if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
         }
-setTimeout(() => {
-    workOrderPart.workOrderScopeId=workOrderPart.workOrderScopeId?workOrderPart.workOrderScopeId :0;
+ 
+    workOrderPart.workOrderScopeId=(workOrderPart.workOrderScopeId !=undefined || workOrderPart.workOrderScopeId !=null)?workOrderPart.workOrderScopeId :0;
 
     const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId)
     const { workOrderScopeId } = workOrderPart;
@@ -1262,7 +1262,7 @@ setTimeout(() => {
             })
     }
     this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
-}, 1000);
+ 
     }
 
     getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
