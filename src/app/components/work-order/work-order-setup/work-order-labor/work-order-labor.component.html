@@ -260,7 +260,7 @@
                   <select class="check-valid-td" [(ngModel)]="rec.expertiseId" (ngModelChange)="checkValid(15)"
                    (change)="
                       getExpertiseEmployeeByExpertiseId($event.target.value, i, rec)
-                    " [disabled]="isView || laborForm.isTaskCompletedByOne">
+                    " [disabled]="isView || laborForm.isTaskCompletedByOne" required>
                     <option>Select</option>
                     <ng-container *ngFor="let exp of expertiseTypeList">
                       <option [value]="exp.value">{{ exp.label }}</option>
