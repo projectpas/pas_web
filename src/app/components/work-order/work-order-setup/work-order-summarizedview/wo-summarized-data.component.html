@@ -94,8 +94,9 @@
                                                 <div class="panel-title">
                                                     <div></div>
                                                     <a data-toggle="collapse" class="ac_cs collapsed" href="#materialList_{{i}}" (click)="getMaterialListData(materialMPN)"> 
-                                                        <div style="overflow-x: scroll;">
-                                                            <table style="border: 1px solid #c8c8c8 !important; width: 130%;table-layout: fixed;">
+                                                        <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                            <div class="tableFixHead">
+                                                            <table class="table table-bordered">
                                                                 <thead *ngIf="i == 0">
                                                                     <tr>
                                                                         <th *ngFor="let matHeader of materialListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
@@ -112,6 +113,7 @@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
+                                                            </div>
                                                         </div>
                                                     </a>
                                                 </div>
@@ -155,7 +157,9 @@
                                                 <div class="panel-title">
                                                     <div></div>
                                                     <a data-toggle="collapse" class="ac_cs collapsed" href="#labour_{{i}}" (click)="getLabourListData(labourMPN)">
-                                                            <table style="border: 1px solid #c8c8c8 !important; width: 98%;">
+                                                        <div class="table-responsive pas-table-cstm  poro-table-cstm parts-list-table-align" id="workflow-attributes-block">
+                                                            <div class="tableFixHead">
+                                                            <table class="table table-bordered">
                                                                 <thead *ngIf="i == 0">
                                                                     <tr>
                                                                         <th *ngFor="let matHeader of labourListHeader" style="border: 1px solid #c8c8c8 !important;padding: 8px; width: 11%;background-color: #4397f7;
@@ -174,6 +178,8 @@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
+                                                            </div>
+                                                            </div>
                                                     </a>
                                                 </div>
                                             </div>
