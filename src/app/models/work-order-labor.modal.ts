@@ -12,6 +12,7 @@ export class WorkOrderLabor {
   costPlusType: any;
   laborFlatBillingAmount: any;
   employeeName:any;
+  laborList:any=[]
   constructor() {
     this.workOrderLaborHeaderId = null;
     this.workFlowWorkOrderId = null;
@@ -24,6 +25,7 @@ export class WorkOrderLabor {
     this.hoursorClockorScan = 1;
     this.costPlusType = null;
     this.laborFlatBillingAmount = null;
+    this.laborList=[];
   }
 }
 

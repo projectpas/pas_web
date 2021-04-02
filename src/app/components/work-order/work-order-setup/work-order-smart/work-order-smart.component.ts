@@ -86,8 +86,7 @@ export class WorkOrderSmartComponent implements OnInit {
             this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
             // if(this.workOrderId)
         }
-        if (this.workOrderId || this.recCustomerId) {
-            console.log("status stage if")
+        if (this.workOrderId || this.recCustomerId) { 
             this.ishowEditDiv=true;
             this.isEdit = true;
             if (this.recCustomerId) {
@@ -130,8 +129,7 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.getAllExpertiseType();
                 this.getAllWorkOrderStatus();
             })
-        } else {
-            console.log("status stage else")
+        } else { 
             this.ishowEditDiv=false;
             this.getWorkOrderDefaultSetting();
             this.getAllWorkOrderTypes();
@@ -144,8 +142,7 @@ export class WorkOrderSmartComponent implements OnInit {
 
     }
     ngOnChanges(changes: SimpleChanges) {
-        this.subWoMpnGridUpdated = this.subWoMpnGridUpdated; 
-        console.log("current values dropsdf",this.subWoMpnGridUpdated)
+        this.subWoMpnGridUpdated = this.subWoMpnGridUpdated;  
     }
     ngOnDestroy(): void {
         this.onDestroy$.next();

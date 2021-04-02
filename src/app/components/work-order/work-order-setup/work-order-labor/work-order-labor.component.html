@@ -324,14 +324,14 @@
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)"  [disabled]="isView " style="width: 75px;" required/>
+                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 75px;" required/>
                     <span style="font-size: 17px; margin: 0 5px;">:</span>
                     <input type="number" class="form-control" (blur)="
                     calculateHoursDifference(rec);
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalMinutes" (ngModelChange)="checkValid(21)"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
+                    " [(ngModel)]="rec.totalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
                   </div>
                  
                 </td>
@@ -418,8 +418,8 @@
                         </div>
                         <div class="modal-body"> 
                          
-                            <p-editor [(ngModel)]="textAreaInfoLabor" [style]="{'height':'320px'}" class="text_sen"
-                            (ngModelChange)="editorgetmemo($event)" name="textAfd_{{currentIndex}}_{{taskIndex}}" required>
+                            <p-editor [(ngModel)]="textAreaInfoLabor" [style]="{'height':'320px'}" class="text_sen" id="textAfdw_{{currentIndex}}_{{taskIndexMemo}}"
+                            (ngModelChange)="editorgetmemo($event)" name="textAfd_{{currentIndex}}_{{taskIndexMemo}}" required>
                         </p-editor> 
                             <div class="editor-buttons">
                                 <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="getmemo($event)"
