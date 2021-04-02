@@ -151,7 +151,8 @@
               <label>Amount<span class="clr-red">*</span></label>
               <input type="text" class="form-control" style="text-align:right;" name="checkAmount"
                 [ngModel]="objInvoicePayment.checkPayments_Amount | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="objInvoicePayment.checkPayments.amount=$event" required />
+                (ngModelChange)="objInvoicePayment.checkPayments.amount=$event"
+                (change)="onChangeAmount($event, objInvoicePayment);" required />
             </div>
             <div class="form-group col-sm-12">
               <label for="currencyId">Currency <span class="clr-red">*</span></label>
@@ -243,7 +244,8 @@
               <label>Amount<span class="clr-red">*</span></label>
               <input type="text" class="form-control" style="text-align:right;" name="wireAmount"
                 [ngModel]="objInvoicePayment.invoiceWireTransferPayment.amount | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="objInvoicePayment.invoiceWireTransferPayment.amount=$event" required />
+                (ngModelChange)="objInvoicePayment.invoiceWireTransferPayment.amount=$event"
+                (change)="onChangeAmount($event, objInvoicePayment);" required />
             </div>
             <div class="form-group col-sm-12">
               <label for="wireCurrencyId">Currency <span class="clr-red">*</span></label>
@@ -449,7 +451,8 @@
               <label>Amount<span class="clr-red">*</span></label>
               <input type="text" class="form-control" style="text-align:right;" name="ccAmount"
                 [ngModel]="objInvoicePayment.invoiceCreditDebitCardPayment.amount | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="objInvoicePayment.invoiceCreditDebitCardPayment.amount=$event" required />
+                (ngModelChange)="objInvoicePayment.invoiceCreditDebitCardPayment.amount=$event"
+                (change)="onChangeAmount($event, objInvoicePayment);" required />
             </div>
             <div class="form-group col-sm-12">
               <label for="ccCurrencyId">Currency <span class="clr-red">*</span></label>
@@ -622,6 +625,12 @@
     Select Customer
   </div>
   <div class="card-body" style="padding: 10px;">
+    <div class="form-group" style="width: 100%; text-align: left;">
+      <button type="button" class="btn btn-primary editor-buttons-margin" (click)="clearCustSearch()"
+        style="width: 100px;">
+        Clear
+      </button>
+    </div>
     <div class="form-group">
       <div class="row" style="padding: 0;">
         <div class="col-md-12 col-sm-12 col-12">
@@ -634,7 +643,7 @@
                   (onChange)=" checkCustomerNameExist($event.target.value)" (onSelect)="selectedCustomerName()"
                   [suggestions]="customerNames" [forceSelection]="false" field="name"
                   (completeMethod)="filterCustomerNames($event)" (ngModelChange)="enableSave()" [size]="30"
-                  [minLength]="1" [dropdown]="true" required value="" autocomplete="new-password">
+                  [minLength]="1" [dropdown]="true" required value="" autocomplete="off">
                 </p-autoComplete>
               </div>
             </div>
@@ -677,6 +686,12 @@
     Open Invoices
   </div>
   <div class="card-body" style="padding: 10px;">
+    <div class="form-group" style="width: 100%; text-align: left;">
+      <button type="button" class="btn btn-primary editor-buttons-margin" (click)="enableCustSearch()"
+        style="width: 100px;" [disabled]="!checkIfInvoiceSelected()">
+        Apply Payment
+      </button>
+    </div>
     <div class="form-group">
       <div class="row" style="padding: 0;">
         <div class="col-md-12 col-sm-12 col-12">
@@ -704,11 +719,79 @@
                     <tr class="mpn-row" style="display: table-row;" *ngFor="let invoice of openInvoices; let i=index;">
                       <td>
                         <input type="checkbox" [(ngModel)]="invoice.selected"
-                          (click)="onApprovalSelected(invoice, i)" />
+                          [disabled]="isView || !getPartToDisableOrNot(invoice)" />
                       </td>
                       <ng-container *ngFor="let field of headers">
                         <td class="table-column-width">
-                          <span>{{invoice[field.field]}}</span>
+                          <span *ngIf="field.field == 'documentType'
+                          || field.field == 'docNum'
+                          || field.field == 'invoiceDate'
+                          || field.field == 'originalAmount'
+                          || field.field == 'remainingAmount'
+                          || field.field == 'newRemainingBal'
+                          || field.field == 'glARAccount'
+                          || field.field == 'currencyCode'
+                          || field.field == 'fxRate'
+                          || field.field == 'wosoNum'
+                          || field.field == 'paymentStatus'
+                          || field.field == 'dsi'
+                          || field.field == 'dso'
+                          || field.field == 'amountPastDue'
+                          || field.field == 'arBalance'
+                          || field.field == 'creditTermName'
+                          || field.field == 'cntrlNum'
+                          || field.field == 'employee'
+                          || field.field == 'level1'
+                          || field.field == 'level2'
+                          || field.field == 'level3'
+                          || field.field == 'level4'">
+                            {{invoice[field.field]}}
+                          </span>
+                          <span *ngIf="field.field == 'paymentAmount'">
+                            <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
+                              [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                              (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
+                          </span>
+                          <span *ngIf="field.field == 'discAmount'">
+                            <input type="text" class="form-control" style="text-align: right;" name="discAmount"
+                              [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                              (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
+                          </span>
+                          <span *ngIf="field.field == 'discType'">
+                            <select [(ngModel)]="invoice[field.field]" name="discType"
+                              (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                              <option value="0">Select</option>
+                              <option value="1">Early pay (Earned)</option>
+                              <option value="2">Early Pay (Not Earned)</option>
+                              <option value="3">Dispute Price</option>
+                              <!-- <option *ngFor="let name of statusList" [ngValue]="name.value">
+                                {{name.label}}</option> -->
+                            </select>
+                          </span>
+                          <span *ngIf="field.field == 'bankFeeAmount'">
+                            <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
+                              [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                              (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
+                          </span>
+                          <span *ngIf="field.field == 'bankFeeType'">
+                            <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
+                              (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                              <option value="0">Select</option>
+                              <option value="1">Wire/ACH Fees</option>
+                              <option value="2">FX Fees</option>
+                              <!-- <option *ngFor="let name of statusList" [ngValue]="name.value">
+                                {{name.label}}</option> -->
+                            </select>
+                          </span>
+                          <span *ngIf="field.field == 'otherAdjustAmt'">
+                            <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
+                              [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                              (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
+                          </span>
+                          <span *ngIf="field.field == 'reason'">
+                            <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
+                              [(ngModel)]="invoice[field.field]" id="reason" />
+                          </span>
                         </td>
                       </ng-container>
                     </tr>
@@ -719,17 +802,21 @@
           </div>
         </div>
       </div>
+      <div class="row" style="padding: 0; text-align: left;">
+        <div class="col-md-12 col-sm-12 col-12">
+          <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal">
+            Save
+          </button>
+          <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal">
+            Enter Another Pmt
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" (click)="onProcessPayment()">
-  Post Payment
-</button>
-<button type="button" (click)="onClose($event)" class="btn btn-danger">
-  Close
-</button>
 <!-- </div> -->
-<ng-template #addCheckMemo let-c="close" let-d="dismiss" tabindex="-1" style="z-index: 1052;">
+<ng-template #addCheckMemo let-c=" close" let-d="dismiss" tabindex="-1" style="z-index: 1052;">
   <div class="modal-header">
     <button type="button" class="close" (click)="dismissCheckMemoModel()">&times;</button>
     <h4 class="modal-title">Edit Memo</h4>
