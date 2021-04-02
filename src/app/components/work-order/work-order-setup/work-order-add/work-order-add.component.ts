@@ -29,6 +29,7 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { DBkeys } from '../../../../services/db-Keys';
 import { MenuItem } from 'primeng/api';
+import {AppModuleEnum} from "../../../../enum/appmodule.enum";
 
 @Component({
     selector: 'app-work-order-add',
@@ -103,6 +104,7 @@ export class WorkOrderAddComponent implements OnInit {
     data: any;
     saveTearDownData: any = [];
     workFlowList: any;
+    moduleId:any;
     tearDownReportList = [{
         label: 'Station 2', 
         value: 20
@@ -291,6 +293,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.subTabWorkFlowChange('editworkFlow');
             }}
         ];
+        this.moduleId= AppModuleEnum.WorkOrder;
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
