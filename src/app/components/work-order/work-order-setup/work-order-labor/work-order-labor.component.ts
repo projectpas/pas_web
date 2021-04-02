@@ -363,7 +363,7 @@ laborTaskData:any;
         })
     }
   }
-  onDeSelect(item: any) {
+  onDeSelect(item: any) { 
     this.currentItem = item;
     this.type = "single";
     document.body.click();
@@ -1278,9 +1278,10 @@ this.commonfunctionHandler();
       currentIndex:any;
       taskIndex:any;
       currentTaks:any;
+      taskIndexMemo:any;
       onAddTextAreaInfo(material,taskName,index,track) {
         this.currentIndex=index;
-        this.taskIndex=track;
+        this.taskIndexMemo=track;
         console.log("index,trek",index,track)
         this.currentTaks=taskName;
         this.textAreaInfoLabor = material;
@@ -1332,8 +1333,7 @@ this.commonfunctionHandler();
         { field: 'updatedDate', header: 'Updated Date',isRequired:false },
         { field: 'updatedBy', header: 'Updated By',isRequired:false },
       ]
-    getAuditHistoryById(rowData) { 
-      console.log("roeData",rowData)
+    getAuditHistoryById(rowData) {  
         if(rowData.workOrderQuoteLaborId){
         this.workOrderService.getquoteLaborHistory(rowData.workOrderQuoteLaborId).subscribe(res => {
           this.historyData = res;

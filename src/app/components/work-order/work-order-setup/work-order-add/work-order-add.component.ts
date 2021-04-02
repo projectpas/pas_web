@@ -919,11 +919,16 @@ setTimeout(() => {
             this.workOrderGeneralInformation.workOrderStatusId = 1;
         }
     }
-
+    dismissModelTask(){
+        $('#confirmationSave').modal('hide');
+    }
     saveWorkOrder(): void {
         this.mpnPartNumbersList = [];
         const generalInfo = this.workOrderGeneralInformation;
- 
+ if(generalInfo.creditLimit<=0){
+    $('#confirmationSave').modal('show');
+     return
+ } 
         const data1 = {
             ...generalInfo,
             customerId: editValueAssignByCondition('customerId', generalInfo.customerId),
@@ -1012,7 +1017,7 @@ setTimeout(() => {
 
     saveWorkOrderGridLogic(result, data) {
         this.savedWorkOrderData = result;
-        this.getWorkFlowData();
+        // this.getWorkFlowData();
         this.workOrderId = result.workOrderId;
         this.workOrderGeneralInformation.workOrderNumber = result.workOrderNum;
         if (this.workFlowWorkOrderId !== 0) {
@@ -1064,7 +1069,8 @@ setTimeout(() => {
     }
 
     onSelectedPartNumber(object, currentRecord, index) {
-        
+        currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined || currentRecord.workOrderScopeId !=0) ? currentRecord.workOrderScopeId :object.workOderScopeId;
+ 
         if (!this.workOrderGeneralInformation.isSinglePN) {
             this.checkPartExist(object, this.isEdit, index)
         }
@@ -1086,7 +1092,7 @@ setTimeout(() => {
         const { itemMasterId } = object;
         this.getPartPublicationByItemMasterId(currentRecord, itemMasterId);
         // currentRecord.masterPartId=object.itemMasterId;
-        currentRecord.workOrderScopeId=(currentRecord.workOrderScopeId !=null || currentRecord.workOrderScopeId !=undefined) ? currentRecord.workOrderScopeId :object.workOderScopeId;
+       
         this.getWorkFlowByPNandScope(null,currentRecord,'onload',index);
         currentRecord.description = object.partDescription
         currentRecord.isPMA = object.pma == null ? false : object.pma;
@@ -1229,31 +1235,34 @@ setTimeout(() => {
         if(value !=null && form=='html'){
             workOrderPart.workOrderScopeId=value;
         }
-        workOrderPart.workOrderScopeId=workOrderPart.workOrderScopeId?workOrderPart.workOrderScopeId :3;
-        const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId)
-        const { workOrderScopeId } = workOrderPart;
-        if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkFlowByPNandScope(itemMasterId, workOrderScopeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-             if(res && res.length!=0){
-                this.workFlowList = res.map(x => {
-                    return {
-                        label: x.workFlowNo,
-                        value: x.workFlowId
-                    }
-                })
-                workOrderPart.workflowId = this.workFlowList[0].value;
-                this.workFlowId=this.workFlowList[0].value;
-                this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
-             }else{
-                this.workFlowList=[];
-             }
-         },err => {
-                    this.handleError(err);
-                })
-        }
-        this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
+setTimeout(() => {
+    workOrderPart.workOrderScopeId=workOrderPart.workOrderScopeId?workOrderPart.workOrderScopeId :0;
+
+    const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId)
+    const { workOrderScopeId } = workOrderPart;
+    if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
+        this.isSpinnerVisible = true;
+        this.workOrderService.getWorkFlowByPNandScope(itemMasterId, workOrderScopeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.isSpinnerVisible = false;
+         if(res && res.length!=0){
+            this.workFlowList = res.map(x => {
+                return {
+                    label: x.workFlowNo,
+                    value: x.workFlowId
+                }
+            })
+            workOrderPart.workflowId = this.workFlowList[0].value;
+            this.workFlowId=this.workFlowList[0].value;
+            this.workOrderGeneralInformation.partNumbers[index].workflowId = this.workFlowList[0].value;
+         }else{
+            this.workFlowList=[];
+         }
+     },err => {
+                this.handleError(err);
+            })
+    }
+    this.getNTEandSTDByItemMasterId(itemMasterId, workOrderPart);
+}, 1000);
     }
 
     getNTEandSTDByItemMasterId(itemMasterId, currentRecord) {
