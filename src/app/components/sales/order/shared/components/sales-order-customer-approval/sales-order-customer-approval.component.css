@@ -59,3 +59,6 @@ label {
 .min-width-100{
   min-width: 100px !important;
 }
+.part-buttons{
+  text-align:right ; width:100% !important; padding-top:5px !important;
+}

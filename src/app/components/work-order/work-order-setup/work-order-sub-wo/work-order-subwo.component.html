@@ -291,8 +291,8 @@
       </div>
     </form>
   </div>
-  <div
-    *ngIf="subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
+  <div 
+    *ngIf="isGridShow && subWorkOrderGeneralInformation && subWorkOrderId!=0 && workOrderId  && isSavedPartNumbers && workOrderDetails && mpnGridUpdated && conditionList">
     <app-work-order-smart [isSubWorkOrder]="issubWorkOrderState"   [subWoMpnGridUpdated]="mpnGridUpdated"
       [paramsData]="workOrderDetails" [showTabsGrid]="showTabsGrid" [showGridMenu]="showGridMenu" [isView]="isView"
       [subWorkOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId"
@@ -302,3 +302,8 @@
 <!-- </div> -->
 <!-- </div> -->
 <!-- </div> -->
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+</div>

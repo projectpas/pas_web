@@ -1,4 +1,4 @@
-<div class="approver-tab-cstm">
+<div class="approver-tab-cstm form-group" style="margin-bottom: 5%;">
   <h5 class="po-head mt-2">Customer Approvals List</h5>
   <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
     <div class="tableFixHead">
@@ -63,7 +63,7 @@
                                       || field.field == 'marginPercentage'">
                   <span>{{approver[field.field] | twoDecimalGlobalNumberFormatPipe}}</span>
                 </td>
-                <td *ngIf="field.field == 'qty'" class=" text-right" style="min-width:60px !important">
+                <td *ngIf="field.field == 'qty'" class=" text-right" style="min-width:60px">
                   <span>{{approver[field.field] | globalNmberFormat}}</span>
                 </td>
                 <td *ngIf="field.field == 'internalSentDate'">
@@ -175,9 +175,11 @@
       </table>
     </div>
   </div>
+  <div class="part-buttons">
   <button *ngIf="!isView" class="btn btn-primary pull-right submit-button-margin" (click)="saveApprovalProcess()"
     [disabled]="!getAllPartsToDisableOrNot()">Submit</button>
 </div>
+  </div>
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
     <div class="modal-content">

@@ -16,4 +16,10 @@ export class CustomerPaymentsService {
       this.customerPaymentsEndpointService.create(salesOrder)
     );
   }
+
+  getCustomerPayment(customerPaymentId: number): Observable<ICustomerPayments[]> {
+    return Observable.forkJoin(
+      this.customerPaymentsEndpointService.getCustomerPayment(customerPaymentId)
+    );
+  }
 }
