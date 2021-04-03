@@ -1244,7 +1244,7 @@ this.commonfunctionHandler();
         }
       )
     }
-  }
+  } 
   formateCurrency(value) {
     if (value) {
       value = (Number(value.toString().split(',').join(''))).toFixed(2);
