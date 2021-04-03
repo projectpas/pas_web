@@ -1829,7 +1829,6 @@ setTimeout(() => {
                 "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
             }
         }
-
         for (let labList in data.workOrderLaborList) {
             for (let labSubList of data.workOrderLaborList[labList]) {
                 if (labSubList && labSubList['expertiseId'] != null){
@@ -1840,7 +1839,6 @@ setTimeout(() => {
         }
         return this.result;
     }
-
     saveReservedPartorIssue(alternatePartData) {  
         if (this.isSubWorkOrder == true) {
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1868,9 +1866,6 @@ setTimeout(() => {
                 })
         }
     }
-
-
-
     getValues(element) {
         if (element.stockLineNumber) {
             if (element.stockLineNumber.indexOf(',') > -1) {
@@ -1901,7 +1896,6 @@ setTimeout(() => {
             }
         }
     }
-
     getMaterialListByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
@@ -1935,7 +1929,6 @@ setTimeout(() => {
                 })
         }
     }
-
     getDocumentsByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.documentsDestructuredData = [];
@@ -1967,7 +1960,6 @@ setTimeout(() => {
             })
         }
     }
-
     clearLaborList() {
         if (this.taskList && this.taskList.length > 0) {
             for (let task of this.taskList) {
@@ -1986,7 +1978,6 @@ setTimeout(() => {
                 this.isSpinnerVisible = false;
                 this.data = {};
                 this.data = res;
-
                 if (res) {
                     this.workOrderLaborList = {
                         ...this.data,
@@ -2008,7 +1999,6 @@ setTimeout(() => {
                     for (let labList of this.data['laborList']) {
                         if (this.taskList) {
                             for (let task of this.taskList) {
-
                                 if (task.taskId == labList['taskId']) {
                                     if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
                                         this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
