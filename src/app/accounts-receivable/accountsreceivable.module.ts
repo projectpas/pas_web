@@ -27,6 +27,9 @@ import { EditorModule } from 'primeng/editor';
 import { AppSharedModule } from '../app-shared.module';
 import { CustomerPaymentsService } from '../services/customer-payment.service';
 import { CustomerPaymentsEndpointService } from '../services/customer-payments-endpoint.service';
+import { TabViewModule } from 'primeng/tabview';
+import { PanelModule } from 'primeng/panel';
+import { AddCustomerPaymentComponent } from '../components/accounts-receivable/add-customer-payment/add-customer-payment.component';
 
 @NgModule({
     imports: [
@@ -47,14 +50,17 @@ import { CustomerPaymentsEndpointService } from '../services/customer-payments-e
         , RadioButtonModule,
         CalendarModule, StepsModule, BreadcrumbModule, DialogModule,
         AppSharedModule,
-        EditorModule
+        EditorModule,
+        PanelModule,
+        TabViewModule
     ],
     declarations: [
         OpenCloseArsubledgerComponent,
         AccountsReceivableComponent,
         CustomerInvoiceListComponent,
         CustomerPaymentListComponent,
-        CustomerPaymentCreateComponent
+        CustomerPaymentCreateComponent,
+        AddCustomerPaymentComponent
     ],
     providers: [
         CustomerPaymentsService,

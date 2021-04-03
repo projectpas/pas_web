@@ -1823,7 +1823,7 @@
                                             <!-- Mark Up Amount -->
                                             <td>
                                                 <input type="text" class="input-field-value text-right input-width-100-percent"
-                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 1 ? 'input-background' : 'input-back-normal'"
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
                                                  pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}"
                                                   [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
                                             </td>
@@ -1834,7 +1834,9 @@
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent"  pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent"  
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'" 
+                                                pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
                                             </td>
                                             <!-- Sale Disc % -->
                                             <td>
@@ -1842,11 +1844,15 @@
                                             </td>
                                             <!-- Sale Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent"
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
                                             </td>
                                             <!-- Last Sales Disc Date -->
                                             <td>
-                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" class="input-field-value input-width-100-percent"
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Sale Price -->
                                             <td>

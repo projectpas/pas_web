@@ -19,8 +19,8 @@
                   getExpertiseEmployeeByExpertiseIdForHeader(laborForm.expertiseId); assignLabourExpertise(laborForm.expertiseId)" name="expertise" [required]="laborForm.isTaskCompletedByOne"></p-dropdown>
               </div>
               <div class="form-group" *ngIf="!isQuote"> 
-                <label for="employee">Employee <span >*</span></label>
-                <p-autoComplete class="p-autoComplete-ctsm" (ngModelChange)="checkValid(2)" field="label" name="employee" [dropdown]="true"
+                <label for="employee">Employee <span class="clr-red">*</span></label>
+                <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete" (ngModelChange)="checkValid(2)" field="label" name="employee" [dropdown]="true"
                   errorMessage="Records not found" [forceSelection]="true" [suggestions]="employeeList"
                   (completeMethod)="filterEmployee($event); " [size]="30" [minLength]="1" [(ngModel)]="laborForm.employeeId"
                   [disabled]="isView " emptyMessage="No Match Found" [required]="laborForm.isTaskCompletedByOne" (onSelect)="assignLabourEmployee(laborForm.employeeId)">
@@ -28,7 +28,7 @@
               </div>
               <div class="form-group" *ngIf="!isQuote">
                 <label for="dataentered">Data Entered By </label>
-                <p-autoComplete class="p-autoComplete-ctsm" field="label" (ngModelChange)="checkValid(3)" disabled name="dataEnteredBy" [dropdown]="true"
+                <p-autoComplete class="p-autoComplete-ctsm employee-autocomplete" field="label" (ngModelChange)="checkValid(3)" disabled name="dataEnteredBy" [dropdown]="true"
                   errorMessage="Records not found" [forceSelection]="true" [suggestions]="dataEnteredByList"
                   (completeMethod)="filterDataEnteredBy($event)" [size]="30" [minLength]="1"
                   [(ngModel)]="laborForm.dataEnteredBy" [disabled]="isView ">

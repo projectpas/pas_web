@@ -18,6 +18,7 @@ const accountReceivablePagesRoutes: Routes = [
             { path: "app-customer-payment-list", component: CustomerPaymentListComponent, data: { title: "Process Customer Receipt" } },
             { path: "app-open-close-ar-subledger", component: OpenCloseArsubledgerComponent, data: { title: "open-close-AR-subledger" } },
             { path: "process-customer-payment", component: CustomerPaymentCreateComponent },
+            { path: "process-customer-payment/:id", component: CustomerPaymentCreateComponent },
         ]
     }
 ];

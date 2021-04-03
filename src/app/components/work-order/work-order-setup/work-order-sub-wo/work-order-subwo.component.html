@@ -62,7 +62,7 @@
         <div class="form-row">
           <div class="col-md-3">
             <div class="form-group ">
-              <label> SubWO Num </label> <span class="clr-red">*</span>
+              <label> Sub WO Num </label> <span class="clr-red">*</span>
               <input class="form-control" data-toggle="tooltip" type="text" name="workOrderNumber"
                 #workOrderNumber="ngModel" disabled required
                 [(ngModel)]="subWorkOrderGeneralInformation.subWorkOrderNo" />
@@ -72,7 +72,7 @@
             <div class="form-group">
               <label for="opendate">Sub WO Open Date </label>
               <span class="clr-red">*</span>
-              <p-calendar [showIcon]="true" class="calender-cstm" (ngModelChange)="getActive()" name="openDate" #openDate="ngModel" required [disabled]="isView"
+              <p-calendar [showIcon]="true" class="calender-cstm sub-wo-calendar" (ngModelChange)="getActive()" name="openDate" #openDate="ngModel" required [disabled]="isView"
                 [(ngModel)]="subWorkOrderGeneralInformation.openDate"  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"></p-calendar>
             </div>
           </div>
