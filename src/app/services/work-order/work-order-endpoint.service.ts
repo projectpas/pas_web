@@ -659,6 +659,13 @@ export class WorkOrderEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.updateBillingByWorkOrderId(data));
         });
     }
+
+    searchPartNumberAdvanced<T>(searchParameters: any): Observable<T> {
+        return this.http.post<T>(`${this.configurations.baseUrl}/api/workorder/searchpartnumberbycustrestriction`, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.searchPartNumberAdvanced(searchParameters));
+            })
+    }
     getExistingWOROList() {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderrolist`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getExistingWOROList());

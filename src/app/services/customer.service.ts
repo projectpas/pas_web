@@ -701,4 +701,10 @@ export class CustomerService {
             this.customerEndpoint.getOpenInvoiceList()
         );
     }
+
+    getOpenInvoiceListByCustomerId(customerId: number) {
+        return Observable.forkJoin(
+            this.customerEndpoint.getOpenInvoiceListByCustomerId(customerId)
+        );
+    }
 }

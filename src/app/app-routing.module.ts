@@ -97,6 +97,11 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
             { path: "app-owner", component: OwnerComponent, data: { title: "Owner" } },
             { path: "app-platform", component: PlatformComponent, data: { title: "Platform" } },
             { path: "app-supervisor", component: SupervisorComponent, data: { title: "Supervisor" } },
+            {
+                path: "exchangemodule",
+                //loadChildren: "./exchangepages/exchangepages.module#ExchangepagesModule"
+                loadChildren: () => import('./exchangepages/exchangepages.module').then(m => m.ExchangepagesModule)
+            },
             { path: "home", redirectTo: "/", pathMatch: "full" },
             {path:"updatepassword",component:UpdatepasswordComponent,data: { title: "UpdatePassword" } },
             { path: "**", component: NotFoundComponent, data: { title: "Page Not Found" } },

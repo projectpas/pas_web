@@ -14,6 +14,7 @@ import { MasterComapnyService } from "../services/mastercompany.service";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { WorkOrderService } from "../services/work-order/work-order.service";
 @Component({
     selector: 'grd-material',
     templateUrl: './Material-List-Create.component.html',
@@ -220,7 +221,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         private commonService: CommonService,
         private authService: AuthService,
         private modalService: NgbModal,
-        private workOrderQuoteService: WorkOrderQuoteService,
+        private workOrderQuoteService: WorkOrderQuoteService, 
+        private workOrderService: WorkOrderService,
         private alertService: AlertService,
         public unitofmeasureService: UnitOfMeasureService,
         public itemClassService: ItemClassificationService,
@@ -416,6 +418,23 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.partCollection = this.partCollection;
     }
     getPartnumbers(value) {
+ 
+            let partSearchParamters = {
+                "customerId": 411,
+                'partNumber': "",
+                "includeAlternatePartNumber": true,
+                "includeEquivalentPartNumber": true,
+                "restrictPMA": true,
+                "restrictDER": true,
+                "custRestrictDER": true,
+                "custRestrictPMA": true,
+                "idlist": 0
+              };
+// this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe(res => {
+// console.log("hello ",res)
+// })
+
+
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
         if (this.UpdateMode) {
@@ -423,6 +442,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
         }
+        
         this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0)
             .subscribe(res => {
                 this.isSpinnerVisible = false;

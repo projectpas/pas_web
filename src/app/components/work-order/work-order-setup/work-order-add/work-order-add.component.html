@@ -443,9 +443,9 @@
                                         </p-calendar>
                                     <td>
                                         <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}"
-                                                    class="calender-cstm" #estimatedCompletionDate="ngModel"
+                                                    class="calender-cstm" #estimatedCompletionDate="ngModel" (onSelect)="doSomething(workOrderPartNumber.estimatedCompletionDate,workOrderPartNumber,i)"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    [minDate]="workOrderPartNumber.promisedDate"   [maxDate]="workOrderPartNumber.estimatedShipDate" (ngModelChange)="getValid()"
+                                                    [minDate]="workOrderPartNumber.receivedDate" (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -454,7 +454,7 @@
                                                     name="estimatedShipDate{{i}}"  (ngModelChange)="getValid()"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="workOrderPartNumber.estimatedShipDate"
-                                                    [minDate]="workOrderPartNumber.receivedDate" #estimatedShipDate="ngModel"
+                                                    [minDate]="workOrderPartNumber.estimatedCompletionDate" #estimatedShipDate="ngModel"
                                                     required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
                                     </td>
 

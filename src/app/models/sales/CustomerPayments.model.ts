@@ -14,7 +14,7 @@ export class CustomerPayments implements ICustomerPayments {
   cntrlNum: string;
   managementStructureId: number;
   openDate: Date;
-  status: string;
+  statusId: number;
   postedDate: Date;
   employeeId: number;
   memo: string;
@@ -25,6 +25,6 @@ export class CustomerPayments implements ICustomerPayments {
   updatedDate: Date;
   isActive: boolean;
   isDeleted: boolean;
-  
+
   constructor() { }
 }

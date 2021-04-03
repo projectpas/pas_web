@@ -543,5 +543,8 @@ export class ItemMasterService {
     getItemMasterMappingPart(id){
         return this.itemMasterEndpoint.getItemMasterMappingPart(id);
     }
+    GetManufacturerByitemMasterId(id){
+        return this.itemMasterEndpoint.GetManufacturerByitemMasterId(id);
+    }
     
 }
