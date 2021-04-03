@@ -2212,9 +2212,10 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-
             if (this.sourceWorkFlow.customerName) {
                 this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
+            }else{
+                this.sourceWorkFlow.customerId=null;
             }
             const createDataset={...this.sourceWorkFlow}
                  delete createDataset.customerName;
@@ -2267,6 +2268,11 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
+            if (this.sourceWorkFlow.customerName) {
+                this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
+            }else{
+                this.sourceWorkFlow.customerId=null;
+            }
             const workflowData={...this.sourceWorkFlow}
         delete    workflowData.customerName
             this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {

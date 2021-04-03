@@ -155,7 +155,7 @@
                                     <label for="Customer Name">Customer Name<span class="clr-red"></span>
                                     </label>
                                     <p class="c-workflow-select">
-                                        <p-autoComplete appendTo="body" required [(ngModel)]="sourceWorkFlow.customerName"
+                                        <p-autoComplete appendTo="body"  [(ngModel)]="sourceWorkFlow.customerName"
                                             [suggestions]="customerNames" (completeMethod)="filterNames($event)"
                                             [size]="32" [minLength]="1" [dropdown]="true" class="wf-header-select"
                                             #partNum="ngModel" errorMessage="Records not found" field="customerName"
@@ -507,10 +507,10 @@
                             <button class="btn btn-primary" *ngIf="!UpdateMode"
                                 (click)="addWorkFlow(true)"
                                 [disabled]=" !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
-                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId ||!sourceWorkFlow.customerName">Save</button>
+                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId">Save</button>
                             <button class="btn btn-primary" *ngIf="UpdateMode"
                                 [disabled]="disableUpdateButton || !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
-                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId ||!sourceWorkFlow.customerName"
+                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId"
                                 (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
                         </div>
                     </div>

@@ -553,51 +553,121 @@ export class CustomerWorksListComponent implements OnInit {
     gotoWorkOrder(rowData) {
         this.editData=rowData;
         this.isAddWorkOrder=true;
-        this.customerResctrictions(rowData.customerId);
-        this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
+        this.customerWarnings(rowData.customerId);
+       // this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
     }
 
     gotoCustomer(rowData) {
         this._route.navigateByUrl(`customersmodule/customerpages/app-customer-edit/${rowData.customerId}`);
     }
 
-    customerWarnings(customerId){
-        if(customerId && this.customerWarningListId){
-           this.warningMessage='';
-        this.commonService.customerWarnings(customerId,this.customerWarningListId).subscribe((res:any) => {
-            if(res){ 
-            this.warningMessage=res.warningMessage;
-            this.warningID=res.customerWarningId;
+    customerWarnings(customerId) {
+        if (this.customerWarningListId == undefined) {
+            this.getCustomerWarningsList();
+        } else {
+            if (customerId && this.customerWarningListId) {
+                this.warningMessage = '';
+                this.validateWarnings(customerId, this.customerWarningListId);
             }
-            this.customerResctrictions(customerId);            
-        })
         }
     }
-
-    customerResctrictions(customerId){
-        this.restrictMessage='';
-        if(customerId && this.customerWarningListId){
-            this.commonService.customerResctrictions(customerId,this.customerWarningListId).subscribe((res:any) => {		 
-                if(res){
-                    this.restrictMessage=res.restrictMessage;
-                    this.restrictID=res.customerWarningId;
+    validateWarnings(customerId, id) {
+        let cusId = (customerId.customerId) ? customerId.customerId : customerId;
+        this.commonService.customerWarnings(cusId, id).subscribe((res: any) => {
+            if (res) {
+                this.warningMessage = res.warningMessage;
+                this.warningID = res.customerWarningId;
+                this.restrictID =0;
+                if (res.customerWarningId != 0) {
+                    this.showAlertWarningMessage();
+                } else 
+                { 
+                    this.customerResctrictions(customerId, this.warningMessage, id);
                 }
-                if(this.restrictID !=0){
-                    this.showAlertMessage();
-                }else{
-                    const { receivingCustomerWorkId } = this.editData;
-                    this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
-                }
+            }
+        },
+            err => { 
+                this.handleError(err);
             })
-        }
+    }
+    handleError(err) {
+        this.isSpinnerVisible = false;
+    }
+    customerResctrictions(customerId, warningMessage, id) {
+        let cusId = (customerId.customerId) ? customerId.customerId : customerId;
+        this.restrictMessage = '';
+        this.commonService.customerResctrictions(cusId, id).subscribe((res: any) => {
+            if (res) {
+                this.restrictMessage = res.restrictMessage;
+                this.restrictID = res.customerWarningId;
+                if (this.warningID != 0 && this.restrictID == 0) {
+                    this.showAlertWarningMessage();
+                } else if (this.warningID == 0 && this.restrictID != 0) {
+                    this.showAlertMessage();
+                } else if (this.warningID != 0 && this.restrictID != 0) {
+                    this.showAlertMessage();
+                } 
+            }
+        },
+            err => { 
+                this.handleError(err);
+            })
     }
 
+    // customerWarnings(customerId){
+    //     if(customerId && this.customerWarningListId){
+    //        this.warningMessage='';
+    //     this.commonService.customerWarnings(customerId,this.customerWarningListId).subscribe((res:any) => {
+    //         if(res){ 
+    //         this.warningMessage=res.warningMessage;
+    //         this.warningID=res.customerWarningId;
+    //         }
+    //         this.customerResctrictions(customerId);            
+    //     })
+    //     }
+    // }
+
+    // customerResctrictions(customerId){
+    //     this.restrictMessage='';
+    //     if(customerId && this.customerWarningListId){
+    //         this.commonService.customerResctrictions(customerId,this.customerWarningListId).subscribe((res:any) => {		 
+    //             if(res){
+    //                 this.restrictMessage=res.restrictMessage;
+    //                 this.restrictID=res.customerWarningId;
+    //             }
+    //             if(this.restrictID !=0){
+    //                 this.showAlertMessage();
+    //             }else{
+    //                 const { receivingCustomerWorkId } = this.editData;
+    //                 this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
+    //             }
+    //         })
+    //     }
+    // }
+
+    showAlertWarningMessage() {
+        $('#warningMesg').modal("show");
+    }
     showAlertMessage(){
         $('#warnRestrictMesg').modal("show");
     }
+    notmoveclick() 
+    {
+        $('#warningMesg').modal("hide");
+        $('#warnRestrictMesg').modal("hide");
+        this.warningMessage='';
+        this.restrictMessage='';
+        // const { receivingCustomerWorkId } = this.editData;
+        // if( this.isEditCustomer==true && this.restrictID ==0){
+        //     this._route.navigateByUrl(`receivingmodule/receivingpages/app-customer-work-setup/edit/${receivingCustomerWorkId}`);
+        // }else if(this.isAddWorkOrder==true && this.restrictID ==0){
+        //     this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
+        // }
+      }
 
     WarnRescticModel(){
         $('#warnRestrictMesg').modal("hide");
+        $('#warningMesg').modal("hide");
         this.warningMessage='';
         this.restrictMessage='';
         const {receivingCustomerWorkId}=this.editData;

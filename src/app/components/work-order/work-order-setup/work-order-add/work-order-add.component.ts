@@ -2837,7 +2837,7 @@ setTimeout(() => {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
                 if (this.warningID != 0 && this.restrictID == 0) {
-                    this.showAlertMessage();
+                    this.showAlertWarningMessage();
                 } else if (this.warningID == 0 && this.restrictID != 0) {
                     this.showAlertMessage();
                 } else if (this.warningID != 0 && this.restrictID != 0) {
@@ -2867,6 +2867,29 @@ setTimeout(() => {
     showAlertMessage() {
         $('#warnRestrictMesg').modal("show");
     }
+    showAlertWarningMessage() {
+        $('#warningMesg').modal("show");
+    }
+
+    movetoworkorderlist() {
+        $('#warningMesg').modal("hide");
+        $('#warnRestrictMesg').modal("show");
+        this.router.navigateByUrl(
+          `/workordersmodule/workorderspages/app-work-order-list`
+        );
+      }
+
+      yestocontinue() 
+      {
+        $('#warningMesg').modal("hide");
+        $('#warnRestrictMesg').modal("show");
+        this.isBillAction = false;
+        this.isQuoteAction = false;
+        this.isCustomerAction = false;
+        this.isEditWorkordershowMsg = false;
+        this.warningMessage = '';
+        this.restrictMessage = '';
+      }
 
     WarnRescticModel() {
         if (this.isQuoteAction == true && this.restrictID == 0) {
@@ -2882,6 +2905,7 @@ setTimeout(() => {
         this.isCustomerAction = false;
         this.isEditWorkordershowMsg = false;
         $('#warnRestrictMesg').modal("hide");
+        $('#warningMesg').modal("hide");
         this.warningMessage = '';
         this.restrictMessage = '';
     }
