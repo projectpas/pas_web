@@ -207,7 +207,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadTagTypes();
 		this.loadModuleTypes();
 		this.loadModulesNamesForObtainOwnerTraceable();
-		this.loadManufacturerData();
+		//this.loadManufacturerData();
 		this.loadAssetAcquisitionTypeList();
 
 		this.stockLineId = this._actRoute.snapshot.params['id'];
@@ -389,14 +389,23 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayWOlist.length == 0) {
 			this.arrayWOlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', strText, true, 20, this.arrayWOlist.join()).subscribe(response => {
-			this.allWorkOrderDetails = [
-				{ value: 0, label: 'Select' }
-			];
-			this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
-			this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+			
+			this.commonService.autoCompleteDropdownsWorkorderList(strText, 20, this.arrayWOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+				this.allWorkOrderDetails = [
+					{ value: 0, label: 'Select' }
+				];
+				this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
+				this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+			  })
 
-		}, error => this.saveFailedHelper(error));
+		// this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', strText, true, 20, this.arrayWOlist.join()).subscribe(response => {
+		// 	this.allWorkOrderDetails = [
+		// 		{ value: 0, label: 'Select' }
+		// 	];
+		// 	this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
+		// 	this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+
+		// }, error => this.saveFailedHelper(error));
 	}
 
 	private loadModuleTypes() {
@@ -465,6 +474,12 @@ export class StockLineSetupComponent implements OnInit {
 					this.stockLineForm.tlaItemMasterId = x.tlaItemMasterId;
 				});
 			}
+		});
+	}
+	GetManufacturerByitemMasterId(itemMasterId) 
+	{
+		this.itemMasterService.GetManufacturerByitemMasterId(itemMasterId).subscribe(res => {
+			this.allManufacturerInfo = res;
 		});
 	}
 
@@ -623,6 +638,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.loadROData(res.itemMasterId);
 			this.loadNHAData(res.itemMasterId);
 			this.loadTLAData(res.itemMasterId);
+			this.GetManufacturerByitemMasterId(res.itemMasterId);
 			this.arrayItemMasterlist.push(res.itemMasterId);
 			if (res.revisedPartId > 0) {
 				this.arrayItemMasterlist.push(res.revisedPartId);
@@ -843,14 +859,26 @@ export class StockLineSetupComponent implements OnInit {
 	getWOSelecionOnEdit(WorkOrderId) {
 		this.arrayWOlist.push(WorkOrderId);
 		if (WorkOrderId > 0) {
-			this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', '', true, 20, this.arrayWOlist.join()).subscribe(response => {
+
+			let strText='';
+			
+			this.commonService.autoCompleteDropdownsWorkorderList(strText, 20, this.arrayWOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
 				this.allWorkOrderDetails = [
 					{ value: 0, label: 'Select' }
 				];
 				this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
 				this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
 				this.stockLineForm.workOrderId = getObjectById('value', WorkOrderId == null ? 0 : WorkOrderId, this.allWorkOrderInfo);
-			}, error => this.saveFailedHelper(error));
+			  })
+
+			// this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', '', true, 20, this.arrayWOlist.join()).subscribe(response => {
+			// 	this.allWorkOrderDetails = [
+			// 		{ value: 0, label: 'Select' }
+			// 	];
+			// 	this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
+			// 	this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+			// 	this.stockLineForm.workOrderId = getObjectById('value', WorkOrderId == null ? 0 : WorkOrderId, this.allWorkOrderInfo);
+			// }, error => this.saveFailedHelper(error));
 		}
 	}
 
@@ -1049,6 +1077,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadROData(itemMasterId);
 		this.loadNHAData(itemMasterId);
 		this.loadTLAData(itemMasterId);
+		this.GetManufacturerByitemMasterId(itemMasterId);
 		this.getUnitCostSalePrice();
 		this.sourceTimeLife = {};
 		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
@@ -1066,6 +1095,8 @@ export class StockLineSetupComponent implements OnInit {
 				}, error => this.saveFailedHelper(error));
 			}
 
+
+
 			this.stockLineForm.partDescription = partDetails.partDescription;
 			this.stockLineForm.revisedPart = partDetails.revisedPart;
 			this.stockLineForm.itemGroup = partDetails.itemGroup;
@@ -1080,6 +1111,7 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.nationalStockNumber = partDetails.nationalStockNumber;
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
 			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
+			this.stockLineForm.purchaseUnitOfMeasureId =  this.getInactiveObjectOnEdit('value', partDetails.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname');
 			// this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice;
 			// this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost;
 			this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
