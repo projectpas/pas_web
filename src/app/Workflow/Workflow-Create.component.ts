@@ -18,15 +18,13 @@ import { AuthService } from "../services/auth.service";
 import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { MenuItem } from 'primeng/api';
-
 @Component({
     selector: 'wf-create',
     templateUrl: './workflow-Create.component.html',
     styleUrls: ['./workflow-Create.component.css']
 })
- 
-export class WorkflowCreateTestComponent implements OnInit, OnDestroy { 
-    @Input() isWorkOrder=false;
+export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
+    @Input() isWorkOrder = false;
     @Input() savedWorkOrderData;
     @Input() WorkOrderType;
     @Input() workFlowId;
@@ -136,7 +134,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         { visible: false, selected: false, label: "Publications" },
         { visible: false, selected: false, label: "Measurements" }
     ];
-
     totalPercent: Percent[];
     currentPanelId: any;
     todaydate = new Date();
@@ -167,6 +164,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         { label: 'Create Work Flow' }
     ];
     isOnload: any;
+    percentBERTh: any;
+    currentActiveTab: string;
+    isheadUpdate: any;
+    originalworkFLow: any = {};
     constructor(private actionService: ActionService,
         private authService: AuthService,
         private router: ActivatedRoute,
@@ -180,7 +181,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         private alertService: AlertService,
         private commonService: CommonService) {
     }
-
     public ngOnDestroy() {
         this._workflowService.listCollection = null
         this.typeOfForm = 'Create';
@@ -189,10 +189,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this._workflowService.currentWorkFlowId = null;
         }
     }
-
     setSelectedItems(workFlow: any): void {
         this.selectedItems = [];
-
         if (workFlow.charges != undefined && workFlow.charges.length > 0) {
             var chargesItem = this.actionAttributes.filter(x => x.Name == "Charges")[0];
             this.selectedItems.push(chargesItem);
@@ -204,7 +202,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (workFlow.equipments != undefined && workFlow.equipments.length > 0) {
             var equipmentItem = this.actionAttributes.filter(x => x.Name == "Tools")[0];
             this.selectedItems.push(equipmentItem);
-
         }
         if (workFlow.exclusions != undefined && workFlow.exclusions.length > 0) {
             var exclusionsItem = this.actionAttributes.filter(x => x.Name == "Exclusions")[0];
@@ -230,9 +227,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.showActionAttribute = true;
         }
         this.workFlow.selectedItems = this.selectedItems;
-
         if (this.selectedItems != undefined && this.selectedItems.length > 0)
-
             if (!this.currentPanelId) {
                 this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
             }
@@ -247,7 +242,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 }
             }
     }
-
     ngOnInit(): void {
         if (this._workflowService.enableUpdateMode) {
             this.typeOfForm = 'Edit';
@@ -256,13 +250,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                 { label: 'Edit Work Flow' }
             ];
         }
-if(!this.isWorkOrder){
-        this.sourceWorkFlow.workFlowId = +this.router.snapshot.paramMap.get("id");
-}
-        this.isFixedcheck(''); 
+        if (!this.isWorkOrder) {
+            this.sourceWorkFlow.workFlowId = +this.router.snapshot.paramMap.get("id");
+        }
+        this.isFixedcheck('');
         this.sourceWorkFlow.workflowCreateDate = new Date();
         this.sourceWorkFlow.version = "V-1";
-
         if (!this.sourceWorkFlow.workFlowId) {
             this.sourceWorkFlow.workOrderNumber = 'Creating';
         } else {
@@ -271,9 +264,7 @@ if(!this.isWorkOrder){
         }
         this.newAction = { Id: "0", Name: "", Description: "", Memo: "", Sequence: 0 };
         this.getAllActions();
-
         this.getTaksAttributes();
-
         this.dropdownSettings = {
             singleSelection: false,
             idField: 'Id',
@@ -282,13 +273,12 @@ if(!this.isWorkOrder){
             unSelectAllText: 'UnSelect All',
             itemsShowLimit: 3,
             allowSearchFilter: false
-        }; 
+        };
         this.loadWorkFlow();
- 
         this.getAllPercentages();
     }
-    masterItemMasterId:any;
-    loadWorkFlow() { 
+    masterItemMasterId: any;
+    loadWorkFlow() {
         if (this._workflowService.enableUpdateMode == true && !this.UpdateMode) {
             let workFlowId: any = this.isWorkOrder ? this.workFlowId : this._workflowService.currentWorkFlowId;
             this.isSpinnerVisible = true;
@@ -300,14 +290,13 @@ if(!this.isWorkOrder){
                         partName: workFlow[0].partNumber
                     }
                 }
-                this.masterItemMasterId=workFlow[0].itemMasterId,
-                this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : -1;
+                this.masterItemMasterId = workFlow[0].itemMasterId,
+                    this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : -1;
                 this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : -1;
                 this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : -1;
                 this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers > 0 ? this.sourceWorkFlow.percentageOfOthers : -1;
                 this.sourceWorkFlow.percentageOfTotal = this.sourceWorkFlow.percentageOfTotal > 0 ? this.sourceWorkFlow.percentageOfTotal : -1;
                 this.isSpinnerVisible = false;
-
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate);
                 this.sourceWorkFlow.workflowExpirationDate = new Date(this.sourceWorkFlow.workflowExpirationDate);
                 this.itemMasterId = this.sourceWorkFlow.itemMasterId;
@@ -329,15 +318,12 @@ if(!this.isWorkOrder){
                     this.sourceWorkFlow.customerName = "";
                     this.sourceWorkFlow.customerCode = "";
                 }
-
                 if (this.sourceWorkFlow.costOfNew && this.sourceWorkFlow.percentageOfNew) {
                     this.onPercentOfNew(this.sourceWorkFlow.costOfNew, this.sourceWorkFlow.percentageOfNew);
-
                 }
                 if (this.sourceWorkFlow.costOfReplacement && this.sourceWorkFlow.percentageOfReplacement) {
                     this.onPercentOfReplcaement(this.sourceWorkFlow.costOfReplacement, this.sourceWorkFlow.percentageOfReplacement);
                 }
-
                 this.updateWorkFlowId = this.sourceWorkFlow.workflowId;
                 this.UpdateMode = true;
                 this.disableUpdateButton = true;
@@ -348,25 +334,20 @@ if(!this.isWorkOrder){
                 this.loadWorkScopedata();
                 this.loadcustomerData();
                 this.updateMode(workFlow);
-                // calculation part 
                 this.isOnload = true;
                 this.calculateTotalWorkFlowCost(true)
-
             }, error => {
                 this.isSpinnerVisible = false;
             });
-
         } else {
             this.sourceWorkFlow.workScopeId = 0;
             this.sourceWorkFlow.currencyId = 0;
-
             this.sourceWorkFlow.percentageOfMaterial = -1;
             this.sourceWorkFlow.percentageOfExpertise = -1;
             this.sourceWorkFlow.percentageOfCharges = -1;
             this.sourceWorkFlow.percentageOfOthers = -1;
             this.sourceWorkFlow.percentageOfTotal = -1;
             this.currenttaskId = "0";
-
             this.loadCurrencyData();
             this.loadWorkScopedata();
         }
@@ -386,340 +367,284 @@ if(!this.isWorkOrder){
                         this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
                     }
                 }
- 
-                this.actionAttributes= this.actionAttributes.sort((a, b) => a.Name.localeCompare(b.Name, 'es', {sensitivity: 'base'}))
+                this.actionAttributes = this.actionAttributes.sort((a, b) => a.Name.localeCompare(b.Name, 'es', { sensitivity: 'base' }))
             }, error => {
                 this.isSpinnerVisible = false;
             });
     }
-    getAllActions(): void { 
-        
+    getAllActions(): void {
         this.isSpinnerVisible = true;
         this.actionService.getActions().subscribe(
             actions1 => {
                 this.isSpinnerVisible = false;
                 this.actions = [];
                 for (let attr of actions1) {
-                    this.actions.push({ Id: attr.taskId, Name: attr.description, Description: "", Memo: "", Sequence: attr.sequence})
+                    this.actions.push({ Id: attr.taskId, Name: attr.description, Description: "", Memo: "", Sequence: attr.sequence })
                 }
-
-                this.actions =       this.actions.sort((a, b) => a.Name.localeCompare(b.Name, 'es', {sensitivity: 'base'}))
+                this.actions = this.actions.sort((a, b) => a.Name.localeCompare(b.Name, 'es', { sensitivity: 'base' }))
             }, error => {
                 this.isSpinnerVisible = false;
             });
     }
     updateMode(workFlow): void {
-        // this.isSpinnerVisible = true;
-        // this.actionService.getActions().subscribe(
-        //     actions1 => {
-                // this.isSpinnerVisible = false;
-                // const actions= actions1.sort((a, b) => a.description.localeCompare(b.description, 'es', {sensitivity: 'base'}))
-                // this.isSpinnerVisible = true;
-                // this.actionService.getActionAttributes().subscribe(
-                //     actionAttributes => {
-                        // this.isSpinnerVisible = false;
-                        this.workFlowList = [];
-                        var ids = [];
-                        var taskIds = [];
-                        if (workFlow[0].charges != undefined) {
+        this.workFlowList = [];
+        var ids = [];
+        var taskIds = [];
+        if (workFlow[0].charges != undefined) {
 
-                            taskIds = workFlow[0].charges.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].directions != undefined) {
-                            ids = workFlow[0].directions.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].equipments != undefined) {
-                            taskIds = taskIds.concat(ids);
-                            ids = workFlow[0].equipments.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].exclusions != undefined) {
-                            taskIds = taskIds.concat(ids);
-                            ids = workFlow[0].exclusions.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].expertise != undefined) {
-                            taskIds = taskIds.concat(ids);
-                            ids = workFlow[0].expertise.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].materialList != undefined) {
-                            taskIds = taskIds.concat(ids);
-                            ids = workFlow[0].materialList.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].measurements != undefined) {
-                            taskIds = taskIds.concat(ids);
-                            ids = workFlow[0].measurements.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
-                        if (workFlow[0].publication != undefined) {
-                            taskIds = taskIds.concat(ids);
-                            ids = workFlow[0].publication.map(item => item.taskId)
-                                .filter((value, index, self) => self.indexOf(value) === index);
-                        }
+            taskIds = workFlow[0].charges.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].directions != undefined) {
+            ids = workFlow[0].directions.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].equipments != undefined) {
+            taskIds = taskIds.concat(ids);
+            ids = workFlow[0].equipments.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].exclusions != undefined) {
+            taskIds = taskIds.concat(ids);
+            ids = workFlow[0].exclusions.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].expertise != undefined) {
+            taskIds = taskIds.concat(ids);
+            ids = workFlow[0].expertise.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].materialList != undefined) {
+            taskIds = taskIds.concat(ids);
+            ids = workFlow[0].materialList.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].measurements != undefined) {
+            taskIds = taskIds.concat(ids);
+            ids = workFlow[0].measurements.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        if (workFlow[0].publication != undefined) {
+            taskIds = taskIds.concat(ids);
+            ids = workFlow[0].publication.map(item => item.taskId)
+                .filter((value, index, self) => self.indexOf(value) === index);
+        }
+        taskIds = taskIds.concat(ids);
+        taskIds = taskIds.map(item => item).filter((value, index, self) => self.indexOf(value) === index);
+        this.currenttaskId = taskIds[0];
+        this.workFlowActions = [];
+        for (let actId of taskIds) {
+            var action = this.actions.filter(x => x.Id == actId)[0];
+            this.workFlowActions.push(action);
+            let wf = this.GetWorkFlow();
+            wf.taskId = action.Id;
+            wf.ActionName = action.Name;
+            wf.selectedItems = [];
+            if (this.UpdateMode) {
+                wf.workflowId = this.updateWorkFlowId;
+            }
+            if (workFlow[0].charges != undefined && workFlow[0].charges.length > 0) {
+                var charges = workFlow[0].charges.filter(charge => charge.taskId == action.Id);
+                wf.charges = charges;
+                wf.qtySummation = wf.charges.reduce((acc, x) => {
+                    return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
+                }, 0);
+                wf.extendedCostSummation = wf.charges.reduce((acc, x) => {
+                    return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost)
+                }, 0);
+                wf.totalChargesCost = wf.charges.reduce((acc, x) => {
+                    return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice)
+                }, 0);
+            }
+            if (workFlow[0].directions != undefined && workFlow[0].directions.length > 0) {
+                var direction = workFlow[0].directions.filter(direction => direction.taskId == action.Id);
+                wf.directions = direction;
+            }
+            if (workFlow[0].equipments != undefined && workFlow[0].equipments.length > 0) {
+                var equipment = workFlow[0].equipments.filter(equipment => equipment.taskId == action.Id);
+                wf.equipments = equipment;
+            }
+            if (workFlow[0].exclusions != undefined && workFlow[0].exclusions.length > 0) {
+                var exclusion = workFlow[0].exclusions.filter(exclusion => exclusion.taskId == action.Id);
+                wf.exclusions = exclusion;
+                wf.sumofQty = wf.exclusions.reduce((acc, x) => {
+                    return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
+                }, 0);
+                wf.sumofExtendedCost = wf.exclusions.reduce((acc, x) => {
+                    return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost)
+                }, 0);
+            }
+            if (workFlow[0].expertise != undefined && workFlow[0].expertise.length > 0) {
+                var expertise = workFlow[0].expertise.filter(expertise => expertise.taskId == action.Id);
+                wf.expertise = expertise;
+                wf.sumofestimatedhrs = wf.expertise.reduce((acc, x) => {
+                    return acc + parseFloat(x.estimatedHours === undefined || x.estimatedHours === '' ? 0 : x.estimatedHours)
+                }, 0);
+                wf.sumofLabourDirectCost = wf.expertise.reduce((acc, x) => {
+                    return acc + parseFloat(x.directLaborRate === undefined || x.directLaborRate === '' ? 0 : x.directLaborRate)
+                }, 0);
+                wf.sumOfOHCost = wf.expertise.reduce((acc, x) => {
+                    return acc + parseFloat(x.overheadCost === undefined || x.overheadCost === '' ? 0 : x.overheadCost)
+                }, 0);
+                wf.sumOfOHCost = parseFloat((wf.sumOfOHCost).toFixed(2));
+                wf.totalExpertiseCost = wf.expertise.reduce((acc, x) => {
+                    return acc + parseFloat(x.laborOverheadCost === undefined || x.laborOverheadCost === '' ? 0 : x.laborOverheadCost)
+                }, 0);
+                wf.totalExpertiseCost = parseFloat((wf.totalExpertiseCost).toFixed(2));
+            }
+            if (workFlow[0].materialList != undefined && workFlow[0].materialList.length > 0) {
+                var material = workFlow[0].materialList.filter(material => material.taskId == action.Id);
+                wf.materialList = material;
+                wf.materialQtySummation = wf.materialList.reduce((acc, x) => {
+                    return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
+                }, 0);
+                wf.materialExtendedCostSummation = wf.materialList.reduce((acc, x) => {
+                    return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost)
+                }, 0);
+                wf.totalMaterialCostValue = wf.materialExtendedCostSummation;
+                wf.totalMaterialCost = wf.materialList.reduce((acc, x) => {
+                    return acc + parseFloat(x.price == undefined || x.price === '' ? 0 : x.price)
+                }, 0);
+                wf.materialExtendedPriceSummation = wf.materialList.reduce((acc, x) => {
+                    return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice)
+                }, 0);
+            }
+            if (workFlow[0].measurements != undefined && workFlow[0].measurements.length > 0) {
+                var measurement = workFlow[0].measurements.filter(measurement => measurement.taskId == action.Id);
+                wf.measurements = measurement;
+            }
+            if (workFlow[0].publication != undefined && workFlow[0].publication.length > 0) {
+                var publication = workFlow[0].publication.filter(publication => publication.taskId == action.Id);
+                wf.publication = publication;
+                for (let pub of wf.publication) {
 
-                        taskIds = taskIds.concat(ids);
-
-                        taskIds = taskIds.map(item => item)
-                            .filter((value, index, self) => self.indexOf(value) === index);
-
-                        this.currenttaskId = taskIds[0];
-                        this.workFlowActions = [];
-                        for (let actId of taskIds) {
-                            var action = this.actions.filter(x => x.Id == actId)[0];
-                            this.workFlowActions.push(action);
-                            let wf = this.GetWorkFlow();
-                            wf.taskId = action.Id;
-                            wf.ActionName = action.Name;
-                            wf.selectedItems = [];
-                            if (this.UpdateMode) {
-                                wf.workflowId = this.updateWorkFlowId;
-                            }
-
-                            if (workFlow[0].charges != undefined && workFlow[0].charges.length > 0) {
-                                var charges = workFlow[0].charges.filter(charge => charge.taskId == action.Id);
-                                wf.charges = charges;
-
-                                wf.qtySummation = wf.charges.reduce((acc, x) => {
-                                    return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
-                                }, 0);
-                                wf.extendedCostSummation = wf.charges.reduce((acc, x) => {
-                                    return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost)
-                                }, 0);
-                                wf.totalChargesCost = wf.charges.reduce((acc, x) => {
-                                    return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice)
-                                }, 0);
-                            }
-                            if (workFlow[0].directions != undefined && workFlow[0].directions.length > 0) {
-                                var direction = workFlow[0].directions.filter(direction => direction.taskId == action.Id);
-                                wf.directions = direction;
-                            }
-                            if (workFlow[0].equipments != undefined && workFlow[0].equipments.length > 0) {
-                                var equipment = workFlow[0].equipments.filter(equipment => equipment.taskId == action.Id);
-                                wf.equipments = equipment;
-                            }
-                            if (workFlow[0].exclusions != undefined && workFlow[0].exclusions.length > 0) {
-                                var exclusion = workFlow[0].exclusions.filter(exclusion => exclusion.taskId == action.Id);
-                                wf.exclusions = exclusion;
-                                wf.sumofQty = wf.exclusions.reduce((acc, x) => {
-                                    return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
-                                }, 0);
-
-                                wf.sumofExtendedCost = wf.exclusions.reduce((acc, x) => {
-                                    return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost)
-                                }, 0);
-
-                            }
-                            if (workFlow[0].expertise != undefined && workFlow[0].expertise.length > 0) {
-                                var expertise = workFlow[0].expertise.filter(expertise => expertise.taskId == action.Id);
-                                wf.expertise = expertise;
-
-                                wf.sumofestimatedhrs = wf.expertise.reduce((acc, x) => {
-                                    return acc + parseFloat(x.estimatedHours === undefined || x.estimatedHours === '' ? 0 : x.estimatedHours)
-                                }, 0);
-
-                                wf.sumofLabourDirectCost = wf.expertise.reduce((acc, x) => {
-                                    return acc + parseFloat(x.directLaborRate === undefined || x.directLaborRate === '' ? 0 : x.directLaborRate)
-                                }, 0);
-
-                                wf.sumOfOHCost = wf.expertise.reduce((acc, x) => {
-                                    return acc + parseFloat(x.overheadCost === undefined || x.overheadCost === '' ? 0 : x.overheadCost)
-                                }, 0);
-
-                                wf.sumOfOHCost = parseFloat((wf.sumOfOHCost).toFixed(2));
-
-                                wf.totalExpertiseCost = wf.expertise.reduce((acc, x) => {
-                                    return acc + parseFloat(x.laborOverheadCost === undefined || x.laborOverheadCost === '' ? 0 : x.laborOverheadCost)
-                                }, 0);
-
-                                wf.totalExpertiseCost = parseFloat((wf.totalExpertiseCost).toFixed(2));
-                            }
-                            if (workFlow[0].materialList != undefined && workFlow[0].materialList.length > 0) {
-                                var material = workFlow[0].materialList.filter(material => material.taskId == action.Id);
-                                wf.materialList = material;
-
-                                wf.materialQtySummation = wf.materialList.reduce((acc, x) => {
-                                    return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
-                                }, 0);
-
-                                wf.materialExtendedCostSummation = wf.materialList.reduce((acc, x) => {
-                                    return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost)
-                                }, 0);
-
-                                wf.totalMaterialCostValue = wf.materialExtendedCostSummation;
-
-                                wf.totalMaterialCost = wf.materialList.reduce((acc, x) => {
-                                    return acc + parseFloat(x.price == undefined || x.price === '' ? 0 : x.price)
-                                }, 0);
-
-                                wf.materialExtendedPriceSummation = wf.materialList.reduce((acc, x) => {
-                                    return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice)
-                                }, 0);
-
-                            }
-                            if (workFlow[0].measurements != undefined && workFlow[0].measurements.length > 0) {
-                                var measurement = workFlow[0].measurements.filter(measurement => measurement.taskId == action.Id);
-                                wf.measurements = measurement;
-                            }
-                            if (workFlow[0].publication != undefined && workFlow[0].publication.length > 0) {
-                                var publication = workFlow[0].publication.filter(publication => publication.taskId == action.Id);
-                                wf.publication = publication;
-                                for (let pub of wf.publication) {
-
-                                    this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
-                                        model => {
-                                            pub["publicationModels"] = model;
-                                        },
-                                        error => this.errorMessage = <any>error
-                                    );
-
-                                    for (let dn of pub.workflowPublicationDashNumbers) {
-                                        dn.dashNumberId = dn.aircraftDashNumberId;
-                                    }
-                                }
-                            }
-
-                            this.workFlowList.push(wf);
-
-                        }
-                        this.workFlow = this.workFlowList[0];
-                        if (this.workFlow != undefined) {
-                            this.setSelectedItems(this.workFlow);
-                            this.showMainPage = true;
-                        }
-                        setTimeout(() => {
-                            if (this.selectedItems.length > 0) {
-                                this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
-                            }
-                        }, 1000);
-                        this.calculateTotalWorkFlowCost(false);
-                    // }, error => {
-                    //     this.isSpinnerVisible = false;
-                    // });
-            // }, error => {
-            //     this.isSpinnerVisible = false;
-            // });
-    }
-
+                    this.actionService.GetPublicationModel(pub.aircraftManufacturer).subscribe(
+                        model => {
+                            pub["publicationModels"] = model;
+                        },
+                        error => this.errorMessage = <any>error
+                    );
+                    for (let dn of pub.workflowPublicationDashNumbers) {
+                        dn.dashNumberId = dn.aircraftDashNumberId;
+                    }
+                }
+            }
+            this.workFlowList.push(wf);
+        }
+        this.workFlow = this.workFlowList[0];
+        if (this.workFlow != undefined) {
+            this.setSelectedItems(this.workFlow);
+            this.showMainPage = true;
+        }
+        setTimeout(() => {
+            if (this.selectedItems.length > 0) {
+                this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
+            }
+        }, 1000);
+        this.calculateTotalWorkFlowCost(false);
+       }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-
     get currentUserMasterCompanyId(): number {
         return this.authService.currentUser
             ? this.authService.currentUser.masterCompanyId
             : null;
     }
-
     get employeeId() {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
-
     private getAllPercentages(): void {
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
-                this.totalPercent = res;
+                this.totalPercent = res.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
             });
     }
-
-    berDetermination(value,from): any {
-        if(from=='html'){ 
-        setTimeout(() => {
-            this.validateCOstflow()
-        }, 1000);
-        }else{
+    berDetermination(value, from): any {
+        if (from == 'html') {
+            setTimeout(() => {
+                this.validateCOstflow()
+            }, 1000);
+        } else {
             this.validateCOstflow()
         }
     }
+    onChangeberThresholdAmount() {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.berThresholdAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2) : '0.00';
+    }
+    validateCOstflow() {
+        if (this.sourceWorkFlow.fixedAmount) {
+            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
+            this.onChangeberThresholdAmount();
+        }
+        // check on is percentOfNew enable
+        if (this.sourceWorkFlow.percentOfNew1) {
+            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
+            this.onChangeberThresholdAmount();
+        }
+        // check on is .percentOfReplacement enable
+        if (this.sourceWorkFlow.percentOfReplacement) {
+            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
+            this.onChangeberThresholdAmount();
+        }
+        // 1 and 2 check box 
+        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew) {
+            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
+            this.onChangeberThresholdAmount();
+        }
+        // 2 and 3  check box 
+        if (this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
+            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+            this.onChangeberThresholdAmount();
+        }
+        // 1 and 3  check box 
+        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
+            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
+            this.onChangeberThresholdAmount();
+        }
 
-     onChangeberThresholdAmount() {
-	 	this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.berThresholdAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2) : '0.00';
-     }
-    
-validateCOstflow(){
-    if (this.sourceWorkFlow.fixedAmount) {
-        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
-        this.onChangeberThresholdAmount();
-   }
-    // check on is percentOfNew enable
-    if (this.sourceWorkFlow.percentOfNew1) {
-        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
-        this.onChangeberThresholdAmount();
+        //1 and 2 and 3 check box
+        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
+            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+            this.onChangeberThresholdAmount();
+        }
+        //1 and 2 and 3 check box all uncheck 
+        if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
+            this.sourceWorkFlow.berThresholdAmount = 0.00;
+          }
+        this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
+        if (this.sourceWorkFlow.berThresholdAmount > 0) {
+            this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
+        }
+        this.calculateTotalWorkFlowCost(false)
     }
-    // check on is .percentOfReplacement enable
-    if (this.sourceWorkFlow.percentOfReplacement) {
-        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
-        this.onChangeberThresholdAmount();
-    }
-
-    // 1 and 2 check box 
-    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew) {
-        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
-        this.onChangeberThresholdAmount();
-    }
-
-    // 2 and 3  check box 
-    if (this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
-        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
-        this.onChangeberThresholdAmount();
-    }
-    // 1 and 3  check box 
-    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
-        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
-        this.onChangeberThresholdAmount();
-    }
-
-    //1 and 2 and 3 check box
-    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
-        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
-        this.onChangeberThresholdAmount();
-    }
-    //1 and 2 and 3 check box all uncheck 
-    if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
-        this.sourceWorkFlow.berThresholdAmount = 0.00;
-        //this.onChangeberThresholdAmount();
-    }
-
-    this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
-    if (this.sourceWorkFlow.berThresholdAmount > 0) {
-        this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
-    }
-    this.calculateTotalWorkFlowCost(false)
-}
-
-
     public filterpartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loapartItems(event.query);
         }
     }
-
     loapartItems(strvalue = '', initialCall = false, itemMasterId = 0) {
         if (this.UpdateMode) {
             itemMasterId = this.sourceWorkFlow.changedPartNumberId ? this.sourceWorkFlow.changedPartNumberId : 0;
         }
-
         if (this.arrayItemMasterIdlist.length == 0 && itemMasterId == 0) {
             this.arrayItemMasterIdlist.push(0);
         }
         else {
             this.arrayItemMasterIdlist.push(itemMasterId);
         }
-  this.commonService.getPartnumList(strvalue).subscribe(res => {
+        this.commonService.getPartnumList(strvalue).subscribe(res => {
             this.isSpinnerVisible = false;
             this.partCollection = res.map(x => {
                 if (initialCall && this.sourceWorkFlow.partNumber == x.partNumber) {
@@ -738,7 +663,6 @@ validateCOstflow(){
             this.isSpinnerVisible = false;
         });
     }
-
     loadChangePartItems(strvalue = '', initialCall = false) {
         this.isSpinnerVisible = true;
         let changedPartNumberId = 0;
@@ -779,13 +703,11 @@ validateCOstflow(){
                 this.isSpinnerVisible = false;
             })
     }
-
     public filterChangedPartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loadChangePartItems(event.query);
         }
     }
-
     public onPartSelect(event) {
         this.isSpinnerVisible = true;
         this.sourceWorkFlow.revisedPartNumber = event.revisedPartNumber
@@ -817,13 +739,11 @@ validateCOstflow(){
         });
 
     }
-
     checkEnableUpdate() {
         if (this.UpdateMode) {
             this.disableUpdateButton = false;
         }
     }
-
     public onChangedPartSelect(event) {
 
         this.isSpinnerVisible = true;
@@ -844,7 +764,6 @@ validateCOstflow(){
         });
 
     }
-
     public isCalculatedBERThreshold(event) {
         if (event == 'calculate') {
             this.isCalculate = true;
@@ -854,8 +773,6 @@ validateCOstflow(){
             this.isFlat = true;
         }
     }
-
-
     isFixedcheck(event) {
 
         if (this.UpdateMode) {
@@ -874,7 +791,6 @@ validateCOstflow(){
             this.sourceWorkFlow.isPercentageOfReplacement = true;
         }
     }
-
     isFixedUnchecked(e) {
         if (!e.target.checked) {
             this.isFixed = false;
@@ -887,18 +803,15 @@ validateCOstflow(){
         if (!e.target.checked) {
             this.ispercent = false;
             this.sourceWorkFlow.isPercentageofNew = false;
-            // reseting the  cost of new values
-            this.sourceWorkFlow.percentOfNew = undefined
+             this.sourceWorkFlow.percentOfNew = undefined
             this.sourceWorkFlow.percentageOfNew = '';
             this.sourceWorkFlow.costOfNew = '';
-
         }
     }
     isPercentreplcaeUnchecked(e) {
         if (!e.target.checked) {
             this.percentreplcae = false;
             this.sourceWorkFlow.percentreplcae = false;
-            // reseting the replacement cost 
             this.sourceWorkFlow.percentOfReplacement = '';
             this.sourceWorkFlow.costOfReplacement = '';
             this.sourceWorkFlow.percentageOfReplacement = '';
@@ -929,7 +842,6 @@ validateCOstflow(){
         else {
             this.arraycurrencyIdlist.push(currencyId);
         }
-
         this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 0, this.arraycurrencyIdlist.join(), this.currentUserMasterCompanyId)
             .subscribe(currencydata => {
                 this.allCurrencyData = currencydata.map(x => {
@@ -1014,8 +926,7 @@ validateCOstflow(){
         this.addedtaskIds = [2, 3, 4];
         // select First Action
         this.displaySelectedAction(this.workflowActions[0]);
-    }
-    //On Action Dropdown value change
+    } 
     onActionValueChange(selectedvalue) {
         if (Number(selectedvalue.target.value) > 0) {
             this.selectedActionAttributes = [];
@@ -1026,14 +937,11 @@ validateCOstflow(){
             this.selectedActionAttributes = [];
         }
     }
-
-    //one of the Actions Tab Click
     onActionSelect(action) {
         let selAction = this.workflowActions.find(obj => obj.taskId == action.taskId);
         if (selAction)
             this.displaySelectedAction(selAction);
     }
-    //ex: accepted format -> selAction = { workflowId: "1", actionId: 2, workflowActionAttributeIds: "11,12,13" }
     displaySelectedAction(selAction, loadAttrData = false) {
         //Display Action Label
         let action = this.actionsDD.find(action => action["taskId"] == selAction["taskId"]);
@@ -1061,7 +969,6 @@ validateCOstflow(){
             }
         }
     }
-    // On Add Button Click
     addActionAttributes() {
         if (this.actionValue && this.actionValue != "" && this.selectedActionAttributes && this.selectedActionAttributes.length > 0) {
             let currAction = { workflowId: "", taskId: Number(this.actionValue), workflowActionAttributeIds: this.selectedActionAttributes.join(",") }
@@ -1138,20 +1045,32 @@ validateCOstflow(){
             this.EstTotalOthers = '0.00';
         }
     }
-    //input
     onChangeOtherCost() {
+        if (this.sourceWorkFlow.otherCost <= 0) {
+            this.sourceWorkFlow.percentageOfOthers = -1;
+        }
         if (this.UpdateMode) {
             this.disableUpdateButton = false;
         }
-        const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
+        this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : '0.00';
+        this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
+        this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
+        this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
+        const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
+        const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
+        const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
+        const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, '')) : 0.00;
+        const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
+        this.Total = formatNumberAsGlobalSettingsModule(total, 2);
         const val = ((otherCost / 100) * this.sourceWorkFlow.percentageOfCharges) + otherCost;
         this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : null;
         this.setTotalCharges();
+
     }
     onTotalChange(percentValue, from) {
         this.TotalEst = '0.00';
-        if (this.Total >0) {
+        if (this.Total > 0) {
             const Total = parseFloat(this.Total.toString().replace(/\,/g, ''));
             const val = ((Total / 100) * percentValue) + Total;
             this.TotalEst = formatNumberAsGlobalSettingsModule(val, 2);
@@ -1159,23 +1078,24 @@ validateCOstflow(){
             this.TotalEst = '0.00';
         }
     }
-
-    setTotalCharges() {
+    setTotalCharges() { 
         const EstMaterialCost = parseFloat(this.EstMaterialCost.toString().replace(/\,/g, ''));
         const EstTotalExpertiseCost = parseFloat(this.EstTotalExpertiseCost.toString().replace(/\,/g, ''));
         const EstTotalCharges = parseFloat(this.EstTotalCharges.toString().replace(/\,/g, ''));
         const EstTotalOthers = parseFloat(this.EstTotalOthers.toString().replace(/\,/g, ''));
         const total = EstMaterialCost + EstTotalExpertiseCost + EstTotalCharges + EstTotalOthers;
         this.TotalEst = formatNumberAsGlobalSettingsModule(total, 2);
-const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
-const maxValue = Math.max(0, total, berThAmt);
-const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
-let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
-this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
-this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+        const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
+        const totlapercent = ((this.TotalEst - this.Total) / this.Total) * 100
+        this.sourceWorkFlow.percentageOfTotal = totlapercent;
+        this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
+        setTimeout(() => {
+            let percentageofBerThreshold: any = (this.TotalEst / berThAmt) * 100;
+            this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
+            this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
 
+        }, 1000);
     }
-    percentBERTh:any;
     calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
         if (this.sourceWorkFlow.berThresholdAmount == undefined || this.sourceWorkFlow.berThresholdAmount == 0) {
             this.sourceWorkFlow.berThresholdAmount = 0;
@@ -1190,8 +1110,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 this.TotalCharges += (wf.extendedCostSummation != undefined && wf.extendedCostSummation != "") ? parseFloat(wf.extendedCostSummation.toString().replace(/\,/g, '')) : 0;
                 this.TotalExpertiseCost += (wf.totalExpertiseCost != undefined && wf.totalExpertiseCost != "") ? parseFloat(wf.totalExpertiseCost.toString().replace(/\,/g, '')) : 0;
             }
-        } 
-        // laborOverheadCost
+        }
         this.MaterialCost = this.MaterialCost ? formatNumberAsGlobalSettingsModule(this.MaterialCost, 2) : '0.00';
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
@@ -1203,37 +1122,29 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
         this.Total = formatNumberAsGlobalSettingsModule(total, 2);
         if (this.isOnload == true) {
-              const percentageOfMaterial=this.sourceWorkFlow.percentageOfMaterial ==-1? 0 :this.sourceWorkFlow.percentageOfMaterial ;
-              const percentageOfExpertise=this.sourceWorkFlow.percentageOfExpertise ==-1? 0 :this.sourceWorkFlow.percentageOfExpertise;
-              const percentageOfCharges= this.sourceWorkFlow.percentageOfCharges ==-1 ? 0 :this.sourceWorkFlow.percentageOfCharges;
-              const  percentageOfOthers=this.sourceWorkFlow.percentageOfOthers==-1?0 :this.sourceWorkFlow.percentageOfOthers
-            const totlapercent = (percentageOfMaterial+percentageOfExpertise+percentageOfCharges+percentageOfOthers) / 4
-            this.sourceWorkFlow.percentageOfTotal = totlapercent;
-            this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
-           this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
+            const percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial == -1 ? 0 : this.sourceWorkFlow.percentageOfMaterial;
+            const percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise == -1 ? 0 : this.sourceWorkFlow.percentageOfExpertise;
+            const percentageOfCharges = this.sourceWorkFlow.percentageOfCharges == -1 ? 0 : this.sourceWorkFlow.percentageOfCharges;
+            const percentageOfOthers = this.sourceWorkFlow.percentageOfOthers == -1 ? 0 : this.sourceWorkFlow.percentageOfOthers
+            this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
             this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise, 'onload');
             this.onChargesChange(this.sourceWorkFlow.percentageOfCharges, 'onload');
             this.onOtherChange(this.sourceWorkFlow.percentageOfOthers, 'onload');
-            // this.onTotalChange(this.sourceWorkFlow.percentageOfTotal, 'onload');
-
-            
         }
         const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
         const maxValue = Math.max(0, total, berThAmt);
         const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
         let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
         this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
-        this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+        this.percentBERTh = (this.PercentBERThreshold ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
         if (!this.isOnload) {
             if (this.Total > berThAmt && isDisplayErrorMesage && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
                 this.alertService.showMessage(this.title, 'Work Flow total cost is exceeding the BER Threshold Amount', MessageSeverity.info);
                 return false;
             }
-
             if (this.Total > berThAmt && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
                 return false;
             }
-
             return true;
         }
     }
@@ -1247,7 +1158,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         } else {
             this.sourceWorkFlow.percentOfNew = 0;
         }
-        this.berDetermination(0,'onload'); 
+        this.berDetermination(0, 'onload');
     }
     onPercentOfReplcaement(myValue, percentValue = 0) {
         this.sourceWorkFlow.costOfReplacement = this.sourceWorkFlow.costOfReplacement ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfReplacement, 2) : null;
@@ -1260,7 +1171,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         } else {
             this.sourceWorkFlow.percentOfReplacement = 0;
         }
-        this.berDetermination(0,'onload'); 
+        this.berDetermination(0, 'onload');
     }
     getWorkFlowMaterial() {
         this.isSpinnerVisible = true;
@@ -1324,20 +1235,15 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             );
         }
     }
-
-    currentActiveTab: string;
     setCurrentPanel(itemName, id): void {
-
         this.currentPanelId = id;
         itemName = itemName.replace(" ", "_");
-
         this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
         var list = document.getElementsByClassName('pan');
         for (var i = 0; i < list.length; i++) {
             list[i].classList.remove('active');
             list[i].classList.remove('in');
         }
-
         var elem = document.getElementById('tab_' + itemName);
         if (elem != null) {
             document.getElementById('tab_' + itemName).classList.remove('fade');
@@ -1347,29 +1253,21 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
     }
     SetCurrectTab(taskId, index?): void {
         this.currenttaskId = taskId;
-        // this.currentPanelId=this.currentPanelId ? this.currentPanelId :0;
         if (index !== undefined || index !== null) {
-
             this.selectedSideTabIndex = index;
         }
         this.workFlow = this.workFlowList.filter(x => x.taskId == this.currenttaskId)[0];
-
         var list = document.getElementsByClassName('actrmv');
-
         for (var i = 0; i < list.length; i++) {
             list[i].classList.add('active');
         }
-
         for (var i = 0; i < this.workFlowList.length; i++) {
             document.getElementById('tab_' + this.workFlowList[i].taskId).classList.remove('active');
         }
-
         document.getElementById('tab_' + taskId).classList.add('active');
-
         if (this.workFlow.selectedItems != undefined || this.workFlow.selectedItems.length > 0) {
             this.setSelectedItems(this.workFlow);
         }
-
         this.selectedItems = this.workFlow.selectedItems;
     }
     AddPage() {
@@ -1420,7 +1318,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                     equipment[0].taskId = this.currenttaskId;
                                 }
                                 this.workFlowList[i].equipments = equipment;
-
                             }
                             if (this.selectedItems[j].Name == 'Expertise' && (this.workFlowList[i].expertise == undefined || (this.workFlowList[i].expertise != undefined && this.workFlowList[i].expertise.length == 0))) {
                                 var expertise: any[];
@@ -1449,7 +1346,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 this.workFlowList[i].totalMaterialCost = 0;
                                 this.workFlowList[i].materialList = material;
                             }
-
                             if (this.selectedItems[j].Name == 'Publications' && (this.workFlowList[i].publication == undefined || (this.workFlowList[i].publication != undefined && this.workFlowList[i].publication.length == 0))) {
                                 var publication: any[];
                                 publication = this.GetPublication();
@@ -1460,9 +1356,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                     publication[0].updatedBy = this.userName;
                                 }
                                 this.workFlowList[i].publication = publication;
-
                             }
-
                             if (this.selectedItems[j].Name == 'Exclusions' && (this.workFlowList[i].exclusions == undefined || (this.workFlowList[i].exclusions != undefined && this.workFlowList[i].exclusions.length == 0))) {
                                 var exclusion: any[];
                                 exclusion = this.GetExclusions();
@@ -1470,12 +1364,10 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                     exclusion[0].taskId = this.currenttaskId;
                                     exclusion[0].workflowId = this.updateWorkFlowId;
                                 }
-
                                 this.workFlowList[i].sumofQty = 0;
                                 this.workFlowList[i].sumofExtendedCost = 0;
                                 this.workFlowList[i].exclusions = exclusion;
                             }
-
                             if (this.selectedItems[j].Name == 'Measurements' && (this.workFlowList[i].measurements == undefined || (this.workFlowList[i].measurements != undefined && this.workFlowList[i].measurements.length == 0))) {
                                 var measurement: any[];
                                 measurement = this.GetMeasurements();
@@ -1486,12 +1378,10 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 this.workFlowList[i].measurements = measurement;
                             }
                         }
-                        // TODO :  need to write delete action code here
                         this.workFlowList[i].selectedItems = this.selectedItems;
                         this.workFlow = this.workFlowList[i];
                     }
                 }
-
                 if (!isWorkFlowExist) {
                     for (var i = 0; i < this.selectedItems.length; i++) {
                         if (this.selectedItems[i].Name == 'Charges') {
@@ -1501,7 +1391,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 charge[0].taskId = this.currenttaskId;
                                 charge[0].workflowId = this.updateWorkFlowId;
                             }
-
                             currentWorkFlow.qtySummation = 0;
                             currentWorkFlow.extendedCostSummation = 0;
                             currentWorkFlow.totalChargesCost = 0;
@@ -1557,7 +1446,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                                 publication[0].taskId = this.currenttaskId;
                                 publication[0].workflowId = this.updateWorkFlowId;
                             }
-
                             currentWorkFlow.publication = publication;
                         }
                         if (this.selectedItems[i].Name == 'Exclusions') {
@@ -1580,7 +1468,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                             }
                             currentWorkFlow.measurements = measurement;
                         }
-
                     }
                     currentWorkFlow.selectedItems = this.selectedItems;
                     this.workFlowList.push(currentWorkFlow);
@@ -1588,12 +1475,10 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 }
             }
             else {
-                // I think this else part is not really required as it was added previously when der was a add button.
                 this.workFlowList = [];
                 var currentWorkFlow = this.GetWorkFlow();
                 currentWorkFlow.selectedItems = this.selectedItems;
                 this.workFlowList.push(currentWorkFlow);
-
                 for (var i = 0; i < this.selectedItems.length; i++) {
                     if (this.selectedItems[i].Name == 'Charges') {
                         var charge: any[];
@@ -1641,7 +1526,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                         this.workFlowList[0].sumOfOHCost = 0;
                         this.workFlowList[0].totalExpertiseCost = 0;
                         this.workFlowList[0].expertise = expertise;
-
                     }
                     if (this.selectedItems[i].Name == 'Material List') {
                         var material: any[];
@@ -1655,7 +1539,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                         this.workFlowList[0].materialExtendedCostSummation = 0;
                         this.workFlowList[0].totalMaterialCost = 0;
                         this.workFlowList[0].materialList = material;
-
                     }
                     if (this.selectedItems[i].Name == 'Publications') {
                         var publication: any[];
@@ -1716,7 +1599,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             }
         }
         this.showMainPage = true;
-
         if (this.selectedItems.length > 0) {
             setTimeout(() => {
                 this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
@@ -1939,9 +1821,7 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             if (this.workFlowList != undefined) {
                 currentWF = this.workFlowList.filter(x => x.taskId == this.currenttaskId);
             }
-
             this.showActionAttribute = true;
-
             if (currentWF == undefined || currentWF.length == 0) {
                 if (this.workFlowList == undefined) {
                     this.workFlowList = [];
@@ -1951,13 +1831,9 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 this.workFlowList.push(currentWorkFlow);
                 currentWF = this.workFlowList.filter(x => x.taskId == this.currenttaskId);
             }
-
             this.workFlow = currentWF[0];
             this.selectedItems = currentWF[0].selectedItems;
-
             this.tasksData.push(this.workFlow);
-
-
         }
     }
     addAction(): void {
@@ -1995,8 +1871,6 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
 
         return true;
     }
-
-
     showVersionUpdate() {
         $('#quoteVer').modal("show");
         this.calculateTotalWorkFlowCost(true)
@@ -2025,21 +1899,19 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
     onItemSelect(item: any) {
         this.AddActionAttribute();
     }
-
     onSelectAll(items: any) {
         this.selectedItems = items;
         this.AddActionAttribute();
         this.setCurrentPanel(this.selectedItems[this.selectedItems.length - 1].Name, this.selectedItems[this.selectedItems.length - 1].Id);
         this.resetWorkflowGrid();
     }
-
     onDeSelectAll(items: any) {
         this.selectedItems = [];
         this.AddActionAttribute();
         this.workFlow.selectedItems = [];
         this.resetWorkflowGrid();
     }
-    taskDeleteConfirmation(confirmDeleteTemplate: any, task: any): void { 
+    taskDeleteConfirmation(confirmDeleteTemplate: any, task: any): void {
     }
     removeTask(workFlow: any): void {
         var index = this.workFlowList.indexOf(workFlow);
@@ -2055,13 +1927,11 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
             this.SetCurrectTab(this.currenttaskId, 0);
             this.setSelectedItems(this.workFlow);
         }
-
         this.tasksData = this.tasksData.filter(x => {
             if (x.taskId !== workFlow.taskId) {
                 return x;
             }
         })
-
         this.onActionChange();
     }
     dismissModel() {
@@ -2074,45 +1944,36 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
                 if (chargesItem.length == 0) {
                     wf.charges = [];
                 }
-
                 var directionsItem = wf.selectedItems.filter(x => x.Name == "Directions");
                 if (directionsItem.length == 0) {
                     wf.directions = [];
                 }
-
                 var equipmentItem = wf.selectedItems.filter(x => x.Name == "Tools");
                 if (equipmentItem.length == 0) {
                     wf.equipments = [];
                 }
-
                 var exclusionItem = wf.selectedItems.filter(x => x.Name == "Exclusions");
                 if (exclusionItem.length == 0) {
                     wf.exclusions = [];
                 }
-
                 var expertiseItem = wf.selectedItems.filter(x => x.Name == "Expertise");
                 if (expertiseItem.length == 0) {
                     wf.expertise = [];
                 }
-
                 var materialItem = wf.selectedItems.filter(x => x.Name == "Material List");
                 if (materialItem.length == 0) {
                     wf.materialList = [];
                 }
-
                 var measurementItem = wf.selectedItems.filter(x => x.Name == "Measurements");
                 if (measurementItem.length == 0) {
                     wf.measurements = [];
                 }
-
                 var measurementItem = wf.selectedItems.filter(x => x.Name == "Publications");
                 if (measurementItem.length == 0) {
                     wf.publication = [];
                 }
             }
-
         }
-
     }
     saveBuildFromScratchData() {
         this.saveData.emit(this.workFlowList);
@@ -2142,33 +2003,30 @@ this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsMod
         this.sourceWorkFlow['isVersionIncrease'] = isIncrease;
         if (this.isWorkOrder) {
             this.saveWorkFlowWorkOrderData['isVersionIncrease'] = isIncrease;
-            this._workflowService.currentWorkFlowId=this.sourceWorkFlow.workflowId !=0 ?this.sourceWorkFlow.workflowId  :this.sourceWorkFlow.existingWorkFlowId
+            this._workflowService.currentWorkFlowId = this.sourceWorkFlow.workflowId != 0 ? this.sourceWorkFlow.workflowId : this.sourceWorkFlow.existingWorkFlowId
             this.savedWorkFlowWorkOrderData.emit(this.saveWorkFlowWorkOrderData);
         }
         else {
             this.updateWorkFlow();
         }
     }
-    isheadUpdate: any;
     addWorkFlow(isHeaderUpdate: boolean): void {
         this.isheadUpdate = isHeaderUpdate;
         this.sourceWorkFlow.workflowId = undefined;
         this.calculateTotalWorkFlowCost(true)
-this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
-     if (!this.validateWorkFlowHeader()) {
+        this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
+        if (!this.validateWorkFlowHeader()) {
             return;
-        } 
-
+        }
         if (!this.calculateTotalWorkFlowCost(false)) {
             $('#confir').modal("show");
         }
-        if(this.finalCost==0){
+        if (this.finalCost == 0) {
             this.confirmation();
         }
     }
-    originalworkFLow:any={};
     updateWorkFlow(): void {
-        this.originalworkFLow=this.workFlow
+        this.originalworkFLow = this.workFlow
         if (!this.validateWorkFlowHeader()) {
             this.validateheader = true;
             return;
@@ -2177,21 +2035,20 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
         if (!this.calculateTotalWorkFlowCost(false)) {
             $('#quoteVer').modal("hide");
-        if(this.finalCost >0){
-            if ((this.finalCost > this.finalThrsh)) {
+            if (this.finalCost > 0) {
+                if ((this.finalCost > this.finalThrsh)) {
                     $('#UpdateConfirm').modal("show");
                 }
-        }
-            if(this.finalCost==0){
+            }
+            if (this.finalCost == 0) {
                 this.updateConfirmation();
             }
         }
         if (this.finalCost < this.finalThrsh) {
-            if(this.finalCost>0){
-            this.updateConfirmation();
+            if (this.finalCost > 0) {
+                this.updateConfirmation();
+            }
         }
-    }
-
     }
     dataCancel() {
         $('#confir').modal("hide");
@@ -2208,16 +2065,14 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.measurements = [];
             this.sourceWorkFlow.publication = [];
             this.isSpinnerVisible = true;
-
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-
             if (this.sourceWorkFlow.customerName) {
                 this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
             }
-            const createDataset={...this.sourceWorkFlow}
-                 delete createDataset.customerName;
+            const createDataset = { ...this.sourceWorkFlow }
+            delete createDataset.customerName;
             this.isSpinnerVisible = true;
             this.actionService.addWorkFlowHeader(createDataset).subscribe(result => {
                 this.isSpinnerVisible = false;
@@ -2225,7 +2080,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 this.isUpdateAfterCreate = true;
                 this._workflowService.enableUpdateMode = true;
                 this._workflowService.currentWorkFlowId = result.workflowId;
-                this.disableUpdateButton=true;
+                this.disableUpdateButton = true;
                 this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this._workflowService.currentWorkFlowId}`);
             }, error => {
                 this.isSpinnerVisible = false;
@@ -2237,8 +2092,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceWorkFlow.createdBy = this.userName;
         this.sourceWorkFlow.updatedBy = this.userName;
-        const dataSet={...this.sourceWorkFlow}
-        delete  dataSet.customerName;
+        const dataSet = { ...this.sourceWorkFlow }
+        delete dataSet.customerName;
         this.actionService.getNewWorkFlow(dataSet).subscribe(
             data => {
                 this.isSpinnerVisible = false;
@@ -2249,7 +2104,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             });
     }
     upDateDataCancel() {
-        $('#UpdateConfirm').modal("hide"); 
+        $('#UpdateConfirm').modal("hide");
     }
     updateConfirmation() {
         this.modifyForSaveUpdateApis();
@@ -2267,31 +2122,30 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-            const workflowData={...this.sourceWorkFlow}
-        delete    workflowData.customerName
+            const workflowData = { ...this.sourceWorkFlow }
+            delete workflowData.customerName
             this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
                 this.sourceWorkFlow.workflowId = result.workflowId;
                 this.UpdateMode = true;
-                this.disableUpdateButton=true;
+                this.disableUpdateButton = true;
             }, error => {
                 this.isSpinnerVisible = false;
             });
 
             return;
         }
-
         if (this.workFlowList.length == 0) {
             this.alertService.showMessage(this.title, "Atleast one task is required.", MessageSeverity.error);
-        } 
+        }
         this.isSpinnerVisible = true;
-        const originalData={ ...this.sourceWorkFlow };
+        const originalData = { ...this.sourceWorkFlow };
         const souceData = { ...this.sourceWorkFlow };
         if (souceData.exclusions && souceData.exclusions.length != 0) {
             souceData.exclusions.forEach(element => {
-                if(element.partName){
-                    element.partNumber=element.partName.partNumber;
+                if (element.partName) {
+                    element.partNumber = element.partName.partNumber;
                 }
                 delete element.partName
             });
@@ -2300,8 +2154,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             souceData.measurements.forEach(element => {
                 delete element.partName
             });
-        } 
-        if (souceData.publication && souceData.publication.length != 0) { 
+        }
+        if (souceData.publication && souceData.publication.length != 0) {
             souceData.publication.forEach(element => {
                 delete element.allDashNumbers;
                 delete element.aircraft;
@@ -2309,39 +2163,37 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                     var i;
                     for (i = 0; i < element.workflowPublicationDashNumbers.length; i++) {
                         element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
-                       element.workflowPublicationDashNumbers[i].workflowId=souceData.workflowId
+                        element.workflowPublicationDashNumbers[i].workflowId = souceData.workflowId
                         delete element.workflowPublicationDashNumbers[i].dashNumberId;
-                      
                     }
                 }
             });
         }
         if (souceData.equipments && souceData.equipments.length != 0) {
             souceData.equipments.forEach(element => {
-                element.partNumber=element.partNumber.name
+                element.partNumber = element.partNumber.name
             });
         }
-        delete    souceData.customerName
-        this.actionService.getNewWorkFlow(souceData).subscribe(  
+        delete souceData.customerName
+        this.actionService.getNewWorkFlow(souceData).subscribe(
             result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow updated successfully.", MessageSeverity.success);
                 this.route.navigateByUrl('/workflowmodule/workflowpages/app-workflow-list');
             }, error => {
                 this.isSpinnerVisible = false;
-             });
-    } 
+            });
+    }
     modifyForSaveUpdateApis(): void {
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
             this.sourceWorkFlow.equipments = [];
-            this.sourceWorkFlow.exclusions = []; 
+            this.sourceWorkFlow.exclusions = [];
             this.sourceWorkFlow.expertise = [];
             this.sourceWorkFlow.materialList = [];
             this.sourceWorkFlow.measurements = [];
             this.sourceWorkFlow.publication = [];
-
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
@@ -2366,7 +2218,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             charge.updatedBy = this.userName;
                             charge.updatedDate = new Date();
                         }
-
                         this.sourceWorkFlow.charges.push(charge);
                     }
                 }
@@ -2405,8 +2256,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.updatedDate = new Date();
                             equipment.createdBy = this.userName;
                             equipment.createdDate = new Date();
-                            equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
-								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
+                            equipment.partNumber = equipment.partNumber && equipment.partNumber.assetId
+                                && equipment.partNumber != null && equipment.partNumber.assetId != undefined ? equipment.partNumber.assetId : '';
                         } else {
                             equipment.workflowEquipmentListId = equipment.workflowEquipmentListId > 0 ? equipment.workflowEquipmentListId : 0;
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
@@ -2414,8 +2265,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.updatedDate = new Date();
                             equipment.createdBy = this.userName;
                             equipment.createdDate = new Date();
-                            equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
-								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
+                            equipment.partNumber = equipment.partNumber && equipment.partNumber.assetId
+                                && equipment.partNumber != null && equipment.partNumber.assetId != undefined ? equipment.partNumber.assetId : '';
                         }
                         this.sourceWorkFlow.equipments.push(equipment);
                     }
@@ -2472,24 +2323,24 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             material.taskId = workflow.taskId;
                             material.order = workflow.order;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
-                             material.createdBy = this.userName;
+                            material.createdBy = this.userName;
                             material.createdDate = new Date();
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
                         } else {
                             material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
-                             material.createdBy = this.userName;
+                            material.createdBy = this.userName;
                             material.createdDate = new Date();
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
-                            material.taskId = workflow.taskId ;
-                            if( material.partItem && typeof material.partItem=='object'){
-                            material.itemMasterId = material.partItem.partId;
-                            material.partNumber = material.partItem.partName;
+                            material.taskId = workflow.taskId;
+                            if (material.partItem && typeof material.partItem == 'object') {
+                                material.itemMasterId = material.partItem.partId;
+                                material.partNumber = material.partItem.partName;
                             }
                         }
-   this.sourceWorkFlow.materialList.push(material);
+                        this.sourceWorkFlow.materialList.push(material);
                     }
                 }
                 if (workflow.measurements != undefined) {
@@ -2533,7 +2384,6 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         } else {
                             publication.id = publication.id > 0 ? publication.id : 0;
                             publication.masterCompanyId = this.currentUserMasterCompanyId;
-                         
                         }
                         publication.createdBy = this.userName;
                         publication.createdDate = new Date();
@@ -2546,10 +2396,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             }
         }
     }
-
     saveWorkFlowWorkOrder(isSaveToWorkFlow) {
         if (this.workFlowList != undefined && this.workFlowList.length > 0) {
-
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
             this.sourceWorkFlow.equipments = [];
@@ -2558,11 +2406,9 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
             this.sourceWorkFlow.materialList = [];
             this.sourceWorkFlow.measurements = [];
             this.sourceWorkFlow.publication = [];
-
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-
             for (let workflow of this.workFlowList) {
                 if (workflow.charges != undefined) {
                     for (let charge of workflow.charges) {
@@ -2609,7 +2455,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                         material.workflowId = workflow.workflowId;
                         material.taskId = workflow.taskId;
-                        material.partNumber= (typeof material.partNumber == 'string') ? material.partNumber:   material.partNumber.partName;
+                        material.partNumber = (typeof material.partNumber == 'string') ? material.partNumber : material.partNumber.partName;
                         this.sourceWorkFlow.materialList.push(material);
                     }
                 }
@@ -2623,7 +2469,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 }
                 if (workflow.publication != undefined) {
                     for (let publication of workflow.publication) {
-                         publication.workflowId = workflow.workflowId;
+                        publication.workflowId = workflow.workflowId;
                         publication.taskId = workflow.taskId;
                         if (publication.workflowPublicationDashNumbers != undefined) {
                             for (let dashNumber of publication.workflowPublicationDashNumbers) {
@@ -2641,9 +2487,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 }
             }
         }
-
         if (this.isWorkOrder) {
-            // responseDataForHeader
             const data = this.sourceWorkFlow;
             const excessParams = {
                 createdBy: this.userName,
@@ -2651,15 +2495,13 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 createdate: new Date(),
                 updatdate: new Date(),
                 isActive: true,
-                 masterCompanyId: this.currentUserMasterCompanyId,
+                masterCompanyId: this.currentUserMasterCompanyId,
             }
-
             if (data.measurements && data.measurements.length != 0) {
                 data.measurements.forEach(element => {
                     delete element.partName
                 });
             }
-
             const saveWorkFlowWorkOrderData = {
                 ...this.sourceWorkFlow,
                 isSaveToWorkFlow: isSaveToWorkFlow,
@@ -2668,20 +2510,22 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 workFlowWorkOrderId: this.workFlowWorkOrderId,
                 workOrderPartNoId: this.workOrderPartNumberId,
                 existingWorkFlowId: this.sourceWorkFlow.workflowId,
-                 charges: data.charges.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                directions: data.directions.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                charges: data.charges.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                directions: data.directions.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 equipments: data.equipments.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                exclusions: data.exclusions.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                expertise: data.expertise.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
-                materialList: data.materialList.map(x => { return {
-                     ...x, 
-                      workOrderId: this.savedWorkOrderData.workOrderId,
-                       partNumber: (typeof x.partNumber == 'string') ? x.partNumber:   x.partNumber.partName,
-                      ...excessParams } }),
-                measurements: data.measurements.map(x => { return { ...x,  workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                exclusions: data.exclusions.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                expertise: data.expertise.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
+                materialList: data.materialList.map(x => {
+                    return {
+                        ...x,
+                        workOrderId: this.savedWorkOrderData.workOrderId,
+                        partNumber: (typeof x.partNumber == 'string') ? x.partNumber : x.partNumber.partName,
+                        ...excessParams
+                    }
+                }),
+                measurements: data.measurements.map(x => { return { ...x, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } }),
                 publication: data.publication.map(x => { return { ...x, Id: 0, workOrderId: this.savedWorkOrderData.workOrderId, ...excessParams } })
             }
-
             if (isSaveToWorkFlow) {
                 this.saveWorkFlowWorkOrderData = saveWorkFlowWorkOrderData;
                 this.showVersionUpdate()

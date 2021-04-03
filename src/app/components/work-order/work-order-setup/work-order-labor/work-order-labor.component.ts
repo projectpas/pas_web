@@ -423,7 +423,7 @@ laborTaskData:any;
 
   newLaborForm:any={}
   clearHoursData() {
-    this.newLaborForm={...this.laborForm}
+
     console.log("laborForm.workOrderLaborList[0]",this.laborForm.workOrderLaborList[0])
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
@@ -1232,6 +1232,7 @@ this.commonfunctionHandler();
   }
   assignAllTask() {
     console.log("hello tasks",this.laborForm.workOrderLaborList);
+    this.newLaborForm={...this.laborForm};
     this.laborForm.workOrderLaborList[0] = {};
     this.laborForm.hoursorClockorScan = 1;
     if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workOrder') {
@@ -1244,6 +1245,7 @@ this.commonfunctionHandler();
         }
       )
     }
+    console.log("hello tasks",this.newLaborForm);
   } 
   formateCurrency(value) {
     if (value) {
@@ -1308,6 +1310,7 @@ this.commonfunctionHandler();
       // this.refreshLabor.emit(true);
     }
     refreshCall(){
+      console.log("new form",this.newLaborForm)
       this.laborForm=={...this.newLaborForm}
         //  this.refreshLabor.emit(true);
         // laborForm.workOrderLaborList[0]
