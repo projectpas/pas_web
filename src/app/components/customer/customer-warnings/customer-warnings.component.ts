@@ -6,6 +6,7 @@ import { AuthService } from '../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CommonService } from '../../../services/common.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { PermissionConstants, ModuleConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
 	selector: 'app-customer-warnings',
@@ -41,11 +42,27 @@ export class CustomerWarningsComponent implements OnInit {
 	@ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
 	@ViewChild("WarningsForm",{static:false}) formdata;
 	stopmulticlicks: boolean;
-
+	isWarningAdd:boolean=true;
+	isWarningUpdate:boolean=true;
+	isWarningDelete:boolean=true;	
+	isSalesPersonInfoAdd:boolean=true;
+	isSalesPersonInfoEdit:boolean=true;
+	isDocumentAdd:boolean=true;
+	isDocumentEdit:boolean=true;
+	
 	constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, private router: Router, private commonService: CommonService, 
 		private modalService: NgbModal
 		) {
-	}
+			this.isWarningAdd=this.authService.checkPermission([ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Add])
+			this.isWarningUpdate=this.authService.checkPermission([ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Update])  
+			this.isWarningDelete=this.authService.checkPermission([ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Update]) 
+			//Next
+			this.isDocumentAdd=this.authService.checkPermission([ModuleConstants.Customers_Documents+'.'+PermissionConstants.Add])
+            this.isDocumentEdit=this.authService.checkPermission([ModuleConstants.Customers_Documents+'.'+PermissionConstants.Update])
+            //Privious
+			this.isSalesPersonInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Add])
+            this.isSalesPersonInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Update])        
+		}
 
 	ngOnInit() {
 	}
