@@ -1017,7 +1017,7 @@ setTimeout(() => {
 
     saveWorkOrderGridLogic(result, data) {
         this.savedWorkOrderData = result;
-        // this.getWorkFlowData();
+        this.getWorkFlowData();
         this.workOrderId = result.workOrderId;
         this.workOrderGeneralInformation.workOrderNumber = result.workOrderNum;
         if (this.workFlowWorkOrderId !== 0) {
@@ -1973,7 +1973,7 @@ setTimeout(() => {
         }
     }
     refreshLabor(value){
-        // this.getWorkFlowLaborList();
+        this.getWorkFlowLaborList();
     }
     getWorkFlowLaborList() {
         this.clearLaborList();
@@ -3128,5 +3128,16 @@ setTimeout(() => {
 
     memoValidate() {
         this.disableForMemo = false;
+    }
+
+    doSomething(currentDate,workOrderPart,index){
+        if(currentDate>workOrderPart.estimatedShipDate){
+            this.alertService.showMessage(
+                this.moduleName,
+                'Selected ESt. Completion Date is greater than ESt. Ship Date. So, ESt. Ship Date also reset.',
+                MessageSeverity.warn
+            );
+            this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
+        }
     }
 }   
