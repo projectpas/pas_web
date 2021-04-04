@@ -105,6 +105,11 @@ export class CommonService extends EndpointFactory {
       return this.handleErrorCommon(error, () => this.autoCompleteDropdownsItemMasterWithStockLine(searchText, startWith, count, idList, masterCompanyId));
     });
   }
+  autoCompleteDropdownsWorkorderList(searchText, count?, idList?, masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteDropdownsWorkorderList?searchText=${searchText}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteDropdownsWorkorderList(searchText, count, idList, masterCompanyId));
+    });
+  }
 
   autoCompleteSmartDropDownCustomerList(customerType, searchText, startWith, count?, idList?, masterCompanyId?) {
     return this.http.get<any>(`${this.baseUrl}/api/Common/AutoCompleteSmartDropDownCustomerList?customerType=${customerType}&searchText=${searchText}&startWith=${startWith}&count=${count !== undefined ? count : 0}&idList=${idList !== undefined ? idList : '0'}&masterCompanyID=${masterCompanyId !== undefined ? masterCompanyId : 1}`, this.getRequestHeaders()).catch(error => {
@@ -907,6 +912,18 @@ export class CommonService extends EndpointFactory {
   getReportsCreadentials() {
     return this.http.get<any>(`${this.baseUrl}/api/Common/getreportscreadentials`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getReportsCreadentials());
+    });
+  }
+
+
+  getPickTicketList(referenceId,moduleId): Observable<any> {
+    return this.http.get(`${this.configurations.baseUrl}/api/Common/getpickticketapprovelist?referenceId=${referenceId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getPickTicketList(referenceId,moduleId));
+    });
+  }
+  getStockLineforPickTicket(itemMasterId,conditionId,referenceId,moduleId): Observable<any> {
+    return this.http.get(`${this.configurations.baseUrl}/api/Common/searchstocklinefrompickticketpop?itemMasterId=${itemMasterId}&conditionId=${conditionId}&referenceId=${referenceId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getStockLineforPickTicket(itemMasterId,conditionId,referenceId,moduleId));
     });
   }
 

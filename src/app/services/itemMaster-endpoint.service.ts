@@ -1358,4 +1358,10 @@ export class ItemMasterEndpoint extends EndpointFactory {
                 return this.handleErrorCommon(error, () => this.getItemMasterMappingPart(id));
             });
     }
+    GetManufacturerByitemMasterId(id) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getmanufacturebyitemmasterid?itemMasterId=${id}`)
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetManufacturerByitemMasterId(id));
+            });
+    }
 }

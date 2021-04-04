@@ -14,6 +14,8 @@ import { MasterComapnyService } from "../services/mastercompany.service";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { WorkOrderService } from "../services/work-order/work-order.service";
+import { any } from "underscore";
 @Component({
     selector: 'grd-material',
     templateUrl: './Material-List-Create.component.html',
@@ -54,6 +56,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Input() conditionsListFromSource = [];
     @Input() isView: boolean = false;
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
+    @Input() customerId;
     materialCondition: any = [];
     materialMandatory: any = [];
     materialUOM: any[] = [];
@@ -220,7 +223,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         private commonService: CommonService,
         private authService: AuthService,
         private modalService: NgbModal,
-        private workOrderQuoteService: WorkOrderQuoteService,
+        private workOrderQuoteService: WorkOrderQuoteService, 
+        private workOrderService: WorkOrderService,
         private alertService: AlertService,
         public unitofmeasureService: UnitOfMeasureService,
         public itemClassService: ItemClassificationService,
@@ -414,7 +418,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.getPartnumbers('');
         }
         this.partCollection = this.partCollection;
-    }
+    } 
     getPartnumbers(value) {
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
@@ -423,31 +427,76 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
         }
-        this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0)
-            .subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.allPartnumbersInfo = res;
-                this.allPartnumbersInfo.forEach(element => {
-                    if (element.value == this.workFlow.itemMasterId) {
-                        this.partCollection.splice(element, 1);
-                    }
-                    this.partCollection.push({
-                        "partId": element.value,
-                        "partName": element.label,
-                        "description": element.partDescription,
-                        "masterCompanyId": element.masterCompanyId,
-                        "itemClassificationId": element.itemClassificationId,
-                        "itemClassification": element.itemClassification,
-                        "unitOfMeasureId": element.unitOfMeasureId,
-                        "unitOfMeasure": element.unitOfMeasure,
-                        "stockType": element.stockType
-                    });
+      if(this.isWorkOrder || this.isSubWorkOrder){
+        let partSearchParamters = {
+            "customerId": 411,
+            'partNumber': "",
+            "includeAlternatePartNumber": true,
+            "includeEquivalentPartNumber": true,
+            "restrictPMA": true,
+            "restrictDER": true,
+            "custRestrictDER": true,
+            "custRestrictPMA": true,
+            "idlist":  null
+          };
+          partSearchParamters.partNumber=value ? value :"";  
+          partSearchParamters.customerId =this.customerId?this.customerId: 0;
+          if(this.isWorkOrder || this.isSubWorkOrder || this.isQuote){
+          }else{
+            partSearchParamters.restrictPMA=false;
+            partSearchParamters.restrictDER=false
+          }
+          partSearchParamters.idlist=  exclusionsIds ? exclusionsIds : 0
+        this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe((res:any) => {
+            this.isSpinnerVisible = false;
+            this.allPartnumbersInfo = res;
+            this.allPartnumbersInfo.forEach(element => {
+                if (element.value == this.workFlow.itemMasterId) {
+                    this.partCollection.splice(element, 1);
+                }
+                this.partCollection.push({
+                    "partId": element.value,
+                    "partName": element.label,
+                    "description": element.partDescription,
+                    "masterCompanyId": element.masterCompanyId,
+                    "itemClassificationId": element.itemClassificationId,
+                    "itemClassification": element.itemClassification,
+                    "unitOfMeasureId": element.unitOfMeasureId,
+                    "unitOfMeasure": element.unitOfMeasure,
+                    "stockType": element.stockType
                 });
-
-                this.partCollection= this.partCollection;
-            }, error => {
-                this.isSpinnerVisible = false;
             });
+
+            this.partCollection= this.partCollection;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
+      }else{
+        this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0).subscribe((res:any) => {
+            this.isSpinnerVisible = false;
+            this.allPartnumbersInfo = res;
+            this.allPartnumbersInfo.forEach(element => {
+                if (element.value == this.workFlow.itemMasterId) {
+                    this.partCollection.splice(element, 1);
+                }
+                this.partCollection.push({
+                    "partId": element.value,
+                    "partName": element.label,
+                    "description": element.partDescription,
+                    "masterCompanyId": element.masterCompanyId,
+                    "itemClassificationId": element.itemClassificationId,
+                    "itemClassification": element.itemClassification,
+                    "unitOfMeasureId": element.unitOfMeasureId,
+                    "unitOfMeasure": element.unitOfMeasure,
+                    "stockType": element.stockType
+                });
+            });
+
+            this.partCollection= this.partCollection;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });  
+      }
     }
     onPartSelect(event, material, index) { 
         var materialObj = this.workFlow.materialList.find(x => x.partItem == event && x.taskId == this.workFlow.taskId);

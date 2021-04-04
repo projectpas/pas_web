@@ -443,9 +443,9 @@
                                         </p-calendar>
                                     <td>
                                         <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}"
-                                                    class="calender-cstm" #estimatedCompletionDate="ngModel"
+                                                    class="calender-cstm" #estimatedCompletionDate="ngModel" (onSelect)="doSomething(workOrderPartNumber.estimatedCompletionDate,workOrderPartNumber,i)"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    [minDate]="workOrderPartNumber.promisedDate"   [maxDate]="workOrderPartNumber.estimatedShipDate" (ngModelChange)="getValid()"
+                                                    [minDate]="workOrderPartNumber.receivedDate" (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -454,7 +454,7 @@
                                                     name="estimatedShipDate{{i}}"  (ngModelChange)="getValid()"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="workOrderPartNumber.estimatedShipDate"
-                                                    [minDate]="workOrderPartNumber.receivedDate" #estimatedShipDate="ngModel"
+                                                    [minDate]="workOrderPartNumber.estimatedCompletionDate" #estimatedShipDate="ngModel"
                                                     required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
                                     </td>
 
@@ -862,7 +862,6 @@
                     aria-expanded="false" [ngClass]="{active : gridActiveTab === 'otherOptions'}"
                     >Other Options</a>
                 <div class="dropdown-menu">
-
                     <a class="dropdown-item" (click)="otherOptionTabSelected('freight');gridTabChange('otherOptions')">Freight</a>
                    <a class="dropdown-item" (click)="otherOptionTabSelected('charges');gridTabChange('otherOptions')">Charges</a>
                   </div>
@@ -873,8 +872,7 @@
                  <app-work-view-component [workOrderId]="mainWorkOrderId"></app-work-view-component>  
               </div>  
             <div [ngClass]="{hidedata :  subTabWorkFlow !== 'createworkFlow' }">
-             </div> 
-             <!-- && editWorkFlowData -->
+             </div>  
             <div *ngIf="workFlowId && subTabWorkFlow == 'editworkFlow'"
                 [ngClass]="{hidedata: subTabWorkFlow !== 'editworkFlow' }">
                 <wf-create [isWorkOrder]="isWorkOrder" [workOrderPartNumberId]="workOrderPartNumberId"
@@ -893,7 +891,7 @@
                     [mpnId]="workOrderPartNumberId" [employeesOriginalData]="employeesOriginalData"
                     [workOrderMaterialList]="workOrderMaterialList" (saveRIParts)="saveReservedPartorIssue($event)"
                     (saveMaterialListForWO)="saveWorkOrderMaterialList($event)"  [workOrderId]="workOrderId" 
-                    (updateMaterialListForWO)="updateWorkOrderMaterialList($event)" [taskList]="taskList"
+                    (updateMaterialListForWO)="updateWorkOrderMaterialList($event)" [taskList]="taskList" [customerId]="isSubWorkOrder? subWorkOrderDetails.customerId :workOrderGeneralInformation.customerId.customerId"
                     (refreshData)="getMaterialListHandle()" [mpnPartNumbersList]="mpnPartNumbersList" [isView]="isView || isViewForApprovedPart"></app-work-order-complete-material-list>
             </div>
            <div *ngIf="labor && (gridActiveTab == 'labor') " [ngClass]="{hidedata : gridActiveTab !== 'labor'}" id="check">
@@ -934,7 +932,6 @@
                     [quoteMaterialList]="quoteMaterialList" [quoteFreightsList]="quoteFreightsList" [quotestatusofCurrentPart]="quotestatusofCurrentPart" [workFlowId]="workFlowId" [labordata]="labor" [workOrderLaborList]="workOrderLaborList"
                     [quoteChargesList]="quoteChargesList" [workOrderChargesList]="workOrderChargesList" [quoteLaborList]="quoteLaborList" [taskList]="taskList" [buildMethodDetails]="buildMethodDetails" [isViewMode] = "isView || isViewForApprovedPart"></app-work-order-billing>
             </div> 
-
             <div *ngIf="(gridActiveTab == 'quote') && !isSubWorkOrder">
                 <div *ngIf="workOrderQuoteId == undefined" class="no-quote">
                     Quote not yet created

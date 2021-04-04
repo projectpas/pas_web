@@ -29,6 +29,7 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { DBkeys } from '../../../../services/db-Keys';
 import { MenuItem } from 'primeng/api';
+import {AppModuleEnum} from "../../../../enum/appmodule.enum";
 
 @Component({
     selector: 'app-work-order-add',
@@ -103,6 +104,7 @@ export class WorkOrderAddComponent implements OnInit {
     data: any;
     saveTearDownData: any = [];
     workFlowList: any;
+    moduleId:any;
     tearDownReportList = [{
         label: 'Station 2', 
         value: 20
@@ -291,6 +293,7 @@ export class WorkOrderAddComponent implements OnInit {
                 this.subTabWorkFlowChange('editworkFlow');
             }}
         ];
+        this.moduleId= AppModuleEnum.WorkOrder;
         this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;
         if (this.salesOrderReferenceData) {
             this.woDealerChange(DBkeys.WORK_ORDER_TYPE_INTERNAL_ID)
@@ -1017,7 +1020,7 @@ setTimeout(() => {
 
     saveWorkOrderGridLogic(result, data) {
         this.savedWorkOrderData = result;
-        // this.getWorkFlowData();
+        this.getWorkFlowData();
         this.workOrderId = result.workOrderId;
         this.workOrderGeneralInformation.workOrderNumber = result.workOrderNum;
         if (this.workFlowWorkOrderId !== 0) {
@@ -1826,7 +1829,6 @@ setTimeout(() => {
                 "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
             }
         }
-
         for (let labList in data.workOrderLaborList) {
             for (let labSubList of data.workOrderLaborList[labList]) {
                 if (labSubList && labSubList['expertiseId'] != null){
@@ -1837,7 +1839,6 @@ setTimeout(() => {
         }
         return this.result;
     }
-
     saveReservedPartorIssue(alternatePartData) {  
         if (this.isSubWorkOrder == true) {
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1865,9 +1866,6 @@ setTimeout(() => {
                 })
         }
     }
-
-
-
     getValues(element) {
         if (element.stockLineNumber) {
             if (element.stockLineNumber.indexOf(',') > -1) {
@@ -1898,7 +1896,6 @@ setTimeout(() => {
             }
         }
     }
-
     getMaterialListByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
@@ -1932,7 +1929,6 @@ setTimeout(() => {
                 })
         }
     }
-
     getDocumentsByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.documentsDestructuredData = [];
@@ -1964,7 +1960,6 @@ setTimeout(() => {
             })
         }
     }
-
     clearLaborList() {
         if (this.taskList && this.taskList.length > 0) {
             for (let task of this.taskList) {
@@ -1973,7 +1968,7 @@ setTimeout(() => {
         }
     }
     refreshLabor(value){
-        // this.getWorkFlowLaborList();
+        this.getWorkFlowLaborList();
     }
     getWorkFlowLaborList() {
         this.clearLaborList();
@@ -1983,7 +1978,6 @@ setTimeout(() => {
                 this.isSpinnerVisible = false;
                 this.data = {};
                 this.data = res;
-
                 if (res) {
                     this.workOrderLaborList = {
                         ...this.data,
@@ -2005,7 +1999,6 @@ setTimeout(() => {
                     for (let labList of this.data['laborList']) {
                         if (this.taskList) {
                             for (let task of this.taskList) {
-
                                 if (task.taskId == labList['taskId']) {
                                     if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
                                         this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
@@ -3128,5 +3121,16 @@ setTimeout(() => {
 
     memoValidate() {
         this.disableForMemo = false;
+    }
+
+    doSomething(currentDate,workOrderPart,index){
+        if(currentDate>workOrderPart.estimatedShipDate){
+            this.alertService.showMessage(
+                this.moduleName,
+                'Selected ESt. Completion Date is greater than ESt. Ship Date. So, ESt. Ship Date also reset.',
+                MessageSeverity.warn
+            );
+            this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
+        }
     }
 }   

@@ -155,7 +155,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }        
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.ledgerNameObjectData = res;
             }            
@@ -173,7 +173,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Master1099", "Master1099Id", "Name", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Master1099", "Master1099Id", "Name", strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.miscData = res;
             }
@@ -190,7 +190,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.entitiesObj = res;                
             }            
@@ -208,7 +208,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('GLCashFlowClassification','glClassFlowClassificationId','GLClassFlowClassificationName',strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('GLCashFlowClassification','glClassFlowClassificationId','GLClassFlowClassificationName',strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {               
                 this.allGLCashFlowClassInfo = res;
             }
@@ -225,7 +225,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("GLAccountClass", "GLAccountClassId", "GLAccountClassName", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("GLAccountClass", "GLAccountClassId", "GLAccountClassName", strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.accountTypeObject = res;
             }
@@ -241,7 +241,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Nodetype", "NodetypeId", "NodetypeName", strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Nodetype", "NodetypeId", "NodetypeName", strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.leafNodeNameObj = res;
             }
@@ -259,7 +259,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('POROCategory','poroCategoryId','CategoryName',strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('POROCategory','poroCategoryId','CategoryName',strText, true, 0, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.poroCategoryList = res;
             }

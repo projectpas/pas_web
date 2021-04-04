@@ -10,14 +10,12 @@ import { Subscription } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { unwrapResolvedMetadata } from '@angular/compiler';
-
 @Component({
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
     styleUrls: ['./work-order-complete-material-list.component.scss'],
     animations: [fadeInOut]
 })
- 
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
     @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
     @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
@@ -40,6 +38,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Output() updateMaterialListForWO = new EventEmitter();
     @Output() saveRIParts = new EventEmitter();
     @Output() refreshData = new EventEmitter();
+    @Input() customerId;
     statusId = null;
     minDateValue: Date = new Date();
     addNewMaterial: boolean = false;
