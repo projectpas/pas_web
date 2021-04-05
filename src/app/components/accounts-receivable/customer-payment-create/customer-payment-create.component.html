@@ -69,13 +69,9 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label>Status</label>
-                                                <select [(ngModel)]="customerPayment.statusId" name="statusId"
-                                                    (ngModelChange)="enableHeaderSave()" [disabled]="true">
-                                                    <option value="0">Select</option>
-                                                    <option *ngFor="let name of statusList" [ngValue]="name.value">
-                                                        {{name.label}}</option>
-                                                </select>
+                                                <label>Reference</label>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="customerPayment.reference" name="reference" />
                                             </div>
                                         </div>
                                         <div class="col-md-6 padding-10">
@@ -102,12 +98,15 @@
                                                 <input type="text" class="form-control text-right" pKeyFilter="money"
                                                     [(ngModel)]="customerPayment.amtRemaining" name="amtRemaining"
                                                     #amtRemaining="ngModel" [disabled]="true" />
-
                                             </div>
                                             <div class="form-group">
-                                                <label>Reference</label>
-                                                <input type="text" class="form-control"
-                                                    [(ngModel)]="customerPayment.reference" name="reference" />
+                                                <label>Status</label>
+                                                <select [(ngModel)]="customerPayment.statusId" name="statusId"
+                                                    (ngModelChange)="enableHeaderSave()" [disabled]="true">
+                                                    <option value="0">Select</option>
+                                                    <option *ngFor="let name of statusList" [ngValue]="name.value">
+                                                        {{name.label}}</option>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Cntrl Num</label>
