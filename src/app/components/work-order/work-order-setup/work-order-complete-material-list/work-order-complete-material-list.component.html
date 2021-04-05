@@ -26,7 +26,7 @@
             </div>
             <div class="modal-body">
                 <div *ngIf="!isEdit && addNewMaterial">
-                    <grd-material [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder" [workFlow]="workFlowObject" [taskList]="taskList"
+                    <grd-material [isWorkOrder]="isWorkOrder" [customerId]="customerId" [isSubWorkOrder]="isSubWorkOrder" [workFlow]="workFlowObject" [taskList]="taskList"
                         (saveMaterialListForWO)="saveMaterialList($event)"  [mpnPartNumbersList]="mpnPartNumbersList"></grd-material>
                 </div>
                 <div *ngIf="isEdit && editData && addNewMaterial">
