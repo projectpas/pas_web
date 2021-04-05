@@ -6,6 +6,7 @@ import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
 import { environment } from "../../environments/environment";
 import { ICustomerPayments } from "../models/sales/ICustomerPayments";
+import { CustomerReceiptInfo } from "../models/invoicePayment/CustomerReceiptInfo";
 
 @Injectable()
 export class CustomerPaymentsEndpointService extends EndpointFactory {

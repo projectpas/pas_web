@@ -5,6 +5,7 @@ import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 import { ICustomerPayments } from "../models/sales/ICustomerPayments";
 import { CustomerPaymentsEndpointService } from "./customer-payments-endpoint.service";
+import { CustomerReceiptInfo } from "../models/invoicePayment/CustomerReceiptInfo";
 
 @Injectable()
 export class CustomerPaymentsService {

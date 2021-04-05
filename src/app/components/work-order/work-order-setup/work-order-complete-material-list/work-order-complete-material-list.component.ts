@@ -59,6 +59,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     isSpinnerVisibleReserve:boolean=false;
     cols = [
         { field: 'taskName', header: 'Task' ,align: 0},
+        { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0},
         { field: 'line', header: 'Line Num' ,align: 0},
         { field: 'partNumber', header: 'PN' ,align: 0},
         { field: 'partDescription', header: 'PN Description' ,align: 0},

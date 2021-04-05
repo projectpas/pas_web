@@ -774,9 +774,10 @@
                                                         {{ col.header }}
                                                         <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'" [field]="col.field"></p-sortIcon>
                                                     </th>
-                                                    <th>
+                                                    <!-- <th>
                                                         Download
-                                                    </th>
+                                                    </th> -->
+                                                    <th class="table-actions-column">Actions</th>
                                                 </tr>
 
                                                 <tr>
@@ -795,7 +796,7 @@
                                                             )
                                                         " />
                                                     </th>
-                                                    <th></th>
+                                                    <th class="table-actions-column"></th>
                                                 </tr>
                                             </ng-template>
                                             <ng-template pTemplate="body"
@@ -805,7 +806,7 @@
                                                         let-i="rowIndex">
                                                 <tr>
                                                     <td *ngFor="let col of columns" style="width:70%">
-                                                        <ng-container *ngIf="col.field !='download' && col.field !='delete'">
+                                                        <ng-container *ngIf="col.field !='download' && col.field !='delete'&& col.field !='docMemo'">
                                                             {{
                                                                 col.field == 'createdDate'
                                                                 ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
@@ -814,7 +815,10 @@
                                                                 : rowData[col.field]
                                                             }}
                                                         </ng-container>
-                                                        <ng-container *ngIf="col.field =='download'" class="align_center">
+                                                        <ng-container class="table-column-width" *ngIf="col.field == 'docMemo'">
+                                                            <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="col.field =='download'" class="align_center table-actions-column">
                                                             <div style="text-align: center !important;" >
                                                                 <a (click)="downloadFileUpload(part)"
                                                                 matTooltip="Download"
@@ -1143,7 +1147,8 @@
                   ? 'black'
                   : 'red'
               }">
-                                            {{ audit.docMemo }}
+                                            <!-- {{ audit.docMemo }} -->
+                                            <p [innerHTML]="audit.docMemo"></p>
                                         </td>
                                         <td [ngStyle]="{
                 color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName)

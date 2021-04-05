@@ -1,7 +1,3 @@
-import { IPriority } from "./IPriority";
-import { ISalesQuoteType } from "./ISalesQuoteType";
-import { ICustomerType } from "./ICustomerType";
-
 export interface ICustomerPayments {
   receiptId: number;
   receiptNo: string;
