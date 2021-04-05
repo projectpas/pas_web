@@ -210,7 +210,7 @@ export class CustomerViewComponent implements OnInit {
             this.isSpinnerVisible = false;
         })
     }
-    this.isSpinnerVisible = false;
+    //this.isSpinnerVisible = false;
     }
     getGlobalSettings() {
         this.globalSettings = this.localStorage.getDataObject<any>(DBkeys.GLOBAL_SETTINGS) || {};
