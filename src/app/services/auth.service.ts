@@ -220,11 +220,13 @@ private defaultEmployeeDetails= new Subject<any>()
             decodedAccessToken.managementStructureId,
             decodedAccessToken.masterCompanyId,
             decodedAccessToken.legalEntityId
-            );
-            console.log(user, "user++++")
+        );
+        
         user.isEnabled = true;
-
-
+        user.isResetPassword = decodedAccessToken.isResetPassword,
+        user.roleName=decodedAccessToken.roleName;
+        user.permissionName=Array.isArray(decodedAccessToken.permissionName)?decodedAccessToken.permissionName:[decodedAccessToken.permissionName];
+        user.roleID=decodedAccessToken.roleID;
         this.saveUserDetails(user, permissions, accessToken, refreshToken, accessTokenExpiry, rememberMe);
         this.getUserRolePermissionByUserId(user.id);
         this.loadAllModulesNameToLocalStorage();
@@ -232,7 +234,6 @@ private defaultEmployeeDetails= new Subject<any>()
         this.loadGlobalSettings();
         this.getEmployeeDetails(user);
         this.getManagementstructureDetails(user);
-
         return user;
     }
 
