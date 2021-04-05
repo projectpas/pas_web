@@ -13,6 +13,9 @@ import { InvoicePaymentService } from "../../../services/invoice-payment-service
 import { InvoiceCheckPayment } from "../../../models/invoicePayment/InvoiceCheckPayment";
 import { LegalEntityService } from "../../../services/legalentity.service";
 import { editValueAssignByCondition } from "../../../generic/autocomplete";
+import { NgForm } from "@angular/forms";
+import { CustomerReceiptInfo } from "../../../models/invoicePayment/CustomerReceiptInfo";
+import { CustomerPaymentsService } from "../../../services/customer-payment.service";
 
 @Component({
   selector: "app-add-customer-payment",
@@ -23,11 +26,14 @@ export class AddCustomerPaymentComponent implements OnInit {
   @Input('modal-reference') modalReference: NgbModalRef;
   @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   @Input() customerId;
+  @Input() customerPayment;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild("addCheckMemo", { static: false }) addCheckMemo: ElementRef;
   @ViewChild("addWireMemo", { static: false }) addWireMemo: ElementRef;
   //@ViewChild("addEFTMemo", { static: false }) addEFTMemo: ElementRef;
   @ViewChild("addCCMemo", { static: false }) addCCMemo: ElementRef;
+  @ViewChild('checkForm', { static: false }) checkForm: NgForm;
+  @ViewChild('wireForm', { static: false }) wireForm: NgForm;
   checkMemomodal: NgbModalRef;
   wireMemomodal: NgbModalRef;
   eftMemomodal: NgbModalRef;
@@ -37,6 +43,9 @@ export class AddCustomerPaymentComponent implements OnInit {
   IsSingleOption: boolean = true;
   paymentMethod: number;
   paymentType: number = 1;
+  id: number;
+  //invoicePayment: IInvoicePayments;
+  customerReceipt: CustomerReceiptInfo;
   chkPaymentMethod: number = 1;
   chkCheck: boolean;
   chkWireTransfer: boolean;
@@ -67,9 +76,12 @@ export class AddCustomerPaymentComponent implements OnInit {
   tradeReceivableGL: any;
   miscReceiptsGL: any;
   selectall: any;
+  totalPaymentAmount: number;
+  combinedPaymentRef: string;
 
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
+    private customerPaymentsService: CustomerPaymentsService,
     private authService: AuthService,
     private alertService: AlertService,
     private legalEntityService: LegalEntityService,
@@ -154,6 +166,9 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.isSpinnerVisible = true;
     this.customerService.getCustomerCommonDataById(this.customerId).subscribe(res => {
       this.customerDetails = res;
+      this.customerDetails.amount = this.totalPaymentAmount;
+      this.customerDetails.amountRem = this.totalPaymentAmount;
+      this.customerDetails.paymentRef = this.combinedPaymentRef;
       this.isSpinnerVisible = false;
     }, err => {
       this.isSpinnerVisible = false;
@@ -366,6 +381,35 @@ export class AddCustomerPaymentComponent implements OnInit {
   /* Credit Debit Card Memo */
 
   enableCustSearch() {
+    this.totalPaymentAmount = 0;
+    let checkAmount = parseFloat(this.objInvoicePayment.checkPayments.amount);
+    let wireTransferAmount = parseFloat(this.objInvoicePayment.invoiceWireTransferPayment.amount);
+    let creditDebitCardAmount = parseFloat(this.objInvoicePayment.invoiceCreditDebitCardPayment.amount);
+
+    let checkRef: any;
+    let wireRef: any;
+    let ccRef: any;
+
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 1) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCheckPayment)) {
+      this.totalPaymentAmount += checkAmount;
+
+      checkRef = this.objInvoicePayment.checkPayments.checkNumber;
+    }
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) {
+      this.totalPaymentAmount += wireTransferAmount;
+
+      wireRef = this.objInvoicePayment.invoiceWireTransferPayment.referenceNo;
+    }
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 3) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCCDCPayment)) {
+      this.totalPaymentAmount += creditDebitCardAmount;
+
+      ccRef = this.objInvoicePayment.invoiceCreditDebitCardPayment.referenceNo;
+    }
+
+    this.combinedPaymentRef = (checkRef ? checkRef : '') + (wireRef ? (' ' + wireRef) : '') + (ccRef ? (' ' + ccRef) : '');
     this.paymentInfoFilled = true;
   }
 
@@ -463,7 +507,8 @@ export class AddCustomerPaymentComponent implements OnInit {
 
     totalAmount = parseFloat(checkAmountEntered) + parseFloat(wireAmountEntered) + parseFloat(ccAmountEntered);
 
-    this.customerDetails.amount = totalAmount;
+    if (this.customerDetails) { this.customerDetails.amount = totalAmount; }
+    this.UpdateRemAmount();
   }
 
   UpdateRemAmount() {
@@ -473,7 +518,9 @@ export class AddCustomerPaymentComponent implements OnInit {
       total = total + parseFloat(e.paymentAmount);
     });
 
-    this.customerDetails.amountRem = +parseFloat(this.customerDetails.amount) - total;
+    if (this.customerDetails) {
+      this.customerDetails.amountRem = +parseFloat(this.customerDetails.amount) - total;
+    }
   }
 
   onChangePaymentAmount(event, paymentList) {
@@ -560,6 +607,59 @@ export class AddCustomerPaymentComponent implements OnInit {
   clearCustSearch() {
     this.customerDetails = {};
     this.openInvoices = [];
+  }
+
+  checkFormValid() {
+    if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 1) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCheckPayment)) && (this.checkForm && this.checkForm.valid)) {
+      return false;
+      // if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
+      //   (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) && (this.wireForm && this.wireForm.valid)) {
+      //   return false;
+      // }
+      // else
+      //   return true;
+    }
+    else
+      return true;
+  }
+
+  onSubmit() {
+    let haveError = false;
+    if (haveError) {
+      // let content = this.errorMessagePop;
+      // this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+      // this.display = true;
+    }
+    else {
+      //this.display = false;
+      this.isSpinnerVisible = true;
+      debugger;
+      this.customerReceipt = new CustomerReceiptInfo();
+
+      let selectedInvoices = this.openInvoices.filter(a => a.selected == true);
+
+      this.customerReceipt.invoices = selectedInvoices;
+      this.customerReceipt.checkPayments = this.objInvoicePayment.checkPayments;
+      this.customerReceipt.wirePayments = this.objInvoicePayment.invoiceWireTransferPayment;
+      this.customerReceipt.ccPayments = this.objInvoicePayment.invoiceCreditDebitCardPayment;
+
+      this.customerReceipt.customerPayments = this.customerPayment;
+      
+      if (this.id) {
+      } else {
+        // this.customerPaymentsService.create(this.customerReceipt).subscribe(data => {
+        //   this.isSpinnerVisible = false;
+        //   this.alertService.showMessage(
+        //     "Success",
+        //     `Payment information updated successfully for Customer`,
+        //     MessageSeverity.success
+        //   );
+        // }, error => {
+        //   this.isSpinnerVisible = false;
+        // });
+      }
+    }
   }
 
   getPartToDisableOrNot(part) {

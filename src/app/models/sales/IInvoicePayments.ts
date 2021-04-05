@@ -1,6 +1,4 @@
-﻿import { IInvoicePayments } from "../sales/IInvoicePayments";
-
-export class InvoicePayments implements IInvoicePayments {
+export interface IInvoicePayments {
   paymentId: number;
   customerId: number;
   soBillingInvoicingId: number;

@@ -120,159 +120,166 @@
   <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
     <p-tabPanel header="Check" [selected]="true" *ngIf="(!objInvoicePayment.isMultiplePaymentMethod && chkPaymentMethod == 1) ||
       (objInvoicePayment.isMultiplePaymentMethod && objInvoicePayment.isCheckPayment)">
-      <div class="card new-card">
-        <div class="card-body header-body">
-          <div class="col-sm-3 w250 payment-blocks check-block" style="display: block;">
-            <div class="form-group col-sm-12">
-              <label>Check Date<span class="clr-red">*</span></label>
-              <p-calendar name="checkDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                [(ngModel)]="objInvoicePayment.checkPayments.checkDate" [showIcon]="true" id="checkDate"
-                #checkDate="ngModel" required>
-              </p-calendar>
-              <div *ngIf="checkDate.invalid && (checkDate.dirty || checkDate.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="checkDate.errors.required">
-                  <small> Check Date is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Check Number <span class="clr-red">*</span></label>
-              <input type="text" class="form-control" name="checkNumber"
-                [(ngModel)]="objInvoicePayment.checkPayments.checkNumber" #checkNumber="ngModel" id="checkNumber" />
-              <div *ngIf="checkNumber.invalid && (checkNumber.dirty || checkNumber.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="checkNumber.errors.required">
-                  <small> Check Number is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Amount<span class="clr-red">*</span></label>
-              <input type="text" class="form-control" style="text-align:right;" name="checkAmount"
-                [ngModel]="objInvoicePayment.checkPayments_Amount | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="objInvoicePayment.checkPayments.amount=$event"
-                (change)="onChangeAmount($event, objInvoicePayment);" required />
-            </div>
-            <div class="form-group col-sm-12">
-              <label for="currencyId">Currency <span class="clr-red">*</span></label>
-              <select name="currencyId" [(ngModel)]="objInvoicePayment.checkPayments.currencyId" required
-                id="currencyId" #currencyId="ngModel">
-                <option *ngFor="let item of currencyList" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="currencyId.invalid && (currencyId.dirty || currencyId.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="currencyId.errors.required">
-                  <small> Currency is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Payor's Bank</label>
-              <input type="text" class="form-control" name="payorsBank"
-                [(ngModel)]="objInvoicePayment.checkPayments.payorsBank" id="payorsBank" />
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Bank Account <span class="clr-red">*</span></label>
-              <input type="text" class="form-control" name="bankAccount"
-                [(ngModel)]="objInvoicePayment.checkPayments.bankAccount" #bankAccount="ngModel" id="bankAccount" />
-              <div *ngIf="bankAccount.invalid && (bankAccount.dirty || bankAccount.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="bankAccount.errors.required">
-                  <small> Bank Account is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label for="glAccountId">GL Cash Account <span class="clr-red">*</span></label>
-              <select name="glAccountId" [(ngModel)]="objInvoicePayment.checkPayments.glAccountNumber" required
-                id="glAccount" #glAccount="ngModel">
-                <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="glAccount.invalid && (glAccount.dirty || glAccount.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="glAccount.errors.required">
-                  <small> GL Cash Account is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12 memo-popup-cstm">
-              <label>
-                Memo<i class=" fa fa-pencil" data-toggle="modal" matTooltipPosition="above" matTooltip="Add Memo"
-                  (click)="openCheckMemo(); onAddCheckMemo()"></i>
-              </label>
-              <span>
-                <div class="form-group memo-popup-cstm mat_emo">
-                  <div [innerHTML]="objInvoicePayment.checkPayments.memo"
-                    [matTooltip]="parsedText(objInvoicePayment.checkPayments.memo)" matTooltipPosition="above"
-                    class="form-control" style="height: 100px !important; width:90% !important" class="text_editor_box">
+      <form #checkForm="ngForm">
+        <div class="card new-card">
+          <div class="card-body header-body">
+            <div class="col-sm-3 w250 payment-blocks check-block" style="display: block;">
+              <div class="form-group col-sm-12">
+                <label>Check Date<span class="clr-red">*</span></label>
+                <p-calendar name="checkDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                  [(ngModel)]="objInvoicePayment.checkPayments.checkDate" [showIcon]="true" id="checkDate"
+                  #checkDate="ngModel" required>
+                </p-calendar>
+                <div *ngIf="checkDate.invalid && (checkDate.dirty || checkDate.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="checkDate.errors.required">
+                    <small> Check Date is required </small>
                   </div>
                 </div>
-              </span>
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Check Number <span class="clr-red">*</span></label>
+                <input type="text" class="form-control" name="checkNumber"
+                  [(ngModel)]="objInvoicePayment.checkPayments.checkNumber" #checkNumber="ngModel" id="checkNumber"
+                  required />
+                <div *ngIf="checkNumber.invalid && (checkNumber.dirty || checkNumber.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="checkNumber.errors.required">
+                    <small> Check Number is required </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Amount<span class="clr-red">*</span></label>
+                <input type="text" class="form-control" style="text-align:right;" name="checkAmount"
+                  [ngModel]="objInvoicePayment.checkPayments.amount | twoDecimalGlobalNumberFormatPipe"
+                  (ngModelChange)="objInvoicePayment.checkPayments.amount=$event"
+                  (change)="onChangeAmount($event, objInvoicePayment);" required />
+              </div>
+              <div class="form-group col-sm-12">
+                <label for="currencyId">Currency <span class="clr-red">*</span></label>
+                <select name="currencyId" [(ngModel)]="objInvoicePayment.checkPayments.currencyId" required
+                  id="currencyId" #currencyId="ngModel">
+                  <option *ngFor="let item of currencyList" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="currencyId.invalid && (currencyId.dirty || currencyId.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="currencyId.errors.required">
+                    <small> Currency is required </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Payor's Bank</label>
+                <input type="text" class="form-control" name="payorsBank"
+                  [(ngModel)]="objInvoicePayment.checkPayments.payorsBank" id="payorsBank" />
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Bank Account <span class="clr-red">*</span></label>
+                <input type="text" class="form-control" name="bankAccount"
+                  [(ngModel)]="objInvoicePayment.checkPayments.bankAccount" #bankAccount="ngModel" id="bankAccount"
+                  required />
+                <div *ngIf="bankAccount.invalid && (bankAccount.dirty || bankAccount.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="bankAccount.errors.required">
+                    <small> Bank Account is required </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-sm-12">
+                <label for="glAccountId">GL Cash Account <span class="clr-red">*</span></label>
+                <select name="glAccountId" [(ngModel)]="objInvoicePayment.checkPayments.glAccountNumber" required
+                  id="glAccount" #glAccount="ngModel">
+                  <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="glAccount.invalid && (glAccount.dirty || glAccount.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="glAccount.errors.required">
+                    <small> GL Cash Account is required </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 memo-popup-cstm">
+                <label>
+                  Memo<i class=" fa fa-pencil" data-toggle="modal" matTooltipPosition="above" matTooltip="Add Memo"
+                    (click)="openCheckMemo(); onAddCheckMemo()"></i>
+                </label>
+                <span>
+                  <div class="form-group memo-popup-cstm mat_emo">
+                    <div [innerHTML]="objInvoicePayment.checkPayments.memo"
+                      [matTooltip]="parsedText(objInvoicePayment.checkPayments.memo)" matTooltipPosition="above"
+                      class="form-control" style="height: 100px !important; width:90% !important"
+                      class="text_editor_box">
+                    </div>
+                  </div>
+                </span>
+              </div>
             </div>
-          </div>
-          <!-- <div class="col-sm-12 payment-blocks check-block" style="display: block;">
+            <!-- <div class="col-sm-12 payment-blocks check-block" style="display: block;">
               <div class="form-group col-sm-12">
                 <app-common-documents [moduleName]="chkModuleName" [referenceId]="chkreferenceId" [isViewMode]="false"
                   [offLineUpload]="true"></app-common-documents>
               </div>
             </div> -->
+          </div>
         </div>
-      </div>
+      </form>
     </p-tabPanel>
     <p-tabPanel header="Wire Transfer" *ngIf="(!objInvoicePayment.isMultiplePaymentMethod && chkPaymentMethod == 2) ||
       (objInvoicePayment.isMultiplePaymentMethod && objInvoicePayment.isWireTransfer)">
-      <div class="card new-card">
-        <div class="card-body header-body">
-          <div class="col-sm-3 w250 payment-blocks wire-block" style="display: block;">
-            <div class="form-group col-sm-12">
-              <label>Wire Date<span class="clr-red">*</span></label>
-              <p-calendar name="wireDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.wireDate" [showIcon]="true" id="wireDate"
-                #wireDate="ngModel" required>
-              </p-calendar>
-              <div *ngIf="wireDate.invalid && (wireDate.dirty || wireDate.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="wireDate.errors.required">
-                  <small> Wire Date is required </small>
+      <form #wireForm="ngForm">
+        <div class="card new-card">
+          <div class="card-body header-body">
+            <div class="col-sm-3 w250 payment-blocks wire-block" style="display: block;">
+              <div class="form-group col-sm-12">
+                <label>Wire/ACH Date<span class="clr-red">*</span></label>
+                <p-calendar name="wireDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.wireDate" [showIcon]="true" id="wireDate"
+                  #wireDate="ngModel" required>
+                </p-calendar>
+                <div *ngIf="wireDate.invalid && (wireDate.dirty || wireDate.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="wireDate.errors.required">
+                    <small> Wire Date is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Amount<span class="clr-red">*</span></label>
-              <input type="text" class="form-control" style="text-align:right;" name="wireAmount"
-                [ngModel]="objInvoicePayment.invoiceWireTransferPayment.amount | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="objInvoicePayment.invoiceWireTransferPayment.amount=$event"
-                (change)="onChangeAmount($event, objInvoicePayment);" required />
-            </div>
-            <div class="form-group col-sm-12">
-              <label for="wireCurrencyId">Currency <span class="clr-red">*</span></label>
-              <select name="wireCurrencyId" [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.currencyId"
-                required id="wireCurrencyId" #wireCurrencyId="ngModel">
-                <option *ngFor="let item of currencyList" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="wireCurrencyId.invalid && (wireCurrencyId.dirty || wireCurrencyId.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="wireCurrencyId.errors.required">
-                  <small> Currency is required </small>
+              <div class="form-group col-sm-12">
+                <label>Reference #</label>
+                <input type="text" class="form-control" name="referenceNo"
+                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.referenceNo" #referenceNum="ngModel"
+                  id="referenceNo" />
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Amount<span class="clr-red">*</span></label>
+                <input type="text" class="form-control" style="text-align:right;" name="wireAmount"
+                  [ngModel]="objInvoicePayment.invoiceWireTransferPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                  (ngModelChange)="objInvoicePayment.invoiceWireTransferPayment.amount=$event"
+                  (change)="onChangeAmount($event, objInvoicePayment);" required />
+              </div>
+              <div class="form-group col-sm-12">
+                <label for="wireCurrencyId">Currency <span class="clr-red">*</span></label>
+                <select name="wireCurrencyId" [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.currencyId"
+                  required id="wireCurrencyId" #wireCurrencyId="ngModel">
+                  <option *ngFor="let item of currencyList" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="wireCurrencyId.invalid && (wireCurrencyId.dirty || wireCurrencyId.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="wireCurrencyId.errors.required">
+                    <small> Currency is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Bank Name</label>
-              <input type="text" class="form-control" name="bankName"
-                [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.bankName" #bankName="ngModel" id="bankName" />
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Reference #</label>
-              <input type="text" class="form-control" name="referenceNo"
-                [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.referenceNo" #referenceNum="ngModel"
-                id="referenceNo" />
-            </div>
-            <div class="form-group col-sm-12">
+              <div class="form-group col-sm-12">
+                <label>Bank Acct Name</label>
+                <input type="text" class="form-control" name="bankName"
+                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.bankName" #bankName="ngModel"
+                  id="bankName" />
+              </div>
+              <!-- <div class="form-group col-sm-12">
               <label>IMAD/OMAD # <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="IMADOMAD"
                 [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.imad_OMADNo" #IMADOMAD="ngModel"
@@ -283,8 +290,8 @@
                   <small> IMAD/OMAD # is required </small>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
+            </div> -->
+              <!-- <div class="form-group col-sm-12">
               <label>Bank Account <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="wireBankAccount"
                 [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.bankAccount" #wireBankAccount="ngModel"
@@ -295,45 +302,47 @@
                   <small> Bank Account is required </small>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label for="wireGlAccountId">GL Cash Account <span class="clr-red">*</span></label>
-              <select name="wireGlAccountId" [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.glAccountNumber"
-                required id="wireGlAccount" #wireGlAccount="ngModel">
-                <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="wireGlAccount.invalid && (wireGlAccount.dirty || wireGlAccount.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="wireGlAccount.errors.required">
-                  <small> GL Cash Account is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12 memo-popup-cstm">
-              <label>
-                Memo<i class=" fa fa-pencil" data-toggle="modal" matTooltipPosition="above" matTooltip="Add Memo"
-                  (click)="openWireMemo(); onAddWireMemo()"></i>
-              </label>
-              <span>
-                <div class="form-group memo-popup-cstm mat_emo">
-                  <div [innerHTML]="objInvoicePayment.invoiceWireTransferPayment.memo"
-                    [matTooltip]="parsedText(objInvoicePayment.invoiceWireTransferPayment.memo)"
-                    matTooltipPosition="above" class="form-control"
-                    style="height: 100px !important; width:90% !important" class="text_editor_box">
+            </div> -->
+              <div class="form-group col-sm-12">
+                <label for="wireGlAccountId">GL Cash Account <span class="clr-red">*</span></label>
+                <select name="wireGlAccountId"
+                  [(ngModel)]="objInvoicePayment.invoiceWireTransferPayment.glAccountNumber" required id="wireGlAccount"
+                  #wireGlAccount="ngModel">
+                  <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="wireGlAccount.invalid && (wireGlAccount.dirty || wireGlAccount.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="wireGlAccount.errors.required">
+                    <small> GL Cash Account is required </small>
                   </div>
                 </div>
-              </span>
+              </div>
+              <div class="form-group col-sm-12 memo-popup-cstm">
+                <label>
+                  Memo<i class=" fa fa-pencil" data-toggle="modal" matTooltipPosition="above" matTooltip="Add Memo"
+                    (click)="openWireMemo(); onAddWireMemo()"></i>
+                </label>
+                <span>
+                  <div class="form-group memo-popup-cstm mat_emo">
+                    <div [innerHTML]="objInvoicePayment.invoiceWireTransferPayment.memo"
+                      [matTooltip]="parsedText(objInvoicePayment.invoiceWireTransferPayment.memo)"
+                      matTooltipPosition="above" class="form-control"
+                      style="height: 100px !important; width:90% !important" class="text_editor_box">
+                    </div>
+                  </div>
+                </span>
+              </div>
             </div>
-          </div>
-          <!-- <div class="col-sm-12 payment-blocks check-block" style="display: block;">
+            <!-- <div class="col-sm-12 payment-blocks check-block" style="display: block;">
               <div class="form-group col-sm-12">
                 <app-common-documents [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="false"
                   [offLineUpload]="true"></app-common-documents>
               </div>
             </div> -->
+          </div>
         </div>
-      </div>
+      </form>
     </p-tabPanel>
     <!-- <p-tabPanel header="EFT" *ngIf="(!objInvoicePayment.isMultiplePaymentMethod && chkPaymentMethod == 3) ||
       (objInvoicePayment.isMultiplePaymentMethod && objInvoicePayment.isEFT)">
@@ -448,6 +457,12 @@
               </div>
             </div>
             <div class="form-group col-sm-12">
+              <label>Reference #</label>
+              <input type="text" class="form-control" name="referenceNo"
+                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.referenceNo" #referenceNum="ngModel"
+                id="referenceNo" />
+            </div>
+            <div class="form-group col-sm-12">
               <label>Amount<span class="clr-red">*</span></label>
               <input type="text" class="form-control" style="text-align:right;" name="ccAmount"
                 [ngModel]="objInvoicePayment.invoiceCreditDebitCardPayment.amount | twoDecimalGlobalNumberFormatPipe"
@@ -469,18 +484,6 @@
               </div>
             </div>
             <div class="form-group col-sm-12">
-              <label>Card Number # <span class="clr-red">*</span></label>
-              <input type="text" class="form-control" name="cardNumber"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardNumber" #cardNumber="ngModel"
-                id="cardNumber" />
-              <div *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="cardNumber.errors.required">
-                  <small> Card Number is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12">
               <label for="cardTypeId">Card Type <span class="clr-red">*</span></label>
               <select name="cardTypeId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardTypeId"
                 required id="cardTypeId" #cardTypeId="ngModel">
@@ -491,6 +494,18 @@
                 class="alert alert-danger alert-danger-cstm">
                 <div *ngIf="cardTypeId.errors.required">
                   <small> Card Type is required </small>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-12">
+              <label>Card Number # <span class="clr-red">*</span></label>
+              <input type="text" class="form-control" name="cardNumber"
+                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardNumber" #cardNumber="ngModel"
+                id="cardNumber" />
+              <div *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)"
+                class="alert alert-danger alert-danger-cstm">
+                <div *ngIf="cardNumber.errors.required">
+                  <small> Card Number is required </small>
                 </div>
               </div>
             </div>
@@ -511,7 +526,7 @@
               <label>Security Code # <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="securityCode"
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.securityCode" #securityCode="ngModel"
-                id="securityCode" />
+                id="securityCode" required />
               <div *ngIf="securityCode.invalid && (securityCode.dirty || securityCode.touched)"
                 class="alert alert-danger alert-danger-cstm">
                 <div *ngIf="securityCode.errors.required">
@@ -523,7 +538,7 @@
               <label>Cardholder Name # <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="cardholderName"
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardholderName" #cardholderName="ngModel"
-                id="cardholderName" />
+                id="cardholderName" required />
               <div *ngIf="cardholderName.invalid && (cardholderName.dirty || cardholderName.touched)"
                 class="alert alert-danger alert-danger-cstm">
                 <div *ngIf="cardholderName.errors.required">
@@ -537,7 +552,7 @@
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.billingAddress" #billingAddress="ngModel"
                 id="billingAddress" />
             </div>
-            <div class="form-group col-sm-12">
+            <!-- <div class="form-group col-sm-12">
               <label>Billing Postal Code # <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="billingPostalCode"
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.billingPostalCode"
@@ -548,7 +563,7 @@
                   <small> Billing Postal Code is required </small>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="form-group col-sm-12">
               <label>Phone #</label>
               <input type="text" class="form-control" name="ccPhoneNum"
@@ -561,7 +576,7 @@
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.approvalRef" #ccApprovalRef="ngModel"
                 id="ccApprovalRef" />
             </div>
-            <div class="form-group col-sm-12">
+            <!-- <div class="form-group col-sm-12">
               <label>Bank Account <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="ccBankAccount"
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.bankAccount" #ccBankAccount="ngModel"
@@ -572,7 +587,7 @@
                   <small> Bank Account is required </small>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="form-group col-sm-12">
               <label for="ccGlAccountId">GL Cash Account <span class="clr-red">*</span></label>
               <select name="ccGlAccountId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.glAccountNumber"
@@ -615,7 +630,7 @@
   </p-tabView>
   <div class="form-group" style="width: 100%; text-align: right;">
     <button type="button" class="btn btn-primary editor-buttons-margin" (click)="enableCustSearch()"
-      style="width: 70px;">
+      style="width: 70px;" [disabled]="checkFormValid()">
       OK
     </button>
   </div>
@@ -665,15 +680,15 @@
           <div class="col-2 column" *ngIf="customerDetails">
             <div class="form-group">
               <label>Amount</label>
-              <input class="form-control" type="text" name="amount" [(ngModel)]="customerDetails.amount"
-                [disabled]="true" />
+              <input class="form-control" type="text" name="amount" style="text-align: right;"
+                [ngModel]="customerDetails.amount | number:'1.2-2'" [disabled]="true" />
             </div>
           </div>
           <div class="col-2 column" *ngIf="customerDetails">
             <div class="form-group">
               <label>Amt Remaining</label>
-              <input class="form-control" type="text" name="customerCode" [(ngModel)]="customerDetails.amountRem"
-                [disabled]="true" />
+              <input class="form-control" type="text" name="customerCode" style="text-align: right;"
+                [ngModel]="customerDetails.amountRem | number:'1.2-2'" [disabled]="true" />
             </div>
           </div>
         </div>
@@ -688,7 +703,7 @@
   <div class="card-body" style="padding: 10px;">
     <div class="form-group" style="width: 100%; text-align: left;">
       <button type="button" class="btn btn-primary editor-buttons-margin" (click)="enableCustSearch()"
-        style="width: 100px;" [disabled]="!checkIfInvoiceSelected()">
+        style="width: 100px;" [disabled]="true">
         Apply Payment
       </button>
     </div>
@@ -804,7 +819,8 @@
       </div>
       <div class="row" style="padding: 0; text-align: left;">
         <div class="col-md-12 col-sm-12 col-12">
-          <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal">
+          <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+            [disabled]="!checkIfInvoiceSelected()" (click)="onSubmit();">
             Save
           </button>
           <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal">
