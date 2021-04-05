@@ -2070,6 +2070,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.sourceWorkFlow.updatedBy = this.userName;
             if (this.sourceWorkFlow.customerName) {
                 this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
+            }else{
+                this.sourceWorkFlow.customerId=null;
             }
             const createDataset = { ...this.sourceWorkFlow }
             delete createDataset.customerName;
@@ -2122,8 +2124,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-            const workflowData = { ...this.sourceWorkFlow }
-            delete workflowData.customerName
+            if (this.sourceWorkFlow.customerName) {
+                this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
+            }else{
+                this.sourceWorkFlow.customerId=null;
+            }
+            const workflowData={...this.sourceWorkFlow}
+            delete    workflowData.customerName
             this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);

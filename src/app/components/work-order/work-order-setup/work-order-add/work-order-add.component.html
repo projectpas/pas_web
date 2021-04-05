@@ -1033,8 +1033,35 @@
                     {{restrictMessage}}</p>
              </div>
             <div class="modal-footer footer-padding">
-                <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="WarnRescticModel()"
+               <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="WarnRescticModel()"
                   >Ok </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="warningMesg" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xsm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title warning_color" *ngIf="restrictID == 0">Warning</h4>
+                <h4 class="modal-title restrict_color" *ngIf="restrictID != 0">Restriction</h4>
+              </div>
+            <div class="pad_msf">
+                <p *ngIf="warningID != 0 && restrictID == 0" class="mar_o warning_color">
+                    {{warningMessage}}</p>
+                  <p *ngIf="restrictID != 0 " class="mar_o restrict_color">
+                    {{restrictMessage}}</p>
+             </div>
+            <div class="modal-footer footer-padding">
+                <h5>Continue ?</h5>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                (click)="WarnRescticModel()">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                  (click)="movetoworkorderlist()">No</button>
+                <!-- <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="WarnRescticModel()"
+                  >Ok </button> -->
             </div>
         </div>
     </div>
