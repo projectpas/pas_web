@@ -17,7 +17,7 @@ export class CustomerPaymentListComponent {
     searchParameters: ICustomerInvoiceSearchParameters;
     selectedColumns: any[];
     selectedColumn: any[];
-    customerInvoices: any[] = [];
+    customerPayments: any[] = [];
     totalRecords: number = 0;
     totalPages: number = 0;
     pageSize: number = 10;
@@ -39,32 +39,27 @@ export class CustomerPaymentListComponent {
 
         this.searchParameters = new CustomerInvoiceSearchParameters();
         this.initColumns();
+        this.currentStatus = 1;
     }
 
     initColumns() {
         this.headers = [
-            { field: "documentType", header: "Document Type", width: "130px" },
-            { field: "custName", header: "Cust Name", width: "180px" },
-            { field: "customerCode", header: "Cust Num", width: "130px" },
-            { field: "docNum", header: "Doc Num", width: "130px" },
-            { field: "invoiceDate", header: "Inv Date", width: "130px" },
-            { field: "wosoNum", header: "WO/SO Num", width: "130px" },
-            { field: "customerReference", header: "Cust Ref", width: "130px" },
-            { field: "currencyCode", header: "Currency Code", width: "180px" },
-            { field: "fxRate", header: "FX Rate", width: "100px" },
-            { field: "originalAmount", header: "Original Amount", width: "100px" },
-            { field: "remainingAmount", header: "Remaining Amount", width: "130px" },
-            { field: "invDueDate", header: "Inv Due Date", width: "130px" },
-            { field: "dsi", header: "DSI", width: "130px" },
-            { field: "dso", header: "DSO", width: "180px" },
-            { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
-            { field: "arBalance", header: "AR Bal", width: "130px" },
-            { field: "creditLimit", header: "Credit Limit", width: "130px" },
-            { field: "creditTermName", header: "Credit Term", width: "130px" },
-            { field: "co", header: "CO", width: "130px" },
-            { field: "bu", header: "BU", width: "130px" },
-            { field: "div", header: "Div", width: "130px" },
-            { field: "dept", header: "Dept", width: "130px" }
+            { field: "receiptID", header: "Receipt No", width: "130px" },
+            { field: "status", header: "Status", width: "180px" },
+            { field: "bankAcct", header: "Bank Acct", width: "130px" },
+            { field: "openDate", header: "Open Date", width: "130px" },
+            { field: "depositDate", header: "Deposit Date", width: "130px" },
+            { field: "acctingPeriod", header: "Accting Period", width: "130px" },
+            { field: "reference", header: "Reference", width: "130px" },
+            { field: "amount", header: "Amount", width: "180px" },
+            { field: "amtApplied", header: "Amt Applied", width: "100px" },
+            { field: "amtRemaining", header: "Amt Remaining", width: "100px" },
+            { field: "currency", header: "Currency", width: "130px" },
+            { field: "cntrlNum", header: "Cntrl Num", width: "130px" },
+            { field: "level1", header: "CO", width: "130px" },
+            { field: "level2", header: "BU", width: "130px" },
+            { field: "level3", header: "Div", width: "130px" },
+            { field: "level4", header: "Dept", width: "130px" }
         ];
         this.selectedColumns = this.headers;
     }
@@ -96,10 +91,10 @@ export class CustomerPaymentListComponent {
     onSearch() {
         this.isSpinnerVisible = true;
         this.customerService
-            .customerInvoiceSearch(this.searchParameters)
+            .customerPaymentSearch(this.searchParameters)
             .subscribe((response: any) => {
                 if (response[0].results) {
-                    this.customerInvoices = response[0].results
+                    this.customerPayments = response[0].results
                         .map(x => {
                             return {
                                 ...x

@@ -3,7 +3,6 @@ import {
   NgForm,
   FormGroup
 } from "@angular/forms";
-import { CustomerService } from "../../../services/customer.service";
 import { Customer } from "../../../models/customer.model";
 import { AlertService, MessageSeverity } from "../../../services/alert.service";
 import { ActivatedRoute } from "@angular/router";
@@ -21,6 +20,7 @@ import {
   editValueAssignByCondition,
   getValueFromArrayOfObjectById,
   formatNumberAsGlobalSettingsModule,
+  getObjectByValue,
 } from "../../../generic/autocomplete";
 import {
   NgbModal,
@@ -118,6 +118,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   isTextTabEnabled: boolean = false;
   selectedCommunicationTab: any = '';
   customerInfoFromSalesQuote: any = {};
+  custPaymentData: any = {};
   marginSummary: MarginSummary = new MarginSummary();
   @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
@@ -560,8 +561,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPaymentsService.getCustomerPayment(salesOrderId).subscribe(data => {
       this.isSpinnerVisible = false;
       if (data) {
-        let custPaymentData = data && data.length ? data[0] : null;
-        this.bindData(custPaymentData, initialCall);
+        this.custPaymentData = data && data.length ? data[0] : null;
+        this.bindData(this.custPaymentData, initialCall);
       }
     }, error => {
       this.isSpinnerVisible = false;
@@ -611,7 +612,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   getNewSalesOrderInstance(customerId: number, initialCall = false) {
     this.customerPayment.receiptNo = "Creating";
-
+    this.customerPayment.statusId = getObjectByValue('label', 'Open', this.statusList).value; // Open status by default
+    
     // this.salesOrderService
     //   .getNewSalesOrderInstance(customerId)
     //   .subscribe(data => {

@@ -13,6 +13,9 @@ import { InvoicePaymentService } from "../../../services/invoice-payment-service
 import { InvoiceCheckPayment } from "../../../models/invoicePayment/InvoiceCheckPayment";
 import { LegalEntityService } from "../../../services/legalentity.service";
 import { editValueAssignByCondition } from "../../../generic/autocomplete";
+import { NgForm } from "@angular/forms";
+import { CustomerReceiptInfo } from "../../../models/invoicePayment/CustomerReceiptInfo";
+import { CustomerPaymentsService } from "../../../services/customer-payment.service";
 
 @Component({
   selector: "app-add-customer-payment",
@@ -23,11 +26,14 @@ export class AddCustomerPaymentComponent implements OnInit {
   @Input('modal-reference') modalReference: NgbModalRef;
   @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   @Input() customerId;
+  @Input() customerPayment;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild("addCheckMemo", { static: false }) addCheckMemo: ElementRef;
   @ViewChild("addWireMemo", { static: false }) addWireMemo: ElementRef;
   //@ViewChild("addEFTMemo", { static: false }) addEFTMemo: ElementRef;
   @ViewChild("addCCMemo", { static: false }) addCCMemo: ElementRef;
+  @ViewChild('checkForm', { static: false }) checkForm: NgForm;
+  @ViewChild('wireForm', { static: false }) wireForm: NgForm;
   checkMemomodal: NgbModalRef;
   wireMemomodal: NgbModalRef;
   eftMemomodal: NgbModalRef;
@@ -37,6 +43,9 @@ export class AddCustomerPaymentComponent implements OnInit {
   IsSingleOption: boolean = true;
   paymentMethod: number;
   paymentType: number = 1;
+  id: number;
+  //invoicePayment: IInvoicePayments;
+  customerReceipt: CustomerReceiptInfo;
   chkPaymentMethod: number = 1;
   chkCheck: boolean;
   chkWireTransfer: boolean;
@@ -66,9 +75,13 @@ export class AddCustomerPaymentComponent implements OnInit {
   paymentInfoFilled: boolean = false;
   tradeReceivableGL: any;
   miscReceiptsGL: any;
-  
+  selectall: any;
+  totalPaymentAmount: number;
+  combinedPaymentRef: string;
+
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
+    private customerPaymentsService: CustomerPaymentsService,
     private authService: AuthService,
     private alertService: AlertService,
     private legalEntityService: LegalEntityService,
@@ -87,28 +100,39 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.objInvoicePayment.invoiceCreditDebitCardPayment = new InvoiceCreditDebitCardPayments();
 
     this.headers = [
-      { field: "documentType", header: "Document Type", width: "130px" },
-      { field: "custName", header: "Cust Name", width: "180px" },
-      { field: "customerCode", header: "Cust Num", width: "130px" },
+      { field: "documentType", header: "Doc Type", width: "130px" },
       { field: "docNum", header: "Doc Num", width: "130px" },
-      { field: "invoiceDate", header: "Inv Date", width: "130px" },
-      { field: "wosoNum", header: "WO/SO Num", width: "130px" },
-      { field: "customerReference", header: "Cust Ref", width: "130px" },
-      { field: "currencyCode", header: "Currency Code", width: "180px" },
-      { field: "fxRate", header: "FX Rate", width: "100px" },
+      { field: "invoiceDate", header: "Doc Date", width: "130px" },
       { field: "originalAmount", header: "Original Amount", width: "100px" },
       { field: "remainingAmount", header: "Remaining Amount", width: "130px" },
-      { field: "invDueDate", header: "Inv Due Date", width: "130px" },
+      { field: "paymentAmount", header: "Payment", width: "130px" },
+      { field: "discAmount", header: "Disc Amount", width: "130px" },
+      { field: "discType", header: "Disc Type", width: "130px" },
+      { field: "bankFeeAmount", header: "Bank Fee Amount", width: "130px" },
+      { field: "bankFeeType", header: "Bank Fee Type", width: "130px" },
+      { field: "otherAdjustAmt", header: "Other Adjust Amt", width: "130px" },
+      { field: "reason", header: "Reason", width: "130px" },
+      { field: "newRemainingBal", header: "New Remaining Bal", width: "130px" },
+      { field: "glARAccount", header: "GL AR Account", width: "130px" },
+      { field: "currencyCode", header: "Curr", width: "180px" },
+      { field: "fxRate", header: "FX Rate", width: "100px" },
+      { field: "wosoNum", header: "WO/SO Num", width: "130px" },
+      { field: "paymentStatus", header: "Status", width: "130px" },
       { field: "dsi", header: "DSI", width: "130px" },
       { field: "dso", header: "DSO", width: "180px" },
       { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
       { field: "arBalance", header: "AR Bal", width: "130px" },
-      { field: "creditLimit", header: "Credit Limit", width: "130px" },
       { field: "creditTermName", header: "Credit Term", width: "130px" },
-      { field: "co", header: "CO", width: "130px" },
-      { field: "bu", header: "BU", width: "130px" },
-      { field: "div", header: "Div", width: "130px" },
-      { field: "dept", header: "Dept", width: "130px" }
+      { field: "cntrlNum", header: "Cntrl Num", width: "130px" },
+      { field: "employee", header: "Employee", width: "180px" },
+      { field: "level1", header: "CO", width: "130px" },
+      { field: "level2", header: "BU", width: "130px" },
+      { field: "level3", header: "Div", width: "130px" },
+      { field: "level4", header: "Dept", width: "130px" }
+      // { field: "customerCode", header: "Cust Num", width: "130px" },
+      // { field: "customerReference", header: "Cust Ref", width: "130px" },
+      // { field: "invDueDate", header: "Inv Due Date", width: "130px" },
+      // { field: "creditLimit", header: "Credit Limit", width: "130px" }      
     ];
   }
 
@@ -142,6 +166,9 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.isSpinnerVisible = true;
     this.customerService.getCustomerCommonDataById(this.customerId).subscribe(res => {
       this.customerDetails = res;
+      this.customerDetails.amount = this.totalPaymentAmount;
+      this.customerDetails.amountRem = this.totalPaymentAmount;
+      this.customerDetails.paymentRef = this.combinedPaymentRef;
       this.isSpinnerVisible = false;
     }, err => {
       this.isSpinnerVisible = false;
@@ -354,6 +381,35 @@ export class AddCustomerPaymentComponent implements OnInit {
   /* Credit Debit Card Memo */
 
   enableCustSearch() {
+    this.totalPaymentAmount = 0;
+    let checkAmount = parseFloat(this.objInvoicePayment.checkPayments.amount);
+    let wireTransferAmount = parseFloat(this.objInvoicePayment.invoiceWireTransferPayment.amount);
+    let creditDebitCardAmount = parseFloat(this.objInvoicePayment.invoiceCreditDebitCardPayment.amount);
+
+    let checkRef: any;
+    let wireRef: any;
+    let ccRef: any;
+
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 1) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCheckPayment)) {
+      this.totalPaymentAmount += checkAmount;
+
+      checkRef = this.objInvoicePayment.checkPayments.checkNumber;
+    }
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) {
+      this.totalPaymentAmount += wireTransferAmount;
+
+      wireRef = this.objInvoicePayment.invoiceWireTransferPayment.referenceNo;
+    }
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 3) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCCDCPayment)) {
+      this.totalPaymentAmount += creditDebitCardAmount;
+
+      ccRef = this.objInvoicePayment.invoiceCreditDebitCardPayment.referenceNo;
+    }
+
+    this.combinedPaymentRef = (checkRef ? checkRef : '') + (wireRef ? (' ' + wireRef) : '') + (ccRef ? (' ' + ccRef) : '');
     this.paymentInfoFilled = true;
   }
 
@@ -443,10 +499,171 @@ export class AddCustomerPaymentComponent implements OnInit {
     });
   }
 
-  getPartToDisableOrNot(part) {
+  onChangeAmount(event, paymentList) {
+    let totalAmount = parseFloat(this.customerDetails ? this.customerDetails.amount : 0);
+    let checkAmountEntered = (paymentList.checkPayments.amount !== undefined ? paymentList.checkPayments.amount : 0);
+    let wireAmountEntered = (paymentList.invoiceWireTransferPayment.amount !== undefined ? paymentList.invoiceWireTransferPayment.amount : 0);
+    let ccAmountEntered = (paymentList.invoiceCreditDebitCardPayment.amount !== undefined ? paymentList.invoiceCreditDebitCardPayment.amount : 0);
+
+    totalAmount = parseFloat(checkAmountEntered) + parseFloat(wireAmountEntered) + parseFloat(ccAmountEntered);
+
+    if (this.customerDetails) { this.customerDetails.amount = totalAmount; }
+    this.UpdateRemAmount();
   }
 
-  onApprovalSelected(approver, i) {
+  UpdateRemAmount() {
+    let total: number = 0;
+
+    this.openInvoices.forEach(e => {
+      total = total + parseFloat(e.paymentAmount);
+    });
+
+    if (this.customerDetails) {
+      this.customerDetails.amountRem = +parseFloat(this.customerDetails.amount) - total;
+    }
+  }
+
+  onChangePaymentAmount(event, paymentList) {
+    let paymentAmount = event.target.value;
+    paymentList["paymentAmount"] = paymentAmount;
+    let remInvAmount = parseFloat(paymentList["remainingAmount"] ? paymentList["remainingAmount"] : 0);
+    let dicsAmount = parseFloat(paymentList["discAmount"] ? paymentList["discAmount"] : 0);
+    let bankFeeAmount = parseFloat(paymentList["bankFeeAmount"] ? paymentList["bankFeeAmount"] : 0);
+    let otherAdjustAmt = parseFloat(paymentList["otherAdjustAmt"] ? paymentList["otherAdjustAmt"] : 0);
+
+    paymentList["newRemainingBal"] = +remInvAmount - parseFloat(paymentAmount) - dicsAmount - bankFeeAmount - otherAdjustAmt;
+
+    this.UpdateRemAmount();
+  }
+
+  onChangeDiscAmount(event, paymentList) {
+    let discAmount = event.target.value;
+    paymentList["discAmount"] = discAmount;
+    let remInvAmount = parseFloat(paymentList["remainingAmount"] ? paymentList["remainingAmount"] : 0);
+    let otherAdjustAmt = parseFloat(paymentList["otherAdjustAmt"] ? paymentList["otherAdjustAmt"] : 0);
+    let bankFeeAmount = parseFloat(paymentList["bankFeeAmount"] ? paymentList["bankFeeAmount"] : 0);
+    let paymentAmount = parseFloat(paymentList["paymentAmount"] ? paymentList["paymentAmount"] : 0);
+
+    paymentList["newRemainingBal"] = +remInvAmount - paymentAmount - parseFloat(discAmount) - bankFeeAmount - otherAdjustAmt;
+
+    this.UpdateRemAmount();
+  }
+
+  onChangeBankFee(event, paymentList) {
+    let bankFeeAmount = event.target.value;
+    paymentList["bankFeeAmount"] = bankFeeAmount;
+    let remInvAmount = parseFloat(paymentList["remainingAmount"] ? paymentList["remainingAmount"] : 0);
+    let dicsAmount = parseFloat(paymentList["discAmount"] ? paymentList["discAmount"] : 0);
+    let paymentAmount = parseFloat(paymentList["paymentAmount"] ? paymentList["paymentAmount"] : 0);
+    let otherAdjustAmt = parseFloat(paymentList["otherAdjustAmt"] ? paymentList["otherAdjustAmt"] : 0);
+
+    paymentList["newRemainingBal"] = +remInvAmount - paymentAmount - dicsAmount - parseFloat(bankFeeAmount) - otherAdjustAmt;
+
+    this.UpdateRemAmount();
+  }
+
+  onChangeOtherAdjustAmt(event, paymentList) {
+    let otherAdjustAmt = event.target.value;
+    paymentList["otherAdjustAmt"] = otherAdjustAmt;
+    let remInvAmount = parseFloat(paymentList["remainingAmount"] ? paymentList["remainingAmount"] : 0);
+    let dicsAmount = parseFloat(paymentList["discAmount"] ? paymentList["discAmount"] : 0);
+    let bankFeeAmount = parseFloat(paymentList["bankFeeAmount"] ? paymentList["bankFeeAmount"] : 0);
+    let paymentAmount = parseFloat(paymentList["paymentAmount"] ? paymentList["paymentAmount"] : 0);
+
+    paymentList["newRemainingBal"] = +remInvAmount - paymentAmount - dicsAmount - bankFeeAmount - parseFloat(otherAdjustAmt);
+
+    this.UpdateRemAmount();
+  }
+
+  selectAllApproval(type, isSelected) {
+    this.openInvoices.forEach(
+      (x, i) => {
+        // let disableEdit = this.getPartToDisableOrNot(x);
+        // if (disableEdit) {
+        x.selected = !isSelected;
+        //}
+      }
+    );
+  }
+
+  checkIfInvoiceSelected() {
+    let selectedFound: boolean = false;
+    this.openInvoices.forEach(
+      (x, i) => {
+        if (x.selected) {
+          selectedFound = true;
+        }
+      }
+    );
+
+    if (selectedFound) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  clearCustSearch() {
+    this.customerDetails = {};
+    this.openInvoices = [];
+  }
+
+  checkFormValid() {
+    if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 1) ||
+      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCheckPayment)) && (this.checkForm && this.checkForm.valid)) {
+      return false;
+      // if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
+      //   (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) && (this.wireForm && this.wireForm.valid)) {
+      //   return false;
+      // }
+      // else
+      //   return true;
+    }
+    else
+      return true;
+  }
+
+  onSubmit() {
+    let haveError = false;
+    if (haveError) {
+      // let content = this.errorMessagePop;
+      // this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
+      // this.display = true;
+    }
+    else {
+      //this.display = false;
+      this.isSpinnerVisible = true;
+      debugger;
+      this.customerReceipt = new CustomerReceiptInfo();
+
+      let selectedInvoices = this.openInvoices.filter(a => a.selected == true);
+
+      this.customerReceipt.invoices = selectedInvoices;
+      this.customerReceipt.checkPayments = this.objInvoicePayment.checkPayments;
+      this.customerReceipt.wirePayments = this.objInvoicePayment.invoiceWireTransferPayment;
+      this.customerReceipt.ccPayments = this.objInvoicePayment.invoiceCreditDebitCardPayment;
+
+      this.customerReceipt.customerPayments = this.customerPayment;
+      
+      if (this.id) {
+      } else {
+        // this.customerPaymentsService.create(this.customerReceipt).subscribe(data => {
+        //   this.isSpinnerVisible = false;
+        //   this.alertService.showMessage(
+        //     "Success",
+        //     `Payment information updated successfully for Customer`,
+        //     MessageSeverity.success
+        //   );
+        // }, error => {
+        //   this.isSpinnerVisible = false;
+        // });
+      }
+    }
+  }
+
+  getPartToDisableOrNot(part) {
+    return true;
   }
 
   getAllPartsToDisableOrNot() { }
