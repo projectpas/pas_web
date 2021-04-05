@@ -52,6 +52,22 @@ export class ModuleConstants
         static LegalEntity_BillingInformation:string = "LegalEntity_BillingInformation";
         static LegalEntity_ShippingInformation:string = "LegalEntity_ShippingInformation";
         static LegalEntity_Documents:string = "LegalEntity_Documents";
+
+        static VendorCapList:string = "VendorCapList";
+        static VendorCap:string = "VendorCap";
+        static CapReport:string= "CapReport";
+        static ManagementStructure:string = "ManagementStructure";
+
+        static Item:string = "Item";
+        static ItemList:string = "ItemList";
+        static Item_GeneralInformation:string = "Item_GeneralInformation";
+        static Item_AircraftInformation:string = "Item_AircraftInformation";
+        static Item_ATAChapter:string = "Item_ATAChapter";
+        static Item_Capes:string = "Item_Capes";
+        static Item_PurchaseSales:string = "Item_PurchaseSales";
+        static Item_NHATLA:string = "Item_NHATLA";
+        static Item_ExchangeLoan:string = "Item_ExchangeLoan";
+        static Item_ExportInformation:string = "Item_ExportInformation";
 }
 
 export class PermissionConstants

@@ -18,6 +18,8 @@ import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service'
 import { TableModule, Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { Permission } from 'src/app/models/permission.model';
 // import { DEFAULT_VALUE_ACCESSOR } from '@angular/forms/src/directives/default_value_accessor';
 @Component({
 	selector: 'app-item-master-list',
@@ -263,7 +265,29 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	nonstockselectedOnly: boolean = false;
 	targetData: any;
 	nonstocktargetData : any;
-
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDownload:boolean=true;
+	isActiveButton:boolean=true;
+	isDelete:boolean=true;
+	permissionAddCheck=[ModuleConstants.Item+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_ATAChapter+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_AircraftInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_Capes+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_ExchangeLoan+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_ExportInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_GeneralInformation+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_NHATLA+'.'+PermissionConstants.Add,
+        ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Add];
+    permissionUpdateCheck=[ModuleConstants.Item+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_ATAChapter+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_AircraftInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_Capes+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_ExchangeLoan+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_ExportInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_GeneralInformation+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_NHATLA+'.'+PermissionConstants.Update,
+	ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Update];
 	/** item-master-list ctor */
 	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
 		this.itemMasterService.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-list';
@@ -279,7 +303,11 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.nonStockTable = true;
 			this.stockTable = false;
 		}
-
+		this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
+		this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
+		this.isActiveButton=this.authService.checkPermission([ModuleConstants.Item+'.'+PermissionConstants.Update]);
+		this.isDownload=this.authService.checkPermission([ModuleConstants.ItemList+'.'+PermissionConstants.Download]);
+		this.isDelete=this.authService.checkPermission([ModuleConstants.Item+'.'+PermissionConstants.Delete]);
 	}
 	ngAfterContentChecked() : void {
         this.cdRef.detectChanges();

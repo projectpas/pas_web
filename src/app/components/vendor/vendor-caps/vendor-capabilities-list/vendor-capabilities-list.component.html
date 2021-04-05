@@ -5,6 +5,7 @@
         <h4 class="header-name">Vendor Capes List</h4>
       </div>
       <div *ngIf="!isViewMode">
+        <div *ngIf="isAdd">
         <button
           type="button"
           class="btn-sm header-button"
@@ -12,6 +13,7 @@
           *ngIf="!isEnableVendor">
           Add Vendor Capabilities
         </button>
+      </div>
       </div>
     </div>
   </div>
@@ -69,7 +71,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary new-table-button"
               matTooltip="Download Data"
@@ -82,7 +84,7 @@
                             (click)="selectedOnly = false; targetData = dt;"
                              data-target="#downloadConfirmation">
             </button>
-            <button
+            <button *ngIf="isDownload"
               type="button"
               class="btn btn-primary new-table-button"
               matTooltip="Download Selected Data"
@@ -101,7 +103,7 @@
                 *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
                 Advanced Search <i class="fa fa-caret-up"></i>
             </button>
-            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Sample File"
+            <button  *ngIf="isDownload" type="button" class="btn btn-primary new-table-button" matTooltip="Download Sample File"
                         matTooltipPosition="above" (click)="sampleExcelDownload()"
                         style="padding: 4px 10px !important;">
                     Sample File Download
@@ -319,7 +321,7 @@
                 ></a>
               </span>
               <span *ngIf="!isViewMode"
-                ><a
+                ><a  *ngIf="isEdit"
                   class="btn nobg"
                   (click)="openEdits(rowData)"
                   matTooltip="Edit"
@@ -336,7 +338,7 @@
                   ><i class="fa fa-history"></i></a
               ></span>
               <span *ngIf="!isViewMode"
-                ><a
+                ><a  *ngIf="isDelete"
                   class="btn nobg"
                   (click)="openDelete(content, rowData)"
                   matTooltip="Delete"
@@ -402,7 +404,7 @@
                   ><i class="fa fa-history"></i></a
               ></span>
               <span
-                ><a
+                ><a  *ngIf="isEdit"
                   class="btn nobg"
                   (click)="restore(restoreId, rowData)"
                   matTooltip="Restore Record"

@@ -16,6 +16,7 @@ import { CommonService } from '../../../../services/common.service';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-vendor-capabilities-list',
@@ -93,12 +94,20 @@ export class VendorCapabilitiesListComponent implements OnInit {
     arrayCapabilityTypelist:any[] = [];
     selectedPartNumberModel = [];
     selectedCapesTypeModel = [];
+    isAdd:boolean=true;
+    isEdit:boolean=true;
+    isDelete:boolean=true;
+    isDownload:boolean=true;
 
     constructor(private vendorService: VendorService, private modalService: NgbModal, private authService: AuthService,
         private _route: Router, private alertService: AlertService,
         private configurations: ConfigurationService,	private commonService: CommonService,
         private vendorCapesService: VendorCapabilitiesService, private datePipe: DatePipe) {
         this.dataSource = new MatTableDataSource();
+        this.isAdd=this.authService.checkPermission([ModuleConstants.VendorCap+"."+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.VendorCap+"."+PermissionConstants.Update]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.VendorCap+"."+PermissionConstants.Delete]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.VendorCapList+"."+PermissionConstants.Download]);
     }
 
     ngOnInit() {

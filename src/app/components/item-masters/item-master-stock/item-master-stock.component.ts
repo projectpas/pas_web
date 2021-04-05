@@ -60,6 +60,7 @@ import * as moment from 'moment';
 import { ConditionService } from '../../../services/condition.service';
 // import { e } from '@angular/core/src/render3';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-item-master-stock',
@@ -539,7 +540,21 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     purchaseCurrencyInfo: any = [];
     salesCurrencyInfo: any = [];
     arrayCurrancylist:any[] = [];
+    isAircraftAdd:boolean=true;
+    isAircraftEdit:boolean=true;
+    isAircraftDownload:boolean=true;
+    isAircraftDelete:boolean=true;
 
+    isATAAdd:boolean=true;
+    isATAEdit:boolean=true;
+    isATADownload:boolean=true;
+    isATADelete:boolean=true;
+
+    isPurchaseAdd:boolean=true;
+    isPurchaseEdit:boolean=true;
+    isPurchaseDownload:boolean=true;
+    isPurchaseDelete:boolean=true;
+    isView:boolean=true ;
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
         public itemser: ItemMasterService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public ataMainSer: AtaMainService,
@@ -566,8 +581,33 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         //Adding Below Code for By Default Date Should be current Date while Creation
         this.sourceItemMaster.salesLastSalePriceDate = new Date();
         this.sourceItemMaster.salesLastSalesDiscountPercentDate = new Date();
+
+        this.isView=this.authService.checkPermission([ModuleConstants.ItemList+'.'+PermissionConstants.View]);
+
+        this.isAircraftAdd=this.authService.checkPermission([ModuleConstants.Item_AircraftInformation+'.'+PermissionConstants.Add]);
+        this.isAircraftEdit=this.authService.checkPermission([ModuleConstants.Item_AircraftInformation+'.'+PermissionConstants.Update]);
+        this.isAircraftDownload=this.authService.checkPermission([ModuleConstants.Item_AircraftInformation+'.'+PermissionConstants.Download]);
+        this.isAircraftDelete=this.authService.checkPermission([ModuleConstants.Item_AircraftInformation+'.'+PermissionConstants.Delete]);
+
+        this.isATAAdd=this.authService.checkPermission([ModuleConstants.Item_ATAChapter+'.'+PermissionConstants.Add]);
+        this.isATAEdit=this.authService.checkPermission([ModuleConstants.Item_ATAChapter+'.'+PermissionConstants.Update]);
+        this.isATADelete=this.authService.checkPermission([ModuleConstants.Item_ATAChapter+'.'+PermissionConstants.Delete]);
+        this.isATADownload=this.authService.checkPermission([ModuleConstants.Item_ATAChapter+'.'+PermissionConstants.Download]);
+        
+        this.isPurchaseAdd=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Add]);
+        this.isPurchaseEdit=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Update]);
+        this.isPurchaseDelete=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Delete]);
+        this.isPurchaseDownload=this.authService.checkPermission([ModuleConstants.Item_PurchaseSales+'.'+PermissionConstants.Download]);
+ 
         // checks the params id with the url 
     }
+
+    isShowTab(value){
+		
+		var isShow=this.authService.ShowTab('Create Item Master',value);
+		return isShow;
+	
+	}
 
     //setting the values for capability //
     capabilityTypeData: any = [{

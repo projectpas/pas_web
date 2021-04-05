@@ -5,7 +5,7 @@
             <h4 class="header-name"> {{selectedTab}}</h4>
           </div>
           <div>
-            <button
+            <button *ngIf="isNHAAdd"
             type="button" 
             class="btn-sm header-button"  matTooltip="Add {{selectedTab}}" (click)="getalterqquparts()" matTooltipPosition="above" data-toggle="modal" data-target="#alternateModalPopup"
             >
@@ -75,11 +75,11 @@
                 <td class="action-icons-cstm table-column-width">
                     <div *ngIf="!rowData.isDeleted">
                         <span *ngIf="!isEnableItemMasterView && !isViewItemMaster" data-toggle="modal" data-target="#alternateModalPopup">
-                            <a class="btn nobg" 
+                            <a class="btn nobg" *ngIf="isNHAEdit"
                             (click)="editNTAETab(selectedTab, rowData)" matTooltip="Edit {{selectedTab}}" 
                             matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
     
-                        <span *ngIf="!isViewItemMaster" data-toggle="modal" data-target="#alternatePopupDel"><a class="btn nobg" 
+                        <span *ngIf="!isViewItemMaster" data-toggle="modal" data-target="#alternatePopupDel"><a *ngIf="isNHADelete" class="btn nobg" 
                             (click)="deleteNTAERow(rowData)" matTooltip="Delete" 
                              matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                         <span><a class="btn nobg" matTooltip="History" matTooltipPosition="above"
@@ -90,7 +90,7 @@
                             (click)="getAuditHistory(viewHistory,rowData)"><i class="fa fa-history"></i></a></span>
 
                          <span data-toggle="modal" data-target="#ntaeRestore" >
-                             <a class="btn nobg" 
+                             <a class="btn nobg"  *ngIf="isNHAEdit"
                              (click)="Restore(rowData);" matTooltip="Restore Record" 
                             matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
                          </span>
