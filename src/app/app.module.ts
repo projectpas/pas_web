@@ -272,6 +272,7 @@ import{AssetInventoryViewComponent} from "./components/Asset-Management/asset-in
 import { CalendarModule } from "primeng/calendar";
 import { SafePipe } from './pipes/safe.pipe';
 import { AuditComponentComponent } from './shared/components/audit-component/audit-component.component';
+import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 import { InvoicePaymentService } from './services/invoice-payment-service';
 import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoint-service';
 @NgModule({
@@ -334,6 +335,7 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     StocklineViewComponent,
     StocklineHistoryComponent,
     RefreshAlert, 
+    UpdatepasswordComponent,
     AssetInventoryViewComponent,
     SafePipe,
     AuditComponentComponent
