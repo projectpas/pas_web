@@ -207,7 +207,7 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadTagTypes();
 		this.loadModuleTypes();
 		this.loadModulesNamesForObtainOwnerTraceable();
-		this.loadManufacturerData();
+		//this.loadManufacturerData();
 		this.loadAssetAcquisitionTypeList();
 
 		this.stockLineId = this._actRoute.snapshot.params['id'];
@@ -389,14 +389,23 @@ export class StockLineSetupComponent implements OnInit {
 		if (this.arrayWOlist.length == 0) {
 			this.arrayWOlist.push(0);
 		}
-		this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', strText, true, 20, this.arrayWOlist.join()).subscribe(response => {
-			this.allWorkOrderDetails = [
-				{ value: 0, label: 'Select' }
-			];
-			this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
-			this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+			
+			this.commonService.autoCompleteDropdownsWorkorderList(strText, 20, this.arrayWOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+				this.allWorkOrderDetails = [
+					{ value: 0, label: 'Select' }
+				];
+				this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
+				this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+			  })
 
-		}, error => this.saveFailedHelper(error));
+		// this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', strText, true, 20, this.arrayWOlist.join()).subscribe(response => {
+		// 	this.allWorkOrderDetails = [
+		// 		{ value: 0, label: 'Select' }
+		// 	];
+		// 	this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
+		// 	this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+
+		// }, error => this.saveFailedHelper(error));
 	}
 
 	private loadModuleTypes() {
@@ -465,6 +474,12 @@ export class StockLineSetupComponent implements OnInit {
 					this.stockLineForm.tlaItemMasterId = x.tlaItemMasterId;
 				});
 			}
+		});
+	}
+	GetManufacturerByitemMasterId(itemMasterId) 
+	{
+		this.itemMasterService.GetManufacturerByitemMasterId(itemMasterId).subscribe(res => {
+			this.allManufacturerInfo = res;
 		});
 	}
 
@@ -618,11 +633,12 @@ export class StockLineSetupComponent implements OnInit {
 	}
 
 	getStockLineDetailsById(stockLineId) {
-		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {
+		this.stocklineser.getStockLineDetailsById(stockLineId).subscribe(res => {			
 			this.loadPOData(res.itemMasterId);
 			this.loadROData(res.itemMasterId);
 			this.loadNHAData(res.itemMasterId);
 			this.loadTLAData(res.itemMasterId);
+			this.GetManufacturerByitemMasterId(res.itemMasterId);
 			this.arrayItemMasterlist.push(res.itemMasterId);
 			if (res.revisedPartId > 0) {
 				this.arrayItemMasterlist.push(res.revisedPartId);
@@ -663,7 +679,7 @@ export class StockLineSetupComponent implements OnInit {
 					quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '0',
 					purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '0.00',
 					repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '0.00',
-					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',
+					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',					
 					coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '0.00',
 					lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '0.00',
 					purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
@@ -843,14 +859,26 @@ export class StockLineSetupComponent implements OnInit {
 	getWOSelecionOnEdit(WorkOrderId) {
 		this.arrayWOlist.push(WorkOrderId);
 		if (WorkOrderId > 0) {
-			this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', '', true, 20, this.arrayWOlist.join()).subscribe(response => {
+
+			let strText='';
+			
+			this.commonService.autoCompleteDropdownsWorkorderList(strText, 20, this.arrayWOlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
 				this.allWorkOrderDetails = [
 					{ value: 0, label: 'Select' }
 				];
 				this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
 				this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
 				this.stockLineForm.workOrderId = getObjectById('value', WorkOrderId == null ? 0 : WorkOrderId, this.allWorkOrderInfo);
-			}, error => this.saveFailedHelper(error));
+			  })
+
+			// this.commonService.autoSuggestionSmartDropDownList('WorkOrder', 'WorkOrderId', 'WorkOrderNum', '', true, 20, this.arrayWOlist.join()).subscribe(response => {
+			// 	this.allWorkOrderDetails = [
+			// 		{ value: 0, label: 'Select' }
+			// 	];
+			// 	this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...response];
+			// 	this.allWorkOrderDetails = [...this.allWorkOrderDetails, ...response];
+			// 	this.stockLineForm.workOrderId = getObjectById('value', WorkOrderId == null ? 0 : WorkOrderId, this.allWorkOrderInfo);
+			// }, error => this.saveFailedHelper(error));
 		}
 	}
 
@@ -1049,12 +1077,12 @@ export class StockLineSetupComponent implements OnInit {
 		this.loadROData(itemMasterId);
 		this.loadNHAData(itemMasterId);
 		this.loadTLAData(itemMasterId);
+		this.GetManufacturerByitemMasterId(itemMasterId);
 		this.getUnitCostSalePrice();
 		this.sourceTimeLife = {};
-		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {
+		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
 			const partDetails = res;
 			this.stockLineForm.oem = partDetails.isOEM.toString();
-
 			if (res.isOemPNId > 0) {
 				this.arrayItemMasterlist.push(res.isOemPNId);
 				this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', '', true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
@@ -1066,6 +1094,8 @@ export class StockLineSetupComponent implements OnInit {
 					this.stockLineForm.isOemPNId = getObjectById('itemMasterId', res.isOemPNId, this.allPartnumbersList);
 				}, error => this.saveFailedHelper(error));
 			}
+
+
 
 			this.stockLineForm.partDescription = partDetails.partDescription;
 			this.stockLineForm.revisedPart = partDetails.revisedPart;
@@ -1081,7 +1111,11 @@ export class StockLineSetupComponent implements OnInit {
 			this.stockLineForm.nationalStockNumber = partDetails.nationalStockNumber;
 			this.stockLineForm.exportECCN = partDetails.exportECCN;
 			this.stockLineForm.coreUnitCost = partDetails.coreUnitCost;
-			this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice;
+			this.stockLineForm.purchaseUnitOfMeasureId =  this.getInactiveObjectOnEdit('value', partDetails.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname');
+			// this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice;
+			// this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost;
+			this.stockLineForm.purchaseOrderUnitCost = partDetails.poUnitCost ? formatNumberAsGlobalSettingsModule(partDetails.poUnitCost, 2) : '0.00';
+		    this.stockLineForm.unitSalesPrice = partDetails.unitSalesPrice ? formatNumberAsGlobalSettingsModule(partDetails.unitSalesPrice, 2) : '0.00';
 			this.stockLineForm.conditionId = partDetails.conditionId;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
@@ -1127,7 +1161,7 @@ export class StockLineSetupComponent implements OnInit {
 	onPartNumberSelectedOnEdit(itemMasterId) {
 		this.sourceTimeLife = {};
 		this.disableManufacturer = false;
-		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {
+		this.itemMasterService.getDataForStocklineByItemMasterId(itemMasterId).subscribe(res => {			
 			const partDetails = res;
 			this.stockLineForm.tagDays = partDetails.tagDays;
 			this.stockLineForm.manufacturingDays = partDetails.manufacturingDays;
@@ -1151,7 +1185,7 @@ export class StockLineSetupComponent implements OnInit {
 			const itemMasterId = getValueFromObjectByKey('value', this.stockLineForm.itemMasterId);
 			const conditionId = this.stockLineForm.conditionId;
 			this.commonService.getPriceDetailsByCondId(itemMasterId, conditionId).subscribe(res => {
-				if (res) {
+				if (res) {					
 					this.stockLineForm.purchaseOrderUnitCost = res.unitCost ? formatNumberAsGlobalSettingsModule(res.unitCost, 2) : '0.00';
 					this.stockLineForm.unitSalesPrice = res.salePrice ? formatNumberAsGlobalSettingsModule(res.salePrice, 2) : '0.00';
 				}

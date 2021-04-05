@@ -276,6 +276,8 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
 //import {AllViewComponent  } from './shared/components/all-view/all-view.component';
 
  
+import { InvoicePaymentService } from './services/invoice-payment-service';
+import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoint-service';
 @NgModule({
   imports: [
     CardModule,
@@ -546,7 +548,9 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
     SalesOrderEndpointService,
     SalesOrderReferenceStorage,
     StocklineReferenceStorage,
-    CommunicationService
+    CommunicationService,
+    InvoicePaymentService,
+    InvoicePaymentEndpointService
   ],
   entryComponents: [
     LoginComponent,

@@ -1,4 +1,4 @@
-﻿import { Component, Input, EventEmitter, Output, OnInit, SimpleChanges } from '@angular/core';
+﻿import { Component, Input, EventEmitter, Output, OnInit, SimpleChanges, ɵConsole } from '@angular/core';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
@@ -53,12 +53,11 @@ export class EntityShippingComponent implements OnInit {
     formData = new FormData();
 
     domesticShippingHeaders = [
+        { field: 'tagName', header: 'Tag Name' },
         { field: 'siteName', header: 'Site Name' },
         { field: 'attention', header: 'Attention' },
-
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
-
         { field: 'city', header: 'City' },
         { field: 'state', header: 'State / Prov' },
         { field: 'postalCode', header: 'Postal Code' },
@@ -296,7 +295,9 @@ export class EntityShippingComponent implements OnInit {
             createdBy: this.userName,
             updatedBy: this.userName,
             masterCompanyId: this.currentUserMasterCompanyId,
-            legalEntityId: this.id
+            legalEntityId: this.id,
+            tagName: this.domesticShippingInfo.tagName ? editValueAssignByCondition('tagName', this.domesticShippingInfo.tagName) : null,
+			contactTagId: this.domesticShippingInfo.tagName ? editValueAssignByCondition('contactTagId', this.domesticShippingInfo.tagName) : null,
         }
         // create shipping 
         if (!this.isEditDomestic) {
@@ -351,7 +352,7 @@ export class EntityShippingComponent implements OnInit {
 
     editisPrimary: boolean = false;
     // edit Domestic details data 
-    openEditDomestic(rowData) {
+    openEditDomestic(rowData) {        
         this.editisPrimary = rowData.isPrimary;
         this.isEditDomestic = true;
         this.domesticShippingInfo = rowData;
@@ -363,6 +364,10 @@ export class EntityShippingComponent implements OnInit {
             this.CountryData('');
             this.getAllSites(this.domesticShippingInfo.siteName);
         }
+        if(rowData.contactTagId > 0){
+			this.arrayTagNamelist.push(rowData.contactTagId);
+			this.getAllTagNameSmartDropDown('', rowData.contactTagId);
+		}
     }
 
     addDomesticShipping() {
@@ -1805,6 +1810,31 @@ export class EntityShippingComponent implements OnInit {
     saveCountry() {}
 
     filtercountry($event) {}
+
+    arrayTagNamelist:any[] = [];  
+    tagNamesList: any;
+	getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+		if(this.arrayTagNamelist.length == 0) {			
+			this.arrayTagNamelist.push(0); }
+			this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+			this.tagNamesList = res.map(x => {
+				return {
+					tagName: x.label, contactTagId: x.value 
+				}
+			})
+			if(contactTagId > 0){
+				this.domesticShippingInfo = {
+					...this.domesticShippingInfo,
+					tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+				}
+			}
+		})
+	}
+
+	filterTagNames(event) {
+		if (event.query !== undefined && event.query !== null) {
+			this.getAllTagNameSmartDropDown(event.query); }
+	}
 }
 
 

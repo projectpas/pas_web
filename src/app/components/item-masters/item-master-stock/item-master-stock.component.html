@@ -1704,47 +1704,139 @@
                                             </td>
                                             <!-- Sale Price -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseAndSaleMasterList" [(ngModel)]="field.SalePriceSelectId" name="SalePriceSelectId{{i}}" placeholder="-- Select --" [showClear]="true" (onChange)="onChangeSalePriceSelectId(field)" appendTo="body" [disabled]="field.isEditable == false" required></p-dropdown>
+                                                <p-dropdown 
+                                                    class="p-dropdown-100px" 
+                                                    [options]="allPurchaseAndSaleMasterList" 
+                                                    [(ngModel)]="field.SalePriceSelectId" 
+                                                    name="SalePriceSelectId{{i}}" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    (onChange)="onChangeSalePriceSelectId(field)" 
+                                                    appendTo="body" 
+                                                    [disabled]="field.isEditable == false" 
+                                                    required></p-dropdown>
                                             </td>
                                             <!-- UOM -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseInfoListActiveandInactive" filter="true" [(ngModel)]="field.SP_FSP_UOMId" name="SP_FSP_UOMId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == false" required></p-dropdown>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="field.SP_FSP_UOMId" name="SP_FSP_UOMId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == true" required></p-dropdown>
+                                                <p-dropdown 
+                                                    class="p-dropdown-100px" 
+                                                    [options]="allPurchaseInfoListActiveandInactive" 
+                                                    filter="true" 
+                                                    [(ngModel)]="field.SP_FSP_UOMId" 
+                                                    name="SP_FSP_UOMId{{i}}" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    appendTo="body" 
+                                                    [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
+                                                    *ngIf="field.isNewItem == false" required>
+                                                </p-dropdown>
+                                                <p-dropdown 
+                                                    class="p-dropdown-100px" 
+                                                    [options]="allPurchaseUnitOfMeasureinfo" 
+                                                    filter="true" 
+                                                    [(ngModel)]="field.SP_FSP_UOMId" 
+                                                    name="SP_FSP_UOMId{{i}}" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    appendTo="body" 
+                                                    [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
+                                                    *ngIf="field.isNewItem == true" required>
+                                                </p-dropdown>
                                             </td>
                                             <!-- Currency -->
                                             <td> 
-                                                <p-dropdown class="p-dropdown-100px" [options]="allCurrencyInfoActiveandInactive" filter="true" [(ngModel)]="field.SP_FSP_CurrencyId" name="SP_FSP_CurrencyId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == false" required></p-dropdown>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allCurrencyInfo" filter="true" [(ngModel)]="field.SP_FSP_CurrencyId" name="SP_FSP_CurrencyId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == true" required></p-dropdown>
+                                                <p-dropdown 
+                                                    class="p-dropdown-100px" 
+                                                    [options]="allCurrencyInfoActiveandInactive" 
+                                                    filter="true" 
+                                                    [(ngModel)]="field.SP_FSP_CurrencyId" 
+                                                    name="SP_FSP_CurrencyId{{i}}" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    appendTo="body" 
+                                                    [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
+                                                    *ngIf="field.isNewItem == false" required>
+                                                </p-dropdown>
+                                                <p-dropdown 
+                                                    class="p-dropdown-100px" 
+                                                    [options]="allCurrencyInfo" 
+                                                    filter="true" 
+                                                    [(ngModel)]="field.SP_FSP_CurrencyId" 
+                                                    name="SP_FSP_CurrencyId{{i}}" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    appendTo="body" 
+                                                    [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
+                                                    *ngIf="field.isNewItem == true" required>
+                                                </p-dropdown>
                                             </td>
                                             <!-- FX Rate -->
                                             <td>
-
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | fiveDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
+                                                <input type="text" 
+                                                        class="input-field-value text-right input-width-100-percent" 
+                                                        pInputText pKeyFilter="money" 
+                                                        [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
+                                                        maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required 
+                                                        [ngModel]="field.SP_FSP_FXRatePerc | fiveDecimalGlobalNumberFormatPipe"                                                                                                                 
+                                                        (ngModelChange)="onChangeFXRate(field.SP_FSP_FXRatePerc=$event,field)"
+                                                        [ngModelOptions]="{updateOn:'blur'}" />
+                                                        <!-- (ngModelChange)="field.SP_FSP_FXRatePerc=$event;" -->
                                             </td>
                                             <!-- Flat Price Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money" maxlength="15" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" name="SP_FSP_FlatPriceAmount{{i}}" [(ngModel)]="field.SP_FSP_FlatPriceAmount" (change)="onChangeFlatPriceAmt(field)" />
+                                                <input type="text" 
+                                                        class="input-field-value text-right input-width-100-percent" 
+                                                        pInputText pKeyFilter="money" maxlength="15" 
+                                                        [disabled]="field.isEditable == false || field.SalePriceSelectId != 1"
+                                                        name="SP_FSP_FlatPriceAmount{{i}}" 
+                                                        [(ngModel)]="field.SP_FSP_FlatPriceAmount" 
+                                                        (change)="onChangeFlatPriceAmt(field)" />
                                             </td>
                                             <!-- Last Flat Price Date -->
                                             <td>
-                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" [ngModel]="field.SP_FSP_LastFlatPriceDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_FSP_LastFlatPriceDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" 
+                                                    class="input-field-value input-width-100-percent" 
+                                                    [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" 
+                                                    [ngModel]="field.SP_FSP_LastFlatPriceDate | date:'yyyy-MM-dd'" 
+                                                    (ngModelChange)="field.SP_FSP_LastFlatPriceDate = $event" 
+                                                    [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Mark % on List Price -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantity" filter="true" [(ngModel)]="field.SP_CalSPByPP_MarkUpPercOnListPrice" name="SP_CalSPByPP_MarkUpPercOnListPrice{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" (onChange)="getPercentValueSPUsingPP(field);"></p-dropdown>
+                                                <p-dropdown 
+                                                    class="p-dropdown-100px" 
+                                                    [options]="itemQuantity" 
+                                                    filter="true" 
+                                                    [(ngModel)]="field.SP_CalSPByPP_MarkUpPercOnListPrice" 
+                                                    name="SP_CalSPByPP_MarkUpPercOnListPrice{{i}}" 
+                                                    [resetFilterOnHide]="true" 
+                                                    placeholder="-- Select --" 
+                                                    [showClear]="true" 
+                                                    appendTo="body" 
+                                                    [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" 
+                                                    (onChange)="getPercentValueSPUsingPP(field);"></p-dropdown>
                                             </td>
                                             <!-- Mark Up Amount -->
                                             <td>
                                                 <input type="text" class="input-field-value text-right input-width-100-percent"
-                                                 pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 pInputText pKeyFilter="money" name="SP_CalSPByPP_MarkUpAmount{{i}}"
+                                                  [(ngModel)]="field.SP_CalSPByPP_MarkUpAmount" disabled />
                                             </td>
                                             <!-- Last Mark Up Date -->
                                             <td>
-                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
+                                                <input type="date" class="input-field-value input-width-100-percent" 
+                                                [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastMarkUpDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastMarkUpDate = $event" [ngModelOptions]="{standalone: true}" />
                                             </td>
                                             <!-- Base Sale Price -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent"  pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent"  
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'" 
+                                                pInputText pKeyFilter="money" name="SP_CalSPByPP_BaseSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_BaseSalePrice" disabled />
                                             </td>
                                             <!-- Sale Disc % -->
                                             <td>
@@ -1752,11 +1844,15 @@
                                             </td>
                                             <!-- Sale Disc Amount -->
                                             <td>
-                                                <input type="text" class="input-field-value text-right input-width-100-percent" pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
+                                                <input type="text" class="input-field-value text-right input-width-100-percent"
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 pInputText pKeyFilter="money"  name="SP_CalSPByPP_SaleDiscAmount{{i}}" [(ngModel)]="field.SP_CalSPByPP_SaleDiscAmount" disabled />
                                             </td>
                                             <!-- Last Sales Disc Date -->
                                             <td>
-                                                <input type="date" class="input-field-value input-width-100-percent" [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
+                                                <input type="date" class="input-field-value input-width-100-percent"
+                                                [ngClass]="field.isEditable == false || field.SalePriceSelectId != 2 ? 'input-background' : 'input-back-normal'"
+                                                 [disabled]="field.isEditable == false || field.SalePriceSelectId != 2" [ngModel]="field.SP_CalSPByPP_LastSalesDiscDate | date:'yyyy-MM-dd'" (ngModelChange)="field.SP_CalSPByPP_LastSalesDiscDate = $event" [ngModelOptions]="{standalone: true}">
                                             </td>
                                             <!-- Unit Sale Price -->
                                             <td>

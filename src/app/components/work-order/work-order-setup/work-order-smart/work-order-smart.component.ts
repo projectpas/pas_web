@@ -13,7 +13,6 @@ import { SalesOrderReference } from '../../../../models/sales/salesOrderReferenc
     selector: 'app-work-order-smart',
     templateUrl: './work-order-smart.component.html',
 })
-/** WorkOrderShipping component*/
 export class WorkOrderSmartComponent implements OnInit {
     @Input() isSubWorkOrder = false;
     @Input() paramsData;
@@ -22,7 +21,8 @@ export class WorkOrderSmartComponent implements OnInit {
     @Input() subWorkOrderId;
     @Input() workFlowWorkOrderId;
     @Input() subWoMpnGridUpdated;
-    @Input() conditionListfromSubWo;
+    @Input() conditionListfromSubWo; 
+    @Input() isView:boolean=false;
     creditTerms: any;
     employeesOriginalData: any;
     techStationList: any;
@@ -35,7 +35,7 @@ export class WorkOrderSmartComponent implements OnInit {
     recCustomerId: any = 0;
     editWorkOrderGeneralInformation: any;
     workOrderGeneralInformation: workOrderGeneralInfo = new workOrderGeneralInfo();
-    isEdit: boolean ;
+    isEdit: boolean;
     currencyList: any;
     legalEntityList: any;
     private onDestroy$: Subject<void> = new Subject<void>();
@@ -55,6 +55,7 @@ export class WorkOrderSmartComponent implements OnInit {
     technicianByExpertiseTypeList: any;
     salesOrderReferenceData: SalesOrderReference;
     arayJobTitleIds: any[] = [];
+    ishowEditDiv:boolean;
     constructor(
         private workOrderService: WorkOrderService,
         private commonService: CommonService,
@@ -71,7 +72,7 @@ export class WorkOrderSmartComponent implements OnInit {
         }
     }
     ngOnInit() {
-    
+
         if (this.isSubWorkOrder == false) {
         } else {
             this.conditionList = this.conditionListfromSubWo;
@@ -79,17 +80,21 @@ export class WorkOrderSmartComponent implements OnInit {
 
         if (this.isSubWorkOrder) {
             this.subWorkOrderId = this.subWorkOrderId;
+            this.isView=this.isView;
         } else {
             this.workOrderId = this.acRouter.snapshot.params['id'];
             this.recCustomerId = this.acRouter.snapshot.params['rcustid'];
+            // if(this.workOrderId)
         }
-        if (this.workOrderId || this.recCustomerId) {
+        if (this.workOrderId || this.recCustomerId) { 
+            this.ishowEditDiv=true;
+            this.isEdit = true;
             if (this.recCustomerId) {
                 this.showTabsGrid = false;
                 this.workOrderId = 0;
                 this.getWorkOrderDefaultSetting();
             }
-            else {    // uncomment this else by mahesh  , due to comment this  this.recCustomerId is undefined and handel bellow  promisedDate etc assing nulls 
+            else {
                 this.recCustomerId = 0;
             }
             this.isSpinnerEnable = true;
@@ -97,9 +102,9 @@ export class WorkOrderSmartComponent implements OnInit {
                 setTimeout(() => {
                     this.isSpinnerEnable = false;
                 }, 3000)
-                this.isEdit = true;
+                this.ishowEditDiv=true;
                 this.getPartNosByCustomer(res.customerId, 0);
-             
+
                 const workOrderData = res;
                 const data = {
                     ...res,
@@ -117,20 +122,27 @@ export class WorkOrderSmartComponent implements OnInit {
                     })
                 }
                 this.editWorkOrderGeneralInformation = data;
+                this.getAllWorkOrderTypes();
+                this.getAllCreditTerms();
+                this.getJobTitles();
+                this.getAllWorkOrderStages();
+                this.getAllExpertiseType();
+                this.getAllWorkOrderStatus();
             })
-        }
-        else {
+        } else { 
+            this.ishowEditDiv=false;
             this.getWorkOrderDefaultSetting();
+            this.getAllWorkOrderTypes();
+            this.getAllCreditTerms();
+            this.getJobTitles();
+            this.getAllWorkOrderStages();
+            this.getAllExpertiseType();
+            this.getAllWorkOrderStatus();
         }
-        this.getAllWorkOrderTypes();
-        this.getAllWorkOrderStatus();
-        this.getAllCreditTerms();
-        this.getJobTitles();
-        this.getAllWorkOrderStages();
-        this.getAllExpertiseType();
+
     }
     ngOnChanges(changes: SimpleChanges) {
-        this.subWoMpnGridUpdated = this.subWoMpnGridUpdated;
+        this.subWoMpnGridUpdated = this.subWoMpnGridUpdated;  
     }
     ngOnDestroy(): void {
         this.onDestroy$.next();
@@ -145,8 +157,8 @@ export class WorkOrderSmartComponent implements OnInit {
             });
         })
     }
-    getExpertiseEmployeeByExpertiseId(value) { 
-        
+    getExpertiseEmployeeByExpertiseId(value) {
+
         this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
             this.technicianByExpertiseTypeList = res;
         })
@@ -162,11 +174,8 @@ export class WorkOrderSmartComponent implements OnInit {
                     partNumbers: this.workOrderGeneralInformation.partNumbers.map(x => {
                         return {
                             ...x,
-                            // workOrderScopeId: data.defaultScopeId, // true
                             workOrderStageId: data.defaultStageCodeId,
-                            workOrderPriorityId: data.defaultPriorityId, // true
-                            // workOrderStatusId: data.defaultStatusId, // status
-                            // conditionId: data.defaultConditionId
+                            workOrderPriorityId: data.defaultPriorityId,
                         }
                     })
                 }
@@ -197,7 +206,7 @@ export class WorkOrderSmartComponent implements OnInit {
         const CSRid = getValueByFieldFromArrayofObject('jobTitleCode', 'CSR', this.jobTitles);
         const Salesid = getValueByFieldFromArrayofObject('jobTitleCode', 'SALES', this.jobTitles);
         const Agentsid = getValueByFieldFromArrayofObject('jobTitleCode', 'AGENT', this.jobTitles);
-        const Technicianid = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles); 
+        const Technicianid = getValueByFieldFromArrayofObject('jobTitleCode', 'TECHNICIAN', this.jobTitles);
         if (CSRid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(CSRid[0].jobTitleId);
 
@@ -206,8 +215,6 @@ export class WorkOrderSmartComponent implements OnInit {
 
         if (Agentsid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
-        // if (Technicianid[0].jobTitleId > 0)
-        //     this.arayJobTitleIds.push(Technicianid[0].jobTitleId);
         this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
             if (res) {
                 this.csrOriginalList = res.filter(x => {
@@ -228,12 +235,6 @@ export class WorkOrderSmartComponent implements OnInit {
                     }
                 })
                 this.salesAgentsOriginalList = [...this.salesPersonOriginalList];
-
-                // this.technicianOriginalList = res.filter(x => {
-                //     if (Technicianid[0].jobTitleId == x.jobTitleId) {
-                //         return x;
-                //     }
-                // })
                 this.arayJobTitleIds = [];
             }
         })
@@ -255,21 +256,20 @@ export class WorkOrderSmartComponent implements OnInit {
             this.partNumberOriginalData = res;
         });
     }
-    // this api returns 4 to 5 records
-    setEditArray:any=[]
-    getAllWorkOrderTypes(): void {
+    setEditArray: any = []
+    getAllWorkOrderTypes(): void { 
         this.setEditArray = [];
-        const strText ='';
-        if(this.isEdit==true){
-            this.setEditArray.push(this.editWorkOrderGeneralInformation.workOrderTypeId ? this.editWorkOrderGeneralInformation.workOrderTypeId :0)
-            if(this.setEditArray && this.setEditArray.length==0){
-                this.setEditArray.push(0);  
+        const strText = '';
+        if (this.isEdit == true) {
+            this.setEditArray.push(this.editWorkOrderGeneralInformation.workOrderTypeId ? this.editWorkOrderGeneralInformation.workOrderTypeId : 0)
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
             }
-        }else{
+        } else {
             this.setEditArray.push(0);
         }
         this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
-      this.workOrderTypes = res.map(x => {
+            this.workOrderTypes = res.map(x => {
                 return {
                     id: x.value,
                     description: x.label
@@ -280,20 +280,20 @@ export class WorkOrderSmartComponent implements OnInit {
     getAllWorkOrderStatus(): void {
         this.setEditArray = [];
         if (this.isEdit == true) {
-            this.workOrderGeneralInformation.partNumbers.forEach(element => {
-                if(element.workOrderStatusId){
+            this.editWorkOrderGeneralInformation.partNumbers.forEach(element => {
+                if (element.workOrderStatusId) {
                     this.setEditArray.push(element.workOrderStatusId)
                 }
             });
-            if(this.setEditArray && this.setEditArray.length==0){
-                this.setEditArray.push(0);  
+            if (this.setEditArray && this.setEditArray.length == 0) {
+                this.setEditArray.push(0);
             }
         } else {
-            this.setEditArray.push(0); 
+            this.setEditArray.push(0);
         }
-        const strText ='';
+        const strText = '';
         this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
-         this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
+            this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
-    } 
+    }
 }

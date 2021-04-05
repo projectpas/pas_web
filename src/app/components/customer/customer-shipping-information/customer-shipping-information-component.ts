@@ -60,6 +60,8 @@ export class CustomerShippingInformationComponent implements OnInit {
     interShippingauditHisory: any[];
     formData = new FormData();
     domesticShippingHeaders = [
+        { field: 'tagName', header: 'Tag' },
+        { field: 'attention', header: 'Attention' },
         { field: 'siteName', header: 'Site Name' },
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
@@ -168,7 +170,11 @@ export class CustomerShippingInformationComponent implements OnInit {
     isAddDomestic:boolean=true;
     isUpdateDomestic:boolean=true;
     isDeleteDomestic:boolean=true;
-
+    isDownloadDomestic:boolean=true;
+    isBillingInfoAdd:boolean=true;
+    isBillingInfoEdit:boolean=true;
+    isSalesPersonInfoAdd:boolean=true;
+    isSalesPersonInfoEdit:boolean=true;
     constructor(private customerService: CustomerService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
         private commonService: CommonService,
@@ -177,8 +183,16 @@ export class CustomerShippingInformationComponent implements OnInit {
         this.id = this.router.snapshot.params['id'];
         this.isAddDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
 		this.isUpdateDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])
-		this.isDeleteDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Delete])
+        this.isDeleteDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Delete])
+        this.isDownloadDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Download])
+        // Next
+        this.isSalesPersonInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Add])
+        this.isSalesPersonInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Update])       
+        //Previous
+        this.isBillingInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
+        this.isBillingInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update]) 
     }
+
     ngOnInit() {
         if (this.editMode) {
             //this.id = this.editGeneralInformationData.customerId;

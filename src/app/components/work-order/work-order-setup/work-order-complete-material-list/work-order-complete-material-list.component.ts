@@ -17,8 +17,7 @@ import { unwrapResolvedMetadata } from '@angular/compiler';
     styleUrls: ['./work-order-complete-material-list.component.scss'],
     animations: [fadeInOut]
 })
-
-/** WorkOrderCompleteMaterialList component*/
+ 
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
     @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
     @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
@@ -128,9 +127,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     subWoRecord: any = {};
     viewSubWolist: boolean = false;
     moduleName: any = '';
-
-    /** WorkOrderCompleteMaterialList ctor */
-    constructor(
+   constructor(
         private workOrderService: WorkOrderService,
         public itemClassService: ItemClassificationService,
         public unitofmeasureService: UnitOfMeasureService,
@@ -145,7 +142,6 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit() {
-        // handel work order and sub work order for subWOPartNoId and  workFlowWorkOrderId
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -199,9 +195,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.cdRef.detectChanges();
         this.isEdit = true;
         this.addNewMaterial = true;
-      
-        // rowData.materialMandatoriesId=rowData.materialMandatoriesId;
-
+       
         this.editData = { ...rowData, unitOfMeasure: rowData.uom,partItem:{partId:rowData.itemMasterId,partName:rowData.partNumber} };
     }
     openDelete(content, row) {
@@ -472,7 +466,19 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         }
     }
-
+    // checkActiveStatus() { 
+    //     console.log("reeeeee", this.reservedList)
+    //     // this.savebutonDisabled = false;
+    //     var result = false;
+    //       this.reservedList.forEach(
+    //         data => { 
+    //             if ( data.isParentSelected==true) {
+    //               result = false;
+    //             }  
+    //         }
+    //       )
+    //     return result;
+    //   }
     allowAll(value) {
         if (value==true) {
             this.reservedList = this.reservedList.map(x => {
@@ -490,13 +496,11 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                  }
                  if(value==true && (this.statusId === 2 || this.statusId === 3 || this.statusId === 4 )&& x.quantityIssued !=0){
                     x.isParentSelected = true;
-                 }
-                // })
+                 } 
                 return {
-                    ...x,
-                    // isParentSelected: true,
+                    ...x, 
                     
-                }
+                } 
             });
 
             this.isAllow = value;
@@ -534,9 +538,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             this.employeeList = employee;
         }
     }
-
-    // used to get Parts from the Servers Bases on the Status Id
-    partsIssueRI(statusId) {
+ 
+    partsIssueRI(statusId) { 
+        this.savebutonDisabled=false;
+        this.checkActiveStatus=true;
         this.countDown = null;
         this.counter = 600;
         this.tick = 1000;
@@ -557,7 +562,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     x.updatedBy = this.authService.currentUser.userName;
                        this.setdefaultValues(x);
                        if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
-                           this.savebutonDisabled = true;
+                        //    this.savebutonDisabled = true;
                            if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                                this.isShowAlternatePN = true;
                                x.isParentSelected = true;
@@ -906,8 +911,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
         }
     }
-
+    checkActiveStatus:boolean=false;
     closeMaterial() {
+        this.checkActiveStatus=true;
         if (this.countDown) {
             this.countDown.unsubscribe();
         }

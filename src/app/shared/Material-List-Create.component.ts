@@ -14,6 +14,7 @@ import { MasterComapnyService } from "../services/mastercompany.service";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { WorkOrderService } from "../services/work-order/work-order.service";
 @Component({
     selector: 'grd-material',
     templateUrl: './Material-List-Create.component.html',
@@ -220,21 +221,20 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         private commonService: CommonService,
         private authService: AuthService,
         private modalService: NgbModal,
-        private workOrderQuoteService: WorkOrderQuoteService,
+        private workOrderQuoteService: WorkOrderQuoteService, 
+        private workOrderService: WorkOrderService,
         private alertService: AlertService,
         public unitofmeasureService: UnitOfMeasureService,
         public itemClassService: ItemClassificationService,
         private masterComapnyService: MasterComapnyService,) {
     }
     ngOnInit(): void {
-        this.isSubWorkOrder = this.isSubWorkOrder;
-        // if (!this.isView) {
+        this.isSubWorkOrder = this.isSubWorkOrder; 
             this.getPartnumbers('');
-        // }
+   
         if (this.isWorkOrder) {
             this.row = this.workFlow.materialList[0];
-            if (this.isEdit) {
-                console.log("hello text",this.editData)
+            if (this.isEdit) { 
                 this.workFlow.materialList = [];
                 this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
                 this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
@@ -418,6 +418,23 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.partCollection = this.partCollection;
     }
     getPartnumbers(value) {
+ 
+            let partSearchParamters = {
+                "customerId": 411,
+                'partNumber': "",
+                "includeAlternatePartNumber": true,
+                "includeEquivalentPartNumber": true,
+                "restrictPMA": true,
+                "restrictDER": true,
+                "custRestrictDER": true,
+                "custRestrictPMA": true,
+                "idlist": 0
+              };
+// this.workOrderService.searchPartNumberAdvanced(partSearchParamters).subscribe(res => {
+// console.log("hello ",res)
+// })
+
+
         this.isSpinnerVisible = true;
         let exclusionsIds = [];
         if (this.UpdateMode) {
@@ -425,6 +442,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
         }
+        
         this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
@@ -451,8 +469,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
             });
     }
-    onPartSelect(event, material, index) {
-        console.log("event",event,material)
+    onPartSelect(event, material, index) { 
         var materialObj = this.workFlow.materialList.find(x => x.partItem == event && x.taskId == this.workFlow.taskId);
         var itemMasterId = this.partCollection.find(x => {
             if (x.partName == event) {
@@ -865,29 +882,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         )
         return result;
     }
-    onDataLoadFailed(log) {
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
+ 
     onTaskChange(material) { }
     editorgetmemo(ev) {
         this.disableEditor = false;
@@ -918,7 +913,24 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getActive() {
         this.disableUpdateButton = false;
     }
-    // closeMaterial(){
-    // this.editData=[];
-    // }
+    setEditArray:any=[];
+    getTaskList() {  
+        this.setEditArray=[];
+        // this.labor.workOrderLaborList.push({})
+        const strText = '';
+        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+         this.taskList = res.map(x => {
+                return {
+                    id: x.value,
+                    description: x.label.toLowerCase(),
+                    taskId: x.value,
+                    label:x.label.toLowerCase(),
+                }
+            });
+   
+        },
+            err => {
+                // this.handleError(err);
+            })
+    }
 } 

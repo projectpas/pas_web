@@ -30,7 +30,7 @@
                                         {{approver.rule}}
                                     </td>
                                     <td>
-                                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['memo']"></p>
+                                        <p class="m-0 p-0 p_textEditor float-left" [innerHTML]="approver['memo']"></p>
                                     </td>
                                     <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
                                 </tr>

@@ -141,25 +141,24 @@ export class WorkflowListComponent implements OnInit {
         this.workFlowtService.listCollection = null;
     }
 
-    ngOnInit() {
-        // this.getWorkFlowActions();
-        // this.LoadParts();
+    ngOnInit() { 
         this.selectedGridColumns = this.gridColumns;
-        if (this.isWorkOrder) {
-            this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
-                this.onViewWFDetails(res);
-                this.responseDataForWorkFlow = res;
-            })
+        if (this.isWorkOrder) { 
+            // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
+                this.onViewWFDetails('','onload');
+                // this.responseDataForWorkFlow = res;
+            // })
         }
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.workFlowId) {
-            this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
-                this.onViewWFDetails(res);
-                this.responseDataForWorkFlow = res;
-            })
-        }
+        // if (changes.workFlowId) {
+        //     console.log("hello res ng ononChanges")
+        //     // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
+        //         this.onViewWFDetails( );
+        //         // this.responseDataForWorkFlow = res;
+        //     // })
+        // }
     }
 
     //Load Data for work Flow List
@@ -407,10 +406,13 @@ export class WorkflowListComponent implements OnInit {
 
     }
 
-    onViewWFDetails(rowData): void {
+    onViewWFDetails(rowData,from): void {
+if(from=='html'){
+    this.workFlowId=rowData.workflowId;
+}
         this.sourceWorkFlow = undefined;
         this.isSpinnerVisible = true;
-        this.actionService.getWorkFlow(rowData.workflowId).subscribe(
+        this.actionService.getWorkFlow(this.workFlowId).subscribe(
             workflow => {
                 const sourceWF = workflow[0];
                 this.sourceWorkFlow = {
@@ -433,13 +435,6 @@ export class WorkflowListComponent implements OnInit {
 
                 this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
-//                if(this.sourceWorkFlow &&  this.sourceWorkFlow.expertise && this.sourceWorkFlow.expertise.length !=0){
-//                 this.sourceWorkFlow.expertise.forEach(element => {
-//                      return  element.estimatedHours=  formatNumberAsGlobalSettingsModule(element.estimatedHours, 2);
-//                 });
-//             }
-                // this.loadcustomerData();
-                // this.loadCurrencyData();
                 this.calculateTotalWorkFlowCost();
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
@@ -569,7 +564,7 @@ export class WorkflowListComponent implements OnInit {
   this.Total = total ? formatNumberAsGlobalSettingsModule(total, 2) : 0.00;
 
         if (this.sourceWorkFlow.berThresholdAmount != 0 && this.Total) {
-           const BRTH = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
+           const BRTH = this.sourceWorkFlow.berThresholdAmount ? parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, '')) : 0;
            const Tot = parseFloat(this.Total.toString().replace(/\,/g, ''));
             const maxValue = Math.max(0, BRTH, Tot);
             const minValue = Math.min(BRTH, Tot) !== -Infinity ? Math.min(BRTH, Tot) : 0;
@@ -695,7 +690,7 @@ export class WorkflowListComponent implements OnInit {
     }
 
     private getAllTasks(): void {
-        // this.isSpinnerVisible = true;
+        // this.isSpinnerVisible = true; 
         this.actionService.getActions().subscribe(
             actions => {
                 this.tasks = [];

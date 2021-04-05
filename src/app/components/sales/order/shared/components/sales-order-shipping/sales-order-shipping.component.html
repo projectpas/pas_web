@@ -1,9 +1,9 @@
 ﻿<div class="card">
     <div class="card-body p-t-0">
         <div class="row">
-            <div class="col-md-12" style="padding-left:25px; padding-top:5px">
-                <label style="width: 100%;"></label>
-                <div class="form-group" style="float: right; margin-right: 10px;">
+            <div class="col-md-12 shipping-div">
+                <label class="input-width-100-percent"></label>
+                <div class="form-group perform-shipping-div">
                     <button type="submit" class="btn  submit-btn btn btn-primary"
                         [disabled]="disableCreateShippingBtn" (click)="PerformShipping()">Perform Shipping</button>
                 </div>
@@ -13,7 +13,7 @@
             style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="so-table">
-                    <tr class="header-table-width" style="font-size: 10px">
+                    <tr class="header-table-width font-10">
                         <th *ngFor="let summaryColumn of headers">
                             <span>
                                 {{ summaryColumn.header }}
@@ -27,7 +27,7 @@
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of headers"
-                                        style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                       class="summary-column" pReorderableRowHandle>
                                         <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
@@ -36,7 +36,7 @@
                                     <td></td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
-                                    <th style="background-color: #fff !important;"></th>
+                                    <th class="background-white"></th>
                                     <th>Ready?</th>
                                     <th>Ship Date</th>
                                     <th>Shipping Num </th>
@@ -105,23 +105,23 @@
                                                     class="fa fa-print"></i></a>
                                         </span>
                                         <span>
-                                            <button *ngIf="ship.qtyShipped > 0" class="btn nobg" mat-icon-button
+                                            <button *ngIf="ship.qtyShipped > 0" class="btn nobg font-bold" mat-icon-button
                                                 (click)="viewShipping(ship)" matTooltip="View Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </button>
                                         </span>
                                         <span>
-                                            <button class="btn nobg" *ngIf="ship.qtyShipped == 0" type="submit"
+                                            <button class="btn nobg font-bold" *ngIf="ship.qtyShipped == 0" type="submit"
                                                 (click)="onSelectPartNumber(ship)" matTooltip="Perform Shipping"
-                                                matTooltipPosition="above" style="font-weight: bold;"
+                                                matTooltipPosition="above"
                                                 [disabled]="!ship.selected">
                                                 <i class="fa fa-plus"></i></button>
                                         </span>
                                         <span>
-                                            <button [hidden]="true" class="btn nobg" mat-icon-button
+                                            <button [hidden]="true" class="btn nobg font-bold" mat-icon-button
                                                 (click)="shippingEdit(ship,pickticketieminterface)" matTooltip="Edit"
-                                                matTooltipPosition="above" style="font-weight: bold;">
+                                                matTooltipPosition="above">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
                                         </span>
@@ -264,8 +264,8 @@
                                             [disabled]="isView" />
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="sale-order-shipping-lable" style="margin-left: 40px;">UOM <span
-                                                style="color: red;" *ngIf="shippingHeader.shipWeight">*</span>
+                                        <label class="sale-order-shipping-lable m-l-40">UOM <span
+                                               class="clr-red" *ngIf="shippingHeader.shipWeight">*</span>
                                         </label>
                                     </div>
                                     <div class="col-md-3">
@@ -295,8 +295,8 @@
                                         </span>
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="sale-order-shipping-lable" style="margin-left: 40px;">
-                                            UOM <span style="color: red;"
+                                        <label class="sale-order-shipping-lable m-l-40">
+                                            UOM <span class="clr-red"
                                                 *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
                                         </label>
                                     </div>
@@ -331,7 +331,7 @@
                     <div class="col-md-4">
                         <div class="card card-stock">
                             <div class="card-header">
-                                <h5 style="text-align: center;">Origin</h5>
+                                <h5 class="text-center">Origin</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -411,7 +411,7 @@
                     <div class="col-md-4">
                         <div class="card card-stock">
                             <div class="card-header">
-                                <h5 style="text-align: center;">Bill To</h5>
+                                <h5 class="text-center">Bill To</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -433,7 +433,7 @@
                                     <div class="col-md-4">
                                         <label>Site <span class="clr-red">*</span>
                                             <span *ngIf="isView ? false : (shippingHeader.soldToName ? true : false) "
-                                                style="margin-left:3px;cursor:pointer;"><a
+                                               class="label-span"><a
                                                     class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name"
                                                     matTooltipPosition="above" data-toggle="modal"
                                                     data-target="#createBillingSiteName1"
@@ -515,7 +515,7 @@
                     <div class="col-md-4">
                         <div class="card card-stock">
                             <div class="card-header">
-                                <h5 style="text-align: center;">Ship To</h5>
+                                <h5 class="text-center">Ship To</h5>
                             </div>
                             <div class="card-body">
                                 <div class="form-group col-md-12">
@@ -538,7 +538,7 @@
                                         <label>Site <span class="clr-red">*</span>
                                             <span
                                                 *ngIf="isView ? false : (shippingHeader.shipToCustomerId ? true : false) "
-                                                style="margin-left:3px;cursor:pointer;"><a
+                                               class="label-span"><a
                                                     class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name"
                                                     matTooltipPosition="above" data-toggle="modal"
                                                     data-target="#createPOSiteName1"
@@ -625,7 +625,7 @@
                                 <div class="card-body">
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>Entry Type <span style="color: red;"
+                                            <label>Entry Type <span class="clr-red"
                                                     *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
@@ -637,7 +637,7 @@
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>Entry Num <span style="color: red;"
+                                            <label>Entry Num <span class="clr-red"
                                                     *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
@@ -665,7 +665,7 @@
                                 <div class="card-body">
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>EPU <span style="color: red;"
+                                            <label>EPU <span class="clr-red"
                                                     *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
@@ -677,7 +677,7 @@
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>UCR <span style="color: red;"
+                                            <label>UCR <span class="clr-red"
                                                     *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
@@ -715,7 +715,7 @@
                                 <div class="card-body">
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label class="workorder-label">Customs Value <span style="color: red;"
+                                            <label class="workorder-label">Customs Value <span class="clr-red"
                                                     *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
@@ -727,7 +727,7 @@
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div class="col-md-4">
-                                            <label>Net Mass <span style="color: red;"
+                                            <label>Net Mass <span class="clr-red"
                                                     *ngIf="shippingHeader.originCountryId !=shippingHeader.shipToCountryId">*</span></label>
                                         </div>
                                         <div class="col-md-8">
@@ -752,11 +752,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row" style="padding-top: 5px;">
+                <div class="form-row padding-5">
                     <div class="col-md-12">
                         <div class="card card-stock">
                             <div class="card-body">
-                                <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
+                                <button *ngIf="!isView" class="btn btn-primary pull-right width-100"
                                     (click)="save()"
                                     [disabled]="!shippingForm.valid">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
                             </div>

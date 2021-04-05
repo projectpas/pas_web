@@ -525,6 +525,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               label: 'Accounts Receivable',
               items: [
                 { label: 'Customer Invoice List', routerLink: '/accountreceivable/accountreceivablepages/app-customer-invoice-list' },
+                { label: 'Process Customer Receipt', routerLink: '/accountreceivable/accountreceivablepages/app-customer-payment-list' },
                 { label: 'Process Customer Credit', routerLink: '/#' },
                 {
                   label: 'Open/Close AR Sub-Ledger',
@@ -975,6 +976,17 @@ export class AppComponent implements OnInit, AfterViewInit {
               ]
             }
 
+          ],
+          [
+            {
+              label: 'Exchange',
+              items: [
+                {
+                  label: 'Exchange Quote List',
+                  routerLink: '/exchangemodule/exchangepages/exchange-quote-list',
+                }
+              ]
+            }
           ],
         ],
       },

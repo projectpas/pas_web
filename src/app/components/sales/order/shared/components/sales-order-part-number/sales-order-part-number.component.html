@@ -16,7 +16,7 @@
             style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="so-table">
-                    <tr style="font-size: 10px">
+                    <tr class="font-size-10">
                         <th *ngFor="let summaryColumn of summaryColumns" [ngStyle]="{'min-width': summaryColumn.width}">
                             <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                  || summaryColumn.field == 'customerRef'
@@ -39,7 +39,7 @@
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns; let i = index"
-                                        style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                                       class="summary-column" pReorderableRowHandle>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
@@ -115,7 +115,7 @@
                                     </td>
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back">
-                                    <th style="background-color: #fff !important;"></th>
+                                    <th class="background-white"></th>
                                     <th>PN</th>
                                     <th>PN Description </th>
                                     <th colspan="2">Stk Line Num</th>
@@ -355,9 +355,9 @@
                                     <td>
                                         {{ part.idNumber }}
                                     </td>
-                                    <td style="width:120px"
+                                    <td class="width-120"
                                         *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                        <div class="form-group notes-popup-cstm mat_emo"
+                                        <div class="form-group memo-popup-cstm mat_emo"
                                             style="width: 120px; display: inline-flex; margin-bottom: 0;">
                                             <div [innerHTML]="part.notes" class="text_editor_box"></div>
                                             <i class="fa fa-pencil" data-toggle="modal"
@@ -370,7 +370,7 @@
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         <div [innerHTML]="part.notes" class="text_editor_box"></div>
                                     </td>
-                                    <td class="zui-sticky-col" style="width:107px !important"
+                                    <td class="zui-sticky-col width-107"
                                         *ngIf="isViewMode == false">
                                         <span *ngIf="!isEditDisabled(salesQuote, part)">
                                             <a [class.disabled]="isEditDisabled(salesQuote, part)"
@@ -410,7 +410,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="48"
-                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                    style="color: red; font-weight: bold; text-transform: uppercase;margin-left:-15%">
                                     No records found
                                 </td>
                             </tr>
@@ -423,13 +423,13 @@
     <div #calendarWrapper>
     </div>
 </div>
-<div *ngIf="isViewMode == false" style="text-align:right; width:100%; padding-top:5px;">
-    <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary"
-        style="width:55px;height:20px;" (click)="approve()">
+<div *ngIf="isViewMode == false" class="part-buttons">
+    <button *ngIf="saveButton" type="button" [disabled]="canSaveParts" class="btn btn-primary part-number-button"
+        (click)="approve()">
         <span>Update</span>
     </button>
-    <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary"
-        style="width:55px;height:20px;" (click)="approve()">
+    <button type="button" *ngIf="!saveButton" [disabled]="canSaveParts" class="btn btn-primary part-number-button"
+        (click)="approve()">
         <span>Save</span>
     </button>
 </div>
@@ -438,12 +438,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit {{"Notes"}}</h4>
+                <h4 class="modal-title">Edit Notes</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
-                        <th style="color: #fff;">{{"Notes"}}</th>
+                        <th class="color-white">{{"Notes"}}</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -455,14 +455,16 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div style="float:right">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;"
+                </table> -->
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                required>
+            </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
                         data-dismiss="modal">
                         Close
                     </button>

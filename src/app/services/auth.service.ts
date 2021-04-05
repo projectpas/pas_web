@@ -93,7 +93,7 @@ private defaultEmployeeDetails= new Subject<any>()
     redirectLogoutUser() {
         let redirect = this.logoutRedirectUrl ? this.logoutRedirectUrl : this.loginUrl;
         this.logoutRedirectUrl = null;
-        window.location.href=redirect;
+        //window.location.href=redirect;
         this.router.navigate([redirect]);
     }
 
@@ -428,7 +428,7 @@ private defaultEmployeeDetails= new Subject<any>()
     }
 
     public async CheckSecurity(MenuInfo: BehaviorSubject<ModuleHierarchyMaster[]>, linkToCheck: string):Promise<Boolean> {
-        debugger;
+        
         let Menus =this.getModuleByUserRole();// MenuInfo.getValue();
         linkToCheck = linkToCheck.toLocaleLowerCase();
         let isAllowed:Boolean = false;
@@ -470,30 +470,25 @@ private defaultEmployeeDetails= new Subject<any>()
         return isAllowed;
       }
 
-      public ShowTab(moduleName:string, tabName: string):Boolean {
-        let Menus= this.getModuleByUserRole();
-        //alert(Menus);
+      public ShowTab(moduleName:string, tabName: string):Boolean {         
+        let Menus = this.getModuleByUserRole();
         tabName = tabName.toLocaleLowerCase();
-         let isAllowed:Boolean = false;
-
-         if(this.currentUser.userName!='admin'){
-        var parentModule=Menus.filter(function(value){
-            return value.Name==moduleName;
-        });
-
-        if(parentModule!=undefined){
-           
-            Menus.forEach(el => {
-                if(el.ParentID==parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3))
-                {
-                  isAllowed = true;
-                }
-              });
+        let isAllowed:Boolean = false;
+        if(this.currentUser.userName!='admin'){
+            var parentModule = Menus.filter(function(value){
+                return value.Name == moduleName;
+            });
+            if(parentModule!=undefined && parentModule.length > 0){           
+                Menus.forEach(el => {
+                    if(el.ParentID == parentModule[0].ID && el.Name.toLocaleLowerCase().indexOf(tabName) != -1 && (el.PermissionID==1||el.PermissionID==3)){                    
+                        isAllowed = true;
+                    }
+                });
+            }
         }
-    }
-    else{
-        isAllowed=true;
-    }
+        else {
+            isAllowed=true;
+        }
         return isAllowed;
       }
 }

@@ -86,7 +86,7 @@
                                 <div class="col">
 
                                 <span *ngIf="isDownload"><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export  Data" (click)="openTag1(export1)" ></button></span>
-                                <span *ngIf="isDownload"></span><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button></span>
+                                <span *ngIf="isDownload"><button *ngIf="isViewMode == false" type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="domestictable.exportCSV({selectionOnly:true})" ></button></span>
                                 <ng-template #export1 let-c="close" let-d="dismiss">
                                     <div class="modal-header">
                                         <h4 class="modal-title">Are You Sure Want to Download?</h4>
@@ -762,15 +762,35 @@
                         <div class="col-sm-12">
                             <div class="col-sm-4">
                                 <label> Primary </label>
-
                             </div>
                             <div class="col-sm-5">
                                 <input type="checkbox" checked id="isPrimary2" name="isPrimary2" [disabled]="editisPrimary==true" [(ngModel)]="domesticShippingInfo.isPrimary"
                                        (ngModelChange)="enableSave()">
                                 <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
-
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                              <label for="tag">Tag <span class="clr-red"></span></label>
+                            </div>
+                            <div class="col-sm-5">
+                              <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="domesticShippingInfo.tagName"
+                                (ngModelChange)="enableSave()" name="tag" field="tagName" [suggestions]="tagNamesList"
+                                (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                [inputStyle]="{ width: '100%' }" [forceSelection]="true" autocomplete="off">
+                              </p-autoComplete>
+                            </div>
+                        </div>   
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label>Attention<span class="clr-red"></span></label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="Attention11" 
+                                type="text" name="Attention111" [(ngModel)]="domesticShippingInfo.attention" 
+                                (ngModelChange)="enableSave()">
+                            </div>
+                        </div> 
                         <div class="col-sm-12">
                             <div class="col-sm-4">
                                 <label>Site Name <span class="clr-red"></span></label>
@@ -785,17 +805,7 @@
                                  </p-autoComplete>
                                <div *ngIf="showExistMsg" class="clr-red">Already Exists</div>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="col-sm-4">
-                                <label>Attention<span class="clr-red"></span></label>
-                            </div>
-                            <div class="col-sm-5">
-                                <input class="form-control" id="Attention11" 
-                                type="text" name="Attention111" [(ngModel)]="domesticShippingInfo.attention" 
-                                (ngModelChange)="enableSave()">
-                            </div>
-                        </div>
+                        </div>                        
                         <div class="col-sm-12">
                             <div class="col-sm-4">
                                 <label>Address 1 <span class="clr-red">*</span></label>

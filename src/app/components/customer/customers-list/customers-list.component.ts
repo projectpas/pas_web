@@ -189,6 +189,7 @@ export class CustomersListComponent implements OnInit {
     isActive:boolean=true;
     isDelete: boolean = true;
     isDownload:boolean=true;
+    isDocumentview:boolean=true;
     permissionAddCheck=[ModuleConstants.Customer+'.'+PermissionConstants.Add,
         ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add,
         ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add,
@@ -231,6 +232,7 @@ export class CustomersListComponent implements OnInit {
         this.isActive=this.authService.checkPermission([ModuleConstants.Customer+'.'+PermissionConstants.Update]);
         this.isDelete=this.authService.checkPermission([ModuleConstants.Customer+'.'+PermissionConstants.Delete]);
         this.isDownload=this.authService.checkPermission([ModuleConstants.CustomerList+'.'+PermissionConstants.Download]);
+        this.isDocumentview=this.authService.checkPermission([ModuleConstants.Customers_Documents+'.'+PermissionConstants.View]);
     }
 
     ngOnInit() {

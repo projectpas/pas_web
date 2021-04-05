@@ -79,8 +79,8 @@ export class WorkOrderService {
     getWorkFlowByPNandScope(itemMasterId, workScopeId) {
         return this.workOrderEndpointService.getWorkFlowByPNandScope(itemMasterId, workScopeId)
     }
-    getNTEandSTDByItemMasterId(itemMasterId, workScopeName) {
-        return this.workOrderEndpointService.getNTEandSTDByItemMasterId(itemMasterId, workScopeName)
+    getNTEandSTDByItemMasterId(itemMasterId, workScopeId) {
+        return this.workOrderEndpointService.getNTEandSTDByItemMasterId(itemMasterId, workScopeId)
     }
 
     getMultipleParts() {
@@ -277,7 +277,9 @@ export class WorkOrderService {
     getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId) {
         return this.workOrderEndpointService.getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId);
     }
-
+    searchPartNumberAdvanced(parameters){
+        return this.workOrderEndpointService.searchPartNumberAdvanced(parameters);
+    }
     getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId) {
         return this.workOrderEndpointService.getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId);
     }
@@ -573,11 +575,21 @@ export class WorkOrderService {
     releaseAssetInventoryList(AssetData){
         return this.workOrderEndpointService.releaseAssetInventoryList(AssetData);
     }
+    releasesubwocheckoutinventory(AssetData){
+        return this.workOrderEndpointService.releasesubwocheckoutinventory(AssetData);
+    }
+    
     saveCheckOutInventory(AssetData) {
         return this.workOrderEndpointService.saveCheckOutInventory(AssetData);
     }
     saveCheckInInventory(AssetData){
         return this.workOrderEndpointService.saveCheckInInventory(AssetData);
+    }
+    savesubwocheckoutinventory(AssetData){
+        return this.workOrderEndpointService.savesubwocheckoutinventory(AssetData);
+    }
+    savesubwocheckininventory(AssetData){
+        return this.workOrderEndpointService.savesubwocheckininventory(AssetData);
     }
     getWoAssetInventoryHistory(workOrderAssetId){
         return this.workOrderEndpointService.getWoAssetInventoryHistory(workOrderAssetId);

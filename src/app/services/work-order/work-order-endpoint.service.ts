@@ -155,9 +155,9 @@ export class WorkOrderEndpointService extends EndpointFactory {
           });
     }
 
-    getNTEandSTDByItemMasterId(itemMasterId, workScopeName) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/ntestdvalues?itemMasterId=${itemMasterId}&workScope=${workScopeName}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getNTEandSTDByItemMasterId(itemMasterId, workScopeName));
+    getNTEandSTDByItemMasterId(itemMasterId, workScopeId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/ntestdvalues?itemMasterId=${itemMasterId}&workScopeId=${workScopeId}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getNTEandSTDByItemMasterId(itemMasterId, workScopeId));
           });
     }
 
@@ -658,6 +658,13 @@ export class WorkOrderEndpointService extends EndpointFactory {
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/updatebillinginvoicing`, JSON.stringify(data), this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.updateBillingByWorkOrderId(data));
         });
+    }
+
+    searchPartNumberAdvanced<T>(searchParameters: any): Observable<T> {
+        return this.http.post<T>(`${this.configurations.baseUrl}/api/workorder/searchpartnumberbycustrestriction`, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.searchPartNumberAdvanced(searchParameters));
+            })
     }
     getExistingWOROList() {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderrolist`, this.getRequestHeaders()).catch(error => {
@@ -1203,7 +1210,7 @@ reserveSubWoAltPartData(data){
 
         if(isSubworkOrder)
         {
-            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwoassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}&subWorkOrderId=${subWorkOrderId}&workOrderId=${workOrderId}&subWOPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
+            return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subwoassetinventorylist?subWorkOrderAssetId=${workOrderAssetId}&subWorkOrderId=${subWorkOrderId}&subWOPartNoId=${woPartNoId}&assetRecordId=${assetRecordId}&createdBy=${createdBy}&masterCompanyId=${masterCompanyId}`).catch(error => {
                 return this.handleErrorCommon(error, () => this.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder));
             });
         }else
@@ -1220,6 +1227,11 @@ reserveSubWoAltPartData(data){
             return this.handleErrorCommon(error, () => this.releaseAssetInventoryList(AssetData));
         });
     }
+    releasesubwocheckoutinventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/releasesubwocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.releasesubwocheckoutinventory(AssetData));
+        });
+    }
     saveCheckOutInventory(AssetData){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savewocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.saveCheckOutInventory(AssetData));
@@ -1228,6 +1240,16 @@ reserveSubWoAltPartData(data){
     saveCheckInInventory(AssetData){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savewocheckininventory`, AssetData, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.saveCheckInInventory(AssetData));
+        });
+    }
+    savesubwocheckoutinventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savesubwocheckoutinventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.savesubwocheckoutinventory(AssetData));
+        });
+    }
+    savesubwocheckininventory(AssetData){
+        return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savesubwocheckininventory`, AssetData, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.savesubwocheckininventory(AssetData));
         });
     }
     getWoAssetInventoryHistory(workOrderAssetId){

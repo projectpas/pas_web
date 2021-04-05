@@ -4147,6 +4147,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             field.SP_CalSPByPP_LastSalesDiscDate = ''; //new Date();
             field.SP_CalSPByPP_UnitSalePrice = '0.00';
             field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
+            field.SP_CalSPByPP_UnitSalePrice = field.SP_FSP_FXRatePerc ? formatNumberAsGlobalSettingsModule(field.SP_FSP_FXRatePerc, 2) : '0.00';            
         } 
         else if(field.SalePriceSelectId == 2) {
             field.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
@@ -5136,8 +5137,18 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         field.PP_VendorListPrice = vendorListPrice ? formatNumberAsGlobalSettingsModule(vendorListPrice, 2) : '0.00';
     }
 
-    onChangeFlatPriceAmt(field) {
+    onChangeFXRate(SP_FSP_FXRatePerc,field) {        
+        //field.SP_FSP_FXRatePerc = SP_FSP_FXRatePerc ? formatNumberAsGlobalSettingsModule(SP_FSP_FXRatePerc, 5) : '0.00000';                              
+        if(field.SP_FSP_FlatPriceAmount == 0.00)
+            field.SP_CalSPByPP_UnitSalePrice = field.SP_FSP_FXRatePerc ? formatNumberAsGlobalSettingsModule(field.SP_FSP_FXRatePerc, 2) : '0.00';                    
+    }
+
+    onChangeFlatPriceAmt(field) {               
         field.SP_FSP_FlatPriceAmount = field.SP_FSP_FlatPriceAmount ? formatNumberAsGlobalSettingsModule(field.SP_FSP_FlatPriceAmount, 2) : '0.00';
+        if(field.SP_FSP_FlatPriceAmount == 0.00 && field.SP_FSP_FXRatePerc > 0)
+            field.SP_CalSPByPP_UnitSalePrice = field.SP_FSP_FXRatePerc ? formatNumberAsGlobalSettingsModule(field.SP_FSP_FXRatePerc, 2) : '0.00';
+        else
+            field.SP_CalSPByPP_UnitSalePrice = field.SP_FSP_FlatPriceAmount ? formatNumberAsGlobalSettingsModule(field.SP_FSP_FlatPriceAmount, 2) : '0.00';
     }
 
     getPercentValueSPUsingPP(field) {
@@ -5157,7 +5168,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             field.SP_CalSPByPP_SaleDiscAmount = saleDiscAmount ? formatNumberAsGlobalSettingsModule(saleDiscAmount, 2) : '0.00';
             field.SP_CalSPByPP_UnitSalePrice = unitSalePrice ? formatNumberAsGlobalSettingsModule(unitSalePrice, 2) : '0.00';
             
-        }
+        }        
     }
     
     atasubchapterValues = [];

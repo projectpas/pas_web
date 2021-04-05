@@ -722,6 +722,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 				this.isLockBox = false;
 				this.lockboxing = {
 					...this.lockboxing,
+					bankName: res[0].bankName,
+					bankAccountNumber: res[0].bankAccountNumber,
 					payeeName: res[0].payeeName,
 					poBox: res[0].poBox,
 					bankStreetaddress1: res[0].address1,
@@ -995,6 +997,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 					this.errorMessageHandler(errorLog);
 				});
 			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Bank Account Number', field: 'bankAccountNumber' },
 				{ header: 'Payee Name', field: 'payeeName' },
 				{ header: 'PO Box', field: 'poBox' },
 				{ header: 'Street Address Line 1', field: 'line1' },

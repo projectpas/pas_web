@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Params, ActivatedRoute } from '@angular/router';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-ata',
@@ -77,6 +78,15 @@ export class CustomerATAInformationComponent implements OnInit {
     stopmulticlicks: boolean;
     loaderForATA = true;
     auditHistory1: any;
+    isAtaAdd:Boolean=true;
+    isAtaEdit:Boolean=true;
+    isAtaDelete:Boolean=true;
+    isAtaDownload:Boolean=true;
+    isAircraftAdd:Boolean=true;
+    isAircraftEdit:Boolean=true;
+    isFinancialInfoAdd:Boolean=true;
+    isFinancialInfoEdit:Boolean=true;
+   
     constructor(
         private atasubchapter1service: AtaSubChapter1Service,
         private atamain: AtaMainService,
@@ -90,6 +100,18 @@ export class CustomerATAInformationComponent implements OnInit {
     ) {
         this.stopmulticlicks = false;
         this.id = this.router.snapshot.params['id'];
+        this.isAtaAdd=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Add])
+        this.isAtaEdit=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])
+        this.isAtaDelete=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Update])
+        this.isAtaDownload=this.authService.checkPermission([ModuleConstants.Customers_ATAChapter+'.'+PermissionConstants.Download])
+
+        // Next
+        this.isFinancialInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add])
+        this.isFinancialInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update])
+        //Previous
+        this.isAircraftAdd=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Add])
+        this.isAircraftEdit=this.authService.checkPermission([ModuleConstants.Customers_AircraftInformation+'.'+PermissionConstants.Update])
+        
     }
 
     ngOnInit() {

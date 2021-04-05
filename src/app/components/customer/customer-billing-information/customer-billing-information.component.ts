@@ -91,6 +91,12 @@ export class CustomerBillingInformationComponent {
     isAdd:boolean=true;
     isEdit:boolean=true;
     isDelete:boolean=true;
+    isDownload:boolean=true;
+    isFinancialInfoAdd:boolean=true;
+    isFinancialInfoEdit:boolean=true;
+    isShippingInfoAdd:boolean=true;
+    isShippingInfoEdit:boolean=true;
+    
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
         private activeModal: NgbActiveModal,
@@ -100,8 +106,15 @@ export class CustomerBillingInformationComponent {
         {
             this.id = this.router.snapshot.params['id'];
             this.isAdd=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Add])
-		this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
-		this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Delete])
+		    this.isEdit=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Update])
+            this.isDelete=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Delete])
+            this.isDownload=this.authService.checkPermission([ModuleConstants.Customers_BillingInformation+'.'+PermissionConstants.Download])
+            // Next
+            this.isShippingInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
+            this.isShippingInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])           
+            //Previous
+            this.isFinancialInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Add])
+            this.isFinancialInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_FinancialInformation+'.'+PermissionConstants.Update])
         }
 
     ngOnInit(): void {

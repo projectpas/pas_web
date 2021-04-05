@@ -12,6 +12,7 @@ import { CommonService } from '../../../services/common.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { any } from 'underscore';
 import { ActivatedRoute } from '@angular/router';
+import { PermissionConstants, ModuleConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-customer-sales-person',
@@ -73,6 +74,14 @@ export class CustomerSalesPersonComponent implements OnInit {
     SSPinfo = [];
     CSRinfo = [];
     Agentinfo = [];
+    isSalesPersonInfoAdd:boolean=true;
+    isSalesPersonInfoEdit:boolean=true;
+    isSalesPersonInfoDelete:boolean=true;
+    isAddDomestic:boolean=true;
+    isUpdateDomestic:boolean=true;
+    isWarningAdd:boolean=true;
+    isWarningUpdate:boolean=true;
+
     constructor(public vendorservice: VendorService, public customerService: CustomerService, 
         public employeeService: EmployeeService,
         private commonService: CommonService,
@@ -83,6 +92,15 @@ export class CustomerSalesPersonComponent implements OnInit {
         private router: ActivatedRoute
     ) {
         this.id = this.router.snapshot.params['id'];
+        this.isSalesPersonInfoAdd=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Add])
+        this.isSalesPersonInfoEdit=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Update])
+        this.isSalesPersonInfoDelete=this.authService.checkPermission([ModuleConstants.Customers_SalesPersonInformation+'.'+PermissionConstants.Delete])
+        // Next
+        this.isWarningAdd=this.authService.checkPermission([ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Add])
+		this.isWarningUpdate=this.authService.checkPermission([ModuleConstants.Customers_Warnings+'.'+PermissionConstants.Update])              
+        //Previous
+        this.isAddDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Add])
+		this.isUpdateDomestic=this.authService.checkPermission([ModuleConstants.Customers_ShippingInformation+'.'+PermissionConstants.Update])
     }
 
     ngOnInit() {

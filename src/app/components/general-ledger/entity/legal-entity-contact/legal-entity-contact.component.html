@@ -706,10 +706,15 @@ col.field == 'createdDate'?
                                 <label>First Name <span class="clr-red">*</span></label>
                                 <div class="inner-addon right-addon inline-block input-width-100-percent">
                                     <p-autoComplete class="autocomp-customer-cstm"
-                                        [(ngModel)]="contactInformation.firstName" name="firstName" field="label"
-                                        [suggestions]="firstNamesList" (completeMethod)="filterFirstNames($event)"
-                                        [size]="30" [minLength]="1" [dropdown]="true" [inputStyle]="{'width': '100%'}"
-                                        (onSelect)="onFirstNameSelected()" required (ngModelChange)="enableSave()"
+                                        [(ngModel)]="contactInformation.firstName" 
+                                        name="firstName" field="label"
+                                        [suggestions]="firstNamesList" 
+                                        (completeMethod)="filterFirstNames($event)"
+                                        [size]="30" [minLength]="1" 
+                                        [dropdown]="true" [inputStyle]="{'width': '100%'}"
+                                        (onSelect)="onFirstNameSelected()"
+                                        required 
+                                        (ngModelChange)="enableSave()"
                                         value="" autocomplete="new-password">
                                     </p-autoComplete>
                                 </div>

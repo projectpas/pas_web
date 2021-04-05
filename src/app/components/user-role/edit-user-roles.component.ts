@@ -8,6 +8,7 @@ import { ModuleHierarchyMaster, UserRole, RolePermission, User, PermissionMaster
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
 import { roleModulesEnum } from '../../enum/rolemodules.enum';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'edit-app-roles',
@@ -26,8 +27,9 @@ export class EditUserRolesComponent implements OnInit {
     public userRoles: UserRole[] = [];
     public permissionMaster: PermissionMaster[];
     isSpinnerVisible: Boolean = true;
-    constructor(private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
-
+    id: number;
+    constructor(private router: ActivatedRoute,private messageService: MessageService, private authService: AuthService, private alertService: AlertService, private userRoleService: UserRoleService) {
+        this.id = this.router.snapshot.params['id'];
     }
 
     ngOnInit(): void {
@@ -39,6 +41,18 @@ export class EditUserRolesComponent implements OnInit {
         this.pages = [];
         this.currentUserRole.id = 0;
         this.isSpinnerVisible = false;
+        if (this.id > 0) {
+            this.currentUserRole.id = this.id;
+            setTimeout(() => {
+                this.userRoleChanged();
+            },1500);
+        }
+    }
+
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     getAllModuleHierarchies(): void {
@@ -140,7 +154,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     getAllUserRoles() {
-        return this.userRoleService.getAllUserRole().subscribe(result => {
+        return this.userRoleService.getAllUserRole(this.currentUserMasterCompanyId).subscribe(result => {
             this.userRoles = result[0];
         });
     }
@@ -243,7 +257,7 @@ export class EditUserRolesComponent implements OnInit {
             case 1:
                 val.rolePermission.canAdd = value;
                 break;
-            case 2:
+            case 2:                
                 val.rolePermission.canView = value;
                 break;
             case 3:
@@ -308,8 +322,7 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     permissionChecked(event, currentModule: ModuleHierarchyMaster, type: string): void {
-        var value = event.target.checked;
-        
+        var value = event.target.checked;        
         if (value == false) {
             this.setPermissionByType(currentModule, type, value);
             if (currentModule.parentId != null)
@@ -474,9 +487,9 @@ export class EditUserRolesComponent implements OnInit {
     UpdateUserRole(): void {
         this.isSpinnerVisible=true;
         this.currentUserRole.rolePermissions=this.currentUserRole.rolePermissions.map(x=>{
-            x.userRoleId=this.currentUserRole.id;
+            x.userRoleId = this.currentUserRole.id;
             return x;
-        })
+        })        
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);
@@ -489,7 +502,7 @@ export class EditUserRolesComponent implements OnInit {
                 this.currentUserRole.id = roleId;
                 this.currentUserRole.rolePermissions = [];
                 this.pages = [];
-                this.userRoleService.getAllUserRole().subscribe(result => {
+                this.userRoleService.getAllUserRole(this.currentUserMasterCompanyId).subscribe(result => {
                     this.userRoles = result[0];
                     this.userRoleChanged();
                 });
@@ -515,11 +528,7 @@ export class EditUserRolesComponent implements OnInit {
             return (module.id == parentId && module.hasChildren == true);
         })[0];        
         this.setPermissionByType(parentModule, type, true);                        
-        if(currentModule.rolePermission.permissionID == 1 || currentModule.rolePermission.permissionID == 2 || currentModule.rolePermission.permissionID == 3 || currentModule.rolePermission.permissionID == 4){
-            // var rolePermissionData=Object.assign({}, currentModule.rolePermission);
-            // rolePermissionData.permissionID=2;
-            // rolePermissionData.moduleHierarchyMasterId = currentModule.id;
-            //this.currentUserRole.rolePermissions.push(rolePermissionData);
+        if(currentModule.rolePermission.permissionID == 1 || currentModule.rolePermission.permissionID == 2 || currentModule.rolePermission.permissionID == 3 || currentModule.rolePermission.permissionID == 4){           
             this.setCorrospondingValue(parentModule,2,true);  
         }
     }

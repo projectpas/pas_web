@@ -62,6 +62,20 @@
                                                     </h6><br>
                                                     <div class="col-md-3 col-lg-3">
                                                         <div class="form-group">
+                                                            <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
+                                                             <input type="text" (ngModelChange)="getmemo()" #bankbenf="ngModel" 
+                                                             class="form-control" name="BankName" [ngModelOptions]="{standalone: true}" 
+                                                             [(ngModel)]="sourceLegalEntity.bankName" value="" required autocomplete="new-password">                                                              
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
+                                                            <input type="text"                                                     
+                                                            (ngModelChange)="getmemo()"  class="form-control"   
+                                                            name="AccountNumber" [ngModelOptions]="{standalone: true}" 
+                                                            [(ngModel)]="sourceLegalEntity.bankAccountNumber" required value="" 
+                                                            autocomplete="new-password">  
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label class="lable-Adjust">Payee Name<span class="clr-red"></span></label>
                                                             <input type="text" class="form-control" (ngModelChange)="getmemo()" name="poBox" [ngModelOptions]="{standalone: true}" 
                                                             [(ngModel)]="sourceLegalEntity.payeeName" value="" autocomplete="new-password">
@@ -120,7 +134,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <button type="submit" class="btn btn-primary" [disabled]="!locksave"
+                                                            <button type="submit" class="btn btn-primary" [disabled]="!locksave 
+                                                            || !sourceLegalEntity.bankName 
+                                                            || !sourceLegalEntity.bankAccountNumber
+                                                            || !sourceLegalEntity.bankStreetaddress1
+                                                            || !sourceLegalEntity.bankCity
+                                                            || !sourceLegalEntity.bankProvince
+                                                            || !sourceLegalEntity.bankcountryId
+                                                            || !sourceLegalEntity.bankpostalCode"
                                                              (click)="savebanklockingbox()">
                                                              {{ !isLockBox ? 'Update' : 'Save' }}</button>
                                                         </div>
@@ -461,7 +482,7 @@
                                                             <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='glAccount' && audit.field!='payeeName' &&  audit.field!='intermediaryBank' && audit.field!='beneficiaryBank' &&  audit.field!='poBox' && audit.field!='line2' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>                                                                        
+                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='swiftCode' &&  audit.field!='beneficiaryBankName' &&  audit.field!='intermediateBankName' && audit.field!='glAccount' && audit.field!='payeeName' &&  audit.field!='intermediaryBank' && audit.field!='beneficiaryBank' &&  audit.field!='poBox' && audit.field!='line2' && audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>                                                                        
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody *ngIf="auditHistory.length> 0">
