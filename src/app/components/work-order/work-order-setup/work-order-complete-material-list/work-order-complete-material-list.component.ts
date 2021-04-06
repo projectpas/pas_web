@@ -60,9 +60,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     interTotalPages: number = 0;
     isSpinnerVisibleReserve:boolean=false;
     cols = [
-        { field: 'taskName', header: 'Task' ,align: 0},
-        { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0},
-        { field: 'line', header: 'Line Num' ,align: 0,width:"64px"},
+        { field: 'taskName', header: 'Task' ,align: 0}, 
+        { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"60px"},
+        { field: 'line', header: 'Line Num' ,align: 0,width:"60px"},
         { field: 'partNumber', header: 'PN' ,align: 0},
         { field: 'partDescription', header: 'PN Description' ,align: 0},
         { field: 'serialNumber', header: 'Serial Num',align: 0 },
@@ -86,7 +86,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'needDate', header: 'Need Date',align: 0 },
         { field: 'controlNo', header: 'Cntl Num' ,align: 0},
         { field: 'controlId', header: 'Cntl ID',align: 0 },
-        { field: 'currency', header: 'Cur' ,align: 1},
+        { field: 'currency', header: 'Cur' ,align: 1,width:"60px"},
         { field: 'unitCost', header: 'Unit Cost', align: 1 ,width:"60px"},
         { field: 'extendedCost', header: 'Extended Cost', align: 1 ,width:"60px"},
         { field: 'costDate', header: 'Cost Date',align: 0 },

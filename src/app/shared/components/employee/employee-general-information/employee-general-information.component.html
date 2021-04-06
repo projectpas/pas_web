@@ -12,9 +12,18 @@
                                     <div class="form-row">
                                         <div class="col-md-3">
                                             <div class="form-group">
+                                                <label>User Name <span class="clr-red">*</span></label>
+                                                <input class="form-control" type="text" name="userName" [attr.disabled]="isEditContent==true?true:null" [formControl]="empCreationForm.controls['userName']" [(ngModel)]="sourceEmployee.userName" value="" autocomplete="new-password" required>
+                                                <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="userName.errors.required">
+                                                        <small> User Name is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label>First Name <span class="clr-red">*</span></label>
                                                 <p-autoComplete field="firstName" class="pautocomp-cstm"
-                                                                [(ngModel)]="sourceEmployee.firstName" (ngModelChange)="enableSave()" name="firstName" [suggestions]="firstCollection" (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1" [dropdown]="true" #firstName="ngModel" required>
+                                                                [(ngModel)]="sourceEmployee.firstName" (ngModelChange)="enableSave()" name="firstName" [suggestions]="firstCollection" (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1" [dropdown]="true" #firstName="ngModel" value="" autocomplete="new-password" required>
                                                 </p-autoComplete>
                                                 <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="firstName.errors.required">
@@ -25,13 +34,13 @@
                                             <div class="form-group">
                                                 <label>Middle Name</label>
                                                 <p-autoComplete field="middleName" class="pautocomp-cstm"
-                                                                [(ngModel)]="sourceEmployee.middleName" (ngModelChange)="enableSave()" name="middleName" [suggestions]="middleNameCollection" (completeMethod)="filtermiddleName($event)" [size]="30" [minLength]="1" [dropdown]="true">
+                                                                [(ngModel)]="sourceEmployee.middleName" (ngModelChange)="enableSave()" name="middleName" [suggestions]="middleNameCollection" (completeMethod)="filtermiddleName($event)" [size]="30" [minLength]="1" [dropdown]="true" value="" autocomplete="new-password">
                                                 </p-autoComplete>
                                             </div>
                                             <div class="form-group">
                                                 <label>Last Name <span class="clr-red">*</span></label>
                                                 <p-autoComplete field="lastName" class="pautocomp-cstm"
-                                                                [(ngModel)]="sourceEmployee.lastName" (ngModelChange)="enableSave()" name="lastName" [suggestions]="lastNameCollection" (completeMethod)="filterlastName($event)" [size]="30" [minLength]="1" [dropdown]="true" #lastName="ngModel" required>
+                                                                [(ngModel)]="sourceEmployee.lastName" (ngModelChange)="enableSave()" name="lastName" [suggestions]="lastNameCollection" (completeMethod)="filterlastName($event)" [size]="30" [minLength]="1" [dropdown]="true" #lastName="ngModel" value="" autocomplete="new-password" required>
                                                 </p-autoComplete>
                                                 <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="lastName.errors.required">
@@ -43,11 +52,7 @@
                                             <div class="form-group">
                                                 <label>Emp ID <span class="clr-red">*</span></label>
                                                 <input #sourceEmpID="ngModel" class="form-control" type="text" name="employeeIdTemp" [(ngModel)]="employeeIdTemp" disabled>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Emp ID (Per Payroll)</label>
-                                                <input class="form-control" type="text" (ngModelChange)="enableSave()" name="employeeIdAsPerPayroll" [(ngModel)]="sourceEmployee.employeeIdAsPerPayroll">
-                                            </div>
+                                            </div>                                            
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
@@ -82,6 +87,23 @@
                                                     <option value="0">-- Select --</option>
                                                     <option *ngFor="let statio of getAllAllStationInfodrpData" [ngValue]="statio.value">{{statio.label}}</option>
                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email<span class="clr-red">*</span></label>
+                                                <input class="form-control" type="text" name="email" [attr.disabled]="isEditContent==true?true:null" [formControl]="empCreationForm.controls['email']" [(ngModel)]="sourceEmployee.email"  required>
+                                            </div>
+                                            <div *ngIf="empCreationForm.controls['email'].invalid && (empCreationForm.controls['email'].dirty || empCreationForm.controls['email'].touched)" class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="empCreationForm.controls['email'].errors.required">
+                                                    <small> Email is required </small>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="empCreationForm.controls['email'].errors?.pattern &&
+                                                        empCreationForm.controls['email'].touched" class="alert alert-danger alert-danger-cstm">                                               
+                                                    <small> Enter Valid email  </small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Emp ID (Per Payroll)</label>
+                                                <input class="form-control" type="text" (ngModelChange)="enableSave()" name="employeeIdAsPerPayroll" [(ngModel)]="sourceEmployee.employeeIdAsPerPayroll" value="" autocomplete="new-password">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -175,7 +197,7 @@
                                                     (keypress)="patternMobilevalidationWithSpl($event)"
                                                     [(ngModel)]="sourceEmployee.mobilePhone"
                                                     (ngModelChange)="enableSave()"                              
-                                                     />                                                  
+                                                    value="" autocomplete="new-password" />                                                  
                                                 </div>
                                                 <div *ngIf="mobilePhone.errors" [ngClass]="'error'">
                                                     <div *ngIf="mobilePhone.errors.pattern">
@@ -201,7 +223,7 @@
                                                     (keypress)="patternMobilevalidationWithSpl($event)"
                                                     [(ngModel)]="sourceEmployee.workPhone"
                                                     (ngModelChange)="enableSave()"                              
-                                                     />                                                  
+                                                    value="" autocomplete="new-password" />                                                  
                                                 </div>
                                                 <div *ngIf="workPhone.errors" [ngClass]="'error'">
                                                     <div *ngIf="workPhone.errors.pattern">
@@ -212,21 +234,13 @@
                                             <div class="form-group">
                                                 <label>Fax</label>
                                                 <div class="inner-addon right-addon inline-block">
-                                                    <input class="form-control" (ngModelChange)="enableSave()" (keypress)="patternMobilevalidationWithSpl($event)"  type="text" name="fax" [(ngModel)]="sourceEmployee.fax">
+                                                    <input class="form-control" (ngModelChange)="enableSave()" (keypress)="patternMobilevalidationWithSpl($event)"  type="text" name="fax" [(ngModel)]="sourceEmployee.fax" value="" autocomplete="new-password">
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Email</label>
-                                                <input class="form-control" type="text" name="email" [formControl]="empCreationForm.controls['email']" [(ngModel)]="sourceEmployee.email">
-                                            </div>
-                                            <div *ngIf="empCreationForm.controls['email'].errors?.pattern &&
-                                                        empCreationForm.controls['email'].touched" class="alert alert-danger alert-danger-cstm">                                               
-                                                    <small> Enter Valid email  </small>
-                                            </div>                                            
+                                            </div>                                                                                       
                                             <div class="form-group">
                                                 <label>SS#</label>
                                                 <div class="inner-addon right-addon inline-block">
-                                                    <input class="form-control" (ngModelChange)="enableSave()" type="text" name="ssn" [(ngModel)]="sourceEmployee.ssn">
+                                                    <input class="form-control" (ngModelChange)="enableSave()" type="text" name="ssn" [(ngModel)]="sourceEmployee.ssn" value="" autocomplete="new-password">
                                                 </div>
                                             </div>
                                         </div>
@@ -290,7 +304,7 @@
                                                         <input class="form-control amount pay-align" (ngModelChange)="enableSave()" 
                                                         type="text" pInputText pKeyFilter="pnum" maxlength="10" name="hourlyPay" 
                                                         (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  
-                                                      >
+                                                        value="" autocomplete="new-password">
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-12 salarypay-block" *ngIf="yearly">
@@ -299,7 +313,7 @@
                                                         <input class="form-control amount pay-align" (ngModelChange)="enableSave()" 
                                                         type="text" pInputText pKeyFilter="pnum" maxlength="10"  name="monthlyPay" 
                                                         (change)="formateNumber(sourceEmployee)" [(ngModel)]="sourceEmployee.hourlyPay"  
-                                                         >
+                                                        value="" autocomplete="new-password">
                                                     </div>
                                                 </div>
                                             </div>

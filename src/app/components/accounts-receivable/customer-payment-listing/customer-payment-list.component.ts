@@ -5,6 +5,7 @@ import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { ICustomerInvoiceSearchParameters } from '../../../models/sales/ICustomerInvoiceSearchParameters';
 import { CustomerInvoiceSearchParameters } from '../../../models/sales/CustomerInvoiceSearchParameters';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-customer-payment-list',
@@ -28,7 +29,8 @@ export class CustomerPaymentListComponent {
     isSpinnerVisible: boolean = false;
     currentStatus: any;
 
-    constructor(private customerService: CustomerService) {
+    constructor(private customerService: CustomerService,
+        private router: Router) {
     }
 
     ngOnInit() {
@@ -44,7 +46,7 @@ export class CustomerPaymentListComponent {
 
     initColumns() {
         this.headers = [
-            { field: "receiptID", header: "Receipt No", width: "130px" },
+            { field: "receiptNo", header: "Receipt No", width: "130px" },
             { field: "status", header: "Status", width: "180px" },
             { field: "bankAcct", header: "Bank Acct", width: "130px" },
             { field: "openDate", header: "Open Date", width: "130px" },
@@ -132,20 +134,33 @@ export class CustomerPaymentListComponent {
     onPaging(event, globalFilter = "") {
         event.filters.statusId = this.currentStatus;
         this.searchParameters.first = parseInt(event.first) / event.rows;
-    
+
         this.searchParameters.rows = event.rows;
-    
+
         this.searchParameters.sortOrder = event.sortOrder;
         this.searchParameters.sortField = event.sortField;
         this.lazyLoadEventData = event;
-    
+
         this.searchParameters.filters = listSearchFilterObjectCreation(
-          event.filters
+            event.filters
         );
         this.searchParameters.filters = {
-          ...this.searchParameters.filters
+            ...this.searchParameters.filters
         }
-    
+
         this.searchParameters.globalFilter = globalFilter;
-      }
+    }
+
+    openOrderToEdit(row) {
+        this.isSpinnerVisible = true;
+        let receiptId = row.receiptID;
+        this.router.navigateByUrl(
+            `accountreceivable/accountreceivablepages/process-customer-payment/${receiptId}`
+        );
+    }
+
+    viewSelectedRow(viewOrder, rowData) {
+    }
+
+    getAuditHistoryById(soHistory, rowData) { }
 }

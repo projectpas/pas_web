@@ -198,7 +198,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
             field: 'stage'
         }, {
             header: 'Scope',
-            field: 'scope'
+            field: 'scope',
+            width:"60px",
         }, {
             header: 'Parts Cost',
             field: 'partsCost'
