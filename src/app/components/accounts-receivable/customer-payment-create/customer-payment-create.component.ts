@@ -1,15 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import {
-  NgForm,
-  FormGroup
+  NgForm
 } from "@angular/forms";
 import { Customer } from "../../../models/customer.model";
 import { AlertService, MessageSeverity } from "../../../services/alert.service";
 import { ActivatedRoute } from "@angular/router";
-import { ISalesOrder } from "../../../models/sales/ISalesOrder.model";
-import { ISalesOrderQuote } from "../../../models/sales/ISalesOrderQuote";
-import { ISalesQuoteView } from "../../../models/sales/ISalesQuoteView";
-import { ISalesOrderView } from "../../../models/sales/ISalesOrderView";
 import { CommonService } from "../../../services/common.service";
 import { CurrencyService } from "../../../services/currency.service";
 import { EmployeeService } from "../../../services/employee.service";
@@ -28,22 +23,10 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerSearchQuery } from "../../sales/quotes/models/customer-search-query";
 import { MarginSummary } from "../../../models/sales/MarginSummaryForSalesorder";
-import { SalesOrderFreightComponent } from "../../sales/order/shared/components/sales-order-freight/sales-order-freight.component";
-import { SalesOrderChargesComponent } from "../../sales/order/shared/components/sales-order-charges/sales-order-charges.component";
 import { ManagementStructureComponent } from "../../sales/quotes/shared/components/management-structure/management-structure.component";
-import { SalesOrderPartNumberComponent } from "../../sales/order/shared/components/sales-order-part-number/sales-order-part-number.component";
-import { SalesAddressComponent } from "../../sales/quotes/shared/components/sales-address/sales-address.component";
 import { SalesOrderConfirmationModalComponent } from "../../sales/order/sales-order-confirmation-modal/sales-order-confirmation-modal.compoent";
-import { SalesOrderBillingComponent } from "../../sales/order/shared/components/sales-order-billing/sales-order-billing.component";
-import { SalesOrderShippingComponent } from "../../sales/order/shared/components/sales-order-shipping/sales-order-shipping.component";
-import { SalesOrderAnalysisComponent } from "../../sales/order/sales-order-analysis/sales-order-analysis.component";
-import { SalesOrderPickTicketsComponent } from "../../sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 import { SalesOrderApproveComponent } from "../../sales/order/shared/components/sales-approve/sales-approve.component";
 import { SalesOrderCustomerApprovalComponent } from "../../sales/order/shared/components/sales-order-customer-approval/sales-order-customer-approval.component";
-import { ISalesOrderCopyParameters } from "../../sales/order/models/isalesorder-copy-parameters";
-import { PartDetail } from "../../sales/shared/models/part-detail";
-import { CustomerViewComponent } from "../../../shared/components/customer/customer-view/customer-view.component";
-import { IStatus } from "../../../models/sales/IStatus";
 import { ICustomerPayments } from "../../../models/sales/ICustomerPayments";
 import { CustomerPayments } from "../../../models/sales/CustomerPayments.model";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
@@ -55,8 +38,6 @@ import { CustomerPaymentsService } from "../../../services/customer-payment.serv
 })
 
 export class CustomerPaymentCreateComponent implements OnInit {
-  SalesOrderId: any;
-  salesCreateHeaderOrderId: number;
   query: CustomerSearchQuery;
   customers: Customer[];
   totalRecords: number = 0;
@@ -64,31 +45,13 @@ export class CustomerPaymentCreateComponent implements OnInit {
   showPaginator: boolean = false;
   customerId: number;
   customerPayment: any = {};
-  defaultSettingPriority;
-  soSettingsList: any = [];
   salesOrder: ICustomerPayments;
   customerDetails: any;
-  salesOrderQuote: ISalesOrderQuote;
   enableUpdateButton = true;
-  salesOrderQuoteObj: ISalesOrderQuote;
-  salesOrderObj: ISalesOrder;
-  salesQuoteView: ISalesQuoteView;
-  salesOrderView: ISalesOrderView;
-  creditTerms: any[];
-  percents: any[];
-  markupList: any[];
-  allCurrencyInfo: any[];
   firstCollection: any[];
-  csrFirstCollection: any[];
-  agentFirstCollection: any[];
-  salesFirstCollection: any[];
   allEmployeeinfo: any[] = [];
   customerNames: any[];
   allCustomer: any[];
-  customerContactList: any[] = [];
-  customerWarningData: any = [];
-  accountTypes: any[];
-  selectedParts: any[] = [];
   modal: NgbModalRef;
   errorModal: NgbModalRef;
   tempMemo: any;
@@ -99,60 +62,25 @@ export class CustomerPaymentCreateComponent implements OnInit {
     customerCode: "",
     promisedDate: ""
   };
-  salesQuoteForm: FormGroup;
   display: boolean = false;
   id: any;
   errorMessages: any[] = [];
   isEdit: boolean = false;
   isEditModeHeader: boolean = false;
-  jobTitles: any;
-  csrOriginalList: any;
-  agentsOriginalList: any[] = [];
-  salesPersonOriginalList: any[] = [];
-  salesPersonAndAgentOriginalList: any[] = []
   managementStructureId: any;
   toggle_po_header: boolean = true;
-  isEmailTabEnabled: boolean = false;
-  isMemoTabEnabled: boolean = false;
-  isPhoneTabEnabled: boolean = false;
-  isTextTabEnabled: boolean = false;
-  selectedCommunicationTab: any = '';
-  customerInfoFromSalesQuote: any = {};
   custPaymentData: any = {};
   marginSummary: MarginSummary = new MarginSummary();
-  @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
-  @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
-  @ViewChild(SalesOrderChargesComponent, { static: false }) public salesOrderChargesComponent: SalesOrderChargesComponent;
-  @ViewChild(SalesOrderPartNumberComponent, { static: false }) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
   @ViewChild(ManagementStructureComponent, { static: false }) managementStructureComponent: ManagementStructureComponent;
-  @ViewChild(SalesAddressComponent, { static: false }) public salesAddressComponent: SalesAddressComponent;
   @ViewChild(SalesOrderConfirmationModalComponent, { static: false }) salesOrderConfirmationModalComponent: SalesOrderConfirmationModalComponent;
-  @ViewChild(SalesOrderBillingComponent, { static: false }) public salesOrderBillingComponent: SalesOrderBillingComponent;
-  @ViewChild(SalesOrderShippingComponent, { static: false }) public salesOrderShippingComponent: SalesOrderShippingComponent;
-  @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
-  @ViewChild(SalesOrderPickTicketsComponent, { static: false }) public salesOrderPickTicketsComponent: SalesOrderPickTicketsComponent;
   employeesList: any = [];
-  customerWarning: any = {};
-  status: IStatus[] = [];
-  freight = [];
-  charge = [];
-  @Input() salesQuoteId: number = 0;
   @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
   @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
-  salesOrderCopyParameters: ISalesOrderCopyParameters;
-  copyMode: boolean;
-  copy: boolean;
-  copyData: string;
   isCreateModeHeader: boolean = false;
   isHeaderSubmit: boolean = false;
-  @ViewChild("updateConfirmationModal", { static: false })
-  public updateConfirmationModal: ElementRef;
   @ViewChild("viewQuote", { static: false }) public viewQuoteModal: ElementRef;
-  submitType: boolean = true;
-  totalFreights = 0;
-  totalCharges = 0;
   legalEntityList: any;
   businessUnitList: any;
   enableHeaderSaveBtn: boolean = false;
@@ -164,16 +92,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
   maincompanylist: any[] = [];
   arrayEmplsit: any[] = [];
   allEmployeeList: any = [];
-  requisitionerList: any[];
   currentUserEmployeeName: string;
-  controlSettings: any = {
-    showViewQuote: false
-  };
   moduleName: any = "SalesOrder";
   statusList: any = [];
   accntPriodList: any = [];
-  addressType: any = 'SO';
-  showAddresstab: boolean = false;
 
   constructor(
     private alertService: AlertService,
@@ -186,9 +108,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
     public router: Router,
     private modalService: NgbModal
   ) {
-    this.salesOrderCopyParameters = null;
-    this.copyMode = false;
-    this.copy = null;
   }
 
   ngOnInit() {
@@ -196,30 +115,15 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.loadAcctPeriods();
 
     this.id = +this.route.snapshot.paramMap.get("id");
-    this.controlSettings.showViewQuote = false;
-
-    // this.salesQuoteService.resetSalesOrderQuote();
-
-    // this.salesQuoteService.getSalesOrderQuteInstance().subscribe(data => {
-    //   this.salesOrderQuote = data;
-    // });
-
-    // this.salesQuoteService.getSelectedParts().subscribe(data => {
-    //   this.selectedParts = data;
-    //   this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.selectedParts, this.marginSummary);
-    // });
-
     this.managementStructureId = this.currentUserManagementStructureId;
-    this.load(this.managementStructureId);
+
+    if (!this.isEdit) {
+      this.load(this.managementStructureId);
+    }
 
     setTimeout(() => {
       this.getSoInstance(true);
-    },
-      2200);
-
-    // this.salesQuoteService.salesOrderViewSubj$.subscribe(data => {
-    //   this.salesOrderView = data;
-    // });
+    }, 2200);
 
     this.isSpinnerVisible = false;
   }
@@ -254,46 +158,14 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.enableUpdateButton = false;
   }
 
-  getInitialDataForSO() {
-    // let creditLimitTermsId = this.salesQuote.creditLimitTermsId ? this.salesQuote.creditLimitTermsId : 0;
-    // let accountTypeId = this.salesQuote.accountTypeId ? this.salesQuote.accountTypeId : 0;
-    // this.isSpinnerVisible = true;
-
-    // this.getCustomerDetails();
-    // this.getDefaultContact();
-  }
-
-  getSOMarginSummary() {
-    // this.salesOrderService.getSOMarginSummary(this.id).subscribe(result => {
-    //   if (result) {
-    //     let summary: any = result;
-    //     this.marginSummary = summary;
-    //     this.totalCharges = this.marginSummary.misc;
-    //     this.totalFreights = this.marginSummary.freightAmount;
-    //     this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
-    //     this.salesOrderService.setTotalCharges(this.marginSummary.misc);
-    //   } else {
-    //     this.marginSummary = new MarginSummary();
-    //   }
-    // })
-  }
-
   getSoInstance(initialCall = false) {
-    if (this.copyMode) {
-      //this.copySalesOrderInstance(this.salesOrderCopyParameters.salesOrderId);
-    }
-    else if (this.id) {
+    if (this.id) {
       this.getSalesOrderInstance(this.id, initialCall);
       this.isEdit = true;
       this.toggle_po_header = false;
-    } else if (this.salesOrderView) {
-      // this.customerPayment = this.salesOrderView.salesOrder
-      // this.commonSalesOrderInstanceForConvertAndEdit(this.salesOrderView);
-      // this.getSOMarginSummary();
     }
     else {
-      this.getNewSalesOrderInstance(this.customerId, initialCall);
-      // this.marginSummary = new MarginSummary();
+      this.getNewSalesOrderInstance();
       this.isEdit = false;
     }
   }
@@ -308,38 +180,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
     }
   }
 
-  // setTypesOfWarnings(warningsData) {
-  //   if (warningsData.length > 0) {
-  //     warningsData.filter(i => {
-  //       if (i.label == DBkeys.GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_ORDER) {
-  //         this.getCustomerWarningsData(i.value)
-  //       }
-  //     })
-  //   }
-  // }
-
-  // async getCustomerWarningsData(customerWarningListId: number) {
-  //   await this.customerService
-  //     .getCustomerWarningsByCustomerIdandCustomerWarningsListID(this.customerId, customerWarningListId)
-  //     .subscribe(res => {
-  //       this.customerWarning = res;
-  //       if (this.customerWarning && this.customerWarning.customerWarningId) {
-  //         this.salesQuote.warningId = this.customerWarning.customerWarningId
-  //         this.salesQuote.customerWarningId = this.customerWarning.customerWarningId;
-  //       }
-  //     }, error => {
-  //       this.isSpinnerVisible = false;
-  //     });
-  // }
-
-  // setCreditTerms(creditTerms) {
-  //   this.creditTerms = creditTerms;
-  // }
-
-  // setAccountTypes(responseData) {
-  //   this.accountTypes = responseData;
-  // }
-
   filterfirstName(event) {
     if (event.query !== undefined && event.query !== null) {
       this.employeedata(event.query, this.customerPayment.managementStructureId);
@@ -347,213 +187,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.enableUpdateButton = false;
   }
 
-  // filtercsrFirstName(event) {
-  //   this.csrFirstCollection = this.csrOriginalList;
-
-  //   const CSRData = [
-  //     ...this.csrOriginalList.filter(x => {
-  //       return x.name.toLowerCase().includes(event.query.toLowerCase());
-  //     })
-  //   ];
-  //   this.csrFirstCollection = CSRData;
-  //   this.enableUpdateButton = false;
-  // }
-
-  // filterSalesFirstName(event) {
-  //   this.salesFirstCollection = this.salesPersonAndAgentOriginalList;
-  //   const employeeListData = [
-  //     ...this.salesPersonAndAgentOriginalList.filter(x => {
-  //       return x.name.toLowerCase().includes(event.query.toLowerCase());
-  //     })
-  //   ];
-  //   this.salesFirstCollection = employeeListData;
-  //   this.enableUpdateButton = false;
-  // }
-
-  // async setJobTitles(res) {
-  //   this.csrOriginalList = res.csrEmpList;
-  //   this.salesPersonAndAgentOriginalList = res.salesEmpList;
-  // }
-
-  // setCSR() {
-  //   if (this.isEdit && this.salesOrderObj.customerSeviceRepId && this.salesOrderObj.customerSeviceRepId != 0) {
-  //     this.salesQuote.customerServiceRepName = getObjectById(
-  //       "employeeId",
-  //       this.salesOrderObj.customerSeviceRepId,
-  //       this.csrOriginalList
-  //     );
-  //   } else if (this.customerDetails && this.customerDetails.csrId) {
-  //     this.salesQuote.customerServiceRepName = getObjectById(
-  //       "employeeId",
-  //       this.customerDetails.csrId,
-  //       this.csrOriginalList
-  //     );
-  //   }
-  // }
-
-  // setSalesPerson() {
-  //   if (this.isEdit && this.salesOrderObj.salesPersonId && this.salesOrderObj.salesPersonId != 0) {
-  //     this.salesQuote.salesPersonName = getObjectById(
-  //       "employeeId",
-  //       this.salesOrderObj.salesPersonId,
-  //       this.salesPersonAndAgentOriginalList
-  //     );
-  //   } else if (this.customerDetails && this.customerDetails.primarySalesPersonId) {
-  //     this.salesQuote.salesPersonName = getObjectById(
-  //       "employeeId",
-  //       this.customerDetails.primarySalesPersonId,
-  //       this.salesPersonAndAgentOriginalList
-  //     );
-  //   }
-  // }
-
-  // filterNames(event) {
-  //   this.customerNames = [];
-  //   if (this.allCustomer) {
-  //     if (this.allCustomer.length > 0) {
-  //       for (let i = 0; i < this.allCustomer.length; i++) {
-  //         let name = this.allCustomer[i].name;
-  //         if (name.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-  //           this.customerNames.push(name);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
   getCustomerDetails() {
-    // this.salesQuote.customerId = this.customerId;
-    // this.salesQuote.customerName = this.customerDetails.name;
-    // this.salesQuote.customerEmail = this.customerDetails.email;
-    // this.salesQuote.customerCode = this.customerDetails.customerCode;
-    // this.salesQuote.creditLimit = this.customerDetails.creditLimit;
-    // this.salesQuote.creditLimitTermsId = this.customerDetails.creditTermsId;
-    // this.customerInfoFromSalesQuote = {
-    //   customerName: this.customerDetails.name,
-    //   customerCode: this.customerDetails.customerCode,
-    //   customerId: this.customerDetails.customerId
-    // }
-
-    // if (!this.id) {
-    //   this.salesQuote.contractReferenceName = this.customerDetails.contractReference;
-    //   this.salesQuote.restrictPMA = this.customerDetails.restrictPMA;
-    //   this.salesQuote.restrictDER = this.customerDetails.restrictDER;
-    //   this.salesQuote.accountTypeId = this.customerDetails.customerTypeId;
-    //   this.setValidDaysBasedOnSettings(false);
-    // }
-    // else {
-    //   this.setValidDaysBasedOnSettings(true);
-    // }
-
-    // this.setSalesPerson();
-    // this.setCSR();
-  }
-
-  getDefaultContact() {
-    if (this.customerContactList) {
-      if (this.customerContactList.length > 0) {
-        for (let i = 0; i < this.customerContactList.length; i++) {
-          let isDefaultContact = this.customerContactList[i].isDefaultContact;
-          if (isDefaultContact) {
-            this.customerPayment.customerContactId = this.customerContactList[
-              i
-            ].contactId;
-          }
-        }
-      }
-    }
-  }
-
-  setAllCustomerContact(result) {
-    this.customerContactList = result.contactList;
-  }
-
-  commonSalesOrderInstanceForConvertAndEdit(data) {
-    this.salesOrderView = data;
-    this.salesOrderObj = this.salesOrderView.salesOrder;
-    let partList: any[] = this.salesOrderView.parts;
-
-    for (let i = 0; i < partList.length; i++) {
-      let selectedPart = partList[i];
-      let partNumberObj = new PartDetail();
-      partNumberObj.itemMasterId = selectedPart.itemMasterId;
-      partNumberObj.stockLineId = selectedPart.stockLineId;
-      partNumberObj.fixRate = selectedPart.fxRate;
-      partNumberObj.quantityFromThis = selectedPart.qty;
-      partNumberObj.conditionId = selectedPart.conditionId;
-      partNumberObj.conditionDescription = selectedPart.conditionDescription;
-      partNumberObj.currencyId = selectedPart.currencyId;
-      partNumberObj.currencyDescription = selectedPart.currencyDescription;
-      partNumberObj.partNumber = selectedPart.partNumber;
-      partNumberObj.description = selectedPart.partDescription;
-      partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
-      if (selectedPart.isOEM) partNumberObj.pmaStatus = "OEM";
-      if (selectedPart.isPMA) partNumberObj.pmaStatus = "PMA";
-      if (selectedPart.isDER) partNumberObj.pmaStatus = "DER";
-      partNumberObj.salesPricePerUnit = selectedPart.unitSalePrice;
-      partNumberObj.salesPriceExtended = selectedPart.salesBeforeDiscount;
-      partNumberObj.salesDiscount = selectedPart.discount;
-      partNumberObj.salesDiscountPerUnit = selectedPart.discountAmount;
-      partNumberObj.netSalesPriceExtended = selectedPart.netSales;
-      partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
-      partNumberObj.quantityFromThis = selectedPart.qty;
-      partNumberObj.markUpPercentage = selectedPart.markUpPercentage;
-      partNumberObj.salesOrderPartId = selectedPart.salesOrderPartId;
-      partNumberObj.salesOrderId = selectedPart.salesOrderId;
-      partNumberObj.markupExtended = selectedPart.markupExtended;
-      partNumberObj.method = selectedPart.method;
-      partNumberObj.methodType = selectedPart.methodType;
-      partNumberObj.serialNumber = selectedPart.serialNumber;
-      partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended;
-      partNumberObj.marginPercentagePerUnit = selectedPart.marginPercentage;
-      partNumberObj.markupExtended = selectedPart.markupExtended;
-      partNumberObj.unitCostPerUnit = selectedPart.unitCost;
-      partNumberObj.unitCostExtended = selectedPart.unitCostExtended;
-      partNumberObj.salesOrderQuoteId = selectedPart.salesOrderQuoteId
-      partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
-      this.selectedParts.push(partNumberObj);
-    }
-    this.customerPayment.managementStructureId = this.salesOrderObj.managementStructureId;
-    this.managementStructureId = this.salesOrderObj.managementStructureId;
-    this.customerPayment.priorities = this.salesOrderView.priorities;
-    this.customerPayment.leadSources = this.salesOrderView.leadSources;
-    this.status = this.salesOrderView.status && this.salesOrderView.status.length > 0 ? this.salesOrderView.status.slice(0) : [];
-    this.customerPayment.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
-    this.customerPayment.quoteTypeId = this.salesOrderObj.typeId;
-    this.customerPayment.statusId = this.salesOrderObj.statusId;
-    this.customerPayment.statusChangeDate = null;
-    this.customerPayment.openDate = new Date(this.salesOrderObj.openDate);
-    this.customerPayment.numberOfItems = this.salesOrderObj.numberOfItems;
-    this.customerPayment.salesOrderNumber = this.salesOrderObj.salesOrderNumber;
-    this.customerPayment.accountTypeId = this.salesOrderObj.accountTypeId;
-    this.customerPayment.customerId = this.salesOrderObj.customerId;
-    this.customerPayment.customerContactId = this.salesOrderObj.customerContactId;
-    this.customerPayment.customerReferenceName = this.salesOrderObj.customerReference;
-    this.customerPayment.quoteApprovedById = this.salesOrderObj.approvedById;
-    this.customerPayment.totalSalesAmount = this.salesOrderObj.totalSalesAmount;
-    this.customerPayment.customerHold = this.salesOrderObj.customerHold;
-    this.customerPayment.depositAmount = this.salesOrderObj.depositAmount;
-    this.customerPayment.balanceDue = this.salesOrderObj.balanceDue;
-    this.customerPayment.employeeName = getObjectById(
-      "value",
-      this.salesOrderObj.employeeId,
-      this.allEmployeeList
-    );
-
-    this.salesOrderQuote.managementStructureId = this.salesOrderObj.managementStructureId;
-    this.salesOrderQuote.salesOrderQuoteId = this.salesOrderObj.salesOrderQuoteId;
-    this.customerPayment.creditLimit = this.salesOrderObj.creditLimit;
-    this.customerPayment.creditLimitTermsId = this.salesOrderObj.creditTermId;
-    this.customerPayment.restrictPMA = this.salesOrderObj.restrictPMA;
-    this.customerPayment.restrictDER = this.salesOrderObj.restrictDER;
-    if (this.salesOrderObj.approvedDate)
-      this.customerPayment.approvedDate = new Date(
-        this.salesOrderObj.approvedDate
-      );
-    this.customerPayment.currencyId = this.salesOrderObj.currencyId;
-    this.customerPayment.warningId = this.salesOrderObj.customerWarningId;
-    this.customerPayment.memo = this.salesOrderObj.memo;
-    this.customerPayment.notes = this.salesOrderObj.notes;
   }
 
   getSalesOrderInstance(salesOrderId: number, initialCall = false) {
@@ -567,24 +201,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     });
-  }
-
-  copySalesOrderInstance(salesOrderId: number) {
-    // this.isSpinnerVisible = true;
-    // this.salesOrderService.copy(salesOrderId).subscribe(data => {
-    //   this.getSOMarginSummary();
-    //   this.load(this.managementStructureId);
-    //   this.salesOrderView = data && data.length ? data[0] : null;
-    //   if (this.salesOrderCopyParameters) {
-    //     if (!this.salesOrderCopyParameters.copyParts) {
-    //       this.salesOrderView.parts = [];
-    //     }
-    //   }
-    //   this.bindData(this.salesOrderView);
-    //   this.isSpinnerVisible = false;
-    // }, error => {
-    //   this.isSpinnerVisible = false;
-    // });
   }
 
   bindData(custPayment: ICustomerPayments, initialCall = false) {
@@ -603,88 +219,16 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.postedDate = new Date(custPayment.postedDate);
     this.customerPayment.memo = custPayment.memo;
     this.customerPayment.managementStructureId = custPayment.managementStructureId;
-    this.customerPayment.employeeId = getObjectById(
-      "value",
-      custPayment.employeeId,
-      this.allEmployeeList
-    );
+    // this.customerPayment.employeeId = getObjectById(
+    //   "value",
+    //   custPayment.employeeId,
+    //   this.allEmployeeList
+    // );
   }
 
-  getNewSalesOrderInstance(customerId: number, initialCall = false) {
+  getNewSalesOrderInstance() {
     this.customerPayment.receiptNo = "Creating";
     this.customerPayment.statusId = getObjectByValue('label', 'Open', this.statusList).value; // Open status by default
-    
-    // this.salesOrderService
-    //   .getNewSalesOrderInstance(customerId)
-    //   .subscribe(data => {
-    //     this.salesQuote = data && data.length ? data[0] : null;
-
-    //     this.load(this.managementStructureId);
-    //     if (this.salesQuote) {
-    //       this.status = this.salesQuote.status && this.salesQuote.status.length > 0 ? this.salesQuote.status.slice(0) : [];
-    //     }
-    //     this.salesQuote.shippedDate = null;
-    //     this.salesQuote.openDate = new Date();
-    //     this.salesQuote.statusId = 1;
-    //     this.salesQuote.validForDays = 10;
-    //     this.salesQuote.quoteExpiryDate = new Date();
-    //     this.onChangeValidForDays();
-    //     this.salesQuote.employeeName = getObjectById(
-    //       "value",
-    //       this.employeeId,
-    //       this.allEmployeeList
-    //     );
-    //     this.salesQuote.salesOrderNumber = "Generating";
-    //     this.getInitialDataForSO();
-    //     this.isSpinnerVisible = false;
-    //   }, error => {
-    //     this.isSpinnerVisible = false;
-    //   });
-  }
-
-  onChangeValidForDays() {
-    let od = new Date(this.customerPayment.openDate);
-    let validForDays = +this.customerPayment.validForDays;
-    let ed = new Date(this.customerPayment.openDate);
-    ed.setDate(od.getDate() + validForDays);
-    this.customerPayment.quoteExpiryDate = ed;
-  }
-
-  onChangeOpenDate() {
-    let od = new Date(this.customerPayment.openDate);
-    let validForDays = +this.customerPayment.validForDays;
-    let ed = new Date(this.customerPayment.openDate);
-    ed.setDate(od.getDate() + validForDays);
-    this.customerPayment.quoteExpiryDate = ed;
-    this.enableUpdateButton = false;
-  }
-
-  viewSelectedRow() {
-    this.modal = this.modalService.open(CustomerViewComponent, { size: "lg", backdrop: 'static', keyboard: false });
-    this.modal.componentInstance.customerId = this.customerId;
-  }
-
-  setValidDaysBasedOnSettings(isEditMode) {
-    // if (this.soSettingsList.length > 0) {
-    //   let settingsObject = this.soSettingsList[0];
-
-    //   if (settingsObject) {
-    //     if (!isEditMode) {
-    //       this.salesQuote.quoteTypeId = settingsObject.typeId;
-    //       this.salesQuote.statusId = settingsObject.defaultStatusId;
-    //       this.salesQuote.statusName = settingsObject.defaultStatusName;
-    //     }
-    //     this.defaultSettingPriority = settingsObject.defaultPriorityId;
-    //   } else {
-    //     if (this.soTypeList.length > 0) {
-    //       this.salesQuote.quoteTypeId = this.soTypeList[0].value;
-    //     }
-    //   }
-    // } else {
-    //   if (this.soTypeList.length > 0) {
-    //     this.salesQuote.quoteTypeId = this.soTypeList[0].value;
-    //   }
-    // }
   }
 
   onAddDescription(value) {
@@ -714,37 +258,9 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.errorModal.close();
   }
 
-  onSubmit(submitType: Boolean, createNewVersion: boolean = false) {
+  onSubmit() {
     this.errorMessages = [];
     let haveError = false;
-    // if (this.customerPayment.quoteTypeId <= 0) {
-    //   this.errorMessages.push("Please select Type");
-    //   haveError = true;
-    // }
-    // if (!this.customerPayment.openDate) {
-    //   this.errorMessages.push("Please select Open Date");
-    //   haveError = true;
-    // }
-    // if (!this.customerPayment.creditLimit) {
-    //   this.errorMessages.push("Please select Credit Limit");
-    //   haveError = true;
-    // }
-    // if (!this.customerPayment.creditLimitTermsId) {
-    //   this.errorMessages.push("Please select Credit Terms");
-    //   haveError = true;
-    // }
-    // if (this.customerPayment.accountTypeId <= 0) {
-    //   this.errorMessages.push("Please select Account Type");
-    //   haveError = true;
-    // }
-    // if (this.customerPayment.customerContactId < 0) {
-    //   this.errorMessages.push("Please select Customer Contact");
-    //   haveError = true;
-    // }
-    // if (!this.customerPayment.employeeId) {
-    //   this.errorMessages.push("Please select employee");
-    //   haveError = true;
-    // }
 
     if (haveError) {
       let content = this.errorMessagePop;
@@ -782,81 +298,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.salesOrder.createdDate = new Date();
       this.salesOrder.updatedDate = new Date();
 
-      // for (let i = 0; i < this.selectedParts.length; i++) {
-      //   let selectedPart = this.selectedParts[i];
-      //   var errmessage = '';
-      //   if (!selectedPart.customerRequestDate) {
-      //     this.isSpinnerVisible = false;
-      //     invalidParts = true;
-      //     errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
-      //   }
-      //   if (!selectedPart.estimatedShipDate) {
-      //     this.isSpinnerVisible = false;
-      //     invalidParts = true;
-      //     errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
-      //   }
-      //   if (!selectedPart.promisedDate) {
-      //     this.isSpinnerVisible = false;
-      //     invalidParts = true;
-      //     errmessage = errmessage + '<br />' + "Please enter Promised Date."
-      //   }
-      //   if (!selectedPart.priorityId) {
-      //     this.isSpinnerVisible = false;
-      //     invalidParts = true;
-      //     errmessage = errmessage + '<br />' + "Please enter priority ID."
-      //   }
-      //   if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-      //     if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
-      //       selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-      //       selectedPart.promisedDate < this.salesQuote.openDate) {
-      //       invalidDate = true;
-      //     }
-      //   }
-      //   if (!invalidDate && !invalidParts) {
-      //     let partNumberObj = this.salesOrderService.marshalSOPartToSave(selectedPart, this.userName);
-      //     partList.push(partNumberObj);
-      //   }
-      // }
-
-      // this.salesOrderView.parts = partList;
-      // this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesOrderView.parts, this.marginSummary);
-
       if (this.id) {
         this.isCreateModeHeader = false;
-        //   if (invalidParts) {
-        //     this.isSpinnerVisible = false;
-        //     this.alertService.resetStickyMessage();
-        //     this.alertService.showStickyMessage('Sales Order', errmessage, MessageSeverity.error);
-        //   } else if (invalidDate) {
-        //     this.isSpinnerVisible = false;
-        //     this.alertService.resetStickyMessage();
-        //     this.alertService.showStickyMessage('Sales Order', "Please select valid Dates for Sales Order PartsList!", MessageSeverity.error);
-        //   } else {
-        //     this.marginSummary.salesOrderId = this.id;
-        //     this.salesOrderService.createSOMarginSummary(this.marginSummary).subscribe(result => {
-        //       this.marginSummary.soMarginSummaryId = result;
-        //     });
-        //     this.salesOrderService.update(this.salesOrderView).subscribe(data => {
-        //       this.isSpinnerVisible = false;
-        //       this.alertService.showMessage(
-        //         "Success",
-        //         `Sales Order updated successfully.`,
-        //         MessageSeverity.success
-        //       );
-        //       this.getSalesOrderInstance(this.id, true);
-        //       if (createNewVersion) {
-        //         this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
-        //       }
-        //       this.toggle_po_header = false;
-        //       if (this.isEdit) {
-        //         this.isCreateModeHeader = false;
-        //       }
-        //       this.enableUpdateButton = true;
-        //     }, error => {
-        //       this.isSpinnerVisible = false;
-        //       this.toggle_po_header = true;
-        //     });
-        //   }
       } else {
         this.customerPaymentsService.create(this.salesOrder).subscribe(data => {
           let receiptId = data[0].receiptId;
@@ -869,7 +312,6 @@ export class CustomerPaymentCreateComponent implements OnInit {
             MessageSeverity.success
           );
           this.toggle_po_header = false;
-          this.id = this.salesCreateHeaderOrderId;
           if (receiptId) {
             this.router.navigateByUrl(
               `accountreceivable/accountreceivablepages/process-customer-payment/${receiptId}`
@@ -888,23 +330,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.amount = this.customerPayment.amount ? formatNumberAsGlobalSettingsModule(this.customerPayment.amount, 2) : '0.00';
   }
 
-  public onPartsApprovedEvent(): void {
-    this.selectedParts = [];
-    this.getSalesOrderInstance(this.id);
-  }
-
   dismissModel() {
     this.modal.close();
-  }
-
-  quote: any = {
-    quoteTypeId: null,
-    quoteDate: Date
-  };
-
-  openConfirmationModal(submitType: boolean) {
-    this.submitType = submitType;
-    this.modal = this.modalService.open(this.updateConfirmationModal, { size: "sm", backdrop: 'static', keyboard: false });
   }
 
   closeConfirmationModal() {
@@ -913,55 +340,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     }
   }
 
-  createNewSalesOrderQuoteVersion() {
-    this.closeConfirmationModal();
-    this.onSubmit(this.submitType, true);
-  }
-
-  updateSalesOrderQuote() {
-    this.closeConfirmationModal();
-    this.onSubmit(this.submitType, false);
-  }
-
   onTabChange(event) {
-    // if (event.index == 0) {
-    //   this.salesOrderPartNumberComponent.refresh();
-    // }
-    // if (event.index == 1) {
-    //   this.salesOrderApproveComponent.refresh(this.marginSummary);
-    // }
-    // if (event.index == 2) {
-    //   this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
-    // }
-    // if (event.index == 3) {
-    //   this.showAddresstab = true;
-    // }
-    // if (event.index == 4) {
-    //   if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
-    //     this.salesOrderFreightComponent.refresh(false);
-    //   } else {
-    //     this.salesOrderFreightComponent.refresh(true);
-    //   }
-    // }
-    // if (event.index == 5) {
-    //   if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
-    //     this.salesOrderChargesComponent.refresh(false);
-    //   } else {
-    //     this.salesOrderChargesComponent.refresh(true);
-    //   }
-    // }
-    // if (event.index == 6) {
-    //   this.salesOrderPickTicketsComponent.refresh(this.id);
-    // }
-    // if (event.index == 7) {
-    //   this.salesOrderShippingComponent.refresh(this.selectedParts);
-    // }
-    // if (event.index == 8) {
-    //   this.salesOrderBillingComponent.refresh(this.id); //(this.selectedParts);
-    // }
-    // if (event.index == 10) {
-    //   this.salesOrderAnalysisComponent.refresh(this.id);
-    // }
   }
 
   load(managementStructureId: number) {

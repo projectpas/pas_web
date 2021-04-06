@@ -6,11 +6,11 @@ import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
 import { environment } from "../../environments/environment";
 import { ICustomerPayments } from "../models/sales/ICustomerPayments";
-import { CustomerReceiptInfo } from "../models/invoicePayment/CustomerReceiptInfo";
 
 @Injectable()
 export class CustomerPaymentsEndpointService extends EndpointFactory {
   private readonly customerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments";
+  private readonly saveCustomerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments/SavePayments";
   private readonly getCustomerPaymentDetails: string = environment.baseUrl + "/api/CustomerPayments/get";
 
   constructor(
@@ -34,6 +34,14 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
       .get<ICustomerPayments>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getCustomerPayment(customerPaymentId));
+      });
+  }
+
+  savePayments(customerPayment: any): Observable<any> {
+    return this.http
+      .post(this.saveCustomerPaymentUrl, JSON.stringify(customerPayment), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.savePayments(customerPayment));
       });
   }
 }

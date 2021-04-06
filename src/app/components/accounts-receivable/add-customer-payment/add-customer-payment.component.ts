@@ -205,11 +205,11 @@ export class AddCustomerPaymentComponent implements OnInit {
   onPaymentMethodClick(value) {
     if (value == 1) {
       this.objInvoicePayment.isMultiplePaymentMethod = false;
-      this.objInvoicePayment.isCheckPayment = true;
+      this.chkPaymentMethod = 1;
     }
     else {
       this.objInvoicePayment.isMultiplePaymentMethod = true;
-      this.chkCheck = true;
+      this.objInvoicePayment.isCheckPayment = true;
     }
   }
 
@@ -235,8 +235,6 @@ export class AddCustomerPaymentComponent implements OnInit {
   }
 
   onProcessPayment() {
-    debugger;
-
     if (!this.objInvoicePayment.isMultiplePaymentMethod) {
       this.objInvoicePayment.isCheckPayment = this.chkPaymentMethod == 1 ? true : false;
       this.objInvoicePayment.isWireTransfer = this.chkPaymentMethod == 2 ? true : false;
@@ -634,30 +632,72 @@ export class AddCustomerPaymentComponent implements OnInit {
     else {
       //this.display = false;
       this.isSpinnerVisible = true;
-      debugger;
       this.customerReceipt = new CustomerReceiptInfo();
+
+      this.customerReceipt.checkPayments = this.objInvoicePayment.checkPayments;
+      if (this.customerReceipt.checkPayments) {
+        this.customerReceipt.checkPayments.customerId = this.customerId;
+        this.customerReceipt.checkPayments.createdBy = this.userName;
+        this.customerReceipt.checkPayments.updatedBy = this.userName;
+        this.customerReceipt.checkPayments.masterCompanyId = this.masterCompanyId;
+      }
+
+      this.customerReceipt.wirePayments = this.objInvoicePayment.invoiceWireTransferPayment;
+      if (this.customerReceipt.wirePayments) {
+        this.customerReceipt.wirePayments.customerId = this.customerId;
+        this.customerReceipt.wirePayments.createdBy = this.userName;
+        this.customerReceipt.wirePayments.updatedBy = this.userName;
+        this.customerReceipt.wirePayments.masterCompanyId = this.masterCompanyId;
+      }
+
+      this.customerReceipt.ccPayments = this.objInvoicePayment.invoiceCreditDebitCardPayment;
+      if (this.customerReceipt.ccPayments) {
+        this.customerReceipt.ccPayments.customerId = this.customerId;
+        this.customerReceipt.ccPayments.createdBy = this.userName;
+        this.customerReceipt.ccPayments.updatedBy = this.userName;
+        this.customerReceipt.ccPayments.masterCompanyId = this.masterCompanyId;
+      }
+
+      this.customerReceipt.customerPayments = this.customerPayment;
 
       let selectedInvoices = this.openInvoices.filter(a => a.selected == true);
 
-      this.customerReceipt.invoices = selectedInvoices;
-      this.customerReceipt.checkPayments = this.objInvoicePayment.checkPayments;
-      this.customerReceipt.wirePayments = this.objInvoicePayment.invoiceWireTransferPayment;
-      this.customerReceipt.ccPayments = this.objInvoicePayment.invoiceCreditDebitCardPayment;
+      selectedInvoices.forEach(ele => {
+        ele.receiptId = this.customerReceipt.customerPayments.receiptId;
+        ele.customerId = this.customerId;
+        ele.isMultiplePaymentMethod = this.paymentMethod == 2 ? true : false;
 
-      this.customerReceipt.customerPayments = this.customerPayment;
-      
+        if (this.paymentMethod == 2) { // Multiple Method
+          ele.isCheckPayment = this.objInvoicePayment.isCheckPayment;
+          ele.isWireTransfer = this.objInvoicePayment.isWireTransfer;
+          ele.isCCDCPayment = this.objInvoicePayment.isCCDCPayment;
+        }
+        else // Single Method
+        {
+          ele.isCheckPayment = this.chkPaymentMethod == 1 ? true : false;
+          ele.isWireTransfer = this.chkPaymentMethod == 2 ? true : false;
+          ele.isCCDCPayment = this.chkPaymentMethod == 3 ? true : false;
+        }
+
+        ele.createdBy = this.userName;
+        ele.updatedBy = this.userName;
+        ele.masterCompanyId = this.masterCompanyId;
+      });
+
+      this.customerReceipt.invoices = selectedInvoices;
+
       if (this.id) {
       } else {
-        // this.customerPaymentsService.create(this.customerReceipt).subscribe(data => {
-        //   this.isSpinnerVisible = false;
-        //   this.alertService.showMessage(
-        //     "Success",
-        //     `Payment information updated successfully for Customer`,
-        //     MessageSeverity.success
-        //   );
-        // }, error => {
-        //   this.isSpinnerVisible = false;
-        // });
+        this.customerPaymentsService.savePayments(this.customerReceipt).subscribe(data => {
+          this.isSpinnerVisible = false;
+          this.alertService.showMessage(
+            "Success",
+            `Payment information updated successfully for Customer`,
+            MessageSeverity.success
+          );
+        }, error => {
+          this.isSpinnerVisible = false;
+        });
       }
     }
   }
