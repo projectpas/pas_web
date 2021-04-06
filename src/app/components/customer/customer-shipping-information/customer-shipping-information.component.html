@@ -514,11 +514,11 @@
         <div class="card new-card" style="padding: 10px" *ngIf="!collapsed">
           <div>
             <div class="margin-top: 10px">
-              <button type="button" *ngIf="((isSalesPersonInfoAdd || isSalesPersonInfoEdit) && (isUpdateDomestic))" class="btn btn-primary pull-right"
+              <button type="button" class="btn btn-primary pull-right"
                 (click)="nextClick('Next')">
                 Next
               </button>
-              <button type="button" *ngIf="isBillingInfoAdd || isBillingInfoEdit" class="btn btn-primary pull-right submit-btn"
+              <button type="button"  class="btn btn-primary pull-right submit-btn"
                 (click)="nextClick('Previous')">
                 Previous
               </button>

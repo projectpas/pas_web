@@ -62,10 +62,10 @@
                             <div class="clear"></div>
                         </div>
                         <div class="m-t-10">
-                            <button type="button" *ngIf="((isDocumentAdd || isDocumentEdit) && (isWarningUpdate))" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>                            
+                            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>                            
                             <button type="submit" *ngIf="isWarningAdd && !warningsUpdateBoolean" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveWarnings()">{{warningsUpdateBoolean ? 'Update' : 'Save' }}</button>
                             <button type="submit" *ngIf="isWarningUpdate && warningsUpdateBoolean" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveWarnings()">{{warningsUpdateBoolean ? 'Update' : 'Save' }}</button>
-                            <button type="button" *ngIf="isSalesPersonInfoAdd || isSalesPersonInfoEdit" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">Previous</button>
+                            <button type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">Previous</button>
                         </div>
                     </div>
                 </form>

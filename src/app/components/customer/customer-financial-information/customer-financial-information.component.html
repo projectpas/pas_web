@@ -484,7 +484,7 @@
                 </div>
               </div>
             </div>
-            <button type="button" *ngIf="((isBillingInfoAdd || isBillingInfoEdit) && (isEdit))" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
+            <button type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
               Next
             </button>
             <button type="button" *ngIf="isAdd && !editModeFinance"  class="btn btn-primary pull-right submit-btn" [disabled]="!financialInfoForm.valid || disableSave"
@@ -495,7 +495,7 @@
               (click)="saveFinancialInformation()">
               {{editModeFinance ? 'Update' : 'Save' }}
             </button>
-            <button type="button"  *ngIf="isAtaAdd || isAtaEdit" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
+            <button type="button"   class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
               Previous
             </button>
           </div>

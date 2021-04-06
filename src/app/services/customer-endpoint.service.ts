@@ -429,23 +429,39 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     deleteInternationalShipping<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this.InternationalShippingDelete}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this.InternationalShippingDelete}/${id}`;
+        var modelData={
+            updatedBy:updatedBy
+        };
+        return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.deleteInternationalShipping(id, updatedBy));
+                return this.handleErrorCommon(error, () => this.deleteInternationalShipping(id,updatedBy));
             });
     }
 
     updateStatusForInternationalShipping<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this.InternationalShippingStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this.InternationalShippingStatus}/${id}`;
+        var modelData={
+            status:status,
+            updatedBy:updatedBy
+        };
+        return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.updateStatusForInternationalShipping(id, status, updatedBy));
+                return this.handleErrorCommon(error, () => this.updateStatusForInternationalShipping(id,status,updatedBy));
             });
+       
     }
     updateStatusForInternationalShippingVia<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this.configurations.baseUrl}/api/customer/shippingviadetailsstatus?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this.configurations.baseUrl}/api/customer/shippingviadetailsstatus/${id}`;
+        var modelData={
+            status:status,
+            updatedBy:updatedBy
+        };
+        return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.updateStatusForInternationalShippingVia(id, status, updatedBy));
+                return this.handleErrorCommon(error, () => this.updateStatusForInternationalShippingVia(id,status,updatedBy));
             });
+        
     }
 
     getInternationalShippingByCustomerId(customerId) {
@@ -1354,66 +1370,114 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     deleteInternationalShipViaId<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this._deleteInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this._deleteInternationalShippingViaMapUrl}/${id}`;
+        var modelData={
+            updatedBy :updatedBy
+        }
+        return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.deleteInternationalShipViaId(id, updatedBy));
             });
+        
     }
 
     restoreInternationalShipViaId<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this._restoreInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this._restoreInternationalShippingViaMapUrl}/${id}`;
+        var modelData={
+            updatedBy :updatedBy
+        }
+        return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.restoreInternationalShipViaId(id, updatedBy));
             });
     }
 
     deleteShipViaDetails<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this._deleteShipVia}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this._deleteShipVia}/${id}`;
+        var modelData={
+            updatedBy :updatedBy
+        }
+        return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.deleteShipViaDetails(id, updatedBy));
             });
     }
 
     restoreShipViaDetails<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this._restoreShipVia}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this._restoreShipVia}/${id}`;
+        var modelData={
+            updatedBy :updatedBy
+        }
+        return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.restoreShipViaDetails(id, updatedBy));
             });
     }
 
     deleteRestrictedPartsById<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this._deleteRestrictedParts}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this._deleteRestrictedParts}/${id}`;
+        var modelData={
+            updatedBy :updatedBy
+        }
+        return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.deleteRestrictedPartsById(id, updatedBy));
             });
     }
 
     restoreRestrictedPartsById<T>(id, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this._restoreRestrictedParts}?id=${id}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this._restoreRestrictedParts}/${id}`;
+        var modelData={
+            updatedBy :updatedBy
+        }
+        return this.http.put<T>(endpointUrl,JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.restoreRestrictedPartsById(id, updatedBy));
             });
     }
 
     updateStatusForShippingDetails<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this.ShippingDetailsStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this.ShippingDetailsStatus}/${id}`;
+        var modelData={
+            status:status,
+            updatedBy:updatedBy
+        };
+        return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateStatusForShippingDetails(id, status, updatedBy));
             });
-    }
+         }
 
     Shippingdetailsviastatus<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this.shippingdetailsviastatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        let endpointUrl = `${this.shippingdetailsviastatus}/${id}`;
+        var modelData={
+            status:status,
+            updatedBy:updatedBy
+        };
+        return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.Shippingdetailsviastatus(id, status, updatedBy));
             });
     }
 
     CustomersBillingUpdateforActive<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<T>(`${this.customersBillingUpdateforActive}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        // return this.http.get<T>(`${this.customersBillingUpdateforActive}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        //     .catch(error => {
+        //         return this.handleErrorCommon(error, () => this.CustomersBillingUpdateforActive(id, status, updatedBy));
+        //     });
+        let endpointUrl = `${this.customersBillingUpdateforActive}/${id}`;
+        var modelData={
+            status:status,
+            updatedBy:updatedBy
+        };
+        return this.http.put<T>(endpointUrl, JSON.stringify(modelData), this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.CustomersBillingUpdateforActive(id, status, updatedBy));
             });
+        // return this.http.put<T>(`${this.customersBillingUpdateforActive}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+        //     .catch(error => {
+        //         return this.handleErrorCommon(error, () => this.CustomersBillingUpdateforActive(id, status, updatedBy));
+        //     });
     }
 
     GetUploadDocumentsList(attachmentId, customerId, moduleId) {

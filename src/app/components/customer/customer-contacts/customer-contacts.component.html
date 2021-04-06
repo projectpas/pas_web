@@ -91,7 +91,7 @@
                <button *ngIf="isDownload" type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                 (click)="contact.exportCSV({ selectionOnly: true })"></button>
-               <div class="excel-upload  excel-upload-cstm">
+               <div class="excel-upload  excel-upload-cstm" *ngIf="isDownload">
 
                 <button *ngIf="isAdd" name="download" id="download" type="button" class="btn btn-primary exports-button"
                   matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForContact()"
@@ -308,11 +308,11 @@
           </ng-template>
         </p-table>
         <div class="m-t-10" *ngIf="isViewMode == false">
-          <button type="button" *ngIf="((isAircrafAdd || isAircrafAdd) && (isEdit))" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+          <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
             [disabled]="stopmulticlicks">
             Next
           </button>
-          <button type="button" *ngIf="isCustGenrlAdd || isCustGenrlUpdate" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+          <button type="button"  class="btn btn-primary pull-right submit-btn" (click)="backClick()">
             Previous
           </button>
         </div>
