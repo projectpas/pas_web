@@ -1014,11 +1014,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             })
         }
     openStocklineAudit(row) {
-
-        row.stockLineId= row.stockLineId?row.stockLineId: 10745;
-  if(row.stockLineId && row.stockLineId !=0){
+ 
+  if(row.stockLIneId && row.stockLIneId !=0){
     this.isSpinnerVisible = true;
-    this.stockLineService.getStocklineAudit(row.stockLineId).subscribe(response => {
+    this.stockLineService.getStocklineAudit(row.stockLIneId).subscribe(response => {
         this.isSpinnerVisible = false;
         this.auditHistory = response.map(res => {
             return {

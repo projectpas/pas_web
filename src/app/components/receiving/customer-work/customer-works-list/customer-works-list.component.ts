@@ -554,7 +554,7 @@ export class CustomerWorksListComponent implements OnInit {
         this.editData=rowData;
         this.isAddWorkOrder=true;
         this.customerWarnings(rowData.customerId);
-       // this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
+       this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${rowData.receivingCustomerWorkId}`);
     }
 
     gotoCustomer(rowData) {
