@@ -61,6 +61,7 @@ import { ConditionService } from '../../../services/condition.service';
 // import { e } from '@angular/core/src/render3';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
 
+
 @Component({
     selector: 'app-item-master-stock',
     templateUrl: './item-master-stock.component.html',
@@ -832,7 +833,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     //Gneral Infor - Get Acquisition Types List
     getAcquisitionTypeList() {
-        this.commonService.smartDropDownWithStatusList('AssetAcquisitionType', 'assetAcquisitionTypeId', 'name', '', 1, 0).subscribe(res => {
+        //this.commonService.smartDropDownWithStatusList('AssetAcquisitionType', 'assetAcquisitionTypeId', 'name', '', 1, 0).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('AssetAcquisitionType', 'assetAcquisitionTypeId', 'name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.AssetAcquisitionTypeList= res;
             this.AssetAcquisitionTypeList.map(x => {
                 if(x.label == 'Buy') {
@@ -841,6 +843,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             });
         })
     }
+
     async getDiscountTableData(){
         await this.commonService.smartDropDownList('Discount', 'DiscountId', 'DiscontValue').subscribe(res => {
             this.itemQuantitys = res;
@@ -928,10 +931,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.getInactiveObjectsOnEdit();
             this.isSpinnerVisible = false;
         }, error => {
-            this.onDataLoadFailed(error)
+            this.isSpinnerVisible = false;
         })
     }
-
+    
     getInactiveObjectsOnEdit() {
         this.sourceItemMaster = {
             ...this.sourceItemMaster,
@@ -1089,7 +1092,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             }
             this.isSpinnerVisible = false;
         }, error=> {
-            this.onDataLoadFailed(error)
+            this.isSpinnerVisible = false;
         })
     }
 
@@ -1144,7 +1147,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             }
             this.isSpinnerVisible = false;
         }, error=> {
-            this.onDataLoadFailed(error)
+            this.isSpinnerVisible = false;
         })        
     }
 
@@ -1158,11 +1161,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     CurrencyData(strText = '') {
         if(this.arrayCurrancylist.length == 0) {			
             this.arrayCurrancylist.push(0); }
-          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 200, this.arrayCurrancylist.join()).subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 200, this.arrayCurrancylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
             this.purchaseCurrencyInfo = this.allCurrencyInfo;
             this.salesCurrencyInfo = this.allCurrencyInfo;
-          }, error => this.saveFailedHelper(error));
+          }, error => {this.isSpinnerVisible=false});
     }
 
     Restore(rowData){
@@ -1209,7 +1212,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     private loadSiteData() {
-        this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
+        //this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {               
             this.allSites = res;
         })
     }
@@ -1314,11 +1318,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     // get All Aircraft 
     private aircraftManfacturerData() {
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('AircraftType', 'AircraftTypeId', 'Description').subscribe(res => {
+        //this.commonService.smartDropDownList('AircraftType', 'AircraftTypeId', 'Description').subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'AircraftTypeId', 'Description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allaircraftInfo = res;
             this.manufacturerData = res;
             this.isSpinnerVisible = false;
-        },error => this.saveFailedHelper(error))
+        },error => {this.isSpinnerVisible=false})
     }
 
     changeValueStringToInt(value) {
@@ -1347,7 +1352,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if(this.sourceItemMaster.itemMasterId){
             this.itemser.getAircaftList(this.sourceItemMaster.itemMasterId).subscribe(
                 results => this.onAircarftmodelloadsuccessfull(results[0]),
-                error => this.onDataLoadFailed(error)
+                error => {this.isSpinnerVisible = false;}
             );
         } else {
             this.alertService.stopLoadingMessage();
@@ -1467,7 +1472,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     //loading itemClassification data//
      itemclass() {
-         this.itemser.getItemMasterClassificationByType('stock').subscribe(res => {
+         this.itemser.getItemMasterClassificationByType('stock',this.currentUserMasterCompanyId).subscribe(res => {
             this.allitemclassificationInfo = res;
          })
     }
@@ -1480,7 +1485,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     //loading GlAccount from generalLedger//
     private glList() {
-        this.commonService.getGlAccountList().subscribe(res => {
+        this.commonService.getGlAccountList(this.currentUserMasterCompanyId).subscribe(res => {
             this.allGlInfo = res;
         })
     }
@@ -1488,7 +1493,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     manufacturerdata() {
         if(this.arrayManufacturelist.length == 0) {			
             this.arrayManufacturelist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'manufacturerId', 'name', '', false, 0, this.arrayManufacturelist.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'manufacturerId', 'name', '', false, 0, this.arrayManufacturelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.allManufacturerInfo = res;
         });
     }
@@ -1632,7 +1637,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
         this.itemser.getActivePartListByItemType('stock').subscribe(
             results => this.onptnmbersSuccessful(results),
-            error => this.onDataLoadFailed(error)  
+            error => {this.isSpinnerVisible = false;}
         )
     }
 
@@ -1669,16 +1674,15 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     private Purchaseunitofmeasure() {
-        this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', 1, 0).subscribe(res => {
+       // this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', 1, 0).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allPurchaseUnitOfMeasureinfo = res;
             this.allStockUnitOfMeasureinfo = this.allPurchaseUnitOfMeasureinfo;
             this.allConsumeUnitOfMeasureinfo = this.allPurchaseUnitOfMeasureinfo;
             this.allWeightUnitOfMeasureInfo = this.allPurchaseUnitOfMeasureinfo;
             this.allExportUnitOfMeasureInfo = this.allPurchaseUnitOfMeasureinfo;
-            this.allSizeUnitOfMeasureInfo = this.allPurchaseUnitOfMeasureinfo;
-            
+            this.allSizeUnitOfMeasureInfo = this.allPurchaseUnitOfMeasureinfo;            
         })
-
     }
 
     unitmeasure(content) {
@@ -1698,15 +1702,16 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     private priorityData() {
-        this.commonService.smartDropDownWithStatusList('Priority', 'priorityId', 'description', '', 1, 0).subscribe(res => {
+        //this.commonService.smartDropDownWithStatusList('Priority', 'priorityId', 'description', '', 1, 0).subscribe(res => {
+         this.commonService.autoSuggestionSmartDropDownList('Priority', 'priorityId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.allPriorityInfo = res;            
         })
     }
 
      itemgroup(type) {
-        this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
-            this.allitemgroupobjInfo = res;
-            
+        //this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
+            this.commonService.autoSuggestionSmartDropDownList('ItemGroup', 'itemGroupId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
+            this.allitemgroupobjInfo = res;            
         })
     }
 
@@ -1878,7 +1883,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             }
             this.itemser.getDescriptionbypart(event).subscribe(
                 results => this.onpartnumberloadsuccessfull(results[0]),
-                error => this.onDataLoadFailed(error)
+                error => {this.isSpinnerVisible = false;}
             );
         }
     }
@@ -2191,7 +2196,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.isSaving = true;
         this.workFlowtService.historyAcion(this.sourceAction.itemClassificationId).subscribe(
             results => this.onHistoryLoadSuccessful(results[0], content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible=false});
     }
     loadModalsForExistingRecords(capData) {
         if (capData.selectedAircraftTypes.length > 0) {
@@ -2203,8 +2208,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             var selectedvalues = arr.join(",");
             this.itemser.getAircraftTypes(selectedvalues).subscribe(
                 results => this.onDataLoadaircrafttypeSuccessfulForExisting(results[0], capData),
-
-                error => this.onDataLoadFailed(error)
+                error => {this.isSpinnerVisible = false;}
             );
         }
     }
@@ -2430,7 +2434,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.isActive == false;
             this.workFlowtService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
         else {
             this.sourceAction = rowData;
@@ -2439,7 +2443,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.isActive == true;
             this.workFlowtService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
     }
 
@@ -2458,7 +2462,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.sourceAction.updatedBy = this.userName;
         this.workFlowtService.deleteAcion(this.sourceAction.itemClassificationId).subscribe(
             response => this.saveCompleted(this.sourceAction),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible=false});
         this.modal.close();
     }
 
@@ -2685,7 +2689,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
            this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
            this.itemservice.updateAction(this.sourceAction).subscribe(
                response => this.saveCompleted(this.sourceAction),
-               error => this.saveFailedHelper(error));
+               error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -2708,7 +2712,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.ataChapterName = this.ataChapterName;
             this.ataMainSer.updateATAMain(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -2765,7 +2769,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
             this.unitService.updateUnitOfMeasure(this.sourceUOM).subscribe(
                 response => this.saveCompleted(this.sourceUOM),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -2784,7 +2788,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.unitService.newUnitOfMeasure(this.sourceUomModel).subscribe(data => {
                 this.sourceItemMaster.consumeUnitOfMeasureId = data.unitOfMeasureId;
             }, 
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible=false});
 
         }
         else {
@@ -2797,7 +2801,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
             this.unitService.updateUnitOfMeasure(this.sourceUOM).subscribe(
                 response => this.saveCompleted(this.sourceUOM),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -2822,7 +2826,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceUOM.masterCompanyId = this.currentUserMasterCompanyId;
             this.unitService.updateUnitOfMeasure(this.sourceUOM).subscribe(
                 response => this.saveCompleted(this.sourceUOM),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -2844,7 +2848,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.description = this.priorityName;
             this.priorityService.updatePriority(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -2873,7 +2877,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
             this.inteService.newAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
         else {
 
@@ -2881,7 +2885,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.description = this.integrationName;
             this.inteService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -3575,10 +3579,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 }
             })
             this.isSpinnerVisible = false;
-
-
         }, 
-        error => this.onDataLoadFailed(error))
+        error => {this.isSpinnerVisible = false;})
     }
 
 
@@ -3662,7 +3664,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.ataMainchapter = this.LoadAtachapter;
             this.isSpinnerVisible = false;
         }, 
-        error => this.saveFailedHelper(error))
+        error => {this.isSpinnerVisible=false})
     }
 
     getAllATASubChapter() {
@@ -3746,7 +3748,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.isSpinnerVisible = false;
 
         }, 
-        error => this.saveFailedHelper(error))
+        error => {this.isSpinnerVisible=false})
 
     }
     updateATAMapping() {
@@ -3770,7 +3772,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             
             this.isSpinnerVisible = false;
         }, 
-        error => this.saveFailedHelper(error))
+        error => {this.isSpinnerVisible=false})
 
     }
 
@@ -3824,8 +3826,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     // get all Aircraft Models
     getAllAircraftModels() {
-
-        this.aircraftModelService.getAll().subscribe(models => {
+        this.aircraftModelService.getAll(this.currentUserMasterCompanyId).subscribe(models => {
             const responseValue = models[0];
             this.aircraftModelList = responseValue.map(models => {
                 return {
@@ -3889,7 +3890,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 
                 this.getATAMappedDataByItemMasterId();
                 this.isSpinnerVisible = false;
-            }, error => this.onDataLoadFailed(error));
+            }, error => {this.isSpinnerVisible = false;});
     }
 
     getSubChapterByATAChapter() {
@@ -4005,7 +4006,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     };
                 });
                 this.isSpinnerVisible = false;
-            }, error => this.onDataLoadFailed(error));
+            }, error => {this.isSpinnerVisible = false;});
     }
 
 
@@ -4186,7 +4187,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     this.disablepurchaseSales = true;
                     this.getPurchaseSalesDetailById(ItemMasterID);
                 },
-                error => this.saveFailedHelper(error))
+                error => {this.isSpinnerVisible=false})
             }
     }
 
@@ -4627,13 +4628,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 isOemPNId : getObjectById('itemMasterId', editIsOemPNId, this.allPartnumbersInfo)
             }
 
-		}, error => this.saveFailedHelper(error));
+		}, error => {this.isSpinnerVisible=false});
 	}
 
     loadOemPnPartNumData(strText = '') {
 		if(this.arrayItemMasterlist.length == 0) {			
             this.arrayItemMasterlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partNumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partNumber', strText, true, 20, this.arrayItemMasterlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.allPartnumbersList = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value 
@@ -4653,13 +4654,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 				}                
 			};        
 
-		}, error => this.saveFailedHelper(error));
+		}, error => {this.isSpinnerVisible=false});
 	}
 
     filterpartItems(event) {
         if(this.arrayItemMasterlist.length == 0) {			
             this.arrayItemMasterlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'PartNumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH, this.arrayItemMasterlist.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'PartNumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH, this.arrayItemMasterlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.itemclaColl = [];
             this.partCollection = [];
             for (let i = 0; i < res.length; i++) {
@@ -4701,7 +4702,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     async  filterdescription(event) {
-      await  this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'Description', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
+      await  this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'Description', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH,'0',this.currentUserMasterCompanyId).subscribe(res => {
         this.descriptionCollection = [];   
         for (let i = 0; i < res.length; i++) {
                 this.descriptionCollection.push(res[i].label);
@@ -4712,7 +4713,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     filterRevisedPart(event) {
-        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {                    
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH,'0',this.currentUserMasterCompanyId).subscribe(res => {                    
             this.revisedPartNumCollection = [];
             for (let i = 0; i < res.length; i++) {
                 if(res[i].label != this.selectedPartNumber && res[i].value != this.tempOEMpartNumberId){
@@ -4759,9 +4760,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
 
-    private Integration() {
-        
-        this.commonService.smartDropDownWithStatusList('IntegrationPortal', 'integrationPortalId', 'description', '', 1, 0).subscribe(res => {
+    private Integration() {        
+        //this.commonService.smartDropDownWithStatusList('IntegrationPortal', 'integrationPortalId', 'description', '', 1, 0).subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'integrationPortalId', 'description','', false, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.integrationvalues= res;                     
         })
     }
@@ -4880,7 +4881,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.allSubChapter = [];
         this.vendorser.getATASubchapterData(ataMainId).subscribe( //calling and Subscribing for Address Data
             results => this.onDataLoadAtaSubChapterDataSuccessful(results[0]), //sending Address
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false;}
         );
     }
 
@@ -4935,7 +4936,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceIntegration.portalURL = this.portalURL;
             this.integrationService.newAction(this.sourceIntegration).subscribe(
                 role => this.saveSuccessHelper(role),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
         else {
             this.sourceIntegration.updatedBy = this.userName;
@@ -4943,7 +4944,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceIntegration.portalURL = this.portalURL;
             this.integrationService.updateAction(this.sourceIntegration).subscribe(
                 response => this.saveCompleted(this.sourceIntegration),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
         this.modal.close();
     }
@@ -5137,7 +5138,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     getAircraftAllList() {
         this.aircraftManufacturerService.getAll().subscribe(
             details => this.onDataLoad(details[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false;}
         );
     }
     private onDataLoad(allACList: any[]) {
@@ -5260,7 +5261,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
         this.priorityService.getPriorityList().subscribe(
             results => this.onDataSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            error => {this.isSpinnerVisible = false;}
         );
     }
     private onDataSuccessful(getPriorityList: Priority[]) {
@@ -5433,7 +5434,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.sourceAction.portalURL = this.portalURL;
             this.integrationService.updateAction(this.sourceAction).subscribe(
                 response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+                error => {this.isSpinnerVisible=false});
         }
 
         this.modal.close();
@@ -5879,14 +5880,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
         this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false});
     }
     openHistoryOfPurchaseAndSales(content, rowData) {
         this.alertService.startLoadingMessage();
 
         this.commonService.GetPurchaseAndSalesAuditHistory(rowData.itemMasterPurchaseSaleId).subscribe(
             results => this.onHistoryOfPurchaseandSalesSuccess(results, content),
-            error => this.saveFailedHelper(error));
+            error => {this.isSpinnerVisible = false});
     }
     private onHistoryOfPurchaseandSalesSuccess(auditHistory, content) {
         this.alertService.stopLoadingMessage();
@@ -5998,17 +5999,17 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 exportCountryId: getObjectById('value', this.sourceExportInfo.exportCountryId, this.allCountryinfo),
                 exportValue: this.sourceExportInfo.exportValue ? formatNumberAsGlobalSettingsModule(this.sourceExportInfo.exportValue, 2) : '0.00',
                 exportCurrencyId: this.getInactiveObjectOnEdit('value', this.sourceExportInfo.exportCurrencyId, this.allCurrencyInfo, 'Currency', 'CurrencyId', 'Code'),
-                exportWeightUnit: this.getInactiveObjectOnEditExportInfoUOM('value', this.sourceExportInfo.exportWeightUnit, this.allWeightUnitOfMeasureInfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname', 'WeightUOM'),
+                exportWeightUnit: this.getInactiveObjectOnEditExportInfoUOM('value', parseInt(this.sourceExportInfo.exportWeightUnit), this.allWeightUnitOfMeasureInfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname', 'WeightUOM'),
                 exportWeight: this.sourceExportInfo.exportWeight == 0 ? '' : this.sourceExportInfo.exportWeight,
                 exportSizeLength: this.sourceExportInfo.exportSizeLength == 0 ? '' : this.sourceExportInfo.exportSizeLength,
                 exportSizeWidth: this.sourceExportInfo.exportSizeWidth == 0 ? '' : this.sourceExportInfo.exportSizeWidth,
                 exportSizeHeight: this.sourceExportInfo.exportSizeHeight == 0 ? '' : this.sourceExportInfo.exportSizeHeight,
                 exportClassificationId: this.sourceExportInfo.exportClassificationId,
-                } 
+                }                 
             }
             this.isSpinnerVisible = false;
         },
-        error => this.saveFailedHelper(error))
+        error => {this.isSpinnerVisible = false})
     }
 
     ConsumeUOMdescription($event) {}
