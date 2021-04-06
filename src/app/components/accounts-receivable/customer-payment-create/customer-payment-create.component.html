@@ -56,8 +56,7 @@
                                                 <p-calendar name="depositDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="customerPayment.depositDate" [showIcon]="true"
-                                                    id="depositDate" #depositDate="ngModel"
-                                                    (onSelect)="onChangeOpenDate()">
+                                                    id="depositDate" #depositDate="ngModel">
                                                 </p-calendar>
                                             </div>
                                             <div class="form-group">
@@ -78,8 +77,10 @@
                                             <div class="form-group">
                                                 <label for="amount">Amount <span class="clr-red">*</span></label>
                                                 <input type="text" class="form-control text-right"
-                                                    [(ngModel)]="customerPayment.amount" name="amount" #amount="ngModel"
-                                                    pKeyFilter="money" (change)="onChangeAmount()" />
+                                                    [ngModel]="customerPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                                                    name="amount" #amount="ngModel" pKeyFilter="money"
+                                                    (change)="onChangeAmount()"
+                                                    (ngModelChange)="customerPayment.amount=$event" />
                                                 <div *ngIf="amount.invalid && (amount.dirty || amount.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="amount.errors.required">
@@ -90,14 +91,16 @@
                                             <div class="form-group">
                                                 <label>Amt Applied</label>
                                                 <input type="text" class="form-control text-right"
-                                                    [(ngModel)]="customerPayment.amtApplied" name="amtApplied"
-                                                    pKeyFilter="money" #amtApplied="ngModel" [disabled]="true" />
+                                                    [ngModel]="customerPayment.amtApplied | twoDecimalGlobalNumberFormatPipe"
+                                                    name="amtApplied" pKeyFilter="money" #amtApplied="ngModel"
+                                                    [disabled]="true" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Amt Remaining</label>
                                                 <input type="text" class="form-control text-right" pKeyFilter="money"
-                                                    [(ngModel)]="customerPayment.amtRemaining" name="amtRemaining"
-                                                    #amtRemaining="ngModel" [disabled]="true" />
+                                                    [ngModel]="customerPayment.amtRemaining | twoDecimalGlobalNumberFormatPipe"
+                                                    name="amtRemaining" #amtRemaining="ngModel" [disabled]="true"
+                                                    (ngModelChange)="customerPayment.amtRemaining=$event" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Status</label>
@@ -183,8 +186,7 @@
                                                     <p-calendar name="OpenDate" [yearNavigator]="true"
                                                         [monthNavigator]="true" yearRange="1900:2100"
                                                         [(ngModel)]="customerPayment.openDate" [showIcon]="true"
-                                                        id="OpenDate" #OpenDate="ngModel" required
-                                                        (onSelect)="onChangeOpenDate()">
+                                                        id="OpenDate" #OpenDate="ngModel" required>
                                                     </p-calendar>
                                                 </div>
                                             </div>
@@ -228,8 +230,7 @@
                                                 <p-calendar name="postedDate" [yearNavigator]="true"
                                                     [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="customerPayment.postedDate" [showIcon]="true"
-                                                    id="postedDate" #OpenDate="ngModel" required
-                                                    (onSelect)="onChangeOpenDate()">
+                                                    id="postedDate" #OpenDate="ngModel" required>
                                                 </p-calendar>
                                             </div>
                                         </div>
@@ -238,13 +239,13 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
+                            <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit()"
                                 [disabled]="!newSalesQuoteForm.form.valid"
                                 class="btn pull-right submit-btn btn btn-primary">
                                 Save
                             </button>
-                            <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
-                                [disabled]="enableUpdateButton" (click)="onSubmit(true)"
+                            <button type="submit" *ngIf="((isEdit && !isCreateModeHeader)) || isHeaderSubmit"
+                                [disabled]="enableUpdateButton" (click)="onSubmit()"
                                 class="btn pull-right submit-btn btn btn-primary">
                                 Update
                             </button>

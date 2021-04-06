@@ -235,8 +235,6 @@ export class AddCustomerPaymentComponent implements OnInit {
   }
 
   onProcessPayment() {
-    debugger;
-
     if (!this.objInvoicePayment.isMultiplePaymentMethod) {
       this.objInvoicePayment.isCheckPayment = this.chkPaymentMethod == 1 ? true : false;
       this.objInvoicePayment.isWireTransfer = this.chkPaymentMethod == 2 ? true : false;
@@ -634,11 +632,11 @@ export class AddCustomerPaymentComponent implements OnInit {
     else {
       //this.display = false;
       this.isSpinnerVisible = true;
-      debugger;
       this.customerReceipt = new CustomerReceiptInfo();
 
       this.customerReceipt.checkPayments = this.objInvoicePayment.checkPayments;
       if (this.customerReceipt.checkPayments) {
+        this.customerReceipt.checkPayments.customerId = this.customerId;
         this.customerReceipt.checkPayments.createdBy = this.userName;
         this.customerReceipt.checkPayments.updatedBy = this.userName;
         this.customerReceipt.checkPayments.masterCompanyId = this.masterCompanyId;
@@ -646,6 +644,7 @@ export class AddCustomerPaymentComponent implements OnInit {
 
       this.customerReceipt.wirePayments = this.objInvoicePayment.invoiceWireTransferPayment;
       if (this.customerReceipt.wirePayments) {
+        this.customerReceipt.wirePayments.customerId = this.customerId;
         this.customerReceipt.wirePayments.createdBy = this.userName;
         this.customerReceipt.wirePayments.updatedBy = this.userName;
         this.customerReceipt.wirePayments.masterCompanyId = this.masterCompanyId;
@@ -653,6 +652,7 @@ export class AddCustomerPaymentComponent implements OnInit {
 
       this.customerReceipt.ccPayments = this.objInvoicePayment.invoiceCreditDebitCardPayment;
       if (this.customerReceipt.ccPayments) {
+        this.customerReceipt.ccPayments.customerId = this.customerId;
         this.customerReceipt.ccPayments.createdBy = this.userName;
         this.customerReceipt.ccPayments.updatedBy = this.userName;
         this.customerReceipt.ccPayments.masterCompanyId = this.masterCompanyId;
