@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { unwrapResolvedMetadata } from '@angular/compiler';
+import { StocklineService } from '../../../../services/stockline.service';
+import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
 @Component({
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
@@ -58,14 +60,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     interTotalPages: number = 0;
     isSpinnerVisibleReserve:boolean=false;
     cols = [
-        { field: 'taskName', header: 'Task' ,align: 0},
+        { field: 'taskName', header: 'Task' ,align: 0}, 
         { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"60px"},
         { field: 'line', header: 'Line Num' ,align: 0,width:"60px"},
         { field: 'partNumber', header: 'PN' ,align: 0},
         { field: 'partDescription', header: 'PN Description' ,align: 0},
         { field: 'serialNumber', header: 'Serial Num',align: 0 },
-        { field: 'condition', header: 'Cond',align: 0 },
-        { field: 'stockLineNumber', header: 'SL Num',align: 0 },
+        { field: 'condition', header: 'Cond',align: 0 ,width:"100px"},
+        { field: 'stockLineNumber', header: 'Stk Line Num',align: 0 },
         { field: 'mandatoryOrSupplemental', header: 'Request Type',align: 0 },
         { field: 'provision', header: 'Provision' ,align: 0},
         { field: 'quantity', header: 'Qty Req', align: 1 ,width:"60px"},
@@ -75,8 +77,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 ,width:"60px"},
         { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 ,width:"60px"},
         { field: 'qunatityRemaining', header: 'Qty Rem', align: 1,width:"60px" },
-        { field: 'uom', header: 'UOM',align: 0 },
-        { field: 'stockType', header: 'Stk Type',align: 0 }, //oem
+        { field: 'uom', header: 'UOM',align: 0,width:"70px" },
+        { field: 'stockType', header: 'Stk Type',align: 0 ,width:"70px"}, //oem
         { field: 'altEquiv', header: 'Alt/Equiv',align: 0 },
         { field: 'itemClassification', header: 'Classification',align: 0 },
         { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"60px" },
@@ -134,7 +136,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private authService: AuthService,
         private cdRef: ChangeDetectorRef,
         private modalService: NgbModal,
-        private alertService: AlertService) {
+        private alertService: AlertService,
+        private stockLineService: StocklineService,
+        ) {
     }
 
     get userName(): string {
@@ -1001,5 +1005,52 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
    
     clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
+
+
+    auditHistory:any=[]; 
+        openMaterialAudit(row){
+            this.workOrderService.getMaterialHistory(row.workOrderMaterialsId).subscribe(res=>{
+                console.log("Res",res)
+            })
+        }
+    openStocklineAudit(row) {
+
+        row.stockLineId= row.stockLineId?row.stockLineId: 10745;
+  if(row.stockLineId && row.stockLineId !=0){
+    this.isSpinnerVisible = true;
+    this.stockLineService.getStocklineAudit(row.stockLineId).subscribe(response => {
+        this.isSpinnerVisible = false;
+        this.auditHistory = response.map(res => {
+            return {
+                ...res,
+                quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '',
+                quantityReserved: (res.quantityReserved || res.quantityReserved == 0) ? formatNumberAsGlobalSettingsModule(res.quantityReserved, 0) : '',
+                quantityIssued: (res.quantityIssued || res.quantityIssued == 0) ? formatNumberAsGlobalSettingsModule(res.quantityIssued, 0) : '',
+                quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '',
+                purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '',
+                repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '',
+                unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '',
+                coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '',
+                lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '',
+            }
+        })
+   
+    }, error => {
+        this.isSpinnerVisible = false;
+    })
+  }
+    }
+
+    getColorCodeForHistory(i, field, value) {
+		const data = this.auditHistory;
+		const dataLength = data.length;
+		if (i >= 0 && i <= dataLength) {
+			if ((i + 1) === dataLength) {
+				return true;
+			} else {
+				return data[i + 1][field] === value
+			}
+		}
+    }
 }
 

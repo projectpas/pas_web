@@ -499,8 +499,10 @@ setTimeout(() => {
                 // if(this.workOrderGeneralInformation.isSinglePN){
                     this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
                 // }
-                this.gridTabChange('materialList');
+                // this.gridTabChange('materialList');
             }
+            this.gridActiveTab = 'materialList'
+            this.gridTabChange('materialList');
             this.isRecCustomer = data.isRecCustomer;
             this.workOrderGeneralInformation = {
                 ...data,
@@ -1313,10 +1315,10 @@ setTimeout(() => {
         this.workScope = data.workscope;
         this.showGridMenu = true;
         this.getWorkFlowTabsData();
-        if (this.workFlowId != null) {
-            this.showWorkflowLabel='View WF';
-            this.subTabWorkFlowChange('viewworkFlow')
-        }
+        // if (this.workFlowId != null) {
+        //     this.showWorkflowLabel='View WF';
+        //     this.subTabWorkFlowChange('viewworkFlow')
+        // }
     }
 
     getWorkFlowTabsData() {
@@ -1472,14 +1474,14 @@ setTimeout(() => {
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
                     }
-                    if (this.workFlowId == null) {
+                    // if (this.workFlowId == null) {
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
                         if (this.isSubWorkOrder == true) {
                             this.getMaterialListByWorkOrderIdForSubWO();
                         } else {
                             this.getMaterialListByWorkOrderId();
                         }
-                    }
+                    // }
                 }
             },
                 err => {
@@ -3156,5 +3158,20 @@ setTimeout(() => {
             );
             this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
         }
+    }
+    createNewRoWorkOrder(rowData) {
+        if(this.isSubWorkOrder==true){
+            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+        }else{
+            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+        }
+    }
+    woPartId:any;
+    currentWorkflowId:any;
+    addToExitRoWorkOrder(rowData){
+this.woPartId=rowData.id;
+    }
+    viewWorkflow(workOrderPartNumber){
+        this.currentWorkflowId=workOrderPartNumber.workflowId;
     }
 }   

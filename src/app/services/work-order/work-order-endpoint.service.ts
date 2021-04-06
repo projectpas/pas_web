@@ -1341,4 +1341,12 @@ getquoteMaterialHistory(WorkOrderQuoteMaterialId) {
         
     });
   }
+  //material list history
+
+  
+  getMaterialHistory(id){
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workorderstockhistory?workOrderMaterialId=${id}`, this.getRequestHeaders()).catch(error => {
+        return this.handleErrorCommon(error, () => this.getMaterialHistory(id));
+    });  
+ }
 }
