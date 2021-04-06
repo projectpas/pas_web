@@ -3157,4 +3157,19 @@ setTimeout(() => {
             this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
         }
     }
+    createNewRoWorkOrder(rowData) {
+        if(this.isSubWorkOrder==true){
+            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+        }else{
+            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+        }
+    }
+    woPartId:any;
+    currentWorkflowId:any;
+    addToExitRoWorkOrder(rowData){
+this.woPartId=rowData.id;
+    }
+    viewWorkflow(workOrderPartNumber){
+        this.currentWorkflowId=workOrderPartNumber.workflowId;
+    }
 }   

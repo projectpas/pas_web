@@ -620,7 +620,9 @@ export class WorkOrderService {
     getquoteFreightsHistory(id){
         return this.workOrderEndpointService.getquoteFreightsHistory(id);
     }
-
+    getMaterialHistory(id){
+        return this.workOrderEndpointService.getMaterialHistory(id);
+    }
 
 } 
 
