@@ -301,11 +301,11 @@
                                                         (click)="onAddDescription(2)"></i>
                                                 </label>
                                                 <span>
-                                                    <div class="form-group memo-popup-cstm mat_emo overflow">
+                                                    <div class="form-group memo-popup-cstm mat_emo ">
                                                         <div [innerHTML]="workOrderGeneralInformation.memo"  matTooltipPosition="above"
                                                             [matTooltip]="parsedText(workOrderGeneralInformation.memo)" 
                                                            
-                                                            class="form-control text_editor_box memo_cehck1 adjust_he">
+                                                            class="form-control text_editor_box memo_cehck1 adjust_he overflow">
                                                         </div>
                                                     </div>
                                                 </span>
@@ -527,7 +527,7 @@
                                                         [(ngModel)]="workOrderPartNumber.workflowId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                             </p-dropdown>
                                         </span>
-                                        <span data-toggle="modal" data-target="#workflowView">
+                                        <span data-toggle="modal" data-target="#workflowView" [ngClass]="{pointerEvents : workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
                                             <a class="btn nobg btn-view-cstm"   (click)="viewWorkflow(workOrderPartNumber)" matTooltip="View Workflow"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
