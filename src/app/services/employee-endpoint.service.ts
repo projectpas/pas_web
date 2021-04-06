@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class EmployeeEndpoint extends EndpointFactory {
@@ -73,9 +74,12 @@ export class EmployeeEndpoint extends EndpointFactory {
 
 	private readonly _employeeTotallistUrl: string = "/api/Employee/exportemployeelist";
 
+	private readonly _employeeUpdatePasswordUrl: string = environment.baseUrl+"/api/Employee/updateemployeepassword";
+
 	private readonly _employeeGlobalSrchUrl: string = "/api/Employee/employeeglobalsearch";
 	get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 	get getEmployeeCommonDataUrl() { return this.configurations.baseUrl + this._employeeCommonDatatUrl; }
+	//get actionsNameUrl() { return environment.baseUrl + this._actionsNameUrl; }
 	get actionsNameUrl() { return this.configurations.baseUrl + this._actionsNameUrl; }
 	get getView() { return this.configurations.baseUrl + this._getView; }
 	get rolesUrl() { return this.configurations.baseUrl + this._rolesUrl; }
@@ -512,5 +516,17 @@ export class EmployeeEndpoint extends EndpointFactory {
 				return this.handleErrorCommon(error, () => this.downloadAllEmployeeList(employeeId));
 		});
 	}	
+
+	getUpdateEmployeePasswordEndpoint<T>(password,employeeId): Observable<T> {
+		let url = this._employeeUpdatePasswordUrl;
+		var data = {
+			"password":password,
+			"employeeId":employeeId
+		}		
+		return this.http.post<T>(url,JSON.stringify(data), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getUpdateEmployeePasswordEndpoint(password,employeeId));
+			});
+	}
 
 }
