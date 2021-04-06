@@ -936,7 +936,7 @@
               </div>  
             <div [ngClass]="{hidedata :  subTabWorkFlow !== 'createworkFlow' }">
              </div>  
-            <div *ngIf="workFlowId && subTabWorkFlow == 'editworkFlow'"
+            <!-- <div *ngIf="workFlowId && subTabWorkFlow == 'editworkFlow'"
                 [ngClass]="{hidedata: subTabWorkFlow !== 'editworkFlow' }">
                 <wf-create [isWorkOrder]="isWorkOrder" [workOrderPartNumberId]="workOrderPartNumberId"
                     [workFlowWorkOrderId]="workFlowWorkOrderId" [savedWorkOrderData]="savedWorkOrderData" [workFlowId]="workFlowId"
@@ -946,7 +946,7 @@
                 [ngClass]="{hidedata :  subTabWorkFlow !== 'viewworkFlow' }">
                 <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
                     [workFlowId]="workFlowId"></app-workflow-list>
-            </div>
+            </div> -->
             <div *ngIf="workOrderId && (gridActiveTab == 'materialList') "
                 [ngClass]="{hidedata : gridActiveTab !== 'materialList' }"> 
                 <app-work-order-complete-material-list [materialStatus]="materialStatus" [isWorkOrder]="isWorkOrder"
