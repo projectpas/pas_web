@@ -62,12 +62,12 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     cols = [
         { field: 'taskName', header: 'Task' ,align: 0},
         { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0},
-        { field: 'line', header: 'Line Num' ,align: 0},
+        { field: 'line', header: 'Line Num' ,align: 0,width:"64px"},
         { field: 'partNumber', header: 'PN' ,align: 0},
         { field: 'partDescription', header: 'PN Description' ,align: 0},
         { field: 'serialNumber', header: 'Serial Num',align: 0 },
-        { field: 'condition', header: 'Cond',align: 0 },
-        { field: 'stockLineNumber', header: 'SL Num',align: 0 },
+        { field: 'condition', header: 'Cond',align: 0 ,width:"100px"},
+        { field: 'stockLineNumber', header: 'Stk Line Num',align: 0 },
         { field: 'mandatoryOrSupplemental', header: 'Request Type',align: 0 },
         { field: 'provision', header: 'Provision' ,align: 0},
         { field: 'quantity', header: 'Qty Req', align: 1 ,width:"60px"},
@@ -77,8 +77,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 ,width:"60px"},
         { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 ,width:"60px"},
         { field: 'qunatityRemaining', header: 'Qty Rem', align: 1,width:"60px" },
-        { field: 'uom', header: 'UOM',align: 0 },
-        { field: 'stockType', header: 'Stk Type',align: 0 }, //oem
+        { field: 'uom', header: 'UOM',align: 0,width:"70px" },
+        { field: 'stockType', header: 'Stk Type',align: 0 ,width:"70px"}, //oem
         { field: 'altEquiv', header: 'Alt/Equiv',align: 0 },
         { field: 'itemClassification', header: 'Classification',align: 0 },
         { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"60px" },
@@ -104,7 +104,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'location', header: 'Location',align: 0 },
         { field: 'shelf', header: 'Shelf' ,align: 0},
         { field: 'bin', header: 'Bin',align: 0 },
-        { field: 'defered', header: 'Deferred',align: 0 },
+        { field: 'defered', header: 'Deferred',align: 0,width:"60px" },
         { field: 'memo', header: 'Memo',align: 0 }
     ]
     savebutonDisabled: boolean = false;

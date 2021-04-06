@@ -124,7 +124,7 @@
                                                         <label for="opendate">
                                                             Open Date <span class="clr-red">*</span>
                                                         </label>
-                                                        <p-calendar [showIcon]="true" class="calender-cstm"
+                                                        <p-calendar [showIcon]="true" class="calender-cstm "
                                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                             name="openDate" #openDate="ngModel" required (ngModelChange)="getmemo($event)"
                                                             [(ngModel)]="workOrderGeneralInformation.openDate" [disabled]="isView" appendTo="body">
@@ -301,7 +301,7 @@
                                                         (click)="onAddDescription(2)"></i>
                                                 </label>
                                                 <span>
-                                                    <div class="form-group memo-popup-cstm mat_emo">
+                                                    <div class="form-group memo-popup-cstm mat_emo overflow">
                                                         <div [innerHTML]="workOrderGeneralInformation.memo"  matTooltipPosition="above"
                                                             [matTooltip]="parsedText(workOrderGeneralInformation.memo)" 
                                                            
@@ -426,7 +426,7 @@
                                                [(ngModel)]="workOrderPartNumber.quantity" disabled>
                                     </td>
                                     <td>
-                                        <p-calendar [showIcon]="true" name="receivedDate{{i}}" class="calender-cstm"
+                                        <p-calendar [showIcon]="true" name="receivedDate{{i}}" class="calender-cstm woAdd"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  (ngModelChange)="getValid()"
                                                     #receivedDate="ngModel" [(ngModel)]="workOrderPartNumber.receivedDate"
                                                     disabled appendTo="body"> 
@@ -435,25 +435,25 @@
                                     <td>
                                         <p-calendar [showIcon]="true" name="customerRequestDate{{i}}"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    class="calender-cstm" #customerRequestDate="ngModel"  (ngModelChange)="getValid()"
+                                                    class="calender-cstm woAdd" #customerRequestDate="ngModel"  (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.customerRequestDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
                                     <td>
-                                        <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm"
+                                        <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm woAdd"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  (ngModelChange)="getValid()"
                                                     #promisedDate="ngModel" [(ngModel)]="workOrderPartNumber.promisedDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     <td>
                                         <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}"
-                                                    class="calender-cstm" #estimatedCompletionDate="ngModel" (onSelect)="doSomething(workOrderPartNumber.estimatedCompletionDate,workOrderPartNumber,i)"
+                                                    class="calender-cstm woAdd" #estimatedCompletionDate="ngModel" (onSelect)="doSomething(workOrderPartNumber.estimatedCompletionDate,workOrderPartNumber,i)"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [minDate]="workOrderPartNumber.receivedDate" (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     </td>
                                     <td>
-                                        <p-calendar [showIcon]="true" class="calender-cstm"
+                                        <p-calendar [showIcon]="true" class="calender-cstm woAdd"
                                                     name="estimatedShipDate{{i}}"  (ngModelChange)="getValid()"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="workOrderPartNumber.estimatedShipDate"
