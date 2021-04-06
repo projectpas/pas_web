@@ -606,7 +606,15 @@ export class CustomerWorksListComponent implements OnInit {
                     this.showAlertMessage();
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage();
-                } 
+                } else
+                {
+                    const {receivingCustomerWorkId}=this.editData;
+                    if( this.isEditCustomer==true && this.restrictID ==0){
+                        this._route.navigateByUrl(`receivingmodule/receivingpages/app-customer-work-setup/edit/${receivingCustomerWorkId}`);
+                    }else if(this.isAddWorkOrder==true && this.restrictID ==0){
+                        this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
+                    }
+                }
             }
         },
             err => { 
