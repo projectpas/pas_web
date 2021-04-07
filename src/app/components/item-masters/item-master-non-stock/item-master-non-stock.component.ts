@@ -1198,7 +1198,7 @@ export class ItemMasterNonStockComponent {
     }
 
     private itemNonStockclassification() {
-        this.itemser.getItemMasterClassificationByType('nonstock').subscribe(res => {
+        this.itemser.getItemMasterClassificationByType('nonstock',this.currentUserMasterCompanyId).subscribe(res => {
             this.allitemNonStockclassificationInfo = res;
          })
     }
