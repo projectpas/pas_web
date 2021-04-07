@@ -219,7 +219,7 @@ export class SubWorkOrderComponent implements OnInit {
             estCompDate: this.subWorkOrderGeneralInformation.estimatedCompletionDate,
             stageId: this.subWorkOrderGeneralInformation.stageId,
             statusId: this.subWorkOrderGeneralInformation.statusId,
-            cmmId: this.subWorkOrderGeneralInformation.cmmId,
+            cMMId: this.subWorkOrderGeneralInformation.cMMId,
             isPMA: this.subWorkOrderGeneralInformation.isPMA,
             IsDER: this.subWorkOrderGeneralInformation.isDER,
             masterCompanyId: 1,
@@ -500,7 +500,7 @@ export class SubWorkOrderComponent implements OnInit {
             });
             if (this.cmmList && this.cmmList.length > 0) {
 
-                currentRecord.cmmId = this.cmmList[0].value;
+                currentRecord.cMMId = this.cmmList[0].value;
             }
         })
     } 

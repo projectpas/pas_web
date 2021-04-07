@@ -958,7 +958,7 @@ setTimeout(() => {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
-                    cmmId:x.cmmId==0 ? null :x.cmmId
+                    cMMId:x.cMMId==0 ? null :x.cMMId
                 }
             })
         };
@@ -1178,7 +1178,7 @@ setTimeout(() => {
                 }
             });
             if (this.cmmList && this.cmmList.length > 0) {
-                currentRecord.cmmId = this.cmmList[0].value;
+                currentRecord.cMMId = this.cmmList[0].value;
             }
         },
             err => {
