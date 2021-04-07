@@ -21,6 +21,8 @@
           <th>Request Type</th>
           <th class="min-width-90" *ngIf="isQuote==true || isWorkOrder==true">Provision <span class="clr-red">*</span></th>
           <th style="min-width:60px">Qty<span class="clr-red">*</span></th>
+          <th class="min-width-90" *ngIf="  isWorkOrder==true">Qty On hand  </th>
+          <th class="min-width-90" *ngIf=" isWorkOrder==true">Qty Avail  </th>
           <th>Item Classification<span class="clr-red">*</span></th>
           <th>UOM<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th class="min-width-90">Stk Type</th>
@@ -28,7 +30,7 @@
           <th style="min-width:60px">Ext. Cost<span *ngIf="!isWorkOrder" class="clr-red">*</span></th>
           <th style="width:60px">Deferred</th>
           <th style="z-index:1">Memo</th>
-          <th>Actions</th>
+          <th *ngIf="!isEdit">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -95,6 +97,12 @@
                 calculateExtendedPrice(material)
               " [(ngModel)]="material.quantity" maxlength="15" name="qty_{{ i }}" required />
           </td>
+          <td class="min-width-50" *ngIf="  isWorkOrder==true">
+            {{material.qtyOnHand}}
+          </td>
+          <td class="min-width-50" *ngIf="  isWorkOrder==true">
+            {{material.qtyAvail}}
+          </td>
           <td class="min-width-115">
             {{material.itemClassification}}
           </td>
@@ -129,8 +137,8 @@
                 matTooltipPosition="above" (click)="onAddTextAreaInfo(material,i)"></i>
             </div>
           </td>
-          <td>
-            <button class="btn btn-danger nobg" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
+          <td *ngIf="!isEdit">
+            <button class="btn btn-danger nobg" matTooltip="Remove" matTooltipPosition="above" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
               <i class="fa fa-trash"></i>
             </button>
           </td>

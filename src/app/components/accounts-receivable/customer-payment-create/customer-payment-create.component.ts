@@ -30,6 +30,7 @@ import { SalesOrderCustomerApprovalComponent } from "../../sales/order/shared/co
 import { ICustomerPayments } from "../../../models/sales/ICustomerPayments";
 import { CustomerPayments } from "../../../models/sales/CustomerPayments.model";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
+import { ReviewCustomerPaymentComponent } from "../reivew-customer-payments/review-customer-payment.component";
 
 @Component({
   selector: "app-customer-payment-create",
@@ -74,13 +75,11 @@ export class CustomerPaymentCreateComponent implements OnInit {
   @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
   @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
   @ViewChild(ManagementStructureComponent, { static: false }) managementStructureComponent: ManagementStructureComponent;
-  @ViewChild(SalesOrderConfirmationModalComponent, { static: false }) salesOrderConfirmationModalComponent: SalesOrderConfirmationModalComponent;
   employeesList: any = [];
-  @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
-  @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
   isCreateModeHeader: boolean = false;
   isHeaderSubmit: boolean = false;
   @ViewChild("viewQuote", { static: false }) public viewQuoteModal: ElementRef;
+  @ViewChild(ReviewCustomerPaymentComponent, { static: false }) public reviewCustomerPaymentComponent: ReviewCustomerPaymentComponent;
   legalEntityList: any;
   businessUnitList: any;
   enableHeaderSaveBtn: boolean = false;
@@ -341,6 +340,9 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    if (event.index == 1) {
+      this.reviewCustomerPaymentComponent.fetchDataForReview();
+    }
   }
 
   load(managementStructureId: number) {

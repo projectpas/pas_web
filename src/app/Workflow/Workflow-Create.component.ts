@@ -1115,6 +1115,23 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
+   
+//    if( this.MaterialCost <=0){
+// this.sourceWorkFlow.percentageOfMaterial=-1;
+//    }
+      
+//    if( this.TotalCharges <=0){
+//        this.sourceWorkFlow.percentageOfCharges=-1;
+// }
+   
+// if( this.TotalExpertiseCost <=0){
+//        this.sourceWorkFlow.percentageOfExpertise=-1;
+// }
+   
+// if( this.sourceWorkFlow.otherCost <=0){
+//        this.sourceWorkFlow.percentageOfOthers=-1;
+// }
+   
         const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));

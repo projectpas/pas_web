@@ -10,6 +10,11 @@ import { Subscription } from 'rxjs';
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { unwrapResolvedMetadata } from '@angular/compiler';
+import { StocklineService } from '../../../../services/stockline.service';
+import { formatNumberAsGlobalSettingsModule } from 'src/app/generic/autocomplete';
+// import { AuditComponentComponent } from '../../../../shared/components/audit-component/audit-component.component';
+
+
 @Component({
     selector: 'app-work-order-complete-material-list',
     templateUrl: './work-order-complete-material-list.component.html',
@@ -58,14 +63,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     interTotalPages: number = 0;
     isSpinnerVisibleReserve:boolean=false;
     cols = [
-        { field: 'taskName', header: 'Task' ,align: 0},
+        { field: 'taskName', header: 'Task' ,align: 0}, 
         { field: 'isFromWorkFlow', header: 'Is From WorkFlow' ,align: 0,width:"60px"},
         { field: 'line', header: 'Line Num' ,align: 0,width:"60px"},
         { field: 'partNumber', header: 'PN' ,align: 0},
         { field: 'partDescription', header: 'PN Description' ,align: 0},
         { field: 'serialNumber', header: 'Serial Num',align: 0 },
-        { field: 'condition', header: 'Cond',align: 0 },
-        { field: 'stockLineNumber', header: 'SL Num',align: 0 },
+        { field: 'condition', header: 'Cond',align: 0 ,width:"100px"},
+        { field: 'stockLineNumber', header: 'Stk Line Num',align: 0 },
         { field: 'mandatoryOrSupplemental', header: 'Request Type',align: 0 },
         { field: 'provision', header: 'Provision' ,align: 0},
         { field: 'quantity', header: 'Qty Req', align: 1 ,width:"60px"},
@@ -75,8 +80,8 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 ,width:"60px"},
         { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 ,width:"60px"},
         { field: 'qunatityRemaining', header: 'Qty Rem', align: 1,width:"60px" },
-        { field: 'uom', header: 'UOM',align: 0 },
-        { field: 'stockType', header: 'Stk Type',align: 0 }, //oem
+        { field: 'uom', header: 'UOM',align: 0,width:"70px" },
+        { field: 'stockType', header: 'Stk Type',align: 0 ,width:"70px"}, //oem
         { field: 'altEquiv', header: 'Alt/Equiv',align: 0 },
         { field: 'itemClassification', header: 'Classification',align: 0 },
         { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1,width:"60px" },
@@ -102,8 +107,56 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'location', header: 'Location',align: 0 },
         { field: 'shelf', header: 'Shelf' ,align: 0},
         { field: 'bin', header: 'Bin',align: 0 },
+        { field: 'employeename', header: 'Employee ',align: 0 },
         { field: 'defered', header: 'Deferred',align: 0,width:"60px" },
         { field: 'memo', header: 'Memo',align: 0 }
+    ]
+
+    auditHistory = [
+        { field: 'taskName', header: 'Task'}, 
+        { field: 'partNumber', header: 'PN' },
+        { field: 'partDescription', header: 'PN Description' },
+        { field: 'serialNumber', header: 'Serial Num' },
+        { field: 'condition', header: 'Cond'},
+        { field: 'stockLineNumber', header: 'Stk Line Num' },
+        { field: 'mandatoryOrSupplemental', header: 'Request Type' },
+        { field: 'provision', header: 'Provision' },
+        { field: 'quantity', header: 'Qty Req'},
+        { field: 'quantityReserved', header: 'Qty Res'},
+        { field: 'quantityIssued', header: 'Qty Iss'},
+        { field: 'qunatityTurnIn', header: 'Qty Turned In' },
+        { field: 'partQuantityOnHand', header: 'Qty OH'},
+        { field: 'partQuantityAvailable', header: 'Qty Avail'},
+        { field: 'qunatityRemaining', header: 'Qty Rem'},
+        { field: 'uom', header: 'UOM'},
+        { field: 'stockType', header: 'Stk Type'}, //oem
+        { field: 'altEquiv', header: 'Alt/Equiv' },
+        { field: 'itemClassification', header: 'Classification' },
+        { field: 'partQuantityOnOrder', header: 'Qty On Order'},
+        { field: 'qunatityBackOrder', header: 'Qty on BK Order'},
+        { field: 'needDate', header: 'Need Date' },
+        { field: 'controlNo', header: 'Cntl Num' },
+        { field: 'controlId', header: 'Cntl ID' },
+        { field: 'currency', header: 'Cur' },
+        { field: 'unitCost', header: 'Unit Cost'},
+        { field: 'extendedCost', header: 'Extended Cost'},
+        { field: 'costDate', header: 'Cost Date' },
+        { field: 'purchaseOrderNumber', header: 'PO Num' },
+        { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date' },
+        { field: 'repairOrderNumber', header: 'RO Num' },
+        { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' },
+        { field: 'receiver', header: 'Rec Num' },
+        { field: 'workOrderNumber', header: 'WO Num' },
+        { field: 'subWorkOrder', header: 'Sub-WO Num' },
+        { field: 'salesOrder', header: 'SO Num' },
+        { field: 'figure', header: 'Figure' },
+        { field: 'site', header: 'Site' },
+        { field: 'wareHouse', header: 'Warehouse' },
+        { field: 'location', header: 'Location' },
+        { field: 'shelf', header: 'Shelf' },
+        { field: 'bin', header: 'Bin' },
+        { field: 'defered', header: 'Deferred' },
+        { field: 'memo', header: 'Memo' }
     ]
     savebutonDisabled: boolean = false;
     roleUpMaterialList: any = [];
@@ -134,7 +187,9 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         private authService: AuthService,
         private cdRef: ChangeDetectorRef,
         private modalService: NgbModal,
-        private alertService: AlertService) {
+        private alertService: AlertService,
+        private stockLineService: StocklineService,
+        ) {
     }
 
     get userName(): string {
@@ -142,13 +197,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit() {
+        console.log("hellowww",this.workFlowObject)
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
                     if (mpn['value']['workOrderPartNumberId'] == this.mpnId) {
                         this.workFlowWorkOrderId = mpn['value']['workOrderWorkFlowId'];
                     }
-                }
+                } 
             }
             else {
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
@@ -159,6 +215,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        console.log("hellowww",this.workFlowObject)
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -188,6 +245,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = undefined;
         this.addNewMaterial = true;
         this.taskList = this.taskList;
+        this.workFlowObject.materialList = [];
     }
 
     edit(rowData) {
@@ -339,6 +397,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     updateMaterialList(event) {
         this.updateMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
+        this.isEdit=false;
     }
 
     restrictMinus(e) {
@@ -1001,5 +1060,52 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
    
     clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
+
+
+    // auditHistory:any=[]; 
+    auditHistoryList:any=[]
+        openMaterialAudit(row){
+            this.workOrderService.getMaterialHistory(row.workOrderMaterialsId,this.isSubWorkOrder).subscribe(res=>{
+ this.auditHistoryList=res.reverse();
+            })
+        }
+//     openStocklineAudit(row) {
+ 
+//   if(row.workOrderMaterialsId && row.workOrderMaterialsId !=0){
+//     this.isSpinnerVisible = true;
+//     this.stockLineService.getStocklineAudit(row.workOrderMaterialsId).subscribe(response => {
+//         this.isSpinnerVisible = false;
+//         this.auditHistory = response.map(res => {
+//             return {
+//                 ...res,
+//                 quantityOnHand: (res.quantityOnHand || res.quantityOnHand == 0) ? formatNumberAsGlobalSettingsModule(res.quantityOnHand, 0) : '',
+//                 quantityReserved: (res.quantityReserved || res.quantityReserved == 0) ? formatNumberAsGlobalSettingsModule(res.quantityReserved, 0) : '',
+//                 quantityIssued: (res.quantityIssued || res.quantityIssued == 0) ? formatNumberAsGlobalSettingsModule(res.quantityIssued, 0) : '',
+//                 quantityAvailable: (res.quantityAvailable || res.quantityAvailable == 0) ? formatNumberAsGlobalSettingsModule(res.quantityAvailable, 0) : '',
+//                 purchaseOrderUnitCost: res.purchaseOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.purchaseOrderUnitCost, 2) : '',
+//                 repairOrderUnitCost: res.repairOrderUnitCost ? formatNumberAsGlobalSettingsModule(res.repairOrderUnitCost, 2) : '',
+//                 unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '',
+//                 coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '',
+//                 lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '',
+//             }
+//         })
+   
+//     }, error => {
+//         this.isSpinnerVisible = false;
+//     })
+//   }
+//     }
+
+    getColorCodeForHistory(i, field, value) {
+		const data = this.auditHistoryList;
+		const dataLength = data.length;
+		if (i >= 0 && i <= dataLength) {
+			if ((i + 1) === dataLength) {
+				return true;
+			} else {
+				return data[i + 1][field] === value
+			}
+		}
+    }
 }
 

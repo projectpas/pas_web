@@ -537,7 +537,7 @@ export class ItemMasterService {
     getActivePartListByItemType(type){
         return this.itemMasterEndpoint.getActivePartListByItemType(type);
     }
-    getItemMasterClassificationByType(type,masterCompanyId){
+    getItemMasterClassificationByType(type, masterCompanyId){
         return this.itemMasterEndpoint.getItemMasterClassificationByType(type,masterCompanyId);
     }
     getItemMasterMappingPart(id){
