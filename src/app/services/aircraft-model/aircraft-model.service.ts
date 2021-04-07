@@ -15,9 +15,9 @@ import { AircraftModel } from "../../models/aircraft-model.model";
 export class AircraftModelService {
   constructor(private aircraftModelEndpoint: AircraftModelEndpointService) { }
 
-  getAll(id?) {
+  getAll(masterCompanyId?) {
     return Observable.forkJoin(
-      this.aircraftModelEndpoint.getAllAircraftModel<AircraftModel[]>(id)
+      this.aircraftModelEndpoint.getAllAircraftModel<AircraftModel[]>(masterCompanyId)
     );
   }
 

@@ -421,7 +421,6 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       // if (this.exchangOrdereQuote.approvedDate) {
       //   this.exchangOrdereQuote.approvedDate = this.exchangeQuote.approvedDate.toDateString();
       // }
-      debugger;
       //this.exchangOrdereQuote.priorityId = this.exchangeQuote.priorityId;
       //this.exchangOrdereQuote.priorityId = getObjectById('value', this.exchangeQuote.priorityId, this.allPriorityInfo),
       this.exchangOrdereQuote.priorityId = this.exchangeQuote.priorityId ? this.getPriorityId(this.exchangeQuote.priorityId) : 0,

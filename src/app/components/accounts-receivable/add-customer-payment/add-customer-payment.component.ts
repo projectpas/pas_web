@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { NavigationExtras } from "@angular/router";
+import { NavigationExtras, Router } from "@angular/router";
 import { CommonService } from "../../../services/common.service";
 import { AuthService } from "../../../services/auth.service";
 import { MessageSeverity, AlertService } from "../../../services/alert.service";
@@ -85,7 +85,8 @@ export class AddCustomerPaymentComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private legalEntityService: LegalEntityService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    public router: Router) {
   }
 
   ngOnInit() {
@@ -666,6 +667,7 @@ export class AddCustomerPaymentComponent implements OnInit {
         ele.receiptId = this.customerReceipt.customerPayments.receiptId;
         ele.customerId = this.customerId;
         ele.isMultiplePaymentMethod = this.paymentMethod == 2 ? true : false;
+        ele.status = "Open";
 
         if (this.paymentMethod == 2) { // Multiple Method
           ele.isCheckPayment = this.objInvoicePayment.isCheckPayment;
@@ -694,6 +696,10 @@ export class AddCustomerPaymentComponent implements OnInit {
             "Success",
             `Payment information updated successfully for Customer`,
             MessageSeverity.success
+          );
+
+          this.router.navigateByUrl(
+            `accountreceivable/accountreceivablepages/app-customer-payment-list`
           );
         }, error => {
           this.isSpinnerVisible = false;

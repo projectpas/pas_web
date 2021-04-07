@@ -620,10 +620,12 @@ export class WorkOrderService {
     getquoteFreightsHistory(id){
         return this.workOrderEndpointService.getquoteFreightsHistory(id);
     }
-    getMaterialHistory(id){
-        return this.workOrderEndpointService.getMaterialHistory(id);
+    getMaterialHistory(id,isSubWorkOrder){
+        return this.workOrderEndpointService.getMaterialHistory(id,isSubWorkOrder);
     }
-
+    getMaterialStockHistory(id,isSubWorkOrder){
+        return this.workOrderEndpointService.getMaterialStockHistory(id,isSubWorkOrder);
+    }
 } 
 
 

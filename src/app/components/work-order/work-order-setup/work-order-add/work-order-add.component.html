@@ -2,7 +2,7 @@
     <p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="!isSubWorkOrder && !isView"></p-breadcrumb>
     <div class="right_col" role="main">
         <form #workOrderForm="ngForm">
-            <div class="x_content">
+            <div class="x_content mr_3">
                 <div class="card new-card" *ngIf="!isSubWorkOrder">
                   
                         <div class="card-header header " *ngIf="!isSubWorkOrder && !isView">
@@ -301,11 +301,11 @@
                                                         (click)="onAddDescription(2)"></i>
                                                 </label>
                                                 <span>
-                                                    <div class="form-group memo-popup-cstm mat_emo overflow">
+                                                    <div class="form-group memo-popup-cstm mat_emo ">
                                                         <div [innerHTML]="workOrderGeneralInformation.memo"  matTooltipPosition="above"
                                                             [matTooltip]="parsedText(workOrderGeneralInformation.memo)" 
                                                            
-                                                            class="form-control text_editor_box memo_cehck1 adjust_he">
+                                                            class="form-control text_editor_box memo_cehck1 adjust_he overflow">
                                                         </div>
                                                     </div>
                                                 </span>
@@ -339,7 +339,7 @@
                     </div>
                     <div>
                     </div>
-                    <div class=" wid_cal"  *ngIf="!isSubWorkOrder">
+                    <div class=" wid_cal card"  *ngIf="!isSubWorkOrder">
                         <div >
                     <div class="table-responsive add-wo-grid pas-table-cstm poro-table-cstm parts-list-table-align" *ngIf="!hideWOHeader">
                         <div class="tableFixHead">
@@ -350,32 +350,32 @@
                                     <th rowspan="2">MPN <span class="clr-red">*</span></th>
                                     <th rowspan="2">MPN Description <span class="clr-red">*</span></th>
                                     <th rowspan="2" >Revised MPN</th>
-                                    <th rowspan="2" style="width:130px !important">Serial Num </th>
+                                    <th rowspan="2" style="min-width:90px !important">Serial Num </th>
                                     <th rowspan="2" style="min-width:60px !important">Qty</th>
-                                    <th rowspan="2">Rec'd Date</th>
-                                    <th rowspan="2">Cust Req Date <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Promised Date <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Est. Comp Date <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Est. Ship Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style="min-width:80px !important">Rec'd Date </th>
+                                    <th rowspan="2" style="min-width:80px !important">Cust Req Date  <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style="min-width:80px !important"> Promised Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style="min-width:80px !important">Est. Comp Date <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style="min-width:80px !important">Est. Ship Date <span class="clr-red">*</span></th>
                                     <th rowspan="2">Stage <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Status <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style="min-width:90px !important">Status <span class="clr-red">*</span></th>
                                     <th rowspan="2">Tech Name</th>
-                                    <th rowspan="2">Station ID</th>
-                                    <th rowspan="2">Work Scope <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Priority <span class="clr-red">*</span></th>
-                                    <th rowspan="2">Cond <span class="clr-red">*</span></th>
-                                    <th rowspan="2">CMM/Pub Ref</th>
-                                    <th rowspan="2">Workflow ID </th>
+                                    <th rowspan="2" style="min-width: 100px !important;">Station ID</th>
+                                    <th rowspan="2" style=" min-width: 100px !important;">Work Scope <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style=" min-width: 100px !important;">Priority <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style=" min-width: 100px !important;">Cond <span class="clr-red">*</span></th>
+                                    <th rowspan="2" style=" min-width: 100px !important;">CMM/Pub Ref</th>
+                                    <th rowspan="2" style=" min-width: 100px !important;">Workflow ID </th>
                                     <th rowspan="2" style="width:130px !important">Item Group</th>
                                     <th rowspan="2">Cust Ref</th>
                                     <th rowspan="2" style="min-width:60px !important" *ngIf="workOrderGeneralInformation.workOrderTypeId==1">Contract</th>
                                     <th rowspan="2" *ngIf="workOrderGeneralInformation.workOrderTypeId==1"
                                         style="min-width: 80px !important;">Contract No</th>
-                                        <th rowspan="2" style="width:130px !important">Stk Line </th>
+                                        <th rowspan="2" style="min-width:86px !important">Stk Line </th>
                                   
                                     <th rowspan="2" style="min-width:60px !important">NTE</th>
-                                    <th rowspan="2" style="min-width:60px !important">PMA</th>
-                                    <th rowspan="2" style="min-width:60px !important">DER</th>
+                                    <th rowspan="2" style="min-width:32px !important">PMA</th>
+                                    <th rowspan="2" style="min-width:32px !important">DER</th>
                                     <th rowspan="2" style="min-width:75px !important">TAT   Current</th>    
                                     <th rowspan="2" style="z-index:1;min-width:80px !important">TAT   Standard</th>
                                     <!-- <th colspan="2">Restriction</th>
@@ -407,7 +407,7 @@
                                         </p-autoComplete>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control  w150" name="description{{i}}"
+                                        <input type="text" class="form-control  w200" name="description{{i}}"
                                                #description="ngModel" [(ngModel)]="workOrderPartNumber.description"
                                                required disabled>
                                     </td>
@@ -425,26 +425,28 @@
                                         <input type="number"  class="form-control w100 text_right width-100" name="quantity{{i}}"
                                                [(ngModel)]="workOrderPartNumber.quantity" disabled>
                                     </td>
-                                    <td>
+                                    <td >
                                         <p-calendar [showIcon]="true" name="receivedDate{{i}}" class="calender-cstm woAdd"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  (ngModelChange)="getValid()"
                                                     #receivedDate="ngModel" [(ngModel)]="workOrderPartNumber.receivedDate"
                                                     disabled appendTo="body"> 
                                         </p-calendar>
                                     </td>
-                                    <td>
+                                    <td >
                                         <p-calendar [showIcon]="true" name="customerRequestDate{{i}}"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     class="calender-cstm woAdd" #customerRequestDate="ngModel"  (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.customerRequestDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body"></p-calendar>
-                                    <td>
+                                                    </td>
+                                    <td >
                                         <p-calendar [showIcon]="true" name="promisedDate{{i}}" class="calender-cstm woAdd"
                                         [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"  (ngModelChange)="getValid()"
                                                     #promisedDate="ngModel" [(ngModel)]="workOrderPartNumber.promisedDate"
                                                     [minDate]="workOrderPartNumber.receivedDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
-                                    <td>
+                                        </td>
+                                    <td >
                                         <p-calendar [showIcon]="true" name="estimatedCompletionDate{{i}}"
                                                     class="calender-cstm woAdd" #estimatedCompletionDate="ngModel" (onSelect)="doSomething(workOrderPartNumber.estimatedCompletionDate,workOrderPartNumber,i)"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -452,7 +454,7 @@
                                                     [(ngModel)]="workOrderPartNumber.estimatedCompletionDate" required [disabled]="isView || quotestatusofCurrentPart =='Approved'"  appendTo="body">
                                         </p-calendar>
                                     </td>
-                                    <td>
+                                    <td >
                                         <p-calendar [showIcon]="true" class="calender-cstm woAdd"
                                                     name="estimatedShipDate{{i}}"  (ngModelChange)="getValid()"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
@@ -463,15 +465,15 @@
 
                                     <td>
                                         <p-dropdown filter="true" [options]="workOrderStagesList" name="stage{{i}}" #stage="ngModel"  (ngModelChange)="getValid()"
-                                                    placeholder="Select" class="p-dropdown-custom-md p-dropdown-mh120"
-                                                    (onChange)="selectedStage($event.value,workOrderPartNumber,i)"
+                                                    placeholder="Select" class="p-dropdown-custom-md1 p-dropdown-mh120"
+                                                    (onChange)="selectedStage($event.value,workOrderPartNumber,i)"  [autoWidth]="false" [style]="pDropdownStyle"
                                                     [(ngModel)]="workOrderPartNumber.workOrderStageId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
-                                    <td>
+                                    <td style="max-width: 80px !important;">
                                         <p-dropdown filter="true" [options]="workOrderStatusList" placeholder="Select"
-                                                    name="status{{i}}" #status="ngModel"
-                                                    class="p-dropdown-custom-md custome_pd-totext p-dropdown-mh120"
+                                                    name="status{{i}}" #status="ngModel"  [autoWidth]="false" [style]="pDropdownStyle"
+                                                    class="p-dropdown-custom-md1 custome_pd-totext p-dropdown-mh120 stdrop"
                                                     [(ngModel)]="workOrderPartNumber.workOrderStatusId" disabled required appendTo="body">
                                         </p-dropdown>
                                      </td>
@@ -479,7 +481,7 @@
                                         <p-autoComplete field="name" [(ngModel)]="workOrderPartNumber.partTechnicianId"
                                                         name="technician{{i}}" #technician="ngModel"  (ngModelChange)="getValid()"
                                                         errorMessage="Records not found" [forceSelection]="true" [dropdown]="true"
-                                                        [suggestions]="technicianList" required
+                                                        [suggestions]="technicianList" required 
                                                         (onSelect)="onSelectedTechnician($event, workOrderPartNumber);"
                                                         (completeMethod)="filterTechnician($event)"
                                                         (onClear)="clearautoCompleteInput(workOrderPartNumber, 'partTechnicianId' )"
@@ -491,43 +493,43 @@
                                     </td>
                                     <td>
                                         <p-dropdown filter="true" placeholder="Select" name="techStation{{i}}" #techStatsion="ngModel"  (ngModelChange)="getValid()"
-                                                    [options]="techStationList" class="p-dropdown-custom-md p-dropdown-mh120"
+                                                    [options]="techStationList" class="p-dropdown-custom-md1 p-dropdown-mh120"  [autoWidth]="false" [style]="pDropdownStyle"
                                                     [(ngModel)]="workOrderPartNumber.techStationId"[disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
                                         <p-dropdown filter="true" placeholder="Select" name="scope{{i}}" #scope="ngModel"
-                                        [options]="workScopesList" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
+                                        [options]="workScopesList" class="p-dropdown-custom-md1 p-dropdown-mh120"  (ngModelChange)="getValid()"  [autoWidth]="false" [style]="pDropdownStyle"
                                         [(ngModel)]="workOrderPartNumber.workOrderScopeId" [disabled]="isView || quotestatusofCurrentPart =='Approved'"
                                         (onChange)="getWorkFlowByPNandScope($event.value,workOrderPartNumber,'html',i)" required appendTo="body">
                             </p-dropdown>
                                     </td>
                                     <td>
-                                        <p-dropdown filter="true" [options]="priorityList" placeholder="Select" name="priority{{i}}"
-                                                    #priority="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
+                                        <p-dropdown filter="true" [options]="priorityList" placeholder="Select" name="priority{{i}}"  [autoWidth]="false" [style]="pDropdownStyle"
+                                                    #priority="ngModel" class="p-dropdown-custom-md1 p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                     [(ngModel)]="workOrderPartNumber.workOrderPriorityId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td>
-                                        <p-dropdown filter="true" placeholder="Select" [options]="conditionList"  (ngModelChange)="getValid()"
+                                        <p-dropdown filter="true" placeholder="Select" [options]="conditionList"  (ngModelChange)="getValid()"  [autoWidth]="false" [style]="pDropdownStyle"
                                                     name="condition{{i}}" #condition="ngModel" (onChange)="selectedCondition($event.value,workOrderPartNumber,i)"
-                                                    class="p-dropdown-custom-md" [(ngModel)]="workOrderPartNumber.conditionId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
+                                                    class="p-dropdown-custom-md1" [(ngModel)]="workOrderPartNumber.conditionId" required [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                      </td>
                                      <td>
-                                        <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"
-                                                    [options]="cmmList" class="p-dropdown-custom-md p-dropdown-mh120"
+                                        <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"  [autoWidth]="false" [style]="pDropdownStyle"
+                                                    [options]="cmmList" class="p-dropdown-custom-md1 p-dropdown-mh120"
                                                     [(ngModel)]="workOrderPartNumber.cmmId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td class="lign_flex">
                                         <span class="inline-block">
-                                            <p-dropdown filter="true" [options]="workFlowList" name="workFlow{{i}}"
-                                                        #workFlow="ngModel" class="p-dropdown-custom-md p-dropdown-mh120"  (ngModelChange)="getValid()"
+                                            <p-dropdown filter="true" [options]="workFlowList" name="workFlow{{i}}"  [autoWidth]="false" [style]="pDropdownStyle"
+                                                        #workFlow="ngModel" class="p-dropdown-custom-md1 p-dropdown-mh120"  (ngModelChange)="getValid()"
                                                         [(ngModel)]="workOrderPartNumber.workflowId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                             </p-dropdown>
                                         </span>
-                                        <span data-toggle="modal" data-target="#workflowView">
+                                        <span data-toggle="modal" data-target="#workflowView" [ngClass]="{pointerEvents : workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
                                             <a class="btn nobg btn-view-cstm"   (click)="viewWorkflow(workOrderPartNumber)" matTooltip="View Workflow"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
@@ -753,7 +755,7 @@
             </div>
         </div>
     </div>
-    <div class="card " *ngIf="showTabsGrid" >
+    <div class="card align_flx" *ngIf="showTabsGrid" >
         <div *ngIf="showTabsMPNGrid">
             <div class="card-header" *ngIf="!workOrderGeneralInformation.isSinglePN">
                 Multiple MPN
@@ -812,7 +814,7 @@
   </div>
 </div>
             <div class="card col-md-12 div_bsck" >
-                 <ul class="nav nav-pills nav-pills-cstm back_filsd wo_td  mrgn_bt4" id="pills-tab" role="tablist"
+                 <ul class="nav nav-pills nav-pills-cstm back_filsd wo_td  mrgn_bt4 adjust_marg" id="pills-tab" role="tablist"
                    *ngIf="!hideWOHeader">
 
                     <li class="nav-item" *ngIf="isSubWorkOrder">

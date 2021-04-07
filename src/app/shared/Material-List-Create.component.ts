@@ -521,6 +521,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 }
             }
         }
+        material.qtyOnHand = material.quantityOnHand;
+        material.qtyAvail = material.qtyAvailable;
         material.itemMasterId = material.partItem.partId;
         material.partDescription = material.partItem.description;
         material.partNumber = material.partItem.partName; 
@@ -803,8 +805,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
     closeMaterialTab() {
         this.workFlow.materialList = [];
+        this.updateMaterialListForWO.emit(this.workFlow);
         this.addRow();
         this.workFlow.materialList[0].conditionCodeId = 0;
+        this.workFlow.materialList[0].partItem = null;
+        this.editData={};
     }
     updateMaterialsWorkOrder() {
         this.updateMaterialListForWO.emit(this.workFlow);

@@ -39,11 +39,11 @@ export class AircraftModelEndpointService extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getAllAircraftModel<T>(id?): Observable<T> {
-        let endpointUrl = `${this.getAll}/${id}`;
+    getAllAircraftModel<T>(masterCompanyId?): Observable<T> {
+        let endpointUrl = `${this.getAll}/${masterCompanyId == undefined ? 1 : masterCompanyId }`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getAllAircraftModel(id));
+                return this.handleErrorCommon(error, () => this.getAllAircraftModel(masterCompanyId));
         });
     }
 

@@ -1343,10 +1343,30 @@ getquoteMaterialHistory(WorkOrderQuoteMaterialId) {
   }
   //material list history
 
-  
-  getMaterialHistory(id){
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workorderstockhistory?workOrderMaterialId=${id}`, this.getRequestHeaders()).catch(error => {
-        return this.handleErrorCommon(error, () => this.getMaterialHistory(id));
-    });  
+  getMaterialHistory(id,isSubWorkOrder){
+ if(isSubWorkOrder){
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/subworkordermaterialauditlist?SubWorkOrderMaterialsId=${id}`, this.getRequestHeaders()).catch(error => {
+        return this.handleErrorCommon(error, () => this.getMaterialHistory(id,isSubWorkOrder));
+    }); 
+ }else{
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workordermaterialauditlist?WorkOrderMaterialsId=${id}`, this.getRequestHeaders()).catch(error => {
+        return this.handleErrorCommon(error, () => this.getMaterialHistory(id,isSubWorkOrder));
+    }); 
  }
+ }
+
+
+
+ getMaterialStockHistory(id,isSubWorkOrder){
+    if(isSubWorkOrder){
+       return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workorderstockhistory?workOrderMaterialId=${id}`, this.getRequestHeaders()).catch(error => {
+           return this.handleErrorCommon(error, () => this.getMaterialHistory(id,isSubWorkOrder));
+       }); 
+    }else{
+       return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workorderstockhistory?workOrderMaterialId=${id}`, this.getRequestHeaders()).catch(error => {
+           return this.handleErrorCommon(error, () => this.getMaterialHistory(id,isSubWorkOrder));
+       }); 
+    }
+    }
+
 }

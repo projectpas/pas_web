@@ -30,6 +30,7 @@ import { CustomerPaymentsEndpointService } from '../services/customer-payments-e
 import { TabViewModule } from 'primeng/tabview';
 import { PanelModule } from 'primeng/panel';
 import { AddCustomerPaymentComponent } from '../components/accounts-receivable/add-customer-payment/add-customer-payment.component';
+import { ReviewCustomerPaymentComponent } from '../components/accounts-receivable/reivew-customer-payments/review-customer-payment.component';
 
 @NgModule({
     imports: [
@@ -60,7 +61,8 @@ import { AddCustomerPaymentComponent } from '../components/accounts-receivable/a
         CustomerInvoiceListComponent,
         CustomerPaymentListComponent,
         CustomerPaymentCreateComponent,
-        AddCustomerPaymentComponent
+        AddCustomerPaymentComponent,
+        ReviewCustomerPaymentComponent
     ],
     providers: [
         CustomerPaymentsService,
