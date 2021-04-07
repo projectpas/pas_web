@@ -517,21 +517,6 @@ export class EmployeeEndpoint extends EndpointFactory {
 				return this.handleError(error, () => this.downloadAllEmployeeList(employeeId));
 			});
 	}
-	
-	getUpdateEmployeePasswordEndpoint<T>(password,employeeId): Observable<T> {
-		let url = this._employeeUpdatePasswordUrl;
-		var data ={
-			"password":password,
-			"employeeId":employeeId
-		}
-		console.log(data);
-		console.log(password);
-		console.log(employeeId);
-		return this.http.post<T>(url,JSON.stringify(data), this.getRequestHeaders())
-			.catch(error => {
-				return this.handleError(error, () => this.getUpdateEmployeePasswordEndpoint(password,employeeId));
-			});
-	}
 
 	getUpdateEmployeePasswordEndpoint<T>(password,employeeId): Observable<T> {
 		let url = this._employeeUpdatePasswordUrl;

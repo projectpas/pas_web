@@ -91,11 +91,6 @@ export class LoginControlComponent implements OnInit, OnDestroy {
                     }
                 });
         }
-
-    }
-
-    private onDataLoadFailed(error: any) {
-console.log(error);
     }
 
     private onDataLoadFailed(error: any) {
