@@ -196,13 +196,14 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit() {
+        console.log("hellowww",this.workFlowObject)
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
                     if (mpn['value']['workOrderPartNumberId'] == this.mpnId) {
                         this.workFlowWorkOrderId = mpn['value']['workOrderWorkFlowId'];
                     }
-                }
+                } 
             }
             else {
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
@@ -213,6 +214,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        console.log("hellowww",this.workFlowObject)
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -242,6 +244,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.editData = undefined;
         this.addNewMaterial = true;
         this.taskList = this.taskList;
+        this.workFlowObject.materialList = [];
     }
 
     edit(rowData) {
@@ -393,6 +396,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     updateMaterialList(event) {
         this.updateMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
+        this.isEdit=false;
     }
 
     restrictMinus(e) {
