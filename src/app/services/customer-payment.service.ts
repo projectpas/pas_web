@@ -29,4 +29,8 @@ export class CustomerPaymentsService {
       this.customerPaymentsEndpointService.savePayments(salesOrder)
     );
   }
+
+  GetCustomerPaymentForReview(receiptId: number) {
+    return this.customerPaymentsEndpointService.getCustomerPaymentForReview(receiptId);
+}
 }

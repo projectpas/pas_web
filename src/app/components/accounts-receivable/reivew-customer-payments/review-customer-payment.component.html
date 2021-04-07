@@ -1,0 +1,366 @@
+<div *ngIf="dataForReview">
+  <div class="card card-stock" style="margin-top: 5px;">
+    <div class="card-body" style="padding: 10px;">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-12">
+            <div class="col-2 column">
+              <div class="form-group">
+                <label>Receipt ID</label>
+                <input type="text" class="form-control" name="receiptNo"
+                  [(ngModel)]="dataForReview.customerPayments.receiptNo" [disabled]="true" />
+              </div>
+            </div>
+            <div class="col-2 column">
+              <div class="form-group">
+                <label>Receipt Date</label>
+                <input type="text" class="form-control" name="depositDate"
+                  [(ngModel)]="dataForReview.customerPayments.depositDate" [disabled]="true" />
+              </div>
+            </div>
+            <div class="col-1 column">
+              <div class="form-group">
+                <label>BankAcct Name</label>
+                <input type="text" class="form-control" [(ngModel)]="dataForReview.customerPayments.bankName"
+                  name="bankName" [disabled]="true" />
+              </div>
+            </div>
+            <div class="col-1 column">
+              <div class="form-group">
+                <label>Reference</label>
+                <input type="text" class="form-control" name="reference"
+                  [(ngModel)]="dataForReview.customerPayments.reference" [disabled]="true" />
+              </div>
+            </div>
+            <div class="col-2 column">
+              <div class="form-group">
+                <label>Amount</label>
+                <input type="text" class="form-control" name="amount"
+                  [(ngModel)]="dataForReview.customerPayments.amount" [disabled]="true" />
+              </div>
+            </div>
+            <div class="col-2 column">
+              <div class="form-group">
+                <label>Applied</label>
+                <input type="text" class="form-control" name="amtApplied"
+                  [(ngModel)]="dataForReview.customerPayments.amtApplied" [disabled]="true" />
+              </div>
+            </div>
+            <div class="col-2 column">
+              <div class="form-group">
+                <label>Amt Remaining</label>
+                <input type="text" class="form-control" name="amtRemaining"
+                  [(ngModel)]="dataForReview.customerPayments.amtRemaining" [disabled]="true" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-12">
+            <div
+              [ngClass]="'table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex'"
+              style="min-height: 130px !important;">
+              <div class="tableFixHead">
+                <table class="table table-bordered" id="so-table">
+                  <tr class="header-table-width" style="font-size: 10px">
+                    <th *ngFor="let summaryColumn of custheaders">
+                      <span>
+                        {{ summaryColumn.header }}
+                      </span>
+                    </th>
+                    <th colspan="25"></th>
+                    <th></th>
+                  </tr>
+                  <ng-container *ngIf="dataForReview">
+                    <ng-container *ngFor="let summaryPart of dataForReview.paymentsByCustomer;let rowIndex=index;">
+                      <tbody>
+                        <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                          <td *ngFor="let summaryColumn of custheaders"
+                            style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
+                            <span>
+                              {{summaryPart.customerDetails[summaryColumn.field]}}
+                            </span>
+                          </td>
+                          <td colspan="25"></td>
+                          <td></td>
+                        </tr>
+                        <tr class="child-header splitship-head child-header-back">
+                          <th></th>
+                          <!-- <th *ngFor="let summaryColumn of headers">
+                            <span>
+                              {{ summaryColumn.header }}
+                            </span>
+                          </th> -->
+                          <th>Doc Type</th>
+                          <th>Doc Num</th>
+                          <th>Doc Date</th>
+                          <th>Original Amount</th>
+                          <th style="min-width: 115px;">Remaining Amount</th>
+                          <th style="min-width: 115px;">Payment</th>
+                          <th style="min-width: 115px;">Disc Amount</th>
+                          <th style="min-width: 115px;">Disc Type</th>
+                          <th style="min-width: 130px;">Bank Fee Amount</th>
+                          <th style="min-width: 115px;">Bank Fee Type</th>
+                          <th style="min-width: 130px;">Other Adjust Amt</th>
+                          <th style="min-width: 140px;">Reason</th>
+                          <th style="min-width: 115px;">New Remaining Bal</th>
+                          <th style="min-width: 150px;">GL AR Account</th>
+                          <th style="min-width: 70px;">Curr</th>
+                          <th style="min-width: 80px;">FX Rate</th>
+                          <th style="min-width: 115px;">WO/SO Num</th>
+                          <th style="min-width: 80px;">Status</th>
+                          <th>DSI</th>
+                          <th>DSO</th>
+                          <th style="min-width: 115px;">Amount Past Due</th>
+                          <th style="min-width: 85px;">AR Bal</th>
+                          <th style="min-width: 125px;">Credit Term</th>
+                          <th style="min-width: 140px;">Cntrl Num</th>
+                          <th style="min-width: 125px;">Employee</th>
+                          <th style="min-width: 175px;">CO</th>
+                          <th style="min-width: 175px;">BU</th>
+                          <th style="min-width: 175px;">Div</th>
+                          <th style="min-width: 175px;">Dept</th>
+                          <th style="min-width: 120px; position: sticky !important">Actions</th>
+                        </tr>
+                        <tr class="child-data splitship-child child-data-back"
+                          *ngFor="let invoice of summaryPart.invoices; let stockIndex = index">
+                          <td></td>
+                          <ng-container *ngFor="let field of headers">
+                            <td class="table-column-width">
+                              <span *ngIf="field.field == 'documentType'
+                            || field.field == 'docNum'
+                            || field.field == 'originalAmount'
+                            || field.field == 'remainingAmount'
+                            || field.field == 'newRemainingBal'
+                            || field.field == 'glARAccount'
+                            || field.field == 'currencyCode'
+                            || field.field == 'fxRate'
+                            || field.field == 'wosoNum'
+                            || field.field == 'paymentStatus'
+                            || field.field == 'dsi'
+                            || field.field == 'dso'
+                            || field.field == 'amountPastDue'
+                            || field.field == 'arBalance'
+                            || field.field == 'creditTermName'
+                            || field.field == 'cntrlNum'
+                            || field.field == 'employee'
+                            || field.field == 'level1'
+                            || field.field == 'level2'
+                            || field.field == 'level3'
+                            || field.field == 'level4'">
+                                {{invoice[field.field]}}
+                              </span>
+                              <span *ngIf="field.field == 'invoiceDate'">
+                                {{invoice[field.field]  | date: "MM/dd/yyyy"}}
+                              </span>
+                              <span *ngIf="field.field == 'paymentAmount'">
+                                <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
+                                  [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
+                              </span>
+                              <span *ngIf="field.field == 'discAmount'">
+                                <input type="text" class="form-control" style="text-align: right;" name="discAmount"
+                                  [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
+                              </span>
+                              <span *ngIf="field.field == 'discType'">
+                                <select [(ngModel)]="invoice[field.field]" name="discType"
+                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                  <option value="0">Select</option>
+                                  <option value="1">Early pay (Earned)</option>
+                                  <option value="2">Early Pay (Not Earned)</option>
+                                  <option value="3">Dispute Price</option>
+                                </select>
+                              </span>
+                              <span *ngIf="field.field == 'bankFeeAmount'">
+                                <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
+                                  [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
+                              </span>
+                              <span *ngIf="field.field == 'bankFeeType'">
+                                <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
+                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                  <option value="0">Select</option>
+                                  <option value="1">Wire/ACH Fees</option>
+                                  <option value="2">FX Fees</option>
+                                </select>
+                              </span>
+                              <span *ngIf="field.field == 'otherAdjustAmt'">
+                                <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
+                                  [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
+                              </span>
+                              <span *ngIf="field.field == 'reason'">
+                                <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
+                                  [(ngModel)]="invoice[field.field]" id="reason" />
+                              </span>
+                            </td>
+                          </ng-container>
+                          <td class="zui-sticky-col">
+                            <span>
+                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                matTooltip="View Stockline">
+                                <i class="fa fa-eye"></i>
+                              </a>
+                            </span>
+                            <span>
+                              <button class="btn nobg" mat-icon-button matTooltip="Edit" matTooltipPosition="above"
+                                (click)="editPayment(invoice)"
+                                style="font-weight: bold;">
+                                <i class="fa fa-pencil"></i>
+                              </button>
+                            </span>
+                          </td>
+                          <!-- <td colspan="2"></td>
+                          <td class="zui-sticky-col" style="width:107px !important">
+                            <span>
+                              <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
+                                (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
+                            </span>
+                            <span>
+                              <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)"
+                                matTooltip="Confirm" matTooltipPosition="above" style="font-weight: bold;"
+                                [disabled]="part.isConfirmed">
+                                <i class="fa fa-check"></i>
+                              </button>
+                            </span>
+                            <span>
+                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                (click)="viewStockSelectedRow(part)" matTooltip="View Stockline">
+                                <i class="fa fa-eye"></i>
+                              </a>
+                            </span>
+                            <span>
+                              <button class="btn nobg" mat-icon-button
+                                (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
+                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
+                                <i class="fa fa-pencil"></i>
+                              </button>
+                            </span>
+                          </td> -->
+                        </tr>
+                      </tbody>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="dataForReview == undefined">
+                    <tbody>
+                      <tr>
+                        <td colspan="48"
+                          style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                          No records found
+                        </td>
+                      </tr>
+                    </tbody>
+                  </ng-container>
+                </table>
+              </div>
+            </div>
+
+            <!-- <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex">
+              <div class="tableFixHead">
+                <table class="table table-bordered header-table-width" id="mpn-list-table">
+                  <thead>
+                    <tr class="pad_workflo">
+                      <th class="approver-th-align th-width">
+                        <input type="checkbox" (click)="selectAllApproval('internal', selectall)"
+                          [(ngModel)]="selectall" />
+                      </th>
+                      <th *ngFor="let header of headers">{{header.header}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="!openInvoices || openInvoices.length == 0">
+                      <tr>
+                        <td colspan="21" class="no-records-cstm">
+                          No records found
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-container *ngIf="openInvoices">
+                      <tr class="mpn-row" style="display: table-row;"
+                        *ngFor="let invoice of openInvoices; let i=index;">
+                        <td>
+                          <input type="checkbox" [(ngModel)]="invoice.selected"
+                            [disabled]="isView || !getPartToDisableOrNot(invoice)" />
+                        </td>
+                        <ng-container *ngFor="let field of headers">
+                          <td class="table-column-width">
+                            <span *ngIf="field.field == 'documentType'
+                          || field.field == 'docNum'
+                          || field.field == 'invoiceDate'
+                          || field.field == 'originalAmount'
+                          || field.field == 'remainingAmount'
+                          || field.field == 'newRemainingBal'
+                          || field.field == 'glARAccount'
+                          || field.field == 'currencyCode'
+                          || field.field == 'fxRate'
+                          || field.field == 'wosoNum'
+                          || field.field == 'paymentStatus'
+                          || field.field == 'dsi'
+                          || field.field == 'dso'
+                          || field.field == 'amountPastDue'
+                          || field.field == 'arBalance'
+                          || field.field == 'creditTermName'
+                          || field.field == 'cntrlNum'
+                          || field.field == 'employee'
+                          || field.field == 'level1'
+                          || field.field == 'level2'
+                          || field.field == 'level3'
+                          || field.field == 'level4'">
+                              {{invoice[field.field]}}
+                            </span>
+                            <span *ngIf="field.field == 'paymentAmount'">
+                              <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
+                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
+                            </span>
+                            <span *ngIf="field.field == 'discAmount'">
+                              <input type="text" class="form-control" style="text-align: right;" name="discAmount"
+                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
+                            </span>
+                            <span *ngIf="field.field == 'discType'">
+                              <select [(ngModel)]="invoice[field.field]" name="discType"
+                                (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                <option value="0">Select</option>
+                                <option value="1">Early pay (Earned)</option>
+                                <option value="2">Early Pay (Not Earned)</option>
+                                <option value="3">Dispute Price</option>
+                              </select>
+                            </span>
+                            <span *ngIf="field.field == 'bankFeeAmount'">
+                              <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
+                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
+                            </span>
+                            <span *ngIf="field.field == 'bankFeeType'">
+                              <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
+                                (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                <option value="0">Select</option>
+                                <option value="1">Wire/ACH Fees</option>
+                                <option value="2">FX Fees</option>
+                              </select>
+                            </span>
+                            <span *ngIf="field.field == 'otherAdjustAmt'">
+                              <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
+                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
+                            </span>
+                            <span *ngIf="field.field == 'reason'">
+                              <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
+                                [(ngModel)]="invoice[field.field]" id="reason" />
+                            </span>
+                          </td>
+                        </ng-container>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
