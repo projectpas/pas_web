@@ -257,6 +257,10 @@
                                 <app-add-customer-payment [customerPayment]="custPaymentData">
                                 </app-add-customer-payment>
                             </p-tabPanel>
+                            <p-tabPanel header="Review Payments">
+                                <app-review-customer-payment [receiptId]="id">
+                                </app-review-customer-payment>
+                            </p-tabPanel>
                         </p-tabView>
                     </ng-container>
                     <div class="card-footer text-right" *ngIf="(isCreateModeHeader||isEdit)">
