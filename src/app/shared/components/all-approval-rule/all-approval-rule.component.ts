@@ -99,11 +99,11 @@ export class AllApprovalRuleComponent implements OnInit {
    creatingData: any;     
    headers = [
       { field: 'taskName', header: 'Task Name' },
-      { field: 'ruleNo', header: 'Rule No' },     
-      { field: 'amount', header: 'Amount' },
-      { field: 'value', header: 'Value' },
-      { field: 'lowerValue', header: 'Lower Value' },
-      { field: 'upperValue', header: 'Upper Value' },
+      { field: 'ruleNo', header: 'Rule No',width:"60px" },     
+      { field: 'amount', header: 'Amount',width:"60px" },
+      { field: 'value', header: 'Value',width:"60px" },
+      { field: 'lowerValue', header: 'Lower Value',width:"60px" },
+      { field: 'upperValue', header: 'Upper Value',width:"60px" },
       { field: 'companyName', header: 'Level 01' },
       { field: 'buName', header: 'Level 02' },
       { field: 'deptName', header: 'Level 03' },

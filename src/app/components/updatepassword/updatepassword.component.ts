@@ -79,7 +79,7 @@ export class UpdatepasswordComponent implements OnInit {
       } else {
           matchingControl.setErrors(null);
       }
-  }
+    } 
   }
 
 }

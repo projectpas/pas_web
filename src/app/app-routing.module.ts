@@ -103,7 +103,7 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
                 loadChildren: () => import('./exchangepages/exchangepages.module').then(m => m.ExchangepagesModule)
             },
             { path: "home", redirectTo: "/", pathMatch: "full" },
-            {path:"updatepassword",component:UpdatepasswordComponent,data: { title: "UpdatePassword" } },
+            { path: "updatepassword", component:UpdatepasswordComponent ,data: { title: "UpdatePassword" } },
             { path: "**", component: NotFoundComponent, data: { title: "Page Not Found" } },
         ], {
             preloadingStrategy: PreloadAllModules

@@ -164,6 +164,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _internationalShipViaByShippingIdList: string = '/api/Customer/getinternationalshippingviadetails';
     private readonly _customerContacATAHistory: string = '/api/Customer/getCustomerATAMappedAudit'
     private readonly _customerInvoiceSearch: string = environment.baseUrl + "/api/customer/SearchCustomerInvoice";
+    private readonly _customerPaymentSearch: string = environment.baseUrl + "/api/CustomerPayments/SearchCustomerPayment";
     private readonly _getOpenInvoiceList: string = environment.baseUrl + "/api/customer/GetOpenInvoiceList";
     private readonly _getOpenInvoiceListByCustId: string = environment.baseUrl + "/api/customer/GetOpenInvoiceListByCustId";
 
@@ -1685,6 +1686,14 @@ export class CustomerEndpoint extends EndpointFactory {
         return this.http.post(this._customerInvoiceSearch, params, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.customerInvoiceSearch(customerInvoiceSearchParameters));
+            });
+    }
+
+    customerPaymentSearch(customerInvoiceSearchParameters: ICustomerInvoiceSearchParameters): Observable<any> {
+        let params = JSON.stringify(customerInvoiceSearchParameters);
+        return this.http.post(this._customerPaymentSearch, params, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.customerPaymentSearch(customerInvoiceSearchParameters));
             });
     }
 

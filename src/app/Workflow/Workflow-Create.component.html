@@ -78,17 +78,7 @@
                                     <label for="changepn">Revised PN</label>
                                     <input type="text" class="form-control" id="revisedPartNumber"
                                         [(ngModel)]="sourceWorkFlow.revisedPartNumber" [disabled]="true">
-                                    <!-- <p class="c-workflow-select">
-                                        <p-autoComplete appendTo="body" [(ngModel)]="sourceWorkFlow.changedPart"
-                                            [suggestions]="changedPartCollection"
-                                            (completeMethod)="filterChangedPartItems($event)" [size]="32"
-                                            [minLength]="1" [dropdown]="true" class="wf-header-select"
-                                            #changedPart="ngModel" errorMessage="Records not found" field="partName"
-                                            (onSelect)="onChangedPartSelect($event)" [forceSelection]="true" title="PN"
-                                            required>
-                                        </p-autoComplete>
-                                    </p> -->
-                                </div>
+                                    </div>
                             </div>
                         </div>
                         <div class="form-row">
@@ -155,7 +145,7 @@
                                     <label for="Customer Name">Customer Name<span class="clr-red"></span>
                                     </label>
                                     <p class="c-workflow-select">
-                                        <p-autoComplete appendTo="body" required [(ngModel)]="sourceWorkFlow.customerName"
+                                        <p-autoComplete appendTo="body"  [(ngModel)]="sourceWorkFlow.customerName"
                                             [suggestions]="customerNames" (completeMethod)="filterNames($event)"
                                             [size]="32" [minLength]="1" [dropdown]="true" class="wf-header-select"
                                             #partNum="ngModel" errorMessage="Records not found" field="customerName"
@@ -229,7 +219,6 @@
                                                 <input  class="form-control w70 text-right" type="text"
                                                     name="fixedAmount" [(ngModel)]="sourceWorkFlow.fixedAmount"                                        
                                                     (input)="berDetermination($event.target.value,'html')" />
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -257,7 +246,6 @@
                                                     class="form-control w70 text-right" id="" name="" pInputText
                                                     pKeyFilter="money"  (ngModelChange)="checkEnableUpdate()"
                                                     (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew)">
-                                               
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="w60">Percent:</label>
@@ -269,7 +257,6 @@
                                                         [ngValue]="percent.value">
                                                         {{percent.label}}%</option>
                                                 </select>
-                                            
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="w60">Amount:</label>
@@ -277,8 +264,6 @@
                                                     pKeyFilter="money" value="{{sourceWorkFlow.percentOfNew}}"
                                                     disabled />
                                              </div>
-                                                
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -301,21 +286,15 @@
                                     <div class="col-md-8">
                                         <div [hidden]="!percentreplcae">
                                             <div class="col-sm-4">
-                                                <!-- <div> -->
-                                                    <label class="cost-replace-label">Cost of Replace:  </label>
+                                                  <label class="cost-replace-label">Cost of Replace:  </label>
                                                     <input  [(ngModel)]="sourceWorkFlow.costOfReplacement" pInputText
                                                         pKeyFilter="money" class="form-control w70 amount text-right"
                                                         type="text"  (ngModelChange)="checkEnableUpdate()"
                                                         (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement)">
-                                                   
-                                                    <!-- </div> -->
-                                            </div>
+                                             </div>
                                             <div class="col-sm-4">
-                                                <!-- <div style="float:left;"> -->
                                                     <label class="w60">Percent:</label>
-                                                <!-- </div> -->
-                                                <!-- <div style="float:left;"> -->
-                                                    <select [(ngModel)]="sourceWorkFlow.percentageOfReplacement"
+                                                 <select [(ngModel)]="sourceWorkFlow.percentageOfReplacement"
                                                         class="form-control w70"  (ngModelChange)="checkEnableUpdate()"
                                                         (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement); ">
                                                         <option value="-1">--Select--</option>
@@ -323,17 +302,12 @@
                                                             [ngValue]="percent.value">{{percent.label}}%
                                                         </option>
                                                     </select>
-                                                <!-- </div> -->
-                                            
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <!-- <div style="float:left;"> -->
+                                                </div>
+                                            <div class="col-sm-4"> 
                                                     <label class="w60">Amount: </label>
                                                     <input type="text" class="form-control w70 text-right" pInputText
                                                         pKeyFilter="money"
                                                         value="{{sourceWorkFlow.percentOfReplacement}}" disabled />
-                                                   
-                                                        <!-- </div> -->
                                             </div>
                                         </div>
                                     </div>
@@ -344,37 +318,32 @@
                             <h4 class="total-wf-cost">Total Workflow Cost</h4>
                             <div class="form-row mar-top-10 total-wf-cost-form">
                                 <div class="col-md-2 workflow-cost-div m-t-20">
-                                    <span class="label"><b>Workflow Cost: </b></span>
-                                    <!-- <label>Workflow Cost</label> -->
+                                    <span class="label"><b>Workflow Cost: </b></span> 
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
-                                        <span class="label"><b>Material </b></span>
-                                        <!-- <label><b>Material</b></label> -->
+                                        <span class="label"><b>Material </b></span> 
                                         <input type="text" class="form-control text-right" [(ngModel)]="MaterialCost"
                                             disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
-                                        <span class="label"><b>Expertise </b></span>
-                                        <!-- <label><b>Expertise</b></label> -->
+                                        <span class="label"><b>Expertise </b></span> 
                                         <input type="text" class="form-control text-right"
                                             [(ngModel)]="TotalExpertiseCost" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
-                                        <span class="label"><b>Charges </b></span>
-                                        <!-- <label><b>Charges</b></label> -->
+                                        <span class="label"><b>Charges </b></span> 
                                         <input type="text" class="form-control text-right" [(ngModel)]="TotalCharges"
                                             disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
-                                        <span class="label"><b>Other </b></span>
-                                        <!-- <label><b>Other</b></label> -->
+                                        <span class="label"><b>Other </b></span> 
                                         <input type="text" class="form-control text-right"
                                             (change)="onChangeOtherCost()" pInputText pKeyFilter="money"
                                             (ngModelChange)="checkEnableUpdate()"
@@ -383,8 +352,7 @@
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
-                                        <span class="label"><b>Total </b></span>
-                                        <!-- <label><b>Total</b></label> -->
+                                        <span class="label"><b>Total </b></span> 
                                         <input type="text" class="form-control text-right" [(ngModel)]="Total" value=""
                                             disabled />
                                     </div>
@@ -392,8 +360,7 @@
                             </div>
                             <div class="form-row mar-top-10 total-wf-cost-form">
                                 <div class="col-md-2 workflow-cost-div m-t-5">
-                                    <span class="label"><b>Mark Up % </b></span>
-                                    <!-- <label><b>Mark Up %</b> </label> -->
+                                    <span class="label"><b>Mark Up % </b></span> 
                                 </div>
                                 <div class="col-md-2 workflow-cost-div">
                                     <div class="form-group">
@@ -492,11 +459,7 @@
                                         <input type="text" name="percentBERTh" class="form-control text-end" [(ngModel)]="percentBERTh"
                                             [value]="percentBERTh" disabled />
                                     </div>
-                                </div>
-                                <!-- <div class="col-md-12 text-right">
-                                    <button class="btn btn-primary" (click)="calculateTotalWorkFlowCost(true)"
-                                   >Calculate Total Workflow Cost</button>
-                                </div> -->
+                                </div> 
                             </div>
                         </div>                        
                     </div>
@@ -507,28 +470,22 @@
                             <button class="btn btn-primary" *ngIf="!UpdateMode"
                                 (click)="addWorkFlow(true)"
                                 [disabled]=" !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
-                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId ||!sourceWorkFlow.customerName">Save</button>
+                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId">Save</button>
                             <button class="btn btn-primary" *ngIf="UpdateMode"
                                 [disabled]="disableUpdateButton || !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
-                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId ||!sourceWorkFlow.customerName"
+                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId"
                                 (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div *ngIf="toggle_wf_header " style="margin-top: 15px;"></div> -->
-
-        </div>
+          </div>
     </div>
-
-</div>
-<div>
+</div> 
     <div class="x_content workflow-page">
         <div class="card-layout">
             <div>
-                <!-- <div class="clear"></div>
-                <br /> -->
-                <div class="card" *ngIf="sourceWorkFlow.workflowId">
+                 <div class="card" *ngIf="sourceWorkFlow.workflowId">
                     <div class="card-body">
                         <div class="form-group col-sm-6">
                             <div class="col-sm-1 class-task">
@@ -560,10 +517,7 @@
                                         (onDeSelect)="onDeSelect($event)" (onSelect)="onItemSelect($event)"
                                         (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
                                     </ng-multiselect-dropdown>
-                                    <!-- <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
-                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
-                                </p-multiSelect> -->
-                                </div>
+                                 </div>
                             </div>
                         </div>
                     </div>                
@@ -588,8 +542,7 @@
                     </div>
 
                     <div class="bhoechie-tab">
-                        <!-- flight section -->
-                        <div class="bhoechie-tab-content active">
+                         <div class="bhoechie-tab-content active">
                             <div class="custom-pill">
                                 <ul class="nav nav-pills">
                                     <li *ngFor="let item of workFlow.selectedItems;let i=index;"
@@ -721,7 +674,6 @@
         </div>
         <div class="clear"></div>
     </div>
-
     <ng-template #deleteConfirm let-c="close" let-d="dismiss" data-backdrop="static">
         <div class="modal-title">
             <h4>Confirm workflow delete</h4>
@@ -734,7 +686,6 @@
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>
-
     <div #saveToWorkFlow id="saveToWorkFlow" class="modal fade" role="dialog" data-backdrop="static"
         data-keyboard="false">
         <div class="modal-dialog">
@@ -751,7 +702,6 @@
             </div>
         </div>
     </div>
-
     <div #saveToWorkOrder id="saveToWorkOrder" class="modal fade" role="dialog" data-backdrop="static"
         data-keyboard="false">
         <div class="modal-dialog">
@@ -769,11 +719,9 @@
 
         </div>
     </div>
-
     <div id="quoteVer" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog modal-sm text-center"> 
-            <!-- Modal content-->
-            <div class="modal-content">
+              <div class="modal-content">
                 <div class="modal-header text-start">
                     <h4 class="modal-title text-left">Do you want to create a new version?</h4>
                     <button type="button" class="close" data-dismiss="modal">
@@ -793,11 +741,9 @@
             </div>
         </div>
     </div>
-
     <div id="confir" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog modal-sm text-center">
-            <!-- Modal content-->
-            <div class="modal-content">
+             <div class="modal-content">
                 <div class="modal-header text-start">
                     <h4 class="modal-title text-left">Confirmation !</h4>
                     <button type="button" class="close" data-dismiss="modal">
@@ -827,21 +773,7 @@
                     <h4 class="modal-title">Edit Memo</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                        <thead>
-                            <th style="color: #fff;">Memo</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo"
-                                        required>
-                                    </p-editor>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-                    <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo"
+                   <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo"
                     required>
                 </p-editor>
                 </div>
@@ -861,8 +793,7 @@
     </div>
     <div id="UpdateConfirm" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog modal-sm text-center">
-            <!-- Modal content-->
-            <div class="modal-content">
+             <div class="modal-content">
                 <div class="modal-header text-start">
                     <h4 class="modal-title text-left">Confirmation !</h4>
                     <button type="button" class="close" data-dismiss="modal">

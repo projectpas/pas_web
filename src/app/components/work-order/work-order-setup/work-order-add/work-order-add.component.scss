@@ -210,6 +210,18 @@ height: 25px !important;
 .add-wo-grid th {
   text-align: center;
 }
+.add-wo-grid{
+  margin-bottom: 4px   !important;
+  margin-top: 0px  !important;
+}
+.lign_flex{
+  
+  display: inline-flex;
+
+}
+.overflow{
+  overflow: scroll !important;
+}
 .addMPN_details{
   margin-bottom: 12px;
     margin-top: 4px;
@@ -271,5 +283,30 @@ height: 25px !important;
   margin-top: 4px;
 }
 .wid_cal{
-  width: 100% !important;
+  width: 99.2% !important;
+  margin: 0px 5px;
+  padding: 0 0 4px;
+}
+.mrgn_bt4{
+  margin-bottom: 4px;
+  margin-top: 0px   !important;
+}
+.w200{ 
+    width: 220px !important; 
+} 
+.w80{
+  width :80px   !important
+}
+.mr_3{
+  margin-bottom: 3px !important;
+}
+.align_flx{
+  width: 99.4% !important;
+  margin: 0 0 0 4px;
+}
+.adjust_mar{
+  margin-right: 1px !important;
+  margin-bottom: 4px !important;
+  margin-left: 1px !important;
+  margin-top: 2px !important;
 }

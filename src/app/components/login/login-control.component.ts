@@ -52,10 +52,20 @@ export class LoginControlComponent implements OnInit, OnDestroy {
             masterCompanyId:1,
             rememberMe: this.authService.rememberMe
         });
-        
+
         this.loadMasterCompanies();
 
-        
+        // if (this.getShouldRedirect()) {
+        //     this.authService.redirectLoginUser();
+        // }
+        // else {
+        //     this.loginStatusSubscription = this.authService.getLoginStatusEvent()
+        //         .subscribe(isLoggedIn => {
+        //             if (this.getShouldRedirect()) {
+        //                 this.authService.redirectLoginUser();
+        //             }
+        //         });
+        // }
     }
 
     private loadMasterCompanies() {
@@ -86,6 +96,10 @@ export class LoginControlComponent implements OnInit, OnDestroy {
 
     private onDataLoadFailed(error: any) {
 console.log(error);
+    }
+
+    private onDataLoadFailed(error: any) {
+        console.log(error);
     }
     
     ngOnDestroy() {
@@ -122,7 +136,7 @@ console.log(error);
             this.modalClosedCallback();
         }
     }
-
+   
     getUserLogin(): UserLogin {
         const formModel = this.loginForm.value;
         return new UserLogin(formModel.userName, formModel.password, formModel.rememberMe,formModel.masterCompanyId);
@@ -133,15 +147,11 @@ console.log(error);
     login() {
         this.isLoading = true;
         this.alertService.startLoadingMessage("", "Attempting login...");
-
-        this.authService.login(this.getUserLogin())
-            .subscribe(
-            user => {
-              
+        this.authService.login(this.getUserLogin()).subscribe(
+            user => {              
                 const userLoginDetails = localStorage.getItem('current_user') === null || localStorage.getItem('current_user') == undefined ?    sessionStorage.getItem('current_user')  :  localStorage.getItem('current_user');
-                console.log(userLoginDetails);console.log(this.authService.currentUser.isResetPassword);
                 if(this.authService.currentUser.isResetPassword=="False"){
-                this.router.navigateByUrl('/UpdatePassword');
+                    this.router.navigateByUrl('/UpdatePassword');
                 }
                 //this.getEmployeeDetailsByEmployeeId(userLoginDetails);
                 setTimeout(() => {

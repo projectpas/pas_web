@@ -2,7 +2,7 @@
   <div class="card-body">
     <div>
       <p-table #rolist
-        class="rpo-table-cstm rro-table-cstm ptable-f10"
+        class="rpo-table-cstm rro-table-cstm1 ptable-f10"
         [columns]="roListColumns"
         [value]="workOrderROPartsList" [paginator]="true" [rows]="pageSize" [resizableColumns]="true" [reorderableColumns]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [scrollable]="true" scrollHeight="450px">
         <ng-template pTemplate="colgroup" let-columns>
@@ -59,7 +59,7 @@
                 <span><i class="fa fa-plus clr-red"></i></span
               ></a>
             </td>
-          </tr>
+          </tr> 
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="workOrderROPartsList.length == 0">
           <tr>

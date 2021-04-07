@@ -499,8 +499,10 @@ setTimeout(() => {
                 // if(this.workOrderGeneralInformation.isSinglePN){
                     this.workFlowWorkOrderId=this.workOrderGeneralInformation.partNumbers[0].workFlowWorkOrderId;
                 // }
-                this.gridTabChange('materialList');
+                // this.gridTabChange('materialList');
             }
+            this.gridActiveTab = 'materialList'
+            this.gridTabChange('materialList');
             this.isRecCustomer = data.isRecCustomer;
             this.workOrderGeneralInformation = {
                 ...data,
@@ -1313,10 +1315,10 @@ setTimeout(() => {
         this.workScope = data.workscope;
         this.showGridMenu = true;
         this.getWorkFlowTabsData();
-        if (this.workFlowId != null) {
-            this.showWorkflowLabel='View WF';
-            this.subTabWorkFlowChange('viewworkFlow')
-        }
+        // if (this.workFlowId != null) {
+        //     this.showWorkflowLabel='View WF';
+        //     this.subTabWorkFlowChange('viewworkFlow')
+        // }
     }
 
     getWorkFlowTabsData() {
@@ -1472,14 +1474,14 @@ setTimeout(() => {
                     else {
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
                     }
-                    if (this.workFlowId == null) {
+                    // if (this.workFlowId == null) {
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId;
                         if (this.isSubWorkOrder == true) {
                             this.getMaterialListByWorkOrderIdForSubWO();
                         } else {
                             this.getMaterialListByWorkOrderId();
                         }
-                    }
+                    // }
                 }
             },
                 err => {
@@ -1829,7 +1831,6 @@ setTimeout(() => {
                 "WorkOrderQuoteTask": data['WorkOrderQuoteTask']
             }
         }
-
         for (let labList in data.workOrderLaborList) {
             for (let labSubList of data.workOrderLaborList[labList]) {
                 if (labSubList && labSubList['expertiseId'] != null){
@@ -1840,7 +1841,6 @@ setTimeout(() => {
         }
         return this.result;
     }
-
     saveReservedPartorIssue(alternatePartData) {  
         if (this.isSubWorkOrder == true) {
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
@@ -1868,9 +1868,6 @@ setTimeout(() => {
                 })
         }
     }
-
-
-
     getValues(element) {
         if (element.stockLineNumber) {
             if (element.stockLineNumber.indexOf(',') > -1) {
@@ -1901,7 +1898,6 @@ setTimeout(() => {
             }
         }
     }
-
     getMaterialListByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.workOrderMaterialList = [];
@@ -1935,7 +1931,6 @@ setTimeout(() => {
                 })
         }
     }
-
     getDocumentsByWorkOrderId() {
         if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
             this.documentsDestructuredData = [];
@@ -1967,7 +1962,6 @@ setTimeout(() => {
             })
         }
     }
-
     clearLaborList() {
         if (this.taskList && this.taskList.length > 0) {
             for (let task of this.taskList) {
@@ -1986,7 +1980,6 @@ setTimeout(() => {
                 this.isSpinnerVisible = false;
                 this.data = {};
                 this.data = res;
-
                 if (res) {
                     this.workOrderLaborList = {
                         ...this.data,
@@ -2008,7 +2001,6 @@ setTimeout(() => {
                     for (let labList of this.data['laborList']) {
                         if (this.taskList) {
                             for (let task of this.taskList) {
-
                                 if (task.taskId == labList['taskId']) {
                                     if (!this.labor.workOrderLaborList[0][task.description.toLowerCase()]) {
                                         this.labor.workOrderLaborList[0][task.description.toLowerCase()] = []
@@ -2837,7 +2829,7 @@ setTimeout(() => {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
                 if (this.warningID != 0 && this.restrictID == 0) {
-                    this.showAlertMessage();
+                    this.showAlertWarningMessage();
                 } else if (this.warningID == 0 && this.restrictID != 0) {
                     this.showAlertMessage();
                 } else if (this.warningID != 0 && this.restrictID != 0) {
@@ -2867,6 +2859,29 @@ setTimeout(() => {
     showAlertMessage() {
         $('#warnRestrictMesg').modal("show");
     }
+    showAlertWarningMessage() {
+        $('#warningMesg').modal("show");
+    }
+
+    movetoworkorderlist() {
+        $('#warningMesg').modal("hide");
+        $('#warnRestrictMesg').modal("show");
+        this.router.navigateByUrl(
+          `/workordersmodule/workorderspages/app-work-order-list`
+        );
+      }
+
+      yestocontinue() 
+      {
+        $('#warningMesg').modal("hide");
+        $('#warnRestrictMesg').modal("show");
+        this.isBillAction = false;
+        this.isQuoteAction = false;
+        this.isCustomerAction = false;
+        this.isEditWorkordershowMsg = false;
+        this.warningMessage = '';
+        this.restrictMessage = '';
+      }
 
     WarnRescticModel() {
         if (this.isQuoteAction == true && this.restrictID == 0) {
@@ -2882,6 +2897,7 @@ setTimeout(() => {
         this.isCustomerAction = false;
         this.isEditWorkordershowMsg = false;
         $('#warnRestrictMesg').modal("hide");
+        $('#warningMesg').modal("hide");
         this.warningMessage = '';
         this.restrictMessage = '';
     }
@@ -3142,5 +3158,20 @@ setTimeout(() => {
             );
             this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
         }
+    }
+    createNewRoWorkOrder(rowData) {
+        if(this.isSubWorkOrder==true){
+            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
+        }else{
+            window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${rowData.id}`)
+        }
+    }
+    woPartId:any;
+    currentWorkflowId:any;
+    addToExitRoWorkOrder(rowData){
+this.woPartId=rowData.id;
+    }
+    viewWorkflow(workOrderPartNumber){
+        this.currentWorkflowId=workOrderPartNumber.workflowId;
     }
 }   

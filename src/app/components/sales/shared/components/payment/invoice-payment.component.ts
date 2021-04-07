@@ -194,8 +194,6 @@ export class AddPaymentComponent implements OnInit {
   }
 
   onProcessPayment() {
-    debugger;
-
     if (!this.objInvoicePayment.isMultiplePaymentMethod) {
       this.objInvoicePayment.isCheckPayment = this.chkPaymentMethod == 1 ? true : false;
       this.objInvoicePayment.isWireTransfer = this.chkPaymentMethod == 2 ? true : false;

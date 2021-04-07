@@ -383,10 +383,10 @@
                                     <label>{{workOrderPart['revisedPartNo']}}</label>
                                 </td>
                                 <td>
-                                    <label>{{workOrderPart['serialNumber']}}</label>
+                                    <label class=" w60">{{workOrderPart['serialNumber']}}</label>
                                </td>
                                <td>
-                                <label class="text-right">{{workOrderPart['quantity'] }}</label>
+                                <label class="text-right w60">{{workOrderPart['quantity'] }}</label>
                             </td>
                             <td>
                                 <label>{{workOrderPart['receivedDate'] | date: 'MM/dd/yyyy'}}</label>
@@ -407,22 +407,22 @@
                                 <label>{{workOrderPart['workOrderStage']}}</label>
                            </td>
                             <td>
-                                <label>{{workOrderPart['workOrderStatus']}}</label>
+                                <label class=" w60">{{workOrderPart['workOrderStatus']}}</label>
                             </td>
                             <td>
                                 <label>{{workOrderPart['technician']}}</label>
                             </td>
                             <td>
                                 <label>{{workOrderPart['techStation']}}</label>
+                            </td> 
+                            <td>
+                                <label class=" w60">    {{workOrderPart['workScope'] }}  </label>
                             </td>
                             <td>
-                                <label>    {{workOrderPart['workScope'] }}  </label>
-                            </td>
-                            <td>
-                                <label>{{workOrderPart['priority']}}</label>
+                                <label class=" w60">{{workOrderPart['priority']}}</label>
                              </td>
                              <td>
-                                <label>{{workOrderPart['condition']}}</label>
+                                <label class=" w60">{{workOrderPart['condition']}}</label>
                             </td>
                             <td>
                                 <label>    {{workOrderPart['publicationId'] }}</label>
@@ -436,21 +436,21 @@
                              
                                
                                 <td>
-                                    <label>   {{workOrderPart['refNo']}}  </label>
+                                    <label class=" w60">   {{workOrderPart['refNo']}}  </label>
                                 </td>
                                 <td>
                                     <input type="checkbox" class="form-control w60" name="contract{{i}}"
                                      #isDER="ngModel" [(ngModel)]="workOrderPart.iscontract" disabled>
                                  </td>
                                  <td>
-                                     <label>{{workOrderPart['contractNo']}}</label>
+                                     <label class="text-right w60">{{workOrderPart['contractNo']}}</label>
                                  </td>
                                  <td>
                                     <label>{{workOrderPart['stockLine']}}</label>
                                 </td>
 
                                 <td>
-                                    <label class="text-right">{{workOrderPart['nte']}}</label>
+                                    <label class="text-right w60">{{workOrderPart['nte']}}</label>
                                 </td>
                                 <td>
                                    
@@ -465,10 +465,10 @@
                                
                               
                               <td>
-                                    <label class="text-right">{{workOrderPart['tatDaysCurrent']}}</label>
+                                    <label class="text-right w60">{{workOrderPart['tatDaysCurrent']}}</label>
                                 </td>
                                 <td>
-                                    <label class="text-right">{{workOrderPart['tatDaysStandard']}}</label>
+                                    <label class="text-right w60">{{workOrderPart['tatDaysStandard']}}</label>
                                 </td>
                                 <td class="min-width-80">
                                     <label> {{workOrderPart['levelCode1'] }}  </label>
@@ -746,7 +746,7 @@
                                 *ngFor="let approver of woQuoteAnalysisList; let i=index;">
                                 <ng-container *ngFor="let field of woQuoteAnalysisHeader">
                                     <td >
-                                        <label [ngClass]="(field.field == 'revenue' || field.field == 'materialCost' || field.field == 'totalLaborCost' || field.field == 'laborCost' || field.field == 'overHeadCost' || field.field == 'otherCost' || field.field == 'directCost' || field.field == 'materialRevenuePercentage' || field.field == 'laborRevenuePercentage' || field.field == 'overHeadCostRevenuePercentage' || field.field == 'directCostRevenuePercentage' || field.field == 'marginPercentage' || field.field == 'margin')?'text-align-right width-60':''">{{approver[field.field]}}</label>
+                                        <label [ngClass]="(field.field == 'revenue' || field.field == 'materialCost' || field.field == 'totalLaborCost' || field.field == 'laborCost' || field.field == 'overHeadCost' || field.field == 'otherCost' || field.field == 'directCost' || field.field == 'materialRevenuePercentage' || field.field == 'laborRevenuePercentage' || field.field == 'overHeadCostRevenuePercentage' || field.field == 'directCostRevenuePercentage'|| field.field =='status' || field.field == 'marginPercentage' || field.field == 'margin')?'text-align-right width-60':''">{{approver[field.field]}}</label>
                                     </td>
                                     
                                 </ng-container>

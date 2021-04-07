@@ -268,7 +268,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             roleName:"",
             permissionName:[],
             roleID:"",
-        };
+        };        
     }
 
     private saveCompleted(user?: User) {
