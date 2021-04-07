@@ -138,7 +138,7 @@
             </div>
           </td>
           <td *ngIf="!isEdit">
-            <button class="btn btn-danger nobg" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
+            <button class="btn btn-danger nobg" matTooltip="Remove" matTooltipPosition="above" (ngModelChange)="getActive()" (click)="openDelete(content,material,i,materialCreateForm)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
