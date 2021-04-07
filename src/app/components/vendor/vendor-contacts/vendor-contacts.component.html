@@ -249,7 +249,8 @@
                                                   matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChanges(rowData, $event)"
                                                      [(ngModel)]="rowData['isActive']">
                                       </p-inputSwitch>
-                                    </span>
+                                    </span>]
+                                    -
                                       <span data-toggle="modal" data-target="#view">
                                           <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                              (click)="opencontactView(view, rowData)" matTooltip="View" matTooltipPosition="above">
@@ -288,7 +289,7 @@
                                           matTooltipPosition="above" onLabel="on" [disabled]="true" offLabel="off" 
                                           [(ngModel)]="rowData['isActive']">
                                           </p-inputSwitch>
-                                        </span>                                          
+                                      </span>                                          
                                     </ng-container>
                                       <span data-toggle="modal" data-target="#view">
                                           <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"

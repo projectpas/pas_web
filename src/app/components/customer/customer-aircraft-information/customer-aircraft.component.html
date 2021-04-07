@@ -212,7 +212,7 @@
             <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg"
                 (click)="getCustomerAircraftHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i
                   class="fa fa-history"></i></a></span>
-                  <span ><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                  <span *ngIf="isEdit"><a class="btn nobg btn-users-cstm " (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
           </div>          
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == true">
@@ -245,11 +245,11 @@
   </p-table>
 
   <div class="m-t-10" *ngIf="isViewMode == false">
-    <button type="button" *ngIf="((isAtaAdd || isAtaEdit) && (isEdit))" class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
+    <button type="button"  class="btn btn-primary pull-right submit-btn" (click)="nextClick()"
       [disabled]="stopmulticlicks">
       Next
     </button>
-    <button type="button" *ngIf="isContactAdd || isContactEdit" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
+    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">
       Previous
     </button>
   </div>

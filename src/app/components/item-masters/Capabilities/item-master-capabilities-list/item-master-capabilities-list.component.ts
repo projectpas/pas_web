@@ -31,6 +31,7 @@ declare var $ : any;
 import { ItemMasterCreateCapabilitiesComponent } from '../item-master-create-capabilities/item-master-create-capabilities.component';
 import { DBkeys } from '../../../../services/db-Keys';
 import { DatePipe } from '@angular/common';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-item-master-capabilities-list',
@@ -137,6 +138,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     arrayEmplsit:any[] = [];
     disableIsVerified: boolean = false;
     disableMagmtStruct: boolean = true;
+    isAdd: boolean=true;
+    isEdit: boolean=true;
+    isDownload: boolean=true;
+    isDelete: boolean=true;
 
     /** item-master-capabilities-list ctor */
     constructor(private itemMasterService: ItemMasterService,
@@ -144,7 +149,11 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         private datePipe: DatePipe,
         private modalService: NgbModal, private authService: AuthService, private _route: Router, private alertService: AlertService, private dashnumberservices: DashNumberService, private formBuilder: FormBuilder, public workFlowtService: LegalEntityService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, public inteService: IntegrationService, private workOrderService: WorkOrderService, private commonservice: CommonService, private activatedRoute: ActivatedRoute) {
         this.dataSource = new MatTableDataSource();
-               
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Item_Capes+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Item_Capes+'.'+PermissionConstants.Update]);
+        this.isDownload=this.authService.checkPermission([ModuleConstants.Item_Capes+'.'+PermissionConstants.Download]);
+        this.isDelete=this.authService.checkPermission([ModuleConstants.Item_Capes+'.'+PermissionConstants.Delete]);
+     
     }
 
     capabilityForm: any = {

@@ -21,6 +21,7 @@ import { TreeNode, MenuItem, MessageService } from 'primeng/api';
 
 import { CommonService } from '../../../../services/common.service';
 import { validateRecordExistsOrNotForInput } from '../../../../generic/autocomplete';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 
 //import { TreeTableModule } from 'primeng/treetable';
@@ -94,14 +95,17 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 	selectedNode: TreeNode;
 	managementViewData: any = {};
 	dropDownLegalEntityList: any[];
-	
+	isAdd:boolean=true;
+	isEdit:boolean=true;
+	isDelete:boolean=true;
 
-	
 	constructor(private messageService: MessageService,private authService: AuthService, private _fb: FormBuilder, private alertService: AlertService, public currency: CurrencyService, public msService: LegalEntityService, private modalService: NgbModal, private activeModal: NgbActiveModal, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, public commonService: CommonService) {
 
 		this.dataSource = new MatTableDataSource();
 
-
+		this.isAdd=this.authService.checkPermission([ModuleConstants.ManagementStructure+"."+PermissionConstants.Add]);
+		this.isEdit=this.authService.checkPermission([ModuleConstants.ManagementStructure+"."+PermissionConstants.Update]);
+		this.isDelete=this.authService.checkPermission([ModuleConstants.ManagementStructure+"."+PermissionConstants.Delete]);
 	}
 
 	ngOnInit(): void {

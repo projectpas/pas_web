@@ -25,7 +25,7 @@
               <h4 class="header-name">Item Master Setup (Stock)</h4>
             </div>
             <div>
-              <button
+              <button *ngIf="isView"
                 type="button"
                 class="btn-sm header-button"
                 [routerLink]="['/itemmastersmodule/itemmasterpages/app-item-master-list']">
@@ -49,7 +49,7 @@
                         <div class="md-step-bar-left"></div>
                         <div class="md-step-bar-right"></div>
                     </div>
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('Aircraft Information')"
                          [ngClass]="{ active: activeMenuItem >= 2, editable : activeMenuItem === 2 }"
                          (click)="changeOfTab('AircraftInfo')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -58,7 +58,7 @@
                         <div class="md-step-bar-left"></div>
                         <div class="md-step-bar-right"></div>
                     </div>
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('ATA Chapter')"
                          [ngClass]="{ active: activeMenuItem >= 3 , editable : activeMenuItem === 3 }"
                          (click)="changeOfTab('Atachapter')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -67,7 +67,7 @@
                         <div class="md-step-bar-left"></div>
                         <div class="md-step-bar-right"></div>
                     </div>
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('Capes')"
                          [ngClass]="{ active: activeMenuItem >= 4 , editable : activeMenuItem === 4 }"
                          (click)="changeOfTab('Capes')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -76,7 +76,7 @@
                         <div class="md-step-bar-left"></div>
                         <div class="md-step-bar-right"></div>
                     </div>
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('Purchase and Sales')"
                          [ngClass]="{ active: activeMenuItem >= 5 , editable : activeMenuItem === 5}"
                          (click)="changeOfTab('PurchaseSales')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -87,7 +87,7 @@
                     </div>
 
                     <!-- NHA, TLA, Alternate, Equivalency -->
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('NHA,TLA,AlterNate,Equivalency')"
                          [ngClass]="{ active: activeMenuItem >= 6 , editable : activeMenuItem === 6}"
                          (click)="changeOfTab('NhaTlaAlternateTab')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -97,7 +97,7 @@
                         <div class="md-step-bar-right"></div>
                     </div>
 
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('Exchange and Loans')"
                          [ngClass]="{ active: activeMenuItem >= 7 , editable : activeMenuItem === 7 }"
                          (click)="changeOfTab('Exchange')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -106,7 +106,7 @@
                         <div class="md-step-bar-left"></div>
                         <div class="md-step-bar-right"></div>
                     </div>
-                    <div class="md-step"
+                    <div class="md-step" *ngIf="isShowTab('Export Information')"
                          [ngClass]="{ active: activeMenuItem >= 8 , editable : activeMenuItem === 8 }"
                          (click)="changeOfTab('ExportInfo')"
                          [class.isDisabled]="!isDisabledSteps">
@@ -1026,7 +1026,7 @@
                                 <h4 class="header-name"> Aircraft Information</h4>
                               </div>
                               <div>
-                                <button
+                                <button *ngIf="isAircraftAdd"
                                 type="button" 
                                 class="btn-sm header-button"  matTooltip="Add Aircraft Information" matTooltipPosition="above" data-toggle="modal" data-target="#ModalDashNumber"
                                 >
@@ -1083,7 +1083,7 @@
                                       </div>
                                       <div class="row">
                                         <div class="col">
-                                            <button type="button"
+                                            <button type="button" *ngIf="isAircraftDownload"
                                                     class="btn btn-primary exports-button"
                                                     pButton
                                                     icon="fa-download"
@@ -1095,7 +1095,7 @@
                                                     (click)="selectedOnly = false; targetData = dt;"
                                                      data-target="#downloadAircraftConfirmation"
                                                    ></button>
-                                            <button type="button"
+                                            <button type="button"  *ngIf="isAircraftDownload"
                                                     class="btn btn-primary exports-button"
                                                     pButton
                                                     icon="fa-download"
@@ -1220,13 +1220,13 @@
                                                    (click)="onViewAircraft(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span>   
     
-                                            <span data-toggle="modal"
+                                            <span  *ngIf="isAircraftEdit" data-toggle="modal"
                                                   data-target="#editAirCraftDetails">
                                                 <a class="btn nobg"
                                                    (click)="onEditAircraft(rowData)" matTooltip="Edit"
                                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                             </span>
-                                            <span data-toggle="modal" data-target="#aircraftDelete">
+                                            <span *ngIf="isAircraftDelete" data-toggle="modal" data-target="#aircraftDelete">
                                                 <a class="btn nobg"
                                                   
                                                    (click)="deleteAircraftRow(rowData)"
@@ -1243,7 +1243,7 @@
                                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewAircraft"
                                                    (click)="onViewAircraft(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span>
-                                           <span data-toggle="modal" data-target="#aircraftRestore">
+                                           <span *ngIf="isAircraftEdit" data-toggle="modal" data-target="#aircraftRestore">
                                                <a class="btn nobg" 
                                                (click)="Restore(rowData)" 
                                                 matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
@@ -1301,7 +1301,7 @@
                                 <h4 class="header-name">ATA Information</h4>
                               </div>
                               <div>
-                                <button
+                                <button *ngIf="isATAAdd"
                                 type="button" 
                                 class="btn-sm header-button"  matTooltip="Add ATA Information" (click)="addNewATA()" matTooltipPosition="above" data-toggle="modal" data-target="#ATAADD"
                                 >
@@ -1354,7 +1354,7 @@
                                       </div>
                                       <div class="row">
                                         <div class="col">
-                                    <button type="button"
+                                    <button type="button" *ngIf="isATADownload"
                                             class="btn btn-primary exports-button"
                                             pButton
                                             icon="fa-download"
@@ -1366,7 +1366,7 @@
                                             (click)="selectedOnly = false; targetData = ataDataTable;"
                                              data-target="#downloadAtaConfirmation"></button>
                                             <!-- (click)="ataDataTable.exportCSV()" -->
-                                            <button type="button"
+                                            <button type="button" *ngIf="isATADownload"
                                             class="btn btn-primary exports-button"
                                             pButton
                                             icon="fa-download"
@@ -1479,7 +1479,7 @@
                                     </td>
                                     <td class="action-icons-cstm table-column-width">
                                         <div *ngIf="!rowData.isDeleted">
-                                            <span data-toggle="modal" data-target="#ATAADD">
+                                            <span  *ngIf="isATAEdit" data-toggle="modal" data-target="#ATAADD">
                                                 <a class="btn nobg"
                                                    (click)="editATAInformation(rowData)"
                                                    matTooltip="Edit"
@@ -1493,7 +1493,7 @@
                                                    (click)="onViewATA(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span> 
     
-                                            <span data-toggle="modal" data-target="#ataDelete">
+                                            <span  *ngIf="isATADelete" data-toggle="modal" data-target="#ataDelete">
                                                 <a class="btn nobg"
                                                    (click)="deleteataRow(rowData)"
                                                    matTooltip="Delete"
@@ -1512,7 +1512,7 @@
                                                 <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewATA"
                                                    (click)="onViewATA(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                             </span>                                   
-                                           <span data-toggle="modal" data-target="#ataRestore"><a class="btn nobg"
+                                           <span  *ngIf="isATAEdit" data-toggle="modal" data-target="#ataRestore"><a class="btn nobg"
                                            (click)="RestoreATA(rowData)" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                            <span data-toggle="modal"
                                                   data-target="#contentATAChapterHist">
@@ -1580,7 +1580,7 @@
                                 <h4 class="header-name">  Purchase and Sales Information</h4>
                               </div>
                               <div>
-                                <button
+                                <button *ngIf="isPurchaseAdd"
                                 type="button" 
                                 class="btn-sm header-button"  matTooltip="Add Purchase and Sales Information" matTooltipPosition="above" (click)="addFieldValue();"
                                 >
@@ -1862,14 +1862,14 @@
                                             <!-- Action -->
                                             <td  class="purSaleLastCol purchase-sales-action-column">
                                                 <ng-container class="action-icons-cstm table-column-width" *ngIf="!field.isDeleted">
-                                                    <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editPandSales(i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                                    <span data-toggle="modal" data-target="#purchaseSaleDelete"><a class="btn nobg" (click)="deletePurchaseSaleRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
+                                                    <span *ngIf="field.isNewItem == false"><a *ngIf="isPurchaseEdit" class="btn nobg" (click)="editPandSales(i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                                    <span data-toggle="modal" data-target="#purchaseSaleDelete"><a *ngIf="isPurchaseDelete" class="btn nobg" (click)="deletePurchaseSaleRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
                                                         <i class="fa fa-trash"></i></a></span>
                                                     <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                                 </ng-container>
                                                 <ng-container class="action-icons-cstm table-column-width" *ngIf="field.isDeleted">
                                                     <span data-toggle="modal" data-target="#purchaseSaleRestore">
-                                                        <a class="btn nobg" (click)="restorePurchaseSaleRow(field);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                        <a *ngIf="isPurchaseEdit" class="btn nobg" (click)="restorePurchaseSaleRow(field);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                     <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                                 </ng-container>
                                            

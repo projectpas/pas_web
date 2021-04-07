@@ -655,7 +655,7 @@
                                   </div>
                                 </div>
                                 <div class="col-sm-2">
-                                  <button style="margin-top: 1px;"
+                                  <button  style="margin-top: 1px;"
                                     class="btn btn-primary"
                                     [disabled]="!disableAddPMA"
                                     (click)="addRestrictPMA()"
@@ -710,10 +710,10 @@
                                       </td>
                                       <td class="text-center">
     
-                                        <span *ngIf="!currantDeletedStatusPMA"><a class="btn nobg"
+                                        <span *ngIf="!currantDeletedStatusPMA"><a *ngIf="isGeneralInfoEdit" class="btn nobg"
                                           (click)="openPopupForDeleteRestrictPMA( i, rowData, deleteRestrictPMAContent);" matTooltip="Delete"
                                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
-                                        </span><span *ngIf="currantDeletedStatusPMA" ><a class="btn nobg" (click)="openPopupForRestoreRestrictPMA(i, rowData, restoreRestrictPMAContent);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        </span><span *ngIf="currantDeletedStatusPMA" ><a *ngIf="isGeneralInfoDelete" class="btn nobg" (click)="openPopupForRestoreRestrictPMA(i, rowData, restoreRestrictPMAContent);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
     
                                       </td>
                                     </tr>
@@ -779,7 +779,7 @@
                                   </div>
                                 </div>
                                 <div class="col-sm-2">
-                                  <button style="margin-top: 1px;"
+                                  <button style="margin-top: 1px;" 
                                     class="btn btn-primary"
                                     [disabled]="!disableAddDER"
                                     (click)="addRestrictDER()">
@@ -832,11 +832,11 @@
                                         {{ part[col.field] }}
                                       </td>
                                       <td class="text-center">
-                                        <span *ngIf="!currantDeletedStatusDER" ><a class="btn nobg"
+                                        <span *ngIf="!currantDeletedStatusDER" ><a *ngIf="isGeneralInfoDelete" class="btn nobg"
                                           (click)="openPopupForDeleteRestrictDER(rowIndex, rowData, deleteRestrictDERContent);" matTooltip="Delete"
                                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                         </span>
-                                        <span *ngIf="currantDeletedStatusDER" ><a class="btn nobg" (click)="openPopupForRestoreRestrictDER(rowIndex, rowData, restoreRestrictDERContent);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="currantDeletedStatusDER" ><a *ngIf="isGeneralInfoEdit" class="btn nobg" (click)="openPopupForRestoreRestrictDER(rowIndex, rowData, restoreRestrictDERContent);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                       </td>
                                     </tr>
                                   </ng-template>
@@ -883,7 +883,7 @@
                         >                        
                         {{editMode ? 'Update' : 'Save' }}
                         </button>                        
-                        <button *ngIf="((isContactAdd || isContactEdit) && (isUpdate && editMode))"
+                        <button 
                           type="button"
                           [disabled]="!allowNextView"
                           class="btn btn-primary submit-btn new-footer-btn"

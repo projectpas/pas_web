@@ -8,6 +8,7 @@ import { pulloutRequiredFieldsOfForm } from '../../../../validations/form.valida
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../services/auth.service';
 import { CommonService } from '../../../../services/common.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare var $ : any;
 
 @Component({
@@ -111,10 +112,18 @@ export class NTAEAlternateComponent implements OnInit {
     displayPdfView: boolean = false;
     showDeletedList: boolean = false;
     isEnableItemMasterView: boolean;
+    isNHAAdd: boolean=true;
+    isNHAEdit: boolean=true;
+    isNHADelete: boolean=true;
+    isNHADownload: boolean=true;
 
     constructor(public itemser: ItemMasterService, private _actRoute: ActivatedRoute, private alertService: AlertService,  private configurations: ConfigurationService, private modalService: NgbModal, private authService: AuthService, private commonService: CommonService){
         this.itemMasterId = this._actRoute.snapshot.params['id'];
-
+        this.isNHAAdd=this.authService.checkPermission([ModuleConstants.Item_NHATLA+'.'+PermissionConstants.Add]);
+        this.isNHAEdit=this.authService.checkPermission([ModuleConstants.Item_NHATLA+'.'+PermissionConstants.Update]);
+        this.isNHADelete=this.authService.checkPermission([ModuleConstants.Item_NHATLA+'.'+PermissionConstants.Delete]);
+        this.isNHADownload=this.authService.checkPermission([ModuleConstants.Item_NHATLA+'.'+PermissionConstants.Download]);
+ 
     }
    
     ngOnInit(){
