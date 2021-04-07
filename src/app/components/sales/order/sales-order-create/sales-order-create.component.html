@@ -83,6 +83,7 @@
                                                         class="clr-red">*</span></label>
                                                 <select name="quoteTypeId" [(ngModel)]="salesQuote.quoteTypeId" required
                                                     id="quoteTypeId" #quoteTypeId="ngModel" [disabled]="isEdit">
+                                                    <option value='-1'>--Select</option>
                                                     <option *ngFor="let item of soTypeList" [ngValue]="item.value">
                                                         {{ item.label }}</option>
                                                 </select>
@@ -173,6 +174,7 @@
                                                 <select name="accountTypeId" required
                                                     [(ngModel)]="salesQuote.accountTypeId" id="accountTypeId"
                                                     #accountTypeId="ngModel" [disabled]="isEdit">
+                                                    <option value='-1'>--Select</option>
                                                     <option *ngFor="let accountType of accountTypes"
                                                         [ngValue]="accountType.value">
                                                         {{ accountType.label }}

@@ -231,6 +231,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.isEdit = true;
         rowData.amount = this.formateCurrency(rowData.amount);
         this.freightForm = [rowData];
+        this.isEnableUpdateButton=false;
     }
 
     memoIndex;
