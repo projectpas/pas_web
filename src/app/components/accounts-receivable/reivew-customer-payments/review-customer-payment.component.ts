@@ -16,7 +16,8 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   custheaders: any[];
   headers: any[];
   dataForReview: any;
-
+  isEdit: boolean = false;
+  
   constructor(public customerService: CustomerService,
     private customerPaymentsService: CustomerPaymentsService,
     private authService: AuthService) {
@@ -69,6 +70,7 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
 
   fetchDataForReview() {
     this.isSpinnerVisible = true;
+    this.isEdit = false;
     this.customerPaymentsService.GetCustomerPaymentForReview(this.receiptId).subscribe(data => {
       this.dataForReview = data;
       this.isSpinnerVisible = false;
@@ -99,5 +101,14 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
 
   editPayment(invoice) {
     invoice.selected = true;
+    this.isEdit = true;
+  }
+
+  onUpdatePayments() {
+
+  }
+
+  onSavePostPayments() {
+    
   }
 }
