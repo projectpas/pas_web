@@ -151,11 +151,13 @@
                               <span *ngIf="field.field == 'paymentAmount'">
                                 <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'discAmount'">
                                 <input type="text" class="form-control" style="text-align: right;" name="discAmount"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'discType'">
@@ -170,6 +172,7 @@
                               <span *ngIf="field.field == 'bankFeeAmount'">
                                 <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'bankFeeType'">
@@ -183,6 +186,7 @@
                               <span *ngIf="field.field == 'otherAdjustAmt'">
                                 <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'reason'">

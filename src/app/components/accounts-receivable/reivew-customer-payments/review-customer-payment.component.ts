@@ -105,7 +105,29 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   }
 
   onUpdatePayments() {
+    debugger;
+    this.dataForReview.paymentsByCustomer
+    let totalInvoicePayments: any[] = [];
+    
+    this.dataForReview.paymentsByCustomer.forEach(payment => {
+      let invoices = payment.invoices;
+      invoices.forEach(invoice => {
+        invoice.bankFeeAmount = invoice.bankFeeAmount ? parseFloat(invoice.bankFeeAmount): 0;
+        invoice.discAmount = invoice.discAmount ? parseFloat(invoice.discAmount) : 0;
+        invoice.paymentAmount = invoice.paymentAmount ? parseFloat(invoice.paymentAmount) : 0;
+        invoice.otherAdjustAmt = invoice.otherAdjustAmt ? parseFloat(invoice.otherAdjustAmt) : 0;
+        invoice.createdBy = this.userName;
+        invoice.updatedBy = this.userName;
+        totalInvoicePayments.push(invoice);
+      });
+    });
 
+    this.customerPaymentsService.updatePayments(totalInvoicePayments).subscribe(data => {
+      this.dataForReview = data;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
   }
 
   onSavePostPayments() {
