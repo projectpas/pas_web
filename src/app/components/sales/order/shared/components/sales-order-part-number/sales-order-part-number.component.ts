@@ -600,7 +600,6 @@ export class SalesOrderPartNumberComponent {
   }
 
   approve() {
-    debugger
     let partList: any = [];
     this.salesOrderView.parts = [];
     this.salesOrderView.salesOrder.salesOrderQuoteId = this.salesQuote.salesOrderQuoteId;
@@ -650,7 +649,6 @@ export class SalesOrderPartNumberComponent {
       this.alertService.showStickyMessage('Sales Order', "Please select valid Dates for Sales Order PartsList!", MessageSeverity.error);
     } else {
       this.isSpinnerVisible = true;
-      debugger
       this.salesOrderService.update(this.salesOrderView).subscribe(data => {
         this.canSaveParts = true;
         this.alertService.stopLoadingMessage();

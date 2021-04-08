@@ -195,7 +195,6 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   }
 
   calculate() {
-    debugger
     if (this.query.partSearchParamters.conditionIds.length > 0
       && this.query.partSearchParamters.partNumber
       && formatStringToNumber(this.query.partSearchParamters.quantityRequested) > 0) {
