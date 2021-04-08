@@ -25,12 +25,12 @@
                   </td>
                   <td style="position:sticky; width:80px">
                     <span>
-                      <button class="btn nobg" mat-icon-button
-                        (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
-                        matTooltipPosition="above" style="font-weight: bold;"
-                        [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
-                        <i class="fa fa-plus"></i>
-                      </button>
+                        <button class="btn nobg" mat-icon-button
+                                (click)="pickticketItemInterface(summaryPart,pickticketieminterface)" matTooltip="Add PT"
+                                matTooltipPosition="above" style="font-weight: bold;"
+                                [disabled]="summaryPart.qtyToShip >= summaryPart.qty">
+                            <i class="fa fa-plus"></i>
+                        </button>
                     </span>
                   </td>
                 </tr>
@@ -298,7 +298,7 @@
           <div class="modal-footer">
             <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
               [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
-              Save
+              {{isEdit ? 'Update' : 'Save' }}
             </button>
             <button type="button" (click)="dismissModel()" class="btn btn-danger">
               Close
