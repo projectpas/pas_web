@@ -543,5 +543,8 @@ export class ItemMasterService {
     getItemMasterMappingPart(id){
         return this.itemMasterEndpoint.getItemMasterMappingPart(id);
     }
+    searchitemmasterfromExchangeQuotepop(searchParameters: any) {
+        return this.itemMasterEndpoint.searchitemmasterfromExchangeQuotepop(searchParameters);
+    }
     
 }

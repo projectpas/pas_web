@@ -50,6 +50,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _stockListingUrl: string = '/api/StockLine/searchstockline';
 	private readonly _stockListGlobalUrl: string = '/api/StockLine/stocklineglobalsearch';
 	private readonly _stockSalesListingUrl: string = '/api/StockLine/searchstocklinesales';
+	private readonly _searchStockLinefromExchangequotepop: string = "/api/StockLine/searchstocklinefromExchangeQuotepop";	
 
 	get tagTypeUrl() { return this.configurations.baseUrl + this._tagTypeUrl; }
 	get adjustmentReasonUrl() { return this.configurations.baseUrl + this._adjustmentReasonUrl; }
@@ -66,6 +67,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	get stockListingUrl() { return this.configurations.baseUrl + this._stockListingUrl };
 	get stockListGlobalUrl() { return this.configurations.baseUrl + this._stockListGlobalUrl };
 	get stockSalesListingUrl() { return this.configurations.baseUrl + this._stockSalesListingUrl; };
+	get getsearchstocklinefromExchangequotepopUrl() { return this.configurations.baseUrl + this._searchStockLinefromExchangequotepop };	
 
 	constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 		super(http, configurations, injector);
@@ -507,6 +509,13 @@ export class StocklineEndpoint extends EndpointFactory {
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.downloadAllStockLineList(data));
 			});
+	}
+
+	searchstocklinefromExchangeQuotepop<T>(searchParameters: any): Observable<T> {
+		return this.http.post<T>(this.getsearchstocklinefromExchangequotepopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+			.catch(err => {
+				return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
+			})
 	}
 
 }

@@ -96,6 +96,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     private readonly _searchPartNumberUrl: string = "/api/ItemMaster/searchpartnumber";
     private readonly _searchMulitPartNumberUrl: string = "/api/ItemMaster/searchmultipleparts";
     private readonly _multiSearchItemMasterUrl: string = "/api/ItemMaster/multisearch";
+    private readonly _searchItemMasterfromExchangequotepop: string = "/api/ItemMaster/searchItemMasterfromExchangequotepop";
 
     //Vendor Caps Air Craft
     private readonly _VendorMasterAircraftPostUrlNew: string = "/api/Vendor/VendorAircraftPost";
@@ -171,6 +172,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     get restoreCapabilityUrl() { return this.configurations.baseUrl + this._restoreCapabilityRow; }
     get advancedSearchstockListUrl() { return this.configurations.baseUrl + this._advanceSearchstockListUrl; }
     get advancedSearchNonStockListUrl() { return this.configurations.baseUrl + this._advanceSearchNonstockListUrl; }
+    get getSearchItemMasterfromExchangeQuotepopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromExchangequotepop };
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
@@ -1357,5 +1359,12 @@ export class ItemMasterEndpoint extends EndpointFactory {
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterMappingPart(id));
             });
+    }
+
+    searchitemmasterfromExchangeQuotepop<T>(searchParameters: any): Observable<T> {
+        return this.http.post<T>(this.getSearchItemMasterfromExchangeQuotepopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
+            })
     }
 }

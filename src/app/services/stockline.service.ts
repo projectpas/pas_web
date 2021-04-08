@@ -283,4 +283,8 @@ export class StocklineService {
 	downloadAllStockLineList(data) {
 		return this.stocklineEndpoint.downloadAllStockLineList(data);
 	}
+
+	searchstocklinefromExchangeQuotepop(searchParameters: any) {
+		return this.stocklineEndpoint.searchstocklinefromExchangeQuotepop(searchParameters);
+	}
 }

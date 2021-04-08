@@ -34,4 +34,8 @@ export interface IExchangeQuote {
 	approvedDate: Date;
 	masterCompanyId:number;
 	customerServiceRepId: number;
+	restrictPMA: boolean;
+	restrictDER: boolean;
+	cogs:number;
+	daysForCoreReturn:number;
 }
