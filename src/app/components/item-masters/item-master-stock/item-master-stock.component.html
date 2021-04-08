@@ -1969,7 +1969,7 @@
                             <div class="form-row col-row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="eccn" class="control-label">
+                                        <label for="eccn">
                                             ECCN <span class="clr-red">*</span>
                                         </label>
 
@@ -2038,7 +2038,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-md-5">
-                                                <label class="control-label">
+                                                <label style="margin-top:9px">
                                                     UOM <span class="clr-red" gIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight">*</span>
                                                 </label>
                                                 <p-dropdown class="p-dropdown-100" [options]="allSizeUnitOfMeasureInfo" filter="true" [(ngModel)]="exportInfo.exportSizeUnitOfMeasureId" name="exportSizeUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" [required]="exportInfo.exportSizeLength > 0 || exportInfo.exportSizeWidth > 0 || exportInfo.exportSizeHeight > 0" (onChange)="btnChange()"></p-dropdown>

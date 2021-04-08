@@ -369,7 +369,7 @@
                 {{ rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
               </td>
               <td class="width-80">
-                <input minlength="1" maxlength="7"  type="number" onKeyPress="if(this.value.length==7) return false;"  class="form-control input-value" [(ngModel)]="rowData.Inventory"
+                <input minlength="1" maxlength="7" min="0" pattern="^[0-9]" type="number" onKeyPress="if(this.value.length==7) return false;"  class="form-control input-value" [(ngModel)]="rowData.Inventory"
                   (keyup)="inventoryValidation($event, 'fromadd')" name="Inventory{{ row_no }}" [required]="true"
                   />
               </td>
@@ -464,7 +464,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="tag">Inventory <span class="clr-red">*</span></label>
-                <input minlength="1" maxlength="7" type="number" onKeyPress="if(this.value.length==7) return false;" class="form-control" [(ngModel)]="editAirCraftData.inventory"
+                <input minlength="1" maxlength="7" min="0" pattern="^[0-9]" type="number" onKeyPress="if(this.value.length==7) return false;" class="form-control" [(ngModel)]="editAirCraftData.inventory"
                   (keyup)="inventoryValidation($event, 'fromedit')" (ngModelChange)="enableSave()" name="tag"
                   required />
               </div>
