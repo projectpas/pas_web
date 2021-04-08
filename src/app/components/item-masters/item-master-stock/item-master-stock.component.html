@@ -861,8 +861,12 @@
                                     </div>
                                    
                                     <div class="card schematic-block form-group col-sm-12 mb-2" *ngIf="sourceItemMaster.isSchematic">
-
-                                        <div class="col-sm-12">
+                                        
+                                        <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"  
+                                             [uploadDocsToser]="uploadDocs" [referenceId]="itemMasterReferenceId"
+                                             [isViewMode]="false" [offLineUpload]="true">
+                                        </app-common-documents>
+                                        <!-- <div class="col-sm-12">
                                             <label>Attachments</label>
                                             <a class="plusicon-cstm ml-2"
                                                href="#"
@@ -874,7 +878,7 @@
                                             </a>
 
                                             <div class="form-group">
-                                                <div> <!--*ngIf="sourceViewforDocumentList.length > 0"-->
+                                                <div>
                                                     <h6 class="panel-title stock-attach">Attachment Details</h6>
                                                     <p-table #table4 class="rpo-table-cstm"
                                                              [columns]="selectedColumnsDoc"
@@ -1003,7 +1007,7 @@
                                                     </p-table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                     </div>
                     <div class="next-button-align">
@@ -1983,7 +1987,7 @@
                                         <label class="control-label">Country </label>
 
 
-                                        <p-autoComplete class="p-autoComplete-ctsm"
+                                        <!-- <p-autoComplete class="p-autoComplete-ctsm"
                                                         [(ngModel)]="exportInfo.exportCountryId"
                                                         name="exportCountry"
                                                         id="exportCountry"
@@ -1993,8 +1997,24 @@
                                                         [forceSelection]="true"
                                                         [suggestions]="countrycollection"
                                                         (completeMethod)="filtercountry($event)" [size]="30" [minLength]="1"
-                                                        [dropdown]="true">
+                                                        [dropdown]="true"> 
 
+                                        </p-autoComplete>-->
+                                        <p-autoComplete
+                                            class="autocomp-customer-cstm"
+                                            filter="true"
+                                            [(ngModel)]="exportInfo.exportCountryId"
+                                            emptyMessage="No Match Found"
+                                            name="country1"                                
+                                            [suggestions]="countrycollection"
+                                            field="nice_name"
+                                            (completeMethod)="filtercountry($event)"                                    
+                                            [size]="30"
+                                            [minLength]="1"
+                                            [dropdown]="true"
+                                            [forceSelection]="true" 
+                                            (ngModelChange)="selectedExportCountry()"                                 
+                                        >
                                         </p-autoComplete>
                                       
                                         <label class="control-label">Value </label>

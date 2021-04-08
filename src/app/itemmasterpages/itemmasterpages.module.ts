@@ -60,7 +60,7 @@ import { TwoDecimalGlobalNumberFormatPipe } from "../pipes/two-decimal-global-nu
 import { AppSharedModule } from "../app-shared.module";
 import { ItemMasterViewComponent } from "../components/item-masters/item-master-view/item-master-view.component";
 import { PNHeaderComponent } from "../components/item-masters/shared/Components/pn-header/pn-header.component";
-
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 
 
 @NgModule({
@@ -92,7 +92,8 @@ import { PNHeaderComponent } from "../components/item-masters/shared/Components/
         AuditModule,
         FileUploadModule,
         AppSharedModule,
-        EditorModule
+        EditorModule,
+        CommonDocumentsModule
     ],
 
     declarations: [
@@ -110,7 +111,7 @@ import { PNHeaderComponent } from "../components/item-masters/shared/Components/
         ItemMasterExchangeLoanComponent,
         NTAEAlternateComponent,
         ItemMasterViewComponent,
-        PNHeaderComponent
+        PNHeaderComponent,       
 
     ],
     exports: [

@@ -100,21 +100,22 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         if (this.generalInformtionData) {
-            this.id = this.referenceId;
+            this.id = this.referenceId;           
             this.generalCode = this.generalInformtionData.companyCode;
             this.generalName = this.generalInformtionData.name;
         }
 
         if (this.uploadDocsToser != undefined || this.uploadDocsToser != null) {
-            this.id = this.referenceId;
+            this.id = this.referenceId;            
             this.uploadDocsToser.subscribe(v => {
                 this.hideUpoladThing = true;
                 setTimeout(() => {
                     console.log("event")
                     this.onUploadDocumentListToServer();
-                }, 1500);
+                }, 2000);
             });
         }
     }
@@ -128,6 +129,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
@@ -147,6 +149,8 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         }
         this.id = this.referenceId;
+       
+       
         this.getModuleList();
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
@@ -471,17 +475,21 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     updateCollection: any = [];
 
+    itemmasterIdReferenceId:number
     onUploadDocumentListToServer() {
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
             }
         });
-        if (this.moduleName == 'VendorCertified' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+        debugger
+        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
             this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
+            this.itemmasterIdReferenceId = this.referenceId;
         }
+        
         const vdata = {
-            referenceId: this.referenceId,
+            referenceId:  this.referenceId,
             masterCompanyId: this.currentUserMasterCompanyId,
             createdBy: this.userName,
             updatedBy: this.userName,
@@ -500,7 +508,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
-                    if (this.moduleName == 'VendorCertified' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+                    if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
                         localStorage.removeItem('commonId');
                         this.uploadDocsToser.unsubscribe()
                     }
@@ -515,14 +523,14 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 }, err => {
                     this.formData = new FormData();
                 });
-            } else {
+            } else {                
                 for (var i = 0; i < this.documentCollection.length; i++) {
                     docList.push(this.documentCollection[i])
                 }
                 this.updateCollection = this.documentCollection;
                 this.formData.append('attachmentdetais', JSON.stringify(docList));
                 this.commonService.uploadDocumentsCommonEndpoint(this.formData, this.updateCollection).subscribe(() => {
-                    if (this.moduleName != 'VendorCertified' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile') {
+                    if (this.moduleName != 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile') {
                         this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     }
                     this.formData = new FormData();
@@ -543,12 +551,18 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     documentCollectionOriginal: any = [];
     getList() {
+        debugger
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
+
             }
         });
+
+        if (this.moduleName =='ItemMaster') {
+            this.referenceId = this.itemmasterIdReferenceId;
+        }
 
         this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus).subscribe(res => {
             this.commondocumentsDestructuredData = [];
