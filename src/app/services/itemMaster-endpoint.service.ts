@@ -8,6 +8,7 @@ import { ConfigurationService } from './configuration.service';
 import { Url } from '../app.settings';
 import { ItemMasterLoanExchange } from '../models/item-master-loan-exchange.model';
 import { environment } from 'src/environments/environment';
+import { masterCompanyId } from '../common-masterData/mastercompany-details';
 
 @Injectable()
 
@@ -1345,8 +1346,8 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getItemMasterClassificationByType(type) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}`)
+    getItemMasterClassificationByType(type,masterCompanyId?) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getItemMasterClassificationByType(type));
             });

@@ -201,6 +201,9 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
       this.searchDisabled = false;
     } else {
       this.searchDisabled = true;
+      if (this.query.partSearchParamters.conditionIds !== undefined && this.query.partSearchParamters.conditionIds.length == 0 && this.query.partSearchParamters.conditionId !== 0) {
+        this.query.partSearchParamters.conditionIds.push(this.query.partSearchParamters.conditionId);
+      }
     }
     let qr = + formatStringToNumber(this.query.partSearchParamters.quantityRequested);
     if (qr) {

@@ -107,6 +107,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'location', header: 'Location',align: 0 },
         { field: 'shelf', header: 'Shelf' ,align: 0},
         { field: 'bin', header: 'Bin',align: 0 },
+        { field: 'employeename', header: 'Employee ',align: 0 },
         { field: 'defered', header: 'Deferred',align: 0,width:"60px" },
         { field: 'memo', header: 'Memo',align: 0 }
     ]

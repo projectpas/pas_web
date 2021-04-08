@@ -177,7 +177,7 @@
                                     <th class="text-center" colspan="4" ></th>
                                 </tr>
                                 <tr>
-                                    <th class="text-center select-all">
+                                    <th class="text-center select-all" style="min-width: 65px;">
                                         Select All
                                         <input type="checkbox" name="isSelectAll" 
                                         [(ngModel)]="isAllow"  (change)="allowAll($event.target.checked)">
@@ -189,16 +189,17 @@
                                         Equivalent Parts
                                     </th>
                                     
-                                    <th *ngIf="(statusId == 2 || statusId == 4 || statusId == 5) && (showAlternateParts ||showEqParts) ">Alt/Equiv</th>
+                                    
                                     <th class="text-center" style="min-width: 110px;">PN </th>
-                                    <th class="text-center" style="min-width: 110px;">Part Description</th>
+                                    <th class="text-center" style="min-width: 130px;">Part Description</th>
+                                    <th class="text-center" style="min-width: 110px;" *ngIf="(statusId == 2 || statusId == 4 || statusId == 5) && (showAlternateParts ||showEqParts) ">Alt/Equiv</th>
                                     <th class="text-center" style="min-width: 96px;"> Alternate PN For</th>
                                     <th class="text-center"> Cond Type</th>
                                     <th class="text-center width-50"> Stk Type</th>
                                     <th class="text-center width-50" style="width:60px !important">Qty Req</th> 
                                     <th class="text-center width-50" style="width:60px !important">Qty Res</th>
-                                    <th class="text-center" >  Qty To Be Reserved</th>
-                                    <th class="text-center" >
+                                    <th class="text-center" style="width:60px !important" >  Qty To Be Reserved</th>
+                                    <th class="text-center"style="width:60px !important" >
                                         <span class="font-size-10" *ngIf="statusId == 1 || statusId == 5 ">
                                         {{ statusId != 5 ? 'Qty Actually Reserving' : 'Qty Actually UnReserving'}} </span>
                                         <span class="font-size-10" *ngIf="statusId == 2 || statusId == 4 ">
@@ -206,25 +207,25 @@
                                         </span>
                                         <span class="font-size-10" *ngIf="statusId == 3"> Qty Actually Resver & Issue</span>
                                     </th>
-                                 <th class="text-center"> Qty  Issued   </th>
-                                    <th class="text-center" *ngIf="statusId !==2 && statusId !==4"> Qty To Be Issued
+                                 <th class="text-center" style="width:60px !important"> Qty  Issued   </th>
+                                    <th class="text-center" style="width:60px !important" *ngIf="statusId !==2 && statusId !==4"> Qty To Be Issued
                                     </th>
-                                    <th class="text-center" *ngIf="statusId === 2  || statusId === 4"> Qty To Be Issued
+                                    <th class="text-center" style="width:60px !important" *ngIf="statusId === 2  || statusId === 4"> Qty To Be Issued
                                     </th>
-                                   <th class="text-center"> Qty on Hand </th>
-                                    <th class="text-center width-50"> Qty Avail </th>
-                                    <th class="text-center"> Qty on Order </th>
-                                    <th class="text-center" *ngIf="statusId === 1 || statusId === 5 ">
+                                   <th class="text-center" style="width:60px !important"> Qty on Hand </th>
+                                    <th class="text-center width-50" style="width:60px !important"> Qty Avail </th>
+                                    <th class="text-center" style="width:60px !important"> Qty on Order </th>
+                                    <th class="text-center" style="width: 110px !important;"  *ngIf="statusId === 1 || statusId === 5 ">
                                         {{statusId == 1 ? 'Reserved' : 'UnReserved'  }} Date <span class="clr-red">*</span></th>
-                                        <th class="text-center" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
+                                    <th class="text-center" style="width: 110px !important;"  *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                             {{statusId === 2  ? 'Issued'  : 
                                         statusId === 3 ? 'Reserved & Issued'  
                                         : 'UnIssued' 
                                          }}
                                             Date <span class="clr-red">*</span></th>
-                                    <th class="text-center" *ngIf="statusId === 1 || statusId === 5">
+                                    <th class="text-center" style="width: 110px !important;" *ngIf="statusId === 1 || statusId === 5">
                                         {{statusId === 1 ? 'Reserved' : 'UnReserved'}} By <span class="clr-red">*</span></th>
-                                    <th class="text-center" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
+                                    <th class="text-center" style="width: 110px !important;" *ngIf="statusId === 2 || statusId === 3 || statusId === 4">
                                         {{statusId === 2  ? 'Issued' : statusId === 3 ? 'Reserved & Issued'  :'UnIssued'  }}
                                         By <span class="clr-red">*</span></th>
                                 </tr>
@@ -250,9 +251,9 @@
                                             (ngModelChange)="showEquantParts($event , x.woReservedIssuedEquParts)" 
                                             [(ngModel)]="x.showEqParts">
                                     </td>
-                                    <th *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></th>
                                     <td>{{x.partNumber}}</td>
                                     <td>{{x.partDescription}}</td>
+                                    <th *ngIf="(statusId == 2 || statusId == 4 || statusId == 5)"></th>
                                     <td></td>
                                     <td>{{x.condition}}</td>
                                     <td>{{x.stockType}}</td>
@@ -334,11 +335,11 @@
                                     </td>
                                     <td *ngIf="isShowEqPN && (statusId == 1 || statusId == 3)">
                                     </td>
+                                    <td>{{b.altPartNumber}}</td>
+                                    <td>{{b.altPartDescription}}</td>
                                     <td  *ngIf="statusId == 2 || statusId == 4 || statusId == 5">
                                         <span>Alternative</span>
                                     </td>
-                                    <td>{{b.altPartNumber}}</td>
-                                    <td>{{b.altPartDescription}}</td>
                                     <td>{{b.parentPartNo}}</td>
 
 

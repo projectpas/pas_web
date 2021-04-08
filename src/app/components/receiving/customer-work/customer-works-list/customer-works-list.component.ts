@@ -75,10 +75,10 @@ export class CustomerWorksListComponent implements OnInit {
     { field: 'customerName', header: 'Customer Name' },
     { field: 'partNumber', header: 'MPN' },
     { field: 'partDescription', header: 'MPN Description' },
-    { field: 'serialNumber', header: 'Serial Num' },
-    { field: 'stockLineNumber', header: 'StockLine Num' },
-    { field: 'woNumber', header: 'WO Num' },
-    { field: 'receivingNumber', header: 'Receiver Num' },
+    { field: 'serialNumber', header: 'Serial Num',width:"90px" },
+    { field: 'stockLineNumber', header: 'StockLine Num' ,width:"116px"},
+    { field: 'woNumber', header: 'WO Num',width:"90px" },
+    { field: 'receivingNumber', header: 'Receiver Num',width:"106px" },
     { field: 'receivedDate', header: 'Received Date' },
     { field: 'receivedBy', header: 'Received By' },
     { field: 'levelCode1', header: 'Level 01' },
@@ -606,7 +606,15 @@ export class CustomerWorksListComponent implements OnInit {
                     this.showAlertMessage();
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage();
-                } 
+                } else
+                {
+                    const {receivingCustomerWorkId}=this.editData;
+                    if( this.isEditCustomer==true && this.restrictID ==0){
+                        this._route.navigateByUrl(`receivingmodule/receivingpages/app-customer-work-setup/edit/${receivingCustomerWorkId}`);
+                    }else if(this.isAddWorkOrder==true && this.restrictID ==0){
+                        this._route.navigateByUrl(`/workordersmodule/workorderspages/app-work-order-receivingcustworkid/${receivingCustomerWorkId}`);
+                    }
+                }
             }
         },
             err => { 

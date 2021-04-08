@@ -471,6 +471,7 @@
                         <th rowspan="2">Currency</th>
                         <th rowspan="2">Amount <span class="clr-red">*</span></th>
                         <th rowspan="2">Memo</th>
+                        <th rowspan="2">Mark Up</th>
                         <th rowspan="2">Billing Method</th>
                         <th rowspan="2">Billing Amount</th>
                         <!-- <th rowspan="2">Is Active</th> -->
@@ -511,6 +512,9 @@
                         {{audit.amount}}</td>
                     <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
                         <p class="p_editor" [innerHTML]="audit.memo"></p>
+                    </td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'markupPercentageId', audit.markupPercentageId) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.markupPercentageId"></p>
                     </td>
                     <td
                         [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
