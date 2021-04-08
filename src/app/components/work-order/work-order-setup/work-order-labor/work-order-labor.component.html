@@ -202,7 +202,7 @@
               Billing Amount
             </th>
           </ng-container>
-          <th class="text-center memo-th" style="width:250px !important" *ngIf="!isQuote">
+          <th class="text-center memo-th" style="width:335px !important" *ngIf="!isQuote">
             Memo
           </th>
           <th style="width:130px !important" *ngIf="!isView">Actions</th>
@@ -320,13 +320,13 @@
                     !laborForm.hoursorClockorScan ||
                     laborForm.hoursorClockorScan === 1
                   " class="check-flex">
-                  <div class="check-flex-div">
+                  <div class="check-flex-div1">
                     <input type="number" class="form-control check-flex-input" (blur)="
                     calculateHoursDifference(rec);
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 75px;" required/>
+                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px !important;" required/>
                     <span style="font-size: 17px; margin: 0 5px;">:</span>
                     <input type="number" class="form-control" (blur)="
                     calculateHoursDifference(rec);
