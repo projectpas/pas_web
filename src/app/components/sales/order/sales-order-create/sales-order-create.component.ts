@@ -960,9 +960,12 @@ export class SalesOrderCreateComponent implements OnInit {
           errmessage = errmessage + '<br />' + "Please enter priority ID."
         }
         if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-          if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
-            selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-            selectedPart.promisedDate < this.salesQuote.openDate) {
+          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+
+          if (crdate < opendate || esdate < opendate || pdate < opendate) {
             invalidDate = true;
           }
         }
