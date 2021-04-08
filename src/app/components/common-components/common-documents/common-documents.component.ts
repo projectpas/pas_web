@@ -354,15 +354,20 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     index: number;
     formNames: any;
 
-    openHistory(rowData) {
-        this.alertService.startLoadingMessage();
-        this.commonService.GetAttachmentCommonAudit(rowData.commonDocumentDetailId, this.referenceId, this.moduleId).subscribe(
-            results => this.onAuditHistoryLoadSuccessful(results),
-            error => this.saveFailedHelper(error));
+    openHistory(rowData) {       
+        //this.alertService.startLoadingMessage();
+        this.isSpinnerVisible = true;
+        this.commonService.GetAttachmentCommonAudit(rowData.commonDocumentDetailId, this.referenceId, this.moduleId).subscribe((res) => {
+            // results => this.onAuditHistoryLoadSuccessful(results),
+            // error => {this.isSpinnerVisible = false});
+            this.isSpinnerVisible = false;
+            this.documentauditHisory = res           
+        })
     }
 
     private onAuditHistoryLoadSuccessful(auditHistory) {
-        this.alertService.stopLoadingMessage();
+        //this.alertService.stopLoadingMessage();
+        
         this.documentauditHisory = auditHistory;
     }
 
@@ -477,6 +482,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     itemmasterIdReferenceId:number
     onUploadDocumentListToServer() {
+        
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
                 this.moduleId = element.value;
@@ -510,12 +516,20 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                     this.formData = new FormData();
                     if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
                         localStorage.removeItem('commonId');
-                        this.uploadDocsToser.unsubscribe()
+                        if(this.moduleName =='ItemMaster'){
+                            //this.uploadDocsToser.unsubscribe()
+                        }else{
+                            this.uploadDocsToser.unsubscribe()
+                        }
                     }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
                     if (this.uploadDocsToser) {
-                        this.uploadDocsToser.unsubscribe();
+                        if(this.moduleName =='ItemMaster') {
+                            //this.uploadDocsToser.unsubscribe()
+                        } else {
+                             this.uploadDocsToser.unsubscribe()
+                        }
                         this.hideUpoladThing = false;
                     }
                     this.getList();
@@ -538,7 +552,11 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                     this.commondocumentsList = [];
                     this.isEnableUpdateButton = true;
                     if (this.uploadDocsToser) {
-                        this.uploadDocsToser.unsubscribe();
+                        if(this.moduleName =='ItemMaster'){
+                            //this.uploadDocsToser.unsubscribe()
+                        } else {
+                            this.uploadDocsToser.unsubscribe()
+                        }
                         this.hideUpoladThing = false;
                     }
                     this.getList();

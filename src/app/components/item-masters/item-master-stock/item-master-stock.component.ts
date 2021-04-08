@@ -1301,13 +1301,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 			})
 		}
     }
-    errorMessageHandler(log) {
-        this.alertService.showMessage(
-            'Error',
-            log.error.error,
-            MessageSeverity.error
-        );
-    }
+    // errorMessageHandler(log) {
+    //     this.alertService.showMessage(
+    //         'Error',
+    //         log.error.error,
+    //         MessageSeverity.error
+    //     );
+    // }
 
     // Form array for capability//
     get mfgFormArray(): FormArray {
@@ -3562,11 +3562,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.getAircraftMappedDataByItemMasterId();
 
         }, error => {
-            this.alertService.showMessage(
-                'Failed',
-                error.error,
-                MessageSeverity.error
-            );
+            // this.alertService.showMessage(
+            //     'Failed',
+            //     error.error,
+            //     MessageSeverity.error
+            // );
             const errorLog = error;            // reset poupup aircraft information
             this.aircraftData = undefined;
             this.selectedAircraftId = undefined;
@@ -4480,7 +4480,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     }
                     this.isSaving = false;
                     this.isEditMode = true;
-                    
+                    this.disableSaveForEdit = true;
                     this.alertService.showMessage("Success", `Updated ItemMaster General Info Successfully`, MessageSeverity.success);
                     this.moveAircraftInformation();
                 })
@@ -5937,13 +5937,13 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
     }
 
-    openHistory(content, rowData) {
-        this.alertService.startLoadingMessage();
+    // openHistory(content, rowData) {
+    //     this.alertService.startLoadingMessage();
 
-        this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
-            results => this.onAuditHistoryLoadSuccessful(results, content),
-            error => {this.isSpinnerVisible = false});
-    }
+    //     this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
+    //         results => this.onAuditHistoryLoadSuccessful(results, content),
+    //         error => {this.isSpinnerVisible = false});
+    // }
     openHistoryOfPurchaseAndSales(content, rowData) {
         this.alertService.startLoadingMessage();
 

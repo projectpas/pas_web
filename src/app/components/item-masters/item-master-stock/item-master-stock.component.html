@@ -1209,10 +1209,14 @@
                                     <tr [pSelectableRow]="rowData"
                                     [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="onViewAircraftonDbl(rowData)">
                                     <td class="text-left" class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
-                                        <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+                                        <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field !='model'">
                                             {{rowData[col.field]}}
                                         </ng-container>
-                                        <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
+                                        <ng-container *ngIf="col.field == 'model'">
+                                            {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
+                                        </ng-container> 
+
+                                        <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate' && col.field !='model'">
                                             {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
                                         </ng-container>                                        
                                     </td>
@@ -3902,7 +3906,7 @@
     </div>
 </div>
 
-<ng-template #contentAuditHist
+<!-- <ng-template #contentAuditHist
              let-c="close"
              let-d="dismiss" class="wauto"
              data-backdrop="static">
@@ -3986,7 +3990,7 @@
             Close
         </button>
     </div>
-</ng-template>
+</ng-template> -->
 
 <ng-template #contentPurchaseAndSalesHist
              let-c="close"
