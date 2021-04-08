@@ -14,11 +14,12 @@
         <th style="width:60px"><label>Qty <span class="clr-red">*</span></label></th>
         <th *ngIf="isWorkOrder || isQuote"><label>Ref Num</label></th>
         <th style="width:60px"><label>Unit Cost<span class="clr-red">*</span> </label></th>
-        <th style="width:60px"><label>Extended Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
-        <th style="z-index:1"><label>Vendor Name</label></th>
+        <th style="width:70px"><label>Ext Cost <span *ngIf="!isWorkOrder" class="clr-red">*</span> </label></th>
+        <th style="z-index:1" style="width: 120px;"><label>Vendor Name</label></th>
+        <th style="z-index: 1;" style="width: 200px;"  *ngIf="isWorkFlow"><label>Memo</label></th>
         <th *ngIf="!isQuote && !isEdit">
           <label class="text-left">Actions </label>
-        </th>
+        </th> 
       </tr>
       </thead>
       <tbody>
@@ -83,6 +84,15 @@
            [size]="30" [minLength]="1" field="vendorName" class="workflow-measurement-select" name="vendo_{{i}}">
           </p-autoComplete>
         </td> 
+        <td *ngIf="isWorkFlow">
+          <div class="form-group memo-popup-cstm mat_emo">
+            <div [innerHTML]="charge.memo" matTooltipPosition="above" [matTooltip]="parsedText(charge.memo)"
+              class="text_editor_box"></div>
+            <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup2222" matTooltip="Memo"
+              matTooltipPosition="above" (click)="onAddTextAreaInfo(charge,i)"></i>
+          </div>
+        </td>
+
         <td *ngIf="!isQuote &&  !isEdit" class="text-center">
           <button class="btn btn-danger nobg"  (click)="openDelete(content,charge,i)">
             <i class="fa fa-trash"></i>
@@ -101,6 +111,7 @@
         <td>&nbsp;</td> 
         <td  class="text-right"><b>{{ workFlow.extendedCostSummation }}</b></td>
         <td>&nbsp;</td>
+        <td *ngIf="isWorkFlow">&nbsp;</td>
         <td *ngIf="!isEdit"></td> 
       </tr>
       </tbody>
@@ -108,6 +119,26 @@
   </div>
 </div>
   </form>
+  <div class="modal fade" id="textarea-popup2222" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+          <h4 class="modal-title">Edit Memo</h4>
+        </div>
+        <div class="modal-body">
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+            name="textAreaInfo" required></p-editor>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" [disabled]="disableEditor"
+            (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+          <button type="button" class="btn btn-danger"
+            (click)="onCloseTextAreaInfo()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <div *ngIf="isWorkOrder && !isEdit" class="float-right">
   <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary m-t-10" (click)="saveChargesWorkOrder()" [disabled]="!chargesCreateForm.valid">
     {{ isQuote ? 'Add' : 'Save' }}

@@ -4,6 +4,7 @@ import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+declare var $ : any;
 @Component({
     selector: 'grd-expertise',
     templateUrl: './Expertise-Create.component.html',
@@ -79,7 +80,39 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             this.reCalculate();
         }
     }
-
+    textAreaInfo: any;
+    memoIndex;
+    disableEditor: any = true;
+    onAddTextAreaInfo(material, index) {
+        this.disableEditor = true;
+        this.memoIndex = index;
+        this.textAreaInfo = material.memo;
+    }
+    onSaveTextAreaInfo(memo) {
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.workFlow.expertise[this.memoIndex].memo = this.textAreaInfo;
+        }
+        this.disableEditor = true;
+        $("#textarea-popup2").modal("hide");
+        // this.disableUpdateButton = false;
+    }
+    onCloseTextAreaInfo() {
+        this.disableEditor = true;
+        $("#textarea-popup2").modal("hide");
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    editorgetmemo(ev) {
+        this.disableEditor = false;
+    }
     reCalculate() {
         this.calculateEstimatedHoursSummation();
         this.calculateLabourDirectCost();

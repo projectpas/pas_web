@@ -4,7 +4,8 @@ import { IEquipmentAssetType } from "../Workflow/EquipmentAssetType";
 import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+declare var $ : any; 
 @Component({
     selector: 'grd-equipment',
     templateUrl: './Equipment-Create.component.html',
@@ -17,6 +18,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     @Input() workFlow: IWorkFlow;
     @Input() isEdit = false;
     @Input() editData;
+    @Input() isWorkFlow:boolean=false;
     @Input() UpdateMode: boolean;
     @Input() moduleName = 'Tool'
     @Output() saveEquipmentListForWO = new EventEmitter();
@@ -255,6 +257,41 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     getActive(){
     this.disableUpdate=false;
   }
+
+  textAreaInfo: any;
+  memoIndex;
+  disableEditor: any = true;
+  onAddTextAreaInfo(material, index) {
+      this.disableEditor = true;
+      this.memoIndex = index;
+      this.textAreaInfo = material.memo;
+  }
+  onSaveTextAreaInfo(memo) {
+      if (memo) {
+          this.textAreaInfo = memo;
+          this.workFlow.equipments[this.memoIndex].memo = this.textAreaInfo;
+      }
+      this.disableEditor = true;
+      $("#textarea-popup5").modal("hide");
+      // this.disableUpdateButton = false;
+  }
+  onCloseTextAreaInfo() {
+      this.disableEditor = true;
+      $("#textarea-popup5").modal("hide");
+  }
+  parsedText(text) {
+      if (text) {
+          const dom = new DOMParser().parseFromString(
+              '<!doctype html><body>' + text,
+              'text/html');
+          const decodedString = dom.body.textContent;
+          return decodedString;
+      }
+  }
+  editorgetmemo(ev) {
+      this.disableEditor = false;
+  }
+
 }
 
 

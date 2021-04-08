@@ -575,7 +575,7 @@
                                     <div id="tab_Tools"
                                         *ngIf="workFlow != undefined && workFlow.equipments != undefined"
                                         class="tab-pane fade pan">
-                                        <grd-equipment [UpdateMode]="UpdateMode" [workFlow]='workFlow'>
+                                        <grd-equipment [UpdateMode]="UpdateMode" [workFlow]='workFlow' isWorkFlow="true">
                                         </grd-equipment>
                                     </div>
                                     <div id="tab_Exclusions"

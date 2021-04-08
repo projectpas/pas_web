@@ -24,3 +24,16 @@ label {
 .float-right{
     float:right !important;
 }
+.mat_emo{
+    display: inline-flex;
+    position: relative;
+    top: 4px;
+}
+.ci_cls{
+    position: relative;
+    top: 6px;
+} 
+.text_editor_box{
+    width: 220px !important;
+    line-height: 17px;
+}

@@ -241,6 +241,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 this.editData.quantity = this.editData.quantity ? formatNumberAsGlobalSettingsModule(this.editData.quantity, 0) : '0';
                 this.editData.unitCost = this.editData.unitCost ? formatNumberAsGlobalSettingsModule(this.editData.unitCost, 2) : '0.00';
                 this.editData.extendedCost = this.editData.extendedCost ? formatNumberAsGlobalSettingsModule(this.editData.extendedCost, 2) : '0.00';
+               
                 this.workFlow.materialList.push(this.editData);
                 this.reCalculate();
             } else {
@@ -293,7 +294,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.getConditionsList();
         }
         this.disableUpdateButton = true;
-  
+  if(this.editData && this.isEdit==true){
+    this.getTaskList()
+  }
     }
     ngOnChanges() {
         if (this.workFlow) {
@@ -950,7 +953,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     setEditArray:any=[];
     getTaskList() {  
         this.setEditArray=[];
-        // this.labor.workOrderLaborList.push({})
+        if(this.editData){
+            this.setEditArray.push(this.editData.taskId ? this.editData.taskId :0)
+        }else{
+            this.setEditArray.push(0);
+        } 
         const strText = '';
         this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
          this.taskList = res.map(x => {
