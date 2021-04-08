@@ -20,7 +20,6 @@ import { StocklineViewComponent } from "../../../../shared/components/stockline/
   styleUrls: ["./sales-order-pick-tickets.component.css"]
 })
 export class SalesOrderPickTicketsComponent implements OnInit {
-  isEdit: boolean = false;
   isEnablePOList: any;
   pickTickes: any[] = [];
   tempSales: any[] = [];
@@ -254,7 +253,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   parts: any[] = [];
   qtyToPick: number = 0;
   pickticketItemInterface(rowData, pickticketieminterface) {
-    this.isEdit=false;
     const itemMasterId = rowData.itemMasterId;
     const conditionId = rowData.conditionId;
     const salesOrderId = rowData.salesOrderId;
@@ -335,7 +333,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       this.salesOrderService
         .savepickticketiteminterface(parts)
         .subscribe(data => {
-          this.isEdit=false;
           this.alertService.stopLoadingMessage();
           this.alertService.showMessage(
             "Success",
@@ -380,7 +377,6 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   }
   
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
-    this.isEdit = true;
     const soPickTicketId = rowData.soPickTicketId;
     const salesOrderId = rowData.salesOrderId;
     const salesOrderPartId = rowData.salesOrderPartId;

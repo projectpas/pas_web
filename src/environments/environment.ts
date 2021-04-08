@@ -4,10 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:6012',
- // baseUrl: 'http://devapp1.poweraerosuites.com'
- dashboardUrl:'',
-  reportUrl:''
+  //baseUrl: 'http://localhost:5050'
+  baseUrl: 'http://devapp1.poweraerosuites.com'
 };
 
 /*
