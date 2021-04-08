@@ -127,7 +127,6 @@ export class CommonPickticketComponent implements OnInit {
   }
 
   refresh(id) {
-    debugger;
     //this.salesOrderId = id;
     this.onSearch();
   }

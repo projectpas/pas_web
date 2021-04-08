@@ -170,7 +170,7 @@
                         [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
                         <span
                             *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field != 'openDate'">
-                            {{convertDate(col.field , rowData) == '01-01-0001' ? '' : convertDate(col.field , rowData)}}
+                            {{convertDate(col.field , rowData) == '01/01/0001' ? '' : convertDate(col.field , rowData)}}
                         </span>
                         <span *ngIf="col.field == 'openDate'">
                             {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy'}}
