@@ -86,11 +86,6 @@
                         </tr>
                         <tr class="child-header splitship-head child-header-back">
                           <th></th>
-                          <!-- <th *ngFor="let summaryColumn of headers">
-                            <span>
-                              {{ summaryColumn.header }}
-                            </span>
-                          </th> -->
                           <th>Doc Type</th>
                           <th>Doc Num</th>
                           <th>Doc Date</th>
@@ -205,39 +200,11 @@
                             </span>
                             <span>
                               <button class="btn nobg" mat-icon-button matTooltip="Edit" matTooltipPosition="above"
-                                (click)="editPayment(invoice)"
-                                style="font-weight: bold;">
+                                (click)="editPayment(invoice)" style="font-weight: bold;">
                                 <i class="fa fa-pencil"></i>
                               </button>
                             </span>
                           </td>
-                          <!-- <td colspan="2"></td>
-                          <td class="zui-sticky-col" style="width:107px !important">
-                            <span>
-                              <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
-                                (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
-                            </span>
-                            <span>
-                              <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)"
-                                matTooltip="Confirm" matTooltipPosition="above" style="font-weight: bold;"
-                                [disabled]="part.isConfirmed">
-                                <i class="fa fa-check"></i>
-                              </button>
-                            </span>
-                            <span>
-                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="viewStockSelectedRow(part)" matTooltip="View Stockline">
-                                <i class="fa fa-eye"></i>
-                              </a>
-                            </span>
-                            <span>
-                              <button class="btn nobg" mat-icon-button
-                                (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
-                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
-                                <i class="fa fa-pencil"></i>
-                              </button>
-                            </span>
-                          </td> -->
                         </tr>
                       </tbody>
                     </ng-container>
@@ -255,109 +222,18 @@
                 </table>
               </div>
             </div>
-
-            <!-- <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex">
-              <div class="tableFixHead">
-                <table class="table table-bordered header-table-width" id="mpn-list-table">
-                  <thead>
-                    <tr class="pad_workflo">
-                      <th class="approver-th-align th-width">
-                        <input type="checkbox" (click)="selectAllApproval('internal', selectall)"
-                          [(ngModel)]="selectall" />
-                      </th>
-                      <th *ngFor="let header of headers">{{header.header}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngIf="!openInvoices || openInvoices.length == 0">
-                      <tr>
-                        <td colspan="21" class="no-records-cstm">
-                          No records found
-                        </td>
-                      </tr>
-                    </ng-container>
-                    <ng-container *ngIf="openInvoices">
-                      <tr class="mpn-row" style="display: table-row;"
-                        *ngFor="let invoice of openInvoices; let i=index;">
-                        <td>
-                          <input type="checkbox" [(ngModel)]="invoice.selected"
-                            [disabled]="isView || !getPartToDisableOrNot(invoice)" />
-                        </td>
-                        <ng-container *ngFor="let field of headers">
-                          <td class="table-column-width">
-                            <span *ngIf="field.field == 'documentType'
-                          || field.field == 'docNum'
-                          || field.field == 'invoiceDate'
-                          || field.field == 'originalAmount'
-                          || field.field == 'remainingAmount'
-                          || field.field == 'newRemainingBal'
-                          || field.field == 'glARAccount'
-                          || field.field == 'currencyCode'
-                          || field.field == 'fxRate'
-                          || field.field == 'wosoNum'
-                          || field.field == 'paymentStatus'
-                          || field.field == 'dsi'
-                          || field.field == 'dso'
-                          || field.field == 'amountPastDue'
-                          || field.field == 'arBalance'
-                          || field.field == 'creditTermName'
-                          || field.field == 'cntrlNum'
-                          || field.field == 'employee'
-                          || field.field == 'level1'
-                          || field.field == 'level2'
-                          || field.field == 'level3'
-                          || field.field == 'level4'">
-                              {{invoice[field.field]}}
-                            </span>
-                            <span *ngIf="field.field == 'paymentAmount'">
-                              <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'discAmount'">
-                              <input type="text" class="form-control" style="text-align: right;" name="discAmount"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'discType'">
-                              <select [(ngModel)]="invoice[field.field]" name="discType"
-                                (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                <option value="0">Select</option>
-                                <option value="1">Early pay (Earned)</option>
-                                <option value="2">Early Pay (Not Earned)</option>
-                                <option value="3">Dispute Price</option>
-                              </select>
-                            </span>
-                            <span *ngIf="field.field == 'bankFeeAmount'">
-                              <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'bankFeeType'">
-                              <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
-                                (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                <option value="0">Select</option>
-                                <option value="1">Wire/ACH Fees</option>
-                                <option value="2">FX Fees</option>
-                              </select>
-                            </span>
-                            <span *ngIf="field.field == 'otherAdjustAmt'">
-                              <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'reason'">
-                              <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
-                                [(ngModel)]="invoice[field.field]" id="reason" />
-                            </span>
-                          </td>
-                        </ng-container>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-                </table>
-              </div>
-            </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-12">
+            <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+              (click)="onUpdatePayments()" [disabled]="!isEdit">
+              Update
+            </button>
+            <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+              [disabled]="dataForReview.customerPayments.amtRemaining > 0" (click)="onSavePostPayments()">
+              Save & Post
+            </button>
           </div>
         </div>
       </div>

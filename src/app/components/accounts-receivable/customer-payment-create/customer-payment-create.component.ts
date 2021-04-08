@@ -24,9 +24,6 @@ import {
 import { CustomerSearchQuery } from "../../sales/quotes/models/customer-search-query";
 import { MarginSummary } from "../../../models/sales/MarginSummaryForSalesorder";
 import { ManagementStructureComponent } from "../../sales/quotes/shared/components/management-structure/management-structure.component";
-import { SalesOrderConfirmationModalComponent } from "../../sales/order/sales-order-confirmation-modal/sales-order-confirmation-modal.compoent";
-import { SalesOrderApproveComponent } from "../../sales/order/shared/components/sales-approve/sales-approve.component";
-import { SalesOrderCustomerApprovalComponent } from "../../sales/order/shared/components/sales-order-customer-approval/sales-order-customer-approval.component";
 import { ICustomerPayments } from "../../../models/sales/ICustomerPayments";
 import { CustomerPayments } from "../../../models/sales/CustomerPayments.model";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
@@ -210,12 +207,12 @@ export class CustomerPaymentCreateComponent implements OnInit {
     this.customerPayment.acctingPeriod = parseInt(custPayment.acctingPeriod);
     this.customerPayment.amount = custPayment.amount;
     this.customerPayment.amtApplied = custPayment.amtApplied;
-    this.customerPayment.amtRemaining = custPayment.amount;
+    this.customerPayment.amtRemaining = custPayment.amtRemaining;
     this.customerPayment.reference = custPayment.reference;
     this.customerPayment.cntrlNum = custPayment.cntrlNum;
     this.customerPayment.openDate = new Date(custPayment.openDate);
     this.customerPayment.statusId = custPayment.statusId;
-    this.customerPayment.postedDate = new Date(custPayment.postedDate);
+    this.customerPayment.postedDate = custPayment.postedDate ? new Date(custPayment.postedDate) : null;
     this.customerPayment.memo = custPayment.memo;
     this.customerPayment.managementStructureId = custPayment.managementStructureId;
     // this.customerPayment.employeeId = getObjectById(
@@ -228,6 +225,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
   getNewSalesOrderInstance() {
     this.customerPayment.receiptNo = "Creating";
     this.customerPayment.statusId = getObjectByValue('label', 'Open', this.statusList).value; // Open status by default
+    this.customerPayment.depositDate = new Date();
+    this.customerPayment.openDate = new Date();
   }
 
   onAddDescription(value) {
@@ -260,6 +259,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
   onSubmit() {
     this.errorMessages = [];
     let haveError = false;
+    if (this.customerPayment.amount == undefined || this.customerPayment.amount <= 0) {
+      this.errorMessages.push("Please enter amount");
+      haveError = true;
+    }
 
     if (haveError) {
       let content = this.errorMessagePop;
