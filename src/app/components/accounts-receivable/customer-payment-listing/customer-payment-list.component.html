@@ -7,18 +7,19 @@
             </div>
             <div>
                 <button type="button" class="btn-sm header-button" matTooltipPosition="above"
-                    matTooltip="Process Customer Payment" [routerLink]="['/accountreceivable/accountreceivablepages/process-customer-payment']">
+                    matTooltip="Process Customer Payment"
+                    [routerLink]="['/accountreceivable/accountreceivablepages/process-customer-payment']">
                     Process Customer Payment
                 </button>
             </div>
         </div>
     </div>
     <div class="card-body header-body">
-        <p-table #dt [value]="customerInvoices" [first]="0" [rows]="pageSize" [paginator]="true" [pageLinks]="3"
-            [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
-            [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true" (onLazyLoad)="loadData($event)"
-            [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
-            [style]="{ width: '100%' }">
+        <p-table #dt [value]="customerPayments" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
+            [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
+            selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
+            (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
+            [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
             <ng-template pTemplate="caption">
                 <div class="row">
                     <div class="col">
@@ -44,7 +45,7 @@
                                 <div class="form-group">
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="currentStatusSo" class="form-control" value="1"
+                                            <input type="radio" name="currentStatusSo" class="form-control" [value]="1"
                                                 [(ngModel)]="currentStatus" checked="{{currentStatus == 1}}"
                                                 (change)="changeOfStatus(1)">
                                             <span class="checkmark"></span>Open
@@ -52,15 +53,15 @@
                                     </div>
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="currentStatusSo" class="form-control" value="2"
+                                            <input type="radio" name="currentStatusSo" class="form-control" [value]="2"
                                                 [(ngModel)]="currentStatus" checked="{{currentStatus == 2}}"
                                                 (change)="changeOfStatus(2)">
-                                            <span class="checkmark"></span>Close
+                                            <span class="checkmark"></span>Posted
                                         </label>
                                     </div>
                                     <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="currentStatusSo" class="form-control" value="0"
+                                            <input type="radio" name="currentStatusSo" class="form-control" [value]="0"
                                                 [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}"
                                                 (change)="changeOfStatus(0)">
                                             <span class="checkmark"></span>All
@@ -86,13 +87,9 @@
                 <tr>
                     <th class="table-column-width" [ngStyle]="{'width': col.width}" *ngFor="let col of columns"
                         [ngSwitch]="col.field">
-                        <input *ngIf="col.field !== 'invDueDate'
-                            && col.field !== 'invoiceDate'" style="width:100%;" pInputText type="text"
-                            (input)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'invDueDate'" name="invDueDate"
-                            class="table-header-input-width"
-                            (change)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" *ngIf="col.field == 'invoiceDate'" name="invoiceDate"
+                        <input *ngIf="col.field !== 'openDate' && col.field !== 'depositDate'" style="width:100%;"
+                            pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input type="date" *ngIf="col.field == 'openDate' || col.field == 'depositDate'" name="openDate"
                             class="table-header-input-width"
                             (change)="dt.filter($event.target.value, col.field, 'contains')">
                     </th>
@@ -104,12 +101,36 @@
                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle
                     [pSelectableRowDblClick]="rowData">
                     <td *ngFor="let col of columns" class="table-column-width">
-                        <span *ngIf="col.field != 'invDueDate' && col.field != 'invoiceDate'">
+                        <span
+                            *ngIf="col.field !== 'openDate' && col.field !== 'depositDate' && col.field !== 'amount' && col.field !== 'amtApplied' && col.field !== 'amtRemaining'">
                             {{convertDate(col.field , rowData) == '01-01-0001' ? '' : convertDate(col.field , rowData)}}
                         </span>
-                        <span *ngIf="col.field == 'invDueDate' || col.field == 'invoiceDate'">
+                        <span *ngIf="col.field == 'openDate' || col.field == 'depositDate'">
                             {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy'}}
                         </span>
+                        <span *ngIf="col.field == 'amount' || col.field == 'amtApplied' || col.field == 'amtRemaining'">
+                            {{rowData[col.field] | number:'1.2-2'}}
+                        </span>
+                    </td>
+                    <td class="action-icons-cstm table-column-width">
+                        <div>
+                            <span>
+                                <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
+                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                            </span>
+                            <span>
+                                <a (click)="openOrderToEdit(rowData)" matTooltip="Edit" class="btn nobg"
+                                    [class.disabled]="rowData.status === 'Posted'"
+                                    [ngClass]="{'btn_disabled': rowData.status === 'Posted'}"
+                                    matTooltipPosition="above">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </span>
+                            <span>
+                                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)"
+                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+                        </div>
                     </td>
                     <!--<td class="action-icons-cstm table-column-width">
                         <div *ngIf="currentDeletedstatus==false">
@@ -154,7 +175,7 @@
                     </td> -->
                 </tr>
             </ng-template>
-            <ng-template pTemplate="emptymessage" let-columns *ngIf="customerInvoices.length == 0">
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="customerPayments.length == 0">
                 <tr>
                     <td [attr.colspan]="19" class="no-records-cstm no-records-msg">
                         No records found

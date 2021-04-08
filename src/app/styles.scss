@@ -39,7 +39,7 @@ body {
 }
 
 body .ui-widget {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 .delete-emoji {
@@ -12905,7 +12905,7 @@ p-dialog .ui-widget.ui-widget-content {
   padding: 0;
   display: inline-block;
   vertical-align: top;
-  padding-top: 2px;
+  // padding-top: 2px;
 }
 
 .modal-body p .value {
@@ -14631,7 +14631,7 @@ body .ui-datepicker table td>a.ui-state-active {
 }
 
 .ui-g-4 {
-  font-size: 10.5px !important;
+  // font-size: 10.5px;
 }
 
 .fs12 {
@@ -17166,4 +17166,8 @@ ng-multiselect-dropdown{
 }
 .woq-radio-align .ui-radiobutton {
   margin-top: -9px !important;
+}
+
+.sub-wo-calendar .ui-calendar{
+  width:100% !important;
 }

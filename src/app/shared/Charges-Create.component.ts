@@ -292,12 +292,47 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         newRow.isDeleted = false;
         newRow.updatedBy = this.userName;
         newRow.createdBy = this.userName;
+        newRow.memo="";
         newRow.masterCompanyId = this.currentUserMasterCompanyId;
         // newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
         this.workFlow.charges.push(newRow);
 
     
     }
+    textAreaInfo: any;
+    memoIndex;
+    disableEditor: any = true;
+    onAddTextAreaInfo(material, index) {
+        this.disableEditor = true;
+        this.memoIndex = index;
+        this.textAreaInfo = material.memo;
+    }
+    onSaveTextAreaInfo(memo) {
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.workFlow.charges[this.memoIndex].memo = this.textAreaInfo;
+        }
+        this.disableEditor = true;
+        $("#textarea-popup2222").modal("hide");
+        // this.disableUpdateButton = false;
+    }
+    onCloseTextAreaInfo() {
+        this.disableEditor = true;
+        $("#textarea-popup2222").modal("hide");
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    editorgetmemo(ev) {
+        this.disableEditor = false;
+    }
+
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }

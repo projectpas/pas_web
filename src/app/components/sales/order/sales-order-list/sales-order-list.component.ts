@@ -255,8 +255,8 @@ export class SalesOrderListComponent implements OnInit {
                 quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy') : '',
                 createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
-                requestedDateType: moment(x.requestedDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.requestedDateType && x.requestedDateType != 'Multiple' ? this.datePipe.transform(x.requestedDateType, 'MMM-dd-yyyy hh:mm a') : ''),
-                estimatedShipDateType: moment(x.estimatedShipDateType).format('MM-DD-YYYY') == '01-01-0001' ? '' : (x.estimatedShipDateType && x.estimatedShipDateType != 'Multiple' ? this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy hh:mm a') : '')
+                requestedDateType: moment(x.requestedDateType).format('MM/DD/YYYY') == '01/01/0001' ? '' : (x.requestedDateType && x.requestedDateType != 'Multiple' ? this.datePipe.transform(x.requestedDateType, 'MMM/dd/yyyy hh:mm a') : ''),
+                estimatedShipDateType: moment(x.estimatedShipDateType).format('MM/DD/YYYY') == '01/01/0001' ? '' : (x.estimatedShipDateType && x.estimatedShipDateType != 'Multiple' ? this.datePipe.transform(x.estimatedShipDateType, 'MMM/dd/yyyy hh:mm a') : '')
               }
             });
 
@@ -424,10 +424,10 @@ export class SalesOrderListComponent implements OnInit {
 
   convertDate(key, data) {
     if (key === 'requestedDateType' && data[key]) {
-      return data['requestedDateType'] !== 'Multiple' ? moment(data['requestedDate']).format('MM-DD-YYYY') : data['requestedDateType'];
+      return data['requestedDateType'] !== 'Multiple' ? moment(data['requestedDate']).format('MM/DD/YYYY') : data['requestedDateType'];
     }
     else if (key === 'estimatedShipDateType' && data[key]) {
-      return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM-DD-YYYY') : data['estimatedShipDateType'];
+      return data['estimatedShipDateType'] !== 'Multiple' ? moment(data['estimatedShipDate']).format('MM/DD/YYYY') : data['estimatedShipDateType'];
     } else {
       return data[key];
     }
@@ -441,7 +441,7 @@ export class SalesOrderListComponent implements OnInit {
     this.isSpinnerVisible = true;
     const isdelete = this.currentDeletedstatus ? true : false;
     let PagingData;
-    PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "StatusId": this.currentStatus, "isDeleted": isdelete, "ViewType": this.viewType }, "globalFilter": "" }
+    PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "StatusId": this.currentStatus, "isDeleted": isdelete,"masterCompanyId": this.currentUserMasterCompanyId, "ViewType": this.viewType }, "globalFilter": "" }
 
     let filters = Object.keys(dt.filters);
 

@@ -10,8 +10,9 @@ import { ICustomerPayments } from "../models/sales/ICustomerPayments";
 @Injectable()
 export class CustomerPaymentsEndpointService extends EndpointFactory {
   private readonly customerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments";
+  private readonly saveCustomerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments/SavePayments";
   private readonly getCustomerPaymentDetails: string = environment.baseUrl + "/api/CustomerPayments/get";
-
+  private readonly getCustomerPaymentForReviewendpoint: string = environment.baseUrl + "/api/CustomerPayments/getCustomerPaymentForReview";
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -33,6 +34,22 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
       .get<ICustomerPayments>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getCustomerPayment(customerPaymentId));
+      });
+  }
+
+  savePayments(customerPayment: any): Observable<any> {
+    return this.http
+      .post(this.saveCustomerPaymentUrl, JSON.stringify(customerPayment), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.savePayments(customerPayment));
+      });
+  }
+
+  getCustomerPaymentForReview<T>(receiptId: number): Observable<T> {
+    let url = `${this.getCustomerPaymentForReviewendpoint}/${receiptId}`;
+    return this.http.get<T>(url, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getCustomerPaymentForReview(receiptId));
       });
   }
 }

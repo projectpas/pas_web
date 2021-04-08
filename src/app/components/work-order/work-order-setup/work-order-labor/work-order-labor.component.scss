@@ -6,6 +6,15 @@
 .padding-10{
   padding: 10px !important;
 }
+.padtp{
+  padding-top: 23px;
+}
+.ht_ad{
+  height: 22px;
+}
+.employee-autocomplete .ui-autocomplete{
+  width:100% !important;
+}
 .background-white{
   background-color: #fff !important;
 }
@@ -14,6 +23,9 @@
 }
 .labour-radio-buttons-align{
   text-align: center !important; display: flex !important;
+}
+.check-flex-div1{
+  display: inline-flex;
 }
 .cost-plus-type-align{
   margin-left: 10px !important; margin-right: 10px !important;
@@ -25,6 +37,7 @@
   margin-top: 10px !important;margin-bottom: 10px !important;
   width: 90px !important;
 }
+
 .start-date-th{
   width: 100px !important;z-index: 2 !important;
 }
@@ -155,7 +168,7 @@ input[type=radio] {
 }
 
 .full-width{
-  width: 100%;
+  width: 100px
 }
 
 .footer{

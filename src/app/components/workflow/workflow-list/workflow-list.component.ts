@@ -97,7 +97,7 @@ export class WorkflowListComponent implements OnInit {
     ];
     gridColumns: any[] = [
         { field: 'workOrderNumber', header: 'Workflow ID' },
-        { field: 'version', header: 'Version Number' },
+        { field: 'version', header: 'Version Number',width:"60px" },
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
         { field: 'description', header: 'Work Scope' },
@@ -105,9 +105,9 @@ export class WorkflowListComponent implements OnInit {
         { field: 'workflowCreateDate', header: 'WF Created Date' },
         { field: 'workflowExpirationDate', header: 'Expiration Date' },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'CreatedBy' },
+        { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'UpdatedBy' }
+        { field: 'updatedBy', header: 'Updated By' }
     ];
     selectedColumn: any;
     sourceViewforDocumentListColumns = [
@@ -146,6 +146,7 @@ export class WorkflowListComponent implements OnInit {
         if (this.isWorkOrder) { 
             // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
                 this.onViewWFDetails('','onload');
+                this.toggle_wf_header=true;
                 // this.responseDataForWorkFlow = res;
             // })
         }

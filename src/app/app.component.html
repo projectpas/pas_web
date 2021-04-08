@@ -57,6 +57,10 @@
             <mat-icon>person</mat-icon
             ><span>{{ 'mainMenu.Profile' | translate }}</span>
           </button>
+          <button mat-menu-item (click)="router.navigateByUrl('/updatepassword')"> 
+            <mat-icon>lock</mat-icon>
+            <span>Update Password</span>
+          </button>
           <button
             mat-menu-item
             (click)="router.navigateByUrl('/settings#preferences')"

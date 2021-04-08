@@ -277,7 +277,9 @@ export class WorkOrderService {
     getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId) {
         return this.workOrderEndpointService.getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId);
     }
-
+    searchPartNumberAdvanced(parameters){
+        return this.workOrderEndpointService.searchPartNumberAdvanced(parameters);
+    }
     getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId) {
         return this.workOrderEndpointService.getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId);
     }
@@ -618,8 +620,12 @@ export class WorkOrderService {
     getquoteFreightsHistory(id){
         return this.workOrderEndpointService.getquoteFreightsHistory(id);
     }
-
-
+    getMaterialHistory(id,isSubWorkOrder){
+        return this.workOrderEndpointService.getMaterialHistory(id,isSubWorkOrder);
+    }
+    getMaterialStockHistory(id,isSubWorkOrder){
+        return this.workOrderEndpointService.getMaterialStockHistory(id,isSubWorkOrder);
+    }
 } 
 
 

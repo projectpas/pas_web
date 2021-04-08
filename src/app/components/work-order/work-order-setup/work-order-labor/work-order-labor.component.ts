@@ -214,11 +214,11 @@ laborTaskData:any;
     this.getAllExpertiseType();
   }
   assignHoursToToalWorkOrder() {
-    if (this.laborForm.isTaskCompletedByOne) {
+    // if (this.laborForm.isTaskCompletedByOne) {
       this.clearHoursData();
       this.laborForm.totalWorkHours = 0;
       this.assignAllTask()
-    }
+    // }
   }
   getWorkFlowLaborList() {
     if (this.workFlowData['laborList']) {
@@ -231,7 +231,7 @@ laborTaskData:any;
               }
               if (this.laborForm.workOrderLaborList[0][task.description][0] && (this.laborForm.workOrderLaborList[0][task.description][0]['expertiseId'] == undefined || this.laborForm.workOrderLaborList[0][task.description][0]['expertiseId'] == null)) {
                 this.laborForm.workOrderLaborList[0][task.description].splice(0, 1);
-              }
+              } 
               let taskData = new AllTasks()
               taskData['workOrderLaborHeaderId'] = labList['workOrderLaborHeaderId'];
               taskData['workOrderLaborId'] = labList['workOrderLaborId'];
@@ -421,8 +421,10 @@ laborTaskData:any;
   }
 
 
-
+  newLaborForm:any={}
   clearHoursData() {
+
+    console.log("laborForm.workOrderLaborList[0]",this.laborForm.workOrderLaborList[0])
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
         if (this.laborForm.hoursorClockorScan != 1) {
@@ -1180,10 +1182,6 @@ this.commonfunctionHandler();
     return (type == 'Hours') ? htotal.toFixed(2) : (type == 'LaborOHCost') ? formatNumberAsGlobalSettingsModule(loTotal, 0) : (type == 'LaborBurdenRate') ? formatNumberAsGlobalSettingsModule(burTotal, 0) : (type == 'CostPerHour') ? formatNumberAsGlobalSettingsModule(cpTotal, 0) : (type == 'Cost') ? formatNumberAsGlobalSettingsModule(costTotal, 0) : (type == 'BillingRate') ? formatNumberAsGlobalSettingsModule(bRTotal, 0) : formatNumberAsGlobalSettingsModule(bATotal, 0);
   }
   deleteConfirmation() {
-    // Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
-    //   this.laborForm.workOrderLaborList[0][task] = [];
-    //   this.addNewTask(task);
-    // })
     Object.keys(this.laborForm.workOrderLaborList[0]).forEach((task, index) => {
       this.laborForm.workOrderLaborList[0][task].forEach((value) => {
         if (this.laborForm.hoursorClockorScan != 1) {
@@ -1233,6 +1231,8 @@ this.commonfunctionHandler();
     return result;
   }
   assignAllTask() {
+    console.log("hello tasks",this.laborForm.workOrderLaborList);
+    this.newLaborForm={...this.laborForm};
     this.laborForm.workOrderLaborList[0] = {};
     this.laborForm.hoursorClockorScan = 1;
     if (this.laborForm.workFloworSpecificTaskorWorkOrder == 'workOrder') {
@@ -1245,7 +1245,8 @@ this.commonfunctionHandler();
         }
       )
     }
-  }
+    console.log("hello tasks",this.newLaborForm);
+  } 
   formateCurrency(value) {
     if (value) {
       value = (Number(value.toString().split(',').join(''))).toFixed(2);
@@ -1307,6 +1308,12 @@ this.commonfunctionHandler();
     }
     headerMaintanance(){
       // this.refreshLabor.emit(true);
+    }
+    refreshCall(){
+      console.log("new form",this.newLaborForm)
+      this.laborForm=={...this.newLaborForm}
+        //  this.refreshLabor.emit(true);
+        // laborForm.workOrderLaborList[0]
     }
     historyData:any=[];
     // auditHistoryHeaders:any=[];

@@ -5,6 +5,7 @@ import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 import { ICustomerPayments } from "../models/sales/ICustomerPayments";
 import { CustomerPaymentsEndpointService } from "./customer-payments-endpoint.service";
+import { CustomerReceiptInfo } from "../models/invoicePayment/CustomerReceiptInfo";
 
 @Injectable()
 export class CustomerPaymentsService {
@@ -22,4 +23,14 @@ export class CustomerPaymentsService {
       this.customerPaymentsEndpointService.getCustomerPayment(customerPaymentId)
     );
   }
+
+  savePayments(salesOrder: any): Observable<ICustomerPayments[]> {
+    return Observable.forkJoin(
+      this.customerPaymentsEndpointService.savePayments(salesOrder)
+    );
+  }
+
+  GetCustomerPaymentForReview(receiptId: number) {
+    return this.customerPaymentsEndpointService.getCustomerPaymentForReview(receiptId);
+}
 }

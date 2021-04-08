@@ -62,6 +62,27 @@
 .select_align_right{
   text-align-last: right;
 }
+.woAdd .ui-calendar.ui-calendar-w-btn input {
+  width: 64% !important;
+}
+.woAdd .ui-calendar {
+  display: flex;
+  max-width: 67px !important;
+}
+.stdrop .ui-dropdown-label-container {
+  min-width: 80px !important;
+}
+.stdrop .ui-dropdown-label{
+  max-width: 86px !important;
+}
+.pDropdownStyle{
+  max-width: 86px !important;
+  min-width: 86px !important;
+   width: 86px !important;
+}
+.p-dropdown-custom-md1 .ui-dropdown, .select-cstm {
+  min-width: 104px !important;
+}
 .pointer_event_none{
   pointer-events: none;
 }

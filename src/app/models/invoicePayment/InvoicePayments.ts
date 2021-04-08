@@ -1,17 +1,28 @@
-﻿export class InvoicePayments {
-  PaymentId: number;
-  CustomerId: number;
-  SOBillingInvoicingId: number;
-  IsMultiplePaymentMethod: boolean;
-  IsCheckPayment: boolean;
-  IsWireTransfer: boolean;
-  IsEFT: boolean;
-  IsCCDCPayment: boolean;
-  MasterCompanyId: number;
-  CreatedBy: string;
-  UpdatedBy: string;
-  CreatedDate: Date;
-  UpdatedDate: Date;
-  IsActive: boolean;
-  IsDeleted: boolean;
+﻿import { IInvoicePayments } from "../sales/IInvoicePayments";
+
+export class InvoicePayments implements IInvoicePayments {
+  paymentId: number;
+  customerId: number;
+  soBillingInvoicingId: number;
+  isMultiplePaymentMethod: boolean;
+  isCheckPayment: boolean;
+  isWireTransfer: boolean;
+  isEFT: boolean;
+  isCCDCPayment: boolean;
+  paymentAmount: number;
+  discAmount: number;
+  discType: string;
+  bankFeeAmount: number;
+  bankFeeType: string;
+  otherAdjustAmt: number;
+  reason: string;
+  remainingBalance: number;
+  status: string;
+  masterCompanyId: number;
+  createdBy: string;
+  updatedBy: string;
+  createdDate: Date;
+  updatedDate: Date;
+  isActive: boolean;
+  isDeleted: boolean;
 }
