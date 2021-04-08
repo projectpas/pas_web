@@ -146,6 +146,7 @@ export class WorkflowListComponent implements OnInit {
         if (this.isWorkOrder) { 
             // this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
                 this.onViewWFDetails('','onload');
+                this.toggle_wf_header=true;
                 // this.responseDataForWorkFlow = res;
             // })
         }

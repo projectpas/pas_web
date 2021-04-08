@@ -197,6 +197,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         newRow.revisionDate = "";
         newRow.verifiedBy = "";
         newRow.status = "";
+        newRow.memo="";
         newRow.verifiedDate = "";
         newRow.aircraft = [];
         newRow.aircraftModels = [];
@@ -685,5 +686,37 @@ if(this.publicationDropdown && this.publicationDropdown.length==1){
         }
         this.dismissModel();
     }
-
+    textAreaInfo: any;
+    memoIndex;
+    disableEditor: any = true;
+    onAddTextAreaInfo(material, index) {
+        this.disableEditor = true;
+        this.memoIndex = index;
+        this.textAreaInfo = material.memo;
+    }
+    onSaveTextAreaInfo(memo) {
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.workFlow.publication[this.memoIndex].memo = this.textAreaInfo;
+        }
+        this.disableEditor = true;
+        $("#textarea-popup56").modal("hide");
+        // this.disableUpdateButton = false;
+    }
+    onCloseTextAreaInfo() {
+        this.disableEditor = true;
+        $("#textarea-popup56").modal("hide");
+    }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+    editorgetmemo(ev) {
+        this.disableEditor = false;
+    }
 }

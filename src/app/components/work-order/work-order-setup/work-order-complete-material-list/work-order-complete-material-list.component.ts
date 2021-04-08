@@ -146,7 +146,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'roNextDlvrDate', header: 'RO Next Dlvr Date' },
         { field: 'receiver', header: 'Rec Num' },
         { field: 'workOrderNumber', header: 'WO Num' },
-        { field: 'subWorkOrder', header: 'Sub-WO Num' },
+        { field: 'subWorkOrderNo', header: 'Sub-WO Num' },
         { field: 'salesOrder', header: 'SO Num' },
         { field: 'figure', header: 'Figure' },
         { field: 'site', header: 'Site' },
@@ -245,8 +245,34 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
         this.taskList = this.taskList;
         this.workFlowObject.materialList = [];
+        const newRow:any={}
+   
+        newRow.conditionCodeId = 1;
+        newRow.extendedCost = "0.00";
+        newRow.extraCost = "0.00";
+        newRow.itemClassificationId = "";
+        newRow.itemMasterId = "";
+        newRow.materialMandatoriesId = 1;
+        newRow.partDescription = "";
+        newRow.partItem = "";
+        newRow.isDeferred = false;
+        newRow.memo = "";
+        newRow.price = "0.00";
+        newRow.provisionId = "";
+        newRow.quantity = "";
+        newRow.unitCost = "0.00";
+        newRow.unitOfMeasureId = null;
+        newRow.isDeleted = false;
+        newRow.extendedPrice = '';
+        newRow.updatedBy = this.userName; 
+        newRow.createdBy = this.userName;
+        newRow.createdDate = new Date();
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
+        this.workFlowObject.materialList.push(newRow)
     }
-
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
     edit(rowData) {
         this.editData = undefined;
         this.cdRef.detectChanges();
@@ -1059,13 +1085,27 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
    
     clearautoCompleteInput(workOrderGeneralInformation, employeeId) { }
-
-
-    // auditHistory:any=[]; 
+ 
     auditHistoryList:any=[]
+    isSpinnerVisibleHistory:boolean=false;
         openMaterialAudit(row){
+            this.auditHistoryList=[];
+            this.isSpinnerVisibleHistory=true;
             this.workOrderService.getMaterialHistory(row.workOrderMaterialsId,this.isSubWorkOrder).subscribe(res=>{
+                this.isSpinnerVisibleHistory=false;
  this.auditHistoryList=res.reverse();
+
+ if (this.auditHistoryList && this.auditHistoryList.length > 0) {
+    this.auditHistoryList = this.auditHistoryList.map(x => {
+        return {
+            ...x,
+            unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+            extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00'
+        }
+    })
+}
+            },err=>{
+                this.isSpinnerVisibleHistory=false;
             })
         }
 //     openStocklineAudit(row) {

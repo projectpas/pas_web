@@ -31,7 +31,7 @@
                 </div>
                 <div *ngIf="isEdit && editData && addNewMaterial"> 
                     <grd-material [isEdit]="isEdit" [editData]="editData" [isWorkOrder]="isWorkOrder" [isSubWorkOrder]="isSubWorkOrder"
-                        [workFlow]="workFlowObject" [taskList]="taskList"
+                        [workFlow]="workFlowObject"  
                         (updateMaterialListForWO)="updateMaterialList($event)" [mpnPartNumbersList]="mpnPartNumbersList">
                     </grd-material> 
                 </div>
@@ -680,7 +680,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                         <th rowspan="2">Updated By</th>
                       </tr>
                   </thead>
-                  <tbody *ngIf="auditHistoryList.length > 0">
+                  <tbody *ngIf="auditHistoryList && auditHistoryList.length > 0">
                       <tr *ngFor="let audit of auditHistoryList; let i = index">
                          <td [ngStyle]="{color: getColorCodeForHistory(i, 'taskName', audit.taskName) ? 'black' : 'red'}">{{ audit.taskName }}</td>
                           <td [ngStyle]="{color: getColorCodeForHistory(i, 'partNumber', audit.partNumber) ? 'black' : 'red'}">{{ audit.partNumber }}</td>
@@ -741,7 +741,7 @@ Do you  to  create new Sub Work Order  or Add to existing Work Order ?
                 </ng-container>
             </table>
             </div>
-            <ng-template *ngIf="!showhistorylist">
+            <ng-template *ngIf="auditHistoryList && auditHistoryList.length==0">
               <div class="text-center">
                   <div class="text-center">
                       <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
