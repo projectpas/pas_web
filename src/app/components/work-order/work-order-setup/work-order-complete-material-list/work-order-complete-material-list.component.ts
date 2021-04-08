@@ -195,8 +195,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    ngOnInit() {
-        console.log("hellowww",this.workFlowObject)
+    ngOnInit() { 
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -213,8 +212,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        console.log("hellowww",this.workFlowObject)
+    ngOnChanges(changes: SimpleChanges) { 
         if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
             if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
                 for (let mpn of this.mpnPartNumbersList) {
@@ -550,8 +548,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
             }
         }
     }
-    // checkActiveStatus() { 
-    //     console.log("reeeeee", this.reservedList)
+    // checkActiveStatus() {  
     //     // this.savebutonDisabled = false;
     //     var result = false;
     //       this.reservedList.forEach(
