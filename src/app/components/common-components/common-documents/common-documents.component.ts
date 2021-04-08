@@ -482,7 +482,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 this.moduleId = element.value;
             }
         });
-        debugger
+        
         if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
             this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
             this.itemmasterIdReferenceId = this.referenceId;
@@ -551,7 +551,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     documentCollectionOriginal: any = [];
     getList() {
-        debugger
+        
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
             if (element.label == this.moduleName) {
@@ -561,10 +561,13 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
         });
 
         if (this.moduleName =='ItemMaster') {
-            this.referenceId = this.itemmasterIdReferenceId;
+            if(this.itemmasterIdReferenceId){
+                this.referenceId = this.itemmasterIdReferenceId;
+            }
         }
 
         this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus).subscribe(res => {
+            
             this.commondocumentsDestructuredData = [];
             this.documentCollection = [];
             this.commondocumentsDestructuredData = res;

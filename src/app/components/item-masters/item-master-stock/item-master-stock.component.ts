@@ -6093,5 +6093,5 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     changeOfStatus(status){
         this.disableSaveForEdit=false;
-    }
+    }    
 }
