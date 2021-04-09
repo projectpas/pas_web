@@ -10,6 +10,7 @@ import { CurrencyService } from "../../../services/currency.service";
 import { EmployeeService } from "../../../services/employee.service";
 import { AuthService } from "../../../services/auth.service";
 import { Router } from "@angular/router";
+import { Subject } from 'rxjs';
 import {
   getObjectById,
   editValueAssignByCondition,
@@ -34,8 +35,8 @@ import { ReviewCustomerPaymentComponent } from "../reivew-customer-payments/revi
   templateUrl: "./customer-payment-create.component.html",
   styleUrls: ["./customer-payment-create.component.scss"]
 })
-
 export class CustomerPaymentCreateComponent implements OnInit {
+  uploadDocs: Subject<boolean> = new Subject();
   query: CustomerSearchQuery;
   customers: Customer[];
   totalRecords: number = 0;
@@ -45,7 +46,8 @@ export class CustomerPaymentCreateComponent implements OnInit {
   customerPayment: any = {};
   salesOrder: ICustomerPayments;
   customerDetails: any;
-  enableUpdateButton = true;
+  enableUpdateButton = false;
+  isDocumentsAdded = false;
   firstCollection: any[];
   allEmployeeinfo: any[] = [];
   customerNames: any[];
@@ -89,9 +91,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
   arrayEmplsit: any[] = [];
   allEmployeeList: any = [];
   currentUserEmployeeName: string;
-  moduleName: any = "SalesOrder";
   statusList: any = [];
   accntPriodList: any = [];
+  modalIsMaintannce: NgbModalRef;
+  maintanancemoduleName = 'CustomerReceipt';
 
   constructor(
     private alertService: AlertService,
@@ -151,7 +154,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   onChangeInput() {
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   getSoInstance(initialCall = false) {
@@ -180,7 +183,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     if (event.query !== undefined && event.query !== null) {
       this.employeedata(event.query, this.customerPayment.managementStructureId);
     }
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   getCustomerDetails() {
@@ -249,7 +252,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
     if (this.tempMemoLabel == "Memo") {
       this.customerPayment.memo = this.tempMemo;
     }
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   closeErrorMessage() {
@@ -302,9 +305,17 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
       if (this.id) {
         this.isCreateModeHeader = false;
+        if (this.isDocumentsAdded) {
+          this.uploadDocs.next(true);
+        }
+        this.isSpinnerVisible = false;
       } else {
         this.customerPaymentsService.create(this.salesOrder).subscribe(data => {
           let receiptId = data[0].receiptId;
+          if (this.isDocumentsAdded) {
+            localStorage.setItem('commonId', receiptId.toString());
+            this.uploadDocs.next(true);
+          }
           this.isCreateModeHeader = true;
           this.isHeaderSubmit = true;
           this.isSpinnerVisible = false;
@@ -360,7 +371,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   enableHeaderSave() {
     this.enableHeaderSaveBtn = true;
-    this.enableUpdateButton = false;
+    this.enableUpdateButton = true;
   }
 
   checkValidOnChange(condition, value) {
@@ -559,5 +570,18 @@ export class CustomerPaymentCreateComponent implements OnInit {
     }, err => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  changeOfStatus() {
+    this.enableUpdateButton = true;
+    this.isDocumentsAdded = true;
+  }
+
+  viewCRDocumentModal(content) {
+    this.modalIsMaintannce = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+  }
+
+  closeCDDocumentModal() {
+    this.modalIsMaintannce.close();
   }
 }

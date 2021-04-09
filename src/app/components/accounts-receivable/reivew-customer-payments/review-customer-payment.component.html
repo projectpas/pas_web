@@ -2,7 +2,7 @@
   <div class="card card-stock" style="margin-top: 5px;">
     <div class="card-body" style="padding: 10px;">
       <div class="form-group">
-        <div class="row">
+        <div class="row" *ngIf="dataForReview.customerPayments">
           <div class="col-md-12 col-sm-12 col-12">
             <div class="col-2 column">
               <div class="form-group">
@@ -35,22 +35,25 @@
             <div class="col-2 column">
               <div class="form-group">
                 <label>Amount</label>
-                <input type="text" class="form-control" name="amount"
-                  [(ngModel)]="dataForReview.customerPayments.amount" [disabled]="true" />
+                <input type="text" class="form-control" style="text-align: right;" name="amount"
+                  [ngModel]="dataForReview.customerPayments.amount | twoDecimalGlobalNumberFormatPipe"
+                  [disabled]="true" />
               </div>
             </div>
             <div class="col-2 column">
               <div class="form-group">
                 <label>Applied</label>
-                <input type="text" class="form-control" name="amtApplied"
-                  [(ngModel)]="dataForReview.customerPayments.amtApplied" [disabled]="true" />
+                <input type="text" class="form-control" style="text-align: right;" name="amtApplied"
+                  [ngModel]="dataForReview.customerPayments.amtApplied | twoDecimalGlobalNumberFormatPipe"
+                  [disabled]="true" />
               </div>
             </div>
             <div class="col-2 column">
               <div class="form-group">
                 <label>Amt Remaining</label>
-                <input type="text" class="form-control" name="amtRemaining"
-                  [(ngModel)]="dataForReview.customerPayments.amtRemaining" [disabled]="true" />
+                <input type="text" class="form-control" style="text-align: right;" name="amtRemaining"
+                  [ngModel]="dataForReview.customerPayments.amtRemaining | twoDecimalGlobalNumberFormatPipe"
+                  [disabled]="true" />
               </div>
             </div>
           </div>
@@ -68,20 +71,29 @@
                         {{ summaryColumn.header }}
                       </span>
                     </th>
-                    <th colspan="25"></th>
+                    <th colspan="24"></th>
                     <th></th>
                   </tr>
                   <ng-container *ngIf="dataForReview">
                     <ng-container *ngFor="let summaryPart of dataForReview.paymentsByCustomer;let rowIndex=index;">
                       <tbody>
                         <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                          <td *ngFor="let summaryColumn of custheaders"
-                            style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                            <span>
-                              {{summaryPart.customerDetails[summaryColumn.field]}}
-                            </span>
-                          </td>
-                          <td colspan="25"></td>
+                          <ng-container *ngFor="let summaryColumn of custheaders">
+                            <td style="width:auto; background-color: #EAF2C5 !important; text-align: right;"
+                              pReorderableRowHandle
+                              *ngIf="summaryColumn.field == 'amount' || summaryColumn.field == 'amountRemaining'">
+                              <span>
+                                {{summaryPart.customerDetails[summaryColumn.field]  | twoDecimalGlobalNumberFormatPipe }}
+                              </span>
+                            </td>
+                            <td style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle
+                              *ngIf="summaryColumn.field != 'amount' && summaryColumn.field != 'amountRemaining'">
+                              <span>
+                                {{summaryPart.customerDetails[summaryColumn.field]}}
+                              </span>
+                            </td>
+                          </ng-container>
+                          <td colspan="24"></td>
                           <td></td>
                         </tr>
                         <tr class="child-header splitship-head child-header-back">
@@ -110,7 +122,6 @@
                           <th style="min-width: 85px;">AR Bal</th>
                           <th style="min-width: 125px;">Credit Term</th>
                           <th style="min-width: 140px;">Cntrl Num</th>
-                          <th style="min-width: 125px;">Employee</th>
                           <th style="min-width: 175px;">CO</th>
                           <th style="min-width: 175px;">BU</th>
                           <th style="min-width: 175px;">Div</th>
@@ -121,11 +132,21 @@
                           *ngFor="let invoice of summaryPart.invoices; let stockIndex = index">
                           <td></td>
                           <ng-container *ngFor="let field of headers">
-                            <td class="table-column-width">
-                              <span *ngIf="field.field == 'documentType'
+                            <td class="table-column-width" style="text-align: right;" *ngIf="field.field == 'originalAmount' ||
+                            field.field == 'remainingAmount' ||
+                            field.field == 'amountPastDue'">
+                              <span *ngIf="field.field == 'originalAmount'">
+                                {{invoice[field.field]  | twoDecimalGlobalNumberFormatPipe}}
+                              </span>
+                              <span *ngIf="field.field == 'remainingAmount'">
+                                {{invoice[field.field]  | twoDecimalGlobalNumberFormatPipe}}
+                              </span>
+                              <span *ngIf="field.field == 'amountPastDue'">
+                                {{invoice[field.field]  | twoDecimalGlobalNumberFormatPipe}}
+                              </span>
+                            </td>
+                            <td class="table-column-width" *ngIf="field.field == 'documentType'
                             || field.field == 'docNum'
-                            || field.field == 'originalAmount'
-                            || field.field == 'remainingAmount'
                             || field.field == 'newRemainingBal'
                             || field.field == 'glARAccount'
                             || field.field == 'currencyCode'
@@ -134,11 +155,34 @@
                             || field.field == 'paymentStatus'
                             || field.field == 'dsi'
                             || field.field == 'dso'
-                            || field.field == 'amountPastDue'
                             || field.field == 'arBalance'
                             || field.field == 'creditTermName'
                             || field.field == 'cntrlNum'
-                            || field.field == 'employee'
+                            || field.field == 'invoiceDate'
+                            || field.field == 'paymentAmount'
+                            || field.field == 'discAmount'
+                            || field.field == 'discType'
+                            || field.field == 'bankFeeAmount'
+                            || field.field == 'bankFeeType'
+                            || field.field == 'otherAdjustAmt'
+                            || field.field == 'reason'
+                            || field.field == 'level1'
+                            || field.field == 'level2'
+                            || field.field == 'level3'
+                            || field.field == 'level4'">
+                              <span *ngIf="field.field == 'documentType'
+                            || field.field == 'docNum'
+                            || field.field == 'newRemainingBal'
+                            || field.field == 'glARAccount'
+                            || field.field == 'currencyCode'
+                            || field.field == 'fxRate'
+                            || field.field == 'wosoNum'
+                            || field.field == 'paymentStatus'
+                            || field.field == 'dsi'
+                            || field.field == 'dso'
+                            || field.field == 'arBalance'
+                            || field.field == 'creditTermName'
+                            || field.field == 'cntrlNum'
                             || field.field == 'level1'
                             || field.field == 'level2'
                             || field.field == 'level3'
@@ -162,7 +206,8 @@
                               </span>
                               <span *ngIf="field.field == 'discType'">
                                 <select [(ngModel)]="invoice[field.field]" name="discType"
-                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected"
+                                  [required]="invoice['discAmount'] != null && invoice['discAmount'] > 0">
                                   <option value='-1'>--Select--</option>
                                   <option *ngFor="let item of discTypeList" [ngValue]="item.value">
                                     {{ item.label }}</option>
@@ -238,7 +283,8 @@
               Update
             </button>
             <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
-              [disabled]="dataForReview.customerPayments.amtRemaining > 0" (click)="onSavePostPayments()">
+              [disabled]="dataForReview.customerPayments != nul && dataForReview.customerPayments.amtRemaining > 0"
+              (click)="onSavePostPayments()">
               Save & Post
             </button>
           </div>
