@@ -440,119 +440,121 @@
       </p-tabPanel> -->
     <p-tabPanel header="Credit Card/Debit Card" *ngIf="(!objInvoicePayment.isMultiplePaymentMethod && chkPaymentMethod == 3) ||
       (objInvoicePayment.isMultiplePaymentMethod && objInvoicePayment.isCCDCPayment)">
-      <div class="card new-card">
-        <div class="card-body header-body">
-          <div class="col-sm-3 w250 payment-blocks cc-block" style="display: block;">
-            <div class="form-group col-sm-12">
-              <label>Payment Date<span class="clr-red">*</span></label>
-              <p-calendar name="ccDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.paymentDate" [showIcon]="true" id="ccDate"
-                #ccDate="ngModel" required>
-              </p-calendar>
-              <div *ngIf="ccDate.invalid && (ccDate.dirty || ccDate.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="ccDate.errors.required">
-                  <small> Payment Date is required </small>
+      <form #ccForm="ngForm">
+        <div class="card new-card">
+          <div class="card-body header-body">
+            <div class="col-sm-3 w250 payment-blocks cc-block" style="display: block;">
+              <div class="form-group col-sm-12">
+                <label>Payment Date<span class="clr-red">*</span></label>
+                <p-calendar name="ccDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.paymentDate" [showIcon]="true"
+                  id="ccDate" #ccDate="ngModel" required>
+                </p-calendar>
+                <div *ngIf="ccDate.invalid && (ccDate.dirty || ccDate.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="ccDate.errors.required">
+                    <small> Payment Date is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Reference #</label>
-              <input type="text" class="form-control" name="referenceNo"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.referenceNo" #referenceNum="ngModel"
-                id="referenceNo" />
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Amount<span class="clr-red">*</span></label>
-              <input type="text" class="form-control" style="text-align:right;" name="ccAmount"
-                [ngModel]="objInvoicePayment.invoiceCreditDebitCardPayment.amount | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="objInvoicePayment.invoiceCreditDebitCardPayment.amount=$event"
-                (change)="onChangeAmount($event, objInvoicePayment);" required />
-            </div>
-            <div class="form-group col-sm-12">
-              <label for="ccCurrencyId">Currency <span class="clr-red">*</span></label>
-              <select name="ccCurrencyId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.currencyId"
-                required id="ccCurrencyId" #ccCurrencyId="ngModel">
-                <option *ngFor="let item of currencyList" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="ccCurrencyId.invalid && (ccCurrencyId.dirty || ccCurrencyId.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="ccCurrencyId.errors.required">
-                  <small> Currency is required </small>
+              <div class="form-group col-sm-12">
+                <label>Reference #</label>
+                <input type="text" class="form-control" name="referenceNo"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.referenceNo" #referenceNum="ngModel"
+                  id="referenceNo" />
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Amount<span class="clr-red">*</span></label>
+                <input type="text" class="form-control" style="text-align:right;" name="ccAmount"
+                  [ngModel]="objInvoicePayment.invoiceCreditDebitCardPayment.amount | twoDecimalGlobalNumberFormatPipe"
+                  (ngModelChange)="objInvoicePayment.invoiceCreditDebitCardPayment.amount=$event"
+                  (change)="onChangeAmount($event, objInvoicePayment);" required />
+              </div>
+              <div class="form-group col-sm-12">
+                <label for="ccCurrencyId">Currency <span class="clr-red">*</span></label>
+                <select name="ccCurrencyId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.currencyId"
+                  required id="ccCurrencyId" #ccCurrencyId="ngModel">
+                  <option *ngFor="let item of currencyList" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="ccCurrencyId.invalid && (ccCurrencyId.dirty || ccCurrencyId.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="ccCurrencyId.errors.required">
+                    <small> Currency is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label for="cardTypeId">Card Type <span class="clr-red">*</span></label>
-              <select name="cardTypeId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardTypeId"
-                required id="cardTypeId" #cardTypeId="ngModel">
-                <option *ngFor="let item of soTypeList" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="cardTypeId.invalid && (cardTypeId.dirty || cardTypeId.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="cardTypeId.errors.required">
-                  <small> Card Type is required </small>
+              <div class="form-group col-sm-12">
+                <label for="cardTypeId">Card Type <span class="clr-red">*</span></label>
+                <select [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardTypeId" name="cardTypeId"
+                  #cardTypeId="ngModel" required>
+                  <option value=''>--Select--</option>
+                  <option *ngFor="let item of cardTypeList" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="cardTypeId.invalid && (cardTypeId.dirty || cardTypeId.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="cardTypeId.errors.required">
+                    <small> Card Type is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Card Number # <span class="clr-red">*</span></label>
-              <input type="text" class="form-control" name="cardNumber"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardNumber" #cardNumber="ngModel"
-                id="cardNumber" />
-              <div *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="cardNumber.errors.required">
-                  <small> Card Number is required </small>
+              <div class="form-group col-sm-12">
+                <label>Card Number # <span class="clr-red">*</span></label>
+                <input type="text" class="form-control" name="cardNumber"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardNumber" #cardNumber="ngModel"
+                  id="cardNumber" />
+                <div *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="cardNumber.errors.required">
+                    <small> Card Number is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Expiry Date<span class="clr-red">*</span></label>
-              <p-calendar name="expiryDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.expirationDate" [showIcon]="true"
-                id="expiryDate" #expiryDate="ngModel" required>
-              </p-calendar>
-              <div *ngIf="expiryDate.invalid && (expiryDate.dirty || expiryDate.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="expiryDate.errors.required">
-                  <small> Expiry Date is required </small>
+              <div class="form-group col-sm-12">
+                <label>Expiry Date<span class="clr-red">*</span></label>
+                <p-calendar name="expiryDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.expirationDate" [showIcon]="true"
+                  id="expiryDate" #expiryDate="ngModel" required>
+                </p-calendar>
+                <div *ngIf="expiryDate.invalid && (expiryDate.dirty || expiryDate.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="expiryDate.errors.required">
+                    <small> Expiry Date is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Security Code # <span class="clr-red">*</span></label>
-              <input type="text" class="form-control" name="securityCode"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.securityCode" #securityCode="ngModel"
-                id="securityCode" required />
-              <div *ngIf="securityCode.invalid && (securityCode.dirty || securityCode.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="securityCode.errors.required">
-                  <small> Security Code is required </small>
+              <div class="form-group col-sm-12">
+                <label>Security Code # <span class="clr-red">*</span></label>
+                <input type="text" class="form-control" name="securityCode"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.securityCode" #securityCode="ngModel"
+                  id="securityCode" required />
+                <div *ngIf="securityCode.invalid && (securityCode.dirty || securityCode.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="securityCode.errors.required">
+                    <small> Security Code is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Cardholder Name # <span class="clr-red">*</span></label>
-              <input type="text" class="form-control" name="cardholderName"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardholderName" #cardholderName="ngModel"
-                id="cardholderName" required />
-              <div *ngIf="cardholderName.invalid && (cardholderName.dirty || cardholderName.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="cardholderName.errors.required">
-                  <small> Cardholder Name is required </small>
+              <div class="form-group col-sm-12">
+                <label>Cardholder Name # <span class="clr-red">*</span></label>
+                <input type="text" class="form-control" name="cardholderName"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.cardholderName" #cardholderName="ngModel"
+                  id="cardholderName" required />
+                <div *ngIf="cardholderName.invalid && (cardholderName.dirty || cardholderName.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="cardholderName.errors.required">
+                    <small> Cardholder Name is required </small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Billing Address</label>
-              <input type="text" class="form-control" name="billingAddress"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.billingAddress" #billingAddress="ngModel"
-                id="billingAddress" />
-            </div>
-            <!-- <div class="form-group col-sm-12">
+              <div class="form-group col-sm-12">
+                <label>Billing Address</label>
+                <input type="text" class="form-control" name="billingAddress"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.billingAddress" #billingAddress="ngModel"
+                  id="billingAddress" />
+              </div>
+              <!-- <div class="form-group col-sm-12">
               <label>Billing Postal Code # <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="billingPostalCode"
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.billingPostalCode"
@@ -564,19 +566,19 @@
                 </div>
               </div>
             </div> -->
-            <div class="form-group col-sm-12">
-              <label>Phone #</label>
-              <input type="text" class="form-control" name="ccPhoneNum"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.phoneNo" #ccPhoneNum="ngModel"
-                id="ccPhoneNum" />
-            </div>
-            <div class="form-group col-sm-12">
-              <label>Approval Ref</label>
-              <input type="text" class="form-control" name="ccApprovalRef"
-                [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.approvalRef" #ccApprovalRef="ngModel"
-                id="ccApprovalRef" />
-            </div>
-            <!-- <div class="form-group col-sm-12">
+              <div class="form-group col-sm-12">
+                <label>Phone #</label>
+                <input type="text" class="form-control" name="ccPhoneNum"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.phoneNo" #ccPhoneNum="ngModel"
+                  id="ccPhoneNum" />
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Approval Ref</label>
+                <input type="text" class="form-control" name="ccApprovalRef"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.approvalRef" #ccApprovalRef="ngModel"
+                  id="ccApprovalRef" />
+              </div>
+              <!-- <div class="form-group col-sm-12">
               <label>Bank Account <span class="clr-red">*</span></label>
               <input type="text" class="form-control" name="ccBankAccount"
                 [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.bankAccount" #ccBankAccount="ngModel"
@@ -588,44 +590,46 @@
                 </div>
               </div>
             </div> -->
-            <div class="form-group col-sm-12">
-              <label for="ccGlAccountId">GL Cash Account <span class="clr-red">*</span></label>
-              <select name="ccGlAccountId" [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.glAccountNumber"
-                required id="ccGlAccount" #ccGlAccount="ngModel">
-                <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
-                  {{ item.label }}</option>
-              </select>
-              <div *ngIf="ccGlAccount.invalid && (ccGlAccount.dirty || ccGlAccount.touched)"
-                class="alert alert-danger alert-danger-cstm">
-                <div *ngIf="ccGlAccount.errors.required">
-                  <small> GL Cash Account is required </small>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-12 memo-popup-cstm">
-              <label>
-                Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                  matTooltipPosition="above" matTooltip="Add Memo" (click)="openCCMemo(); onAddCCMemo()"></i>
-              </label>
-              <span>
-                <div class="form-group memo-popup-cstm mat_emo">
-                  <div [innerHTML]="objInvoicePayment.invoiceCreditDebitCardPayment.memo"
-                    [matTooltip]="parsedText(objInvoicePayment.invoiceCreditDebitCardPayment.memo)"
-                    matTooltipPosition="above" class="form-control"
-                    style="height: 100px !important; width:90% !important" class="text_editor_box">
+              <div class="form-group col-sm-12">
+                <label for="ccGlAccountId">GL Cash Account <span class="clr-red">*</span></label>
+                <select name="ccGlAccountId"
+                  [(ngModel)]="objInvoicePayment.invoiceCreditDebitCardPayment.glAccountNumber" required
+                  id="ccGlAccount" #ccGlAccount="ngModel">
+                  <option *ngFor="let item of allGlInfo" [ngValue]="item.value">
+                    {{ item.label }}</option>
+                </select>
+                <div *ngIf="ccGlAccount.invalid && (ccGlAccount.dirty || ccGlAccount.touched)"
+                  class="alert alert-danger alert-danger-cstm">
+                  <div *ngIf="ccGlAccount.errors.required">
+                    <small> GL Cash Account is required </small>
                   </div>
                 </div>
-              </span>
+              </div>
+              <div class="form-group col-sm-12 memo-popup-cstm">
+                <label>
+                  Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                    matTooltipPosition="above" matTooltip="Add Memo" (click)="openCCMemo(); onAddCCMemo()"></i>
+                </label>
+                <span>
+                  <div class="form-group memo-popup-cstm mat_emo">
+                    <div [innerHTML]="objInvoicePayment.invoiceCreditDebitCardPayment.memo"
+                      [matTooltip]="parsedText(objInvoicePayment.invoiceCreditDebitCardPayment.memo)"
+                      matTooltipPosition="above" class="form-control"
+                      style="height: 100px !important; width:90% !important" class="text_editor_box">
+                    </div>
+                  </div>
+                </span>
+              </div>
             </div>
-          </div>
-          <!-- <div class="col-sm-12 payment-blocks check-block" style="display: block;">
+            <!-- <div class="col-sm-12 payment-blocks check-block" style="display: block;">
               <div class="form-group col-sm-12">
                 <app-common-documents [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="false"
                   [offLineUpload]="true"></app-common-documents>
               </div>
             </div> -->
+          </div>
         </div>
-      </div>
+      </form>
     </p-tabPanel>
   </p-tabView>
   <div class="form-group" style="width: 100%; text-align: right;">
@@ -755,12 +759,18 @@
                           || field.field == 'arBalance'
                           || field.field == 'creditTermName'
                           || field.field == 'cntrlNum'
-                          || field.field == 'employee'
                           || field.field == 'level1'
                           || field.field == 'level2'
                           || field.field == 'level3'
                           || field.field == 'level4'">
                             {{invoice[field.field]}}
+                          </span>
+                          <span *ngIf="field.field == 'employee'">
+                            <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="this.employee" name="employee"
+                              title="Employee" appendTo='body' [baseZIndex]="9999" field="label"
+                              [suggestions]="employeesList" disabled="true" (completeMethod)="filterEmployees($event)"
+                              [dropdown]="true">
+                            </p-autoComplete>
                           </span>
                           <span *ngIf="field.field == 'paymentAmount'">
                             <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
@@ -775,12 +785,9 @@
                           <span *ngIf="field.field == 'discType'">
                             <select [(ngModel)]="invoice[field.field]" name="discType"
                               (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                              <option value="0">Select</option>
-                              <option value="1">Early pay (Earned)</option>
-                              <option value="2">Early Pay (Not Earned)</option>
-                              <option value="3">Dispute Price</option>
-                              <!-- <option *ngFor="let name of statusList" [ngValue]="name.value">
-                                {{name.label}}</option> -->
+                              <option value='-1'>--Select--</option>
+                              <option *ngFor="let item of discTypeList" [ngValue]="item.value">
+                                {{ item.label }}</option>
                             </select>
                           </span>
                           <span *ngIf="field.field == 'bankFeeAmount'">
@@ -791,11 +798,9 @@
                           <span *ngIf="field.field == 'bankFeeType'">
                             <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
                               (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                              <option value="0">Select</option>
-                              <option value="1">Wire/ACH Fees</option>
-                              <option value="2">FX Fees</option>
-                              <!-- <option *ngFor="let name of statusList" [ngValue]="name.value">
-                                {{name.label}}</option> -->
+                              <option value='-1'>--Select--</option>
+                              <option *ngFor="let item of bankFeesTypeList" [ngValue]="item.value">
+                                {{ item.label }}</option>
                             </select>
                           </span>
                           <span *ngIf="field.field == 'otherAdjustAmt'">
@@ -804,8 +809,12 @@
                               (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
                           </span>
                           <span *ngIf="field.field == 'reason'">
-                            <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
-                              [(ngModel)]="invoice[field.field]" id="reason" />
+                            <select [(ngModel)]="invoice[field.field]" name="reason"
+                              (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                              <option value='-1'>--Select--</option>
+                              <option *ngFor="let item of adjustReasonList" [ngValue]="item.value">
+                                {{ item.label }}</option>
+                            </select>
                           </span>
                         </td>
                       </ng-container>

@@ -341,7 +341,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
           );
           this.dismissModel();
           this.onSearch();
-        }, error => this.isSpinnerVisible = false);
+        });
     }
   }
 
@@ -375,7 +375,7 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
-  
+
   pickticketItemInterfaceedit(rowData, pickticketieminterface) {
     const soPickTicketId = rowData.soPickTicketId;
     const salesOrderId = rowData.salesOrderId;
