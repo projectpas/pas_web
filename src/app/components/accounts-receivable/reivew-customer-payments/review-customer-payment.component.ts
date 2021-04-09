@@ -3,6 +3,7 @@ import { AuthService } from "../../../services/auth.service";
 import { CustomerService } from "../../../services/customer.service";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
 import { CommonService } from "../../../services/common.service";
+import { AlertService, MessageSeverity } from "../../../services/alert.service";
 
 @Component({
   selector: "app-review-customer-payment",
@@ -25,6 +26,7 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   constructor(public customerService: CustomerService,
     private customerPaymentsService: CustomerPaymentsService,
     private authService: AuthService,
+    private alertService: AlertService,
     private commonservice: CommonService) {
   }
 
@@ -62,7 +64,7 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
       { field: "arBalance", header: "AR Bal", width: "130px" },
       { field: "creditTermName", header: "Credit Term", width: "130px" },
       { field: "cntrlNum", header: "Cntrl Num", width: "130px" },
-      { field: "employee", header: "Employee", width: "180px" },
+      //{ field: "employee", header: "Employee", width: "180px" },
       { field: "level1", header: "CO", width: "130px" },
       { field: "level2", header: "BU", width: "130px" },
       { field: "level3", header: "Div", width: "130px" },
@@ -114,7 +116,6 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   }
 
   onUpdatePayments() {
-    debugger;
     this.dataForReview.paymentsByCustomer
     let totalInvoicePayments: any[] = [];
 
@@ -131,8 +132,15 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
       });
     });
 
+    this.isSpinnerVisible = false;
     this.customerPaymentsService.updatePayments(totalInvoicePayments).subscribe(data => {
       this.dataForReview = data;
+      this.alertService.showMessage(
+        "Success",
+        `Payment information updated successfully for Customer`,
+        MessageSeverity.success
+      );
+      this.fetchDataForReview();
       this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
