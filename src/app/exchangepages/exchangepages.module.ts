@@ -36,6 +36,12 @@ import { ExchangeQuoteComponent } from "../components/exchange-quote/exchange-qu
 import { CommonService } from "../services/common.service";
 import { ExchangequoteService } from "../services/exchangequote.service";
 import { ExchangeQuoteEndpointService } from "../services/exchangequote-endpoint.service";
+import { ExchangeQuotePartNumberComponent } from "../components/exchange-quote/shared/components/exchange-quote-part-number/exchange-quote-part-number.component";
+import { AddExchangePartNumberComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/add-exchange-part-number.component";
+import { ExchangeCustomerDetailsComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-customer-details/exchange-customer-details.component";
+import { ExchangePartDetailsComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-details/exchange-part-details.component";
+import { ExchangePartNumberFilterComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-number-filter/exchange-part-number-filter.component";
+import { ExchangeMerginComponent } from "../components/exchange-quote/shared/components/exchange-mergin/exchange-mergin.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -76,7 +82,13 @@ import { ExchangeQuoteEndpointService } from "../services/exchangequote-endpoint
     ExchangepagesComponent,
     ExchangeQuoteListComponent,
     ExchangeQuoteCreateComponent,
-    ExchangeQuoteComponent
+    ExchangeQuoteComponent,
+    ExchangeQuotePartNumberComponent,
+    AddExchangePartNumberComponent,
+    ExchangeCustomerDetailsComponent,
+    ExchangePartDetailsComponent,
+    ExchangePartNumberFilterComponent,
+    ExchangeMerginComponent
   ],
   providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService],
   entryComponents: []

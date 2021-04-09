@@ -317,6 +317,28 @@
               </button>
           </div>
           </div>
+          <!-- <ng-container *ngIf="((isCreateModeHeader||isEdit))">
+            <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+                <p-tabPanel header="Parts List" [selected]="true">
+                    <app-sales-order-part-number [exchangeQuote]="exchangeQuote" [salesOrderId]="id"
+                        [employeesList]="employeesList" [isViewMode]="false" [customer]="customerDetails"
+                        [salesOrderView]="exchangeQuoteView" (on-parts-save)="onPartsSaveEvent($event)"
+                        [totalCharges]="totalCharges" [totalFreights]="totalFreights"
+                        [defaultSettingPriority]="defaultSettingPriority">
+                    </app-sales-order-part-number>
+                </p-tabPanel>
+            </p-tabView>
+        </ng-container> -->
+        <ng-container *ngIf="((isCreateModeHeader||isEdit))">
+            <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+                <p-tabPanel header="Parts List" [selected]="true">
+                    <app-exchange-quote-part-number [exchangeQuote]="exchangeQuote" [exchangeQuoteId]="id"
+                        [isViewMode]="false" [customer]="customerDetails"
+                        [exchangeQuoteView]="exchangeQuoteView" (on-parts-save)="onPartsSaveEvent($event)">
+                    </app-exchange-quote-part-number>
+                </p-tabPanel>
+            </p-tabView>
+        </ng-container>
         </form>
       </div>
     </div>

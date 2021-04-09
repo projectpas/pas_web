@@ -546,5 +546,8 @@ export class ItemMasterService {
     GetManufacturerByitemMasterId(id){
         return this.itemMasterEndpoint.GetManufacturerByitemMasterId(id);
     }
+    searchitemmasterfromExchangeQuotepop(searchParameters: any) {
+        return this.itemMasterEndpoint.searchitemmasterfromExchangeQuotepop(searchParameters);
+    }
     
 }

@@ -15,6 +15,8 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getNewExchangeQuoteInstanceUrl: string = environment.baseUrl + "/api/exchangequote/new";
     private readonly exchangequote: string = environment.baseUrl + "/api/exchangequote";
     private readonly searchExchangeQuote: string = environment.baseUrl + "/api/exchangequote/exchangequotesearch";
+    private readonly getExchangeQuoteDetails: string = environment.baseUrl + "/api/exchangequote/get";
+    private readonly getExchngeQuoteeSetting: string = environment.baseUrl + "/api/exchangequote/getExchangeQuoteSettinglist";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -53,6 +55,23 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.post(this.searchExchangeQuote, params, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.search(exchangeQuoteSearchParameters));
+        });
+    }
+
+    getExchangeQuote(exchangeQuoteId: number): Observable<any> {
+      const URL = `${this.getExchangeQuoteDetails}/${exchangeQuoteId}`;
+      return this.http
+        .get<IExchangeQuote>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuote(exchangeQuoteId));
+        });
+    }
+
+    getAllExchangeQuoteSettings<T>(): Observable<T> {
+      let endPointUrl = this.getExchngeQuoteeSetting;
+      return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings());
         });
     }
 }  
