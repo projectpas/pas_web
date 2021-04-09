@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges } from "@angular/core";
 import { AuthService } from "../../../services/auth.service";
 import { CustomerService } from "../../../services/customer.service";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
+import { CommonService } from "../../../services/common.service";
 
 @Component({
   selector: "app-review-customer-payment",
@@ -16,10 +17,15 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   custheaders: any[];
   headers: any[];
   dataForReview: any;
+  isEdit: boolean = false;
+  discTypeList: any = [];
+  bankFeesTypeList: any = [];
+  adjustReasonList: any = [];
 
   constructor(public customerService: CustomerService,
     private customerPaymentsService: CustomerPaymentsService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private commonservice: CommonService) {
   }
 
   ngOnInit() {
@@ -60,8 +66,12 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
       { field: "level1", header: "CO", width: "130px" },
       { field: "level2", header: "BU", width: "130px" },
       { field: "level3", header: "Div", width: "130px" },
-      { field: "level4", header: "Dept", width: "130px" }      
+      { field: "level4", header: "Dept", width: "130px" }
     ];
+
+    this.loadDiscType();
+    this.loadBankFeesType();
+    this.loadAdjustReason();
   }
 
   ngOnChanges(changes) {
@@ -69,6 +79,7 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
 
   fetchDataForReview() {
     this.isSpinnerVisible = true;
+    this.isEdit = false;
     this.customerPaymentsService.GetCustomerPaymentForReview(this.receiptId).subscribe(data => {
       this.dataForReview = data;
       this.isSpinnerVisible = false;
@@ -99,5 +110,69 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
 
   editPayment(invoice) {
     invoice.selected = true;
+    this.isEdit = true;
+  }
+
+  onUpdatePayments() {
+    debugger;
+    this.dataForReview.paymentsByCustomer
+    let totalInvoicePayments: any[] = [];
+
+    this.dataForReview.paymentsByCustomer.forEach(payment => {
+      let invoices = payment.invoices;
+      invoices.forEach(invoice => {
+        invoice.bankFeeAmount = invoice.bankFeeAmount ? parseFloat(invoice.bankFeeAmount) : 0;
+        invoice.discAmount = invoice.discAmount ? parseFloat(invoice.discAmount) : 0;
+        invoice.paymentAmount = invoice.paymentAmount ? parseFloat(invoice.paymentAmount) : 0;
+        invoice.otherAdjustAmt = invoice.otherAdjustAmt ? parseFloat(invoice.otherAdjustAmt) : 0;
+        invoice.createdBy = this.userName;
+        invoice.updatedBy = this.userName;
+        totalInvoicePayments.push(invoice);
+      });
+    });
+
+    this.customerPaymentsService.updatePayments(totalInvoicePayments).subscribe(data => {
+      this.dataForReview = data;
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  onSavePostPayments() {
+
+  }
+
+  loadDiscType() {
+    this.commonservice.smartDropDownList('MasterDiscountType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.discTypeList = response;
+        this.discTypeList = this.discTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadBankFeesType() {
+    this.commonservice.smartDropDownList('MasterBankFeesType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.bankFeesTypeList = response;
+        this.bankFeesTypeList = this.bankFeesTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadAdjustReason() {
+    this.commonservice.smartDropDownList('MasterAdjustReason', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.adjustReasonList = response;
+        this.adjustReasonList = this.adjustReasonList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
   }
 }

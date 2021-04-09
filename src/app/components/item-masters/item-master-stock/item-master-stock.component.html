@@ -115,9 +115,9 @@
                         <div class="md-step-bar-left"></div>
                     </div>
 
-                    <div class="pheading">
+                    <!-- <div class="pheading">
                         <h4 [ngClass]="{hideTab : currentTab !== 'General'}" class="page-heading clr-green">Item Master Setup (Stock)</h4>
-                    </div>
+                    </div> -->
                 
                 </div>                
                   
@@ -127,6 +127,16 @@
                 
                 <div [ngClass]="{hideTab : currentTab !== 'General'}" class="m-t-5">
                     <div>
+                        <div class="card new-card">
+                            <div class="card-header header" >
+                                <div class="row">
+                                  <div class="col">
+                                    <h4 class="header-name"> Item Master General Info</h4>
+                                  </div>
+                                 
+                                </div>
+                            </div>
+    
                         <div class="form-row col-row col-row1">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -844,7 +854,7 @@
 
                         </div>
 
-                    </div>
+                    <!-- </div> -->
                     <div class="col-md-12">
                         <div class="form-group m-t-10">
                                         <div class="checkbox-cstm">
@@ -936,9 +946,9 @@
                                                                         pReorderableRowHandle>
                                                                         {{
                       col.field == 'createdDate'
-                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                         : rowData[col.field] && col.field == 'updatedDate'
-                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                         : rowData[col.field]
                                                                         }}
                                                                     </td>
@@ -1018,6 +1028,8 @@
                          [disabled]="!addItemMasterStockForm.valid || disableSavepartNumber || disableSaveForEdit"
                           type="submit">{{isItemMasterCreateGeneralInfoEditMode ? 'Update' : 'Save' }}</button> <!--&& (sourceItemMaster.isOem != true || sourceItemMaster.isPma != true || sourceItemMaster.der != true)-->
                     </div>
+                </div>
+                </div>
                 </div>
             </div>
             <div [ngClass]="{hideTab : currentTab !== 'AircraftInfo'}">
@@ -1977,7 +1989,7 @@
                             <div class="form-row col-row">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="eccn" class="control-label">
+                                        <label for="eccn">
                                             ECCN <span class="clr-red">*</span>
                                         </label>
 
@@ -2062,7 +2074,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-md-5">
-                                                <label class="control-label">
+                                                <label style="margin-top:9px">
                                                     UOM <span class="clr-red" gIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight">*</span>
                                                 </label>
                                                 <p-dropdown class="p-dropdown-100" [options]="allSizeUnitOfMeasureInfo" filter="true" [(ngModel)]="exportInfo.exportSizeUnitOfMeasureId" name="exportSizeUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" [required]="exportInfo.exportSizeLength > 0 || exportInfo.exportSizeWidth > 0 || exportInfo.exportSizeHeight > 0" (onChange)="btnChange()"></p-dropdown>
@@ -3630,9 +3642,9 @@
                 }">
                                 <span *ngIf="audit.dashNumber != 'Unknown'">{{ audit.dashNumber }}</span>
                             </td>
-                            <td><p class="width-120 text-center">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                            <td><p class="width-120 text-center">{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                             <td>{{ audit.createdBy }}</td>
-                            <td><p class="width-120 text-center">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                            <td><p class="width-120 text-center">{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                             <td>{{ audit.updatedBy }}</td>
                             
                             <td class="background-white"><p class="width-100"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
@@ -3719,10 +3731,10 @@
                   }">
                                     {{audit.ataSubChapterCode}}
                                 </td>
-                                <td>{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</td>
+                                <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                                 <td>{{ audit.createdBy }}</td>
                                
-                                <td>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</td>
+                                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                                 <td>{{ audit.updatedBy }}</td>
                                
                                 <td class="background-white"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></td>
@@ -3930,11 +3942,10 @@
                         <th>Memo</th>
                         <th>File Name</th>
                         <th>File Size</th>
-                        <th>Updated Date</th>
-                        <th>Updated By</th>
-                        
                         <th>Created Date</th>
                         <th>Created By</th>
+                        <th>Updated Date</th>
+                        <th>Updated By</th>
                        
                     </tr>
                 </thead>
@@ -3975,9 +3986,9 @@
                         </td>
                         <td>{{ audit.fileSize }}</td>
                        
-                        <td>{{ audit.createdDate | date: 'MM-dd-yyyy' }}</td>
+                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                         <td>{{ audit.createdBy }}</td>
-                        <td>{{ audit.updatedDate | date: 'MM-dd-yyyy' }}</td>
+                        <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
                         <td>{{ audit.updatedBy }}</td>
                     </tr>
                 </tbody>
@@ -4108,7 +4119,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-120">    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-120">    {{ audit.pP_LastListPriceDate  | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
@@ -4130,7 +4141,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-100">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
@@ -4179,7 +4190,7 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p class="width-100">      {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p class="width-100">      {{ audit.salePriceSelectName == 'Calculated' ? '' : audit.sP_FSP_LastFlatPriceDate | date: 'MM/dd/yyyy h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
@@ -4238,10 +4249,10 @@
                           <p class="width-100">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                      
-                        <td><p class="width-120"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p class="width-120"> {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                       
                         <td><p class="width-100"> {{ audit.createdBy }}</p></td>
-                        <td><p class="width-120"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p class="width-120"> {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</p></td>
                         <td><p class="width-100"> {{ audit.updatedBy }}</p></td>
 
                         <td class="background-white"><p class="width-100"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>

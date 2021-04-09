@@ -66,6 +66,25 @@ export class SalesOrderBillingComponent implements OnInit {
     @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
     isMultipleSelected: boolean = false;
     salesOrderShippingId: number;
+    sourceSOApproval: any = {};
+    shipToAddress: any = {};
+    billToAddress: any = {};
+    shipvia: any = {};
+    shiptomoduleTypeId: number;
+    billtomoduleTypeId: number;
+    shipUsertype: number = 0;
+    billUsertype: number = 0;
+    userShipingList: any[] = [];
+    userShipingIdList: any[] = [];
+    userBillingList: any[] = [];
+    userBillingIdList: any[] = [];
+    billToUserId: any = 0;
+    shipToUserId: any = 0;
+    shipToSite: any;
+    billToSite: any;
+    billingSieListOriginal: any[];
+    countryList: any = [];
+    shippingSieListOriginal: any[];
 
     constructor(public salesOrderService: SalesOrderService,
         public commonService: CommonService,
@@ -307,7 +326,6 @@ export class SalesOrderBillingComponent implements OnInit {
                 }
             )
         }, err => {
-            this.isSpinnerVisible = false;
         })
     }
 
@@ -330,7 +348,6 @@ export class SalesOrderBillingComponent implements OnInit {
                 }
             )
         }, err => {
-            this.isSpinnerVisible = false;
         })
     }
 
@@ -370,9 +387,7 @@ export class SalesOrderBillingComponent implements OnInit {
             : "";
     }
 
-    OpenPrintORPost() {
-
-    }
+    OpenPrintORPost() { }
 
     saveSalesOrderBilling(invoiceStatus: InvoiceTypeEnum) {
         let billingItems: BillingItems[] = [];
@@ -412,9 +427,7 @@ export class SalesOrderBillingComponent implements OnInit {
         this.billingorInvoiceForm.createdBy = this.userName;
         this.billingorInvoiceForm.updatedBy = this.userName;
         this.billingorInvoiceForm.salesOrderId = this.salesOrderId;
-        //this.billingorInvoiceForm.salesOrderPartId = this.selectedPartNumber;
         this.billingorInvoiceForm.customerId = billingorInvoiceFormTemp.customerId;
-        //this.billingorInvoiceForm.qtyToBill = this.selectedQtyToBill;
         this.billingorInvoiceForm.invoiceNo = "test";
         this.billingorInvoiceForm.invoiceStatus = invoiceStatus == InvoiceTypeEnum.Billed ? 'Billed' : (invoiceStatus == InvoiceTypeEnum.Reviewed ? 'Reviewed' : 'Invoiced');
         this.billingorInvoiceForm.billingItems = billingItems;
@@ -475,30 +488,9 @@ export class SalesOrderBillingComponent implements OnInit {
         return data[key];
     }
 
-    loadData(event) {
-    }
+    loadData(event) { }
 
     updateWorkOrderBilling() { }
-
-    sourceSOApproval: any = {};
-    shipToAddress: any = {};
-    billToAddress: any = {};
-    shipvia: any = {};
-    shiptomoduleTypeId: number;
-    billtomoduleTypeId: number;
-    shipUsertype: number = 0;
-    billUsertype: number = 0;
-    userShipingList: any[] = [];
-    userShipingIdList: any[] = [];
-    userBillingList: any[] = [];
-    userBillingIdList: any[] = [];
-    billToUserId: any = 0;
-    shipToUserId: any = 0;
-    shipToSite: any;
-    billToSite: any;
-    billingSieListOriginal: any[];
-    countryList: any = [];
-    shippingSieListOriginal: any[];
 
     getCountriesList() {
         this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
@@ -512,8 +504,7 @@ export class SalesOrderBillingComponent implements OnInit {
         userShipingIdList.push(0);
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.userShipingList = res;
-        }, err => {
-        });
+        }, err => { });
     }
 
     getSoldCustomerNameList(usertype) {
@@ -521,8 +512,7 @@ export class SalesOrderBillingComponent implements OnInit {
         userBillinngIdList.push(0);
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userBillinngIdList.join()).subscribe(res => {
             this.userBillingList = res;
-        }, err => {
-        });
+        }, err => { });
     }
 
     getAddressById(salesOrderId) {
@@ -656,8 +646,6 @@ export class SalesOrderBillingComponent implements OnInit {
             this.shipCustomerAddress.country = this.shipToAddress.country;
             this.shipCustomerAddress.postalCode = this.shipToAddress.postalCode;
         }
-
-        this.isSpinnerVisible = false;
     }
 
     onBillToSelected(res?) {
@@ -679,9 +667,7 @@ export class SalesOrderBillingComponent implements OnInit {
                             }
                         })
                     }
-                }, err => {
-                    this.isSpinnerVisible = false;
-                });
+                }, err => { });
         }
     }
 
@@ -689,16 +675,14 @@ export class SalesOrderBillingComponent implements OnInit {
         const value = event.query.toLowerCase();
         this.commonService.autoSuggestionSmartuserDropDownList(this.billUsertype, value, true, 20, this.userBillingIdList.join()).subscribe(res => {
             this.userBillingList = res;
-        }, err => {
-        });
+        }, err => { });
     }
 
     filterCustomerShip(event) {
         const value = event.query.toLowerCase();
         this.commonService.autoSuggestionSmartuserDropDownList(this.shipUsertype, value, true, 20, this.userShipingIdList.join()).subscribe(res => {
             this.userShipingList = res;
-        }, err => {
-        });
+        }, err => { });
     }
 
     setBillToSelectedSite(userID, siteId?) {
@@ -732,9 +716,7 @@ export class SalesOrderBillingComponent implements OnInit {
                         }
                     }
 
-                }, err => {
-                    this.isSpinnerVisible = false;
-                });
+                }, err => { });
         }
     }
 

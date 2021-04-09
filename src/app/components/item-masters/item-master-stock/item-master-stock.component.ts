@@ -4030,7 +4030,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     movePurchaseInformation() {
         this.alertService.showMessage(
             'Success',
-            `Saved Ata Chapter Successfully `,
+            `Saved ATA Chapter Successfully `,
             MessageSeverity.success
         );
         this.changeOfTab('PurchaseSales');

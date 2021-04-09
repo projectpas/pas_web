@@ -2,7 +2,10 @@
 <div class="header" >
   <div class="row">
       <div class="col">
-          <h4 class="header-name">{{isQuote? 'Work Order Quote' :'Work Order'}} Labor</h4>
+          <h4 class="header-name">
+            <!-- {{isQuote? 'Work Order Quote' :'Work Order'}} Labor -->
+            Add Labor Hours
+          </h4>
       </div>
   </div>
 </div>
@@ -11,7 +14,7 @@
     <div class="form-row" >
       <div class="col-md-12">
         <div class="col-md-12 display-flex" *ngIf="!hideHeader">
-          <div class="col-md-3" *ngIf="!isQuote"> 
+          <div class="col-md-2" *ngIf="!isQuote"> 
             <form #labourHeader="ngForm">
               <div class="form-group" *ngIf="!isQuote">
                 <label for="expertise">Expertise <span *ngIf="laborForm.isTaskCompletedByOne">*</span></label>
@@ -37,13 +40,13 @@
             </form> 
           </div> 
           <div class="col-md-3 col-offset-3 task-detail" [ngClass]="{'col-offset-3' :!isQuote}">
-              <div class="form-row" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
-                <div >   <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
+              <div class="form-row ht_ad" *ngIf="!isQuote && (laborForm.expertiseId && laborForm.employeeId) && laborForm.workFloworSpecificTaskorWorkOrder != 'workOrder' && !frombilling">
+                <div class="padtp">   <label class="wauto" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
                     matTooltip="Single MPN">
                     <input type="radio"  (change)="headerMaintanance()" (ngModelChange)="checkValid(4)" [value]=1 name="HoursorClockorScan" #HoursorClockorScan="ngModel"
                         class="radio_adjust"
                         [(ngModel)]="laborForm.hoursorClockorScan">
-                        Labour hours
+                        Labor hours
                 </label>
                 <label class="wauto" style="margin-left:10px" matTooltipPosition="above" [ngClass]="{pointerEvents :isView}"
                     matTooltip="Multiple MPN">
@@ -51,7 +54,7 @@
                         class="radio_adjust"
                         [(ngModel)]="laborForm.hoursorClockorScan" 
                         >
-                        Labour Clock In/Out
+                        Labor Clock In/Out
                 </label>
                 <label class="wauto" matTooltipPosition="above" style="margin-left:10px" [ngClass]="{pointerEvents :isView}"
                 matTooltip="Multiple MPN">
@@ -144,12 +147,12 @@
                 </td>
            </tr>
           <tr>
-            <th class="text-center padding-td tasks-th">Tasks</th>
-            <th class="text-center expertise-th">Expertise</th>
-            <th class="text-center employee-th" style="width:200px" *ngIf="!isQuote">
+            <th class="text-center padding-td tasks-th" style="width:100px">Tasks</th>
+            <th class="text-center expertise-th" style="width:100px">Expertise</th>
+            <th class="text-center employee-th" style="width:140px" *ngIf="!isQuote">
               Employee
             </th>
-            <th class="text-center th-zindex-2">Billable /NonBillable</th>
+            <th class="text-center th-zindex-2" style="width:100px">Billable /NonBillable</th>
             <th class="text-center" style="width:70px !important" *ngIf="
                 laborForm.hoursorClockorScan &&
                 laborForm.hoursorClockorScan !== 1 &&
@@ -199,7 +202,7 @@
               Billing Amount
             </th>
           </ng-container>
-          <th class="text-center memo-th" style="width:250px !important" *ngIf="!isQuote">
+          <th class="text-center memo-th" style="width:335px !important" *ngIf="!isQuote">
             Memo
           </th>
           <th style="width:130px !important" *ngIf="!isView">Actions</th>
@@ -317,13 +320,13 @@
                     !laborForm.hoursorClockorScan ||
                     laborForm.hoursorClockorScan === 1
                   " class="check-flex">
-                  <div class="check-flex-div">
+                  <div class="check-flex-div1">
                     <input type="number" class="form-control check-flex-input" (blur)="
                     calculateHoursDifference(rec);
                     calculateTaskHours(task);
                     calculateTotalCost(rec);
                     markupChanged(rec, 'row')
-                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 75px;" required/>
+                    " [(ngModel)]="rec.totalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px !important;" required/>
                     <span style="font-size: 17px; margin: 0 5px;">:</span>
                     <input type="number" class="form-control" (blur)="
                     calculateHoursDifference(rec);

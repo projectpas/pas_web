@@ -39,6 +39,10 @@ export class ExchangeQuote implements IExchangeQuote {
 	createdOn: string;
 	updatedBy: string;
 	updatedOn: string;
+	restrictPMA: boolean;
+	restrictDER: boolean;
+	cogs:number;
+	daysForCoreReturn:number;
 	constructor() {
 	}
 

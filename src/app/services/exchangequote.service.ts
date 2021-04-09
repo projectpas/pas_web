@@ -14,6 +14,10 @@ import { formatStringToNumber } from "../generic/autocomplete";
 export type RolesChangedOperation = "add" | "delete" | "modify";
 import { IExchangeQuoteSearchParameters } from "../models/exchange/IExchangeQuoteSearchParameters";
 import { IExchangeQuoteListView } from "../models/exchange/IExchangeQuoteListView";
+import { ExchangeQuote } from "../models/exchange/ExchangeQuote.model";
+import { IPartJson } from "../components/sales/shared/models/ipart-json";
+import { PartDetail } from "../components/sales/shared/models/part-detail";
+import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -24,7 +28,11 @@ export type RolesChangedEventArg = {
 })
 export class ExchangequoteService {
 
-  exchangeOrderQuote: IExchangeOrderQuote;
+exchangeOrderQuote: IExchangeOrderQuote;
+parts: IPartJson[];
+selectedParts: PartDetail[];
+activeStep = new Subject();
+query: ItemMasterSearchQuery;
 
 constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
 
@@ -48,6 +56,65 @@ search(
   return Observable.forkJoin(
     this.exchangeQuoteEndpointService.search(exchangeQuoteSearchParameters)
   );
+}
+
+resetExchangeQuote() {
+  // this.approvers = [];
+  // this.initializeApprovals();
+  this.selectedParts = [];
+  this.exchangeOrderQuote = new ExchangeQuote();
+}
+
+getExchangeQuoteInstance() {
+  return Observable.create(observer => {
+    observer.next(this.exchangeOrderQuote);
+    observer.complete();
+  });
+}
+
+getExchangeQuote(exchangeQuoteId: number): Observable<IExchangeQuoteView[]> {
+  return Observable.forkJoin(
+    this.exchangeQuoteEndpointService.getExchangeQuote(exchangeQuoteId)
+  );
+}
+
+resetSearchPart() {
+  this.parts = [];
+  this.query = new ItemMasterSearchQuery();
+  this.query.partSearchParamters.quantityAlreadyQuoted = 0;
+}
+
+getSearchPartResult() {
+  return Observable.create(observer => {
+    observer.next(this.parts);
+    observer.complete();
+  });
+}
+
+getSearchPartObject() {
+  return Observable.create(observer => {
+    observer.next(this.query);
+    observer.complete();
+  });
+}
+
+updateSearchPartResult(parts) {
+  this.parts = parts;
+}
+
+updateSearchPartObject(query) {
+  this.query = query;
+}
+
+getSelectedParts() {
+  return Observable.create(observer => {
+    observer.next(this.selectedParts);
+    observer.complete();
+  });
+}
+
+getAllExchangeQuoteSettings() {
+  return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings();
 }
 
 }
