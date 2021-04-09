@@ -265,6 +265,7 @@ export class WorkOrderAddComponent implements OnInit {
     disableForMemo: boolean = false;
     wflowitems:any=[];
     showWorkflowLabel:any='View WF';
+    currentDate=new Date();
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
@@ -452,7 +453,7 @@ setTimeout(() => {
             this.gridTabChange(this.gridActiveTab)
         }
     }
-
+    expriryarray:any=[];
     modifyWorkorderdata() { 
         if (!this.isEdit) { // create new WorkOrder
             this.isEditLabor = true;
@@ -464,6 +465,7 @@ setTimeout(() => {
             this.getEmployeeData();
             this.isRecCustomer = false;
             this.workOrderStatusvalue = "open";
+            this.expriryarray=[];
             this.workOrderGeneralInformation.partNumbers.forEach(
                 x => {
                     if (x.customerRequestDate) {
@@ -474,6 +476,7 @@ setTimeout(() => {
                     if (x.workOrderScopeId == 0) {
                         x.workOrderScopeId = '';
                     }
+
                 }
             )
         } else { // edit WorkOrder
@@ -554,8 +557,58 @@ setTimeout(() => {
                 this.showTabsGrid = false;
             this.getEmployeeData();
         }
+
+
+setTimeout(() => {
+    this.workOrderGeneralInformation.partNumbers.map((x, index) => {
+        if(x.publicatonExpirationDate){ 
+            console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+           if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+            setTimeout(() => {
+                x.cMMId=0;
+                this.disableSaveForPart=false;
+            }, 2000);
+            // this.removePublication(x,index);
+           
+            // this.expriryarray.push(x);
+     
+            $('#warningForCmmPublication').modal('show');
+           }
+        }
+        if(x.workflowExpirationDate){ 
+            console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+           if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+           
+            // this.removeWorkflow(x,index);
+            setTimeout(() => {
+                x.workflowId=0;
+                this.disableSaveForPart=false;
+            }, 2000);
+            $('#warningForCmmWorkflow').modal('show');
+            // this.expriryarray.push(x);
+    
+           }
+        }
+       }); 
+}, 5000);
+    }
+    removePublication(currentRecord,index){
+setTimeout(() => {
+    // currentRecord.cMMId=0;
+    this.disableSaveForPart=false;
+}, 2000);
     }
 
+    removeWorkflow(currentRecord,index){
+        setTimeout(() => {
+        // currentRecord.workflowId=0;
+        this.disableSaveForPart=false;
+    }, 2000);
+    }
+    tranferCheckbox(ev){
+        console.log("ev",ev)
+        $('#workFlowTransfer').modal('show'); 
+    }
     getEmployeeData() {
         this.workOrderGeneralInformation.woEmployee = this.authService.currentEmployee.name;
     }
@@ -922,6 +975,9 @@ setTimeout(() => {
         } else {
             this.workOrderNumberStatus = 'Open';
             this.workOrderGeneralInformation.workOrderStatusId = 1;
+        }
+        if(this.workOrderNumberStatus=='Close'){
+            this.isView=true;
         }
     }
     dismissModelTask(){
@@ -3173,5 +3229,9 @@ this.woPartId=rowData.id;
     }
     viewWorkflow(workOrderPartNumber){
         this.currentWorkflowId=workOrderPartNumber.workflowId;
+    }
+
+    transferWorkflow(){
+        $('#workFlowTransfer').modal('hide');
     }
 }   
