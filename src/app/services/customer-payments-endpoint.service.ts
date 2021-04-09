@@ -11,6 +11,7 @@ import { ICustomerPayments } from "../models/sales/ICustomerPayments";
 export class CustomerPaymentsEndpointService extends EndpointFactory {
   private readonly customerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments";
   private readonly saveCustomerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments/SavePayments";
+  private readonly updateCustomerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments/UpdateCustomerPayment";
   private readonly getCustomerPaymentDetails: string = environment.baseUrl + "/api/CustomerPayments/get";
   private readonly getCustomerPaymentForReviewendpoint: string = environment.baseUrl + "/api/CustomerPayments/getCustomerPaymentForReview";
   constructor(
@@ -50,6 +51,14 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
     return this.http.get<T>(url, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getCustomerPaymentForReview(receiptId));
+      });
+  }
+
+  updatePayments(customerPayment: any): Observable<any> {
+    return this.http
+      .post(this.updateCustomerPaymentUrl, JSON.stringify(customerPayment), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.updatePayments(customerPayment));
       });
   }
 }

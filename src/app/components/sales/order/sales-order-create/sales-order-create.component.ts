@@ -371,7 +371,6 @@ export class SalesOrderCreateComponent implements OnInit {
           this.salesQuote.customerWarningId = this.customerWarning.customerWarningId;
         }
       }, error => {
-        this.isSpinnerVisible = false;
       });
   }
 
@@ -960,9 +959,12 @@ export class SalesOrderCreateComponent implements OnInit {
           errmessage = errmessage + '<br />' + "Please enter priority ID."
         }
         if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
-          if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
-            selectedPart.estimatedShipDate < this.salesQuote.openDate ||
-            selectedPart.promisedDate < this.salesQuote.openDate) {
+          let crdate = new Date(Date.UTC(selectedPart.customerRequestDate.getUTCFullYear(), selectedPart.customerRequestDate.getUTCMonth(), selectedPart.customerRequestDate.getUTCDate()));
+          let esdate = new Date(Date.UTC(selectedPart.estimatedShipDate.getUTCFullYear(), selectedPart.estimatedShipDate.getUTCMonth(), selectedPart.estimatedShipDate.getUTCDate()));
+          let pdate = new Date(Date.UTC(selectedPart.promisedDate.getUTCFullYear(), selectedPart.promisedDate.getUTCMonth(), selectedPart.promisedDate.getUTCDate()));
+          let opendate = new Date(Date.UTC(this.salesQuote.openDate.getUTCFullYear(), this.salesQuote.openDate.getUTCMonth(), this.salesQuote.openDate.getUTCDate()));
+
+          if (crdate < opendate || esdate < opendate || pdate < opendate) {
             invalidDate = true;
           }
         }
@@ -1407,7 +1409,6 @@ export class SalesOrderCreateComponent implements OnInit {
       this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
       }, err => {
-        this.isSpinnerVisible = false;
       });
     } else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
@@ -1425,7 +1426,6 @@ export class SalesOrderCreateComponent implements OnInit {
       this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
         this.departmentList = res;
       }, err => {
-        this.isSpinnerVisible = false;
       });
     }
     else {
@@ -1456,7 +1456,6 @@ export class SalesOrderCreateComponent implements OnInit {
         this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       }
     }, err => {
-      this.isSpinnerVisible = false;
     });
   }
 
@@ -1467,7 +1466,6 @@ export class SalesOrderCreateComponent implements OnInit {
         this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       }
     }, err => {
-      this.isSpinnerVisible = false;
     });
   }
 

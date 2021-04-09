@@ -32,5 +32,11 @@ export class CustomerPaymentsService {
 
   GetCustomerPaymentForReview(receiptId: number) {
     return this.customerPaymentsEndpointService.getCustomerPaymentForReview(receiptId);
-}
+  }
+
+  updatePayments(salesOrder: any): Observable<any[]> {
+    return Observable.forkJoin(
+      this.customerPaymentsEndpointService.updatePayments(salesOrder)
+    );
+  }
 }

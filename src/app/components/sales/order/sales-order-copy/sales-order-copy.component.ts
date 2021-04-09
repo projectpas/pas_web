@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from "@angular/core";
-import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnInit, Input, EventEmitter } from "@angular/core";
+import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
-import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
+import { NavigationExtras } from "@angular/router";
 
 @Component({
   selector: "app-sales-order-copy",
@@ -14,8 +14,7 @@ export class SalesOrderCopyComponent implements OnInit {
   @Input('on-confirm') onConfirm: EventEmitter<NavigationExtras> = new EventEmitter<NavigationExtras>();
   salesOrderCopyParameters: ISalesOrderCopyParameters;
 
-  constructor(private modalService: NgbModal,
-    private router: Router) {
+  constructor() {
     this.salesOrderCopyParameters = new SalesOrderCopyParameters();
   }
 

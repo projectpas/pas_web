@@ -59,13 +59,11 @@ export class SalesOrderConfirmationListComponent {
   salesOrderId: any;
   customerId: any;
   
-  constructor(
-    private salesOrderService: SalesOrderService,
+  constructor(private salesOrderService: SalesOrderService,
     private modalService: NgbModal,
     public employeeService: EmployeeService,
     public currencyService: CurrencyService,
-    private authService: AuthService
-  ) {
+    private authService: AuthService) {
     this.breadcrumbs = [
       { label: 'Sales Order' },
       { label: ' Confirmation List' },

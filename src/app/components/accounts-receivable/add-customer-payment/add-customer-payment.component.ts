@@ -12,7 +12,7 @@ import { CustomerService } from "../../../services/customer.service";
 import { InvoicePaymentService } from "../../../services/invoice-payment-service";
 import { InvoiceCheckPayment } from "../../../models/invoicePayment/InvoiceCheckPayment";
 import { LegalEntityService } from "../../../services/legalentity.service";
-import { editValueAssignByCondition } from "../../../generic/autocomplete";
+import { editValueAssignByCondition, getObjectById } from "../../../generic/autocomplete";
 import { NgForm } from "@angular/forms";
 import { CustomerReceiptInfo } from "../../../models/invoicePayment/CustomerReceiptInfo";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
@@ -34,6 +34,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   @ViewChild("addCCMemo", { static: false }) addCCMemo: ElementRef;
   @ViewChild('checkForm', { static: false }) checkForm: NgForm;
   @ViewChild('wireForm', { static: false }) wireForm: NgForm;
+  @ViewChild('ccForm', { static: false }) ccForm: NgForm;
   checkMemomodal: NgbModalRef;
   wireMemomodal: NgbModalRef;
   eftMemomodal: NgbModalRef;
@@ -78,6 +79,12 @@ export class AddCustomerPaymentComponent implements OnInit {
   selectall: any;
   totalPaymentAmount: number;
   combinedPaymentRef: string;
+  discTypeList: any = [];
+  cardTypeList: any = [];
+  bankFeesTypeList: any = [];
+  adjustReasonList: any = [];
+  employeesList: any = [];
+  employee: any;
 
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
@@ -135,6 +142,13 @@ export class AddCustomerPaymentComponent implements OnInit {
       // { field: "invDueDate", header: "Inv Due Date", width: "130px" },
       // { field: "creditLimit", header: "Credit Limit", width: "130px" }      
     ];
+
+    this.loadCardType();
+    this.loadDiscType();
+    this.loadBankFeesType();
+    this.loadAdjustReason();
+
+    this.employeedata('', this.currentUserManagementStructureId);
   }
 
   arrayCurrencyList: any = [];
@@ -233,6 +247,28 @@ export class AddCustomerPaymentComponent implements OnInit {
     return this.authService.currentUser
       ? this.authService.currentUser.masterCompanyId
       : 1;
+  }
+
+  get employeeId() {
+    return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+  }
+
+  arrayEmplsit: any[] = [];
+  employeedata(strText = '', manStructID = 0) {
+    if (this.arrayEmplsit.length == 0) {
+      this.arrayEmplsit.push(0);
+    }
+
+    this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
+
+    this.isSpinnerVisible = true;
+    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
+      this.isSpinnerVisible = false;
+      this.employeesList = res;
+      this.employee = getObjectById('value', this.employeeId, this.employeesList);
+    }, err => {
+      this.isSpinnerVisible = false;
+    })
   }
 
   onProcessPayment() {
@@ -609,18 +645,27 @@ export class AddCustomerPaymentComponent implements OnInit {
   }
 
   checkFormValid() {
-    if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 1) ||
-      (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isCheckPayment)) && (this.checkForm && this.checkForm.valid)) {
+    if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 1)
+      && (this.checkForm && this.checkForm.valid)) {
       return false;
-      // if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
-      //   (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) && (this.wireForm && this.wireForm.valid)) {
-      //   return false;
-      // }
-      // else
-      //   return true;
     }
-    else
+    else if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2)
+      && (this.wireForm && this.wireForm.valid)) {
+      return false;
+    }
+    else if ((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 3)
+      && (this.ccForm && this.ccForm.valid)) {
+      return false;
+    }
+    else {
       return true;
+    }
+    // if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
+    //   (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) && (this.wireForm && this.wireForm.valid)) {
+    //   return false;
+    // }
+    // else
+    //   return true;
   }
 
   onSubmit() {
@@ -708,9 +753,64 @@ export class AddCustomerPaymentComponent implements OnInit {
     }
   }
 
+  filterEmployees(event) {
+    const employeeListData = [
+      ...this.employeesList.filter(x => {
+        if (x.label.toLowerCase().includes(event.query.toLowerCase())) {
+          return x.label;
+        }
+      })
+    ];
+    this.employeesList = employeeListData;
+  }
+
   getPartToDisableOrNot(part) {
     return true;
   }
 
   getAllPartsToDisableOrNot() { }
+
+  loadCardType() {
+    this.commonService.smartDropDownList('MasterCardType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.cardTypeList = response;
+        this.cardTypeList = this.cardTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadDiscType() {
+    this.commonService.smartDropDownList('MasterDiscountType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.discTypeList = response;
+        this.discTypeList = this.discTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadBankFeesType() {
+    this.commonService.smartDropDownList('MasterBankFeesType', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.bankFeesTypeList = response;
+        this.bankFeesTypeList = this.bankFeesTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  loadAdjustReason() {
+    this.commonService.smartDropDownList('MasterAdjustReason', 'Id', 'Name').subscribe(response => {
+      if (response) {
+        this.adjustReasonList = response;
+        this.adjustReasonList = this.adjustReasonList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      }
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
 }

@@ -10,18 +10,17 @@ import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
     styleUrls: []
 })
 export class SalesOrderConfirmationModalComponent implements OnInit {
-
     @Input('header-title') header: string;
     @Input('body-text') body: string;
     @Input('sales-order-action-type') salesOrderActionType: SalesOrderActionType;
     @Input('modal-ref') modalRef: NgbModalRef;
     @Output('onConfirm') onConfirm: EventEmitter<SalesOrderEventArgs> = new EventEmitter<SalesOrderEventArgs>();
     salesOrderConfirmationType = SalesOrderConfirmationType;
+
     constructor() {
     }
 
     ngOnInit() {
-
     }
 
     onClick(confirmationType: SalesOrderConfirmationType): void {
@@ -31,5 +30,4 @@ export class SalesOrderConfirmationModalComponent implements OnInit {
             this.modalRef.close();
         }
     }
-
 }
