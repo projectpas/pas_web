@@ -298,7 +298,7 @@
           <div class="modal-footer">
             <button type="submit" (click)="savepickticketiteminterface(parts)" class="btn btn-primary"
               [disabled]="!ptiteminterface.valid || disableSubmitButton == true">
-              Save
+              {{ isEdit ? 'Update' : 'Save' }}
             </button>
             <button type="button" (click)="dismissModel()" class="btn btn-danger">
               Close
