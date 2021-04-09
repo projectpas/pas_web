@@ -371,7 +371,6 @@ export class SalesOrderCreateComponent implements OnInit {
           this.salesQuote.customerWarningId = this.customerWarning.customerWarningId;
         }
       }, error => {
-        this.isSpinnerVisible = false;
       });
   }
 
@@ -1410,7 +1409,6 @@ export class SalesOrderCreateComponent implements OnInit {
       this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
       }, err => {
-        this.isSpinnerVisible = false;
       });
     } else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
@@ -1428,7 +1426,6 @@ export class SalesOrderCreateComponent implements OnInit {
       this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
         this.departmentList = res;
       }, err => {
-        this.isSpinnerVisible = false;
       });
     }
     else {
@@ -1459,7 +1456,6 @@ export class SalesOrderCreateComponent implements OnInit {
         this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       }
     }, err => {
-      this.isSpinnerVisible = false;
     });
   }
 
@@ -1470,7 +1466,6 @@ export class SalesOrderCreateComponent implements OnInit {
         this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
       }
     }, err => {
-      this.isSpinnerVisible = false;
     });
   }
 

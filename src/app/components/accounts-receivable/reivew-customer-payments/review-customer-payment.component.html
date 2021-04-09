@@ -163,10 +163,9 @@
                               <span *ngIf="field.field == 'discType'">
                                 <select [(ngModel)]="invoice[field.field]" name="discType"
                                   (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                  <option value="0">Select</option>
-                                  <option value="1">Early pay (Earned)</option>
-                                  <option value="2">Early Pay (Not Earned)</option>
-                                  <option value="3">Dispute Price</option>
+                                  <option value='-1'>--Select--</option>
+                                  <option *ngFor="let item of discTypeList" [ngValue]="item.value">
+                                    {{ item.label }}</option>
                                 </select>
                               </span>
                               <span *ngIf="field.field == 'bankFeeAmount'">
@@ -178,9 +177,9 @@
                               <span *ngIf="field.field == 'bankFeeType'">
                                 <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
                                   (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                  <option value="0">Select</option>
-                                  <option value="1">Wire/ACH Fees</option>
-                                  <option value="2">FX Fees</option>
+                                  <option value='-1'>--Select--</option>
+                                  <option *ngFor="let item of bankFeesTypeList" [ngValue]="item.value">
+                                    {{ item.label }}</option>
                                 </select>
                               </span>
                               <span *ngIf="field.field == 'otherAdjustAmt'">
@@ -190,8 +189,12 @@
                                   (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'reason'">
-                                <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
-                                  [(ngModel)]="invoice[field.field]" id="reason" />
+                                <select [(ngModel)]="invoice[field.field]" name="reason"
+                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                  <option value='-1'>--Select--</option>
+                                  <option *ngFor="let item of adjustReasonList" [ngValue]="item.value">
+                                    {{ item.label }}</option>
+                                </select>
                               </span>
                             </td>
                           </ng-container>
