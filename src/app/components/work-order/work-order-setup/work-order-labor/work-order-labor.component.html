@@ -85,9 +85,9 @@
               <!-- <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Task Completed by one Tech/Mech"
                 [(ngModel)]="laborForm.isTaskCompletedByOne" [disabled]="isView" (onChange)="taskComletedByConfirmation($event)"></p-checkbox> -->
               <div class="form-group task-hours-type">
-                  <p-radioButton (ngModelChange)="checkValid(8)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
+                  <!-- <p-radioButton (ngModelChange)="checkValid(8)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
                   label="Use target hours from workflow" value="workFlow"
-                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton>
+                  [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder" [disabled]="savedWorkOrderData.workFlowWorkOrderId == 0 || isView " (click)="calculateOverallTotalHours();getWorkFlowLaborList();"></p-radioButton> -->
                   <p-radioButton (ngModelChange)="checkValid(9)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
                     [(ngModel)]="laborForm.workFloworSpecificTaskorWorkOrder"  [disabled]="isView " (click)="laborForm.totalWorkHours = 0;refreshCall();"></p-radioButton>
                   <p-radioButton (ngModelChange)="checkValid(10)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" value="workOrder"
@@ -148,8 +148,8 @@
            </tr>
           <tr>
             <th class="text-center padding-td tasks-th" style="width:100px">Tasks</th>
-            <th class="text-center expertise-th" style="width:100px">Expertise</th>
-            <th class="text-center employee-th" style="width:140px" *ngIf="!isQuote">
+            <th class="text-center expertise-th" style="width:100px;min-width: 100px !important;">Expertise</th>
+            <th class="text-center employee-th" style="width:140px;min-width: 140px;" *ngIf="!isQuote">
               Employee
             </th>
             <th class="text-center th-zindex-2" style="width:100px">Billable /NonBillable</th>
@@ -341,7 +341,25 @@
                   <td>
                       <input type="number" class="form-control" (ngModelChange)="checkValid(22)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);" [(ngModel)]="rec.adjustments" [disabled]="isView
                       "/>
-                  </td>
+               
+                      <!-- <div class="check-flex-div1" >
+                        <input type="number" class="form-control check-flex-input" (blur)="
+                        calculateHoursDifference(rec);
+                        calculateTaskHours(task);
+                        calculateTotalCost(rec);
+                        markupChanged(rec, 'row')
+                        " [(ngModel)]="rec.adjtotalHours"(ngModelChange)="checkValid(20)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px !important;" required/>
+                        <span style="font-size: 17px; margin: 0 5px;">:</span>
+                        <input type="number" class="form-control" (blur)="
+                        calculateHoursDifference(rec);
+                        calculateTaskHours(task);
+                        calculateTotalCost(rec);
+                        markupChanged(rec, 'row')
+                        " [(ngModel)]="rec.ajdtotalMinutes" (ngModelChange)="checkValid(21)" (blur)="calculateHoursDifference(rec);calculateAdjustmentHours(task);"  [disabled]="isView " style="width: 50px;" max="60" (change)="rec.totalMinutes >=60?rec.totalMinutes=00:''" required/>
+                      </div> -->
+               
+               
+                    </td>
                   <td class="content-to-end" style="width:70px !important;text-align:right !important">
                       {{ rec.adjustedHours }}
                   </td>

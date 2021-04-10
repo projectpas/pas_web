@@ -4,6 +4,7 @@ import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+import { WorkFlowtService } from "../services/workflow.service";
 declare var $ : any;
 @Component({
     selector: 'grd-expertise',
@@ -24,7 +25,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
 
     constructor(private alertService: AlertService,
-        private commonService: CommonService, private modalService: NgbModal,) {
+        private commonService: CommonService, private modalService: NgbModal, private wflwService:WorkFlowtService) {
     }
 
     ngOnInit(): void {
@@ -261,6 +262,18 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         }
         this.reCalculate();
         this.dismissModel();
+    }
+
+    setIsUpdate(value,index){
+if(value){
+        this.wflwService.getemployeeExpertiseById(value).subscribe(res => {
+     if(res){
+        this.workFlow.expertise[index].laborDirectRate = res.avglaborrate;
+        this.workFlow.expertise[index].overheadBurden = res.overheadburden;
+     }
+        });
+        
+    }
     }
     }
 
