@@ -203,7 +203,7 @@
       <span *ngIf="enableUpdate"> Update </span>
       <span *ngIf="!enableUpdate">Save </span>
     </button>
-    <button type="button" *ngIf="moduleName !='LegalEntity'" class="btn btn-primary pull-right submit-btn"
+    <button type="button" *ngIf="moduleName == 'LegalEntity'" class="btn btn-primary pull-right submit-btn"
       (click)="backClick()">Previous</button>
    </div>
   </div>  

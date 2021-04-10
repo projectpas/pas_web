@@ -489,7 +489,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         });
         
-        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile') {
+        if (this.moduleName == 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName == 'VendorAudit' || this.moduleName == 'AssetInventoryMaintenanceFile' || this.moduleName == 'AssetInventoryWarrantyFile' || this.moduleName == 'AssetInventoryIntangibleFile' || this.moduleName == 'CustomerReceipt') {
             this.referenceId = this.referenceId ? this.referenceId : localStorage.getItem('commonId');
             this.itemmasterIdReferenceId = this.referenceId;
         }
@@ -544,7 +544,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
                 this.updateCollection = this.documentCollection;
                 this.formData.append('attachmentdetais', JSON.stringify(docList));
                 this.commonService.uploadDocumentsCommonEndpoint(this.formData, this.updateCollection).subscribe(() => {
-                    if (this.moduleName != 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile') {
+                    if (this.moduleName != 'VendorCertified' || this.moduleName =='ItemMaster' || this.moduleName != 'VendorAudit' || this.moduleName != 'AssetInventoryMaintenanceFile' || this.moduleName != 'AssetInventoryWarrantyFile' || this.moduleName != 'AssetInventoryIntangibleFile' || this.moduleName != 'CustomerReceipt') {
                         this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     }
                     this.formData = new FormData();
@@ -578,7 +578,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (this.moduleName =='ItemMaster') {
+        if (this.moduleName =='ItemMaster' || this.moduleName == 'CustomerReceipt') {
             if(this.itemmasterIdReferenceId){
                 this.referenceId = this.itemmasterIdReferenceId;
             }
