@@ -110,7 +110,7 @@ private defaultEmployeeDetails= new Subject<any>()
         if (this.isLoggedIn)
             this.logout();
 
-        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password)
+        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password,user.masterCompanyId)
             .map(response => this.processLoginResponse(response, user.rememberMe));
     }
 

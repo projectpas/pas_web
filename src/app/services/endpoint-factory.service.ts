@@ -52,13 +52,14 @@ export class EndpointFactory {
 
     }
 
-    getLoginEndpoint<T>(userName: string, password: string): Observable<T> {
+    getLoginEndpoint<T>(userName: string, password: string,masterCompanyId:number): Observable<T> {
 
         let header = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
         let params = new HttpParams()
             .append('username', userName)
             .append('password', password)
+            .append('masterCompanyId',masterCompanyId.toString())
             .append('client_id', 'quickapp_spa')
             .append('grant_type', 'password')
             .append('scope', 'openid email phone profile offline_access roles quickapp_api');
