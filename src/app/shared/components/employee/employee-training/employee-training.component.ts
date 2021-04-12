@@ -110,11 +110,11 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         { field: 'docDescription', header: 'Description' },
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
-        { field: 'fileSize', header: 'File Size' },
+        { field: 'fileSize', header: 'File Size',width:"70px" },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
+        { field: 'createdBy', header: 'Created By',width:"80px"},
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'updatedBy', header: 'Updated By',width:"80px" },
     ];
     selectedColumnsDoc = this.customerDocumentsColumns;
     sourceViewforDocumentList: any = [];
