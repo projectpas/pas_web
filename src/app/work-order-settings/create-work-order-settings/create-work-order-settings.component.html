@@ -187,6 +187,18 @@
                             <p-dropdown  [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allBins" filter="true" [(ngModel)]="receivingForm.defaultBinId" name="defaultBinId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
+                    <div class="col-md-3 col-offset-3 task-detail" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
+                       <div class="form-group task-hours-type">
+                            <p-radioButton (ngModelChange)="getmemo($event)" *ngIf="workFlowId !==0" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder"
+                            label="Use target hours from workflow" value="workFlow"
+                            [(ngModel)]="receivingForm.laborType" ></p-radioButton>
+                            <p-radioButton (ngModelChange)="getmemo($event)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" label="Assign hours by specific tasks" value="specificTasks"
+                              [(ngModel)]="receivingForm.laborType" ></p-radioButton>
+                            <p-radioButton (ngModelChange)="getmemo($event)" class="p-radiobutton-label-horizontal p-radiobutton-cstm" name="WorkFloworSpecificTaskorWorkOrder" value="workOrder"
+                              label="Assign total hours to workorder" [(ngModel)]="receivingForm.laborType" ></p-radioButton>
+                          </div>
+                     </div>
+
                     <div class="col-md-3 work_order_teardown" style="padding-top:12px;">
                         <div class="form-group">
                             <p-checkbox name="isApprovalRule" binary="true"

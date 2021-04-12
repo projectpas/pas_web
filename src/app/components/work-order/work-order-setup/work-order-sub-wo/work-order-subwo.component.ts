@@ -195,6 +195,7 @@ export class SubWorkOrderComponent implements OnInit {
                 this.getAllPriority(''); 
                 this.getConditionsList();
                 this.getAllTecStations();
+                this.workOrderStatus();
                 if (this.addToExisting == NaN) {
                     this.subWorkOrderPartNumbers.map((x, index) => {
                         this.getWorkFlowByPNandScope(x, index);
