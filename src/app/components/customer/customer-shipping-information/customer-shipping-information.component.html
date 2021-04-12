@@ -127,7 +127,7 @@
             
                           <ng-template pTemplate="header" let-columns>
                             <tr>
-                              <th class="table-column-width">Flag</th>
+                              <th class="width-60">Flag</th>
                               <th class="table-column-width" *ngFor="let col of columns" pResizableColumn
                                pReorderableColumn [pSortableColumn]="col.field"
                                 [hidden]="col.header == 'IsPrimary'">
@@ -137,7 +137,7 @@
                               <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
-                              <th class="table-column-width"></th>
+                              <th class="width-60"></th>
                               <th class="table-column-width" *ngFor="let col of columns"
                                [hidden]="col.field == 'isPrimary'"
                                 [ngSwitch]="col.field">
@@ -156,7 +156,7 @@
                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                       <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                         (dblclick)="viewSelectedRowdbl(rowData)">
-                        <td class="table-column-width">
+                        <td class="width-60">
                           <span class="flag">
                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                       color: rowData.isPrimary == true ? 'green' : 'none'
@@ -368,7 +368,7 @@
             
                           <ng-template pTemplate="header" let-columns>
                             <tr>
-                              <th class="table-column-width">Flag</th>
+                              <th class="width-60">Flag</th>
                               <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
                                 pReorderableColumn [pSortableColumn]="col.field">
                                 {{ col.header }}
@@ -379,7 +379,7 @@
                               </th>
                             </tr>
                             <tr>
-                              <th class="table-column-width"></th>
+                              <th class="width-60"></th>
                               <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                 [ngSwitch]="col.field">
                                 <input class="table-header-input-width" pInputText type="text" (input)="
@@ -397,7 +397,7 @@
                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                       <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                         (dblclick)="viewInterShipping(rowData)">
-                        <td class="table-column-width">
+                        <td class="width-60">
                           <span class="flag">
                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                       color: rowData.isPrimary == true ? 'green' : 'none'
