@@ -152,12 +152,12 @@
                             || field.field == 'currencyCode'
                             || field.field == 'fxRate'
                             || field.field == 'wosoNum'
-                            || field.field == 'paymentStatus'
+                            || field.field == 'status'
                             || field.field == 'dsi'
                             || field.field == 'dso'
                             || field.field == 'arBalance'
                             || field.field == 'creditTermName'
-                            || field.field == 'cntrlNum'
+                            || field.field == 'ctrlNum'
                             || field.field == 'invoiceDate'
                             || field.field == 'paymentAmount'
                             || field.field == 'discAmount'
@@ -177,12 +177,12 @@
                             || field.field == 'currencyCode'
                             || field.field == 'fxRate'
                             || field.field == 'wosoNum'
-                            || field.field == 'paymentStatus'
+                            || field.field == 'status'
                             || field.field == 'dsi'
                             || field.field == 'dso'
                             || field.field == 'arBalance'
                             || field.field == 'creditTermName'
-                            || field.field == 'cntrlNum'
+                            || field.field == 'ctrlNum'
                             || field.field == 'level1'
                             || field.field == 'level2'
                             || field.field == 'level3'
@@ -246,7 +246,7 @@
                           <td class="zui-sticky-col">
                             <span>
                               <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                matTooltip="View Stockline">
+                                matTooltip="View Document" (click)="ViewDocument(invoice);">
                                 <i class="fa fa-eye"></i>
                               </a>
                             </span>
@@ -261,7 +261,7 @@
                       </tbody>
                     </ng-container>
                   </ng-container>
-                  <ng-container *ngIf="dataForReview == undefined">
+                  <ng-container *ngIf="dataForReview.customerPayments == null">
                     <tbody>
                       <tr>
                         <td colspan="48"
@@ -293,3 +293,32 @@
     </div>
   </div>
 </div>
+<ng-template #printPost let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="closeDocument()">&times;</button>
+    <h4 class="modal-title">Document</h4>
+  </div>
+  <div class="modal-body">
+    <app-sales-order-print-invoice [salesOrderbillingInvoicingId]="DocId" [salesOrderId]="salesOrderId">
+    </app-sales-order-print-invoice>
+  </div>
+  <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeDocument()">Close</button>
+  </div>
+</ng-template>

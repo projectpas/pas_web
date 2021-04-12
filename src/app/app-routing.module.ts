@@ -60,6 +60,7 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
             { path: "rolesmodule", loadChildren: './rolespages/rolespages.module#RolesPagesModule' },
             { path: "workordersettingsmodule", loadChildren: './work-order-settings/work-order-settings.module#WorkOrderSettingsModule' },
             { path: "salesordersettingsmodule", loadChildren: './sales-order-settings/sales-order-settings.module#SalesOrderSettingsModule' },
+            { path: "accountreceivablesettingsmodule", loadChildren: './account-receivable-settings/account-receivable-settings.module#ARSettingsModule' },
             { path: "singlepages", loadChildren: './singlepages/singlepages.module#SinglePgesModule' },
             { path: "customersmodule", loadChildren: './customerpages/customerpages.module#CustomerPagesModule' },
             { path: "accountmodule", loadChildren: './accounting-pages/accountingpages.module#AccountingPagesModule' },
