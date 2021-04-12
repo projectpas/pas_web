@@ -1065,7 +1065,7 @@
                 </div>
                 <div class="col-sm-5">
                   <input type="checkbox" name="isPrimary" checked id="isPrimary"
-                    [disabled]="internationalShippingInfo.isPrimary && isEditInternational && isprimarydata"
+                    [disabled]="internationalShippingInfo.isPrimary && isEditInternational"
                     [(ngModel)]="internationalShippingInfo.isPrimary" (ngModelChange)="enableSave()" />
                 </div>
               </div>
@@ -1262,7 +1262,7 @@
                           internationShipVia.filter(
                             $event.target.value,
                             col.field,
-                            'contains'
+                            'contains' 
                           )
                         " />
                     </th>

@@ -177,6 +177,8 @@ export class CustomerAircraftComponent implements OnInit {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
+                aircraftModel:x.aircraftModel =='Unknown' ?'':x.aircraftModel,
+                dashNumber:x.dashNumber=='Unknown'?'':x.dashNumber,
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
             }
