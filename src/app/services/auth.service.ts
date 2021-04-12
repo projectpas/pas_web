@@ -270,7 +270,7 @@ private defaultEmployeeDetails= new Subject<any>()
     getEmployeeDetails(user){
         console.log("resulets user",user);
         if(user && user.employeeId){
-            this.commonService.getEmployeeData(1,user.employeeId).subscribe( (results :any) => {
+            this.commonService.getEmployeeData(user.masterCompanyId,user.employeeId).subscribe( (results :any) => {
                 console.log("resulets checks",results);
                  const employee:any=results;
                 employee.label=results.name;
