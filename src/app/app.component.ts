@@ -450,10 +450,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Process Customer Receipt', routerLink: '/accountreceivable/accountreceivablepages/app-customer-payment-list' },
                 { label: 'Process Customer Credit', routerLink: '/#' },
                 {
-                  label: 'Open/Close AR Sub-Ledger',
+                  label: 'AR Settings List',
                   routerLink:
-                    '/accountreceivable/accountreceivablepages/app-open-close-ar-subledger',
-                },
+                    '/accountreceivablesettingsmodule/arsettings/app-account-receivable-settings-list',
+                }
               ],
             },
             {
@@ -488,6 +488,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                     '/accountpayble/accountpayble/app-open-close-ap-subledger',
                 },
                 { label: 'Print Checks', routerLink: '/#' },
+                {
+                  label: 'Open/Close AP Subledger',
+                  routerLink:
+                    '/accountpayble/accountpayble/app-open-close-ap-subledger',
+                },
               ],
             },
             {
@@ -1111,8 +1116,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // {
                 //   label: 'Disposal Sale',
                 //   routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
+                
                 // },
-
               ],
             },
             {

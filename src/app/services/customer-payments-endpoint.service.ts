@@ -14,6 +14,11 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
   private readonly updateCustomerPaymentUrl: string = environment.baseUrl + "/api/CustomerPayments/UpdateCustomerPayment";
   private readonly getCustomerPaymentDetails: string = environment.baseUrl + "/api/CustomerPayments/get";
   private readonly getCustomerPaymentForReviewendpoint: string = environment.baseUrl + "/api/CustomerPayments/getCustomerPaymentForReview";
+  private readonly getARSetting: string = environment.baseUrl + "/api/ARSettings/getlist"
+  private readonly saveARSettigns: string = environment.baseUrl + "/api/ARSettings/save";
+  private readonly deleteARSettings: string = environment.baseUrl + "/api/ARSettings/delete";
+  private readonly getARSettingsAuditHistory: string = environment.baseUrl + "/api/ARSettings/getauditdatabyid";
+
   constructor(
     http: HttpClient,
     configurations: ConfigurationService,
@@ -26,6 +31,15 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
       .post(this.customerPaymentUrl, JSON.stringify(customerPayment), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.create(customerPayment));
+      });
+  }
+
+  update(customerPayment: ICustomerPayments): Observable<any> {
+    let url: string = `${this.customerPaymentUrl}/${customerPayment.receiptId}`;
+    return this.http
+      .put(url, JSON.stringify(customerPayment), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.update(customerPayment));
       });
   }
 
@@ -59,6 +73,42 @@ export class CustomerPaymentsEndpointService extends EndpointFactory {
       .post(this.updateCustomerPaymentUrl, JSON.stringify(customerPayment), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.updatePayments(customerPayment));
+      });
+  }
+
+  getAllARSettings<T>(): Observable<T> {
+    let endPointUrl = this.getARSetting;
+    return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getAllARSettings());
+      });
+  }
+
+  saveOrUpdateARSettings(data) {
+    return this.http
+      .post(
+        this.saveARSettigns,
+        JSON.stringify(data),
+        this.getRequestHeaders()
+      )
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.saveOrUpdateARSettings(data));
+      });
+  }
+
+  deleteARSetting(ARSettingId: number, updatedBy): Observable<boolean> {
+    let endpointUrl = `${this.deleteARSettings}?settingsId=${ARSettingId}&updatedBy=${updatedBy}`;
+    return this.http
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deleteARSetting(ARSettingId, updatedBy));
+      });
+  }
+
+  getARSettingHistory(id) {
+    return this.http.get<any>(`${this.getARSettingsAuditHistory}/${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getARSettingHistory(id));
       });
   }
 }

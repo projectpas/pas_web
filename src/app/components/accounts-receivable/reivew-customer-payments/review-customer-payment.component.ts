@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, OnChanges } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, ViewChild, ElementRef } from "@angular/core";
 import { AuthService } from "../../../services/auth.service";
 import { CustomerService } from "../../../services/customer.service";
 import { CustomerPaymentsService } from "../../../services/customer-payment.service";
 import { CommonService } from "../../../services/common.service";
 import { AlertService, MessageSeverity } from "../../../services/alert.service";
+import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-review-customer-payment",
@@ -13,6 +14,7 @@ import { AlertService, MessageSeverity } from "../../../services/alert.service";
 export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   @Input() receiptId;
   objInvoicePayment: any = {};
+  modal: NgbModalRef;
   isSpinnerVisible: boolean = false;
   openInvoices: any[] = [];
   custheaders: any[];
@@ -22,12 +24,15 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
   discTypeList: any = [];
   bankFeesTypeList: any = [];
   adjustReasonList: any = [];
+  @ViewChild("printPost", { static: false }) public printPostModal: ElementRef;
+  DocId: number;
 
   constructor(public customerService: CustomerService,
     private customerPaymentsService: CustomerPaymentsService,
     private authService: AuthService,
     private alertService: AlertService,
-    private commonservice: CommonService) {
+    private commonservice: CommonService,
+    private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -57,13 +62,13 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
       { field: "currencyCode", header: "Curr", width: "180px" },
       { field: "fxRate", header: "FX Rate", width: "100px" },
       { field: "wosoNum", header: "WO/SO Num", width: "130px" },
-      { field: "paymentStatus", header: "Status", width: "130px" },
+      { field: "status", header: "Status", width: "130px" },
       { field: "dsi", header: "DSI", width: "130px" },
       { field: "dso", header: "DSO", width: "180px" },
       { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
       { field: "arBalance", header: "AR Bal", width: "130px" },
       { field: "creditTermName", header: "Credit Term", width: "130px" },
-      { field: "cntrlNum", header: "Cntrl Num", width: "130px" },
+      { field: "ctrlNum", header: "Cntrl Num", width: "130px" },
       //{ field: "employee", header: "Employee", width: "180px" },
       { field: "level1", header: "CO", width: "130px" },
       { field: "level2", header: "BU", width: "130px" },
@@ -182,5 +187,14 @@ export class ReviewCustomerPaymentComponent implements OnInit, OnChanges {
     }, err => {
       this.isSpinnerVisible = false;
     });
+  }
+
+  ViewDocument(rowData) {
+    this.DocId = rowData.soBillingInvoicingId;
+    this.modal = this.modalService.open(this.printPostModal, { size: "lg", backdrop: 'static', keyboard: false });
+  }
+
+  closeDocument() {
+    this.modal.close();
   }
 }

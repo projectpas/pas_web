@@ -95,6 +95,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
   accntPriodList: any = [];
   modalIsMaintannce: NgbModalRef;
   maintanancemoduleName = 'CustomerReceipt';
+  selectedIndex: number = 0;
 
   constructor(
     private alertService: AlertService,
@@ -277,6 +278,7 @@ export class CustomerPaymentCreateComponent implements OnInit {
       this.isSpinnerVisible = true;
       this.salesOrder = new CustomerPayments();
       this.salesOrder.receiptNo = "Creating";
+      this.salesOrder.receiptId = this.id;
       this.salesOrder.bankName = this.customerPayment.bankName;
       this.salesOrder.bankAcctNum = this.customerPayment.bankAcctNum;
       this.salesOrder.masterCompanyId = this.masterCompanyId;
@@ -305,10 +307,27 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
       if (this.id) {
         this.isCreateModeHeader = false;
-        if (this.isDocumentsAdded) {
-          this.uploadDocs.next(true);
-        }
-        this.isSpinnerVisible = false;
+        this.customerPaymentsService.update(this.salesOrder).subscribe(data => {
+          this.isSpinnerVisible = false;
+          this.alertService.showMessage(
+            "Success",
+            `Payment Header Information updated successfully.`,
+            MessageSeverity.success
+          );
+          if (this.isDocumentsAdded) {
+            this.uploadDocs.next(true);
+          }
+          this.getSalesOrderInstance(this.id, true);
+
+          this.toggle_po_header = false;
+          if (this.isEdit) {
+            this.isCreateModeHeader = false;
+          }
+          this.enableUpdateButton = true;
+        }, error => {
+          this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
+        });
       } else {
         this.customerPaymentsService.create(this.salesOrder).subscribe(data => {
           let receiptId = data[0].receiptId;
@@ -354,7 +373,11 @@ export class CustomerPaymentCreateComponent implements OnInit {
   }
 
   onTabChange(event) {
+    if (event.index == 0) {
+      this.selectedIndex = 0;
+    }
     if (event.index == 1) {
+      this.selectedIndex = 1;
       this.reviewCustomerPaymentComponent.fetchDataForReview();
     }
   }
@@ -583,5 +606,10 @@ export class CustomerPaymentCreateComponent implements OnInit {
 
   closeCDDocumentModal() {
     this.modalIsMaintannce.close();
+  }
+
+  changeToReviewTab(event) {
+    this.selectedIndex = 1;
+    this.reviewCustomerPaymentComponent.fetchDataForReview();
   }
 }
