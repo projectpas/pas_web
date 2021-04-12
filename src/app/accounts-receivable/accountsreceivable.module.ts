@@ -65,8 +65,7 @@ import { SalesOrderPrintInvoiceComponent } from '../components/sales/order/share
         CustomerPaymentListComponent,
         CustomerPaymentCreateComponent,
         AddCustomerPaymentComponent,
-        ReviewCustomerPaymentComponent,
-        SalesOrderPrintInvoiceComponent
+        ReviewCustomerPaymentComponent
     ],
     providers: [
         CustomerPaymentsService,
