@@ -199,6 +199,7 @@ export class VendorContactsComponent implements OnInit {
     isDelete:boolean=true;
     isDownload:boolean=true;
     isATA:Boolean=true;
+    isContactView:boolean=true;
 
     constructor(private router: ActivatedRoute,
         private atamain: AtaMainService,
@@ -271,7 +272,8 @@ export class VendorContactsComponent implements OnInit {
 		this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Update])
         this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Delete])
         this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.Download])
-		this.isATA=this.authService.ShowTab('Create Vendor','ATA Chapter');
+        this.isATA=this.authService.ShowTab('Create Vendor','ATA Chapter');
+        this.isContactView=this.authService.checkPermission([ModuleConstants.Vendors_Contacts+'.'+PermissionConstants.View]);
         this.alertService.stopLoadingMessage();
     }
     ngOnInit(): void {
@@ -335,10 +337,13 @@ export class VendorContactsComponent implements OnInit {
     private loadData() {
         this.isSpinnerVisible = true;
         const vendorId = this.vendorId != 0 ? this.vendorId : this.local.vendorId;
+
+        if(this.isContactView){
         this.vendorService.getContacts(vendorId).subscribe(
             results => this.onDataLoadSuccessful(results[0]),           
             error => {this.isSpinnerVisible = false } //this.onDataLoadFailed(error))
         );
+        }
     }
     enableSaveMemo() {
         this.disableSaveMemo = false;
