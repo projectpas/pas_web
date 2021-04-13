@@ -125,7 +125,7 @@ export class EmployeesListComponent implements OnInit {
         //{ field: 'jobtype', header: 'Job Type'},
         { field: 'startDate', header: 'Start Date' },
         { field: 'company', header: 'Company' },
-        { field: 'shopEmployee', header: 'Shop Employee',width:"70px" },
+        { field: 'shopEmployee', header: 'Is Certified Emp',width:"70px" },
         { field: 'paytype', header: 'Pay Type' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'CreatedBy',width:"90px" },
