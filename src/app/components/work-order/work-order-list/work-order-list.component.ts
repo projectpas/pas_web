@@ -382,7 +382,7 @@ export class WorkOrderListComponent implements OnInit {
 
     openViewOnDbl(rowData) {
         this.view(rowData);
-        $('#viewWorkOrder').modal('show');
+        $('#viewWorkOrderr').modal('show');
     }
 
     async view(rowData) {
@@ -476,7 +476,9 @@ export class WorkOrderListComponent implements OnInit {
     showAlertMessage(warningMessage, restrictMessage) {
         $('#warnRestrictMesg').modal("show");
     }
-
+    closeViewModel(){
+        $('#viewWorkOrderr').modal("hide");
+    }
     WarnRescticModel() {
         if (this.restrictID == 0) {
         }
