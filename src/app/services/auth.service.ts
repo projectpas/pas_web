@@ -267,29 +267,25 @@ private defaultEmployeeDetails= new Subject<any>()
             return this.localStorage.savePermanentData(results[0], DBkeys.GLOBAL_SETTINGS)
         })
     }
-    getEmployeeDetails(user){
-        console.log("resulets user",user);
+    getEmployeeDetails(user){        
         if(user && user.employeeId){
-            this.commonService.getEmployeeData(user.masterCompanyId,user.employeeId).subscribe( (results :any) => {
-                console.log("resulets checks",results);
-                 const employee:any=results;
+            this.commonService.getEmployeeData(user.masterCompanyId,user.employeeId).subscribe( (results :any) => {                
+                const employee:any=results;
                 employee.label=results.name;
                 employee.value=results.employeeId;
                 this.localStorage.savePermanentData(employee, DBkeys.EMPLOYEE);
                 // return this.defaultEmployeeDetails.next(results);
             })
+           }
         }
-        }
-        getManagementstructureDetails(user){
-            console.log("resulets managementStructureId",user);
+        getManagementstructureDetails(user){            
             if(user && user.managementStructureId){
-                this.commonService.getManagementStructureData(1,user.managementStructureId).subscribe(results => {
-                    console.log("resulets managementStructureId",results);
+                this.commonService.getManagementStructureData(1,user.managementStructureId).subscribe(results => {                    
                     this.localStorage.savePermanentData(results, DBkeys.MANAGEMENTSTRUCTURE);
                     // return this.defaultEmployeeDetails.next(results);
                 })
             }
-            }
+        }
         get currentEmployee() {
             let employee = this.localStorage.getDataObject<any>(DBkeys.EMPLOYEE);
             return employee;
