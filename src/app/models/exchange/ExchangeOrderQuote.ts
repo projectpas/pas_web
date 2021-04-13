@@ -1,7 +1,6 @@
-//import { IPriority } from "../sales/IPriority";
+import { IExchangeOrderQuote } from "./IExchangeOrderQuote";
 
-export interface IExchangeQuote {
-//export interface IExchangOrdereQuote {
+export class ExchangeOrderQuote implements IExchangeOrderQuote {
     exchangeQuoteId: number;
 	type: any;
 	typeName: string;
@@ -12,7 +11,7 @@ export interface IExchangeQuote {
 	versionNumber: string;
 	versionDate: Date;
 	priorityId: number;
-    statusId: number;
+	statusId: number;
 	statusName: string;
 	statusChangeDate: Date;
 	customerId: number;
@@ -35,8 +34,13 @@ export interface IExchangeQuote {
 	masterCompanyId:number;
 	managementStructureId:number;
 	customerServiceRepId: number;
+	createdBy: string;
+    createdOn: string;
+    updatedBy: string;
+	updatedOn: string;
 	restrictPMA: boolean;
 	restrictDER: boolean;
 	cogs:number;
 	daysForCoreReturn:number;
+    constructor() { }
 }

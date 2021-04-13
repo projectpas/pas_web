@@ -46,6 +46,7 @@ export class ExchangeQuoteListComponent implements OnInit {
   clearStatusText: boolean = false;
   exchanges: any[] = [];
   @ViewChild("filterStatusInput", { static: false }) public filterText: ElementRef;
+  exchangeQuoteId: any;
   constructor(private exchangequoteService: ExchangequoteService,
     private alertService: AlertService,
     private modalService: NgbModal,
@@ -89,8 +90,8 @@ export class ExchangeQuoteListComponent implements OnInit {
       { field: "customerReference", header: "Customer Ref", width: "130px" },
       { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
       //{ field: "quoteExpireDate", header: "Quote Exp Date", width: "130px" },
-      // { field: "partNumberType", header: "PN", width: "130px" },
-      // { field: "partDescriptionType", header: "PN Description", width: "180px" },
+      { field: "partNumberType", header: "PN", width: "130px" },
+      { field: "partDescriptionType", header: "PN Description", width: "180px" },
       { field: "status", header: "Status", width: "100px" },
       { field: "priorityType", header: "Priority", width: "100px" },
       { field: "openDate", header: "Open Date", width: "130px" },
@@ -247,6 +248,15 @@ export class ExchangeQuoteListComponent implements OnInit {
     if (currentStatus != "0" && this.filterText != undefined) {
       this.filterText.nativeElement.value = '';
     }
+  }
+
+  openExchangeQuoteToEdit(row) {
+    this.isSpinnerVisible = true;
+    const { exchangeQuoteId } = row;
+    let customerId = row.customerId;
+    this.router.navigateByUrl(
+      `exchangemodule/exchangepages/exchange-quote-edit/${customerId}/${exchangeQuoteId}`
+    );
   }
 
 }

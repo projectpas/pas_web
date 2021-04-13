@@ -143,6 +143,12 @@ export class AddressComponentComponent implements OnInit {
 				this.getShipToBillToDropDown(res)
 			});	
 		}
+		else if(this.addressType == AddressTypeEnum.ExchangeQUote){
+			this.ModuleID = AppModuleEnum.ExchangeQuote;
+			this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
+				this.getShipToBillToDropDown(res)
+			});
+		}
 	}
 
   }

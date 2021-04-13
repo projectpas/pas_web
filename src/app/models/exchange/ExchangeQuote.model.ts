@@ -34,6 +34,7 @@ export class ExchangeQuote implements IExchangeQuote {
 	approvedByName: string;
 	approvedDate: Date;
 	masterCompanyId: number;
+	managementStructureId:number;
 	customerServiceRepId: number;
 	createdBy: string;
 	createdOn: string;

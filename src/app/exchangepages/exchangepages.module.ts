@@ -42,6 +42,7 @@ import { ExchangeCustomerDetailsComponent } from "../components/exchange-quote/s
 import { ExchangePartDetailsComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-details/exchange-part-details.component";
 import { ExchangePartNumberFilterComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-number-filter/exchange-part-number-filter.component";
 import { ExchangeMerginComponent } from "../components/exchange-quote/shared/components/exchange-mergin/exchange-mergin.component";
+import { CommonModulesModule } from "../common-modules/common-modules.module";
 @NgModule({
   imports: [
     CommonModule,
@@ -77,6 +78,7 @@ import { ExchangeMerginComponent } from "../components/exchange-quote/shared/com
     AppSharedModule,
     EditorModule,
     SplitButtonModule,
+    CommonModulesModule,
   ],
   declarations: [
     ExchangepagesComponent,

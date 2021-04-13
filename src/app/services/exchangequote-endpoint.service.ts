@@ -74,4 +74,13 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
           return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings());
         });
     }
+
+    update(exchangeQuote: IExchangeQuoteView): Observable<IExchangeQuote> {
+      let url: string = `${this.exchangequote}/${exchangeQuote.exchangeOrderQuote.exchangeQuoteId}`;
+      return this.http
+        .put(url, JSON.stringify(exchangeQuote), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.create(exchangeQuote));
+        });
+    }
 }  

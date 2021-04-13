@@ -9,6 +9,7 @@ import {
   NgbModal,
   NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
+import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByValue, getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectByKey } from '../../../../../generic/autocomplete';
 @Component({
   selector: 'app-exchange-mergin',
   templateUrl: './exchange-mergin.component.html',
@@ -25,11 +26,13 @@ export class ExchangeMerginComponent implements OnInit {
   invalidQuantityenteredForQuantityFromThis: boolean = false;
   @ViewChild("errorMessagePop",{static: false}) public errorMessagePop: ElementRef;
   errorModal: NgbModalRef;
+  currencyArr: any[] = [];
   constructor(private commonservice: CommonService,private modalService: NgbModal) { }
 
   ngOnInit() {
     this.getPercents();
     this.calculate();
+    this.getCurrency();
   }
 
   formatStringToNumberGlobal(val) {
@@ -39,6 +42,20 @@ export class ExchangeMerginComponent implements OnInit {
   getPercents() {
     this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
       this.percentage = res;
+      //console.log("this.percentage" , this.percentage);
+    })
+  }
+  getCurrency() {
+    this.commonservice.smartDropDownList('[Currency]', 'CurrencyId', 'Code').subscribe(res => {
+      this.currencyArr = res;
+      // this.part.exchangeCurrencyId = getValueFromArrayOfObjectById(
+      //   'label',
+      //   'value',
+      //   this.part.exchangeCurrencyId,
+      //   this.currencyArr
+      // ),
+      //this.part.exchangeCurrencyId = getObjectById('value', this.part.exchangeCurrencyId, this.currencyArr);
+      console.log("this.currencyArr" , this.currencyArr);
     })
   }
 
@@ -114,7 +131,7 @@ export class ExchangeMerginComponent implements OnInit {
   isScheduleBilling:boolean=false;
   errorMessages: any[] = [];
   addSchesuleBilling(event){
-    debugger;
+    //debugger;
     event.preventDefault();
     console.log("event", event.target.value);
     let count = event.target.value;
@@ -142,15 +159,29 @@ export class ExchangeMerginComponent implements OnInit {
             ...scheduleBillingObject,
             periodicBillingAmount: this.part.exchangeListPrice,
             scheduleBillingDate: this.part.billingStartDate,
+            cogs: getValueFromArrayOfObjectById(
+              'label',
+              'value',
+              this.part.cogs,
+              this.percentage
+            ),
+            cogsAmount : (this.part.exchangeListPrice * getValueFromArrayOfObjectById('label','value',this.part.cogs,this.percentage))/100,
           }
         }
         else{
-          let newDate = new Date();
-          newDate.setDate(this.part.exchangeQuoteScheduleBilling[i-1].scheduleBillingDate.getDate() + Number(this.part.billingIntervalDays));
+          let newDate = new Date(this.part.exchangeQuoteScheduleBilling[i-1].scheduleBillingDate);
+          newDate.setDate(new Date(this.part.exchangeQuoteScheduleBilling[i-1].scheduleBillingDate).getDate() + Number(this.part.billingIntervalDays));
           scheduleBillingObject = {
             ...scheduleBillingObject,
             periodicBillingAmount: this.part.exchangeListPrice,
             scheduleBillingDate: newDate,
+            cogs: getValueFromArrayOfObjectById(
+              'label',
+              'value',
+              this.part.cogs,
+              this.percentage
+            ),
+            cogsAmount : (this.part.exchangeListPrice * getValueFromArrayOfObjectById('label','value',this.part.cogs,this.percentage))/100,
           }
         }
         //console.log(scheduleBillingObject);
@@ -164,5 +195,39 @@ export class ExchangeMerginComponent implements OnInit {
   }
   closeErrorMessage() {
     this.errorModal.close();
+  }
+
+  calculateCOGS(i){
+    this.part.exchangeQuoteScheduleBilling[i].cogsAmount = (this.part.exchangeQuoteScheduleBilling[i].periodicBillingAmount * Number(this.part.exchangeQuoteScheduleBilling[i].cogs) / 100);
+  }
+
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+  } 
+  memoPopupContent: any;
+  memoPopupValue: any;
+  disableSaveMemo: boolean = true;
+  onClickRemarktext(value) {
+    if (value == 'remarkText') {
+        this.memoPopupContent = this.part.remarkText;
+        this.disableSaveMemo = true;
+    }
+    this.memoPopupValue = value;
+  }
+
+  enableSaveMemo() {
+    this.disableSaveMemo = false;
+  }
+  onClickPopupSave() {
+    if (this.memoPopupValue == 'remarkText') {
+        this.part.remarkText = this.memoPopupContent;
+    }
+    this.memoPopupContent = '';
   }
 }
