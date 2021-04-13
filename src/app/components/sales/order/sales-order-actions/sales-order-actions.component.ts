@@ -8,12 +8,10 @@ import { SalesOrderEventArgs } from "../../sales-order-event-args";
 import { SalesOrderCopyComponent } from "../sales-order-copy/sales-order-copy.component";
 import { NavigationExtras, Router } from "@angular/router";
 import { SalesOrderpickTicketComponent } from "../sales-order-pickTicket/sales-order-pickTicket.component";
-import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
-import { AddPaymentComponent } from "../../shared/components/payment/invoice-payment.component";
 
 @Component({
   selector: "app-sales-order-actions",
@@ -90,18 +88,7 @@ export class SalesOrderActionsComponent implements OnInit {
   }
 
   openPaymentModal() {
-    this.modal = this.modalService.open(this.payment, { size: "lg", backdrop: 'static', keyboard: false });
-
-    // this.modal = this.modalService.open(AddPaymentComponent, { size: "sm" });
-    // let instance: AddPaymentComponent = (<AddPaymentComponent>this.modal.componentInstance)
-    // instance.modalReference = this.modal;
-
-    // instance.onConfirm.subscribe($event => {
-    //   this.navigate($event);
-    // });
-
-    // instance.salesOrderCopyParameters.customerId = this.customerId;
-    // instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
+    //this.modal = this.modalService.open(this.payment, { size: "lg", backdrop: 'static', keyboard: false });
   }
 
   initPrintActions(): void {
@@ -113,7 +100,6 @@ export class SalesOrderActionsComponent implements OnInit {
       },
       {
         label: 'Print Pick Ticket', command: () => {
-          //this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.PrintPickTicket, SalesOrderConfirmationType.None));
           this.PrintTicket();
         }
       },
@@ -155,7 +141,6 @@ export class SalesOrderActionsComponent implements OnInit {
     this.paymentItems = [
       {
         label: 'Make Payment', command: () => {
-          //this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.MakePayment, SalesOrderConfirmationType.None));
           this.openPaymentModal();
         }
       },
@@ -186,7 +171,6 @@ export class SalesOrderActionsComponent implements OnInit {
       },
       {
         label: 'Make Duplicate', command: () => {
-          //this.onActionClick.emit(new SalesOrderEventArgs(SalesOrderActionType.MakeDuplicate, SalesOrderConfirmationType.None));
           this.copySalesOrder();
         }
       },
@@ -279,8 +263,6 @@ export class SalesOrderActionsComponent implements OnInit {
       this.navigate($event);
     });
     instance.salesOrderCopyParameters.salesOrderId = this.salesOrderId;
-
-    this.modal.result.then(() => { }, () => { });
   }
 
   navigate(navigationExtras: NavigationExtras) {
@@ -294,7 +276,8 @@ export class SalesOrderActionsComponent implements OnInit {
 
   viewSelectedRow(content) {
     this.modal = this.modalService.open(content, { size: "lg" });
-  };
+  }
+
   dismissModel() {
     this.modal.close();
   }

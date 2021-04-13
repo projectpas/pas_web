@@ -42,7 +42,7 @@
                     </div>              
                         <div>
                             <div class="card-body header-body"> 
-                                <p-table #dt class="ptable-custom lastcol-fix" 
+                                <p-table #dt class="rpo-table-cstm lastcol-fix" 
                                             [value]="allActions"                                             
                                             [metaKeySelection]="true" 
                                             [rows]="pageSize" 
@@ -175,7 +175,7 @@
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th class="table-column-width">Flag</th>
+                                            <th style="width:50px">Flag</th>
                                             <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 {{ col.header }}
@@ -184,7 +184,7 @@
                                             <th class="table-actions-column">Actions</th>
                                         </tr>
                                         <tr>
-                                            <th class="table-column-width"></th>
+                                            <th style="width:50px"></th>
                                             <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                                 [ngSwitch]="col.field">
                                                 <input class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value,
@@ -197,7 +197,7 @@
                                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                             (dblclick)="openView(view,rowData)">
 
-                                            <td class="table-column-width">
+                                            <td style="width:50px">
                                                 <span class="flag">
                                                     <i *ngIf="rowData.isPrimary == true"
                                                        [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"

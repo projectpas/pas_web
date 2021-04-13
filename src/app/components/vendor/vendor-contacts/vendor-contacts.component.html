@@ -170,7 +170,7 @@
                       </ng-template>
                       <ng-template pTemplate="header" let-columns>
                           <tr>
-                              <th class="table-column-width">Flag</th>
+                              <th class="width-60">Flag</th>
                               <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                                   [pSortableColumn]="col.field">
                                   {{ col.header }}
@@ -180,7 +180,7 @@
                               <th class="table-actions-column">Actions</th>
                           </tr>
                           <tr>
-                              <th class="table-column-width"></th>
+                              <th class="width-60"></th>
                               <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                   [hidden]="col.field == 'isDefaultContact'">
                                   <input class="table-header-input-width" pInputText type="text" (input)="
@@ -192,7 +192,7 @@
                       <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                           <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                               (dblclick)="opencontactView(view, rowData)">
-                              <td class="table-column-width">
+                              <td class="width-60">
                                   <span class="flag">
                                       <i *ngIf="rowData.isDefaultContact == true" [ngStyle]="{color: rowData.isDefaultContact == true ? 'green' : 'none'
                                   }" class="fa fa-flag" aria-hidden="true" matTooltip="Primary " matTooltipPosition="above">
@@ -597,7 +597,7 @@
                   }">
                   {{ audit.updatedBy }}
             </td>
-            <td style="background-color: #fff !important; text-align: center;"><p style="width: 60px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+            <td style="width:60px;background-color: #fff !important; text-align: center;"><p style="width: 60px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
           </tr>
         </tbody>
       </table>

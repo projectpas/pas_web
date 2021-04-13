@@ -165,4 +165,12 @@ export class WorkFlowEndpoint extends EndpointFactory {
 			return this.handleErrorCommon(error, () => this.getWorkFlowDataByIdForEdit(workFlowId));
 		});
 	}
+
+	getemployeeExpertiseById(id) {
+		return this.http.get<any>(`${environment.baseUrl}/api/workflow/getEmployeeExpertiseById/${id}`)
+		.catch(error => {
+			return this.handleErrorCommon(error, () => this.getemployeeExpertiseById(id));
+		});
+	}
+
 }

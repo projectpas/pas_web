@@ -2,7 +2,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
-
 import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
 import { ISalesQuote } from "../models/sales/ISalesQuote.model";
@@ -12,13 +11,12 @@ import { ISalesSearchParameters } from "../models/sales/ISalesSearchParameters";
 import { ISalesQuoteListView } from "../models/sales/ISalesQuoteListView";
 import { VerifySalesQuoteModel } from "../components/sales/quotes/models/verify-sales-quote-model";
 import { SalesOrderConversionCritera } from "../components/sales/quotes/models/sales-order-conversion-criteria";
-import { SalesOrder } from "../models/sales/SalesOrder.model";
 import { SalesOrderView } from "../models/sales/SalesOrderView";
-import { SalesOrderFreight } from "../models/sales/SalesOrderFreight";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
 import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
-import { environment } from 'src/environments/environment';
+import { environment } from "../../environments/environment";
+
 @Injectable()
 export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly getNewSalesQuoteInstanceUrl: string = environment.baseUrl + "/api/salesquote/new";
@@ -142,10 +140,6 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  // saveOrUpdateSOQuoteSettings(data) {
-  //   return this.http.post<any>(`${this.configurations.baseUrl}/api/SOQuoteSettings/save`, JSON.stringify(data), this.getRequestHeaders());
-  // }
-
   saveOrUpdateSOQuoteSettings(data) {
     return this.http
       .post(
@@ -167,7 +161,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  create(salesQuote: ISalesQuoteView): Observable<ISalesOrderQuote> {
+  create(salesQuote: ISalesQuoteView): Observable<any> {
     return this.http
       .post(
         this.saleQuote,
@@ -179,7 +173,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  createFreight(salesOrderFreights: ISalesOrderFreight[]): Observable<ISalesOrderQuote> {
+  createFreight(salesOrderFreights: ISalesOrderFreight[]): Observable<any> {
     return this.http
       .post(
         this.saleQuoteFreightsSave,
@@ -191,7 +185,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  createCharges(salesOrderCharges: ISalesOrderQuoteCharge[]): Observable<ISalesOrderQuote> {
+  createCharges(salesOrderCharges: ISalesOrderQuoteCharge[]): Observable<any> {
     return this.http
       .post(
         this.saleQuoteChargesSave,
@@ -214,15 +208,15 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.saveCustomerQuotesApprovedEndPoint(data));
       });
   }
-  
+
   sentForInternalApproval(data) {
     return this.http.post<any>(`${this.configurations.baseUrl}/api/salesquote/soquoteapproval`, JSON.stringify(data), this.getRequestHeaders())
-    .catch(error => {
-      return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
-    });
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.sentForInternalApproval(data));
+      });
   }
 
-  update(salesQuote: ISalesQuoteView): Observable<ISalesOrderQuote> {
+  update(salesQuote: ISalesQuoteView): Observable<any> {
     let url: string = `${this.saleQuote}/${salesQuote.salesOrderQuote.salesOrderQuoteId}`;
     return this.http
       .put(url, JSON.stringify(salesQuote), this.getRequestHeaders())
@@ -233,7 +227,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
 
   search(
     salesQuoteSearchParameters
-  ): Observable<ISalesQuoteListView> {
+  ): Observable<any> {
     return this.http
       .post(
         this.searchSalesQuote,
@@ -249,7 +243,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
 
   globalSearch(
     salesQuoteSearchParameters: ISalesSearchParameters
-  ): Observable<ISalesQuoteListView> {
+  ): Observable<any> {
     return this.http
       .post(
         this.globalSearchSalesQuote,
@@ -308,7 +302,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  getSalesQuote(salesQuoteId: number): Observable<ISalesQuoteView> {
+  getSalesQuote(salesQuoteId: number): Observable<any> {
     const URL = `${this.getSalesQuoteDetails}/${salesQuoteId}`;
     return this.http
       .get<ISalesQuote>(URL, this.getRequestHeaders())
@@ -316,6 +310,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getSalesQuote(salesQuoteId));
       });
   }
+
   getview(salesQuoteId: number): Observable<any> {
     const URL = `${this.getSalesQuoteViewDetails}/${salesQuoteId}`;
     return this.http
@@ -324,6 +319,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getview(salesQuoteId));
       });
   }
+
   GetTotal(salesQuoteId: number): Observable<any> {
     const URL = `${this.getSalesQuoteTotalDetails}/${salesQuoteId}`;
     return this.http
@@ -332,8 +328,8 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.GetTotal(salesQuoteId));
       });
   }
-  getCustomerQuotesList(salesQuoteId: number): Observable<ISalesQuoteView> {
 
+  getCustomerQuotesList(salesQuoteId: number): Observable<any> {
     const URL = `${this.getCustomerQuotesListUrl}/${salesQuoteId}`;
     return this.http
       .get<ISalesQuote>(URL, this.getRequestHeaders())
@@ -341,7 +337,8 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getCustomerQuotesList(salesQuoteId));
       });
   }
-  initiateQuoteCopying(salesQuoteId: number): Observable<ISalesQuoteView> {
+
+  initiateQuoteCopying(salesQuoteId: number): Observable<any> {
     const URL = `${this.getCopyEndpointUrl}/${salesQuoteId}`;
     return this.http
       .get(URL, this.getRequestHeaders())
@@ -350,7 +347,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  verifySalesOrderConversionEndPoint(salesQuoteId: number): Observable<VerifySalesQuoteModel> {
+  verifySalesOrderConversionEndPoint(salesQuoteId: number): Observable<any> {
     const URL = `${this.getVerifyEndpointUrl}/${salesQuoteId}`;
     return this.http
       .get(URL, this.getRequestHeaders())
@@ -359,7 +356,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  closeSalesOrderQuoteEndPoint(salesQuoteId: number, updatedBy: string): Observable<ISalesQuoteView> {
+  closeSalesOrderQuoteEndPoint(salesQuoteId: number, updatedBy: string): Observable<any> {
     const URL = `${this.getCloseEndointUrl}/${salesQuoteId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
@@ -367,7 +364,8 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.closeSalesOrderQuoteEndPoint(salesQuoteId, updatedBy));
       });
   }
-  convertfromquoteEndPoint(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<SalesOrderView> {
+
+  convertfromquoteEndPoint(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<any> {
     const URL = `${this.getConvertfromquoteEndPoint}`;
     return this.http
       .post(URL, salesQuoteConversionCriteria, this.getRequestHeaders())
@@ -385,7 +383,6 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-
   //start SalesOrderQuoteDocument--nitin
   SalesOrderQuoteGeneralDocumentUploadEndpoint<T>(file: any, salesquoteId, moduleId, moduleName, uploadedBy, masterCompanyId): Observable<T> {
     const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
@@ -401,37 +398,64 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   GetUploadDocumentsList(attachmentId, salesquoteId, moduleId) {
     return this.http.get<any>(`${this._getsalesquoteDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${salesquoteId}&moduleId=${moduleId}`, this.getRequestHeaders())
   }
+
   getSalesQuoteDocumentAuditHistory(id) {
     return this.http.get<any>(`${this._geSaleQuoteDocumentHistory}/${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesQuoteDocumentAuditHistory(id));
+      });
   }
+
   getSOQuoteSettingHistory(id) {
     return this.http.get<any>(`${this._geSaleQuoteSettingsHistory}/${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOQuoteSettingHistory(id));
+      });
   }
+
   saveSalesQuoteHeader<T>(param: any): Observable<any> {
     let body = JSON.stringify(param);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
     return this.http.post(this._savequoteHeader, body, this.getRequestHeaders())
       .map((response: Response) => {
         return <any>response;
-
       }).catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
+
   getSalesQuoteFreights(id, isDeleted) {
     return this.http.get<any>(`${this._geSaleQuoteFreights}?SalesOrderQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesQuoteFreights(id, isDeleted));
+      });
   }
+
   getSalesQuoteCharges(id, isDeleted) {
     return this.http.get<any>(`${this._geSaleQuoteCharges}?SalesOrderQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesQuoteCharges(id, isDeleted));
+      });
   }
 
   getInternalApproversList(approvalTaskId, moduleAmount) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalRule/approverslist?approvalTaskId=${approvalTaskId}&moduleAmount=${moduleAmount}`);
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalRule/approverslist?approvalTaskId=${approvalTaskId}&moduleAmount=${moduleAmount}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getInternalApproversList(approvalTaskId, moduleAmount));
+      });
   }
+
   //end nitin
   getSOQFreightsHistory(id) {
     return this.http.get<any>(`${this.getFreightAudihistory}/?SalesOrderQuoteFreightId=${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOQFreightsHistory(id));
+      });
   }
+
   getSOQChargesHistory(id) {
     return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOQChargesHistory(id));
+      });
   }
 
   getAllSOQEditID(salesOrderQuoteId) {
@@ -440,7 +464,6 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getAllSOQEditID(salesOrderQuoteId));
       });
   }
-
 
   saveSalesOrderQuoteAddress<T>(param: any): Observable<any> {
     let url = `${this.configurations.baseUrl}/api/SalesQuote/createsoqaddress`;

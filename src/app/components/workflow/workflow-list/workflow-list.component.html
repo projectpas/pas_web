@@ -604,6 +604,7 @@
                                                 <th>Unit Cost<span class="clr-red">*</span></th>
                                                 <th>Extended Cost<span class="clr-red">*</span></th>
                                                 <th>Vendor Name</th>
+                                                <th>Memo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -615,6 +616,9 @@
                                                 <td class="text-right">{{charge.unitCost}}</td>
                                                 <td class="text-right">{{charge.extendedCost}}</td>
                                                 <td>{{charge.vendorName}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="charge.memo"></span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td><b>Total</b></td>
@@ -623,6 +627,7 @@
                                                 <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
+                                                <td></td>
                                                 <td></td>
                                             </tr>
                                         </tbody>
@@ -672,16 +677,20 @@
                                                 <th>Tool Description</th>
                                                 <th>Tool Class</th>
                                                 <th>Qty<span class="clr-red">*</span></th>
+                                                <th>Memo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let equipment of task.equipments;let i=index">
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{equipment.assetName}}</td>
-                                                <td>{{equipment.assetName}}</td>
+                                                <td>{{equipment.assetIdName}}</td>
                                                 <td>{{equipment.assetDescription}}</td>
                                                 <td>{{equipment.assetTypeName}}</td>                                                
                                                 <td class="text-right">{{equipment.quantity}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="equipment.memo"></span>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -756,6 +765,7 @@
                                                 <th style="width:60px">OHead Burden(%)</th>
                                                 <th style="width:60px">OH Cost</th>
                                                 <th style="width:60px">Direct Labor and OH Cost</th>
+                                                <th>Memo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -768,6 +778,8 @@
                                                 <td class="text-right">{{expertise.overheadBurden}}</td>
                                                 <td class="text-right">{{expertise.overheadCost}}</td>
                                                 <td class="text-right">{{expertise.laborOverheadCost}}</td>
+                                                <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="expertise.memo"></span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td><b>Total</b></td>
@@ -778,6 +790,7 @@
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.expertiseTotalOHCost}}</b></td>
                                                 <td class="text-right"><b>{{task.expertiseTotalDirectLabourAndOHCost}}</b></td>
+                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -901,14 +914,15 @@
                                                 <th>Revision Date</th>                                                
                                                 <th>Sequence</th>
                                                 <th>Source</th>
-                                                <th>Aircraft</th>
-                                                <th>Model</th>
-                                                <th>Dash Number</th>
+                                                <!-- <th>Aircraft</th> -->
+                                                <!-- <th>Model</th> -->
+                                                <!-- <th>Dash Number</th> -->
                                                 <th>Location</th>
                                                 <th>Verified By</th>
                                                 <th>Verified Date</th>
                                                 <th>Status</th>
-                                                <th>File Name</th>
+                                                <th>Files </th>
+                                                <th>Memo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -920,17 +934,20 @@
                                                 <td>{{publication.revisionDate}}</td>
                                                 <td class="text-right">{{publication.sequence}}</td>
                                                 <td>{{publication.source}}</td>
-                                                <td>{{publication.aircraftManufacturerName}}</td>
-                                                <td>{{publication.modelName}}</td>
-                                                <td>{{publication.allDashNumbers}}</td>
+                                                <!-- <td>{{publication.aircraftManufacturerName}}</td> -->
+                                                <!-- <td>{{publication.modelName}}</td> -->
+                                                <!-- <td>{{publication.allDashNumbers}}</td> -->
                                                 <td>{{publication.location}}</td>
                                                 <td>{{publication.verifiedBy}}</td>
                                                 <td>{{publication.verifiedDate}}</td>
                                                 <td>{{publication.status ? 'Active': 'In Active' }}</td>
+                                           
                                                 <td>
-                                                    <button class="btn btn-danger nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
+                                                    <button class="btn btn-danger1 nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
                                                         <i class="fa fa-eye"></i>
                                                     </button>
+                                                </td>
+                                                <td> <span class="m-0 p-0 p_textEditor float-left" [innerHTML]="publication.memo"></span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -1483,6 +1500,7 @@
                                         <th>Asset Type</th>
                                         <th>Asset Description</th>
                                         <th>Qty</th>
+                                        <th>Memo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1493,6 +1511,9 @@
                                         <td>{{equipment.assetTypeName}}</td>
                                         <td>{{equipment.assetDescription}}</td>
                                         <td class="text-right">{{equipment.quantity}}</td>
+                                        <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="equipment.memo"></span> 
+                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1568,6 +1589,7 @@
                                         <th>OHead Burden(%)</th>
                                         <th>OH Cost</th>
                                         <th>Direct Labor and OH Cost</th>
+                                        <th>Memo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1580,6 +1602,9 @@
                                         <td class="text-right">{{expertise.overheadBurden}}</td>
                                         <td class="text-right">{{expertise.overheadCost}}</td>
                                         <td class="text-right">{{expertise.laborOverheadCost}}</td>
+                                           <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="equipment.memo"></span> 
+                                           </td>
                                     </tr>
                                     <tr>
                                         <td><b>Total</b></td>
@@ -1590,6 +1615,7 @@
                                         <td></td>
                                         <td class="text-right"><b>{{task.expertiseTotalOHCost}}</b></td>
                                         <td class="text-right"><b>{{task.expertiseTotalDirectLabourAndOHCost}}</b></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1610,6 +1636,7 @@
                                         <th style="width:60px">Unit Cost</th>
                                         <th style="width:60px">Extended Cost</th>
                                        <th>Vendor Name</th>
+                                       <th>Memo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1621,6 +1648,9 @@
                                         <td class="text-right">{{charge.unitCost}}</td>
                                         <td class="text-right">{{charge.extendedCost}}</td>
                                       <td>{{charge.vendorName}}</td>
+                                      <td>
+                                        <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="equipment.memo"></span> 
+                                       </td>
                                     </tr>
                                     <tr>
                                         <td><b>Total</b></td>
@@ -1629,6 +1659,7 @@
                                         <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
                                         <td></td>
                                         <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
+                                       <td></td>
                                        <td></td>
                                     </tr>
                                 </tbody>
@@ -1754,7 +1785,8 @@
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
                                         <th>Status</th>
-                                        <th>Image</th>
+                                        <th>Files</th>
+                                        <th>Memo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1771,11 +1803,15 @@
                                         <td>{{publication.verifiedDate}}</td>
                                         <td>{{publication.status ? 'Active': 'In Active' }}</td>
                                         <!-- <td><a href="{{publication.attachmentURL}}" class="img-responsive" alt="">View</a></td> -->
+                                       
                                         <td>
                                             <button class="btn btn-danger nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
                                                 <i class="fa fa-eye"></i>
                                             </button>
                                         </td>
+                                        <td>
+                                            <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="equipment.memo"></span> 
+                                           </td>
                                     </tr>
                                 </tbody>
                             </table>

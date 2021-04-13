@@ -410,7 +410,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         if (this.arrayCustomerTypelist.length == 0) {
             this.arrayCustomerTypelist.push(0);
         }
-        await this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 50, this.arrayCustomerTypelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+        await this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'CustomerTypeName', '', true, 50, this.arrayCustomerTypelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.customertypes = res.map(x => {
                 return {
                     description: x.label, customerTypeId: x.value
@@ -952,6 +952,14 @@ export class CustomerGeneralInformationComponent implements OnInit {
     }
 
     saveGeneralInformation() {
+
+        if (this.generalInformation.customerTypeId == 0 || this.generalInformation.customerTypeId == undefined) {            
+                this.alertService.showMessage(
+                    'Validation Error',
+                    `Please Select Customer Type.`,
+                    MessageSeverity.error)
+                return;                   
+        } 
         if (this.generalInformation.customerAffiliationId == "3" || this.generalInformation.customerAffiliationId == "1") {
             if (this.generalInformation.integrationPortalId == undefined || this.generalInformation.integrationPortalId.length <= 0) {
                 this.alertService.showMessage(

@@ -53,7 +53,7 @@
     min-width: 90px !important;
 }
 .width-180{
-    width: 180px !important;
+    min-width: 180px !important;
 }
 .min-width-145{
     min-width: 145px !important;

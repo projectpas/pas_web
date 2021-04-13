@@ -1341,10 +1341,10 @@ export class ItemMasterEndpoint extends EndpointFactory {
             });
     }
 
-    getActivePartListByItemType(type) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist/${type}`)
+    getActivePartListByItemType(type,masterCompanyId?) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist?type=${type}&&masterCompanyId=${masterCompanyId==undefined ? 1 : masterCompanyId}`)
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type));
+                return this.handleErrorCommon(error, () => this.getActivePartListByItemType(type,masterCompanyId));
             });
     }
 

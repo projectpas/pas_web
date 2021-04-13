@@ -33,7 +33,7 @@
           <p-autoComplete (ngModelChange)="getActive()"  class="p-autoComplete-ctsm" field="name" name="AName{{i}}" [dropdown]="true"  [forceSelection]="true"
           errorMessage="Records not found"  emptyMessage="No Records Found"  (completeMethod)="filterpartItems($event)"
            [size]="30" [minLength]="1" appendTo='body' [baseZIndex]="9999" (onSelect)="onPartSelect($event, eqp,i)" [suggestions]="allPartnumbersInfo"
-           [(ngModel)]="eqp.partNumber" (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
+           [(ngModel)]="eqp.partNumber" required (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
       </p-autoComplete> 
         </td>
         <td>

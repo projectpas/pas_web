@@ -170,7 +170,7 @@
                         </td>
                         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
                             <div *ngIf="currentDeletedstatus == false">
-                                <span data-toggle="modal" data-target="#viewWorkOrder">
+                                <span data-toggle="modal" data-target="#viewWorkOrderr">
                                     <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
                                         matTooltipPosition="above">
                                         <i class="fa fa-eye"></i>
@@ -190,7 +190,7 @@
                                 </span> -->
                             </div>
                             <div *ngIf="currentDeletedstatus == true">
-                                <span data-toggle="modal" data-target="#viewWorkOrder">
+                                <span data-toggle="modal" data-target="#viewWorkOrderr">
                                     <a class="btn nobg btn-view-cstm" (click)="view(rowData)" matTooltip="View"
                                         matTooltipPosition="above">
                                         <i class="fa fa-eye"></i>
@@ -230,13 +230,13 @@
     </div>
 </div>
  
-<div id="viewWorkOrder" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+<div id="viewWorkOrderr" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xlg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    (click)="closeView.emit(false); workOrderId = 0;">
+                <button type="button" class="close" 
+                    (click)="closeViewModel(); workOrderId = 0;">
                     &times;
                 </button>
                 <h4 class="modal-title">Work Order View</h4>
@@ -246,8 +246,8 @@
                 <app-work-view-component [workOrderId]="workOrderId"></app-work-view-component>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"
-                    (click)="closeView.emit(false); workOrderId = 0;">
+                <button type="button" class="btn btn-danger" 
+                    (click)="closeViewModel(); workOrderId = 0;">
                     Close
                 </button>
             </div>

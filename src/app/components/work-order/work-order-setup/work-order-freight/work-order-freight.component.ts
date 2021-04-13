@@ -128,11 +128,12 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     originalList:any=[]
     ngOnChanges() {
         this.originalList=this.workOrderFreightList;
-        if(this.originalList && this.originalList[0].workOrderQuoteDetailsId){
-            this.disableFrt=true;
-        }else{
-            this.disableFrt=false;
-        }
+        // console.log("hello",this.originalList)
+        // if(this.originalList && this.originalList[0] && this.originalList[0].workOrderQuoteDetailsId !=undefined){
+        //     this.disableFrt=true;
+        // }else{
+        // }
+        this.disableFrt=false;
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);

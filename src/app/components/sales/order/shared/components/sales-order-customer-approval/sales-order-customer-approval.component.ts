@@ -211,7 +211,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         return true;
       } else if (part.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
         return true;
-
       } else {
         return false;
       }
@@ -292,6 +291,17 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       } else {
         this.salesOrderCustomerApprovalListView[i].customerApprovedById = '';
       }
+
+      this.salesOrderCustomerApprovalListView[i].customerApprovedDate = new Date();
+    }
+    else if (approver.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+      this.salesOrderCustomerApprovalListView[i].internalSentDate = new Date();
+    }
+    else if (approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+      this.salesOrderCustomerApprovalListView[i].internalApprovedDate = new Date();
+    }
+    else if (approver.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+      this.salesOrderCustomerApprovalListView[i].customerSentDate = new Date();
     }
   }
 
@@ -310,26 +320,27 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       instance.approvalDate = new Date(approval.approvalDate);
       instance.approvedDate = new Date(approval.approvedDate);
       instance.statusChangeDate = new Date(approval.statusChangeDate);
+
       if (approval.internalSentDate) {
         instance.internalSentDate = new Date(approval.internalSentDate);
-        if (!approval.internalApprovedDate) {
-          instance.internalApprovedDate = new Date();
-        }
+        // if (!approval.internalApprovedDate) {
+        //   instance.internalApprovedDate = new Date();
+        // }
       }
-      else if (!approval.internalSentDate) {
-        instance.internalSentDate = new Date();
-      }
+      // else if (!approval.internalSentDate) {
+      //   instance.internalSentDate = new Date();
+      // }
       if (approval.customerSentDate) {
         instance.customerSentDate = new Date(approval.customerSentDate);
-        if (!approval.customerApprovedDate) {
-          instance.customerApprovedDate = new Date();
-        }
+        // if (!approval.customerApprovedDate) {
+        //   instance.customerApprovedDate = new Date();
+        // }
       }
       if (approval.internalApprovedDate) {
         instance.internalApprovedDate = new Date(approval.internalApprovedDate);
-        if (!approval.customerSentDate) {
-          instance.customerSentDate = new Date();
-        }
+        // if (!approval.customerSentDate) {
+        //   instance.customerSentDate = new Date();
+        // }
       }
       if (approval.customerApprovedDate) {
         instance.customerApprovedDate = new Date(approval.customerApprovedDate);
@@ -663,6 +674,11 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       }
       if (!x.customerApprovedDate) {
         str += x.partNumber + ' - ' + 'Customer approved date is required<br/>';
+      }
+      if (x.customerStatusId == ApprovalStatusEnum.Approved) {
+        if (!x.customerMemo) {
+          str += 'Customer memo is required<br/>';
+        }
       }
     }
     return str;
