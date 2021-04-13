@@ -34,6 +34,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {TooltipModule} from 'primeng/tooltip';
 import{ FileUploadModule } from 'primeng/fileupload';
 import { EditorModule } from 'primeng/editor';
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 
 @NgModule({
     imports: [
@@ -58,7 +59,8 @@ import { EditorModule } from 'primeng/editor';
         TooltipModule,
         FileUploadModule,
         EditorModule,
-        NgMultiSelectDropDownModule.forRoot()
+        NgMultiSelectDropDownModule.forRoot(),
+        CommonDocumentsModule
     ],
     declarations: [
         EmployeePagesComponent,

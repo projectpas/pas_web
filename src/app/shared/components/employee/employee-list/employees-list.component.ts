@@ -111,7 +111,7 @@ export class EmployeesListComponent implements OnInit {
     currenDocDeletedstatus: boolean = false;
     selectedOnly: boolean = false;
     targetData: any;
-
+    moduleName='Employee'
     headers = [
         { field: 'firstName', header: 'First Name' },
         { field: 'lastName', header: 'Last Name' },
@@ -735,7 +735,7 @@ export class EmployeesListComponent implements OnInit {
         this.toGetDocumentsListNew(row.employeeId);
         this.viewEmpID = row.employeeId;
         this.loadEmployeeRoles(row.employeeId);
-        this.isSpinnerVisible = false;
+        //this.isSpinnerVisible = false;
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
             error => {this.isSpinnerVisible=false} //this.onDataLoadFailed(error)
