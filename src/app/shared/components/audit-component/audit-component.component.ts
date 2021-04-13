@@ -26,7 +26,7 @@ export class AuditComponentComponent implements OnInit {
             }
         }
       }
-      dismissModel() {
+      dismissModell() {
         this.activeModal.close();
     }
 }
