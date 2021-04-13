@@ -29,7 +29,7 @@
                                 {{ summaryColumn.header }}
                             </span>
                         </th>
-                        <th colspan="27"></th>
+                        <th colspan="21"></th>
                         <th *ngIf="isViewMode == false"
                             style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
@@ -81,7 +81,7 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="27" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="21" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
                                         <span>
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
@@ -130,7 +130,7 @@
                                     <th>Qty Resvd<span class="clr-red">*</span></th>
                                     <th style="min-width: 60px;">Qty Avail </th>
                                     <th style="min-width: 80px;">Qty On Hand</th>
-                                    <th>Qty Back Ord</th>
+                                    <!-- <th>Qty Back Ord</th> -->
                                     <th>Qty to Ship</th>
                                     <th>Alt/Equiv</th>
                                     <th>Status </th>
@@ -140,8 +140,8 @@
                                     <th style="min-width: 75px;">Qty Invoiced</th>
                                     <th style="min-width: 100px;">Invoice Num</th>
                                     <th style="min-width: 100px;">Invoice Date </th>
-                                    <th style="min-width: 84px;">Qty Prev Shpd</th>
-                                    <th style="min-width: 100px;">Last Ship Date </th>
+                                    <!-- <th style="min-width: 84px;">Qty Prev Shpd</th>
+                                    <th style="min-width: 100px;">Last Ship Date </th> -->
                                     <th style="min-width: 90px;">Ship Ref</th>
                                     <th style="min-width: 60px;">Unit Cost </th>
                                     <th style="min-width: 70px;">Markup % </th>
@@ -262,9 +262,9 @@
                                     <td class="text-right">
                                         {{ part.qtyOnHand | globalNmberFormat }}
                                     </td>
-                                    <td class="text-right">
+                                    <!-- <td class="text-right">
                                         {{  part.qtyBackOrder | globalNmberFormat }}
-                                    </td>
+                                    </td> -->
                                     <td class="text-right">
                                         {{ part.qtyToShip | globalNmberFormat }}
                                     </td>
@@ -292,12 +292,12 @@
                                     <td>
                                         {{ part.invoiceDate | date : "MM/dd/yyyy"}}
                                     </td>
-                                    <td class="text-right">
+                                    <!-- <td class="text-right">
                                         {{ part.qtyPreviouslyShipped | globalNmberFormat }}
                                     </td>
                                     <td>
                                         {{ part.lastShippedDate | date : "MM/dd/yyyy"}}
-                                    </td>
+                                    </td> -->
                                     <td>
                                         {{ part.shipReference }}
                                     </td>
