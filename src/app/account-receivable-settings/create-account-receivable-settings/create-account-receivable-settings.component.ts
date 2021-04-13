@@ -54,7 +54,6 @@ export class CreateARSettingsComponent implements OnInit {
     }
 
     ngOnInit() {
-        debugger;
         if (this.arService.isEditARSettingsList) {
             this.isEditMode = true;
             this.receivingForm = this.arService.arSettingsData;
