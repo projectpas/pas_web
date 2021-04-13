@@ -116,7 +116,7 @@ export class AddSalesPartNumberComponent implements OnInit {
     let qtyAvailable = 0;
     for (let i = 0; i < this.parts.length; i++) {
       qtyAvailable = qtyAvailable + this.parts[i].qtyAvailable;
-      qtyOnHand = qtyOnHand + this.parts[i].qtyOnHand;
+      qtyOnHand = qtyOnHand + this.parts[i].quantityOnHand;
     }
     this.query.partSearchParamters.qtyAvailable = qtyAvailable;
     this.query.partSearchParamters.qtyOnHand = qtyOnHand;

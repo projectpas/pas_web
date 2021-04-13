@@ -78,7 +78,7 @@ export class PartDetail {
   grossSalePrice: number;
   grossSalePricePerUnit: number;
   altOrEqType: string;
-  qtyOnHand: number;
+  quantityOnHand: number;
   notes: string;
   createdBy: string;
   itemNo:number;

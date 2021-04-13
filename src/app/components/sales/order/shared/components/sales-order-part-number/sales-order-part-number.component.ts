@@ -200,6 +200,8 @@ export class SalesOrderPartNumberComponent {
       { field: 'quantityToBeQuoted', header: 'Qty Resvd', width: "70px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Prev Shipped', width: "98px" },
       { field: 'qtyBackOrder', header: 'Qty Back Ord', width: "98px" },
+      { field: 'qtyAvailable', header: 'Qty Avail', width: "98px" },
+      { field: 'qtyOnHand', header: 'Qty on Hand', width: "98px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "75px" },
       { field: 'uom', header: 'UOM', width: "90px" },
@@ -401,7 +403,7 @@ export class SalesOrderPartNumberComponent {
           }
 
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
-          this.part.qtyOnHand = this.selectedPart.qtyOnHand;
+          this.part.quantityOnHand = this.selectedPart.quantityOnHand;
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
           this.part.quantityAlreadyQuoted = this.query.partSearchParamters.quantityAlreadyQuoted;
         });
@@ -730,6 +732,8 @@ export class SalesOrderPartNumberComponent {
     parts.forEach(part => {
       uniquePart.quantityToBeQuoted = this.getSum(uniquePart.quantityToBeQuoted, part.quantityFromThis);
       uniquePart.quantityAlreadyQuoted = uniquePart.quantityToBeQuoted;
+      uniquePart.qtyAvailable = this.getSum(uniquePart.qtyAvailable, part.qtyAvailable);
+      uniquePart.qtyOnHand = this.getSum(uniquePart.qtyOnHand ? uniquePart.qtyOnHand : 0, part.quantityOnHand);
       uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);
       uniquePart.salesDiscountExtended = this.getSum(uniquePart.salesDiscountExtended, part.salesDiscountExtended);
       uniquePart.netSalesPriceExtended = this.getSum(uniquePart.netSalesPriceExtended, part.netSalesPriceExtended);

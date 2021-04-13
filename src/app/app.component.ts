@@ -589,10 +589,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'SO List',
                   routerLink: '/salesmodule/salespages/sales-order-list',
                 },
-                // {
-                //   label: 'Create SO',
-                //   routerLink: '/salesmodule/salespages/sales-order',
-                // },
+                {
+                  label: 'Create Sales Order',
+                  routerLink: '/salesmodule/salespages/sales-order',
+                },
                 { label: 'SO Shipping', routerLink: '/#' },
                 { label: 'SO Billing', routerLink: '/#' },
                 { label: 'SO Confirmation List', routerLink: '/salesmodule/salespages/sales-order-confirmation-list' },
@@ -610,10 +610,10 @@ export class AppComponent implements OnInit, AfterViewInit {
                   label: 'SO Quote List',
                   routerLink: '/salesmodule/salespages/sales-quote-list',
                 },
-                // {
-                //   label: 'Create SO Quote',
-                //   routerLink: '/salesmodule/salespages/sales-quote',
-                // },
+                {
+                  label: 'Create Sales Order Quote',
+                  routerLink: '/salesmodule/salespages/sales-quote',
+                },
                 { label: 'Open SO Quotes', routerLink: '/#' },
                 { label: 'Approved SO Quotes', routerLink: '/#' },
                 {

@@ -231,7 +231,10 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="col-sm-12">Notes </label>
-                                <div class="col-sm-6">
+                                <p-editor class="p-editor-cstm" [(ngModel)]="addList[0].notes"
+                                    (ngModelChange)="getmemo()" style="overflow-y: auto;;" [style]="{'height':'150px'}"
+                                    name="notes"></p-editor>
+                                <!-- <div class="col-sm-6">
                                     <span>
                                         <div class="form-group memo-popup-cstm mat_emo">
                                             <div (ngModelChange)="setvaliDate()" [innerHTML]=" addList[0].notes"
@@ -248,7 +251,7 @@
                                             <i style="color: #337ab7" class="fa fa-pencil"></i>
                                         </a>
                                     </span>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
