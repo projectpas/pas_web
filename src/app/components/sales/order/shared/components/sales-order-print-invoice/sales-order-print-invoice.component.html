@@ -9,63 +9,63 @@
                     </div>
                     <div class="clear"></div>
                     <hr />
-                    <div class="pick-ticket-header" style="margin-bottom: 15px;">
+                    <!-- <div class="pick-ticket-header" style="margin-bottom: 15px;">
                         <h4>SALES ORDER INVOICE</h4>
-                    </div>
+                    </div> -->
                     <div class="very-first-block">
                         <div class="col-sm-4 address-block">
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Company :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Company :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.companyName : ''}}</label>
                             </div>
                             <br />
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Logo/Slogan :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Logo/Slogan :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled></label>
                             </div>
                             <br />
                             <br />
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Tagline :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Tagline :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled></label>
                             </div>
                             <br />
                             <br />
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Address1 :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Address1 :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.address1 : ''}}</label>
                             </div>
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Address2 :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Address2 :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.address2 : ''}}</label>
                             </div>
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">City :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">City :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.city : ''}}</label>
                             </div>
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">State/Prov :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">State/Prov :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.stateOrProvince : ''}}</label>
                             </div>
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Zip :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Zip :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.postalCode : ''}}</label>
                             </div>
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Country :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Country :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.country : ''}}</label>
                             </div>
                             <div class="col-sm-12 first-block-name">
-                                <label class="col-sm-3 first-block-label">Phone :</label>
+                                <label class="col-sm-3 first-block-label" style="text-align: left">Phone :</label>
                                 <label class="col-sm-4 first-block-label" style="width:30%; text-align: left"
                                     disabled>{{this.salesOrderInvoice.managementStructureHeaderData ? this.salesOrderInvoice.managementStructureHeaderData.phoneNumber : ''}}</label>
                             </div>
@@ -308,7 +308,8 @@
                                 <tr></tr>
                                 <tr>
                                     <td rowspan="7" colspan="7">
-                                        Notes/Instructions: <span>{{this.salesOrderInvoice.soNotes}}</span>
+                                        <!-- Notes/Instructions: <span>{{this.salesOrderInvoice.soNotes}}</span> -->
+                                        Notes/Instructions: <span>{{getFormattedNotes(this.salesOrderInvoice.soNotes)}}</span>
                                     </td>
                                     <td class="border-transparent" colspan="2">SUBTOTAL</td>
                                     <td style="text-align: right;"> {{this.salesOrderInvoice.subTotal}}</td>
