@@ -41,6 +41,8 @@ declare var $ : any;
 import { Subject } from 'rxjs'
 
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { Permission } from 'src/app/models/permission.model';
 @Component({
     selector: 'app-vendor-general-information',
     templateUrl: './vendor-general-information.component.html',
@@ -249,6 +251,8 @@ export class VendorGeneralInformationComponent implements OnInit {
     referenceId:any; 
     uploadDocs: Subject<boolean> = new Subject();
     isView:boolean=true;
+    isAdd:boolean=true;
+    isEdit:boolean=true;
     constructor(public vendorclassificationService: VendorClassificationService,
         private http: HttpClient,
         private changeDetectorRef: ChangeDetectorRef,
@@ -315,6 +319,8 @@ export class VendorGeneralInformationComponent implements OnInit {
                 }
             }
         }
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_GeneralInformation+'.'+PermissionConstants.Add]);
+        this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_GeneralInformation+'.'+PermissionConstants.Update]);
     }
 
     ngOnInit(): void {
