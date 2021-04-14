@@ -286,7 +286,7 @@
                                         <td> - </td>
                                         <td>{{child.cond}}</td>
                                         <td> - </td>
-                                        <td>{{child.quantity}}</td>
+                                        <td style="text-align: right;">{{child.quantity}}</td>
                                         <td style="text-align: right;">{{child.unitCost | number : '1.2-2'}}</td>
                                         <td style="text-align: right;">{{child.billingAmount | number : '1.2-2'}}</td>
                                     </tr>
@@ -312,7 +312,7 @@
                                         Notes/Instructions: <span>{{getFormattedNotes(this.salesOrderInvoice.soNotes)}}</span>
                                     </td>
                                     <td class="border-transparent" colspan="2">SUBTOTAL</td>
-                                    <td style="text-align: right;"> {{this.salesOrderInvoice.subTotal}}</td>
+                                    <td style="text-align: right;"> {{this.salesOrderInvoice.subTotal | number : '1.2-2'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2">TAX RATE</td>
@@ -367,7 +367,7 @@
                                         <b>BALANCE DUE</b>
                                     </td>
                                     <td style="text-align: right;">
-                                        <b>{{this.salesOrderInvoice.balanceDue}}</b>
+                                        <b>{{this.salesOrderInvoice.balanceDue | number : '1.2-2'}}</b>
                                     </td>
                                 </tr>
                                 <tr>
