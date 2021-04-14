@@ -32,6 +32,7 @@ export interface IExchangeOrderQuote {
 	approvedByName: string;
 	approvedDate: Date;
 	masterCompanyId:number;
+	managementStructureId:number;
 	customerServiceRepId: number;
 	createdBy: string;
     createdOn: string;

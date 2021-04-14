@@ -16,8 +16,10 @@ import { IExchangeQuoteSearchParameters } from "../models/exchange/IExchangeQuot
 import { IExchangeQuoteListView } from "../models/exchange/IExchangeQuoteListView";
 import { ExchangeQuote } from "../models/exchange/ExchangeQuote.model";
 import { IPartJson } from "../components/sales/shared/models/ipart-json";
-import { PartDetail } from "../components/sales/shared/models/part-detail";
+//import { PartDetail } from "../components/sales/shared/models/part-detail";
+import { PartDetail } from "../components/exchange-quote/shared/components/models/part-detail";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
+import { ExchangeQuotePart } from '../models/exchange/ExchangeQuotePart';
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -28,93 +30,231 @@ export type RolesChangedEventArg = {
 })
 export class ExchangequoteService {
 
-exchangeOrderQuote: IExchangeOrderQuote;
-parts: IPartJson[];
-selectedParts: PartDetail[];
-activeStep = new Subject();
-query: ItemMasterSearchQuery;
+  exchangeOrderQuote: IExchangeOrderQuote;
+  parts: IPartJson[];
+  selectedParts: PartDetail[];
+  activeStep = new Subject();
+  query: ItemMasterSearchQuery;
 
-constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
+  constructor(private exchangeQuoteEndpointService: ExchangeQuoteEndpointService) { }
 
-getNewExchangeQuoteInstance(customerId: number) {
-  return Observable.forkJoin(
-    this.exchangeQuoteEndpointService.getNewExchangeQuoteInstance<IExchangeQuote>(
-      customerId
-    )
-  );
-}
+  getNewExchangeQuoteInstance(customerId: number) {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getNewExchangeQuoteInstance<IExchangeQuote>(
+        customerId
+      )
+    );
+  }
 
-create(exchangeQuote: IExchangeQuoteView): Observable<IExchangeOrderQuote[]> {
-  return Observable.forkJoin(
-    this.exchangeQuoteEndpointService.create(exchangeQuote)
-  );
-}
+  create(exchangeQuote: IExchangeQuoteView): Observable<IExchangeOrderQuote[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.create(exchangeQuote)
+    );
+  }
 
-search(
-  exchangeQuoteSearchParameters: IExchangeQuoteSearchParameters
-): Observable<IExchangeQuoteListView[]> {
-  return Observable.forkJoin(
-    this.exchangeQuoteEndpointService.search(exchangeQuoteSearchParameters)
-  );
-}
+  search(
+    exchangeQuoteSearchParameters: IExchangeQuoteSearchParameters
+  ): Observable<IExchangeQuoteListView[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.search(exchangeQuoteSearchParameters)
+    );
+  }
 
-resetExchangeQuote() {
-  // this.approvers = [];
-  // this.initializeApprovals();
-  this.selectedParts = [];
-  this.exchangeOrderQuote = new ExchangeQuote();
-}
+  resetExchangeQuote() {
+    // this.approvers = [];
+    // this.initializeApprovals();
+    this.selectedParts = [];
+    this.exchangeOrderQuote = new ExchangeQuote();
+  }
 
-getExchangeQuoteInstance() {
-  return Observable.create(observer => {
-    observer.next(this.exchangeOrderQuote);
-    observer.complete();
-  });
-}
+  getExchangeQuoteInstance() {
+    return Observable.create(observer => {
+      observer.next(this.exchangeOrderQuote);
+      observer.complete();
+    });
+  }
 
-getExchangeQuote(exchangeQuoteId: number): Observable<IExchangeQuoteView[]> {
-  return Observable.forkJoin(
-    this.exchangeQuoteEndpointService.getExchangeQuote(exchangeQuoteId)
-  );
-}
+  getExchangeQuote(exchangeQuoteId: number): Observable<IExchangeQuoteView[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.getExchangeQuote(exchangeQuoteId)
+    );
+  }
 
-resetSearchPart() {
-  this.parts = [];
-  this.query = new ItemMasterSearchQuery();
-  this.query.partSearchParamters.quantityAlreadyQuoted = 0;
-}
+  resetSearchPart() {
+    this.parts = [];
+    this.query = new ItemMasterSearchQuery();
+    this.query.partSearchParamters.quantityAlreadyQuoted = 0;
+  }
 
-getSearchPartResult() {
-  return Observable.create(observer => {
-    observer.next(this.parts);
-    observer.complete();
-  });
-}
+  getSearchPartResult() {
+    return Observable.create(observer => {
+      observer.next(this.parts);
+      observer.complete();
+    });
+  }
 
-getSearchPartObject() {
-  return Observable.create(observer => {
-    observer.next(this.query);
-    observer.complete();
-  });
-}
+  getSearchPartObject() {
+    return Observable.create(observer => {
+      observer.next(this.query);
+      observer.complete();
+    });
+  }
 
-updateSearchPartResult(parts) {
-  this.parts = parts;
-}
+  updateSearchPartResult(parts) {
+    this.parts = parts;
+  }
 
-updateSearchPartObject(query) {
-  this.query = query;
-}
+  updateSearchPartObject(query) {
+    this.query = query;
+  }
 
-getSelectedParts() {
-  return Observable.create(observer => {
-    observer.next(this.selectedParts);
-    observer.complete();
-  });
-}
+  getSelectedParts() {
+    return Observable.create(observer => {
+      observer.next(this.selectedParts);
+      observer.complete();
+    });
+  }
 
-getAllExchangeQuoteSettings() {
-  return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings();
-}
+  getAllExchangeQuoteSettings() {
+    return this.exchangeQuoteEndpointService.getAllExchangeQuoteSettings();
+  }
+
+  marshalExchangeQuotePartToSave(selectedPart, userName) {
+    // this.checkNullValuesList.forEach(key => {
+    //   if (!selectedPart[key]) {
+    //     selectedPart[key] = 0;
+    //   }
+    // })
+    let partNumberObj = new ExchangeQuotePart();
+    partNumberObj.exchangeQuotepartPartId = selectedPart.exchangeQuotepartPartId;
+    partNumberObj.stockLineId = selectedPart.stockLineId;
+    partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
+    // partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
+    // partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
+    // partNumberObj.estimatedShipDate = selectedPart.estimatedShipDate.toDateString();
+    //partNumberObj.priorityId = selectedPart.priorityId;
+    partNumberObj.itemMasterId = selectedPart.itemMasterId;
+    partNumberObj.fxRate = selectedPart.fixRate;
+    partNumberObj.qtyQuoted = selectedPart.quantityToBeQuoted ? formatStringToNumber(selectedPart.quantityToBeQuoted) : 0;
+    partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
+    partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
+    partNumberObj.salesBeforeDiscount = formatStringToNumber(selectedPart.salesPriceExtended);
+    partNumberObj.discount = selectedPart.discount ? Number(selectedPart.discount) : 0;
+    partNumberObj.discountAmount = selectedPart.salesDiscountPerUnit;
+    partNumberObj.netSales = formatStringToNumber(selectedPart.netSalesPriceExtended);
+    partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
+    partNumberObj.taxType = selectedPart.taxType;
+    partNumberObj.taxAmount = selectedPart.taxAmount;
+    partNumberObj.taxPercentage = selectedPart.taxPercentage;
+    if (!selectedPart.createdBy) {
+      partNumberObj.createdBy = userName;
+    } else {
+      partNumberObj.createdBy = selectedPart.createdBy;
+    }
+
+    partNumberObj.idNumber = selectedPart.idNumber;
+    partNumberObj.updatedBy = userName;
+    partNumberObj.createdOn = new Date().toDateString();
+    partNumberObj.updatedOn = new Date().toDateString();
+    partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
+    partNumberObj.altOrEqType = selectedPart.altOrEqType;
+    partNumberObj.qtyPrevQuoted = selectedPart.quantityAlreadyQuoted;
+    partNumberObj.methodType =
+      // selectedPart.method === "Stock Line" ? "S" : "I";
+      selectedPart.stockLineId != null ? "S" : "I";
+    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0;
+    partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0;
+    partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
+    partNumberObj.markupPerUnit = selectedPart.markupPerUnit;
+    partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
+    partNumberObj.netSalePriceExtended = selectedPart.netSalePriceExtended;
+    partNumberObj.unitCostExtended = selectedPart.unitCostExtended ? formatStringToNumber(selectedPart.unitCostExtended) : 0;
+    partNumberObj.marginAmount = selectedPart.marginAmount ? formatStringToNumber(selectedPart.marginAmount) : 0;
+    partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended ? formatStringToNumber(selectedPart.marginAmountExtended) : 0;
+    partNumberObj.marginPercentage = selectedPart.marginPercentageExtended ? selectedPart.marginPercentageExtended : 0;
+    partNumberObj.conditionId = selectedPart.conditionId;
+    partNumberObj.currencyId = selectedPart.currencyId;
+    partNumberObj.uom = selectedPart.uom;
+    partNumberObj.controlNumber = selectedPart.controlNumber;
+    partNumberObj.grossSalePrice = selectedPart.grossSalePrice;
+    partNumberObj.grossSalePricePerUnit = selectedPart.grossSalePricePerUnit;
+    partNumberObj.notes = selectedPart.notes;
+    partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
+    partNumberObj.customerReference = selectedPart.customerRef;
+    partNumberObj.itemNo = selectedPart.itemNo;
+
+    partNumberObj.exchangeCurrencyId=selectedPart.exchangeCurrencyId;
+    partNumberObj.loanCurrencyId=selectedPart.loanCurrencyId;
+    partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
+    partNumberObj.entryDate=selectedPart.entryDate;
+    partNumberObj.exchangeOverhaulPrice=selectedPart.exchangeOverhaulPrice;
+    partNumberObj.exchangeCorePrice=selectedPart.exchangeCorePrice;
+    partNumberObj.estOfFeeBilling=selectedPart.estOfFeeBilling;
+    partNumberObj.billingStartDate=selectedPart.billingStartDate;
+    partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
+    partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
+    partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
+    partNumberObj.currencyId=selectedPart.currencyId;
+    partNumberObj.currency=selectedPart.currency;
+    partNumberObj.depositeAmount=selectedPart.depositeAmount;
+    partNumberObj.coreDueDate=selectedPart.coreDueDate;
+    partNumberObj.isRemark=selectedPart.isRemark;
+    partNumberObj.remarkText=selectedPart.remarkText;
+    
+    if(selectedPart.exchangeQuoteScheduleBilling.length > 0)
+    {
+      for(let i=0;i<selectedPart.exchangeQuoteScheduleBilling.length;i++)
+      {
+        selectedPart.exchangeQuoteScheduleBilling[i].cogs = Number(selectedPart.exchangeQuoteScheduleBilling[i].cogs);
+        partNumberObj.exchangeQuoteScheduleBilling.push(selectedPart.exchangeQuoteScheduleBilling[i]);
+      }
+    }
+    return partNumberObj;
+  }
+
+  update(salesquote:IExchangeQuoteView): Observable<IExchangeQuote[]> {
+    return Observable.forkJoin(
+      this.exchangeQuoteEndpointService.update(salesquote)
+    );
+  }
+
+  marshalExchangeQuotePartToView(selectedPart) {
+    let partNumberObj = new PartDetail();
+    partNumberObj.itemMasterId = selectedPart.itemMasterId;
+    partNumberObj.stockLineId = selectedPart.stockLineId;
+    partNumberObj.conditionId = selectedPart.conditionId;
+    partNumberObj.conditionDescription = selectedPart.conditionDescription;
+    partNumberObj.currencyId = selectedPart.currencyId;
+    partNumberObj.currencyDescription = selectedPart.currencyDescription;
+    //partNumberObj.priorityId = selectedPart.priorityId;
+    partNumberObj.partNumber = selectedPart.partNumber;
+    //partNumberObj.priorityName = selectedPart.priorityName;
+    //partNumberObj.statusName = selectedPart.statusName;
+    partNumberObj.description = selectedPart.partDescription;
+    partNumberObj.stockLineNumber = selectedPart.stockLineNumber;
+    partNumberObj.exchangeQuotePartId = selectedPart.salesOrderQuotePartId;
+    partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
+    partNumberObj.createdBy = selectedPart.createdBy;
+    partNumberObj.serialNumber = selectedPart.serialNumber;
+    // partNumberObj.totalSales = selectedPart.totalSales;
+    // partNumberObj.idNumber = selectedPart.idNumber;
+    // partNumberObj.isApproved = selectedPart.isApproved;
+    partNumberObj.exchangeCurrencyId=selectedPart.exchangeCurrencyId;
+    partNumberObj.loanCurrencyId=selectedPart.loanCurrencyId;
+    partNumberObj.exchangeListPrice=formatStringToNumber(selectedPart.exchangeListPrice);
+    partNumberObj.entryDate=selectedPart.entryDate;
+    partNumberObj.exchangeOverhaulPrice=selectedPart.exchangeOverhaulPrice;
+    partNumberObj.exchangeCorePrice=selectedPart.exchangeCorePrice;
+    partNumberObj.estOfFeeBilling=selectedPart.estOfFeeBilling;
+    partNumberObj.billingStartDate=selectedPart.billingStartDate;
+    partNumberObj.exchangeOutrightPrice=selectedPart.exchangeOutrightPrice;
+    partNumberObj.daysForCoreReturn=selectedPart.daysForCoreReturn;
+    partNumberObj.billingIntervalDays=formatStringToNumber(selectedPart.billingIntervalDays);
+    partNumberObj.currencyId=selectedPart.currencyId;
+    partNumberObj.currency=selectedPart.currency;
+    partNumberObj.depositeAmount=selectedPart.depositeAmount;
+    partNumberObj.coreDueDate=selectedPart.coreDueDate;
+    return partNumberObj;
+  }
 
 }

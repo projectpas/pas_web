@@ -1,5 +1,6 @@
+import { IExchangeQuotePart } from "./IExchangeQuotePart";
 import { ExchangeQuoteScheduleBilling } from "../../components/exchange-quote/shared/components/models/ExchangeQuoteScheduleBilling";
-export interface IExchangeQuotePart {
+export class ExchangeQuotePart implements IExchangeQuotePart {
     exchangeQuotepartPartId: number;
     exchangeQuoteId: number;
     itemMasterId: number;
@@ -71,5 +72,5 @@ export interface IExchangeQuotePart {
     coreDueDate: Date;
     isRemark:boolean;
     remarkText:string;
-    exchangeQuoteScheduleBilling:ExchangeQuoteScheduleBilling[];
+    exchangeQuoteScheduleBilling:ExchangeQuoteScheduleBilling[]=[];
 }

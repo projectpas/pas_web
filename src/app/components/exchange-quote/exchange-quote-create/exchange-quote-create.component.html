@@ -337,6 +337,16 @@
                         [exchangeQuoteView]="exchangeQuoteView" (on-parts-save)="onPartsSaveEvent($event)">
                     </app-exchange-quote-part-number>
                 </p-tabPanel>
+                <!-- <p-tabPanel header="Internal Approvers">
+                  <app-exchange-quote-approve>
+                  </app-exchange-quote-approve>
+                </p-tabPanel> -->
+                <p-tabPanel header="Address">
+                  <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="exchangeQuoteId">
+                  </app-address-component>
+                  <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
+                      [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address> -->
+              </p-tabPanel>
             </p-tabView>
         </ng-container>
         </form>

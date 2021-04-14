@@ -10,6 +10,11 @@ import { AuthService } from "../../../../../services/auth.service";
 import { ItemMasterSearchQuery } from "../../../models/item-master-search-query";
 import { IExchangeQuotePart } from "../../../../../models/exchange/IExchangeQuotePart";
 import { IExchangeQuoteView } from "../../../../../models/exchange/IExchangeQuoteView";
+import {
+  AlertService,
+  DialogType,
+  MessageSeverity
+} from "../../../../../services/alert.service";
 @Component({
   selector: 'app-exchange-quote-part-number',
   templateUrl: './exchange-quote-part-number.component.html',
@@ -48,9 +53,11 @@ export class ExchangeQuotePartNumberComponent {
   pageLinks: any;
   @Input() exchangeQuoteId: any;
   summaryColumns: any[] = [];
+  IsRestrictOnePN:boolean=false;
   constructor(private exchangequoteService: ExchangequoteService,
     private authService: AuthService,
-    private modalService: NgbModal,) {
+    private modalService: NgbModal,
+    private alertService: AlertService,) {
       this.show = false;
       this.part = new PartDetail();
      }
@@ -89,6 +96,18 @@ export class ExchangeQuotePartNumberComponent {
     //   // { header: "Notes", width: "100px" },
     //   this.summaryColumns.push({ header: "Actions", width: "100px" });
     // }
+  }
+
+  refresh() {
+    this.exchangequoteService.getSelectedParts().subscribe(data => {
+      if (data) {
+        this.selectedParts = data;
+      } else {
+        this.selectedParts = [];
+      }
+      this.filterParts();
+    });
+    this.canSaveParts = true;
   }
 
   addPartNumber(summaryRow: any = '', rowIndex = null) {
@@ -156,10 +175,13 @@ export class ExchangeQuotePartNumberComponent {
           this.part.exchangeListPrice = this.selectedPart.exchangeListPrice;
           this.part.exchangeOverhaulPrice = this.selectedPart.exchangeOverhaulPrice;
           this.part.exchangeOutrightPrice = this.selectedPart.exchangeOutrightPrice;
+          this.part.exchangeCurrencyId = this.selectedPart.exchangeCurrencyId;
+          this.part.loanCurrencyId = this.selectedPart.loanCurrencyId;
           this.part.entryDate = this.exchangeQuote.openDate;
           this.part.billingStartDate = new Date();
           this.part.coreDueDate = new Date();
-          this.part.exchangeQuoteScheduleBilling[0].cogs = this.exchangeQuote.cogs;
+          //this.part.exchangeQuoteScheduleBilling.cogs = this.exchangeQuote.cogs;
+          this.part.cogs = this.exchangeQuote.cogs;
           this.part.daysForCoreReturn = this.exchangeQuote.daysForCoreReturn;
           //this.part.freight = this.salesOrderService.getTotalFreights();
           //this.part.misc = this.salesOrderService.getTotalCharges();
@@ -182,7 +204,7 @@ export class ExchangeQuotePartNumberComponent {
           this.part.conditionDescription = this.selectedPart.conditionDescription;
           //this.part.currencyId = this.defaultCurrencyId;
           //this.part.currencyDescription = this.defaultCurrencyDiscription;
-          this.part.salesQuoteNumber = this.exchangeQuote.exchangeQuoteNumber;
+          this.part.exchangeQuoteNumber = this.exchangeQuote.exchangeQuoteNumber;
           this.part.quoteVesrion = this.exchangeQuote.versionNumber;
           this.part.customerRef = this.exchangeQuote.customerReference;
           this.part.serialNumber = this.selectedPart.serialNumber;
@@ -253,8 +275,8 @@ export class ExchangeQuotePartNumberComponent {
         this.onPartsSavedEvent.emit(this.selectedParts);
       }
     }
-    //this.filterParts();
-    //this.checkUpdateOrsaveButton();
+    this.filterParts();
+    this.checkUpdateOrsaveButton();
   }
 
   onCloseMargin(event) {
@@ -294,7 +316,7 @@ export class ExchangeQuotePartNumberComponent {
         })
         this.combineParts(this.summaryParts);
       }
-      this.openPartNumber(false);
+      //this.openPartNumber(false);
       const partsList = this.selectedParts;
       partsList.push(partObj);
       this.exchangequoteService.selectedParts = partsList;
@@ -331,6 +353,10 @@ export class ExchangeQuotePartNumberComponent {
       });
       this.summaryParts = uniqueParts;
       console.log("filterParts_summaryParts",this.summaryParts);
+      if(this.summaryParts.length > 0)
+      {
+        this.IsRestrictOnePN = true;
+      }
     }
 
     //console.log("summaryParts" , this.summaryParts);
@@ -398,9 +424,41 @@ export class ExchangeQuotePartNumberComponent {
   getSum(num1, num2) {
     return Number(num1) + Number(num2);
   }
-
+  enableUpdateButton: boolean = false;
   approve() {
     console.log("selectedParts",this.selectedParts);
+    this.enableUpdateButton = true;
+    let partList: any = [];
+    this.exchangeQuoteView.parts = [];
+    let invalidParts = false;
+    let invalidDate = false;
+    var errmessage = '';
+    for (let i = 0; i < this.selectedParts.length; i++) {
+      let selectedPart = this.selectedParts[i];
+      let partNameAdded = false;
+      //if (!invalidParts && !invalidDate) {
+        let partNumberObj = this.exchangequoteService.marshalExchangeQuotePartToSave(selectedPart, this.userName);
+        this.exchangeQuoteView.parts.push(partNumberObj);
+        console.log("this.exchangeQuoteView.parts" , this.exchangeQuoteView.parts);
+      //}
+    }
+    this.isSpinnerVisible = true;
+    this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
+      this.canSaveParts = true;
+      this.alertService.stopLoadingMessage();
+      this.isSpinnerVisible = false;
+      this.inputValidCheckHeader = true;
+      this.alertService.showMessage(
+        "Success",
+        `PN  updated successfully.`,
+        MessageSeverity.success
+      );
+      this.onPartsSavedEvent.emit(this.selectedParts);
+    }, error => {
+      this.isSpinnerVisible = false;
+      const errorLog = error;
+      //this.onDataLoadFailed(errorLog)
+    });
   }
 
   checkUpdateOrsaveButton() {

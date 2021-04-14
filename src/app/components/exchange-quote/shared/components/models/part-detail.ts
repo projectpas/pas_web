@@ -62,7 +62,7 @@ export class PartDetail {
     exchangeQuoteId:number;
     qtyReserved: number;
     qtyAvailable: number;
-    salesQuoteNumber: string;
+    exchangeQuoteNumber: string;
     customerRef: string;
     priority: string;
     quoteDate?: Date;
@@ -100,6 +100,8 @@ export class PartDetail {
     loanOutrightPrice:number;
     loanFees:number;
     exchangeOverhaulCost:number;
+    isRemark:boolean
+    remarkText:string;
 
     estOfFeeBilling:number;
     entryDate:Date;
@@ -110,6 +112,7 @@ export class PartDetail {
     depositeAmount:number;
     coreDueDate:Date;
     exchangeQuoteScheduleBilling:ExchangeQuoteScheduleBilling[]=[];
+    cogs:number;
     constructor() {
       this.estOfFeeBilling = 0;
       this.billingIntervalDays = 0;
