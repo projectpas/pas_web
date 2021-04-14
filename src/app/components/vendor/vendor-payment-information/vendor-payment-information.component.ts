@@ -212,20 +212,20 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 		}
 
 		this.cols = [
-			{ field: 'tagName', header: 'Tag',width: '150px' },
-			{ field: 'attention', header: 'Attention',width: '150px' },
-			{ field: 'siteName', header: 'Site Name',  width: '150px'},
-			{ field: 'address1', header: 'Address1' ,  width: '150px'},
-			{ field: 'address2', header: 'Address2' ,  width: '150px'},
-			{ field: 'city', header: 'City' ,  width: '120px'},
-			{ field: 'stateOrProvince', header: 'State/Prov' ,  width: '100px'},
-			{ field: 'postalCode', header: 'Postal Code' ,  width: '100px'},
-			{ field: 'countryName', header: 'Country' ,  width: '120px'},
-			{ field: 'createdDate', header: 'Created Date' ,  width: '150px'},
-			{ field: 'createdBy', header: 'Created By' ,  width: '100px'},
-			{ field: 'updatedDate', header: 'Updated Date' ,  width: '150px'},
-			{ field: 'updatedBy', header: 'Updated By' ,  width: '100px'},
-			{ field: 'isPrimayPayment', header: 'IsPrimary' ,  width: '40px'}
+			{ field: 'tagName', header: 'Tag' },
+			{ field: 'attention', header: 'Attention' },
+			{ field: 'siteName', header: 'Site Name'},
+			{ field: 'address1', header: 'Address1' },
+			{ field: 'address2', header: 'Address2'},
+			{ field: 'city', header: 'City'},
+			{ field: 'stateOrProvince', header: 'State/Prov' },
+			{ field: 'postalCode', header: 'Postal Code'},
+			{ field: 'countryName', header: 'Country' },
+			{ field: 'createdDate', header: 'Created Date' },
+			{ field: 'createdBy', header: 'Created By'},
+			{ field: 'updatedDate', header: 'Updated Date' },
+			{ field: 'updatedBy', header: 'Updated By' ,  },
+			{ field: 'isPrimayPayment', header: 'IsPrimary' ,}
 		];
 		this.selectedColumns = this.cols;
 
