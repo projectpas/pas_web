@@ -129,10 +129,10 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			contextMenu.hide();
 		}
 	}
+
 	getDeleteListByStatus(value) {	
 		this.currentDeletedstatus = value;
 	}
-
 
 	getAuditHistoryById(rowData) {
 		this.isSpinnerVisible = true;
@@ -141,19 +141,17 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;            
         });
 	}
 
-	errorMessageHandler(log) {
-		this.alertService.showMessage(
-			'Error',
-			log.error,
-			MessageSeverity.error
-		);
-	}
+	// errorMessageHandler(log) {
+	// 	this.alertService.showMessage(
+	// 		'Error',
+	// 		log.error,
+	// 		MessageSeverity.error
+	// 	);
+	// }
 	
 	getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
@@ -173,12 +171,9 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 
 		this.masterComapnyService.getMasterCompanies().subscribe(
 			results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator = false}
 		);
-
 	}
-
-
 	
 	expandAll(toggle: boolean) {
 		this.gridData.map(node => {
@@ -211,14 +206,12 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-
 	private loadManagementdata() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
-
-		this.msService.getManagemententity().subscribe(
+		this.msService.getManagemententity(this.currentUserMasterCompanyId).subscribe(
 			results => this.onManagemtntdataLoad(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator = false}
 		);
 
 		// this.cols = [
@@ -237,16 +230,15 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 	}
 
 	getAllLegalEntityList(): void {	
-        this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(res => {
+        //this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(res => {
+		this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name','',true, 0,'0',this.currentUserMasterCompanyId).subscribe(res => {
             this.dropDownLegalEntityList = res;            
         })
-	}
-	
+	}		
 
 	msAddChange(){
 		this.msAddbutton = true;
-	}
-	
+	}	
 
 	private loadData() {
 		this.alertService.startLoadingMessage();
@@ -254,7 +246,7 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 
 		this.msService.getEntityList().subscribe(
 			results => this.onDataLoadSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator = false}
 		);
 
 		this.cols = [
@@ -267,10 +259,7 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			{ field: 'createdBy', header: 'Created By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
 			{ field: 'updatedBy', header: 'Updated By' },
-			
-			
 		];
-
 		this.selectedColumns = this.cols;
 	}
 
@@ -283,6 +272,7 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		//debugger;
 		
 	}
+
 	nodeSelect(event) {
 		this.messageService.add({ severity: 'info', summary: 'Node Selected', detail: event.node.data.name });
 	}
@@ -290,8 +280,8 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 	nodeUnselect(event) {
 		this.messageService.add({ severity: 'info', summary: 'Node Unselected', detail: event.node.data.name });
 	}
-	private onManagemtntdataLoad(getAtaMainList: any[]) {
-		// alert('success');
+
+	private onManagemtntdataLoad(getAtaMainList: any[]) {		
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
 		this.dataSource.data = getAtaMainList;
@@ -300,14 +290,11 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			if (this.allManagemtninfo[i].tagName != null) {
 				this.tagNameCollection.push(this.allManagemtninfo[i]);
 			}
-		}
-		//debugger;
+		}		
 		if (this.allManagemtninfo)
-		{
-			
+		{			
 			this.gridData = this.makeNestedObj(this.allManagemtninfo, null);
 		}
-
 		this.cols1 = [
 			{ field: 'code', header: 'Code' },
 			{ field: 'name', header: 'Name' },
@@ -317,35 +304,24 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			{ field: 'createdBy', header: 'Created By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
 			{ field: 'updatedBy', header: 'Updated By' },
-			
-			
-			//{ field: 'legalEntityId', header: 'ID' },
-			
-
 		];
-		
-	
 	}
-	openDelete(content, row) {
 
+	openDelete(content, row) {
 		this.isEditMode = false;
 		this.isDeleteMode = true;
 		this.isRestoreMode = false;
 		this.sourceAction = row;
-		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-		
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });		
 	}
 
 	openRestore(content, row) {
-
 		this.isEditMode = false;
 		this.isDeleteMode = false;
 		this.isRestoreMode = true;
 		this.sourceAction = row;
-		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-		
-	}
-	
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });		
+	}	
 	
 	deleteItemAndCloseModel() {
 		this.isSaving = true;
@@ -365,12 +341,7 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			this.loadManagementdata();
 		})
 		this.modal.close();
-	}
-
-	
-	
-	
-	
+	}	
 
     showViewData(viewContent, row) {
 		this.managementViewData.legalEntityId=row.legalEntityId;
@@ -394,9 +365,7 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 			}
 		}
 		return out
-	}
-	
-	
+	}	
 
 	GeneralInformation() {
 		this.GeneralInformationValue = true;
@@ -404,7 +373,6 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = true;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
@@ -418,62 +386,62 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = true;
 		this.domesticWireStyle = false;
 		this.internationalStyle = false;
 		this.ACHStyle = false;
 	}
+
 	DomesticWire() {
 		this.GeneralInformationValue = false;
 		this.LockboxValue = false;
 		this.domesticWireValue = true;
 		this.internationalValue = false;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = true;
 		this.internationalStyle = false;
 		this.ACHStyle = false;
 	}
+
 	InternationalWire() {
 		this.GeneralInformationValue = false;
 		this.LockboxValue = false;
 		this.domesticWireValue = false;
 		this.internationalValue = true;
 		this.ACHValue = false;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
 		this.internationalStyle = true;
 		this.ACHStyle = false;
 	}
+
 	ACH() {
 		this.GeneralInformationValue = false;
 		this.LockboxValue = false;
 		this.domesticWireValue = false;
 		this.internationalValue = false;
 		this.ACHValue = true;
-
 		this.GeneralInformationStyle = false;
 		this.LockboxStyle = false;
 		this.domesticWireStyle = false;
 		this.internationalStyle = false;
 		this.ACHStyle = true;
 	}
-	showDomesticWire() {
 
+	showDomesticWire() {
 		this.DomesticWire();
 	}
 
-	openContentEdit(content, row) {
-		
+	openContentEdit(content, row, rowNode) {		
 		this.headerofMS = row.code;
 		this.msAddbutton = false;	
 		var findIndex = -1;
+		this.sourceLegalEntity = {};
+		this.sourceLegalEntity.legalEntityId = 0;
 		this.dropDownLegalEntityList.forEach((legEntity, index) => {
 			if (legEntity.legalEntityId == row.legalEntityId) {
 				findIndex = index;
@@ -489,10 +457,15 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		this.sourceLegalEntity = row;
 		if (row.isLastChild == true) {
 			this.sourceLegalEntity.isAssignable = true;
+		}				
+		this.isParent = rowNode.node.parent;
+		if(this.isParent) {
+			this.disableonchild = true;		
+		}
+		else {
+			this.disableonchild = false;		
 		}		
-		
-		this.modal1 = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-		
+		this.modal1 = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });		
 	}
 
 	closeHistoryModal() {
@@ -507,49 +480,44 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		this.isRestoreMode = false;
 		this.sourceLegalEntity.legalEntityId = 0;
 		this.msAddbutton = false;
-
+		this.disableonchild = false;
 		this.isSaving = true;
 		this.loadMasterCompanies();
 		//this.sourceLegalEntity = new ATAMain();
 		this.sourceLegalEntity.isActive = true;
 		this.entityName = "";
-		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-	
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });	
 	}
 
-	private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
-		// alert('success');
+	private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {		
 		this.toggle_ms_header = false;
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
 		this.allComapnies = allComapnies;
-
 	}
-	private CurrencyData() {
-		// 
+
+	// not in use
+	private CurrencyData() {		
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
-
 		this.currency.getCurrencyList().subscribe(
 			results => this.oncurrencySuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator = false;}
 		);
-
 	}
-	private oncurrencySuccessful(getCreditTermsList: Currency[]) {
-		// alert('success');
+
+	private oncurrencySuccessful(getCreditTermsList: Currency[]) {		
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
 		//this.dataSource.data = getCreditTermsList;
-
 		this.allCurrencyInfo = getCreditTermsList;
 	}
-	private onDataLoadFailed(error: any) {
-		// alert(error);
-		this.alertService.stopLoadingMessage();
-		this.loadingIndicator = false;
 
-	}
+	// private onDataLoadFailed(error: any) {		
+	// 	this.alertService.stopLoadingMessage();
+	// 	this.loadingIndicator = false;
+	// }
+
 	get userName(): string {
 		return this.authService.currentUser ? this.authService.currentUser.userName : "";
 	}
@@ -575,7 +543,6 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 	}
 
 	editItemAndCloseModel() {
-
 			if (!this.sourceLegalEntity.code) {		
 				this.alertService.showMessage(
 					'Error',
@@ -618,19 +585,16 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 				this.sourceLegalEntity.updatedBy = this.userName;
 				this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
 				this.msService.updateManagementEntity(this.sourceLegalEntity).subscribe(
-					data => {
-						this.saveCompleted(this.sourceLegalEntity);
-						this.loadManagementdata();
-					})
-
+				data => {
+					this.saveCompleted(this.sourceLegalEntity);
+					this.loadManagementdata();
+				})
 			}
 		}
 		if (this.display == false) {
-
 			this.dismissModel();
 		}
 	}
-
 	
 	private saveSuccessHelper(role?: any) {
 		this.isSaving = false;
@@ -638,7 +602,6 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 		this.getAllLegalEntityList();
 		//this.loadData();
 	}
-
 
 	private saveCompleted(user?: any) {
 		this.isSaving = false;
@@ -669,41 +632,48 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
 
 	dismissModel() {
 		if (this.modal) { this.modal.close(); }
-		if (this.modal1) { this.modal1.close(); }
-		
+		if (this.modal1) { this.modal1.close(); }		
 	}
-	onNodeExpand(event) {
 
+	onNodeExpand(event) {
 		if (event.node.parent == null) {
 			this.treeindex == 1;
 			this.treeindex++;
 			if (this.treeindex == 4) {
 			this.showicon = true;
 				alert(this.showicon);
-			}
-			
+			}			
 		}
 	}
-	openEdit(content, rowNode) {		
+
+	disableonchild : boolean = false;
+	isParent : any []
+	openEdit(content, rowNode) {
+		this.sourceLegalEntity.legalEntityId = 0;		
 		this.headerofMS = rowNode.node.data.code;
 		this.selectedNode1 = rowNode.node;
 		//this.isEditMode = true;
 		this.sourceLegalEntity = {};
 		this.isSaving = true;
-		this.msAddbutton = false;
-		
-
+		this.msAddbutton = false;		
 		this.loadMasterCompanies();
 		//this.sourceAction = row;
-		this.sourceLegalEntity.legalEntityId=rowNode.node.data.legalEntityId;
+		this.sourceLegalEntity.legalEntityId = rowNode.node.data.legalEntityId;
 		this.sourceLegalEntity.parentId = rowNode.node.data.managementStructureId;
-		
+		this.isParent = rowNode.node.parent;
+		if(this.isParent) {
+			this.disableonchild = true;		
+		}
+		else {
+			this.disableonchild = false;	
+		}
 		//this.entityName = this.sourceLegalEntity.entityName;
 		this.loadMasterCompanies();
-		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-		
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });		
 	}
+
 	openHist(content, row) {
 		this.sourceLegalEntity = row;
 	}
+
 }
