@@ -4,8 +4,8 @@
             <div class="col-md-12 invoice-div">
                 <label></label>
                 <div class="form-group invoice-button-div">
-                    <button type="submit" class="btn  submit-btn btn btn-primary"
-                        [disabled]="disableCreateInvoiceBtn" (click)="PerformBilling()">Invoice</button>
+                    <button type="submit" class="btn  submit-btn btn btn-primary" [disabled]="disableCreateInvoiceBtn"
+                        (click)="PerformBilling()">Invoice</button>
                 </div>
             </div>
         </div>
@@ -26,8 +26,8 @@
                         <ng-container *ngFor="let summaryPart of billingList; let rowIndex = index;">
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                                    <td *ngFor="let summaryColumn of headers"
-                                        class="summary-column" pReorderableRowHandle>
+                                    <td *ngFor="let summaryColumn of headers" class="summary-column"
+                                        pReorderableRowHandle>
                                         <span *ngIf="summaryColumn.field != 'itemNo'">
                                             {{summaryPart[summaryColumn.field]}}
                                         </span>
@@ -56,8 +56,7 @@
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled > 0">
-                                        <label
-                                            style="color: #0F9D58">{{ bill.invoiceStatus }}</label>
+                                        <label style="color: #0F9D58">{{ bill.invoiceStatus }}</label>
                                     </td>
                                     <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
@@ -242,10 +241,22 @@
                                             <label for="credit" style="width: 100%;">Currency <span
                                                     class="clr-red">*</span>
                                             </label>
-                                            <p-dropdown [options]="currencyList" name="currency" #currency="ngModel"
-                                                required placeholder="Select" class="p-dropdown-custom-md-Header"
+                                            <select name="currencyId" [(ngModel)]="billingorInvoiceForm.currencyId"
+                                                required id="currencyId" #currencyId="ngModel" [disabled]="isViewMode">
+                                                <option value="">--Select--</option>
+                                                <option *ngFor="let item of currencyList" [ngValue]="item.value">
+                                                    {{ item.label }}</option>
+                                            </select>
+                                            <div *ngIf="currencyId.invalid && (currencyId.dirty || currencyId.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="currencyId.errors.required">
+                                                    <small> Currency is required </small>
+                                                </div>
+                                            </div>
+                                            <!-- <p-dropdown [options]="currencyList" name="currency" #currency="ngModel"
+                                                required="true" placeholder="Select" class="p-dropdown-custom-md-Header"
                                                 [(ngModel)]="billingorInvoiceForm.currencyId" [disabled]="isViewMode">
-                                            </p-dropdown>
+                                            </p-dropdown> -->
                                         </div>
                                     </div>
                                 </div>
