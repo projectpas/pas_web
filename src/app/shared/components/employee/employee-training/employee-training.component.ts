@@ -137,6 +137,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     arrayTrainingtypelist: any = [];
     arrayFrequencyTrainingInfolist: any = [];
     arrayaircraftmodelarraylist: any = [];
+    moduleName='Employee'
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -1144,6 +1145,10 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
             }
         }
     }
+
+    changeOfTab(event) {
+
+	}
 
     enableSave() {
         if (this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0) {

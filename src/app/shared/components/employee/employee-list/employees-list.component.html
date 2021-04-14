@@ -1069,7 +1069,13 @@
                                 <h4 class="panel-title">
                                   Certification Received
                                 </h4>
-                                <div class="clear"></div>
+                                <div>
+                                  <div class="clear"></div>
+                                  <hr /> 
+                                  <app-common-documents [moduleName]="moduleName" [referenceId]="viewEmpID" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                               </div>
+
+                                <!-- <div class="clear"></div>
                                             <hr /> 
                                            <div class="checkbox-cstm setDelts" style="margin-bottom: 10px;" >
                                                 <label style="width: auto !important;margin-top: 3px;">
@@ -1149,8 +1155,7 @@
                                             col.field
                                           )
                                         " />
-                                                    <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                                    <input type="date"
+                                                                                                       <input type="date"
                                                            class="hidePlaceHolder table-header-input-width"
                                                            *ngIf="col.field == 'updatedDate'"
                                                            name="updatedDate"
@@ -1161,8 +1166,7 @@
                                           )
                                         " />
                                                 </th>
-                                                <!-- <th style="width:140px;position:sticky"></th> -->
-                                                <!-- <th></th> -->
+                                               
                                             </tr>
                                         </ng-template>
                                         <ng-template pTemplate="body"
@@ -1175,8 +1179,7 @@
                                                 "
                                                 >
                                                 <td *ngFor="let col of columns" class="table-column-width">
-                                                    <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
-                                                    <!-- <ng-container > -->
+                                                    
                                                     <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
                                                         <span>
                                                             {{
@@ -1190,9 +1193,7 @@
                                               : rowData[col.field]
                                                             }}
                                                         </span>
-                                                        <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
-                        rowData[col.field]
-                        </span> -->
+                                                       
                                                     </div>
                                                     <div *ngIf="col.field == 'docMemo'">
 
@@ -1219,7 +1220,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <!-- </ng-container> -->
+                                                   
                                                 </td>
                                             </tr>
                                         </ng-template>
@@ -1252,10 +1253,10 @@
                                                    type="text" />
                                         </ng-template>
 
-                                    </p-table>
+                                    </p-table> -->
 
 
-</div>
+                           </div>
                           </div>
                         </div>
                       </div>
