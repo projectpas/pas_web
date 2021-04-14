@@ -21,7 +21,7 @@
                             <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                  || summaryColumn.field == 'customerRef'
                                  || summaryColumn.field == 'quantityRequested'">
-                                {{ summaryColumn.header }}<span class="clr-red">*</span>
+                                {{ summaryColumn.header }}
                             </span>
                             <span *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
                             && summaryColumn.field != 'customerRef'
@@ -29,7 +29,7 @@
                                 {{ summaryColumn.header }}
                             </span>
                         </th>
-                        <th colspan="27"></th>
+                        <th colspan="19"></th>
                         <th *ngIf="isViewMode == false"
                             style="position: sticky !important; min-width: 145px !important;">Actions
                         </th>
@@ -39,7 +39,7 @@
                             <tbody>
                                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                                     <td *ngFor="let summaryColumn of summaryColumns; let i = index"
-                                       class="summary-column" pReorderableRowHandle>
+                                        class="summary-column" pReorderableRowHandle>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
                                         </span>
@@ -50,6 +50,8 @@
                                                     && summaryColumn.field != 'quantityRequested'
                                                     && summaryColumn.field != 'quantityToBeQuoted'
                                                     && summaryColumn.field != 'quantityAlreadyQuoted'
+                                                    && summaryColumn.field != 'qtyAvailable'
+                                                    && summaryColumn.field != 'qtyOnHand'
                                                     && summaryColumn.field != 'fixRate'
                                                     && summaryColumn.field != 'grossSalePrice'
                                                     && summaryColumn.field != 'salesDiscountExtended'
@@ -65,7 +67,9 @@
                                         </span>
                                         <span class="float-right" *ngIf="summaryColumn.field == 'quantityRequested'
                                                     || summaryColumn.field == 'quantityToBeQuoted'
-                                                    || summaryColumn.field == 'quantityAlreadyQuoted'">
+                                                    || summaryColumn.field == 'quantityAlreadyQuoted'
+                                                    || summaryColumn.field == 'qtyAvailable'
+                                                    || summaryColumn.field == 'qtyOnHand'">
                                             {{summaryPart[summaryColumn.field] | globalNmberFormat}}
                                         </span>
                                         <span class="float-right" *ngIf=" summaryColumn.field == 'grossSalePrice'
@@ -81,7 +85,7 @@
                                             {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                         </span>
                                     </td>
-                                    <td colspan="27" style="background-color: #EAF2C5 !important;"></td>
+                                    <td colspan="19" style="background-color: #EAF2C5 !important;"></td>
                                     <td *ngIf="isViewMode == false" style="position:sticky; width:80px">
                                         <span>
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
@@ -121,16 +125,16 @@
                                     <th colspan="2">Stk Line Num</th>
                                     <th colspan="2">Ser Num</th>
                                     <th>Stk Type</th>
-                                    <th>Cond<span class="clr-red">*</span></th>
+                                    <th>Cond</th>
                                     <th>Priority<span class="clr-red">*</span></th>
                                     <th>Cust Req Date<span class="clr-red">*</span></th>
                                     <th>Cust PRMSD Date<span class="clr-red">*</span></th>
                                     <th>Est Ship Date<span class="clr-red">*</span></th>
-                                    <th>Qty Ord<span class="clr-red">*</span></th>
-                                    <th>Qty Resvd<span class="clr-red">*</span></th>
+                                    <th>Qty Ord</th>
+                                    <th>Qty Resvd</th>
                                     <th style="min-width: 60px;">Qty Avail </th>
                                     <th style="min-width: 80px;">Qty On Hand</th>
-                                    <th>Qty Back Ord</th>
+                                    <!-- <th>Qty Back Ord</th> -->
                                     <th>Qty to Ship</th>
                                     <th>Alt/Equiv</th>
                                     <th>Status </th>
@@ -140,8 +144,8 @@
                                     <th style="min-width: 75px;">Qty Invoiced</th>
                                     <th style="min-width: 100px;">Invoice Num</th>
                                     <th style="min-width: 100px;">Invoice Date </th>
-                                    <th style="min-width: 84px;">Qty Prev Shpd</th>
-                                    <th style="min-width: 100px;">Last Ship Date </th>
+                                    <!-- <th style="min-width: 84px;">Qty Prev Shpd</th>
+                                    <th style="min-width: 100px;">Last Ship Date </th> -->
                                     <th style="min-width: 90px;">Ship Ref</th>
                                     <th style="min-width: 60px;">Unit Cost </th>
                                     <th style="min-width: 70px;">Markup % </th>
@@ -260,11 +264,11 @@
                                         {{ part.qtyAvailable | globalNmberFormat }}
                                     </td>
                                     <td class="text-right">
-                                        {{ part.qtyOnHand | globalNmberFormat }}
+                                        {{ part.quantityOnHand | globalNmberFormat }}
                                     </td>
-                                    <td class="text-right">
+                                    <!-- <td class="text-right">
                                         {{  part.qtyBackOrder | globalNmberFormat }}
-                                    </td>
+                                    </td> -->
                                     <td class="text-right">
                                         {{ part.qtyToShip | globalNmberFormat }}
                                     </td>
@@ -292,12 +296,12 @@
                                     <td>
                                         {{ part.invoiceDate | date : "MM/dd/yyyy"}}
                                     </td>
-                                    <td class="text-right">
+                                    <!-- <td class="text-right">
                                         {{ part.qtyPreviouslyShipped | globalNmberFormat }}
                                     </td>
                                     <td>
                                         {{ part.lastShippedDate | date : "MM/dd/yyyy"}}
-                                    </td>
+                                    </td> -->
                                     <td>
                                         {{ part.shipReference }}
                                     </td>
@@ -370,8 +374,7 @@
                                     <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
                                         <div [innerHTML]="part.notes" class="text_editor_box"></div>
                                     </td>
-                                    <td class="zui-sticky-col width-107"
-                                        *ngIf="isViewMode == false">
+                                    <td class="zui-sticky-col width-107" *ngIf="isViewMode == false">
                                         <span *ngIf="!isEditDisabled(salesQuote, part)">
                                             <a [class.disabled]="isEditDisabled(salesQuote, part)"
                                                 [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
@@ -456,16 +459,14 @@
                         </tr>
                     </tbody>
                 </table> -->
-                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                required>
-            </p-editor>
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required>
+                </p-editor>
                 <div class="editor-buttons">
                     <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
                         (click)="onSaveTextAreaInfo(textAreaInfo)">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger editor-buttons-margin"
-                        data-dismiss="modal">
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">
                         Close
                     </button>
                 </div>

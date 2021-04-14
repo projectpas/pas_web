@@ -334,7 +334,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 padding-10">
-                                        <div class="card">
+                                        <!-- <div class="card">
                                             <div class="card-header margin-summary-div">
                                                 <label class="text-center">Margin Summary</label>
                                             </div>
@@ -358,9 +358,9 @@
                                                         class="float-right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                             </div>
                                         </div>
-                                        <div class="padding-10"></div>
+                                        <div class="padding-10"></div> -->
                                         <div>
-                                            <div class="card m-t-20">
+                                            <div class="card">
                                                 <div class="card-header mgmt-card-header">
                                                     <h5 class="mgmt-label">Management Structure
                                                         <span class="clr-red">*</span></h5>
@@ -416,6 +416,25 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class=" main_ar" style="padding-top:10px">
+                                            <div class="form-group memo-popup-cstm">
+                                                <label>
+                                                    Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                        data-target="#add-description" matTooltipPosition="above"
+                                                        matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                                </label>
+                                                <span>
+                                                    <div class="form-group memo-popup-cstm mat_emo">
+                                                        <div [innerHTML]="salesQuote.memo"
+                                                            [matTooltip]="parsedText(salesQuote.memo)"
+                                                            class="form-control"
+                                                            style="height: 100px !important;width:100%"
+                                                            class="text_editor_box">
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -449,24 +468,21 @@
                                 </div>
                             </div>
                             <div class="col-md-4 main_ar">
-                                <div class="form-group memo-popup-cstm">
-                                    <label>
-                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                            matTooltipPosition="above" matTooltip="Memo"
-                                            (click)="onAddDescription('memo')"></i>
-                                    </label>
-                                    <span>
-                                        <div class="form-group memo-popup-cstm mat_emo">
-                                            <div [innerHTML]="salesQuote.memo"
-                                                [matTooltip]="parsedText(salesQuote.memo)" class="form-control"
-                                                style="height: 100px !important;width:90%" class="text_editor_box">
-                                            </div>
-                                        </div>
-                                    </span>
+                                <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
+                                    <button type="submit" *ngIf="!isEdit && !isCreateModeHeader"
+                                        (click)="onSubmit(true)" [disabled]="!newSalesQuoteForm.form.valid"
+                                        class="btn pull-right submit-btn btn btn-primary">
+                                        Save
+                                    </button>
+                                    <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
+                                        (click)="openConfirmationModal(true)" [disabled]="enableUpdateButton"
+                                        class="btn pull-right submit-btn btn btn-primary">
+                                        Update
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                             <button type="submit" *ngIf="!isEdit && !isCreateModeHeader" (click)="onSubmit(true)"
                                 [disabled]="!newSalesQuoteForm.form.valid"
                                 class="btn pull-right submit-btn btn btn-primary">
@@ -477,7 +493,7 @@
                                 class="btn pull-right submit-btn btn btn-primary">
                                 Update
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
                         <div class="x_panel">

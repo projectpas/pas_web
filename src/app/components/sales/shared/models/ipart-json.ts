@@ -13,7 +13,7 @@ export interface IPartJson {
     stockLineNumber: string;
     uomDescription: string;
     qtyAvailable: number;
-    qtyOnHand: number;
+    quantityOnHand: number;
     qtyToOrder: number;
     qtyOnOrder: number;
     itemClassification: any;

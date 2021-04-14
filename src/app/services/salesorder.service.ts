@@ -504,6 +504,7 @@ export class SalesOrderService {
       partNumberObj.quoteDate = selectedPart.quoteDate;
     }
     partNumberObj.qtyReserved = selectedPart.qtyReserved;
+    partNumberObj.quantityOnHand = selectedPart.quantityOnHand
     partNumberObj.qtyAvailable = selectedPart.qtyAvailable;
     partNumberObj.idNumber = selectedPart.idNumber;
     partNumberObj.isApproved = selectedPart.isApproved;
