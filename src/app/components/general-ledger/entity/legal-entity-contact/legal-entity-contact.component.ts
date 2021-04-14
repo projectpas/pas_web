@@ -315,7 +315,6 @@ export class EntityContactComponent implements OnInit {
 	}
 
 	async saveContactInformation() {
-		debugger
 		// create a new contact in the contact table
 		if (this.contactInformation.firstName && typeof this.contactInformation.firstName != 'string') {
 			this.contactInformation.firstName = editValueAssignByCondition('label', this.contactInformation.firstName);

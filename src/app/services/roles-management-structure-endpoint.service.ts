@@ -54,7 +54,6 @@ export class RolesManagementStructureEndpoint extends EndpointFactory {
 	//new ManagementSie table entereing
 
 	getnewRolesManagementStructureData<T>(userObject: any): Observable<T> {
-		debugger
 		return this.http.post<T>(this._actionsUrlManagementPost, JSON.stringify(userObject), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleError(error, () => this.getnewRolesManagementStructureData(userObject));

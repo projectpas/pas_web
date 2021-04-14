@@ -114,7 +114,6 @@ export class ExchangeMerginComponent implements OnInit {
   isScheduleBilling:boolean=false;
   errorMessages: any[] = [];
   addSchesuleBilling(event){
-    debugger;
     event.preventDefault();
     console.log("event", event.target.value);
     let count = event.target.value;
