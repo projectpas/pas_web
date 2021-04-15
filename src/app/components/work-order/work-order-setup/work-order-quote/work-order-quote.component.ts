@@ -32,6 +32,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteListViewData: any = {};
     @Input() workorderid: number = 0;
     @Input() isView: boolean = false;
+    @Input() hidehistoricalBtns: boolean = false;
+    
     @Input() enableEditBtn: boolean = false;
     @Input() ispop: boolean = false;
     @Input() isQuoteListView: boolean = false;
@@ -1893,6 +1895,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     saveMaterialListForWO(data) {
         this.disableMat=false;
+        console.log("dattaaa",data)
+        debugger;
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -2041,7 +2045,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     deleteMaterialList(mainIndex, subIndex) {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
-        this.disableMat=true;
+        this.disableMat=false;
     }
 
     updateWorkOrderChargesList(data) {

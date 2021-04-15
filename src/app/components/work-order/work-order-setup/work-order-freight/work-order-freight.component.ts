@@ -424,7 +424,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
   }
     delete() {
         if (this.isQuote) {
-            this.currentRow.isDeleted = true;
+// if(this.currentRow.workOrderFreightId !=null){
+    this.currentRow.isDeleted = true;
+// }
+this.refreshData.emit();
             $('#addNewFreight').modal('hide');
             this.isEdit = false;
             this.disableFrt=false;
@@ -437,7 +440,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     '',
-                    'Deleted WorkOrder Freight Successfully',
+                    'Deleted WorkOrder Freight Successfully', 
                     MessageSeverity.success
                 );
             })

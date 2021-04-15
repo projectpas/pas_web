@@ -492,8 +492,8 @@
                                     </label>
                                 </td>
                                 <td class="flex_d table-actions-column1 mpn-table-buttons">
-                                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
-                    <button type="button" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
+                                    <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('use historical wos')">Display Historical WOs</button>
+                    <button type="button" [disabled]="hidehistoricalBtns" data-target="#showHistoricalWorkOrder" data-toggle="modal" class="btn btn-primary dis_bt" (click)="getDisplayData('historical WO quotes')">Display Historical WO Quotes</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -899,12 +899,20 @@
                     <ng-container *ngFor="let mData of materialListQuotation; let mainIndex=index;">
                         <ng-container *ngFor="let matQuotation of mData; let subIndex=index">
                             <tr class="mpn-row" *ngIf="!matQuotation['isDeleted']">
-                                <td>
+                                <td *ngIf="originlaMlist && originlaMlist.length !=0">
+                                  
                                     <select *ngIf="matQuotation && matQuotation.workOrderQuoteMaterialId==0" class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.taskId" [disabled]="isView || isViewForApprovedPart" disabled>
                                         <option value="">Select</option>
                                         <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
                                     </select> 
                                     <span *ngIf="matQuotation && matQuotation.workOrderQuoteMaterialId>0">{{matQuotation.taskName}}</span>
+                                </td>
+                                <td *ngIf="originlaMlist && originlaMlist.length ==0">
+                               <select *ngIf="matQuotation && matQuotation.workOrderMaterialsId==0" class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.taskId" [disabled]="isView || isViewForApprovedPart" disabled>
+                                        <option value="">Select</option>
+                                        <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
+                                    </select> 
+                                    <span *ngIf="matQuotation && matQuotation.workOrderMaterialsId>0">{{matQuotation.taskName}}</span>
                                 </td>
                                 <td><div style="min-width: 100px;">{{matQuotation.partNumber.partName?matQuotation.partNumber.partName :matQuotation.partNumber }}</div></td>
                                 <td>{{matQuotation.partDescription}}</td>
@@ -1717,11 +1725,11 @@
                                 <td>{{rowData.woType}}</td>
                                 <td>{{rowData.openDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.promisedDate  | date: 'MM/dd/yyyy'}}</td>
-                                <td>{{rowData.estCompletionDate  | date: 'MM/dd/yyyy'}}</td>
-                                <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
+                               <td >{{rowData.estimatedCompletionDate  | date: 'MM/dd/yyyy'}}</td>
+                                <td >{{rowData.estimatedShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>Closed</td>
                                 <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
-                                <td>{{rowData.cretedBy}}</td>
+                                <td >{{rowData.createdBy}}</td> 
                                 <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.updatedBy}}</td>
                                 <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="selectedHistoricalWorkOrder = rowData.workOrderId; selectedHistoricalCustomerId = rowData.customerId" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
@@ -1787,7 +1795,7 @@
                                 <td>{{rowData.estShipDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.quoteStatus}}</td>
                                 <td>{{rowData.createdDate  | date: 'MM/dd/yyyy'}}</td>
-                                <td>{{rowData.cretedBy}}</td>
+                                <td>{{rowData.createdBy}}</td>
                                 <td>{{rowData.updatedDate  | date: 'MM/dd/yyyy'}}</td>
                                 <td>{{rowData.updatedBy}}</td>
                                 <td><span data-toggle="modal" data-target="#historicalWorkOrderView"><a class="btn nobg btn-view-cstm" (click)="triggerWoQuoteView(rowData);" matTooltip="View"><i class="fa fa-eye"></i></a> </span></td>
@@ -1984,7 +1992,7 @@
                 <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
                     <!-- <grd-quote-view [workorderid]="selectedHistoricalWorkOrder" isView="true"></grd-quote-view> -->
 
-                   <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
+                   <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                 </div>
                 <div >
                     <button type="button" class="btn btn-danger foot_bt"  (click)="hideModal('historicalWorkOrderView')"
