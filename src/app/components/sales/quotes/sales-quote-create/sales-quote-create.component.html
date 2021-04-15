@@ -69,7 +69,7 @@
                         <div class="form-row">
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6 padding-10">
+                                    <div class="col-md-6 padding-10" style="padding-bottom: 0px !important">
                                         <div class="form-group">
                                             <label>Quote Type <span class="clr-red">*</span></label>
                                             <select name="quoteTypeId" required [(ngModel)]="salesQuote.quoteTypeId"
@@ -139,7 +139,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label>Employee<span class="clr-red">*</span></label>
                                             <p-autoComplete field="label" class="autocomp-customer-cstm"
                                                 name="employeeId" [(ngModel)]="salesQuote.employeeId"
@@ -154,9 +154,9 @@
                                                     <small>Employee is required </small>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <div class="col-md-6 padding-10">
+                                    <div class="col-md-6 padding-10" style="padding-bottom: 0px !important;">
                                         <div class="form-group">
                                             <label>Account Type <span class="clr-red">*</span></label>
                                             <select name="accountTypeId" required [(ngModel)]="salesQuote.accountTypeId"
@@ -258,22 +258,40 @@
                             </div>
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6 padding-10 padding-top-5">
-                                        <div class="form-group padding-12">
-                                            <label></label>
-                                            <div class="col-md-6">
+                                    <div class="col-md-6 padding-10 padding-top-5" style="padding-bottom: 0px !important;">
+                                        <div class="form-group padding-6">
+                                            <!-- <label></label> -->
+                                            <div class="col-md-5" style="margin-bottom: 4px;">
+                                                <label></label>
                                                 <label>
                                                     <input type="checkbox" [(ngModel)]="salesQuote.restrictPMA"
                                                         name="restrictPMA" id="restrictPMA" [disabled]="true" />
                                                     Restrict PMA
                                                 </label>
-                                            </div>
-                                            <div class="col-md-6">
                                                 <label>
                                                     <input type="checkbox" [(ngModel)]="salesQuote.restrictDER"
                                                         name="restrictDER" id="restrictDER" [disabled]="true" />
                                                     Restrict DER
                                                 </label>
+                                            </div>
+                                            <!-- <div class="col-md-3">
+                                                
+                                            </div> -->
+                                            <div class="col-md-7">
+                                                <label>Employee<span class="clr-red">*</span></label>
+                                                <p-autoComplete field="label" class="autocomp-customer-cstm"
+                                                    name="employeeId" [(ngModel)]="salesQuote.employeeId"
+                                                    [suggestions]="firstCollection" [forceSelection]="true"
+                                                    emptyMessage="No Match Found" field="label"
+                                                    (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
+                                                    [dropdown]="true" #employeeName="ngModel" required>
+                                                </p-autoComplete>
+                                                <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="employeeName.errors.required">
+                                                        <small>Employee is required </small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group padding-top-8">
@@ -333,7 +351,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 padding-10">
+                                    <div class="col-md-6 padding-10" style="padding-bottom: 0px !important;">
                                         <!-- <div class="card">
                                             <div class="card-header margin-summary-div">
                                                 <label class="text-center">Margin Summary</label>
@@ -428,7 +446,7 @@
                                                         <div [innerHTML]="salesQuote.memo"
                                                             [matTooltip]="parsedText(salesQuote.memo)"
                                                             class="form-control"
-                                                            style="height: 100px !important;width:100%"
+                                                            style="height: 85px !important; width:100%"
                                                             class="text_editor_box">
                                                         </div>
                                                     </div>
