@@ -1100,10 +1100,10 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.errorMessages.push("Please select Open Date");
       haveError = true;
     }
-    if (this.salesQuote.validForDays < 1) {
-      this.errorMessages.push("Please enter Valid For (Days)");
-      haveError = true;
-    }
+    // if (this.salesQuote.validForDays < 1) {
+    //   this.errorMessages.push("Please enter Valid For (Days)");
+    //   haveError = true;
+    // }
     if (!this.salesQuote.quoteExpiryDate) {
       this.errorMessages.push("Please select Quote Expiry Date");
       haveError = true;
