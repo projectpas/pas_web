@@ -200,9 +200,9 @@
             <td *ngIf="!isViewMode" class="purSaleLastCol">
               <p style="width:80px">
                 <ng-container *ngIf="!currentDeletedStatus">
-                  <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editCapes(i)" matTooltip="Edit"
+                  <span *ngIf="field.isNewItem == false"><a *ngIf="isEdit" class="btn nobg" (click)="editCapes(i)" matTooltip="Edit"
                       matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                  <span data-toggle="modal" data-target="#capesDelete"><a class="btn nobg"
+                  <span *ngIf="isDelete" data-toggle="modal" data-target="#capesDelete"><a class="btn nobg"
                       (click)="deleteCapesRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
                       <i class="fa fa-trash"></i></a></span>
                   <span *ngIf="field.isNewItem == false"><a class="btn nobg"
@@ -210,7 +210,7 @@
                       matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                 </ng-container>
                 <ng-container *ngIf="currentDeletedStatus">
-                  <span data-toggle="modal" data-target="#capesRestore"><a class="btn nobg btn-users-cstm"
+                  <span *ngIf="isEdit" data-toggle="modal" data-target="#capesRestore"><a class="btn nobg btn-users-cstm"
                       (click)="restoreCapesRow(i, field);" matTooltip="Restore Record" matTooltipPosition="above"><i
                         class="fa fa-undo" aria-hidden="true"></i></a> </span>
                   <span *ngIf="field.isNewItem == false"><a class="btn nobg"

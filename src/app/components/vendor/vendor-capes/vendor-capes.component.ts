@@ -100,6 +100,7 @@ export class VendorCapesComponent implements OnInit {
     isDelete:boolean=true;
     isDownload:boolean=true;
     isUpload:boolean=true;
+    isVendorCapView:boolean=true;
 
     constructor(public vendorService: VendorService, private datePipe: DatePipe, private configurations: ConfigurationService, private modalService: NgbModal, private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private alertService: AlertService) {
         if(window.localStorage.getItem('vendorService')){
@@ -139,6 +140,7 @@ export class VendorCapesComponent implements OnInit {
         this.isDelete=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Delete])
         this.isDownload=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Download])
         this.isUpload=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.Upload])
+        this.isVendorCapView=this.authService.checkPermission([ModuleConstants.Vendors_Capabilities+'.'+PermissionConstants.View]);
     }
 
     ngOnInit() {
@@ -156,7 +158,10 @@ export class VendorCapesComponent implements OnInit {
         this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);        
         //this.getCapesTypesSmartDropDown();
         this.getVendorCodeandNameByVendorId();
+        if(this.isVendorCapView){
         this.getVendorCapabilitylistId('all');
+        }
+
         this.disableCapes = true;
     }
 

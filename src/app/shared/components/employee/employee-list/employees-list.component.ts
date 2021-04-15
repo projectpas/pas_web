@@ -33,7 +33,7 @@ import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete
 import { ThrowStmt } from '@angular/compiler';
 import { DatePipe } from '@angular/common';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
-declare let $ : any;
+declare let $: any;
 
 
 
@@ -46,7 +46,7 @@ declare let $ : any;
 })
 /** employees-list component*/
 export class EmployeesListComponent implements OnInit {
-    
+
     activeIndex: number;
     private isSaving: boolean;
     isDeleteMode: boolean = false;
@@ -159,7 +159,11 @@ export class EmployeesListComponent implements OnInit {
     deleteEmployeeName: any;
     restoreRecordData: any;
     table3: any;
-    
+
+    isGeneralInfo: boolean = true;
+    isCert: boolean = true;
+    isTraining: boolean = true;
+    isMgmtStruct: boolean = true;
     ngOnInit(): void {
         this.activeIndex = 0;
         this.empService.currentUrl = '/employeesmodule/employeepages/app-employees-list';
@@ -258,22 +262,22 @@ export class EmployeesListComponent implements OnInit {
         // { field: 'delete', header: 'Delete' },
     ];
     currentDeletedstatus: boolean = false;
-    isAdd:boolean=true;
-    isEdit:boolean=true;
+    isAdd: boolean = true;
+    isEdit: boolean = true;
     isDelete: boolean = true;
-    isDownLoad:boolean=true;
-    permissionAddCheck=[ModuleConstants.Employees+'.'+PermissionConstants.Add,
-    ModuleConstants.EmployeesList+'.'+PermissionConstants.Add,
-    ModuleConstants.Employees_Certification+'.'+PermissionConstants.Add,
-    ModuleConstants.Employees_GeneralInformation+'.'+PermissionConstants.Add,
-    ModuleConstants.Employees_ManagementStructure+'.'+PermissionConstants.Add,
-    ModuleConstants.Employees_Training+'.'+PermissionConstants.Add];
-permissionUpdateCheck=[ModuleConstants.Employees+'.'+PermissionConstants.Update,
-ModuleConstants.EmployeesList+'.'+PermissionConstants.Update,
-ModuleConstants.Employees_Certification+'.'+PermissionConstants.Update,
-ModuleConstants.Employees_GeneralInformation+'.'+PermissionConstants.Update,
-ModuleConstants.Employees_ManagementStructure+'.'+PermissionConstants.Update,
-ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
+    isDownLoad: boolean = true;
+    permissionAddCheck = [ModuleConstants.Employees + '.' + PermissionConstants.Add,
+    ModuleConstants.EmployeesList + '.' + PermissionConstants.Add,
+    ModuleConstants.Employees_Certification + '.' + PermissionConstants.Add,
+    ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.Add,
+    ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Add,
+    ModuleConstants.Employees_Training + '.' + PermissionConstants.Add];
+    permissionUpdateCheck = [ModuleConstants.Employees + '.' + PermissionConstants.Update,
+    ModuleConstants.EmployeesList + '.' + PermissionConstants.Update,
+    ModuleConstants.Employees_Certification + '.' + PermissionConstants.Update,
+    ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.Update,
+    ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.Update,
+    ModuleConstants.Employees_Training + '.' + PermissionConstants.Update];
     /** employees-list ctor */
     constructor(private modalService: NgbModal,
         private translationService: AppTranslationService,
@@ -287,10 +291,15 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         this.translationService.closeCmpny = false;
         this.activeIndex = 0;
         this.empService.listCollection = null;
-        this.isAdd=this.authService.checkPermission(this.permissionAddCheck);
-        this.isEdit=this.authService.checkPermission(this.permissionUpdateCheck);
-        this.isDelete=this.authService.checkPermission([ModuleConstants.Employees+'.'+PermissionConstants.Delete]);
-        this.isDownLoad=this.authService.checkPermission([ModuleConstants.EmployeesList+"."+PermissionConstants.Download]);
+        this.isAdd = this.authService.checkPermission(this.permissionAddCheck);
+        this.isEdit = this.authService.checkPermission(this.permissionUpdateCheck);
+        this.isDelete = this.authService.checkPermission([ModuleConstants.Employees + '.' + PermissionConstants.Delete]);
+        this.isDownLoad = this.authService.checkPermission([ModuleConstants.EmployeesList + "." + PermissionConstants.Download]);
+
+        this.isGeneralInfo = this.authService.checkPermission([ModuleConstants.Employees_GeneralInformation + '.' + PermissionConstants.View]);
+        this.isCert = this.authService.checkPermission([ModuleConstants.Employees_Certification + '.' + PermissionConstants.View]);
+        this.isTraining = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.View]);
+        this.isMgmtStruct = this.authService.checkPermission([ModuleConstants.Employees_ManagementStructure + '.' + PermissionConstants.View]);
     }
     private onDataLoadSuccessful(allWorkFlows: any[]) {
         //this.alertService.stopLoadingMessage();
@@ -326,7 +335,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
 
 
 
-        }
+        } 
 
         //this.alertService.stopLoadingMessage();
         //this.loadingIndicator = false;
@@ -559,7 +568,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
         data.filters.loginEmployeeId = this.loginEmployeeId;
-        data.filters.masterCompanyId = this.currentUserMasterCompanyId;         
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         const Data = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.empService.getAllEmployeeList(Data).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.data = res[0]['results'];
@@ -576,7 +585,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
             }
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;            
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -584,26 +593,26 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         this.isSpinnerVisible = true;
         this.exportData = [];
         const isdelete = this.currentDeletedstatus ? true : false;
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "loginEmployeeId": this.loginEmployeeId, "masterCompanyId": this.currentUserMasterCompanyId,"status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "loginEmployeeId": this.loginEmployeeId, "masterCompanyId": this.currentUserMasterCompanyId, "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
         });
-        this.empService.getAllEmployeeList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {         
-                dt._value = res[0]['results'].map(x => {
-                    return {
-                        ...x,
-                        startDate: x.startDate ? this.datePipe.transform(x.startDate, 'MMM-dd-yyyy') : '',
-                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
-                    }
-                });                
-                dt.exportCSV();
-                dt.value = this.data;               
-                this.isSpinnerVisible = false;                
-            }, err => {
-                this.isSpinnerVisible = false;               
+        this.empService.getAllEmployeeList(PagingData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            dt._value = res[0]['results'].map(x => {
+                return {
+                    ...x,
+                    startDate: x.startDate ? this.datePipe.transform(x.startDate, 'MMM-dd-yyyy') : '',
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                }
             });
+            dt.exportCSV();
+            dt.value = this.data;
+            this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     errorMessageHandler(log) {
@@ -749,7 +758,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
     openView(row) {
-        this.isSpinnerVisible = true;       
+        this.isSpinnerVisible = true;
         $('#step1').collapse('show');
         this.toGetEmployeeDetailsByEmpId(row.employeeId);
         this.toGetDocumentsListNew(row.employeeId);
@@ -758,8 +767,8 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         this.isSpinnerVisible = false;
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
-            error => {this.isSpinnerVisible=false} //this.onDataLoadFailed(error)
-        );        
+            error => { this.isSpinnerVisible = false } //this.onDataLoadFailed(error)
+        );
     }
 
     dismissModel() {
@@ -778,7 +787,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
             this.sourceEmployee.isActive = false;
             this.empService.updateActionforActive(this.sourceEmployee).subscribe(
                 response => this.saveCompleted(this.sourceEmployee),
-                error => {this.isSpinnerVisible=false});
+                error => { this.isSpinnerVisible = false });
             //alert(e);
         }
         else {
@@ -792,7 +801,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
             this.sourceEmployee.isActive == true;
             this.empService.updateActionforActive(this.sourceEmployee).subscribe(
                 response => this.saveCompleted(this.sourceEmployee),
-                error => {this.isSpinnerVisible=false});
+                error => { this.isSpinnerVisible = false });
             //alert(e);
         }
 
@@ -833,7 +842,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;            
+            this.isSpinnerVisible = false;
         });
     }
     getColorCodeForHistory(i, field, value) {
@@ -855,7 +864,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         }, err => {
             this.isSpinnerVisible = false;
             //const errorLog = err;
-           // this.errorMessageHandler(errorLog);
+            // this.errorMessageHandler(errorLog);
         });
     }
 
@@ -915,8 +924,8 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
 
         }, err => {
             this.isSpinnerVisible = false;
-           // const errorLog = err;
-           // this.errorMessageHandler(errorLog);
+            // const errorLog = err;
+            // this.errorMessageHandler(errorLog);
         });
     }
 
@@ -966,7 +975,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
                 this.employeeRoleLabel = this.employeeRolesList.map((emp) => { return emp['name'] })
                 this.loadManagementStructure(empId);
             },
-            error => {this.isSpinnerVisible=false} //console.log(error)
+            error => { this.isSpinnerVisible = false } //console.log(error)
         );
     }
 
@@ -977,7 +986,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
                 this.getManagementStructureData(empId);
             },
             (error: any) => {
-                this.isSpinnerVisible=false
+                this.isSpinnerVisible = false
             }
         )
     }
@@ -1085,13 +1094,13 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
 
     }
     dateObject: any = {}
-    dateFilterForTable(date, field) { 
+    dateFilterForTable(date, field) {
         const minyear = '1900';
         const dateyear = moment(date).format('YYYY');
-        this.dateObject = {}  
+        this.dateObject = {}
         date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if(dateyear > minyear){
+            if (dateyear > minyear) {
                 if (field == 'createdDate') {
                     this.dateObject = { 'createdDate': date }
                 } else if (field == 'updatedDate') {
@@ -1148,7 +1157,7 @@ ModuleConstants.Employees_Training+'.'+PermissionConstants.Update];
         }
     }
 
-    changeStatus(rowData) {}
+    changeStatus(rowData) { }
 
 
 
