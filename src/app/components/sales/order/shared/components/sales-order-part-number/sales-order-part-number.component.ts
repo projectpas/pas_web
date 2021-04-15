@@ -401,7 +401,7 @@ export class SalesOrderPartNumberComponent {
           } else {
             this.part.quantityFromThis = this.part.quantityToBeQuoted;
           }
-
+          
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
           this.part.quantityOnHand = this.selectedPart.quantityOnHand;
           this.part.quantityAvailableForThis = this.query.partSearchParamters.qtyAvailable;
