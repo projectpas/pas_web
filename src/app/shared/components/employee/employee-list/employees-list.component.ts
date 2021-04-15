@@ -335,7 +335,7 @@ export class EmployeesListComponent implements OnInit {
 
 
 
-        }
+        } 
 
         //this.alertService.stopLoadingMessage();
         //this.loadingIndicator = false;
