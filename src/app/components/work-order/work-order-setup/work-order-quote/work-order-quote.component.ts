@@ -2344,7 +2344,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
                 } else if (this.warningID == 0 && this.restrictID == 0) {
-                    window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                    console.log("hello")
+                    // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
                 }
             }
         })

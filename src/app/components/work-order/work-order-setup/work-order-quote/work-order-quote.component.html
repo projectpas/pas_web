@@ -1,6 +1,6 @@
 ﻿
     <div *ngIf="selectedDisplayType != ''" class="wo-details">
-        {{(selectedDisplayType == 'use historical wos')?'Work order details ':'Workorder quote Details of '+quoteForm.quoteNumber}}
+       <span  *ngIf="!isView"> {{(selectedDisplayType == 'use historical wos')?'Work order details ':'Workorder quote Details of '+quoteForm.quoteNumber}}</span>
     </div>
     <nav aria-label="breadcrumb" *ngIf="!isView">
         <ol class="breadcrumb">
@@ -30,8 +30,8 @@
             <div class="row">
                 <div class="col">
                   <h4  class="header-name">
-                    {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote
-                
+                 <span  *ngIf="!isView">   {{ isEdit ? 'Edit' : 'Create' }} Work Order Quote</span>
+                 <span  *ngIf="isView">  Work Order Quote</span>
                     <button class="btn-sm header-button header-button-alignment"  (click)="toggleDisplayMode()">
                         {{!isDetailedView ? 'Collapse' : 'Expand'}}</button>
                 </h4>
@@ -562,7 +562,7 @@
                         <thead>
                             <tr class="pad_workflo">
                                 <th class="approver-th-align th-width">
-                                    <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot()"/> Select All
+                                    <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall" [disabled]="isViewMode || !getAllPartsToDisableOrNot() || isView"/> Select All
                                 </th>
                                 <th style="z-index: 1;" *ngFor="let header of woQuoteListHeader">{{header.header}}</th>
                             </tr>
@@ -571,7 +571,7 @@
                             <tr class="mpn-row" style="display: table-row;"
                                 *ngFor="let approver of woQuoteApprovalList; let i=index;">
                                 <td>
-                                    <input type="checkbox" [(ngModel)]="approver.isSelected" (click)="onApprovalSelected(approver, i)"  [disabled]=" isViewMode ||!getPartToDisableOrNot(approver)"/>
+                                    <input type="checkbox" [(ngModel)]="approver.isSelected" (click)="onApprovalSelected(approver, i)"  [disabled]=" isViewMode ||!getPartToDisableOrNot(approver)||isView"/>
                                 </td>
                                 <ng-container *ngFor="let field of woQuoteListHeader">
                                     <td *ngIf="field.field != 'internalSentDate'
@@ -591,7 +591,7 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="approver[field.field]"
-                                                    [disabled]="getInternalSentDateEnableStatus(approver)"
+                                                    [disabled]="getInternalSentDateEnableStatus(approver) ||isView"
                                                     [minDate]="getInternalSentMinDate(quoteForm.openDate)" [maxDate]="getInternalSentMaxDate(sentDate)" appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -599,7 +599,7 @@
                                         <label *ngIf="field.field != 'internalStatusId'"
                                           [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                                         <select class="width-150" [(ngModel)]="approver.internalStatusId"
-                                          [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)||isView"
                                           *ngIf="field.field == 'internalStatusId'">
                                           <option value='-1'>--Select</option>
                                           <option *ngFor="let status of statusList" [ngValue]="status.statusId">
@@ -611,7 +611,7 @@
                                         <label *ngIf="field.field != 'internalStatusId'"
                                           [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                                         <select class="width-150" [(ngModel)]="approver.internalStatusId"
-                                          [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getinternalStatusIdEnableStatus(approver)||isView"
                                           *ngIf="field.field == 'internalStatusId'">
                                           <option value='' selected>--Select</option>
                                           <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
@@ -650,7 +650,7 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="approver[field.field]"
-                                                    [disabled]="getinternalStatusIdEnableStatus(approver)"
+                                                    [disabled]="getinternalStatusIdEnableStatus(approver)||isView"
                                                     [minDate]="approver.internalSentDate" [maxDate]="getInternalApprovedMaxDate()"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -660,14 +660,14 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                     [(ngModel)]="approver[field.field]"
-                                                    [disabled]="getcustomerSentDateEnableStatus(approver)"
+                                                    [disabled]="getcustomerSentDateEnableStatus(approver)||isView"
                                                     [maxDate]="getInternalApprovedMaxDate()" [minDate]="getCustomerSentMinDate(approver['internalApprovedDate'])"  appendTo="body">
                                         </p-calendar>
                                     </td>
                                     <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
                                         <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
                                         <select class="width-150" [(ngModel)]="approver['customerStatusId']"
-                                          [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)||isView"
                                           *ngIf="field.field == 'customerStatusId'">
                                           <option value='-1'>--Select</option>
                                           <option *ngFor="let status of statusList" [ngValue]="status.statusId">
@@ -678,7 +678,7 @@
                                       <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver)">
                                         <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
                                         <select class="width-150" [(ngModel)]="approver['customerStatusId']"
-                                          [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)"
+                                          [ngModelOptions]="{standalone: true}" [disabled]="getcustomerStatusIdEnableStatus(approver)||isView"
                                           *ngIf="field.field == 'customerStatusId'">
                                           <option value='' selected>--Select</option>
                                           <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
@@ -704,7 +704,7 @@
                                                     name="openDate" #openDate="ngModel" required
                                                     [(ngModel)]="approver[field.field]"
                                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                    [disabled]="getcustomerStatusIdEnableStatus(approver)"
+                                                    [disabled]="getcustomerStatusIdEnableStatus(approver)||isView"
                                                     [minDate]="approver['customerSentDate']" [maxDate]="getInternalApprovedMaxDate()"  appendTo="body">
                                         </p-calendar>
                                     </td>
@@ -713,7 +713,7 @@
                                         <select *ngIf="field.field == 'customerApprovedBy'"
                                                 [(ngModel)]="approver['customerApprovedById']"
                                                class="width-150"
-                                                [disabled]="getcustomerStatusIdEnableStatus(approver)">
+                                                [disabled]="getcustomerStatusIdEnableStatus(approver) ||isView">
                                             <option value="">Select</option>
                                             <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.name}}</option>
                                         </select>
@@ -1992,7 +1992,7 @@
                 <div class="modal-body table-responsive" *ngIf="!ispop && (!isView || isListView) && selectedHistoricalWorkOrder">
                     <!-- <grd-quote-view [workorderid]="selectedHistoricalWorkOrder" isView="true"></grd-quote-view> -->
 
-                   <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" isView="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
+                   <app-work-order-quote [workorderid]="selectedHistoricalWorkOrder" [isView]="true" [hidehistoricalBtns]="true" (enableBackToWO)="noBack($event)" [customerId]="customerId" enableEditBtn="false" [selectedDisplayType]="displayType"></app-work-order-quote>
                 </div>
                 <div >
                     <button type="button" class="btn btn-danger foot_bt"  (click)="hideModal('historicalWorkOrderView')"
