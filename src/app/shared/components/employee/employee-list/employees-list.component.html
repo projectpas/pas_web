@@ -506,7 +506,7 @@
                     </div>
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" href="#step1"
+                  <a *ngIf="isGeneralInfo" class="collapsed" data-toggle="collapse" href="#step1"
                     >General Information</a
                   >
                 </h4>
@@ -843,7 +843,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step2"
+                    <a *ngIf="isCert" class="collapsed" data-toggle="collapse" href="#step2"
                       >Certification</a
                     >
                   </h4>
@@ -958,7 +958,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step3"
+                    <a *ngIf="isTraining" class="collapsed" data-toggle="collapse" href="#step3"
                       >Training</a
                     >
                   </h4>
@@ -1266,7 +1266,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step4"
+                    <a *ngIf="isMgmtStruct" class="collapsed" data-toggle="collapse" href="#step4"
                       >Management Structure</a
                     >
                   </h4>

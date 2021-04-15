@@ -9,6 +9,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
 @Component({
     selector: 'app-vendor-warnings',
@@ -76,6 +77,8 @@ export class VendorWarningsComponent implements OnInit {
     stopmulticlicks: boolean = false;
     @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
     isView: boolean = true;
+    isAdd:boolean=true;
+    isEdit:boolean=true;
     constructor(private authService: AuthService, private activeRoute: ActivatedRoute, private router: Router, private vendorService: VendorService, private alertService: AlertService, private commonService: CommonService, private modalService: NgbModal) {
         if (window.localStorage.getItem('vendorService')) {
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -108,6 +111,8 @@ export class VendorWarningsComponent implements OnInit {
             this.vendorService.ShowPtab = true;
         }
         this.dataSource = new MatTableDataSource();
+        this.isAdd=this.authService.checkPermission([ModuleConstants.Vendors_Warnings+'.'+PermissionConstants.Add]);
+this.isEdit=this.authService.checkPermission([ModuleConstants.Vendors_Warnings+'.'+PermissionConstants.Update]);
     }
 
     ngOnInit() {
