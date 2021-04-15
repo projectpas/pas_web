@@ -622,7 +622,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width">
+					<table class="table table-bordered">
             <thead>
               <tr>
                 <th>Aircraft</th>
@@ -636,6 +636,7 @@
                 <th>Is Deleted</th>
               </tr>
             </thead>
+            <tbody>
 
             <tr *ngFor="let audit of aircraftauditHisory; let i = index">
               <td [ngStyle]="{
@@ -696,6 +697,7 @@
               </td>
               <td class="background-white"><p class="width-50 text-center"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
             </tr>
+            </tbody>
           </table>
           </div>
         </div>

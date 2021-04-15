@@ -679,7 +679,7 @@
                 </div> -->
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                   <div class="tableFixHead">
-          <table class="table table-bordered header-table-width">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>Name <span class="clr-red">*</span></th>
@@ -719,11 +719,11 @@
               </tr>
               </td>
               <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }">{{audit.fileName}}</td> -->
-              <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-              <td>{{audit.createdBy}}</td>
+              <td >{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+              <td style="width:60px">{{audit.createdBy}}</td>
               <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-              <td>{{audit.updatedBy}}</td>
-              <td class="text-center">
+              <td style="width:60px">{{audit.updatedBy}}</td>
+              <td class="text-center width-60">
                 <span class="value">
                   <label class="wauto">
                     <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>

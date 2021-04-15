@@ -291,10 +291,10 @@
                 <th>ATA Sub Chapter</th>
                 <th>ATA Sub Code</th>                
                 <th>Created Date</th>
-                <th>Created By</th>
+                <th style="min-width:60px">Created By</th>
                 <th>Updated Date</th>   
-                <th>Updated By</th>                             
-                <th>Is Deleted</th>
+                <th style="min-width:60px">Updated By</th>                             
+                <th style="width:60px">Is Deleted</th>
               </tr>
             </thead>
             <tbody *ngIf="auditHistory1.length > 0">
@@ -311,7 +311,7 @@
                       {{ audit.firstName }} {{ audit.lastName ? audit.lastName : ''}}
                   </td>
 
-                <td [ngStyle]="{
+                <td style="width:100px" [ngStyle]="{
                     color: getColorCodeForHistoryATA(
                       i,
                       'ataChapterCode',
@@ -345,7 +345,7 @@
                   }">
                   {{ audit.ataSubChapterDescription }}
                 </td>
-                <td [ngStyle] ="{
+                <td style="width:100px" [ngStyle] ="{
                     color: getColorCodeForHistoryATA(
                       i,
                       'ataSubChapterCode',
