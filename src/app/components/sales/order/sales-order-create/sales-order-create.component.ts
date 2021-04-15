@@ -179,7 +179,7 @@ export class SalesOrderCreateComponent implements OnInit {
   addressType: any = 'SO';
   showAddresstab: boolean = false;
   isContactsLoaded: boolean = false;
-  
+
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -493,7 +493,6 @@ export class SalesOrderCreateComponent implements OnInit {
   }
 
   getDefaultContact() {
-    debugger;
     if (this.customerContactList) {
       if (this.customerContactList.length > 0) {
         for (let i = 0; i < this.customerContactList.length; i++) {

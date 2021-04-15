@@ -101,7 +101,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
 
   setDefaultContact() {
     if (this.customerContactList) {
-      debugger;
       if (this.customerContactList.length > 0) {
         for (let i = 0; i < this.customerContactList.length; i++) {
           let isDefaultContact = this.customerContactList[i].isDefaultContact;

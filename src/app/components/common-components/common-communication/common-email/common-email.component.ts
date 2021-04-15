@@ -390,7 +390,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
 
     }
     downloadFileUpload(link) {
-        debugger;
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${link}`;
         window.location.assign(url);
     }
