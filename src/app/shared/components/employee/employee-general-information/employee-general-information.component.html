@@ -13,7 +13,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>User Name <span class="clr-red">*</span></label>
-                                                <input class="form-control" type="text" name="userName" [attr.disabled]="isEditContent==true?true:null" [formControl]="empCreationForm.controls['userName']" [(ngModel)]="sourceEmployee.userName" value="" autocomplete="new-password" required>
+                                                <input class="form-control" type="text" name="userName" [attr.disabled]="isEditContent==true?true:null" #userName="ngModel"  [(ngModel)]="sourceEmployee.userName" value="" autocomplete="new-password" required>
                                                 <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="alert alert-danger alert-danger-cstm">
                                                     <div *ngIf="userName.errors.required">
                                                         <small> User Name is required </small>
@@ -90,15 +90,15 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Email<span class="clr-red">*</span></label>
-                                                <input class="form-control" type="text" name="email" [attr.disabled]="isEditContent==true?true:null" [formControl]="empCreationForm.controls['email']" [(ngModel)]="sourceEmployee.email"  required>
+                                                <input class="form-control" type="text" name="email" [attr.disabled]="isEditContent==true?true:null" #email="ngModel" [(ngModel)]="sourceEmployee.email"  required>
                                             </div>
-                                            <div *ngIf="empCreationForm.controls['email'].invalid && (empCreationForm.controls['email'].dirty || empCreationForm.controls['email'].touched)" class="alert alert-danger alert-danger-cstm">
-                                                <div *ngIf="empCreationForm.controls['email'].errors.required">
+                                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="email.errors.required">
                                                     <small> Email is required </small>
                                                 </div>
                                             </div>
-                                            <div *ngIf="empCreationForm.controls['email'].errors?.pattern &&
-                                                        empCreationForm.controls['email'].touched" class="alert alert-danger alert-danger-cstm">                                               
+                                            <div *ngIf="email.errors?.pattern &&
+                                                        email.touched" class="alert alert-danger alert-danger-cstm">                                               
                                                     <small> Enter Valid email  </small>
                                             </div>
                                             <div class="form-group">
@@ -344,10 +344,13 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Supervisor Name</label>
-                                                <select name="supervisorName" class="form-control" (ngModelChange)="enableSave()" [(ngModel)]="supervisorId">
-                                                    <option value="0">-- Select --</option>
-                                                    <option *ngFor="let employee of allEmployeeinfo" [ngValue]="employee.employeeId">{{employee.firstName}}  {{employee.lastName}}</option>
-                                                </select>
+                                                <p-autoComplete field="firstName" name="supervisorName" [suggestions]="supervisorList" (completeMethod)="filterSupervisorList($event)"
+                                                    class="pautocomp-cstm" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                                    [forceSelection]="true" (ngModelChange)="enableSave()" [(ngModel)]="supervisorId">
+                                                    <!-- <option value="0">-- Select --</option>
+                                                    <option *ngFor="let employee of allEmployeeinfo" [ngValue]="employee.employeeId">{{employee.firstName}}
+                                                        {{employee.lastName}}</option> -->
+                                                </p-autoComplete>
                                             </div>                                         
                                         </div>
                                     </div>
