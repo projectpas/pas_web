@@ -909,22 +909,31 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
 
     isDocumentrevnumAlreadyExists: boolean = false;
     checkDocumentRevnumExist(value) {
-        this.isDocumentrevnumAlreadyExists = false;
-        this.DocumentTypebutton = true;
-        if (value != undefined && value != null) {
-            if (this.documentType && this.documentType.length != 0) {
-                for (let i = 0; i < this.documentType.length; i++) {
-                    if ((this.addNew.revNum == this.documentType[i].revNum
-                        || value == this.documentType[i].revNum)
-                        //&&  this.addNew.revNum !=  ''
-                    ) {
-                        this.isDocumentrevnumAlreadyExists = true;
-                        this.DocumentTypebutton = false;
-                        return;
+        if(this.validateInt(value)){
+            this.isDocumentrevnumAlreadyExists = false;
+            this.DocumentTypebutton = true;
+            if (value != undefined && value != null) {
+                if (this.documentType && this.documentType.length != 0) {
+                    for (let i = 0; i < this.documentType.length; i++) {
+                        if ((this.addNew.revNum == this.documentType[i].revNum
+                            || value == this.documentType[i].revNum)
+                            //&&  this.addNew.revNum !=  ''
+                        ) {
+                            this.isDocumentrevnumAlreadyExists = true;
+                            this.DocumentTypebutton = false;
+                            return;
+                        }
                     }
                 }
             }
         }
+        else{
+            return;
+        }
+       
+    }
+    validateInt(value) {
+        return /(^-?\d\d*$)/g.test(value);
     }
 
     resetDocumentTypeForm() {
