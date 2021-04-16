@@ -8,6 +8,7 @@ import {   editValueAssignByCondition, getObjectById } from '../../../../generic
 import * as moment from 'moment';
 import { SubWorkOrderPartNumber } from '../../../../models/sub-work-order-partnumber.model';
 import { DatePipe, Location } from '@angular/common';
+declare var $: any;
 @Component({
     selector: 'app-sub-work-order',
     templateUrl: './work-order-subwo.component.html',
@@ -56,6 +57,7 @@ export class SubWorkOrderComponent implements OnInit {
     technicianList: any = [];
     techStationList: any = []; 
     isGridShow:boolean=true;
+    currentDate=new Date();
     constructor(private router: Router,
         private commonService: CommonService,
         private datePipe: DatePipe,
@@ -122,7 +124,7 @@ export class SubWorkOrderComponent implements OnInit {
                     }
                 } else { 
                     this.activeGridUpdateButton = true; 
-              
+             
                    const data= res;
                 data.map((x, index) => {
                         x.customerRequestDate = (x.customerRequestDate) ? new Date(x.customerRequestDate) : new Date();
@@ -135,17 +137,19 @@ export class SubWorkOrderComponent implements OnInit {
                         //   getObjectById('employeeId', x.technicianId, this.technicianByExpertiseTypeList)
                         // 
                         this.getWorkFlowByPNandScope(x, index);
+                        
                     }) 
 
                     this.subWorkOrderPartNumbers=data;   // = res; 
                     if (this.addToExisting == 1) { 
                         this.subWorkOrderGridData();
                     } else {
+                        this.handleExpiryDates();
                         if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
                             this.getAllWorkOrderStages();  
                             this.getAllWorkScpoes('');
                             this.getAllPriority('');
-                     
+                            this.workOrderStatus();
                             this.getConditionsList();
                             this.getAllTecStations();
                         }
@@ -161,6 +165,40 @@ export class SubWorkOrderComponent implements OnInit {
             this.getConditionsList();
             this.getAllTecStations();
         }
+    }
+
+    handleExpiryDates(){ 
+            this.subWorkOrderPartNumbers.map((x, index) => {
+                if(x.publicatonExpirationDate){ 
+                    // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+                   if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                    setTimeout(() => {
+                        x.cMMId=0;
+                        this.disableUpdateMpn=false;
+                    }, 2000);
+                    // this.removePublication(x,index);
+                   
+                    // this.expriryarray.push(x);
+             
+                    $('#warningForCmmPublication').modal('show');
+                   }
+                }
+                if(x.workflowExpirationDate){ 
+                    // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+                   if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
+                   
+                    // this.removeWorkflow(x,index);
+                    setTimeout(() => {
+                        x.workflowId=0;
+                        this.disableUpdateMpn=false;
+                    }, 2000);
+                    $('#warningForCmmWorkflow').modal('show');
+                    // this.expriryarray.push(x);
+            
+                   }
+                }
+               });  
+            
     }
     subWorkOrderGridData() {
         this.isSpinnerVisible=true;
@@ -188,7 +226,8 @@ export class SubWorkOrderComponent implements OnInit {
                 obj.createdDate = new Date(),
                     obj.updatedDate = new Date(),
                     this.subWorkOrderPartNumbers.push({ ...subWoObj, ...obj });
-            }
+            } 
+            this.handleExpiryDates();
             if (this.subWorkOrderPartNumbers && this.subWorkOrderPartNumbers.length != 0) {
                 this.getAllWorkOrderStages();  
                 this.getAllWorkScpoes('');
@@ -488,7 +527,9 @@ export class SubWorkOrderComponent implements OnInit {
         }
         const strText ='';
         this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
-         this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
+         this.workOrderStatusList = res;
+        //  console.log("stathis list",this.workOrderStatusList)
+        //  .sort(function (a, b) { return a.value - b.value; })
         })
     } 
     async getPartPublicationByItemMasterId(currentRecord, itemMasterId) {
@@ -598,4 +639,27 @@ export class SubWorkOrderComponent implements OnInit {
     getActiveMPN(){
         this.disableUpdateMpn=false;
     }
+    moduleName:any="Sub Work Order"
+    doSomething(currentDate,workOrderPart,index){
+        if(currentDate>workOrderPart.estimatedShipDate){
+            this.alertService.showMessage(
+                this.moduleName,
+                'Selected ESt. Completion Date is greater than ESt. Ship Date. So, ESt. Ship Date also reset.',
+                MessageSeverity.warn
+            );
+            this.subWorkOrderPartNumbers[index].estimatedShipDate=currentDate;
+        }
+    }
+    removePublication(currentRecord,index){
+        setTimeout(() => { 
+            this.disableUpdateMpn=false;
+        }, 2000);
+            }
+        
+            removeWorkflow(currentRecord,index){
+                setTimeout(() => {
+                // currentRecord.workflowId=0;
+                this.disableUpdateMpn=false;
+            }, 2000);
+            }
 }

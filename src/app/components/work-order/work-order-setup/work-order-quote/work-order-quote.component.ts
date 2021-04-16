@@ -1953,12 +1953,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join()).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
+                this.markupList.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
             }
         },err => {
              this.errorHandling(err);
             })
     }
-
     markupChanged(matData, type) {
         try {
             this.markupList.forEach((markup) => {
@@ -3450,3 +3450,4 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.disableMat=false;
     }
 }
+//9505784975
