@@ -20,7 +20,12 @@ body {
 .myCustomModalClass .modal-dialog {
   max-width: 90% !important;
 }
-
+.jda .p-radiobutton-label-horizontal .ui-radiobutton-label{
+  width: 100px !important;
+}
+.adj .p-radiobutton-label-horizontal .ui-radiobutton-label{
+  width: 80px !important;
+}
 @media print {
   body {
     -webkit-print-color-adjust: exact;

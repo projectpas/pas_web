@@ -93,38 +93,85 @@ export class SalesOrderAnalysisComponent implements OnInit {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
 
+  initSummaryColumns() {
+    this.headers = [
+      { field: "salesOrderNumber", header: "SO Num", width: "120px" },
+      { field: "versionNumber", header: "Ver Num", width: "80px" },
+      { field: "partNumber", header: "PN", width: "130px" },
+      { field: "partDescription", header: "PN Description", width: "180px" },
+      { field: "uomName", header: "UOM", width: "100px" },
+      { field: "currency", header: "Curr", width: "100px" },
+      { field: "qty", header: "Qty", width: "85px" },
+      { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
+      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "misc", header: "Misc Charges", width: "120px" },
+      { field: "totalSales", header: "Total Revenue", width: "130px" },
+      { field: "unitCost", header: "Unit Cost", width: "130px" },
+      { field: "unitCostExtended", header: "Ext Cost", width: "130px" },
+      { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
+      { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
+      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+      { field: "taxAmount", header: "Tax Amt", width: "120px" },
+      { field: "notes", header: "Notes", width: "120px" }
+      // { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
+      // { field: "grossSalePrice", header: "Gross Sales Amt", width: "120px" },
+      // { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
+      // { field: "netSales", header: "Net Sales Amt", width: "130px" },
+      // { field: "misc", header: "Misc Amt", width: "120px" },
+      // { field: "totalSales", header: "Product Revenue", width: "130px" },
+      // { field: "unitCostExtended", header: "Prod Cost", width: "130px" },
+      // { field: "marginAmountExtended", header: "Prod Margin Amt", width: "120px", style: "text-align:right" },
+      // { field: "marginPercentage", header: " Prod Margin %", width: "100px", style: "text-align:right" },
+      // { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+      // { field: "taxAmount", header: "Tax Amt", width: "120px" },
+      // { field: "totalRevenue", header: "Total Revenue", width: "130px" }
+    ];
+    this.selectedColumns = this.headers;
+  }
+
   initColumns() {
     this.headers = [
       { field: "salesOrderNumber", header: "SO Num", width: "120px" },
-      { field: "versionNumber", header: "Ver Num", width: "130px" },
+      { field: "versionNumber", header: "Ver Num", width: "80px" },
       { field: "partNumber", header: "PN", width: "130px" },
       { field: "partDescription", header: "PN Description", width: "180px" },
-      { field: "stockLineNumber", header: "Stk Line Num", width: "150px" },
-      { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "120px" },
-      { field: "quoteDate", header: "Quote Date", width: "130px" },
+      { field: "stockLineNumber", header: "Stk Line Num", width: "110px" },
+      { field: "salesOrderQuoteNumber", header: "SO Qte Num", width: "120px" },
+      { field: "quoteDate", header: "Qte Date", width: "85px" },
       { field: "serialNumber", header: "Ser Num", width: "120px" },
       { field: "conditionDescription", header: "Cond", width: "100px" },
       { field: "uomName", header: "UOM", width: "100px" },
-      { field: "qty", header: "Qty Quoted", width: "80px" },
       { field: "status", header: "Status", width: "80px" },
       { field: "currency", header: "Curr", width: "80px" },
-      { field: "markupPerUnit", header: "MarkUp Amt", width: "80px" },
-      { field: "grossSalePricePerUnit", header: "Gross Price/Unit", width: "80px" },
-      { field: "discountAmount", header: "Disc. Amt", width: "80px" },
-      { field: "markupExtended", header: "MarkUp Amt", width: "80px" },
-      { field: "grossSalePrice", header: "Gross Sales Amt", width: "80px" },
-      { field: "salesDiscountExtended", header: "Disc. Amt", width: "80px" },
-      { field: "netSales", header: "Net Sales Amt", width: "80px" },
-      { field: "misc", header: "Misc Amt", width: "80px" },
-      { field: "totalSales", header: "Product Revenue", width: "80px" },
-      { field: "unitCost", header: "Unit Cost", width: "80px" },
-      { field: "unitCostExtended", header: "Extended Cost", width: "80px" },
-      { field: "marginAmountExtended", header: "Margin Amt", width: "80px", style: "text-align:right" },
-      { field: "marginPercentage", header: "Margin %", width: "80px", style: "text-align:right" },
-      { field: "freight", header: "Freight", width: "80px", style: "text - align: right" },
-      { field: "taxAmount", header: "Tax Amt", width: "80px" },
-      { field: "totalRevenue", header: "Total Revenue", width: "80px" },
-      { field: "notes", header: "Notes", width: "80px" },
+      { field: "qty", header: "Qty", width: "80px" },
+      { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
+      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "misc", header: "Misc Charges", width: "120px" },
+      { field: "totalSales", header: "Total Revenue", width: "130px" },
+      { field: "unitCost", header: "Unit Cost", width: "130px" },
+      { field: "unitCostExtended", header: "Ext Cost", width: "130px" },
+      { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
+      { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
+      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+      { field: "taxAmount", header: "Tax Amt", width: "120px" },
+      { field: "notes", header: "Notes", width: "120px" }
+      // { field: "markupPerUnit", header: "MarkUp Amt", width: "80px" },
+      // { field: "grossSalePricePerUnit", header: "Gross Price/Unit", width: "80px" },
+      // { field: "discountAmount", header: "Disc. Amt", width: "80px" },
+      // { field: "markupExtended", header: "MarkUp Amt", width: "80px" },
+      // { field: "grossSalePrice", header: "Gross Sales Amt", width: "80px" },
+      // { field: "salesDiscountExtended", header: "Disc. Amt", width: "80px" },
+      // { field: "netSales", header: "Net Sales Amt", width: "80px" },
+      // { field: "misc", header: "Misc Amt", width: "80px" },
+      // { field: "totalSales", header: "Product Revenue", width: "80px" },
+      // { field: "unitCost", header: "Unit Cost", width: "80px" },
+      // { field: "unitCostExtended", header: "Extended Cost", width: "80px" },
+      // { field: "marginAmountExtended", header: "Margin Amt", width: "80px", style: "text-align:right" },
+      // { field: "marginPercentage", header: "Margin %", width: "80px", style: "text-align:right" },
+      // { field: "freight", header: "Freight", width: "80px", style: "text - align: right" },
+      // { field: "taxAmount", header: "Tax Amt", width: "80px" },
+      // { field: "totalRevenue", header: "Total Revenue", width: "80px" },
+      // { field: "notes", header: "Notes", width: "80px" },
     ];
     this.selectedColumns = this.headers;
   }
@@ -194,7 +241,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
   dismissPartViewModel() {
     this.partModal.close();
   }
-  
+
   mouseOverData(key, data) {
     if (key === 'partNumberType') {
       return data['partNumber']
@@ -265,31 +312,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
 
   formateCurrency(amount) {
     return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
-  }
-
-  initSummaryColumns() {
-    this.headers = [
-      { field: "salesOrderNumber", header: "SO Num", width: "120px" },
-      { field: "versionNumber", header: "Ver Num", width: "130px" },
-      { field: "partNumber", header: "PN", width: "130px" },
-      { field: "partDescription", header: "PN Description", width: "180px" },
-      { field: "uomName", header: "UOM", width: "100px" },
-      { field: "qtyQuoted", header: "Qty Quoted", width: "100px" },
-      { field: "currency", header: "Curr", width: "100px" },
-      { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
-      { field: "grossSalePrice", header: "Gross Sales Amt", width: "120px" },
-      { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
-      { field: "netSales", header: "Net Sales Amt", width: "130px" },
-      { field: "misc", header: "Misc Amt", width: "120px" },
-      { field: "totalSales", header: "Product Revenue", width: "130px" },
-      { field: "unitCostExtended", header: "Prod Cost", width: "130px" },
-      { field: "marginAmountExtended", header: "Prod Margin Amt", width: "120px", style: "text-align:right" },
-      { field: "marginPercentage", header: " Prod Margin %", width: "100px", style: "text-align:right" },
-      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
-      { field: "taxAmount", header: "Tax Amt", width: "120px" },
-      { field: "totalRevenue", header: "Total Revenue", width: "130px" }
-    ];
-    this.selectedColumns = this.headers;
   }
 
   changeOfStatus(part, viewType) {

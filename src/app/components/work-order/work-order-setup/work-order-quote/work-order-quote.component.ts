@@ -32,6 +32,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     @Input() quoteListViewData: any = {};
     @Input() workorderid: number = 0;
     @Input() isView: boolean = false;
+    @Input() hidehistoricalBtns: boolean = false;
+    
     @Input() enableEditBtn: boolean = false;
     @Input() ispop: boolean = false;
     @Input() isQuoteListView: boolean = false;
@@ -1893,6 +1895,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     saveMaterialListForWO(data) {
         this.disableMat=false;
+        console.log("dattaaa",data)
+        debugger;
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -1949,12 +1953,12 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', strText, true, 200, this.setEditArray.join()).subscribe(res => {
             if (res && res.length != 0) {
                 this.markupList = res;
+                this.markupList.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))
             }
         },err => {
              this.errorHandling(err);
             })
     }
-
     markupChanged(matData, type) {
         try {
             this.markupList.forEach((markup) => {
@@ -2041,7 +2045,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
 
     deleteMaterialList(mainIndex, subIndex) {
         this.materialListQuotation[mainIndex][subIndex].isDeleted = true;
-        this.disableMat=true;
+        this.disableMat=false;
     }
 
     updateWorkOrderChargesList(data) {
@@ -2340,7 +2344,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 } else if (this.warningID != 0 && this.restrictID != 0) {
                     this.showAlertMessage(warningMessage, this.restrictMessage);
                 } else if (this.warningID == 0 && this.restrictID == 0) {
-                    window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
+                    console.log("hello")
+                    // window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
                 }
             }
         })
@@ -3445,3 +3450,4 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.disableMat=false;
     }
 }
+//9505784975

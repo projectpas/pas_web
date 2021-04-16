@@ -53,4 +53,10 @@ export class SalesOrderPrintInvoiceComponent implements OnInit {
             this.modalReference.close();
         }
     }
+
+    getFormattedNotes(notes) {
+        if (notes != undefined) {
+            return notes.replace(/<[^>]*>/g, '');
+        }
+    }
 }

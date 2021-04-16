@@ -544,6 +544,16 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
         });
         this.getPNDetails(material);
+        if(this.isQuote){
+            if(material.taskId){
+                this.taskList.forEach(element => {
+                    if(element.taskId==material.taskId){
+                        material.taskName=element.description;
+                        return;
+                    }
+                });
+            }
+        }
     }
     clearautoCompleteInput(currentRecord) {
         currentRecord.partItem = undefined;
@@ -920,7 +930,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return result;
     }
  
-    onTaskChange(material) { }
+    onTaskChange(material) { 
+
+    }
     editorgetmemo(ev) {
         this.disableEditor = false;
     }

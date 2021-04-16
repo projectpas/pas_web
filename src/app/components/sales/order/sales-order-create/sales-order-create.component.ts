@@ -178,6 +178,7 @@ export class SalesOrderCreateComponent implements OnInit {
   soTypeList: any = [];
   addressType: any = 'SO';
   showAddresstab: boolean = false;
+  isContactsLoaded: boolean = false;
 
   constructor(
     private customerService: CustomerService,
@@ -237,7 +238,7 @@ export class SalesOrderCreateComponent implements OnInit {
     setTimeout(() => {
       this.getSoInstance(true);
     },
-      1200);
+      2200);
 
     this.salesQuoteService.salesOrderViewSubj$.subscribe(data => {
       this.salesOrderView = data;
@@ -504,6 +505,8 @@ export class SalesOrderCreateComponent implements OnInit {
         }
       }
     }
+
+    this.isContactsLoaded = true;
   }
 
   setAllCustomerContact(result) {

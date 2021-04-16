@@ -605,6 +605,26 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                 this.sourceEmployee.aircraftManufacturerId = this.sourceEmployee.aircraftManufacturerId == 0 ? null : this.sourceEmployee.aircraftManufacturerId;
                 this.sourceEmployee.aircraftModelId = this.sourceEmployee.aircraftModelId == 0 ? null : this.sourceEmployee.aircraftModelId;
                 this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
+                if (this.sourceEmployee.scheduleDate) {
+                    let d= new Date(this.sourceEmployee.scheduleDate);
+                    this.sourceEmployee.scheduleDate =`${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+    
+                }
+                if (this.sourceEmployee.completionDate) {
+                    
+                    let comdt= new Date(this.sourceEmployee.completionDate);
+                    this.sourceEmployee.completionDate =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                }
+                if (this.sourceEmployee.completionDate < this.setExpireDate) {
+                    this.setExpireDate = new Date();
+                } else {
+                    let comdt= new Date(this.sourceEmployee.completionDate);
+                    this.setExpireDate =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                }
+                if (this.sourceEmployee.expirationDate != null) {
+                    let comdt= new Date(this.sourceEmployee.expirationDate);
+                    this.sourceEmployee.expirationDate  =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                }
                 this.employeeService.updateTrainingDetails(this.sourceEmployee).subscribe(
                     data => {
                         this.onUploadDocumentListNew();

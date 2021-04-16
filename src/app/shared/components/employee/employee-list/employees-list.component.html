@@ -171,7 +171,7 @@
 
           <ng-template pTemplate="colgroup" let-columns>
               <colgroup>
-                  <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="table-column-width"> />
+                  <col *ngFor="let col of columns" class="table-column-width"> />
               </colgroup>
           </ng-template>
 
@@ -252,7 +252,7 @@
                      
                   </td>
 
-                  <td class="action-icons-cstm table-column-width" >
+                  <td class="action-icons-cstm table-column-width" style="width:131px !important">
                       <div *ngIf="currentDeletedstatus == false">
                           <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -553,8 +553,8 @@
                                       <p>
                                           <span class="label"><b>Employee Id: <span class="clr-red">*</span></b></span><span class="value">
                                               {{
-                                allEmployeelist.employeeId
-                                  ? allEmployeelist.employeeId
+                                allEmployeelist.employeeCode
+                                  ? allEmployeelist.employeeCode
                                   : '-'
                                               }}
                                           </span>

@@ -84,6 +84,7 @@ export class SalesOrderShippingComponent {
     isEditModeAdd: boolean = false;
     modal: NgbModalRef;
     isMultipleSelected: boolean = false;
+    addCustomerInfo: boolean = false;
 
     constructor(public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -138,6 +139,7 @@ export class SalesOrderShippingComponent {
             this.shippingHeader['shipToName'] = this.customerDetails['name'];
             this.shippingHeader['customerId'] = this.customerDetails['customerId'];
         }
+        this.shippingHeader['soShippingNum'] = 'Creating';
     }
 
     userShipingList: any[] = [];
@@ -520,7 +522,7 @@ export class SalesOrderShippingComponent {
         }
 
         this.shippingHeader['salesOrderId'] = this.salesOrderId;
-        this.shippingHeader['masterCompanyId'] = this.salesOrder['masterCompanyId'];
+        this.shippingHeader['masterCompanyId'] = this.currentUserMasterCompanyId;
         this.shippingHeader['createdBy'] = this.userName;
         this.shippingHeader['updatedBy'] = this.userName;
         this.shippingHeader['createdDate'] = new Date().toDateString();
@@ -759,10 +761,14 @@ export class SalesOrderShippingComponent {
             this.shippingHeader.shipToState = this.shipToAddress.stateOrProvince;
             this.shippingHeader.shipToCountryName = this.shipToAddress.country;
             this.shippingHeader.shipToZip = this.shipToAddress.postalCode;
+            this.shippingHeader.shippingAccountNo = this.shipToAddress.shippingAccountNo;
         }
 
         if (this.shipvia !== undefined) {
             this.shippingHeader.shipviaId = this.shipvia.shipviaId;
+        }
+        if (this.sourceSOApproval !== undefined) {
+            this.shippingHeader.shippingAccountNo = this.sourceSOApproval.shippingAccountNo;
         }
         this.isSpinnerVisible = false;
     }
@@ -1281,6 +1287,11 @@ export class SalesOrderShippingComponent {
         this.shippingHeader['salesOrderCustomsInfo']['netMass'] = '';
         this.shippingHeader['salesOrderCustomsInfo']['vatValue'] = '';
         this.shippingHeader['salesOrderCustomsInfo']['salesOrderCustomsInfoId'] = 0;
+        this.addCustomerInfo = false;
+    }
+
+    AddCustomInfo() {
+        this.addCustomerInfo = true;
     }
 }
 
