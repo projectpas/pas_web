@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import {
   NgForm,
   FormBuilder,
@@ -242,6 +242,9 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.deleteApproversWhileCopieng = true;
         }
         this.getSalesQuoteInstance(params['copyref']);
+        setTimeout(() => {
+          this.toggle_po_header = true;
+        }, 1600);
       }
     });
     this.isSpinnerVisible = false;

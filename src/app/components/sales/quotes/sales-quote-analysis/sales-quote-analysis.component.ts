@@ -3,11 +3,7 @@ import * as $ from "jquery";
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
-import {
-  AlertService
-} from "../../../../services/alert.service";
-import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Router } from "@angular/router";
+import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
@@ -15,8 +11,6 @@ import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
-import { CustomerService } from "../../../../services/customer.service";
-import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
 import { PartDetail } from "../../shared/models/part-detail";
 import { formatNumberAsGlobalSettingsModule, listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
@@ -29,7 +23,6 @@ import { MenuItem } from "primeng/api";
   styleUrls: ["./sales-quote-analysis.component.css"]
 })
 export class SalesQuoteAnalysisComponent implements OnInit {
-  // @ViewChild("dt")
   isEnablePOList: any;
   searchParameters: ISalesSearchParameters;
   sales: any[] = [];
@@ -63,7 +56,6 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   allEmployeeinfo: any[] = [];
   customerWarningData: any = [];
   accountTypes: any[];
-  // approvers: any[];
   customerId: any;
   salesQuoteId: any;
   statusList: any = [];
@@ -74,15 +66,10 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   home: any;
   salesOrderQuoteId: any;
   isApproverlist: any;
-  
+
   constructor(
     private salesQuoteService: SalesQuoteService,
-    private alertService: AlertService,
-    private modalService: NgbModal,
-    private router: Router,
-    private customerService: CustomerService,
     public employeeService: EmployeeService,
-    private commonservice: CommonService,
     public currencyService: CurrencyService,
     private authService: AuthService
   ) { }
@@ -92,20 +79,13 @@ export class SalesQuoteAnalysisComponent implements OnInit {
     this.salesQuote = new SalesQuote();
     this.salesOrderQuote = new SalesOrderQuote();
     this.searchParameters = new SalesSearchParameters();
-    // this.getStatusList();
     this.initColumns();
     this.searchParameters.filters = {
       ...this.searchParameters.filters,
       viewType: this.viewType
     }
     this.isSpinnerVisible = false;
-    // this.breadcrumbs = [
-    //   { label: 'Sales Order Quote' },
-    //   { label: 'Quote List' },
-    // ];
   }
-
-
 
   get userName(): string {
     return this.authService.currentUser
@@ -118,65 +98,111 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   }
 
   initColumns() {
+    // this.headers = [
+    //   { field: "salesOrderQuoteNumber", header: "SO Qte Num", width: "120px" },
+    //   { field: "versionNumber", header: "Qte Ver Num", width: "130px" },
+    //   { field: "quoteDate", header: "Qte Date", width: "130px" },
+    //   { field: "partNumber", header: "PN", width: "130px" },
+    //   { field: "partDescription", header: "PN Description", width: "180px" },
+    //   { field: "stockLineNumber", header: "Stk Line Num", width: "150px" },
+    //   { field: "serialNumber", header: "Ser Num", width: "120px" },
+    //   { field: "conditionDescription", header: "Cond", width: "100px" },
+    //   { field: "uomName", header: "UOM", width: "100px" },
+    //   { field: "qtyQuoted", header: "Qty Qted", width: "100px" },
+    //   { field: "status", header: "Status", width: "80px" },
+    //   { field: "currency", header: "Curr", width: "80px" },
+    //   { field: "markupPerUnit", header: "MarkUp Amt", width: "80px" },
+    //   { field: "grossSalePricePerUnit", header: "Gross Price/Unit", width: "80px" },
+    //   { field: "discountAmount", header: "Disc. Amt", width: "80px" },
+    //   { field: "markupExtended", header: "MarkUp Amt", width: "80px" },
+    //   { field: "grossSalePrice", header: "Gross Sales Amt", width: "80px" },
+    //   { field: "salesDiscountExtended", header: "Disc. Amt", width: "80px" },
+    //   { field: "netSales", header: "Net Sales Amt", width: "80px" },
+    //   { field: "misc", header: "Misc Amt", width: "80px" },
+    //   { field: "totalSales", header: "Product Revenue", width: "80px" },
+    //   { field: "unitCost", header: "Unit Cost", width: "80px" },
+    //   { field: "unitCostExtended", header: "Extended Cost", width: "80px" },
+    //   { field: "marginAmountExtended", header: "Margin Amt", width: "80px", style: "text-align:right" },
+    //   { field: "marginPercentage", header: "Margin %", width: "80px", style: "text-align:right" },
+    //   { field: "freight", header: "Freight", width: "80px", style: "text-align: right" },
+    //   { field: "taxAmount", header: "Tax Amt", width: "80px" },
+    //   { field: "totalRevenue", header: "Total Revenue", width: "80px" },
+    //   { field: "notes", header: "Notes", width: "80px" },
+    // ];
     this.headers = [
-      { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "120px" },
-      { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
-      { field: "quoteDate", header: "Quote Date", width: "130px" },
+      { field: "salesOrderQuoteNumber", header: "SO Qte Num", width: "120px" },
+      { field: "versionNumber", header: "Qte Ver Num", width: "130px" },
+      { field: "quoteDate", header: "Qte Date", width: "85px" },
       { field: "partNumber", header: "PN", width: "130px" },
       { field: "partDescription", header: "PN Description", width: "180px" },
-      { field: "stockLineNumber", header: "Stk Line Num", width: "150px" },
+      { field: "stockLineNumber", header: "Stk Line Num", width: "120px" },
       { field: "serialNumber", header: "Ser Num", width: "120px" },
       { field: "conditionDescription", header: "Cond", width: "100px" },
       { field: "uomName", header: "UOM", width: "100px" },
-      { field: "qtyQuoted", header: "Qty Quoted", width: "100px" },
+      { field: "qtyQuoted", header: "Qty Qted", width: "70px" },
       { field: "status", header: "Status", width: "80px" },
       { field: "currency", header: "Curr", width: "80px" },
-      { field: "markupPerUnit", header: "MarkUp Amt", width: "80px" },
-      { field: "grossSalePricePerUnit", header: "Gross Price/Unit", width: "80px" },
-      { field: "discountAmount", header: "Disc. Amt", width: "80px" },
-      { field: "markupExtended", header: "MarkUp Amt", width: "80px" },
-      { field: "grossSalePrice", header: "Gross Sales Amt", width: "80px" },
-      { field: "salesDiscountExtended", header: "Disc. Amt", width: "80px" },
-      { field: "netSales", header: "Net Sales Amt", width: "80px" },
-      { field: "misc", header: "Misc Amt", width: "80px" },
-      { field: "totalSales", header: "Product Revenue", width: "80px" },
-      { field: "unitCost", header: "Unit Cost", width: "80px" },
-      { field: "unitCostExtended", header: "Extended Cost", width: "80px" },
-      { field: "marginAmountExtended", header: "Margin Amt", width: "80px", style: "text-align:right" },
-      { field: "marginPercentage", header: "Margin %", width: "80px", style: "text-align:right" },
-      {
-        field: "freight", header: "Freight", width: "80px", style: "text - align: right"
-      },
-      { field: "taxAmount", header: "Tax Amt", width: "80px" },
-      { field: "totalRevenue", header: "Total Revenue", width: "80px" },
-      { field: "notes", header: "Notes", width: "80px" },
+      { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
+      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "misc", header: "Misc Charges", width: "120px" },
+      { field: "totalSales", header: "Total Revenue", width: "130px" },
+      { field: "unitCost", header: "Unit Cost", width: "130px" },
+      { field: "unitCostExtended", header: "Ext Cost", width: "130px" },
+      { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
+      { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
+      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+      { field: "taxAmount", header: "Tax Amt", width: "120px" },
+      { field: "notes", header: "Notes", width: "120px" }
     ];
     this.selectedColumns = this.headers;
   }
 
   initSummaryColumns() {
+    // this.headers = [
+    //   { field: "salesOrderQuoteNumber", header: "SO Qte Num", width: "120px" },
+    //   { field: "versionNumber", header: "Qte Ver Num", width: "130px" },
+    //   { field: "partNumber", header: "PN", width: "130px" },
+    //   { field: "partDescription", header: "PN Description", width: "180px" },
+    //   { field: "uomName", header: "UOM", width: "100px" },
+    //   { field: "qtyQuoted", header: "Qty Qted", width: "100px" },
+    //   { field: "currency", header: "Curr", width: "100px" },
+    //   { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
+    //   { field: "grossSalePrice", header: "Gross Sales Amt", width: "120px" },
+    //   { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
+    //   { field: "netSales", header: "Net Sales Amt", width: "130px" },
+    //   { field: "misc", header: "Misc Amt", width: "120px" },
+    //   { field: "totalSales", header: "Product Revenue", width: "130px" },
+    //   { field: "unitCostExtended", header: "Prod Cost", width: "130px" },
+    //   { field: "marginAmountExtended", header: "Prod Margin Amt", width: "120px", style: "text-align:right" },
+    //   { field: "marginPercentage", header: " Prod Margin %", width: "100px", style: "text-align:right" },
+    //   { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+    //   { field: "taxAmount", header: "Tax Amt", width: "120px" },
+    //   { field: "totalRevenue", header: "Total Revenue", width: "130px" },
+    // ];
     this.headers = [
-      { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "120px" },
-      { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
+      { field: "salesOrderQuoteNumber", header: "SO Qte Num", width: "120px" },
+      { field: "versionNumber", header: "Qte Ver Num", width: "130px" },
       { field: "partNumber", header: "PN", width: "130px" },
       { field: "partDescription", header: "PN Description", width: "180px" },
       { field: "uomName", header: "UOM", width: "100px" },
-      { field: "qtyQuoted", header: "Qty Quoted", width: "100px" },
       { field: "currency", header: "Curr", width: "100px" },
-      { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
-      { field: "grossSalePrice", header: "Gross Sales Amt", width: "120px" },
-      { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
-      { field: "netSales", header: "Net Sales Amt", width: "130px" },
-      { field: "misc", header: "Misc Amt", width: "120px" },
-      { field: "totalSales", header: "Product Revenue", width: "130px" },
-      { field: "unitCostExtended", header: "Prod Cost", width: "130px" },
-      { field: "marginAmountExtended", header: "Prod Margin Amt", width: "120px", style: "text-align:right" },
-      { field: "marginPercentage", header: " Prod Margin %", width: "100px", style: "text-align:right" },
-      {
-        field: "freight", header: "Freight", width: "120px", style: "text - align: right"
-      },
+      { field: "qtyQuoted", header: "Qty", width: "70px" },
+      { field: "grossSalePricePerUnit", header: "Per Unit", width: "120px" },
+      { field: "grossSalePrice", header: "Ext. Price", width: "120px" },
+      { field: "misc", header: "Misc Charges", width: "120px" },
+      { field: "totalSales", header: "Total Revenue", width: "130px" },
+      { field: "unitCost", header: "Unit Cost", width: "130px" },
+      { field: "unitCostExtended", header: "Ext Cost", width: "130px" },
+      { field: "marginAmountExtended", header: "Margin Amt", width: "120px", style: "text-align:right" },
+      { field: "marginPercentage", header: "Margin %", width: "100px", style: "text-align:right" },
+      { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
       { field: "taxAmount", header: "Tax Amt", width: "120px" },
-      { field: "totalRevenue", header: "Total Revenue", width: "130px" },
+      { field: "notes", header: "Notes", width: "120px" }
+      // { field: "markupExtended", header: "MarkUp Amt", width: "120px" },
+      // { field: "salesDiscountExtended", header: "Disc. Amt", width: "120px" },
+      // { field: "netSales", header: "Net Sales Amt", width: "130px" },
+      // { field: "freight", header: "Freight", width: "120px", style: "text - align: right" },
+      // { field: "totalRevenue", header: "Total Revenue", width: "130px" },
     ];
     this.selectedColumns = this.headers;
   }
@@ -200,8 +226,6 @@ export class SalesQuoteAnalysisComponent implements OnInit {
     this.onSearch();
   }
 
-
-
   loadData(event, globalFilter = "") {
     event.filters.statusId = this.currentStatus;
     this.searchParameters.first = parseInt(event.first) / event.rows;
@@ -221,18 +245,14 @@ export class SalesQuoteAnalysisComponent implements OnInit {
     }
 
     this.searchParameters.globalFilter = globalFilter;
-
-    // this.onSearch();
   }
 
   globalSearch(val) {
     this.searchParameters.globalFilter = val
     const lazyEvent = this.lazyLoadEventData;
-    // this.loadData(lazyEvent, val);
-
   }
+
   onSearch() {
-    //this.alertService.startLoadingMessage();
     this.isSpinnerVisible = true;
     this.salesQuoteService
       .getAllSalesOrderQuoteAnalysis(this.salesOrderQuoteId)
@@ -258,9 +278,11 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   dismissModel() {
     this.modal.close();
   }
+
   dismissViewModel() {
     this.modal.close();
   }
+
   dismissPartViewModel() {
     this.partModal.close();
   }
@@ -299,7 +321,6 @@ export class SalesQuoteAnalysisComponent implements OnInit {
 
   calculateTotalRevenue(part: PartDetail, i) {
     return this.sales[i].netSales + this.sales[i].misc;
-
   }
 
   calculateProductRevenue(part, i) {
@@ -337,7 +358,6 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   formateCurrency(amount) {
     return amount ? formatNumberAsGlobalSettingsModule(amount, 2) : '0.00';
   }
-
 
   filterParts(tempSales) {
     this.sales = [];
@@ -389,7 +409,6 @@ export class SalesQuoteAnalysisComponent implements OnInit {
 
   getUniqueParts(myArr, prop1) {
     let uniqueParts = JSON.parse(JSON.stringify(myArr));
-    // let uniquePartsFiltered = [];
     uniqueParts.reduceRight((acc, v, i) => {
       if (acc.some(obj => v[prop1] === obj[prop1])) {
         uniqueParts.splice(i, 1);
@@ -400,5 +419,4 @@ export class SalesQuoteAnalysisComponent implements OnInit {
     }, []);
     return uniqueParts;
   }
-
 }
