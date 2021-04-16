@@ -348,7 +348,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }, 0)
         }
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 20, materialMandatoriesIds)
+        this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 0, materialMandatoriesIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.materialMandatory = res.map(x => {
@@ -390,7 +390,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 conditionIds.push(acc.conditionCodeId);
             })
         }
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, conditionIds)
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true,  0, conditionIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.conditionList = res
@@ -440,10 +440,12 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             "restrictDER": true,
             "custRestrictDER": true,
             "custRestrictPMA": true,
-            "idlist":  null
+            "idlist":  null,
+            "masterCompanyId":0
           };
           partSearchParamters.partNumber=value ? value :"";  
           partSearchParamters.customerId =this.customerId?this.customerId: 0;
+          partSearchParamters.masterCompanyId =this.currentUserMasterCompanyId;
           if(this.isWorkOrder || this.isSubWorkOrder || this.isQuote){
           }else{
             partSearchParamters.restrictPMA=false;
@@ -475,7 +477,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
         });
       }else{
-        this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0).subscribe((res:any) => {
+        this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds ? exclusionsIds : 0,this.currentUserMasterCompanyId).subscribe((res:any) => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
             this.allPartnumbersInfo.forEach(element => {
@@ -565,7 +567,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             return provisionIds.push(acc.provisionId);
         }, 0)
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 100, provisionIds)
+        this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 0, provisionIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.provisionListData = [];
@@ -588,7 +590,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         provisionIds = this.workFlow.materialList.reduce((acc, x) => {
             return provisionIds.push(acc.provisionId);
         }, 0)
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 100, provisionIds)
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, provisionIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.percentageList = res;
@@ -869,7 +871,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getPNDetails(part) {
         if (part.partItem && part.conditionCodeId) {
             this.isSpinnerVisible = true;
-            this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionCodeId)
+            this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionCodeId,this.authService.currentUser.masterCompanyId)
                 .subscribe(
                     partDetail => {
 
@@ -971,7 +973,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         } 
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Task', 'TaskId', 'Description', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
          this.taskList = res.map(x => {
                 return {
                     id: x.value,

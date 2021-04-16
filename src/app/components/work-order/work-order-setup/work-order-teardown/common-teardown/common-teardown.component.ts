@@ -197,7 +197,7 @@ export class CommonTeardownComponent implements OnInit {
                     }
                 }		
             }	
-                 this.commonService.autoCompleteDropdownsEmployeeByJobTitle('',TechnicianId[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId).subscribe(res => {
+                 this.commonService.autoCompleteDropdownsEmployeeByJobTitle('',TechnicianId[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.technicianOriginalList = res; 
                     this.technicianList = this.technicianOriginalList;
                 }, error => error => this.saveFailedHelper(error))
@@ -279,7 +279,7 @@ export class CommonTeardownComponent implements OnInit {
                     }
                 }	
             }	
-                 this.commonService.autoCompleteDropdownsEmployeeByJobTitle('',id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId).subscribe(res => {
+                 this.commonService.autoCompleteDropdownsEmployeeByJobTitle('',id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.inspectorsOriginalList = res; 
                     this.inspectionList = this.inspectorsOriginalList; 
                     if(!iscall) 
@@ -340,7 +340,7 @@ export class CommonTeardownComponent implements OnInit {
             if(this.arrayInsectorlist.length == 0) {			
                 this.arrayInsectorlist.push(0); 
             }	
-                await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId).subscribe(res => {
+                await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayInsectorlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.inspectorsOriginalList = res; 
                     this.inspectionList = this.inspectorsOriginalList;           
                 }, error => error => this.saveFailedHelper(error))
@@ -354,7 +354,7 @@ export class CommonTeardownComponent implements OnInit {
             if(this.arrayTechnicianlist.length == 0) {			
                 this.arrayTechnicianlist.push(0); 
             }	
-                await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId).subscribe(res => {
+                await this.commonService.autoCompleteDropdownsEmployeeByJobTitle(serachtext,id[0].jobTitleId, 20,this.arrayTechnicianlist.join(), this.currentUserManagementStructureId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                     this.technicianOriginalList = res; 
                     this.technicianList = this.technicianOriginalList;           
                 }, error => error => this.saveFailedHelper(error))
@@ -382,9 +382,13 @@ export class CommonTeardownComponent implements OnInit {
     //         console.log("reasons list", res);
     //     })
     // }
+    setEditArray: any = []
     getTeardownServicesList() {
-        this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name').subscribe(res => {
-            this.teadownTypesList = res.map(x => {
+        // this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name').subscribe(res => {
+            const strText = '';
+            this.setEditArray.push(0);
+            this.commonService.autoSuggestionSmartDropDownList('TeardownType', 'TeardownTypeId', 'Name', strText, true, 0, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
+            this.teadownTypesList = res.map(x => { 
                 return {
                     ...x,
                     teardownTypeId: x.value,

@@ -320,7 +320,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         // part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
         if (part && part.partNumber && part.conditionId) {
                         this.isSpinnerVisible = true;
-                        this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionId)
+                        this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionId,this.authService.currentUser.masterCompanyId)
                             .subscribe(
                                 partDetail => {
                                     this.isSpinnerVisible = false;

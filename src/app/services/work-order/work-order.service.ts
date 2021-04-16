@@ -13,6 +13,7 @@ import { WorkOrder } from '../../models/work-order.model';
 import { WorkOrderType, WorkOrderStatus, WorkScope, WorkOrderStage } from '../../models/work-order-type.model';
 
 import { WorkOrderEndpointService } from '../work-order/work-order-endpoint.service';
+import { masterCompanyId } from 'src/app/common-masterData/mastercompany-details';
 
 @Injectable()
 export class WorkOrderService {
@@ -29,8 +30,8 @@ export class WorkOrderService {
     //     return this.workOrderEndpointService.getWorkOrderById<WorkOrder>(workOrderId);
     // }
 
-    getWorkOrderById(workOrderId, receivingCustomerId) {
-        return this.workOrderEndpointService.getWorkOrderById(workOrderId, receivingCustomerId);
+    getWorkOrderById(workOrderId, receivingCustomerId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderById(workOrderId, receivingCustomerId,masterCompanyId);
     }
 
     createNewWorkOrder(workOrder) {
@@ -72,36 +73,36 @@ export class WorkOrderService {
         return this.workOrderEndpointService.postLabourEndpoint<any>(action);
     }
 
-    getWorkOrderStageAndStatus(){
-        return this.workOrderEndpointService.getWorkOrderStageAndStatus()
+    getWorkOrderStageAndStatus(masterCompanyId){
+        return this.workOrderEndpointService.getWorkOrderStageAndStatus(masterCompanyId)
     }
 
-    getWorkFlowByPNandScope(itemMasterId, workScopeId) {
-        return this.workOrderEndpointService.getWorkFlowByPNandScope(itemMasterId, workScopeId)
+    getWorkFlowByPNandScope(itemMasterId, workScopeId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkFlowByPNandScope(itemMasterId, workScopeId,masterCompanyId)
     }
-    getNTEandSTDByItemMasterId(itemMasterId, workScopeId) {
-        return this.workOrderEndpointService.getNTEandSTDByItemMasterId(itemMasterId, workScopeId)
+    getNTEandSTDByItemMasterId(itemMasterId, workScopeId,masterCompanyId) {
+        return this.workOrderEndpointService.getNTEandSTDByItemMasterId(itemMasterId, workScopeId,masterCompanyId)
     }
 
-    getMultipleParts() {
-        return this.workOrderEndpointService.getMultipleParts()
+    getMultipleParts(masterCompanyId) {
+        return this.workOrderEndpointService.getMultipleParts(masterCompanyId)
     }
 
     
-    getWorkOrderDatesFoRTat(workOrderId) {
-        return this.workOrderEndpointService.getWorkOrderDatesFoRTat(workOrderId)
+    getWorkOrderDatesFoRTat(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderDatesFoRTat(workOrderId,masterCompanyId)
     }
     getRevisedPartNumbers(itemMasterId) {
         return this.workOrderEndpointService.getRevisedPartNumbers(itemMasterId)
     }
-    getStockLineByItemMasterId(itemMasterId, conditionId) {
-        return this.workOrderEndpointService.getStockLineByItemMasterId(itemMasterId, conditionId);
+    getStockLineByItemMasterId(itemMasterId, conditionId,masterCompanyId) {
+        return this.workOrderEndpointService.getStockLineByItemMasterId(itemMasterId, conditionId,masterCompanyId);
     }
-    getPartPublicationByItemMaster(itemMasterId) {
-        return this.workOrderEndpointService.getPartPublicationByItemMaster(itemMasterId);
+    getPartPublicationByItemMaster(itemMasterId,masterCompanyId) {
+        return this.workOrderEndpointService.getPartPublicationByItemMaster(itemMasterId,masterCompanyId);
     }
-    getSerialNoByStockLineId(stockLineId, conditionId) {
-        return this.workOrderEndpointService.getSerialNoByStockLineId(stockLineId, conditionId)
+    getSerialNoByStockLineId(stockLineId, conditionId,masterCompanyId) {
+        return this.workOrderEndpointService.getSerialNoByStockLineId(stockLineId, conditionId,masterCompanyId)
     }
     getConditionByItemMasterId(itemMasterId) {
         return this.workOrderEndpointService.getConditionByItemMasterId(itemMasterId);
@@ -128,8 +129,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.createWorkFlowWorkOrder(data);
     }
 
-    getWorkOrderWorkFlowNumbers(workOrderId) {
-        return this.workOrderEndpointService.getWorkOrderWorkFlowNumbers(workOrderId);
+    getWorkOrderWorkFlowNumbers(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getWorkOrderWorkFlowNumbers(workOrderId,masterCompanyId);
     }
     getbillingCostDataForWoOnly(workOrderWorkflowId,managementStructureId) {
         return this.workOrderEndpointService.getbillingCostDataForWoOnly(workOrderWorkflowId,managementStructureId);
@@ -232,8 +233,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getWorkOrderWorkFlowByWorkFlowWorkOrderId(workFlowWorkOrderId)
     }
 
-    viewWorkOrderHeader(workOrderId) {
-        return this.workOrderEndpointService.viewWorkOrderHeader(workOrderId);
+    viewWorkOrderHeader(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.viewWorkOrderHeader(workOrderId,masterCompanyId);
     } 
     // getSitesbymanagementstructrue(managementStructureId){
     //     return this.workOrderEndpointService.getSitesbymanagementstructrue(managementStructureId);
@@ -242,8 +243,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.viewWorkOrderPartNumber(workOrderId);
     }
 
-    getReservedPartsByWorkFlowWOId(WorkFlowWorkOrderId,workOrderId, statusId,updatedBy,type) {
-        return this.workOrderEndpointService.getReservedPartsByWorkFlowWOId(WorkFlowWorkOrderId,workOrderId, statusId,updatedBy,type);
+    getReservedPartsByWorkFlowWOId(WorkFlowWorkOrderId,workOrderId, statusId,updatedBy,type,masterCompanyId) {
+        return this.workOrderEndpointService.getReservedPartsByWorkFlowWOId(WorkFlowWorkOrderId,workOrderId, statusId,updatedBy,type,masterCompanyId);
     }
     saveReservedPartorIssue(alternatePart) {
         return this.workOrderEndpointService.saveReservedPartorIssue(alternatePart)
@@ -274,14 +275,14 @@ export class WorkOrderService {
     }
 
     // subWorkOrder 
-    getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId) {
-        return this.workOrderEndpointService.getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId);
+    getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId,masterCompanyId) {
+        return this.workOrderEndpointService.getSubWorkOrderHeaderByWorkOrderId(workOrderId, workOrderPartNumberId,masterCompanyId);
     }
     searchPartNumberAdvanced(parameters){
         return this.workOrderEndpointService.searchPartNumberAdvanced(parameters);
     }
-    getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId) {
-        return this.workOrderEndpointService.getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId);
+    getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getSubWorkOrderDataBySubWorkOrderId(subWorkOrderId,masterCompanyId);
     }
 
 
@@ -312,8 +313,8 @@ export class WorkOrderService {
 
 
 
-    getPartsDetail(workOrderId) {
-        return this.workOrderEndpointService.getPartsDetail(workOrderId);
+    getPartsDetail(workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getPartsDetail(workOrderId,masterCompanyId);
     }
 
     getBuildDetailsFromWorkFlow(partId, workScopeId) {
@@ -324,8 +325,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.getBillingEditData(workOrderId, workOrderPartNoId);
     }
 
-    getPartNosByCustomer(customerId, workOrderId) {
-        return this.workOrderEndpointService.getPartNosByCustomer(customerId, workOrderId);
+    getPartNosByCustomer(customerId, workOrderId,masterCompanyId) {
+        return this.workOrderEndpointService.getPartNosByCustomer(customerId, workOrderId,masterCompanyId);
     }
     
     getReceivingCustomerreference(customerId) {
@@ -352,8 +353,8 @@ export class WorkOrderService {
         return this.workOrderEndpointService.createworkOrderTearDownData(data,isSubWorkOrder);
     }
 
-    getworkOrderTearDownData(id,isSubWorkOrder){
-        return this.workOrderEndpointService.getworkOrderTearDownData(id,isSubWorkOrder);
+    getworkOrderTearDownData(id,isSubWorkOrder,masterCompanyId){
+        return this.workOrderEndpointService.getworkOrderTearDownData(id,isSubWorkOrder,masterCompanyId);
     }
     getworkOrderTearDownViewData(id,isSubWorkOrder){
         return this.workOrderEndpointService.getworkOrderTearDownViewData(id,isSubWorkOrder);
@@ -373,8 +374,8 @@ export class WorkOrderService {
     getworblist(){
         return this.workOrderEndpointService.getworblist()   
     }
-    getLaborOHSettingsByManagementstrucId(id) {
-        return this.workOrderEndpointService.getLaborOHSettingsByManagementstrucId(id);
+    getLaborOHSettingsByManagementstrucId(id,masterCompanyId) {
+        return this.workOrderEndpointService.getLaborOHSettingsByManagementstrucId(id,masterCompanyId);
     }
 
     saveOrUpdateWOQuoteSetting(data){
@@ -417,18 +418,18 @@ export class WorkOrderService {
     deleteMpnByWorkOrderId(data){
         return this.workOrderEndpointService.deleteMpnByWorkOrderId(data);
     }
-    getSubWorkOrderDataForMpnGrid(workOrderMaterialsId,workOrderPartNoId){
-        return this.workOrderEndpointService.getSubWorkOrderDataForMpnGrid(workOrderMaterialsId,workOrderPartNoId);
+    getSubWorkOrderDataForMpnGrid(workOrderMaterialsId,workOrderPartNoId,masterCompanyId){
+        return this.workOrderEndpointService.getSubWorkOrderDataForMpnGrid(workOrderMaterialsId,workOrderPartNoId,masterCompanyId);
     }
     createSubWorkOrderGrid(subWorkOrder){
         return this.workOrderEndpointService.createSubWorkOrderGrid(subWorkOrder);
     }
 
-    getSubWorOrderMpnsById(subWorkOrderId){
-        return this.workOrderEndpointService.getSubWorOrderMpnsById(subWorkOrderId);
+    getSubWorOrderMpnsById(subWorkOrderId,masterCompanyId){
+        return this.workOrderEndpointService.getSubWorOrderMpnsById(subWorkOrderId,masterCompanyId);
     }
-    getMpnDropdownlistSubWo(subWorkOrderId){
-        return this.workOrderEndpointService.getMpnDropdownlistSubWo(subWorkOrderId)
+    getMpnDropdownlistSubWo(subWorkOrderId,masterCompanyId){
+        return this.workOrderEndpointService.getMpnDropdownlistSubWo(subWorkOrderId,masterCompanyId)
     } 
     createSubWorkOrderMaterialList(data){
         return this.workOrderEndpointService.createSubWorkOrderMaterialList(data)
@@ -565,8 +566,8 @@ export class WorkOrderService {
     getWorkOrderAssetListForDropDown() {
         return this.workOrderEndpointService.getWorkOrderAssetListForDropDown();
     }
-    checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder){
-        return this.workOrderEndpointService.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder);
+    checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder,masterCompanyId){
+        return this.workOrderEndpointService.checkInAseetInventoryList(workOrderAssetId,isSubWorkOrder,masterCompanyId);
     }
     checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder){
         return this.workOrderEndpointService.checkOutAseetInventoryList(workOrderAssetId,workOrderId,woPartNoId,assetRecordId,createdBy,masterCompanyId,subWorkOrderId,isSubworkOrder);

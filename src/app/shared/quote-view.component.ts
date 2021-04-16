@@ -139,7 +139,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   getWorkOrderInfo(getWorkOrderInfo) {
-    this.workOrderService.getWorkOrderById(getWorkOrderInfo).subscribe(res => {
+    this.workOrderService.getWorkOrderById(getWorkOrderInfo,this.authService.currentUser.masterCompanyId).subscribe(res => {
       if (res) {
         this.savedWorkOrderData = res;
         this.customerCode = res.customerDetails.customerId;
@@ -160,7 +160,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
         this.quoteForm['employeeId'] = res['employeeId'];
         this.quoteForm.masterCompanyId = res['masterCompanyId'];
         this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
-        this.workOrderService.getWorkOrderQuoteDetail(res.workOrderId, res["workFlowWorkOrderId"])
+        this.workOrderService.getWorkOrderQuoteDetail(res.workOrderId, res["workFlowWorkOrderId"],this.authService.currentUser.masterCompanyId)
           .subscribe(
             (res: any) => {
               if (res) {
@@ -191,7 +191,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   getMPNDetails(workOrderId) {
-    this.workOrderService.getPartsDetail(workOrderId)
+    this.workOrderService.getPartsDetail(workOrderId,this.authService.currentUser.masterCompanyId)
       .subscribe((workOrderParts: partsDetail[]) => {
         this.workOrderPartsDetail = workOrderParts;
       }
@@ -300,7 +300,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   }
 
   getMPNList(workOrderId) {
-    this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId).subscribe(res => {
+    this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {
       this.workOrderWorkFlowOriginalData = res;
       console.log(res);
       this.mpnPartNumbersList = res.map(x => {
@@ -340,7 +340,7 @@ export class QuoteViewComponent implements OnInit, OnChanges {
         this.labor.workFlowWorkOrderId = mpn;
         this.workFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
         this.selectedWorkFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
-        this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId)
+        this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId,this.authService.currentUser.masterCompanyId)
           .subscribe(
             (res) => {
               if (res && res['workOrderQuoteDetailsId']) {

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
+import { masterCompanyId } from 'src/app/common-masterData/mastercompany-details';
 
 
 @Injectable()
@@ -12,9 +13,9 @@ export class QuoteEndpointService extends EndpointFactory {
         super(http, configurations, injector);
     } 
 
-    getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquote?wfwoId=${wfwoId}&workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
-            return this.handleErrorCommon(error, () => this.getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId));
+    getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquote?wfwoId=${wfwoId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+            return this.handleErrorCommon(error, () => this.getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId,masterCompanyId));
           });
     }
     getQuoteExclusionList(workOrderQuoteId, buildMethodId) {
@@ -62,9 +63,9 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getQuoteLaborListBilling(workOrderId));
           });
     }
-    getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getworkorderquote?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId));
+    getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,masterCompanyId?) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getworkorderquote?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,masterCompanyId));
           });
     }
     getWorkOrderQuoteList(payload) {
@@ -77,14 +78,14 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getWorkOrderQuoteData(workOrderQuoteId));
           });
     }
-    getSavedQuoteDetails(wfwoid) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/buildmethoddetails?workflowWorkorderId=${wfwoid}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getSavedQuoteDetails(wfwoid));
+    getSavedQuoteDetails(wfwoid,masterCompanyId?) {
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/buildmethoddetails?workflowWorkorderId=${wfwoid}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getSavedQuoteDetails(wfwoid,masterCompanyId));
           });
     }
-    getPartDetails(itemMasterId, conditionId) {
-        return this.http.get(`${this.configurations.baseUrl}/api/common/partpurchasesaledetails?itemMasterId=${itemMasterId}&condition=${conditionId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getPartDetails(itemMasterId, conditionId));
+    getPartDetails(itemMasterId, conditionId,masterCompanyId) {
+        return this.http.get(`${this.configurations.baseUrl}/api/common/partpurchasesaledetails?itemMasterId=${itemMasterId}&condition=${conditionId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getPartDetails(itemMasterId, conditionId,masterCompanyId));
           });
     }
     getPartConditions(itemMasterId) {
@@ -92,9 +93,9 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getPartConditions(itemMasterId));
           });
     }
-    getWOTaskQuote(workOrderPartNoId){
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/wotasklevelcharges?workOrderPartNoId=${workOrderPartNoId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getWOTaskQuote(workOrderPartNoId));
+    getWOTaskQuote(workOrderPartNoId,masterCompanyId){
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/wotasklevelcharges?workOrderPartNoId=${workOrderPartNoId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getWOTaskQuote(workOrderPartNoId,masterCompanyId));
           });
     }
     getQuoteSettings(masterCompanyId, woTypeId){
@@ -107,15 +108,15 @@ export class QuoteEndpointService extends EndpointFactory {
             return this.handleErrorCommon(error, () => this.getInternalApproversList(approvalTaskId, moduleAmount));
           });
     }
-    getWOQuoteApprovalList(workOrderQuoteId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/woquoteapprovallist?workOrderQuoteId=${workOrderQuoteId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getWOQuoteApprovalList(workOrderQuoteId));
+    getWOQuoteApprovalList(workOrderQuoteId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/woquoteapprovallist?workOrderQuoteId=${workOrderQuoteId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getWOQuoteApprovalList(workOrderQuoteId,masterCompanyId));
           });
     }
 
-    getWOQuoteAnalysisList(workOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/summarisedauotationanalysis?workOrderId=${workOrderId}`).catch(error => {
-            return this.handleErrorCommon(error, () => this.getWOQuoteAnalysisList(workOrderId));
+    getWOQuoteAnalysisList(workOrderId,masterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/summarisedauotationanalysis?workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getWOQuoteAnalysisList(workOrderId,masterCompanyId));
           });
     }
 

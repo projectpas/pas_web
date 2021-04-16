@@ -384,7 +384,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         });
     }
     getAllWorkOrderStages(): void {
-        this.workOrderService.getWorkOrderStageAndStatus().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getWorkOrderStageAndStatus(this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderOriginalStageList = res;
             this.workOrderStagesList = res
             if(!this.isEditMode) {

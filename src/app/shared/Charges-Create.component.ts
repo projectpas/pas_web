@@ -104,7 +104,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
               chargesIds.push(acc.workflowChargeTypeId);
             }, 0)
         }
-        this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds)
+        this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.chargesTypes = res.map(x => {

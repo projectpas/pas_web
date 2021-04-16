@@ -1816,7 +1816,7 @@ export class RoSetupComponent implements OnInit {
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
 					}				
-					this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId).subscribe(resp => {
+					this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId,this.authService.currentUser.masterCompanyId).subscribe(resp => {
 						   parentdata.allStocklineDetails = resp;
 							if (parentdata.stockLineId) {
 							parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineDetails);
@@ -2227,7 +2227,7 @@ export class RoSetupComponent implements OnInit {
 	}	
 
 	getShipViaDetailsForShipTo(id?) {		
-		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue).subscribe(response => {
+		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.shipViaList = response;
 			for(var i =0; i < this.shipViaList.length; i++) {
 				if(this.shipViaList[i].isPrimary) {
@@ -2275,7 +2275,7 @@ export class RoSetupComponent implements OnInit {
 	}
 	
 	getShipViaEdit(data) {
-		this.commonService.getShipViaDetailsByModule(data.shipToUserType, this.shipToSelectedvalue).subscribe(response => {
+		this.commonService.getShipViaDetailsByModule(data.shipToUserType, this.shipToSelectedvalue,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.shipViaList = response;
 			this.sourcePoApproval.shippingAcctNum = data.shippingAccountNo;
 			this.sourcePoApproval.shipViaId = data.shipViaId;
@@ -4483,7 +4483,7 @@ WarnRescticModel() {
 		partList.controlId = '';
 		partList.purchaseOrderNum = '';
 		partList.controlNumber = '';
-		this.workOrderService.getStockLineByItemMasterId(partList.itemMasterId, partList.conditionId).subscribe(res => {
+		this.workOrderService.getStockLineByItemMasterId(partList.itemMasterId, partList.conditionId,this.authService.currentUser.masterCompanyId).subscribe(res => {
 			partList.allStocklineDetails = res;			
 			if(partList.allStocklineDetails.length > 0) {
 				partList.stocklineId = partList.allStocklineDetails[0];

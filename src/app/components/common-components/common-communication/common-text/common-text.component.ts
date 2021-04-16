@@ -124,7 +124,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
         }
         const strText = value ? value : '';
         // 190
-        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.ContactList = res.map(x => {
                 return {
                     ...x,
@@ -426,7 +426,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
     dataOriginal:any=[];
     getAllTextList() {
         this.isSpinnerVisible = true;
-        this.communicationService.getCOmmonTextList(this.referenceId, this.moduleId, this.deletedStatusInfo)
+        this.communicationService.getCOmmonTextList(this.referenceId, this.moduleId, this.deletedStatusInfo,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
                     if(res && res.length !=0){

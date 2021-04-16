@@ -889,6 +889,8 @@ if(element.exclusions){
     }
     downloadFile(rowData) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
-        window.location.assign(url);
+         window.location.assign(url);
     }
+ 
+
 }

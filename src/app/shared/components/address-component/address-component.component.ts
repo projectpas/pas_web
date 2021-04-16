@@ -622,7 +622,7 @@ filterCountries(event) {
         }
     }
 	getShipViaDetailsForShipTo(id?) {		
-		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue).subscribe(response => {
+		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue,this.authService.currentUser.masterCompanyId).subscribe(response => {
 			this.shipViaList = response;
 			if(this.shipViaList && this.shipViaList.length !=0){
 			for(var i =0; i < this.shipViaList.length; i++) {

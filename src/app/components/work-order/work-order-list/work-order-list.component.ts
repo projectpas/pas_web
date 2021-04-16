@@ -155,7 +155,7 @@ export class WorkOrderListComponent implements OnInit {
 		  : null;
     }
     getWorkOrderDefaultSetting() {
-        this.commonService.workOrderDefaultSettings(1, 1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, 1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res && res[0]) {
                 if (res[0].woListDefault == 'WO View') {
                     this.viewType = 'wp';
@@ -433,7 +433,7 @@ export class WorkOrderListComponent implements OnInit {
         if (customerId && this.customerWarningListId) {
             this.warningMessage = '';
             this.isSpinnerVisible = true;
-            this.commonService.customerWarnings(customerId, this.customerWarningListId).subscribe((res: any) => {
+            this.commonService.customerWarnings(customerId, this.customerWarningListId,this.currentUserMasterCompanyId).subscribe((res: any) => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     this.warningMessage = res.warningMessage;
@@ -452,7 +452,7 @@ export class WorkOrderListComponent implements OnInit {
         this.restrictMessage = '';
         if (customerId && this.customerWarningListId) {
             this.isSpinnerVisible = true;
-            this.commonService.customerResctrictions(customerId, this.customerWarningListId).subscribe((res: any) => {
+            this.commonService.customerResctrictions(customerId, this.customerWarningListId,this.currentUserMasterCompanyId).subscribe((res: any) => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     this.restrictID = res.customerWarningId;
@@ -500,7 +500,7 @@ export class WorkOrderListComponent implements OnInit {
     }
 
     exportCSV(dt) {
-        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "workOrderStatus": this.currentStatus }, "globalFilter": "" }
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "workOrderStatus": this.currentStatus,"masterCompanyId":this.currentUserMasterCompanyId }, "globalFilter": "" }
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;

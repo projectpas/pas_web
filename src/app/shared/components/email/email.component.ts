@@ -419,7 +419,7 @@ export class EmailComponent implements OnInit, OnChanges {
     getAllEmail() {
         //
         this.isSpinnerVisible = true;
-        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.partNo)
+        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.partNo,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res: any[]) => {
                     this.isSpinnerVisible = false;

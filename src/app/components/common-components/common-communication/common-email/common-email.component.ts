@@ -129,7 +129,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
         this.setEditArray = [];
         this.setEditArray.push(0);
         const strText = value ? value : '';
-        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.ContactList = res.map(x => {
                 return {
                     ...x,
@@ -512,7 +512,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     getAllEmail() {
         this.data = [];
         this.isSpinnerVisible = true;
-        this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type)
+        this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res: any[]) => {
                     console.log("res" , res);

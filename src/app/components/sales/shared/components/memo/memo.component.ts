@@ -4,6 +4,7 @@ declare var $ : any;
 import { CommunicationService } from '../../../../../shared/services/communication.service';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { DBkeys } from '../../../../../services/db-Keys';
+import { AuthService } from '../../../../../services/auth.service';
 
 
 
@@ -44,7 +45,7 @@ export class MemoComponent implements OnInit, OnChanges {
     isEdit: any;
     employees: any[];
     newdata: any;
-    constructor(private activeModal: NgbActiveModal, private employeeService: EmployeeService, private communicationService: CommunicationService) { }
+    constructor(private activeModal: NgbActiveModal, private authService: AuthService,private employeeService: EmployeeService, private communicationService: CommunicationService) { }
 
     ngOnInit(): void {
 
@@ -157,7 +158,7 @@ export class MemoComponent implements OnInit, OnChanges {
     }
 
     getAllMemoList(referenceId, moduleId, PartId) {
-        this.communicationService.getMemoList(referenceId, moduleId, PartId)
+        this.communicationService.getMemoList(referenceId, moduleId, PartId,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
                     if (res && res.length > 0) {

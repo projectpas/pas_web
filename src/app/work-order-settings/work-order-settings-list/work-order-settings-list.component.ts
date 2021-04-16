@@ -88,10 +88,12 @@ export class WorkOrderSettingsListComponent {
     }
 
     public allWorkFlows: any[] = [];
-
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
     private getAllWorkflows() {
         this.alertService.startLoadingMessage();
-        this.receivingCustomerWorkOrderService.getAllWorkFlows().subscribe(
+        this.receivingCustomerWorkOrderService.getAllWorkFlows(this.currentUserMasterCompanyId).subscribe(
            
             results => this.onWorkflowLoadSuccessful(results[0]),
            
