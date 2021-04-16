@@ -117,7 +117,7 @@ export class WorkOrderSettingsListComponent {
             { field: 'defaultScope', header: 'Default Scope' },
             // { field: 'woListDefaultRB', header: ' WOListDefaultRB' },
             { field: 'defaultPriority', header: 'Priority' },
-            { field: 'laborHoursMedthod', header: 'Labor Hours Method' },
+            { field: 'laborHoursMedthodId', header: 'Labor Hours Method' },
             //
         ];
 
@@ -137,15 +137,15 @@ export class WorkOrderSettingsListComponent {
         this.alertService.stopLoadingMessage();
         this.workFlowGridSource.data = allWorkFlows;
         const data=allWorkFlows
-        data.forEach(element => {
-            if(element.laborHoursMedthodId==1){
-                element.laborHoursMedthod='Labor Hours';
-            }else if(element.laborHoursMedthodId==2){
-                element.laborHoursMedthod=='Labor ClockIn/Out';
-            }else if(element.laborHoursMedthodId==3){
-                element.laborHoursMedthod='Scan';
-            }
-        });
+        // data.forEach(element => {
+        //     if(element.laborHoursMedthodId==1){ 
+        //         element.laborHoursMedthod='Labor Hours';
+        //     }else if(element.laborHoursMedthodId==2){
+        //         element.laborHoursMedthod=='Labor ClockIn/Out';
+        //     }else if(element.laborHoursMedthodId==3){
+        //         element.laborHoursMedthod='Scan';
+        //     }
+        // });
               this.workflowList = data; 
     }
 
