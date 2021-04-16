@@ -1,9 +1,9 @@
 <div class="card new-card">
   <div class="card-body header-body">
-    <p-table #dt [value]="sales" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
-      paginator="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
-      selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
-      (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
+    <p-table #dt [value]="sales" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize" paginator="true"
+      [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
+      [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true" (onLazyLoad)="loadData($event)"
+      [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
       <ng-template pTemplate="caption">
         <div class="row">
           <div style="margin-left: 12px;">
@@ -56,19 +56,17 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr *ngIf="!pnViewSelected">
-          <th class="table-column-width" colspan="12">&nbsp;
+          <th class="table-column-width" colspan="13">&nbsp;
           </th>
-          <th class="table-column-width" colspan="3">Per Unit Revenue
-          </th>
-          <th class="table-column-width" colspan="4">Extended Revenue
-          </th>
-          <th class="table-column-width" colspan="2">&nbsp;
+          <th class="table-column-width" colspan="4">Revenue
           </th>
           <th class="table-column-width" colspan="2">Cost
           </th>
-          <th class="table-column-width" colspan="2">Product Margin
+          <th class="table-column-width" colspan="2">Margin
           </th>
-          <th class="table-column-width" colspan="5">
+          <th class="table-column-width" colspan="2">&nbsp;
+          </th>
+          <th class="table-column-width" colspan="1">&nbsp;
           </th>
         </tr>
         <tr>
@@ -126,49 +124,36 @@
           </td>
         </tr>
         <tr *ngIf="!pnViewSelected && rowIndex == (sales.length-1)" class="footer">
-          <td class="table-column-width" colspan="15">&nbsp;
+          <td class="table-column-width" colspan="12">&nbsp;
           </td>
           <td class="table-column-width"><label>Total</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('markupExtended')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
+          <td class="table-column-width content-to-end"><label
               class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('salesDiscountExtended')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('netSales')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('misc')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('unitCost')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-             class="margin-0">{{getTotalAmount('totalSales')}}</label>
-          </td>
-          <td>&nbsp;
-          </td>
-          <td class="table-column-width" class="content-to-end"><label
+          <td class="content-to-end table-column-width"><label
               class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
+          <td class="content-to-end table-column-width"><label
               class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getPercentage('marginPercentage')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginPercentage')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('freight')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getPercentage('freight')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('taxAmount')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
-          </td>
-          <td class="table-column-width">&nbsp;
+          <td class="content-to-end table-column-width">
           </td>
         </tr>
         <tr *ngIf="pnViewSelected && rowIndex == (sales.length-1)" class="footer">
@@ -176,41 +161,32 @@
           </td>
           <td class="table-column-width"><label>Total</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('markupExtended')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
+          <td class="table-column-width content-to-end"><label
               class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('salesDiscountExtended')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('netSales')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('misc')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('unitCost')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('totalSales')}}</label>
-          </td>
-          <td class="table-column-width" class="content-to-end"><label
+          <td class="content-to-end table-column-width"><label
               class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
+          <td class="content-to-end table-column-width"><label
               class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getPercentage('marginPercentage')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginPercentage')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('freight')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getPercentage('freight')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('taxAmount')}}</label>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label
-              class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
+          <td class="content-to-end table-column-width">
           </td>
         </tr>
       </ng-template>

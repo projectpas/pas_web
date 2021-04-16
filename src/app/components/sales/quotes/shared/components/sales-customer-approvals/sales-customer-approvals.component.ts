@@ -372,6 +372,25 @@ export class SalesCustomerApprovalsComponent {
         return result;
     }
 
+    checkAnyRowSelected() {
+        var result = false;
+        var keepGoing = true;
+        if (this.quotesList && this.quotesList.length > 0) {
+            this.quotesList.forEach(
+                (x) => {
+                    if (keepGoing) {
+                        if (x.isSelected) {
+                            result = true;
+                            keepGoing = false;
+                        }
+                    }
+                }
+            )
+        }
+
+        return result;
+    }
+
     viewSelectedRow(content, row) {
         const { salesQuoteId } = row;
         let customerId = row.customerId;
