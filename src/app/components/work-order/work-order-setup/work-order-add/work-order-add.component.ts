@@ -562,7 +562,7 @@ setTimeout(() => {
 setTimeout(() => {
     this.workOrderGeneralInformation.partNumbers.map((x, index) => {
         if(x.publicatonExpirationDate){ 
-            console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+            // console.log("exp and current", moment(x.publicatonExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
            if(  moment(x.publicatonExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
             setTimeout(() => {
                 x.cMMId=0;
@@ -576,7 +576,7 @@ setTimeout(() => {
            }
         }
         if(x.workflowExpirationDate){ 
-            console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
+            // console.log("exp and current", moment(x.workflowExpirationDate).format('MM/DD/YYYY'),moment(this.currentDate).format('MM/DD/YYYY'))
            if(  moment(x.workflowExpirationDate).format('MM/DD/YYYY')   <  moment(this.currentDate).format('MM/DD/YYYY')){
            
             // this.removeWorkflow(x,index);
@@ -606,7 +606,7 @@ setTimeout(() => {
     }, 2000);
     }
     tranferCheckbox(ev){
-        console.log("ev",ev)
+        // console.log("ev",ev)
         $('#workFlowTransfer').modal('show'); 
     }
     getEmployeeData() {
@@ -2043,7 +2043,7 @@ setTimeout(() => {
                         employeeId: {employeeId:this.data.employeeId,name:this.data.employeeName,value:this.data.employeeId,label:this.data.employeeName},
                         dataEnteredBy: {value:this.data.dataEnteredBy,label:this.data.dataEnteredByName},
                     };
-                    this.labor.hoursorClockorScan = res.hoursorClockorScan + 1;
+                    this.labor.hoursorClockorScan = res.hoursorClockorScan;
                     this.labor.workFloworSpecificTaskorWorkOrder = (res.workOrderHoursType == 0) ? 'workFlow' : (res.workOrderHoursType == 1) ? 'specificTasks' : 'workOrder';
                     this.labor.totalWorkHours = res.totalWorkHours;
                     this.labor.expertiseId = res.expertiseId;
@@ -2080,6 +2080,11 @@ setTimeout(() => {
                                         let hours = taskData.hours.toFixed(2);
                                         taskData['totalHours'] = hours.toString().split('.')[0];
                                         taskData['totalMinutes'] = hours.toString().split('.')[1];
+                                    }
+                                    if (taskData.adjustments) {
+                                        let adjustments = taskData.adjustments.toFixed(2);
+                                        taskData['adjtotalHours'] = adjustments.toString().split('.')[0];
+                                        taskData['ajdtotalMinutes'] = adjustments.toString().split('.')[1];
                                     }
                                     this.labor.workOrderLaborList[0][task.description.toLowerCase()].push(taskData);
                                     break;
@@ -2640,6 +2645,12 @@ setTimeout(() => {
                                     let hours = rt.hours.toFixed(2);
                                     rt.totalHours = hours.toString().split('.')[0];
                                     rt.totalMinutes = hours.toString().split('.')[1];
+                                }
+
+                                if (rt.adjustments) {
+                                    let adjustments = rt.adjustments.toFixed(2);
+                                    rt.adjtotalHours = adjustments.toString().split('.')[0];
+                                    rt.ajdtotalMinutes = adjustments.toString().split('.')[1];
                                 }
                                 labor = { ...rt, employeeId: { 'label': rt.employeeName, 'value': rt.employeeId } }
                                 this.quoteLaborList.workOrderLaborList[0][tl['description'].toLowerCase()].push(labor);
@@ -3214,7 +3225,7 @@ setTimeout(() => {
             );
             this.workOrderGeneralInformation.partNumbers[index].estimatedShipDate=currentDate;
         }
-    }
+    } 
     createNewRoWorkOrder(rowData) {
         if(this.isSubWorkOrder==true){
             window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)

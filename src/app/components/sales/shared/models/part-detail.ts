@@ -59,6 +59,7 @@ export class PartDetail {
   salesOrderQuotePartId: number;
   qtyReserved: number;
   qtyAvailable: number;
+  qtyToShip: number;
   salesQuoteNumber: string;
   customerRef: string;
   priority: string;

@@ -482,10 +482,17 @@ laborTaskData:any;
       if (!obj.totalMinutes) {
         obj.totalMinutes = 0;
       }
+      if (!obj.adjtotalHours) {
+        obj.adjtotalHours = 0;
+      }
+      if (!obj.ajdtotalMinutes) {
+        obj.ajdtotalMinutes = 0;
+      }
       if (!obj.totalHours) {
         obj.totalHours = 0;
       }
       obj.hours = Number(`${obj.totalHours}.${obj.totalMinutes}`)
+      obj.adjustments=Number(`${obj.adjtotalHours}.${obj.ajdtotalMinutes}`)
       obj['adjustedHours'] = Number(obj.hours) + Number(obj.adjustments)
       var totalHours = 0;
     }
@@ -658,8 +665,12 @@ if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length
       const ms = moment(end, "DD/MM/YYYY HH:mm:ss").diff(moment(start, "DD/MM/YYYY HH:mm:ss"));
       const days = moment.duration(ms)
       currentRecord.hours = Math.floor(days.asHours()) + moment.utc(ms).format(".mm");
+      currentRecord.adjustments = Math.floor(days.asHours()) + moment.utc(ms).format(".mm");
+
       currentRecord.totalMinutes = moment.utc(ms).format("mm");
       currentRecord.totalHours = Math.floor(days.asHours());
+      currentRecord.ajdtotalMinutes = moment.utc(ms).format("mm");
+      currentRecord.adjtotalHours = Math.floor(days.asHours());
       this.calculateHoursDifference(currentRecord);
     }
   }
@@ -752,7 +763,7 @@ if(this.laborForm && this.laborForm.laborList && this.laborForm.laborList.length
         })
       }
     }
-    this.saveFormdata = {
+    this.saveFormdata = { 
       ...this.laborForm,
       hoursorClockorScan: this.laborForm.hoursorClockorScan,
       dataEnteredBy: getValueFromObjectByKey('value', this.laborForm.dataEnteredBy),
@@ -1106,10 +1117,22 @@ this.commonfunctionHandler();
         if (!taskData.totalHours) {
           taskData.totalHours = 0;
         }
+        if (!taskData.ajdtotalMinutes) {
+          taskData.ajdtotalMinutes = 0;
+        }
+        if (!taskData.adjtotalHours) {
+          taskData.adjtotalHours = 0;
+        }
         taskData.hours = Number(`${taskData.totalHours}.${taskData.totalMinutes}`)
         if (taskData.hours && !taskData.isDeleted)
           task.totalWorkHours += Number(taskData.hours);
+
+          taskData.adjustments = Number(`${taskData.adjtotalHours}.${taskData.ajdtotalMinutes}`)
+          if (taskData.adjustments && !taskData.isDeleted)
+            task.totalWorkHours += Number(taskData.adjustments);
       }
+
+      
       task.totalWorkHours = task.totalWorkHours.toFixed(2);
     }
     this.calculateTotalHours();
@@ -1137,8 +1160,12 @@ this.commonfunctionHandler();
     task.totalWorkHours = 0;
     if (this.laborForm.workOrderLaborList[0] && this.laborForm.workOrderLaborList[0][task.description]) {
       for (let taskData of this.laborForm.workOrderLaborList[0][task.description]) {
-        if (taskData.hours && !taskData.isDeleted)
+        if (taskData.hours && !taskData.isDeleted){
           taskData.hours = 0;
+        }
+        if (taskData.adjustments && !taskData.isDeleted){
+          taskData.adjustments = 0;
+        }
       }
     }
   }

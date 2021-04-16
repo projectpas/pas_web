@@ -59,7 +59,6 @@ export class ManagementStructureComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   msAddbutton: boolean = false;
-  isSpinnerVisible: boolean;
   currencyName: any;
   cols: any[];
   allComapnies: MasterCompany[] = [];

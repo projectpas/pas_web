@@ -130,7 +130,7 @@ export class EmployeesListComponent implements OnInit {
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'CreatedBy',width:"90px" },
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'UpdatedBy',width:"90px" },
+        { field: 'updatedBy', header: 'UpdatedBy',width:"130px" },
 
 
     ];
