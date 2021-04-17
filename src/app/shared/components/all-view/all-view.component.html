@@ -228,22 +228,22 @@
                   <th>PN Description</th>												
                   <th>Stock Type</th>
                   <th>Mfr</th>												
-                  <th>Priority<span _ngcontent-c22="" class="clr-red">*</span></th>												
-                  <th>Need By <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th>Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th>Order Qty <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th>Vend List Price<span _ngcontent-c22="" class="clr-red">*</span></th>												
-                  <th>Disc Percent</th>
-                  <th>Disc./unit</th>
-                  <th>Disc. Amount</th>
-                  <th>Unit Cost</th>												
-                  <th>Ext Cost</th>
+                  <th class="min-width-70">Priority<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Need By <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Cond <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Order Qty <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">Vend List Price<span _ngcontent-c22="" class="clr-red">*</span></th>												
+                  <th class="min-width-70">Disc Percent</th>
+                  <th class="min-width-70">Disc./unit</th>
+                  <th class="min-width-70">Disc. Amount</th>
+                  <th class="min-width-70">Unit Cost</th>												
+                  <th class="min-width-70">Ext Cost</th>
                   <th>Functional CUR <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th>FX Rate <span _ngcontent-c22="" class="clr-red">*</span></th>
+                  <th class="min-width-70">FX Rate <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Report CUR <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th>WO</th>
-                  <th>RO</th>
-                  <th>SO</th>
+                  <th class="min-width-80">WO</th>
+                  <th class="min-width-80">RO</th>
+                  <th class="min-width-80">SO</th>
                   <th>Item Type</th>
                   <th>GL Account</th>
                   <th>UOM</th>
@@ -417,7 +417,7 @@
                     <td>{{approver.approverName}}</td>
                     <td>{{approver.approverCode}}</td>
                     <td>{{approver.approverEmail}}</td>
-                    <td class="approver-total-cost">
+                    <td style="text-align:right" class="approver-total-cost">
                       <label class="approver-total-cost">{{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}</label>
                     </td>
                     <td>
@@ -442,7 +442,7 @@
         <p-tabPanel header="Approver Process">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
-                <table class="table table-bordered header-table-width">
+                <table class="table table-bordered">
                   <thead>
                       <tr class="pad_workflo">
                           <th *ngFor="let header of approvalProcessHeader">
@@ -457,9 +457,9 @@
                               <td  class="qty-width" *ngIf="field.field == 'qty'
                                     || field.field == 'unitCost'
                                     || field.field == 'extCost'"  >
-                                  <p  class="minwidth-80">{{approver[field.field]}}</p>
+                                  <p style="text-align:right" class="minwidth-80">{{approver[field.field]}}</p>
                               </td>
-                              <td   *ngIf="field.field != 'sentDate'
+                              <td style="min-width:120px" *ngIf="field.field != 'sentDate'
                                     && field.field != 'approvedDate'
                                     && field.field != 'statusId'
                                     && field.field != 'approvedBy'
@@ -471,16 +471,16 @@
                                     && field.field != 'extCost'" >
                                   <p  class="minwidth-120">{{approver[field.field]}}</p>
                               </td>
-                              <td class="date-td-width" *ngIf="field.field == 'sentDate' && approver.isSelected == true && approver['actionId'] == 1">
+                              <td class="date-td-width" style="min-width:114px" *ngIf="field.field == 'sentDate' && approver.isSelected == true && approver['actionId'] == 1">
                                   {{approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                               </td>
-                              <td  class="date-td-width" *ngIf="field.field == 'sentDate' && (approver.isSelected == null || approver.isSelected == false) && approver['actionId'] == 1">
+                              <td  class="date-td-width" style="min-width:114px" *ngIf="field.field == 'sentDate' && (approver.isSelected == null || approver.isSelected == false) && approver['actionId'] == 1">
                                  &nbsp;
                               </td>                               
-                              <td  class="date-td-width" *ngIf="field.field == 'sentDate' && approver['actionId']  > 1">
+                              <td  class="date-td-width" style="min-width:114px" *ngIf="field.field == 'sentDate' && approver['actionId']  > 1">
                                   {{ approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                               </td>
-                              <td *ngIf="field.field == 'statusId'">
+                              <td style="min-width:80px" *ngIf="field.field == 'statusId'">
                                   <label *ngIf="field.field != 'statusId'" [ngClass]="approvalProcessHeader.includes(field.field)?'text-right':''">{{approver[field.field]}}</label>
                                   <select *ngIf="field.field == 'statusId'" (change)="onStatusChange(approver)"
                                           [(ngModel)]="approver['statusId']"
@@ -503,7 +503,7 @@
                                   </div>
 
                               </td>
-                              <td *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
+                              <td style="min-width:114px" *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
                                   <!-- <p-calendar [showIcon]="true" class="calender-cstm"
                                               (change)="onStatusChange(approver)"
                                               name="openDate" #openDate="ngModel" required
@@ -514,7 +514,7 @@
                                   </p-calendar> -->
                                
                               </td>
-                              <td *ngIf="field.field == 'approvedDate' && approver['actionId'] == 5 " >
+                              <td style="min-width:114px" *ngIf="field.field == 'approvedDate' && approver['actionId'] == 5 " >
                                   <!-- <p-calendar [showIcon]="true" class="calender-cstm"
                                               (change)="onStatusChange(approver)"
                                               name="openDate" #openDate="ngModel" required
@@ -525,13 +525,13 @@
                                   </p-calendar> -->
                                   {{ approver[field.field] | date: 'MM/dd/yyyy h:mm a' }}
                               </td>
-                              <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] != 1 " >
+                              <td style="min-width:114px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] != 1 " >
                                 
                               </td>
-                              <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1  && approver['statusId'] != 3 " >
+                              <td style="min-width:114px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1  && approver['statusId'] != 3 " >
                                 
                               </td>
-                              <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1 && approver['statusId'] == 3" >
+                              <td style="min-width:114px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1 && approver['statusId'] == 3" >
                                   
                                   {{ approver[field.field] | date: 'MM/dd/yyyy h:mm a' }}
                               </td>
@@ -591,7 +591,7 @@
             <div class="tableFixHead">  
             <table class="table table-bordered" id="po-table">
               <thead>
-                <tr class="header-table-width">
+                <tr >
                   <th>PN <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>ALT/Equiv PN</th>
                   <th>PN Description</th>												
@@ -838,7 +838,7 @@
         <p-tabPanel header="Approver Process">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
               <div class="tableFixHead">  
-                <table class="table table-bordered header-table-width">
+                <table class="table table-bordered">
                   <thead>
                       <tr class="pad_workflo">
                           <th *ngFor="let header of approvalProcessHeader">
@@ -853,9 +853,9 @@
                               <td  class="qty-width" *ngIf="field.field == 'qty'
                                     || field.field == 'unitCost'
                                     || field.field == 'extCost'"  >
-                                  <p  class="minwidth-80">{{approver[field.field]}}</p>
+                                  <p style="text-align: right !important;" class="minwidth-80">{{approver[field.field]}}</p>
                               </td>
-                              <td   *ngIf="field.field != 'sentDate'
+                              <td  style="min-width:120px" *ngIf="field.field != 'sentDate'
                                     && field.field != 'approvedDate'
                                     && field.field != 'statusId'
                                     && field.field != 'approvedBy'
@@ -867,13 +867,13 @@
                                     && field.field != 'extCost'" >
                                   <p  class="minwidth-120">{{approver[field.field]}}</p>
                               </td>
-                              <td class="date-td-width" *ngIf="field.field == 'sentDate' && approver.isSelected == true && approver['actionId'] == 1">
+                              <td class="date-td-width" style="min-width:114px" *ngIf="field.field == 'sentDate' && approver.isSelected == true && approver['actionId'] == 1">
                                   {{approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                               </td>
-                              <td  class="date-td-width" *ngIf="field.field == 'sentDate' && (approver.isSelected == null || approver.isSelected == false) && approver['actionId'] == 1">
+                              <td  class="date-td-width" style="min-width:114px" *ngIf="field.field == 'sentDate' && (approver.isSelected == null || approver.isSelected == false) && approver['actionId'] == 1">
                                  &nbsp;
                               </td>                               
-                              <td  class="date-td-width" *ngIf="field.field == 'sentDate' && approver['actionId']  > 1">
+                              <td  class="date-td-width" style="min-width:114px" *ngIf="field.field == 'sentDate' && approver['actionId']  > 1">
                                   {{ approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                               </td>
                               <td *ngIf="field.field == 'statusId'">
@@ -899,7 +899,7 @@
                                   </div>
 
                               </td>
-                              <td *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
+                              <td style="min-width:114px" *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
                                   <!-- <p-calendar [showIcon]="true" class="calender-cstm"
                                               (change)="onStatusChange(approver)"
                                               name="openDate" #openDate="ngModel" required
@@ -910,7 +910,7 @@
                                   </p-calendar> -->
                                
                               </td>
-                              <td *ngIf="field.field == 'approvedDate' && approver['actionId'] == 5 " >
+                              <td style="min-width:114px" *ngIf="field.field == 'approvedDate' && approver['actionId'] == 5 " >
                                   <!-- <p-calendar [showIcon]="true" class="calender-cstm"
                                               (change)="onStatusChange(approver)"
                                               name="openDate" #openDate="ngModel" required
@@ -921,13 +921,13 @@
                                   </p-calendar> -->
                                   {{ approver[field.field] | date: 'MM/dd/yyyy h:mm a' }}
                               </td>
-                              <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] != 1 " >
+                              <td style="min-width:114px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] != 1 " >
                                 
                               </td>
-                              <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1  && approver['statusId'] != 3 " >
+                              <td style="min-width:114px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1  && approver['statusId'] != 3 " >
                                 
                               </td>
-                              <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1 && approver['statusId'] == 3" >
+                              <td style="min-width:114px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1 && approver['statusId'] == 3" >
                                   
                                   {{ approver[field.field] | date: 'MM/dd/yyyy h:mm a' }}
                               </td>

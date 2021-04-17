@@ -1,4 +1,4 @@
-﻿import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
+import { SalesQuote } from './../../../../models/sales/SalesQuote.model';
 import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Params, ActivatedRoute } from '@angular/router';
 import {WorkOrderQuote,multiParts,partsDetail} from '../../../../models/work-order-quote.modal';
@@ -1896,9 +1896,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     }
 
     saveMaterialListForWO(data) {
-        this.disableMat=false;
-        console.log("dattaaa",data)
-        // debugger;
+        this.disableMat=false; 
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
@@ -3471,4 +3469,3 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         this.disableMat=false;
     }
 }
-//9505784975
