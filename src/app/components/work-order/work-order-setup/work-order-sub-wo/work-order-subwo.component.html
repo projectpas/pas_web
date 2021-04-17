@@ -233,13 +233,19 @@
                   [disabled]="isView" appendTo="body">
                 </p-dropdown>
               </td>
-              <td>
+              <td class="lign_flex">
                 <span class="inline-block">
                   <p-dropdown [options]="dybamicworkFlowList[i]" name="workFlow{{i}}" #workFlow="ngModel" (ngModelChange)="getActiveMPN()"
                     class="p-dropdown-custom-md p-dropdown-mh120" [(ngModel)]="workOrderPartNumber.workflowId"
                     [disabled]="isView" appendTo="body">
                   </p-dropdown>
                 </span>
+                <span data-toggle="modal" data-target="#workflowView" [ngClass]="{pointerEvents : workOrderPartNumber.workflowId==0 || workOrderPartNumber.workflowId==null}">
+                  <a class="btn nobg btn-view-cstm"   (click)="viewWorkflow(workOrderPartNumber)" matTooltip="View Workflow"
+                      matTooltipPosition="above">
+                      <i class="fa fa-eye"></i>
+                  </a>
+              </span> 
               </td>
               <td>
                 <input type="text" class="form-control w100" name="itemGroup{{i}}" #description="ngModel" 
@@ -339,6 +345,26 @@
               <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="removePublication()"
                 >Ok </button>
           </div>
+      </div>
+  </div>
+</div>
+<div id="workflowView" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-xlg">
+      <!-- Modal content-->
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" (click)="closeModel()">&times;</button>
+              <h4 class="modal-title">Workflow OverView</h4>
+         
+          </div>
+              <div class="modal-body" *ngIf="currentWorkflowId">
+                  <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowType]="subTabWorkFlow"
+                  [workFlowId]="currentWorkflowId"></app-workflow-list>
+                </div> 
+                <div class="modal-footer">
+                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModel()"
+               >Close</button>
+              </div>
       </div>
   </div>
 </div>

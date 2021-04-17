@@ -636,7 +636,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.isShowAlternatePN = false;
        if (this.workFlowWorkOrderId) {
            this.isSpinnerVisibleReserve=true;
-           this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
+           this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder,this.authService.currentUser.masterCompanyId).subscribe(res => {
                if(res && res.length !=0){
                 this.reservedList = res.map(x => {
                     x.masterCompanyId = this.authService.currentUser.masterCompanyId;

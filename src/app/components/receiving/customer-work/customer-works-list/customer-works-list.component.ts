@@ -519,13 +519,13 @@ export class CustomerWorksListComponent implements OnInit {
         else el.classList.remove("hidePlaceHolder");
     }
 
-    toGetDocumentsList(id) {       
-        var moduleId=37;
-        this.commonService.GetDocumentsListNew(id,moduleId).subscribe(res => {
-            this.customerWorkDocumentsList = res;
-            this.allCustomerFinanceDocumentsListOriginal=res;
-		})
-    }
+    // toGetDocumentsList(id) {       
+    //     var moduleId=37;
+    //     this.commonService.GetDocumentsListNew(id,moduleId).subscribe(res => {
+    //         this.customerWorkDocumentsList = res;
+    //         this.allCustomerFinanceDocumentsListOriginal=res;
+	// 	})
+    // }
 
     downloadFileUpload(rowData) {	
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
@@ -573,7 +573,7 @@ export class CustomerWorksListComponent implements OnInit {
     }
     validateWarnings(customerId, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
-        this.commonService.customerWarnings(cusId, id).subscribe((res: any) => {
+        this.commonService.customerWarnings(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.warningMessage = res.warningMessage;
                 this.warningID = res.customerWarningId;
@@ -596,7 +596,7 @@ export class CustomerWorksListComponent implements OnInit {
     customerResctrictions(customerId, warningMessage, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.restrictMessage = '';
-        this.commonService.customerResctrictions(cusId, id).subscribe((res: any) => {
+        this.commonService.customerResctrictions(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;

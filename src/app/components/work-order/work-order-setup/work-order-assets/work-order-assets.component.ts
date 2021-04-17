@@ -144,7 +144,7 @@ viewAsstesInventory(rowData){
         this.workOrderCheckInCheckOutList = [];
         this.AvailableCount = 0;
         if (this.status == 'checkIn') {
-            this.workOrderService.checkInAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.isSubWorkOrder).subscribe(res => {
+            this.workOrderService.checkInAseetInventoryList(this.isSubWorkOrder ? this.currentRecord.subWorkOrderAssetId :this.currentRecord.workOrderAssetId,this.isSubWorkOrder,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.workOrderCheckInCheckOutList = res;
                 if (this.workOrderCheckInCheckOutList && this.workOrderCheckInCheckOutList.length != 0) {
                     this.workOrderCheckInCheckOutList.map(element => {

@@ -584,7 +584,7 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus).subscribe(res => {
+        this.commonService.GetDocumentsCommonList(this.referenceId, this.moduleId, this.currentDeletedstatus,this.currentUserMasterCompanyId).subscribe(res => {
             
             this.commondocumentsDestructuredData = [];
             this.documentCollection = [];

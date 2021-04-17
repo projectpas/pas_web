@@ -102,7 +102,7 @@ export class EmailComponent implements OnInit, OnChanges {
     }
 
     getContactDetailsById(id) {
-        this.commonService.getCustomerContactsById(id).subscribe(res => {
+        this.commonService.getCustomerContactsById(id,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.customerContactList = res;
             for (let i = 0; i < this.customerContactList.length; i++) {
                 this.customerContactList[i]['contactName'] = this.customerContactList[i].firstName + " " + this.customerContactList[i].lastName;
@@ -378,7 +378,7 @@ export class EmailComponent implements OnInit, OnChanges {
     getAllEmail() {
         //
 
-        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.selectedPartNumber.workOrderPartNumberId)
+        this.communicationService.getEmailList(this.referenceId, this.moduleId, this.selectedPartNumber.workOrderPartNumberId,1)
             .subscribe(
                 (res: any[]) => {
                     this.data = res;
