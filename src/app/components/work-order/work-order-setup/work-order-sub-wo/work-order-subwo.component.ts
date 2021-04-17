@@ -58,6 +58,8 @@ export class SubWorkOrderComponent implements OnInit {
     techStationList: any = []; 
     isGridShow:boolean=true;
     currentDate=new Date();
+     subTabWorkFlow = "viewworkFlow";
+     isWorkOrder:boolean=true;
     constructor(private router: Router,
         private commonService: CommonService,
         private datePipe: DatePipe,
@@ -491,6 +493,13 @@ export class SubWorkOrderComponent implements OnInit {
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.conditionList = res;
         })
+    }
+    closeModel(){
+        
+    }
+    currentWorkflowId:any;
+    viewWorkflow(workOrderPartNumber){
+        this.currentWorkflowId=workOrderPartNumber.workflowId;
     }
     selectedCondition(value, currentRecord, index,) {
         this.conditionList.forEach(element => {

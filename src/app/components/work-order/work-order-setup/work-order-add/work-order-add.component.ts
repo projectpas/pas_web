@@ -1495,7 +1495,9 @@ setTimeout(() => {
                 this.handleError(err);
             })
     } 
-
+    closeModel(){
+        
+    }
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
