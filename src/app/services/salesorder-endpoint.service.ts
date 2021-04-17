@@ -580,12 +580,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getAllSalesOrderSettings<T>(): Observable<T> {
-    let endPointUrl = this.getSalesOrderSetting;
+  getAllSalesOrderSettings<T>(masterCompanyId): Observable<T> {
+    let endPointUrl = `${this.getSalesOrderSetting}?masterCompanyId=${masterCompanyId}`;
 
     return this.http.get<T>(endPointUrl, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getAllSalesOrderSettings());
+        return this.handleErrorCommon(error, () => this.getAllSalesOrderSettings(masterCompanyId));
       });
   }
 

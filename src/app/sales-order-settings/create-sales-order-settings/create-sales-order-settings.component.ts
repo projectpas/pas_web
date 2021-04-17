@@ -1,49 +1,18 @@
 ﻿import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { fadeInOut } from '../../services/animations';
-import { PageHeaderComponent } from '../../shared/page-header.component';
-declare var $ : any;
+declare var $: any;
 import { AlertService, MessageSeverity } from '../../services/alert.service';
-import { ItemMasterService } from '../../services/itemMaster.service';
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
-import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { MenuItem } from 'primeng/api';//bread crumb
-import { Charge } from '../../models/charge.model';
-import { MasterCompany } from '../../models/mastercompany.model';
-import { AuditHistory } from '../../models/audithistory.model';
+import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
-import { ReceivingCustomerWorkService } from '../../services/receivingcustomerwork.service';
-import { MasterComapnyService } from '../../services/mastercompany.service';
 import { CustomerService } from '../../services/customer.service';
-import { Condition } from '../../models/condition.model';
-import { ConditionService } from '../../services/condition.service';
-import { VendorService } from '../../services/vendor.service';
-import { BinService } from '../../services/bin.service';
-import { SiteService } from '../../services/site.service';
-import { Site } from '../../models/site.model';
-import { LegalEntityService } from '../../services/legalentity.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition } from '../../generic/autocomplete';
+import { Router } from '@angular/router';
 import { CommonService } from '../../services/common.service';
 import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
-import { StocklineService } from '../../services/stockline.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { WorkOrderService } from '../../services/work-order/work-order.service';
-import { WorkOrderType } from '../../models/work-order-type.model';
-import { WorkOrderSettingsService } from '../../services/work-order-settings.service';
-import { SalesQuoteService } from '../../services/salesquote.service';
 import { SOSettingsModel } from '../../components/sales/quotes/models/verify-sales-quote-model';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { SalesOrderService } from '../../services/salesorder.service';
-
 
 @Component({
     selector: 'app-create-sales-order-settings',
@@ -53,10 +22,7 @@ import { SalesOrderService } from '../../services/salesorder.service';
 })
 
 export class CreateSalesOrderSettingsComponent implements OnInit {
-
-
-
-    @ViewChild("errorMessagePop",{static:false}) public errorMessagePop: ElementRef;
+    @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
     errorModal: NgbModalRef;
     accountTypes: any[] = [];
     receivingForm: SOSettingsModel = new SOSettingsModel();
@@ -67,23 +33,20 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         { label: 'SO  Settings' },
         { label: 'Create SO Settings' }
     ];
-
-    salesOrderStatusList:any = [];
-    salesOrderPriorityList:any = [];
+    salesOrderStatusList: any = [];
+    salesOrderPriorityList: any = [];
     salesOrderViewList = [{ label: "PN View", value: 1 },
     { label: "SO View", value: 2 }];
-
     salesOrderTypes;
     moduleName: string = "SO Settings";
     allSettings: any = [];
     isSpinnerVisible = false;
     disableSave = true;
     errorMessages: any[] = [];
+
     constructor(private router: Router,
-        private salesQuoteService: SalesQuoteService,
         private salesOrderService: SalesOrderService,
         private alertService: AlertService,
-        private customerService: CustomerService,
         private authService: AuthService,
         private commonservice: CommonService,
         private modalService: NgbModal) {
@@ -97,7 +60,6 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         this.getInitialData();
     }
 
-
     get masterCompanyId(): number {
         return this.authService.currentUser
             ? this.authService.currentUser.masterCompanyId
@@ -110,66 +72,43 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
             : "";
     }
 
-    getAccountTypes() {
-        this.customerService.getCustomerTypes().subscribe(result => {
-            this.accountTypes = result[0];
-        })
-    }
-
     getInitialData() {
-        // this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description"),
-        //     this.customerService.getCustomerTypes(),
-        //     this.salesOrderService.getAllSalesOrderSettings(),
-        //     this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
-        //     this.commonservice.smartDropDownList("Priority", "PriorityId", "Description")
         let typeId = this.receivingForm.typeId ? this.receivingForm.typeId : 0;
         let defaultStatusId = this.receivingForm.defaultStatusId ? this.receivingForm.defaultStatusId : 0;
         let defaultPriorityId = this.receivingForm.defaultPriorityId ? this.receivingForm.defaultPriorityId : 0;
         let defaultStatus = this.receivingForm.soListStatusId ? this.receivingForm.soListStatusId : 0;
-
         this.isSpinnerVisible = true;
-        forkJoin(this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [typeId].join()),
-            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join()),
-            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join())).subscribe(result => {
+        forkJoin(this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [typeId].join(), this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join(), this.masterCompanyId),
+            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join(), this.masterCompanyId)).subscribe(result => {
                 this.isSpinnerVisible = false;
                 this.salesOrderTypes = result[0];
-                // this.accountTypes = result[1][0];
-                // this.allSettings = result[2];
                 this.salesOrderStatusList = result[1];
                 this.salesOrderPriorityList = result[2];
-                // this.removeDuplicateAccountTypes(this.accountTypes);
-
             }, error => {
                 this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadFailed(errorLog)
             })
     }
 
-
     getAllsalesOrderTypes(): void {
-        this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description").subscribe(
+        this.isSpinnerVisible = true;
+        let typId = this.receivingForm.typeId ? this.receivingForm.typeId : 0;
+        this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [typId].join(), this.masterCompanyId).subscribe(
             result => {
                 this.salesOrderTypes = result[0];
+                this.isSpinnerVisible = false;
             }, error => {
                 this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadFailed(errorLog)
             }
         );
     }
 
     saveOrUpdateSOSetting() {
+        this.isSpinnerVisible = true;
         let validSettings = this.validateSettings();
         if (validSettings) {
             let content = this.errorMessagePop;
             this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-            this.errorModal.result.then(
-                () => {
-                },
-                () => {
-                }
-            );
         } else {
             if (!this.isEditMode) {
                 this.receivingForm.createdDate.toDateString();
@@ -184,6 +123,7 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
             this.salesOrderService.saveOrUpdateSOSetting(this.receivingForm)
                 .subscribe(
                     (res) => {
+                        this.isSpinnerVisible = false;
                         this.alertService.showMessage(
                             this.moduleName,
                             `Setting ${(this.isEditMode) ? 'updated' : 'created'} successfully`,
@@ -192,12 +132,9 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
                         this.router.navigateByUrl('/salesordersettingsmodule/salesordersettings/app-sales-order-settings-list');
                     }, error => {
                         this.isSpinnerVisible = false;
-                        const errorLog = error;
-                        this.onDataLoadFailed(errorLog)
                     }
                 )
         }
-
     }
 
     closeErrorMessage() {
@@ -238,35 +175,4 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         }
         return haveError;
     }
-
-    onDataLoadFailed(log) {
-        // this.isSpinnerVisible = false;
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
-
-
-
 }
-
-
-

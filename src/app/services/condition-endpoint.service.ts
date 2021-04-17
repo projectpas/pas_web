@@ -32,11 +32,11 @@ export class ConditionEndpoint extends EndpointFactory {
             });
     }
 
-    getConditionEndpoint<T>(): Observable<T> {
+    getConditionEndpoint<T>(masterCompanyId: number): Observable<T> {
 
-        return this.http.get<T>(this.ConditionUrl, this.getRequestHeaders())
+        return this.http.get<T>(`${this.ConditionUrl}?masterCompanyId=${masterCompanyId}`, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getConditionEndpoint());
+                return this.handleError(error, () => this.getConditionEndpoint(masterCompanyId));
             });
     }
     getNewConditionEndpoint<T>(userObject: any): Observable<T> {
