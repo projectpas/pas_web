@@ -1,200 +1,113 @@
-﻿﻿﻿﻿<div class="card new-card">
+﻿﻿<div class="card new-card">
   <div class="card-header header">
     <div class="row">
       <div class="col">
         <h4 class="header-name">Employee List</h4>
       </div>
       <div>
-        <button *ngIf="isAdd"
-          type="button"
-          class="btn-sm header-button"
-          (click)="navigateTogeneralInfo()">
+        <button *ngIf="isAdd" type="button" class="btn-sm header-button" (click)="navigateTogeneralInfo()">
           Add Employee
         </button>
       </div>
     </div>
   </div>
   <div class="card-body header-body">
-      <p-table
-               #dt
-               class="rpo-table-cstm rro-table-cstm"
-               [value]="allEmployeesList"
-               [first]="0"
-               [totalRecords]="totalRecords"
-               [rows]="pageSize"
-               [paginator]="true"
-               (onLazyLoad)="loadEmployeePages($event)"
-               [lazy]="true"
-               [pageLinks]="3"
-               [rowsPerPageOptions]="[10, 20, 50, 100, totalRecords]"
-               [columns]="selectedColumns"
-               [metaKeySelection]="true"
-               selectionMode="multiple"
-               [(selection)]="selectedColumn"
-               [resizableColumns]="true"
-               [scrollable]="true"
-               [reorderableColumns]="true"
-               scrollHeight="450px">
-          <ng-template pTemplate="caption">            
-              <div class="row">
-                  <div class="col">
-                      <p-multiSelect
-                                     [options]="headers"
-                                     [(ngModel)]="selectedColumns"
-                                     optionLabel="header"
-                                     selectedItemsLabel="{0} columns selected"
-                                     class="multiselect-field"
-                                     defaultLabel="Choose Columns"
-                                     ></p-multiSelect>
-                  </div>
-                  <div class="col">
-                    <div class="global-search-field inner-addon right-addon inline-block">
-                          <i class="fa fa-search"></i>
-                          <input
-                                 type="text"
-                                 pInputText
-                                 size="50"
-                                 class="form-control"
-                                 (input)="globalSearch($event.target.value)"
-                                 placeholder="Filter"
-                                 />
-                      </div>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col">
-                      <button *ngIf="isDownLoad"
-                              type="button"
-                              class="btn btn-primary exports-button"
-                              matTooltip="Download Data"
-                              matTooltipPosition="above"
-                              pButton
-                              icon="fa-download"
-                              iconPos="left"
-                              label="Export Data"
-                              data-toggle="modal" (click)="selectedOnly = false; targetData = dt;" data-target="#downloadConfirmation"
-                              ></button>
-                      <button *ngIf="isDownLoad"
-                              type="button"
-                              class="btn btn-primary exports-button"
-                              matTooltip="Download Selected Data"
-                              matTooltipPosition="above"
-                              pButton
-                              icon="fa-download"
-                              iconPos="left"
-                              label="Export Selected Data"
-                              (click)="dt.exportCSV({selectionOnly:true})"
-                             
-                              ></button>
-                              <!-- data-toggle="modal"
+    <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="allEmployeesList" [first]="0"
+      [totalRecords]="totalRecords" [rows]="pageSize" [paginator]="true" (onLazyLoad)="loadEmployeePages($event)"
+      [lazy]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100, totalRecords]" [columns]="selectedColumns"
+      [metaKeySelection]="true" selectionMode="multiple" [(selection)]="selectedColumn" [resizableColumns]="true"
+      [scrollable]="true" [reorderableColumns]="true" scrollHeight="450px">
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col">
+            <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" optionLabel="header"
+              selectedItemsLabel="{0} columns selected" class="multiselect-field" defaultLabel="Choose Columns">
+            </p-multiSelect>
+          </div>
+          <div class="col">
+            <div class="global-search-field inner-addon right-addon inline-block">
+              <i class="fa fa-search"></i>
+              <input type="text" pInputText size="50" class="form-control" (input)="globalSearch($event.target.value)"
+                placeholder="Filter" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button *ngIf="isDownLoad" type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
+              data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
+              data-target="#downloadConfirmation"></button>
+            <button *ngIf="isDownLoad" type="button" class="btn btn-primary exports-button"
+              matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+              label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"></button>
+            <!-- data-toggle="modal"
                               data-target="#downloadConfirmation"
                               (click)="selectedOnly = true; targetData = dt;" -->
+          </div>
+          <div class="col">
+            <div class="">
+              <div class="col" style="width: 370px; float: right; padding-top: 3px;">
+                <div class="form-group">
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="EmpStatus" class="form-control" value="Active"
+                        (click)="geEmpListByStatus('Active')" [(ngModel)]="currentstatus" />
+                      <span class="checkmark"></span>Active
+                    </label>
                   </div>
-                  <div class="col">
-                      <div class="">
-                          <div
-                               class="col"
-                               style="width: 370px; float: right; padding-top: 3px;"
-                               >
-                              <div class="form-group">
-                                  <div
-                                       class="pull-left radio-buttons-align"
-                                       >
-                                      <label class="radio-cstm wauto">
-                                          <input
-                                                 type="radio"
-                                                 name="EmpStatus"
-                                                 class="form-control"
-                                                 value="Active"
-                                                 (click)="geEmpListByStatus('Active')"
-                                                 [(ngModel)]="currentstatus"
-                                               
-                                               
-                                                 />
-                                          <span class="checkmark"></span>Active
-                                      </label>
-                                  </div>
-                                  <div
-                                       class="pull-left radio-buttons-align"
-                                       >
-                                      <label class="radio-cstm wauto">
-                                          <input
-                                                 type="radio"
-                                                 name="EmpStatus"
-                                                 class="form-control"
-                                                 value="InActive"
-                                                 (click)="geEmpListByStatus('InActive')"
-                                                 [(ngModel)]="currentstatus"
-                                            
-                                                
-                                                 />
-                                          <span class="checkmark"></span>In-active
-                                      </label>
-                                  </div>
-                                  <div
-                                       class="pull-left radio-buttons-align"
-                                       >
-                                      <label class="radio-cstm wauto">
-                                          <input
-                                                 type="radio"
-                                                 name="EmpStatus"
-                                                 class="form-control"
-                                                 value="ALL"
-                                                 (click)="geEmpListByStatus('ALL')"
-                                                 [(ngModel)]="currentstatus"
-                                              
-                                                 />
-                                          <span class="checkmark"></span>All
-                                      </label>
-                                  </div>
-                                  <div class="checkbox-cstm pull-left checkbox-align">
-                                    <label class="checkbox-label-align">
-                                          <input
-                                                 type="checkbox"
-                                                 [(ngModel)]="currentDeletedstatus"
-                                                 name="cparent"
-                                                 id="cparent"
-                                                 (click)="getDeleteListByStatus($event.target.checked)"
-                                                 />
-                                          <span class="cr"
-                                                ><i class="cr-icon pi pi-check"></i
-                                        ></span>
-                                          Show Deleted
-                                      </label>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="EmpStatus" class="form-control" value="InActive"
+                        (click)="geEmpListByStatus('InActive')" [(ngModel)]="currentstatus" />
+                      <span class="checkmark"></span>In-active
+                    </label>
                   </div>
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="EmpStatus" class="form-control" value="ALL"
+                        (click)="geEmpListByStatus('ALL')" [(ngModel)]="currentstatus" />
+                      <span class="checkmark"></span>All
+                    </label>
+                  </div>
+                  <div class="checkbox-cstm pull-left checkbox-align">
+                    <label class="checkbox-label-align">
+                      <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
+                        (click)="getDeleteListByStatus($event.target.checked)" />
+                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                      Show Deleted
+                    </label>
+                  </div>
+                </div>
               </div>
-          </ng-template>
+            </div>
+          </div>
+        </div>
+      </ng-template>
 
-          <ng-template pTemplate="colgroup" let-columns>
-              <colgroup>
-                  <col *ngFor="let col of columns" class="table-column-width"> />
-              </colgroup>
-          </ng-template>
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" class="table-column-width"> />
+        </colgroup>
+      </ng-template>
 
-          <ng-template pTemplate="header" let-columns style="padding-top: 1% !important">
-              <tr>
-                <ng-container *ngFor="let col of columns">
-                  <th class="table-column-width"                     
-                      pResizableColumn
-                      pReorderableColumn
-                      [pSortableColumn]="col.field">
-                      {{ col.header }}
-                      <p-sortIcon [field]="col.field"></p-sortIcon>
-                  </th>
-                </ng-container>
-                  <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
-                    Actions
-                 </th>
-              </tr>
+      <ng-template pTemplate="header" let-columns style="padding-top: 1% !important">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th class="table-column-width" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+              {{ col.header }}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+          </ng-container>
+          <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
+            Actions
+          </th>
+        </tr>
 
-              <tr>
-                  <!--(keyup)="dt.filter($event.target.value, col.field, 'contains')"-->
-                  <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                      <!-- <input style="width: 100%;"
+        <tr>
+          <!--(keyup)="dt.filter($event.target.value, col.field, 'contains')"-->
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+            <!-- <input style="width: 100%;"
                              pInputText
                              type="text"
                              *ngIf="col.field !== 'startDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'"
@@ -205,270 +118,203 @@
                          style="width:100%;"  (change)="dt.filter($event.target.value, col.field, 'contains')">
                      <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate" 
                          style="width:100%;"  (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
-                     <input class="table-header-input-width"
-                             pInputText  *ngIf="col.field !== 'startDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'"
-                             type="text"
-                             (input)="dt.filter($event.target.value, col.field, 'contains'); activeStatus($event.target.value)" />
-                             
-                             <input type="date"   class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
-                             name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-<input type="date"  class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
-          (change)="dateFilterForTable($event.target.value,col.field)" />
-          <input type="date"  
-           class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'startDate'"
-              name="startDate"
-          (change)="dateFilterForTable($event.target.value,col.field)" />
-					       
-                  </th>
-                  <th  class="table-actions-column"></th>
-              </tr>
-          </ng-template>
+            <input class="table-header-input-width" pInputText
+              *ngIf="col.field !== 'startDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'"
+              type="text"
+              (input)="dt.filter($event.target.value, col.field, 'contains'); activeStatus($event.target.value)" />
 
-          <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-              <tr
-                  [pSelectableRow]="rowData"
-                  pReorderableRowHandle
-                  (dblclick)="openEdit(rowData)"
-                  >
-                  <td class="table-column-width"
-                      *ngFor="let col of columns"
-                      class="ui-resizable-column"
-                      pReorderableRowHandle
-                      [matTooltip]="mouseOverData(col.field, rowData)"
-                      >
-                      <ng-container *ngIf="col.field !='shopEmployee'">
-                          {{
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+              name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+              name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
+            <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'startDate'"
+              name="startDate" (change)="dateFilterForTable($event.target.value,col.field)" />
+
+          </th>
+          <th class="table-actions-column"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
+          <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle
+            [matTooltip]="mouseOverData(col.field, rowData)">
+            <ng-container *ngIf="col.field !='shopEmployee'">
+              {{
                             col.field == 'startDate'
                               ? (rowData[col.field] | date: 'MM/dd/yyyy')
                               : (col.field == 'createdDate' || col.field == 'updatedDate')
                               ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                               : rowData[col.field] 
                           }}
-                      </ng-container>
-                    <ng-container *ngIf="col.field =='shopEmployee'">
-                        <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
-                             class="shop-employee-checkbox" />
-                    </ng-container>
-                     
-                  </td>
+            </ng-container>
+            <ng-container *ngIf="col.field =='shopEmployee'">
+              <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'" class="shop-employee-checkbox" />
+            </ng-container>
 
-                  <td class="action-icons-cstm table-column-width" >
-                      <div *ngIf="currentDeletedstatus == false">
-                          <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+          </td>
+
+          <td class="action-icons-cstm table-column-width">
+            <div *ngIf="currentDeletedstatus == false">
+              <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch> -->
-                          <p-inputSwitch *ngIf="isEdit"
-                                         [(ngModel)]="rowData['isActive']"
-                                         name="isActive{{ rowIndex }}"
-                                         matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
-                                         matTooltipPosition="above"
-                                         (onChange)="handleChange(rowData, $event)"
-                                         ></p-inputSwitch>
-                          <span data-toggle="modal" data-target="#view">
-                              <a
-                                 class="btn btn-info boxed-float-btn nobg"
-                                 data-toggle="tooltip"
-                                 (click)="openView(rowData)"
-                                 matTooltip="View"
-                                 ><i class="fa fa-eye"></i
-                              ></a>
-                          </span>
-                          <span *ngIf="isEdit"><a class="btn nobg"
-                                 (click)="openEdit(rowData)"
-                                 matTooltip="Edit"
-                                 matTooltipPosition="above"
-                                 ><i class="fa fa-pencil"> </i></a>
-                          </span>
-                          <!-- <button class="btn-edit" mat-icon-button
+              <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
+                matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}" matTooltipPosition="above"
+                (onChange)="handleChange(rowData, $event)"></p-inputSwitch>
+              <span data-toggle="modal" data-target="#view">
+                <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openView(rowData)"
+                  matTooltip="View"><i class="fa fa-eye"></i></a>
+              </span>
+              <span *ngIf="isEdit"><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit"
+                  matTooltipPosition="above"><i class="fa fa-pencil"> </i></a>
+              </span>
+              <!-- <button class="btn-edit" mat-icon-button
                                       (click)="openEdit(rowData)" matTooltip="Edit">
                                           <mat-icon>edit</mat-icon>
                                       </button> -->
-                          <span *ngIf="isDelete">
-                              <a
-                                 class="btn nobg"
-                                 (click)="openDelete(content, rowData)"
-                                 matTooltip="Delete"
-                                 matTooltipPosition="above"
-                                 >
-                                  <i class="fa fa-trash"></i
-></a>
-                          </span>
-                          <!-- <button class="btn-delete" mat-icon-button matTooltip="Delete"
+              <span *ngIf="isDelete">
+                <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
+                  matTooltipPosition="above">
+                  <i class="fa fa-trash"></i></a>
+              </span>
+              <!-- <button class="btn-delete" mat-icon-button matTooltip="Delete"
                                   (click)="openDelete(content,rowData)">
                                       <mat-icon color="warn">delete</mat-icon>
                                   </button> -->
 
-                                  
-                          <span data-target="#employeeHistory" data-toggle="modal"
-                                ><a
-                                 class="btn nobg"
-                                 (click)="getAuditHistoryById(rowData)"
-                                 matTooltip="History"
-                                 matTooltipPosition="above">
-                                  <i class="fa fa-history"></i></a
-></span>
-                          <!-- <button class="btn-history" mat-icon-button matTooltip="History"
+
+              <span data-target="#employeeHistory" data-toggle="modal"><a class="btn nobg"
+                  (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
+                  <i class="fa fa-history"></i></a></span>
+              <!-- <button class="btn-history" mat-icon-button matTooltip="History"
                                        data-target="#employeeHistory" data-toggle="modal"
                                        (click)="getAuditHistoryById(rowData)">
                                           <mat-icon color="green">history</mat-icon>
                                       </button> -->
-                      </div>
-                      <div *ngIf="currentDeletedstatus == true">
-                          <p-inputSwitch *ngIf="isEdit"
-                                         [(ngModel)]="rowData['isActive']"
-                                         [disabled]="true"
-                                         name="isActive{{ rowIndex }}"
-                                         matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
-                                         matTooltipPosition="above"
-                                         (onChange)="changeStatus(rowData)"
-                                         ></p-inputSwitch>
-                          <span data-toggle="modal" data-target="#view">
-                              <a
-                                 class="btn btn-info boxed-float-btn nobg"
-                                 data-toggle="tooltip"
-                                 (click)="openView(rowData)"
-                                 matTooltip="View"
-                                 ><i class="fa fa-eye"></i
-></a>
-                          </span>
-                          <span *ngIf="isDelete"
-                                ><a
-                                 class="btn nobg btn-users-cstm"
-                                 (click)="restore(restoreId,rowData)"
-                                 matTooltip="Restore Record"
-                                 matTooltipPosition="above"
-                                 ><i class="fa fa-undo" aria-hidden="true"></i
-></a>
-                          </span>
-                          <span data-target="#employeeHistory" data-toggle="modal"
-                                ><a
-                                 class="btn nobg"
-                                 (click)="getAuditHistoryById(rowData)"
-                                 matTooltip="History"
-                                 matTooltipPosition="above">
-                                  <i class="fa fa-history"></i></a
-></span>
-                      </div>
-                  </td>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage" let-columns>
-            <tr>
-              <td [attr.colspan]="15"   class="no-records-cstm no-records-msg">
-                No records found
-              </td>	
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="summary" id="footer">
-              <label id="footer" class="footer">Total:</label>
-              <input
-              class="footer-input-width"
-                     [(ngModel)]="totalRecords"
-                     [disabled]="true"
-                     pInputText
-                     type="text"
-                     />
-              &nbsp;&nbsp;
-              <label id="footer" class="footer1">Pages Count:</label>
-              <input
-              class="footer-input-width"
-                     [(ngModel)]="totalPages"
-                     [disabled]="true"
-                     pInputText
-                     type="text"
-                     />
-          </ng-template>
-      </p-table>
-
-      <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
-          <div class="modal-header">
-              <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-              <button
-                      type="button"
-                      class="close"
-                      aria-label="Close"
-                      (click)="dismissModel()"
-                      >
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <strong>
-                  Employee Name:
-                  <span class="new-label">{{deleteEmployeeName}}</span>
-              </strong>
-          </div>
-
-          <div class="modal-footer">
-              <button
-                      type="button"
-                      class="btn btn-primary"
-                      (click)="deleteItemAndCloseModel()"
-                      >
-                  Yes
-              </button>
-              <button type="button" class="btn btn-danger" (click)="dismissModel()">
-                  No
-              </button>
-          </div>
+            </div>
+            <div *ngIf="currentDeletedstatus == true">
+              <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" [disabled]="true"
+                name="isActive{{ rowIndex }}" matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
+                matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch>
+              <span data-toggle="modal" data-target="#view">
+                <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openView(rowData)"
+                  matTooltip="View"><i class="fa fa-eye"></i></a>
+              </span>
+              <span *ngIf="isDelete"><a class="btn nobg btn-users-cstm" (click)="restore(restoreId,rowData)"
+                  matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
+                    aria-hidden="true"></i></a>
+              </span>
+              <span data-target="#employeeHistory" data-toggle="modal"><a class="btn nobg"
+                  (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
+                  <i class="fa fa-history"></i></a></span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
+            No records found
+          </td>
+        </tr>
       </ng-template>
 
-      <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
-          <div class="modal-header">
-              <h4 class="modal-title">Are You Sure Want to Restore?</h4>
-
-              <button type="button"
-                      class="close"
-                      aria-label="Close"
-                      (click)="dismissModel()">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <strong>
-                  Employee Name:
-                  <span class="new-label">{{restoreRecordData.firstName}}</span>
-              </strong>
-          </div>
-
-          <div class="modal-footer">
-              <button type="button" class="btn btn-primary" (click)="restoreRecord()">
-                  Yes
-              </button>
-              <button type="button" class="btn btn-danger" (click)="dismissModel()">
-                  No
-              </button>
-          </div>
-
-          <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
-              <div class="loading">
-                  <div class="lds-roller">
-                      <div>
-                      </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-                  </div>
-              </div>
-          </div>
-          <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+      <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer">Total:</label>
+        <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" />
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+        <input class="footer-input-width" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
       </ng-template>
+    </p-table>
+
+    <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <strong>
+          Employee Name:
+          <span class="new-label">{{deleteEmployeeName}}</span>
+        </strong>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
+          Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+          No
+        </button>
+      </div>
+    </ng-template>
+
+    <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+      <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <strong>
+          Employee Name:
+          <span class="new-label">{{restoreRecordData.firstName}}</span>
+        </strong>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="restoreRecord()">
+          Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+          No
+        </button>
+      </div>
+
+      <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+        <div class="loading">
+          <div class="lds-roller">
+            <div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+    </ng-template>
   </div>
 </div>
 
 <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
   <div class="loading">
-    <div class="lds-roller"><div>			
-    </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="lds-roller">
+      <div>
+      </div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </div>
-<app-spinner  *ngIf="isSpinnerVisible"></app-spinner>
+<app-spinner *ngIf="isSpinnerVisible"></app-spinner>
 
-<div
-  id="view"
-  class="modal fade"
-  role="dialog"
-  data-backdrop="static"
-  data-keyboard="false"
->
+<div id="view" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xl">
     <!-- Modal content-->
     <div class="modal-content">
@@ -481,122 +327,119 @@
           <!--<a href="#" class="btn btn-primary openall">open all</a> <a href="#" class="btn btn-warning closeall">close all</a>-->
           <div class="panel-group" id="accordion">
             <div class="panel panel-default">
-                <div>
-                    <button type="button"
-                            class="btn btn-primary"
-                            data-toggle="collapse"
-                            (click)="ExpandAllEmployeeDetailsModel()">
-                        Expand All
-                    </button>
-                    <button type="button"
-                            class="btn btn-primary collapsed"
-                            data-toggle="collapse"
-                            (click)="CloseAllEmployeerDetailsModel()">
-                        Collapse All
-                    </button>
-
-                    
-                        <button type="button"  [ngClass]="empstatus ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'">
-                            <span class="value">{{empstatus ? 'Active' : 'In-Active'}}</span>
-                        </button>
-                      
+              <div>
+                <button type="button" class="btn btn-primary" data-toggle="collapse"
+                  (click)="ExpandAllEmployeeDetailsModel()">
+                  Expand All
+                </button>
+                <button type="button" class="btn btn-primary collapsed" data-toggle="collapse"
+                  (click)="CloseAllEmployeerDetailsModel()">
+                  Collapse All
+                </button>
 
 
-                        <hr />
-                    </div>
+                <button type="button"
+                  [ngClass]="empstatus ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'">
+                  <span class="value">{{empstatus ? 'Active' : 'In-Active'}}</span>
+                </button>
+
+
+
+                <hr />
+              </div>
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a *ngIf="isGeneralInfo" class="collapsed" data-toggle="collapse" href="#step1"
-                    >General Information</a
-                  >
+                  <a *ngIf="isGeneralInfo" class="collapsed" data-toggle="collapse" href="#step1">General
+                    Information</a>
                 </h4>
               </div>
-              <div
-                id="step1"
-                class="panel-collapse collapse"
-                *ngIf="allEmployeelist"
-              >
+              <div id="step1" class="panel-collapse collapse" *ngIf="allEmployeelist">
                 <div class="panel-body">
                   <div class="card">
                     <div class="card-body">
                       <div>
-                          <div class="table-responsive default-bg clear">
-                              <div class=" col-sm-12">
-                                  <div class="col-sm-3">
-                                      <p>
-                                          <span class="label"><b>First Name: <span class="clr-red">*</span></b></span><span class="value">
-                                              {{
+                        <div class="table-responsive default-bg clear">
+                          <div class=" col-sm-12">
+                            <div class="col-sm-3">
+                              <p>
+                                <span class="label"><b>First Name: <span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                 allEmployeelist.firstName
                                   ? allEmployeelist.firstName
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Middle Name: </b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Middle Name: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.middleName
                                   ? allEmployeelist.middleName
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Last Name: <span class="clr-red">*</span></b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Last Name: <span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                 allEmployeelist.lastName
                                   ? allEmployeelist.lastName
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Employee Id: <span class="clr-red">*</span></b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Employee Id: <span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                 allEmployeelist.employeeId
                                   ? allEmployeelist.employeeId
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Employee Id (per Payroll): </b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Employee Id (per Payroll): </b></span><span class="value">
+                                  {{
                                 allEmployeelist.employeeIdAsPerPayroll
                                   ? allEmployeelist.employeeIdAsPerPayroll
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                  </div>
+                                </span>
+                              </p>
+                            </div>
 
-                                  <div class="col-sm-3">
-                                      <p>
-                                          <span class="label"><b>Job Title: <span class="clr-red">*</span></b></span><span class="value">
-                                              {{
+                            <div class="col-sm-3">
+                              <p>
+                                <span class="label"><b>Job Title: <span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                 jobTitleName ? jobTitleName : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Emp Expertise:<span class="clr-red">*</span></b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Emp Expertise:<span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                 empExpertiseName ? empExpertiseName : '-'
                                               }}
-                                          </span>
-                                      </p>
+                                </span>
+                              </p>
 
-                                      <p>
-                                          <span class="label"><b>Station ID: </b></span><span class="value">
-                                              {{
+                              <p>
+                                <span class="label"><b>Station ID: </b></span><span class="value">
+                                  {{
                                 stationName ? stationName : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                  </div>
+                                </span>
+                              </p>
+                            </div>
 
-                                  <div class="col-sm-3">
-                                      <!--<p>
+                            <div class="col-sm-3">
+                              <!--<p>
               <span class="label"><b>Management Structure: <span class="clr-red">*</span></b></span><span class="value">
                   {{
     compmanagmentLegalEntityName
@@ -632,208 +475,204 @@
                   }}
               </span>
           </p>-->
-                                      <div class="form-row">
-                                          <div class="col-sm-12">
-                                            <div class="card mgmt-card">
-                                              <div class="card-header mgmt-card-header">
-                                                <h5 class="mgmt-header-name">Management Structure <span class="text-danger">*</span></h5>
-                                              </div>
-                                              <div class="card-body mgmt-card-body" >
-                                                <div class="form-group margin-bottom-4">
-                                                  <input class="form-control" type="text" name="companyName" 
-                                                       [(ngModel)]="headerManagementStructureWithName.level1" disabled>
-                                                </div>
-                                                <div class="form-group margin-bottom-4">
-                                                  <input class="form-control" type="text" name="BUName"
-                                                       [(ngModel)]="headerManagementStructureWithName.level2" disabled>
-                                                </div>
-                                                <div class="form-group margin-bottom-4">
-                                                  <input class="form-control" type="text" name="divisionName"
-                                                       [(ngModel)]="headerManagementStructureWithName.level3" disabled>
-                                                </div>
-                                                <div class="form-group margin-bottom-4">
-                                                  <input class="form-control" type="text" name="deptName"
-                                                       [(ngModel)]="headerManagementStructureWithName.level4" disabled>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
+                              <div class="form-row">
+                                <div class="col-sm-12">
+                                  <div class="card mgmt-card">
+                                    <div class="card-header mgmt-card-header">
+                                      <h5 class="mgmt-header-name">Management Structure <span
+                                          class="text-danger">*</span></h5>
+                                    </div>
+                                    <div class="card-body mgmt-card-body">
+                                      <div class="form-group margin-bottom-4">
+                                        <input class="form-control" type="text" name="companyName"
+                                          [(ngModel)]="headerManagementStructureWithName.level1" disabled>
                                       </div>
+                                      <div class="form-group margin-bottom-4">
+                                        <input class="form-control" type="text" name="BUName"
+                                          [(ngModel)]="headerManagementStructureWithName.level2" disabled>
+                                      </div>
+                                      <div class="form-group margin-bottom-4">
+                                        <input class="form-control" type="text" name="divisionName"
+                                          [(ngModel)]="headerManagementStructureWithName.level3" disabled>
+                                      </div>
+                                      <div class="form-group margin-bottom-4">
+                                        <input class="form-control" type="text" name="deptName"
+                                          [(ngModel)]="headerManagementStructureWithName.level4" disabled>
+                                      </div>
+                                    </div>
                                   </div>
+                                </div>
                               </div>
-                              <div class=" card"> </div>
+                            </div>
+                          </div>
+                          <div class=" card"> </div>
 
 
-                              <div class=" col-sm-12">
-                                  <div class="col-sm-3">
-                                      <p>
-                                          <span class="label"><b>Date of Birth: </b></span><span class="value">
-    {{
+                          <div class=" col-sm-12">
+                            <div class="col-sm-3">
+                              <p>
+                                <span class="label"><b>Date of Birth: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.dateOfBirth | date: 'MM/dd/yyyy'
     }}
-</span>
-                                      </p>
-                                      <!--<p><span class="label"><b>Country of Origin: </b></span><span class="value">{{originatingCountryName ? originatingCountryName : '-'}}</span></p>-->
-                                      <p>
-                                          <span class="label"><b>Start Date: <span class="clr-red">*</span></b></span><span class="value">
-    {{
+                                </span>
+                              </p>
+                              <!--<p><span class="label"><b>Country of Origin: </b></span><span class="value">{{originatingCountryName ? originatingCountryName : '-'}}</span></p>-->
+                              <p>
+                                <span class="label"><b>Start Date: <span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                 allEmployeelist.startDate | date: 'MM/dd/yyyy'
     }}
-</span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Cell: </b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Cell: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.mobilePhone
                                   ? allEmployeelist.mobilePhone
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                  </div>
+                                </span>
+                              </p>
+                            </div>
 
-                                  <div class="col-sm-3">
-                                      <p>
-                                          <span class="label"><b>Business Phone: </b></span><span class="value">
-                                              {{
+                            <div class="col-sm-3">
+                              <p>
+                                <span class="label"><b>Business Phone: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.workPhone
                                   ? allEmployeelist.workPhone
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Fax: </b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Fax: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.fax ? allEmployeelist.fax : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>Email: </b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Email: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.email
                                   ? allEmployeelist.email
                                   : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                      <p>
-                                          <span class="label"><b>SS#: </b></span><span class="value">
-                                              {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>SS#: </b></span><span class="value">
+                                  {{
                                 allEmployeelist.ssn ? allEmployeelist.ssn : '-'
                                               }}
-                                          </span>
-                                      </p>
-                                  </div>
+                                </span>
+                              </p>
+                            </div>
 
-                                  <div class="col-sm-3">
-                                      <p>
-                                          <span class="label"><b>Shift: </b></span>
-                                          <span class="value"
-                                                *ngIf="allEmployeelist.inMultipleShifts == true">Multiple Shift</span>
-                                          <span class="value"
-                                                *ngIf="allEmployeelist.inMultipleShifts == false && shiftNames">Single Shift</span>
-                                      </p>
-                                      <p   *ngIf="allEmployeelist.inMultipleShifts == true || (allEmployeelist.inMultipleShifts == false && shiftNames)" >
-                                          <!--{{empShiftType}}{{shiftNames ? shiftNames : '-'}}-->
-                                          <span class="label"><b>Shift Type: </b></span><span class="value">
-                                              <span class="value">
-                                                  {{ shiftNames ? shiftNames : '-' }}
-                                              </span>
-                                              <!-- <div *ngFor="let shift of shiftMapArray">
+                            <div class="col-sm-3">
+                              <p>
+                                <span class="label"><b>Shift: </b></span>
+                                <span class="value" *ngIf="allEmployeelist.inMultipleShifts == true">Multiple
+                                  Shift</span>
+                                <span class="value"
+                                  *ngIf="allEmployeelist.inMultipleShifts == false && shiftNames">Single Shift</span>
+                              </p>
+                              <p
+                                *ngIf="allEmployeelist.inMultipleShifts == true || (allEmployeelist.inMultipleShifts == false && shiftNames)">
+                                <!--{{empShiftType}}{{shiftNames ? shiftNames : '-'}}-->
+                                <span class="label"><b>Shift Type: </b></span><span class="value">
+                                  <span class="value">
+                                    {{ shiftNames ? shiftNames : '-' }}
+                                  </span>
+                                  <!-- <div *ngFor="let shift of shiftMapArray">
                 <span class="value">{{shift.shiftId}}</span>
             </div> -->
-                                          </span>
-                                      </p>
-                                      <!-- <p><span class="label"><b>Extra Hours: </b></span><span class="value"></span></p> -->
+                                </span>
+                              </p>
+                              <!-- <p><span class="label"><b>Extra Hours: </b></span><span class="value"></span></p> -->
 
 
-                                
-                                          <p>
-                                              <span class="label"><b>Extra Hours: </b></span>
-                                            </p>
 
-                                          <p>
-                                              <span class="label"><b>Allow Overtime: </b></span><span class="value">
-                                                  <input type="checkbox"
-                                                         name="isallowOvertime"
-                                                         [(ngModel)]="allEmployeelist.allowOvertime"
-                                                         disabled />
-                                              </span>
-                                          </p>
-                                          <p>
-                                              <span class="label"><b>Allow Double-Time: </b></span><span class="value">
-                                                  <input type="checkbox"
-                                                         name="isallowDoubleTime"
-                                                         [(ngModel)]="allEmployeelist.allowDoubleTime"
-                                                         disabled />
-                                              </span>
-                                          </p>
+                              <p>
+                                <span class="label"><b>Extra Hours: </b></span>
+                              </p>
 
-                                   
-                                              <p>
-                                                  <span class="label"><b>Pay Type: </b></span>
-                                                  <span class="value"
-                                                        *ngIf="allEmployeelist.isHourly == true">Hourly Pay</span>
-                                                  <span class="value" *ngIf="allEmployeelist.isHourly == false">Monthly Pay</span>
-                                              </p>
-                                              <p>
-                                                  <span *ngIf="allEmployeelist.isHourly == true"
-                                                        class="label"><b>Hourly Pay: <span class="clr-red"></span></b></span>
-                                                  <span *ngIf="allEmployeelist.isHourly == false"
-                                                        class="label"><b>Monthly Pay: <span class="clr-red"></span></b></span>
-                                                  <!-- <span *ngIf="!allEmployeelist.isHourly" class="label"><b>Pay: </b></span> -->
-                                                  <span class="value">{{allEmployeelist.hourlyPay ? allEmployeelist.hourlyPay : '-' }}
-                                                  </span>
-                                              </p>
-                                          </div>
+                              <p>
+                                <span class="label"><b>Allow Overtime: </b></span><span class="value">
+                                  <input type="checkbox" name="isallowOvertime"
+                                    [(ngModel)]="allEmployeelist.allowOvertime" disabled />
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Allow Double-Time: </b></span><span class="value">
+                                  <input type="checkbox" name="isallowDoubleTime"
+                                    [(ngModel)]="allEmployeelist.allowDoubleTime" disabled />
+                                </span>
+                              </p>
 
-                                          <div class=" col-sm-3">
-                                              <p>
-                                                  <span class="label"><b>Currency: <span class="clr-red"></span></b></span><span class="value">
-                                                      {{
+
+                              <p>
+                                <span class="label"><b>Pay Type: </b></span>
+                                <span class="value" *ngIf="allEmployeelist.isHourly == true">Hourly Pay</span>
+                                <span class="value" *ngIf="allEmployeelist.isHourly == false">Monthly Pay</span>
+                              </p>
+                              <p>
+                                <span *ngIf="allEmployeelist.isHourly == true" class="label"><b>Hourly Pay: <span
+                                      class="clr-red"></span></b></span>
+                                <span *ngIf="allEmployeelist.isHourly == false" class="label"><b>Monthly Pay: <span
+                                      class="clr-red"></span></b></span>
+                                <!-- <span *ngIf="!allEmployeelist.isHourly" class="label"><b>Pay: </b></span> -->
+                                <span class="value">{{allEmployeelist.hourlyPay ? allEmployeelist.hourlyPay : '-' }}
+                                </span>
+                              </p>
+                            </div>
+
+                            <div class=" col-sm-3">
+                              <p>
+                                <span class="label"><b>Currency: <span class="clr-red"></span></b></span><span
+                                  class="value">
+                                  {{
                                 currencyName ? currencyName : '-'
                                                       }}
-                                                  </span>
-                                              </p>
-                                              <p>
-                                                  <span class="label"><b>Leave Type: </b></span><span class="value">
-                                                      <!--<span class="value">{{empleaveType? empleaveType: '-'}}</span>-->
-                                                      <span class="value">
-                                                          {{
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Leave Type: </b></span><span class="value">
+                                  <!--<span class="value">{{empleaveType? empleaveType: '-'}}</span>-->
+                                  <span class="value">
+                                    {{
                                                           empleaveType ? empleaveType : '-'
                                                           }}
-                                                      </span>
-                                                      <!-- <div *ngFor="let leave of leaveMapArray">
+                                  </span>
+                                  <!-- <div *ngFor="let leave of leaveMapArray">
                     <span class="value">{{leave.employeeLeaveTypeId}}</span>
                 </div> -->
-                                                  </span>
-                                              </p>
-                                              <p>
-                                                  <span class="label" style="width: initial;"><b>Emp Certifying staff:</b></span><span>
-                                                      <input type="checkbox"
-                                                             name="isemployeeCertifyingStaff"
-                                                             [(ngModel)]="
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label" style="width: initial;"><b>Emp Certifying staff:</b></span><span>
+                                  <input type="checkbox" name="isemployeeCertifyingStaff" [(ngModel)]="
                                     allEmployeelist.employeeCertifyingStaff
-                                  "
-                                                             disabled />
-                                                  </span>
-                                              </p>
-                                              <p>
-                                                <span class="label"><b>Supervisor Name: </b></span><span class="value">
-                                                  
-                                                  {{
+                                  " disabled />
+                                </span>
+                              </p>
+                              <p>
+                                <span class="label"><b>Supervisor Name: </b></span><span class="value">
+
+                                  {{
                             supervisorname ? supervisorname : '-'
                                                   }}
-                                              </span>
-                                              </p>
+                                </span>
+                              </p>
 
-                                          </div>
-                                      </div>
-
-
+                            </div>
                           </div>
+
+
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -843,9 +682,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a *ngIf="isCert" class="collapsed" data-toggle="collapse" href="#step2"
-                      >Certification</a
-                    >
+                    <a *ngIf="isCert" class="collapsed" data-toggle="collapse" href="#step2">Certification</a>
                   </h4>
                 </div>
                 <div id="step2" class="panel-collapse collapse">
@@ -853,31 +690,22 @@
                     <div class="card">
                       <div class="card-body">
                         <div>
-                          <div
-                            class="table-responsive default-bg clear"
-                            *ngIf="allEmployeelist.employeeCertification"
-                          >
+                          <div class="table-responsive default-bg clear" *ngIf="allEmployeelist.employeeCertification">
                             <div class="col-sm-4">
                               <p>
-                                <span class="label"
-                                  ><b>Certification #: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Certification #: </b></span><span class="value">{{
                                   allEmployeelist.employeeCertification[0]
                                     ?.certificationNumber
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"
-                                  ><b> Certification Type: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b> Certification Type: </b></span><span class="value">{{
                                   allEmployeelist.employeeCertificationtype[0]
                                     ?.description
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"
-                                  ><b>Certifying Institution: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Certifying Institution: </b></span><span class="value">{{
                                   allEmployeelist.employeeCertification[0]
                                     ?.certifyingInstitution
                                 }}</span>
@@ -888,63 +716,47 @@
                                 </div> -->
                             <div class="col-sm-4">
                               <p>
-                                <span class="label"
-                                  ><b>Certification Date: </b></span
-                                ><span class="value">
-    {{
+                                <span class="label"><b>Certification Date: </b></span><span class="value">
+                                  {{
                                   allEmployeelist.employeeCertification[0]
                                     ?.certificationDate | date: 'MM/dd/yyyy'
     }}
-</span>
-                              </p>
-                              <p  *ngIf="allEmployeelist.employeeCertification[0]?.isCertificationInForce">
-                                <span class="label"
-                                  ><b>Certification In Force? </b></span
-                                >
-                                <span class="value" >
-                                  <input type="checkbox" name="resale"
-														             checked="true" disabled>
-                                </span>                                
-                              </p>
-                              <p  *ngIf="!allEmployeelist.employeeCertification[0]?.isCertificationInForce">
-                                <span class="label"
-                                  ><b>Certification In Force? </b></span
-                                >
-                                <span class="value" >
-                                  <input type="checkbox" name="resale"
-														             disabled>
                                 </span>
-                                
+                              </p>
+                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isCertificationInForce">
+                                <span class="label"><b>Certification In Force? </b></span>
+                                <span class="value">
+                                  <input type="checkbox" name="resale" checked="true" disabled>
+                                </span>
+                              </p>
+                              <p *ngIf="!allEmployeelist.employeeCertification[0]?.isCertificationInForce">
+                                <span class="label"><b>Certification In Force? </b></span>
+                                <span class="value">
+                                  <input type="checkbox" name="resale" disabled>
+                                </span>
+
                               </p>
 
-                              <p  *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate">
-                                <span class="label"
-                                  ><b>Expiration Date</b></span
-                                >
-                                <span class="value" >
-                                  <input type="checkbox" name="resale"
-														             checked="true" disabled>
-                                </span>                                
-                              </p>
-                              <p  *ngIf="!allEmployeelist.employeeCertification[0]?.isExpirationDate">
-                                <span class="label"
-                                  ><b>Expiration Date</b></span
-                                >
-                                <span class="value" >
-                                  <input type="checkbox" name="resale"
-														             disabled>
+                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate">
+                                <span class="label"><b>Expiration Date</b></span>
+                                <span class="value">
+                                  <input type="checkbox" name="resale" checked="true" disabled>
                                 </span>
-                                
-                              </p>                             
-                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate"> 
-                                <span class="label"
-                                  ><b>Certification Expiration Date: </b></span
-                                ><span class="value">
-    {{
+                              </p>
+                              <p *ngIf="!allEmployeelist.employeeCertification[0]?.isExpirationDate">
+                                <span class="label"><b>Expiration Date</b></span>
+                                <span class="value">
+                                  <input type="checkbox" name="resale" disabled>
+                                </span>
+
+                              </p>
+                              <p *ngIf="allEmployeelist.employeeCertification[0]?.isExpirationDate">
+                                <span class="label"><b>Certification Expiration Date: </b></span><span class="value">
+                                  {{
                                   allEmployeelist.employeeCertification[0]
                                     ?.expirationDate | date: 'MM/dd/yyyy'
     }}
-</span>
+                                </span>
                               </p>
                             </div>
                           </div>
@@ -958,9 +770,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a *ngIf="isTraining" class="collapsed" data-toggle="collapse" href="#step3"
-                      >Training</a
-                    >
+                    <a *ngIf="isTraining" class="collapsed" data-toggle="collapse" href="#step3">Training</a>
                   </h4>
                 </div>
                 <div id="step3" class="panel-collapse collapse">
@@ -968,217 +778,172 @@
                     <div class="card">
                       <div class="card-body">
                         <div>
-                          <div
-                            class="table-responsive default-bg clear"
-                            *ngIf="allEmployeelist.employeeTraining"
-                          >
+                          <div class="table-responsive default-bg clear" *ngIf="allEmployeelist.employeeTraining">
                             <div class="col-sm-4">
                               <p>
-                                <span class="label"
-                                  ><b>Aircraft Manfacturer: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Aircraft Manfacturer: </b></span><span class="value">{{
                                   allEmployeelist.employeeTraining[0]
                                     ?.aircraftManufacturerName
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"
-                                  ><b>Aircraft Model: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Aircraft Model: </b></span><span class="value">{{
                                   allEmployeelist.aircraftModelIds
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b>Provider: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Provider: </b></span><span class="value">{{
                                   allEmployeelist.employeeTraining[0]?.provider
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b>Industry Code: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Industry Code: </b></span><span class="value">{{
                                   allEmployeelist.employeeTraining[0]?.industryCode
                                 }}</span>
                               </p>
                             </div>
                             <div class="col-sm-4">
                               <p>
-                                <span class="label"><b>Training Type: <span class="clr-red">*</span></b></span
-                                ><span class="value">
-                                    {{
+                                <span class="label"><b>Training Type: <span class="clr-red">*</span></b></span><span
+                                  class="value">
+                                  {{
                                   allEmployeelist.employeeTraining[0]?.employeeTrainingTypeName
                                     
                                  }}
                                 </span>
                               </p>
                               <p>
-                                <span class="label"
-                                  ><b>Frequency of Training: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Frequency of Training: </b></span><span class="value">{{
                                   allEmployeelist.employeeTraining[0]
                                     ?.frequencyOfTrainingName
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b>Cost: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Cost: </b></span><span class="value">{{
                                   allEmployeelist.employeeTraining[0]?.cost | number : '1.2-2'
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b>Duration: </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Duration: </b></span><span class="value">{{
                                   allEmployeelist.employeeTraining[0]?.duration
                                 }} {{durationType}}</span>
                               </p>
                             </div>
                             <div class="col-sm-4">
                               <p>
-                                <span class="label"><b>Schedule Date: </b></span
-                                ><span class="value">
-                                {{
+                                <span class="label"><b>Schedule Date: </b></span><span class="value">
+                                  {{
                                   allEmployeelist.employeeTraining[0]
                                     ?.scheduleDate | date: 'MM/dd/yyyy'
                                 }}
-                            </span>
+                                </span>
                               </p>
                               <p>
-                                <span class="label"
-                                  ><b>Completion Date: </b></span
-                                ><span class="value">
-                                        {{
+                                <span class="label"><b>Completion Date: </b></span><span class="value">
+                                  {{
                                   allEmployeelist.employeeTraining[0]
                                     ?.completionDate | date: 'MM/dd/yyyy'
     }}
-</span>
+                                </span>
                               </p>
                               <p>
-                                <span class="label"
-                                  ><b>Expiration Date: </b></span
-                                ><span class="value">
-    {{
+                                <span class="label"><b>Expiration Date: </b></span><span class="value">
+                                  {{
                                   allEmployeelist.employeeTraining[0]
                                     ?.expirationDate | date: 'MM/dd/yyyy'
     }}
-</span>
+                                </span>
                               </p>
                             </div>
-                           
-                            <div class="col-md-10 tableview"
-                                 style="max-width: 100%;">
-                                <h4 class="panel-title">
-                                  Certification Received
-                                </h4>
-                                <div class="clear"></div>
-                                            <hr /> 
-                                           <div class="checkbox-cstm setDelts" style="margin-bottom: 10px;" >
-                                                <label style="width: auto !important;margin-top: 3px;">
-                                                 
-                                                  <input type="checkbox" [(ngModel)]="currenDocDeletedstatus" name="cparent1" id="cparent1"  (click)="getDeleteDocumentListByStatus($event.target.checked,allEmployeelist.employeeId)"
-                                                    />
-                                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                                Show  Deleted List 
-                                                </label>
-                                            </div>  
-                                            <div class="clear"></div>
-                                <p-table #count
-                                         class="ptable-custom lastcol-fix"
-                                         [paginator]="true"
-                                         allEmployeeTrainingDocumentsList.length="0"
-                                         [value]="allEmployeeTrainingDocumentsList"
-                                         [rows]="pageSize"
-                                         [pageLinks]="3"
-                                         [rowsPerPageOptions]="[10, 20, 50, 100]"
-                                         [columns]="documentTableColumns"
-                                         [scrollable]="true"
-                                         scrollHeight="450px"
-                                         (onPage)="pageIndexChange($event)">
-                               
 
-                                       <ng-template pTemplate="colgroup" let-columns>
-                                            <colgroup>
-                                                <col *ngFor="let col of columns" class="table-column-width" />
-                                            </colgroup>
-                                        </ng-template>
-                                        <ng-template pTemplate="header" let-columns>
-                                            <tr>
-                                                <th *ngFor="let col of columns"
-                                                class="table-column-width"
-                                                    pResizableColumn
-                                                    pReorderableColumn
-                                                    [pSortableColumn]="col.field">
-                                                    <div>
-                                                        {{ col.header }}
-                                                        <p-sortIcon *ngIf="
+                            <div class="col-md-10 tableview" style="max-width: 100%;">
+                              <h4 class="panel-title">
+                                Certification Received
+                              </h4>
+                              <div class="clear"></div>
+                              <hr />
+                              <div class="checkbox-cstm setDelts" style="margin-bottom: 10px;">
+                                <label style="width: auto !important;margin-top: 3px;">
+
+                                  <input type="checkbox" [(ngModel)]="currenDocDeletedstatus" name="cparent1"
+                                    id="cparent1"
+                                    (click)="getDeleteDocumentListByStatus($event.target.checked,allEmployeelist.employeeId)" />
+                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                  Show Deleted List
+                                </label>
+                              </div>
+                              <div class="clear"></div>
+                              <p-table #count class="ptable-custom lastcol-fix" [paginator]="true"
+                                allEmployeeTrainingDocumentsList.length="0" [value]="allEmployeeTrainingDocumentsList"
+                                [rows]="pageSize" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                [columns]="documentTableColumns" [scrollable]="true" scrollHeight="450px"
+                                (onPage)="pageIndexChange($event)">
+
+
+                                <ng-template pTemplate="colgroup" let-columns>
+                                  <colgroup>
+                                    <col *ngFor="let col of columns" class="table-column-width" />
+                                  </colgroup>
+                                </ng-template>
+                                <ng-template pTemplate="header" let-columns>
+                                  <tr>
+                                    <th *ngFor="let col of columns" class="table-column-width" pResizableColumn
+                                      pReorderableColumn [pSortableColumn]="col.field">
+                                      <div>
+                                        {{ col.header }}
+                                        <p-sortIcon *ngIf="
                                             col.field != 'download' &&
                                             col.field != 'delete'
-                                          "
-                                                                    [field]="col.field">
-                                                        </p-sortIcon>
-                                                    </div>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th *ngFor="let col of columns"
-                                                class="table-column-width"
-                                                    [ngSwitch]="col.field">
-                                                    <input type="text" class="table-header-input-width"
-                                                           (input)="
+                                          " [field]="col.field">
+                                        </p-sortIcon>
+                                      </div>
+                                    </th>
+                                  </tr>
+                                  <tr>
+                                    <th *ngFor="let col of columns" class="table-column-width" [ngSwitch]="col.field">
+                                      <input type="text" class="table-header-input-width" (input)="
                                           table3.filter(
                                             $event.target.value,
                                             col.field,
                                             'contains'
                                           )
-                                        "
-                                                           *ngIf="
+                                        " *ngIf="
                                           col.field != 'download' &&
                                           col.field != 'delete' &&
                                           col.field != 'createdDate' &&
                                           col.field != 'updatedDate'
-                                        "
-                                                           pInputText />
-                                                    <input type="date"
-                                                          
-                                                           class="hidePlaceHolder table-header-input-width"
-                                                           *ngIf="col.field == 'createdDate'"
-                                                           name="createdDate"
-                                                           (change)="
+                                        " pInputText />
+                                      <input type="date" class="hidePlaceHolder table-header-input-width"
+                                        *ngIf="col.field == 'createdDate'" name="createdDate" (change)="
                                           dateFilterForTable(
                                             $event.target.value,
                                             col.field
                                           )
                                         " />
-                                                    <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                                    <input type="date"
-                                                           class="hidePlaceHolder table-header-input-width"
-                                                           *ngIf="col.field == 'updatedDate'"
-                                                           name="updatedDate"
-                                                           (change)="
+                                      <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
+                                      <input type="date" class="hidePlaceHolder table-header-input-width"
+                                        *ngIf="col.field == 'updatedDate'" name="updatedDate" (change)="
                                           dateFilterForTable(
                                             $event.target.value,
                                             col.field
                                           )
                                         " />
-                                                </th>
-                                                <!-- <th style="width:140px;position:sticky"></th> -->
-                                                <!-- <th></th> -->
-                                            </tr>
-                                        </ng-template>
-                                        <ng-template pTemplate="body"
-                                                     let-rowData
-                                                     let-columns="columns"
-                                                     let-i="rowIndex">
-                                            <tr *ngIf="
+                                    </th>
+                                    <!-- <th style="width:140px;position:sticky"></th> -->
+                                    <!-- <th></th> -->
+                                  </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                  <tr *ngIf="
                                                 allEmployeeTrainingDocumentsList.length>
                                                 0
-                                                "
-                                                >
-                                                <td *ngFor="let col of columns" class="table-column-width">
-                                                    <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
-                                                    <!-- <ng-container > -->
-                                                    <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
-                                                        <span>
-                                                            {{
+                                                ">
+                                    <td *ngFor="let col of columns" class="table-column-width">
+                                      <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
+                                      <!-- <ng-container > -->
+                                      <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
+                                        <span>
+                                          {{
                                             col.field == 'createdDate'
                                               ? (rowData[col.field]
                                                 | date: 'MM/dd/yyyy h:mm a')
@@ -1188,73 +953,58 @@
                                                 | date: 'MM/dd/yyyy h:mm a')
                                               : rowData[col.field]
                                                             }}
-                                                        </span>
-                                                        <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+                                        </span>
+                                        <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                         rowData[col.field]
                         </span> -->
-                                                    </div>
-                                                    <div *ngIf="col.field == 'docMemo'">
+                                      </div>
+                                      <div *ngIf="col.field == 'docMemo'">
 
-                                                    <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
-                                                  </div> 
-                                                    <div *ngIf="col.field == 'download'"
-                                                         class="align_center">
-                                                        <a (click)="downloadFileUpload(rowData)"
-                                                           matTooltip="Download"
-                                                           matTooltipPosition="above"
-                                                           class="btn nobg btn-cstm">
-                                                            <span>
-                                                                <i class="fa fa-download"></i>
-                                                            </span>
-                                                        </a>
-                                                        <span data-toggle="modal"
-                                                              data-target="#contentAuditHistDoc">
-                                                            <a class="btn nobg"
-                                                               (click)="openHistoryDoc(rowData)"
-                                                               matTooltip="History"
-                                                               matTooltipPosition="above">
-                                                                <i class="fa fa-history"></i>
-                                                            </a>
-                                                        </span>
-                                                    </div>
+                                        <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
+                                      </div>
+                                      <div *ngIf="col.field == 'download'" class="align_center">
+                                        <a (click)="downloadFileUpload(rowData)" matTooltip="Download"
+                                          matTooltipPosition="above" class="btn nobg btn-cstm">
+                                          <span>
+                                            <i class="fa fa-download"></i>
+                                          </span>
+                                        </a>
+                                        <span data-toggle="modal" data-target="#contentAuditHistDoc">
+                                          <a class="btn nobg" (click)="openHistoryDoc(rowData)" matTooltip="History"
+                                            matTooltipPosition="above">
+                                            <i class="fa fa-history"></i>
+                                          </a>
+                                        </span>
+                                      </div>
 
-                                                    <!-- </ng-container> -->
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-                                        <ng-template pTemplate="emptymessage"
-                                                     let-columns
-                                                     *ngIf="
+                                      <!-- </ng-container> -->
+                                    </td>
+                                  </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns *ngIf="
                                     allEmployeeTrainingDocumentsList.length == 0
                                   ">
-                                            <tr>
-                                                <td [attr.colspan]="10"
-                                                    class="no-records-cstm no-records-msg">
-                                                    No records found
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-                                        &nbsp;&nbsp;
-                                        <ng-template pTemplate="summary" id="footer">
-                                            <label id="footer" class="footer">Total:</label>
-                                            <input class="footer-input-width"
-                                                   [(ngModel)]="count._totalRecords"
-                                                   [disabled]="true"
-                                                   pInputText
-                                                   type="text" />
-                                            &nbsp;&nbsp;
-                                            <label id="footer" class="footer1">Pages Count:</label>
-                                            <input class="footer-input-width"
-                                                   [(ngModel)]="count._totalRecords"
-                                                   [disabled]="true"
-                                                   pInputText
-                                                   type="text" />
-                                        </ng-template>
+                                  <tr>
+                                    <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
+                                      No records found
+                                    </td>
+                                  </tr>
+                                </ng-template>
+                                &nbsp;&nbsp;
+                                <ng-template pTemplate="summary" id="footer">
+                                  <label id="footer" class="footer">Total:</label>
+                                  <input class="footer-input-width" [(ngModel)]="count._totalRecords" [disabled]="true"
+                                    pInputText type="text" />
+                                  &nbsp;&nbsp;
+                                  <label id="footer" class="footer1">Pages Count:</label>
+                                  <input class="footer-input-width" [(ngModel)]="count._totalRecords" [disabled]="true"
+                                    pInputText type="text" />
+                                </ng-template>
 
-                                    </p-table>
+                              </p-table>
 
 
-</div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1266,9 +1016,8 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a *ngIf="isMgmtStruct" class="collapsed" data-toggle="collapse" href="#step4"
-                      >Management Structure</a
-                    >
+                    <a *ngIf="isMgmtStruct" class="collapsed" data-toggle="collapse" href="#step4">Management
+                      Structure</a>
                   </h4>
                 </div>
                 <div id="step4" class="panel-collapse collapse">
@@ -1276,20 +1025,16 @@
                     <div class="card">
                       <div class="card-body">
                         <div>
-                          <div
-                            class="table-responsive default-bg clear"
-                            *ngIf="employeeRolesList"
-                          >
+                          <div class="table-responsive default-bg clear" *ngIf="employeeRolesList">
                             <div class="col-sm-6">
                               <p>
-                                <span class="label"><b>Roles : </b></span
-                                ><span class="value">{{
+                                <span class="label"><b>Roles : </b></span><span class="value">{{
                                   selectedRoleNames
                                 }}</span>
                               </p>
                               <p>
-                                <span class="label"><b>Memo :</b></span
-                                ><span class="value" style="vertical-align: middle;" [innerHTML]="allEmployeelist.memo
+                                <span class="label"><b>Memo :</b></span><span class="value"
+                                  style="vertical-align: middle;" [innerHTML]="allEmployeelist.memo
                                     ? allEmployeelist.memo
                                     : '-'">
                                   <!--{{
@@ -1297,14 +1042,12 @@
                                     ? allEmployeelist.memo
                                     : '-'
                                 }}-->
-                                  </span>
+                                </span>
                               </p>
                             </div>
                             <div class="col-sm-6">
                               <p>
-                                <app-tree-structure
-                                  [gridData]="gridData"
-                                ></app-tree-structure>
+                                <app-tree-structure [gridData]="gridData"></app-tree-structure>
                               </p>
                             </div>
                           </div>
@@ -1315,12 +1058,8 @@
                 </div>
               </div>
 
-            
-              <div
-                class="modal popup-blur"
-                id="contentAuditHistDoc"
-                data-backdrop="static"
-              >
+
+              <div class="modal popup-blur" id="contentAuditHistDoc" data-backdrop="static">
                 <div class="modal-dialog modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -1328,14 +1067,10 @@
                       <!--<button type="button" class="close" data-dismiss="modal">
                                                 &times;
                                             </button>-->
-                        
-                      <button
-                        type="button"
-                        class="close"
-                        (click)="
+
+                      <button type="button" class="close" (click)="
                           dismissDocumentPopupModel('#contentAuditHistDoc')
-                        "
-                      >
+                        ">
                         &times;
                       </button>
                     </div>
@@ -1343,33 +1078,28 @@
                       <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                         <div class="tableFixHead">
                           <table class="table table-bordered header-table-width">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Description</th>
-                              <th>Memo</th>
-                              <th>File Name</th>
-                              <th>File Size</th>
-                              <th>Created Date</th>
-                              <th>Created By</th>
-                              <th>Updated Date</th>
-                              <th>Updated By</th>
-                              <th>Is Deleted</th>
-                           
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                              *ngFor="let audit of sourceViewforDocumentAudit"
-                            ></tr>
-                            <tr
-                              *ngFor="
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Memo</th>
+                                <th>File Name</th>
+                                <th>File Size</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <th>Is Deleted</th>
+
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                              <tr *ngFor="
                                 let audit of sourceViewforDocumentAudit;
                                 let i = index
-                              "
-                            >
-                              <td
-                                [ngStyle]="{
+                              ">
+                                <td [ngStyle]="{
                                   color: getColorCodeForHistoryDoc(
                                     i,
                                     'docName',
@@ -1377,12 +1107,10 @@
                                   )
                                     ? 'black'
                                     : 'red'
-                                }"
-                              >
-                                {{ audit.docName }}
-                              </td>
-                              <td
-                                [ngStyle]="{
+                                }">
+                                  {{ audit.docName }}
+                                </td>
+                                <td [ngStyle]="{
                                   color: getColorCodeForHistoryDoc(
                                     i,
                                     'docDescription',
@@ -1390,12 +1118,10 @@
                                   )
                                     ? 'black'
                                     : 'red'
-                                }"
-                              >
-                                {{ audit.docDescription }}
-                              </td>
-                              <td
-                                [ngStyle]="{
+                                }">
+                                  {{ audit.docDescription }}
+                                </td>
+                                <td [ngStyle]="{
                                   color: getColorCodeForHistoryDoc(
                                     i,
                                     'docMemo',
@@ -1403,13 +1129,11 @@
                                   )
                                     ? 'black'
                                     : 'red'
-                                }"
-                              >
-                              <p class="m-0 p-0" [innerHTML]="audit.docMemo"></p> 
-                              
-                              </td>
-                              <td
-                                [ngStyle]="{
+                                }">
+                                  <p class="m-0 p-0" [innerHTML]="audit.docMemo"></p>
+
+                                </td>
+                                <td [ngStyle]="{
                                   color: getColorCodeForHistoryDoc(
                                     i,
                                     'fileName',
@@ -1417,65 +1141,75 @@
                                   )
                                     ? 'black'
                                     : 'red'
-                                }"
-                              >
-                                {{ audit.fileName }}
-                              </td>
-                              <td>{{ audit.fileSize }}</td>  
-                             
-                              <td>
-                                {{
+                                }">
+                                  {{ audit.fileName }}
+                                </td>
+                                <td>{{ audit.fileSize }}</td>
+
+                                <td>
+                                  {{
                                   audit.createdDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
-                              </td>
-                              <td>{{ audit.createdBy }}</td>
-                                                    
-                              <td>
-                                {{
+                                </td>
+                                <td>{{ audit.createdBy }}</td>
+
+                                <td>
+                                  {{
                                   audit.updatedDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
-                              </td>
-                              <td>{{ audit.updatedBy }}</td>     
-                             
-                              
-                              <td> <input type="checkbox"  name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
-                            </tr>
-                          </tbody>
-                        </table>
+                                </td>
+                                <td>{{ audit.updatedBy }}</td>
+
+
+                                <td> <input type="checkbox" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        (click)="
+                      <button type="button" class="btn btn-danger" (click)="
                           dismissDocumentPopupModel('#contentAuditHistDoc')
-                        "
-                      >
+                        ">
                         Close
                       </button>
                     </div>
                   </div>
                   <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
                     <div class="loading">
-                        <div class="lds-roller">
-                            <div>
-                            </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                      <div class="lds-roller">
+                        <div>
                         </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
                     </div>
-                </div>
-                <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+                  </div>
+                  <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
                 </div>
                 <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
                   <div class="loading">
-                      <div class="lds-roller">
-                          <div>
-                          </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div class="lds-roller">
+                      <div>
                       </div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
                   </div>
-              </div>
-              <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+                </div>
+                <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
               </div>
             </div>
           </div>
@@ -1499,12 +1233,13 @@
       <div class="modal-body" *ngIf="targetData">
         <strong>
           <span>
-            You are attempting to export {{targetData.totalRecords}} of records. 
-          </span> 
+            You are attempting to export {{targetData.totalRecords}} of records.
+          </span>
         </strong>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+        <button type="button" class="btn btn-primary"
+          (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
         <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
       </div>
     </div>
@@ -1512,14 +1247,8 @@
 </div>
 
 
-<div id="employeeHistory"
-  style="z-index: 10000 !important;"
-  class="modal fade"
-  role="dialog"
-  data-backdrop="static"
-  data-keyboard="false"
-  data-backdrop="static"
->
+<div id="employeeHistory" style="z-index: 10000 !important;" class="modal fade" role="dialog" data-backdrop="static"
+  data-keyboard="false" data-backdrop="static">
 
   <div class="modal-dialog modal-xl">
     <!-- Modal content-->
@@ -1532,35 +1261,32 @@
       </div>
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-					<div class="tableFixHead">
-						<table class="table table-bordered header-table-width"
-            *ngIf="auditHistory.length > 0; else noDatavailable"
-          >
-            <thead>
-              <tr>
-                <th>First Name <span class="clr-red">*</span></th>
-                <th>Last Name <span class="clr-red">*</span></th>
-                <th>Emp ID</th>
-                <th>Job Title <span class="clr-red">*</span></th>
-                <th>Emp Expertise <span class="clr-red">*</span></th>
-                <!-- <th>Job Type</th> -->
-                <th>Start Date <span class="clr-red">*</span></th>
-                <th>Company</th>
-                <th>Pay Type</th>
-                <th>Is Active</th>               
-                <th>Created Date</th>
-                <th>Created By</th>               
-                <th>Updated Date</th>
-                <th>Updated By</th>
-                <th>Is Deleted</th>
-              </tr>
-            </thead>
-            <tbody class="audithistory-cstm">
-              <!--*ngIf="auditHistory.length> 0"-->
-              <tr *ngFor="let audit of auditHistory; let i = index">
-                <!-- auditHistory[i>0 ? i-1 : i] -->
-                <td
-                  [ngStyle]="{
+          <div class="tableFixHead">
+            <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+              <thead>
+                <tr>
+                  <th>First Name <span class="clr-red">*</span></th>
+                  <th>Last Name <span class="clr-red">*</span></th>
+                  <th>Emp ID</th>
+                  <th>Job Title <span class="clr-red">*</span></th>
+                  <th>Emp Expertise <span class="clr-red">*</span></th>
+                  <!-- <th>Job Type</th> -->
+                  <th>Start Date <span class="clr-red">*</span></th>
+                  <th>Company</th>
+                  <th>Pay Type</th>
+                  <th>Is Active</th>
+                  <th>Created Date</th>
+                  <th>Created By</th>
+                  <th>Updated Date</th>
+                  <th>Updated By</th>
+                  <th>Is Deleted</th>
+                </tr>
+              </thead>
+              <tbody class="audithistory-cstm">
+                <!--*ngIf="auditHistory.length> 0"-->
+                <tr *ngFor="let audit of auditHistory; let i = index">
+                  <!-- auditHistory[i>0 ? i-1 : i] -->
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'firstName',
@@ -1568,21 +1294,17 @@
                     )
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.firstName }}
-                </td>
-                <td
-                  [ngStyle]="{
+                  }">
+                    {{ audit.firstName }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'lastName', audit.lastName)
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.lastName }}
-                </td>
-                <td
-                  [ngStyle]="{
+                  }">
+                    {{ audit.lastName }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'employeeId',
@@ -1590,21 +1312,17 @@
                     )
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.employeeId }}
-                </td>
-                <td
-                  [ngStyle]="{
+                  }">
+                    {{ audit.employeeId }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'jobtitle', audit.jobtitle)
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.jobtitle }}
-                </td>
-                <td
-                  [ngStyle]="{
+                  }">
+                    {{ audit.jobtitle }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'employeeExpertise',
@@ -1612,12 +1330,11 @@
                     )
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.employeeExpertise }}
-                </td>
-                <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'jobType', audit.jobType)  ? 'black' : 'red'  }">{{audit.jobType}}</td> -->
-              <td [ngStyle]="{
+                  }">
+                    {{ audit.employeeExpertise }}
+                  </td>
+                  <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'jobType', audit.jobType)  ? 'black' : 'red'  }">{{audit.jobType}}</td> -->
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'startDate',
@@ -1625,90 +1342,73 @@
                     )
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.startDate | date: 'MM/dd/yyyy' }}
-                </td>
-                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'company', audit.company)  ? 'black' : 'red'  }">{{audit.company}}</td>
-                <td
-                  [ngStyle]="{
+                  }">
+                    {{ audit.startDate | date: 'MM/dd/yyyy' }}
+                  </td>
+                  <td [ngStyle]="{'color': getColorCodeForHistory(i, 'company', audit.company)  ? 'black' : 'red'  }">
+                    {{audit.company}}</td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'payType', audit.payType)
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                  {{ audit.payType }}
-                </td>
-                <td class="text-center"
-                  [ngStyle]="{
+                  }">
+                    {{ audit.payType }}
+                  </td>
+                  <td class="text-center" [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
                       ? 'black'
                       : 'red'
-                  }"
-                >
-                <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled>                
-                </td>
-                
-              <td
-              [ngStyle]="{
+                  }">
+                    <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled>
+                  </td>
+
+                  <td [ngStyle]="{
                 color: getColorCodeForHistory(i, 'createdDate', audit.createdDate)
                   ? 'black'
                   : 'red'
-              }"
-            >
-              {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}
-            </td>
-            <td
-                [ngStyle]="{
+              }">
+                    {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}
+                  </td>
+                  <td [ngStyle]="{
                   color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
                     ? 'black'
                     : 'red'
-                }"
-              >
-                {{ audit.createdBy }}
-              </td>
-           
-            <td
-            [ngStyle]="{
+                }">
+                    {{ audit.createdBy }}
+                  </td>
+
+                  <td [ngStyle]="{
               color: getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)
                 ? 'black'
                 : 'red'
-            }"
-          >
-            {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}
-          </td>
-          <td
-          [ngStyle]="{
+            }">
+                    {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}
+                  </td>
+                  <td [ngStyle]="{
             color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)
               ? 'black'
               : 'red'
-          }"
-        >
-          {{ audit.updatedBy }}
-        </td>
-          <td class="text-center"
-          [ngStyle]="{
+          }">
+                    {{ audit.updatedBy }}
+                  </td>
+                  <td class="text-center" [ngStyle]="{
             color: getColorCodeForHistory(i, 'isDeleted', audit.isDeleted)
               ? 'black'
               : 'red'
-          }"
-        >
-        <input type="checkbox" class="color-green" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
-        
-        </td>
+          }">
+                    <input type="checkbox" class="color-green" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
 
-          
-               
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+
+
+
+                </tr>
+              </tbody>
+            </table>
           </div>
           <ng-template #noDatavailable>
             <div class="text-center">
-              <img
-                src="../../../../assets/images/binoculars.png"
-               class="no-history-found-image"
-              />
+              <img src="../../../../assets/images/binoculars.png" class="no-history-found-image" />
               <h4 class="no-history-found-msg">No History Found</h4>
             </div>
           </ng-template>
@@ -1722,27 +1422,54 @@
     </div>
     <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
       <div class="loading">
-        <div class="lds-roller"><div>			
-        </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <div class="lds-roller">
+          <div>
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     </div>
-    <app-spinner  *ngIf="isSpinnerVisible"></app-spinner>
+    <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
   </div>
   <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
-		<div class="loading">
-			<div class="lds-roller"><div>			
-			</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-		</div>
-	</div>
-	<app-spinner  *ngIf="isSpinnerVisible"></app-spinner>
+    <div class="loading">
+      <div class="lds-roller">
+        <div>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
 
- </div>
+</div>
 
 
 <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
-		<div class="loading">
-			<div class="lds-roller"><div>			
-			</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-		</div>
-	</div>
-	<app-spinner  *ngIf="isSpinnerVisible"></app-spinner>
+  <div class="loading">
+    <div class="lds-roller">
+      <div>
+      </div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+<app-spinner *ngIf="isSpinnerVisible"></app-spinner>

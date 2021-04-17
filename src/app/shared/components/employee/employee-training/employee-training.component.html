@@ -308,8 +308,8 @@
                               
                                     <div class="buttons-margin">
                                         <button type="button"  [disabled]="!isEnableNext" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next</button>
-                                        <button *ngIf ="!isEditContent" type="button" [disabled]="nextbuttonEnable == false" class="btn btn-primary pull-right" (click)="savetrainigSection()">Save </button>
-                                        <button *ngIf ="isEditContent"type="button" [disabled]="disableSave" class="btn btn-primary pull-right" (click)="savetrainigSection()"> {{ !sourceEmployee.employeeTrainingId ? 'Save' : 'Update' }} </button>
+                                        <button *ngIf ="isAdd && !isEditContent" type="button" [disabled]="nextbuttonEnable == false" class="btn btn-primary pull-right" (click)="savetrainigSection()">Save </button>
+                                        <button *ngIf ="isEdit && isEditContent"type="button" [disabled]="disableSave" class="btn btn-primary pull-right" (click)="savetrainigSection()"> {{ !sourceEmployee.employeeTrainingId ? 'Save' : 'Update' }} </button>
                                         <button type="button" class="btn btn-primary pull-right"  (click)="nextClick('Previous')" >Previous</button>
                                     </div>
                             </div>
