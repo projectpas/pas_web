@@ -14,7 +14,8 @@ export class QuoteEndpointService extends EndpointFactory {
     } 
 
     getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId,masterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquote?wfwoId=${wfwoId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`, this.getRequestHeaders()).catch(error => {
+        // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/getworkorderquote?wfwoId=${wfwoId}&workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
             return this.handleErrorCommon(error, () => this.getQuoteIdByWfandWorkOrderId(wfwoId, workOrderId,masterCompanyId));
           });
     }
@@ -64,7 +65,8 @@ export class QuoteEndpointService extends EndpointFactory {
           });
     }
     getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,masterCompanyId?) {
-        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getworkorderquote?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}`).catch(error => {
+        // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}
+        return this.http.get(`${this.configurations.baseUrl}/api/workorder/getworkorderquote?wfwoId=${workFlowWorkOrderId}&workOrderId=${workOrderId}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,masterCompanyId));
           });
     }

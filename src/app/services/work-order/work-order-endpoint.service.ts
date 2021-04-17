@@ -176,7 +176,8 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     
     getWorkOrderDatesFoRTat(workOrderId,masterCompanyId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woquotationandshippeddates?workOrderId=${workOrderId}&masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0 }`, this.getRequestHeaders()).catch(error => {
+        // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0 }
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/woquotationandshippeddates?workOrderId=${workOrderId}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getWorkOrderDatesFoRTat(workOrderId,masterCompanyId));
     });
     }
@@ -490,7 +491,8 @@ export class WorkOrderEndpointService extends EndpointFactory {
  
 
     getWorkOrderById(workOrderId, receivingCustomerId,masterCompanyId?) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderbyid?workOrderId=${workOrderId}&receivingCustomerId=${receivingCustomerId}&masterCompanyId=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+        // &masterCompanyId=${masterCompanyId !=undefined ? masterCompanyId :0}
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderbyid?workOrderId=${workOrderId}&receivingCustomerId=${receivingCustomerId}`, this.getRequestHeaders()).catch(error => {
       return this.handleErrorCommon(error, () => this.getWorkOrderById(workOrderId, receivingCustomerId,masterCompanyId));
     });
     }

@@ -518,7 +518,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                     this.quoteForm.creditTermsandLimit = res.customerDetails.creditLimit;
                     this.quoteForm['versionNo'] = 'V1';
                     this.salesPerson = res.salesPerson.name;
-                    this.workOrderService.getWorkOrderQuoteDetail(res.workOrderId, res["workFlowWorkOrderId"],this.authService.currentUser.masterCompanyId)
+                    const workorderid =res.workOrderId ==0 ? this.workOrderId :res.workOrderId; 
+                    this.workOrderService.getWorkOrderQuoteDetail(workorderid, res["workFlowWorkOrderId"],this.authService.currentUser.masterCompanyId)
                         .subscribe(
                             (res: any) => {
                                 
@@ -593,7 +594,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                         this.getMarkup('');
                     // this.getCreditTerms(res.creditTermsId);
                     this.setEmpAndSalesPersonName(res.employeeId, res.salesPersonId);
-                    this.getMPNList(res.workOrderId);
+                    this.getMPNList(res.workOrderId !=0 ? res.workOrderId :this.workOrderId);
                     this.customerWarnings(this.quoteForm['customerId']);
                 }
                 else{
@@ -835,7 +836,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    getMPNList(workOrderId) {        
+    getMPNList(workOrderId) {   
+        console.log("workorderId",workOrderId)     
         if(workOrderId && workOrderId != 0){
             this.workOrderService.getWorkOrderWorkFlowNumbers(workOrderId,this.authService.currentUser.masterCompanyId).subscribe(res => {                
                 this.workOrderWorkFlowOriginalData = res;
