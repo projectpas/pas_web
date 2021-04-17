@@ -348,13 +348,16 @@ export class PurchaseSetupComponent implements OnInit {
             field: 'stockType'
 		}, {
             header: 'Qty',
-            field: 'qty'
+            field: 'qty',
+			width:"70px"
 		}, {
             header: 'Unit Cost',
-            field: 'unitCost'
+            field: 'unitCost',
+			width:"70px"
 		}, {
             header: 'Ext Cost',
-            field: 'extCost'
+            field: 'extCost',
+			width:"70px"
         }
 	];
 	approvalProcessList: any = [];
