@@ -131,12 +131,12 @@ export class SalesQuoteEndpointService extends EndpointFactory {
       });
   }
 
-  getAllSalesOrderQuoteSettings<T>(): Observable<T> {
-    let endPointUrl = this.getSalesOrderQuoteSetting;
-
+  getAllSalesOrderQuoteSettings<T>(masterCompanyId): Observable<T> {
+    //let endPointUrl = this.getSalesOrderQuoteSetting;
+    let endPointUrl = `${this.getSalesOrderQuoteSetting}/${masterCompanyId}`;;
     return this.http.get<T>(endPointUrl, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getAllSalesOrderQuoteSettings());
+        return this.handleErrorCommon(error, () => this.getAllSalesOrderQuoteSettings(masterCompanyId));
       });
   }
 

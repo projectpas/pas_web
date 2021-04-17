@@ -52,7 +52,7 @@ export class ShipViaCreateComponent implements OnInit {
   // }
 
   loadShippingViaList() {
-    this.commonService.getShipVia().subscribe(res => {
+    this.commonService.getShipVia(this.masterCompanyId).subscribe(res => {
       this.allShipViaInfo = res;
       console.log("res",res);
       if(this.ShipViaEditID > 0){
