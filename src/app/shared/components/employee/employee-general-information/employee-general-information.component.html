@@ -344,12 +344,9 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Supervisor Name</label>
-                                                <p-autoComplete field="firstName" name="supervisorName" [suggestions]="supervisorList" (completeMethod)="filterSupervisorList($event)"
+                                                <p-autoComplete field="name" name="supervisorName" [suggestions]="supervisorList" (completeMethod)="filterSupervisorList($event)"
                                                     class="pautocomp-cstm" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
                                                     [forceSelection]="true" (ngModelChange)="enableSave()" [(ngModel)]="supervisorId">
-                                                    <!-- <option value="0">-- Select --</option>
-                                                    <option *ngFor="let employee of allEmployeeinfo" [ngValue]="employee.employeeId">{{employee.firstName}}
-                                                        {{employee.lastName}}</option> -->
                                                 </p-autoComplete>
                                             </div>                                         
                                         </div>
