@@ -5,10 +5,10 @@
                 <div class="row">
                     <div class="col">
                         <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order Quote
-                        <button class="btn-sm header-button header-button-alignment" (click)="expandHeader()">
-                            {{toggle_po_header ? 'Collapse' : 'Expand'}}
-                        </button>
-                    </h4>
+                            <button class="btn-sm header-button header-button-alignment" (click)="expandHeader()">
+                                {{toggle_po_header ? 'Collapse' : 'Expand'}}
+                            </button>
+                        </h4>
                     </div>
                     <div>
                         <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
@@ -19,53 +19,49 @@
                 </div>
             </div>
             <div class="card-body toggle-div" *ngIf="!toggle_po_header">
-                    <div class="form-row body-alignment">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Customer Name
-                                    <span class="clr-red">*</span>
-                                    <span style="color:blue" class="ng-star-inserted">
-                                        <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
-                                            matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-                                    </span>
-                                </label>
-                                <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
-                                    class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
-                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
-                                    class="alert alert-danger alert-danger-cstm">
-                                    <div *ngIf="customerName.errors.required">
-                                        <small>Customer Name is required </small>
-                                    </div>
+                <div class="form-row body-alignment">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label style="height: 15px;">Customer Name
+                                <span class="clr-red">*</span>
+                                <span style="color:blue" class="ng-star-inserted">
+                                    <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
+                                        matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                </span>
+                            </label>
+                            <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
+                                class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
+                            <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
+                                class="alert alert-danger alert-danger-cstm">
+                                <div *ngIf="customerName.errors.required">
+                                    <small>Customer Name is required </small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Customer Code</label>
-                                <input type="text"
-                                 [(ngModel)]="salesQuote.customerCode"
-                                  name="customerCode"
-                                    class="form-control" [disabled]="true"
-                                     id="customerCode" #customerCode="ngModel" />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>SO Quote Num</label>
-                                <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
-                                    name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
-                                    id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group" *ngIf="isEdit">
-                                <label>Version Num</label>
-                                <input type="text" [(ngModel)]="salesQuote.versionNumber" name="versionNumber"
-                                    class="form-control" [disabled]="true" id="versionNumber"
-                                    #versionNumber="ngModel" />
-                            </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Customer Code</label>
+                            <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
+                                class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>SO Quote Num</label>
+                            <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
+                                name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
+                                id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group" *ngIf="isEdit">
+                            <label>Version Num</label>
+                            <input type="text" [(ngModel)]="salesQuote.versionNumber" name="versionNumber"
+                                class="form-control" [disabled]="true" id="versionNumber" #versionNumber="ngModel" />
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="form-controls margin-top-0">
                 <form #newSalesQuoteForm="ngForm" class="form-horizontal">
@@ -73,7 +69,7 @@
                         <div class="form-row">
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6 padding-10">
+                                    <div class="col-md-6 padding-10" style="padding-bottom: 0px !important">
                                         <div class="form-group">
                                             <label>Quote Type <span class="clr-red">*</span></label>
                                             <select name="quoteTypeId" required [(ngModel)]="salesQuote.quoteTypeId"
@@ -143,11 +139,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group"> 
+                                        <!-- <div class="form-group">
                                             <label>Employee<span class="clr-red">*</span></label>
-                                            <p-autoComplete field="label" class="autocomp-customer-cstm" name="employeeId"
-                                                [(ngModel)]="salesQuote.employeeId" [suggestions]="firstCollection"
-                                                [forceSelection]="true" emptyMessage="No Match Found" field="label"
+                                            <p-autoComplete field="label" class="autocomp-customer-cstm"
+                                                name="employeeId" [(ngModel)]="salesQuote.employeeId"
+                                                [suggestions]="firstCollection" [forceSelection]="true"
+                                                emptyMessage="No Match Found" field="label"
                                                 (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
                                                 [dropdown]="true" #employeeName="ngModel" required>
                                             </p-autoComplete>
@@ -157,9 +154,9 @@
                                                     <small>Employee is required </small>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <div class="col-md-6 padding-10">
+                                    <div class="col-md-6 padding-10" style="padding-bottom: 0px !important;">
                                         <div class="form-group">
                                             <label>Account Type <span class="clr-red">*</span></label>
                                             <select name="accountTypeId" required [(ngModel)]="salesQuote.accountTypeId"
@@ -229,8 +226,7 @@
                                         <div class="form-group">
                                             <label>Credit Limit &amp; terms</label>
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control text-right"
-                                                    name="creditLimit"
+                                                <input type="text" class="form-control text-right" name="creditLimit"
                                                     [ngModel]="salesQuote.creditLimit | twoDecimalGlobalNumberFormatPipe"
                                                     (ngModelChange)="salesQuote.creditLimit=$event" [disabled]="true" />
                                             </div>
@@ -262,25 +258,43 @@
                             </div>
                             <div class="col-md-6 main_ar">
                                 <div class="form-row">
-                                    <div class="col-md-6 padding-10 padding-top-5">
-                                        <div class="form-group padding-12">
-                                            <label></label>
-                                            <div class="col-md-6">
+                                    <div class="col-md-6 padding-10 padding-top-5" style="padding-bottom: 0px !important;">
+                                        <div class="form-group padding-6">
+                                            <!-- <label></label> -->
+                                            <div class="col-md-5" style="margin-bottom: 4px;">
+                                                <label></label>
                                                 <label>
                                                     <input type="checkbox" [(ngModel)]="salesQuote.restrictPMA"
                                                         name="restrictPMA" id="restrictPMA" [disabled]="true" />
                                                     Restrict PMA
                                                 </label>
-                                            </div>
-                                            <div class="col-md-6">
                                                 <label>
                                                     <input type="checkbox" [(ngModel)]="salesQuote.restrictDER"
                                                         name="restrictDER" id="restrictDER" [disabled]="true" />
                                                     Restrict DER
                                                 </label>
                                             </div>
+                                            <!-- <div class="col-md-3">
+                                                
+                                            </div> -->
+                                            <div class="col-md-7">
+                                                <label>Employee<span class="clr-red">*</span></label>
+                                                <p-autoComplete field="label" class="autocomp-customer-cstm"
+                                                    name="employeeId" [(ngModel)]="salesQuote.employeeId"
+                                                    [suggestions]="firstCollection" [forceSelection]="true"
+                                                    emptyMessage="No Match Found" field="label"
+                                                    (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
+                                                    [dropdown]="true" #employeeName="ngModel" required>
+                                                </p-autoComplete>
+                                                <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="employeeName.errors.required">
+                                                        <small>Employee is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group padding-top-10">
+                                        <div class="form-group padding-top-8">
                                             <label>Sales Person/Agent</label>
                                             <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
                                                 [(ngModel)]="salesQuote.salesPersonName"
@@ -291,7 +305,7 @@
                                                 [minLength]="1" [dropdown]="true">
                                             </p-autoComplete>
                                         </div>
-                                        <div class="form-group padding-top-4">
+                                        <div class="form-group">
                                             <label>CSR</label>
                                             <p-autoComplete class=" autocomp-customer-cstm"
                                                 name="customerServiceRepName"
@@ -337,47 +351,37 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 padding-10">
-                                        <div class="card">
+                                    <div class="col-md-6 padding-10" style="padding-bottom: 0px !important;">
+                                        <!-- <div class="card">
                                             <div class="card-header margin-summary-div">
                                                 <label class="text-center">Margin Summary</label>
                                             </div>
                                             <div>
-                                                <label
-                                                    class="margin-summary-label">Sales<span
+                                                <label class="margin-summary-label">Sales<span
                                                         class="float-right">{{marginSummary.sales | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                <label
-                                                    class="margin-summary-label">Misc
+                                                <label class="margin-summary-label">Misc
                                                     Amt<span
                                                         class="float-right">{{marginSummary.misc | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                <label
-                                                    class="margin-summary-label">Net
+                                                <label class="margin-summary-label">Net
                                                     Sales<span
                                                         class="float-right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                <label
-                                                    class="margin-summary-label">Product
+                                                <label class="margin-summary-label">Product
                                                     Cost<span
                                                         class="float-right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                <label
-                                                    class="margin-summary-label">Margin
+                                                <label class="margin-summary-label">Margin
                                                     Amt<span
                                                         class="float-right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
-                                                <label
-                                                    class="margin-summary-label">Margin
+                                                <label class="margin-summary-label">Margin
                                                     %<span
                                                         class="float-right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
                                             </div>
                                         </div>
-                                        <div class="padding-10"></div>
+                                        <div class="padding-10"></div> -->
                                         <div>
-                                            <!-- <app-management-structure [salesQuote]="salesQuote"
-                                                [managementStructureId]="currentUserManagementStructureId">
-                                            </app-management-structure> -->
-                                            <div class="card m-t-20">
+                                            <div class="card">
                                                 <div class="card-header mgmt-card-header">
                                                     <h5 class="mgmt-label">Management Structure
                                                         <span class="clr-red">*</span></h5>
-
                                                 </div>
                                                 <div class="card-body mgmt-card-body">
                                                     <div class="form-group">
@@ -430,6 +434,25 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class=" main_ar" style="padding-top:10px">
+                                            <div class="form-group memo-popup-cstm">
+                                                <label>
+                                                    Memo<i class=" fa fa-pencil" data-toggle="modal"
+                                                        data-target="#add-description" matTooltipPosition="above"
+                                                        matTooltip="Memo" (click)="onAddDescription('memo')"></i>
+                                                </label>
+                                                <span>
+                                                    <div class="form-group memo-popup-cstm mat_emo">
+                                                        <div [innerHTML]="salesQuote.memo"
+                                                            [matTooltip]="parsedText(salesQuote.memo)"
+                                                            class="form-control"
+                                                            style="height: 85px !important; width:100%"
+                                                            class="text_editor_box">
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -447,7 +470,8 @@
                             <div class="col-md-4 main_ar">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
-                                        Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description" matTooltipPosition="above" matTooltip="Notes"
+                                        Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                            matTooltipPosition="above" matTooltip="Notes"
                                             (click)="onAddDescription('notes')"></i>
                                     </label>
                                     <span>
@@ -462,24 +486,21 @@
                                 </div>
                             </div>
                             <div class="col-md-4 main_ar">
-                                <div class="form-group memo-popup-cstm">
-                                    <label>
-                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                            matTooltipPosition="above" matTooltip="Memo"
-                                            (click)="onAddDescription('memo')"></i>
-                                    </label>
-                                    <span>
-                                        <div class="form-group memo-popup-cstm mat_emo">
-                                            <div [innerHTML]="salesQuote.memo"
-                                                [matTooltip]="parsedText(salesQuote.memo)" class="form-control"
-                                                style="height: 100px !important;width:90%" class="text_editor_box">
-                                            </div>
-                                        </div>
-                                    </span>
+                                <div class="form-group" style="position: absolute; right: 10px; bottom: 0;">
+                                    <button type="submit" *ngIf="!isEdit && !isCreateModeHeader"
+                                        (click)="onSubmit(true)" [disabled]="!newSalesQuoteForm.form.valid"
+                                        class="btn pull-right submit-btn btn btn-primary">
+                                        Save
+                                    </button>
+                                    <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
+                                        (click)="openConfirmationModal(true)" [disabled]="enableUpdateButton"
+                                        class="btn pull-right submit-btn btn btn-primary">
+                                        Update
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                             <button type="submit" *ngIf="!isEdit && !isCreateModeHeader" (click)="onSubmit(true)"
                                 [disabled]="!newSalesQuoteForm.form.valid"
                                 class="btn pull-right submit-btn btn btn-primary">
@@ -490,27 +511,30 @@
                                 class="btn pull-right submit-btn btn btn-primary">
                                 Update
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
                         <div class="x_panel">
                             <button type="button" (click)="initiateSalesOrderCoversion()"
                                 [disabled]="verifySalesOrderQuoteObj.canCovertToSalesOrder == false"
-                                class="btn btn-primary">
+                                class="btn btn-primary" style="width: 92px;">
                                 Create SO
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()" [disabled]="(enforceApproval ? (verifySalesOrderQuoteObj.canCovertToSalesOrder === false ? true : false) : false)">
+                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()"
+                                [disabled]="(enforceApproval ? (verifySalesOrderQuoteObj.canCovertToSalesOrder === false ? true : false) : false)"
+                                style="width: 92px;">
                                 Email Quote
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="initiateQuoteCopying()">
+                            <button type="button" class="btn btn-primary" (click)="initiateQuoteCopying()"
+                                style="width: 92px;">
                                 Make Duplicate
                             </button>
-                            <a class="btn btn-primary" (click)="initiatePrintProcess()">Print Quote </a>
-                            <a class="btn btn-primary" (click)="initiateCreatingNewQuote()">New Quote</a>
-                            <span class="btn btn-primary" (click)="initiateClosingSalesOrderQuote()">Close</span>
-                            <!-- <p-splitButton label="Communication" class="btn btn-primary btn"
-                                [model]="communicationItems">
-                            </p-splitButton> -->
+                            <a class="btn btn-primary" (click)="initiatePrintProcess()" style="width: 92px;">Print Quote
+                            </a>
+                            <a class="btn btn-primary" (click)="initiateCreatingNewQuote()" style="width: 92px;">New
+                                Quote</a>
+                            <span class="btn btn-primary" (click)="initiateClosingSalesOrderQuote()"
+                                style="width: 92px;">Close</span>
                         </div>
                     </div>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
@@ -529,25 +553,21 @@
                                     [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
                                 </app-sales-part-number>
                             </p-tabPanel>
-                            <p-tabPanel header="Internal Approvers">
+                            <p-tabPanel header="Internal Approvers" *ngIf="enforceApproval">
                                 <app-sales-approve>
                                 </app-sales-approve>
                             </p-tabPanel>
-                            <p-tabPanel header="Approver Process">
-
+                            <p-tabPanel header="Approver Process" *ngIf="enforceApproval">
                                 <app-sales-customer-approvals *ngIf="isEdit == true" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" [customerContactList]="customerContactList"
-                                    [marginSummary]="marginSummary" (quoteApprovedCheck)="verifySalesQuoteConversion(salesQuoteView.verificationResult)"
+                                    [marginSummary]="marginSummary"
+                                    (quoteApprovedCheck)="verifySalesQuoteConversion(salesQuoteView.verificationResult)"
                                     (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
                                 </app-sales-customer-approvals>
-
                             </p-tabPanel>
                             <p-tabPanel header="Address">
                                 <app-address-component [addressType]="addressType" [id]="SalesOrderQuoteId">
-
                                 </app-address-component>
-                                <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
-                                    [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address> -->
                             </p-tabPanel>
                             <p-tabPanel header="Freight">
                                 <app-sales-order-quote-freight [freightForm]="freight" [customerId]="customerId"
@@ -568,32 +588,25 @@
                                 </app-sales-order-quote-charges>
                             </p-tabPanel>
                             <p-tabPanel header="Document">
-                                <!-- <app-salesQuote-documents [viewMode]="false" [salesOrderQuoteId]="id"
-                                    [isEditMode]="true">
-                                </app-salesQuote-documents> -->
                                 <app-common-documents [moduleName]="moduleName" [referenceId]="id" [isViewMode]="false"
                                     [offLineUpload]="true"></app-common-documents>
                             </p-tabPanel>
-                            <p-tabPanel header="Analysis"> 
+                            <p-tabPanel header="Analysis">
                                 <app-sales-quote-analysis>
                                 </app-sales-quote-analysis>
                             </p-tabPanel>
                             <p-tabPanel header="Communication">
-                                <!-- [ContactList]="customerContactList" -->
-                              <app-communication [isViewMode]="false" [type]="1" [moduleName]="moduleName" [idForContact]="customerId"  [referenceId]="id"></app-communication>
-                            </p-tabPanel> 
-
+                                <app-communication [isViewMode]="false" [type]="1" [moduleName]="moduleName"
+                                    [idForContact]="customerId" [referenceId]="id"></app-communication>
+                            </p-tabPanel>
                         </p-tabView>
                     </ng-container>
-
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
-
                         <div *ngIf="(selectedCommunicationTab == 'memo')">
                             <app-m-memo [salesQuoteId]="id" [selectedParts]="selectedParts"
                                 [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
                                 [customerContactList]="customerContactList"></app-m-memo>
                         </div>
-
                         <div *ngIf="(selectedCommunicationTab == 'text')">
                             <app-text [salesQuoteId]="id" [selectedParts]="selectedParts"
                                 [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
@@ -614,23 +627,15 @@
                         </div>
                         <div class="clearfix mb-1"></div>
                     </ng-container>
-
                     <div class="card-footer text-right">
                         <div class="col-md-1 col-sm-1 col-1">
                             &nbsp;
                         </div>
                         <div class="col-md-11 col-sm-11 col-11">
-
-
                             <button type="submit" *ngIf="!isEdit && isCreateModeHeader" (click)="onSubmit(false)"
                                 class="btn pull-right submit-btn btn btn-primary">
                                 Submit
                             </button>
-                            <!-- <button type="submit" *ngIf="isEdit && !isCreateModeHeader"
-                                (click)="openConfirmationModal(false)"
-                                class="btn pull-right submit-btn btn btn-primary">
-                                Update
-                            </button> -->
                         </div>
                     </div>
                 </form>
@@ -646,37 +651,22 @@
                 <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
             </div>
             <div class="modal-body">
-                <!-- <table class="table table-bordered table-fixed workflow-table-material">
-                    <thead>
-                        <th style="color: #fff;">{{tempMemoLabel}}</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
-                                </p-editor>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
                 <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
                 </p-editor>
                 <div class="editor-buttons">
-                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" 
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
                         (click)="onSaveDescription()">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal" (click)="closeModal()">
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal"
+                        (click)="closeModal()">
                         Close
                     </button>
-
-
                 </div>
             </div>
         </div>
     </div>
- </div>
+</div>
 <ng-template #errorMessagePop let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
@@ -686,11 +676,9 @@
         <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
     </div>
 </ng-template>
-
 <ng-template #emailQuotePopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
@@ -702,12 +690,10 @@
         </h6>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendQuoteToCustomer()">Yes</button>
     </div>
 </ng-template>
-
 <ng-template #closeQuotePopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
@@ -719,12 +705,10 @@
         </h6>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="closeSalesOrderQuote()">Yes</button>
     </div>
 </ng-template>
-
 <ng-template #newQuoteCreatePopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
@@ -736,12 +720,10 @@
         </h6>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="newQuoteEvent()">Yes</button>
     </div>
 </ng-template>
-
 <ng-template #copyQuotePopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
@@ -749,7 +731,6 @@
     </div>
     <div class="modal-body">
         <h6> If yes, please select below considerations.</h6>
-
         <div class="form-group popup_checkbox_considerations m-t-5">
             <p-checkbox name="isPartsAllowForCopy" [(ngModel)]="copyConsiderations.isPartsAllowForCopy" binary="true"
                 label="Parts">
@@ -757,52 +738,42 @@
         </div>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="copySalesOrderQuote()">Yes</button>
     </div>
 </ng-template>
-
-
 <ng-template #salesQuoteConvertPopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
         <h4 class="modal-title">Creating Sales Order From Quote</h4>
     </div>
     <form #quoteConversionForm="ngForm" class="form-horizontal">
-
         <div class="modal-body">
             <div class="form-group">
                 <label>Enter Customer Refrence<span class="clr-red">*</span></label>
                 <input type="text" required class="form-control" name="customerReference" style="max-width: 60%;"
                     [(ngModel)]="salesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
             </div>
-
             <div class="form-group popup_checkbox_considerations m-t-5">
-                <p-checkbox name="selectAllForConversion"
-                    (onChange)="onActionSelectAllforconvversion()"
+                <p-checkbox name="selectAllForConversion" (onChange)="onActionSelectAllforconvversion()"
                     [(ngModel)]="selectAllForConversion" binary="true" label="Select All">
                 </p-checkbox>
             </div>
-
             <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferStockline" [(ngModel)]="salesOrderConversionCriteriaObj.transferStockline"
                     binary="true" label="Transfer Stockline">
                 </p-checkbox>
             </div>
-
             <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="reserveStockline" [(ngModel)]="salesOrderConversionCriteriaObj.reserveStockline"
                     binary="true" label="Reserve Stockline">
                 </p-checkbox>
             </div>
-
             <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferNotes" [(ngModel)]="salesOrderConversionCriteriaObj.transferNotes"
                     binary="true" label="Transfer Notes">
                 </p-checkbox>
             </div>
-
             <div class="form-group popup_checkbox_considerations stock-check-box">
                 <p-checkbox name="transferMemos" [(ngModel)]="salesOrderConversionCriteriaObj.transferMemos"
                     binary="true" label="Transfer Memo">
@@ -820,7 +791,6 @@
             </div>
         </div>
         <div class="modal-footer">
-
             <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal"
                 [disabled]="conversionStarted || !quoteConversionForm.valid" (click)="convertSalesOrderQuote()">
@@ -835,7 +805,6 @@
         <h4 class="modal-title">Do you want to create new version or update existing sales order quote ?</h4>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal"
             (click)="closeConfirmationModal()">Cancel</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal"
@@ -846,7 +815,6 @@
             (click)="updateSalesOrderQuote()">Update</button>
     </div>
 </ng-template>
-
 <ng-template #salesQuotePrintPopup let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
@@ -858,7 +826,6 @@
         </div>
     </div>
     <div class="modal-footer">
-
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
     </div>

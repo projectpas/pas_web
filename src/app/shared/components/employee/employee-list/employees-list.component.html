@@ -252,7 +252,7 @@
                      
                   </td>
 
-                  <td class="action-icons-cstm table-column-width" >
+                  <td class="action-icons-cstm table-column-width" style="width:131px !important">
                       <div *ngIf="currentDeletedstatus == false">
                           <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -553,8 +553,8 @@
                                       <p>
                                           <span class="label"><b>Employee Id: <span class="clr-red">*</span></b></span><span class="value">
                                               {{
-                                allEmployeelist.employeeId
-                                  ? allEmployeelist.employeeId
+                                allEmployeelist.employeeCode
+                                  ? allEmployeelist.employeeCode
                                   : '-'
                                               }}
                                           </span>
@@ -1069,7 +1069,13 @@
                                 <h4 class="panel-title">
                                   Certification Received
                                 </h4>
-                                <div class="clear"></div>
+                                <div>
+                                  <div class="clear"></div>
+                                  <hr /> 
+                                  <app-common-documents [moduleName]="moduleName" [referenceId]="viewEmpID" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                               </div>
+
+                                <!-- <div class="clear"></div>
                                             <hr /> 
                                            <div class="checkbox-cstm setDelts" style="margin-bottom: 10px;" >
                                                 <label style="width: auto !important;margin-top: 3px;">
@@ -1097,7 +1103,8 @@
 
                                        <ng-template pTemplate="colgroup" let-columns>
                                             <colgroup>
-                                                <col *ngFor="let col of columns" class="table-column-width" />
+                                                <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" 
+                                                />
                                             </colgroup>
                                         </ng-template>
                                         <ng-template pTemplate="header" let-columns>
@@ -1107,7 +1114,7 @@
                                                     pResizableColumn
                                                     pReorderableColumn
                                                     [pSortableColumn]="col.field">
-                                                    <div>
+                                                  
                                                         {{ col.header }}
                                                         <p-sortIcon *ngIf="
                                             col.field != 'download' &&
@@ -1115,7 +1122,7 @@
                                           "
                                                                     [field]="col.field">
                                                         </p-sortIcon>
-                                                    </div>
+                                                    
                                                 </th>
                                             </tr>
                                             <tr>
@@ -1148,8 +1155,7 @@
                                             col.field
                                           )
                                         " />
-                                                    <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                                    <input type="date"
+                                                                                                       <input type="date"
                                                            class="hidePlaceHolder table-header-input-width"
                                                            *ngIf="col.field == 'updatedDate'"
                                                            name="updatedDate"
@@ -1160,8 +1166,7 @@
                                           )
                                         " />
                                                 </th>
-                                                <!-- <th style="width:140px;position:sticky"></th> -->
-                                                <!-- <th></th> -->
+                                               
                                             </tr>
                                         </ng-template>
                                         <ng-template pTemplate="body"
@@ -1174,8 +1179,7 @@
                                                 "
                                                 >
                                                 <td *ngFor="let col of columns" class="table-column-width">
-                                                    <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
-                                                    <!-- <ng-container > -->
+                                                    
                                                     <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
                                                         <span>
                                                             {{
@@ -1189,9 +1193,7 @@
                                               : rowData[col.field]
                                                             }}
                                                         </span>
-                                                        <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
-                        rowData[col.field]
-                        </span> -->
+                                                       
                                                     </div>
                                                     <div *ngIf="col.field == 'docMemo'">
 
@@ -1218,7 +1220,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <!-- </ng-container> -->
+                                                   
                                                 </td>
                                             </tr>
                                         </ng-template>
@@ -1251,10 +1253,10 @@
                                                    type="text" />
                                         </ng-template>
 
-                                    </p-table>
+                                    </p-table> -->
 
 
-</div>
+                           </div>
                           </div>
                         </div>
                       </div>
@@ -1342,7 +1344,7 @@
                     <div class="modal-body">
                       <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                         <div class="tableFixHead">
-                          <table class="table table-bordered header-table-width">
+                          <table class="table table-bordered">
                           <thead>
                             <tr>
                               <th>Name</th>
@@ -1421,24 +1423,24 @@
                               >
                                 {{ audit.fileName }}
                               </td>
-                              <td>{{ audit.fileSize }}</td>  
+                              <td style="width:60px !important ">{{ audit.fileSize }}</td>  
                              
                               <td>
                                 {{
                                   audit.createdDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
                               </td>
-                              <td>{{ audit.createdBy }}</td>
+                              <td style="width:60px !important ">{{ audit.createdBy }}</td>
                                                     
                               <td>
                                 {{
                                   audit.updatedDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
                               </td>
-                              <td>{{ audit.updatedBy }}</td>     
+                              <td style="width:60px !important ">{{ audit.updatedBy }}</td>     
                              
                               
-                              <td> <input type="checkbox"  name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
+                              <td style="width:60px !important "> <input type="checkbox"  name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
                             </tr>
                           </tbody>
                         </table>
@@ -1533,7 +1535,7 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">
-						<table class="table table-bordered header-table-width"
+						<table class="table table-bordered"
             *ngIf="auditHistory.length > 0; else noDatavailable"
           >
             <thead>
@@ -1581,7 +1583,7 @@
                 >
                   {{ audit.lastName }}
                 </td>
-                <td
+                <td style="width:60px !important"
                   [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
@@ -1630,7 +1632,7 @@
                   {{ audit.startDate | date: 'MM/dd/yyyy' }}
                 </td>
                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'company', audit.company)  ? 'black' : 'red'  }">{{audit.company}}</td>
-                <td
+                <td style="width:60px !important"
                   [ngStyle]="{
                     color: getColorCodeForHistory(i, 'payType', audit.payType)
                       ? 'black'
@@ -1639,7 +1641,7 @@
                 >
                   {{ audit.payType }}
                 </td>
-                <td class="text-center"
+                <td class="text-center" style="width:60px !important"
                   [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
                       ? 'black'
@@ -1658,7 +1660,7 @@
             >
               {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}
             </td>
-            <td
+            <td style="width:60px !important"
                 [ngStyle]="{
                   color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
                     ? 'black'
@@ -1677,7 +1679,7 @@
           >
             {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}
           </td>
-          <td
+          <td style="width:60px !important"
           [ngStyle]="{
             color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)
               ? 'black'
@@ -1686,7 +1688,7 @@
         >
           {{ audit.updatedBy }}
         </td>
-          <td class="text-center"
+          <td class="text-center" style="width:60px !important"
           [ngStyle]="{
             color: getColorCodeForHistory(i, 'isDeleted', audit.isDeleted)
               ? 'black'

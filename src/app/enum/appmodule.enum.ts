@@ -12,5 +12,6 @@
     SOPickTicket = 12,
     PurchaseOrder = 13,
     RepairOrder = 14,
-    WorkOrder = 15
+    WorkOrder = 15,
+    ExchangeQuote = 17,
 }

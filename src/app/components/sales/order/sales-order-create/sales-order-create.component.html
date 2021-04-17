@@ -23,7 +23,7 @@
                 <div class="form-row body-alignment">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Customer Name
+                            <label style="height: 15px;">Customer Name
                                 <span class="clr-red">*</span>
                                 <span class="ng-star-inserted color-blue">
                                     <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
@@ -475,7 +475,6 @@
                                     </span>
                                 </div>
                             </div>
-                           
                         </div>
                         <div class="col-md-12">
                             <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
@@ -547,7 +546,7 @@
                                 </app-sales-order-approve>
                             </p-tabPanel>
                             <p-tabPanel header="Approver Process">
-                                <app-sales-order-customer-approval *ngIf="isEdit" [customer-id]="customerId"
+                                <app-sales-order-customer-approval *ngIf="isEdit && isContactsLoaded" [customer-id]="customerId"
                                     [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
                                     [customerContactList]="customerContactList"
                                     (on-part-approved-event)="onPartsApprovedEvent()">

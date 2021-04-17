@@ -110,11 +110,11 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         { field: 'docDescription', header: 'Description' },
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
-        { field: 'fileSize', header: 'File Size' },
+        { field: 'fileSize', header: 'File Size',width:"70px" },
         { field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },
+        { field: 'createdBy', header: 'Created By',width:"80px"},
         { field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'updatedBy', header: 'Updated By',width:"80px" },
     ];
     selectedColumnsDoc = this.customerDocumentsColumns;
     sourceViewforDocumentList: any = [];
@@ -137,6 +137,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     arrayTrainingtypelist: any = [];
     arrayFrequencyTrainingInfolist: any = [];
     arrayaircraftmodelarraylist: any = [];
+    moduleName='Employee'
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -604,6 +605,26 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                 this.sourceEmployee.aircraftManufacturerId = this.sourceEmployee.aircraftManufacturerId == 0 ? null : this.sourceEmployee.aircraftManufacturerId;
                 this.sourceEmployee.aircraftModelId = this.sourceEmployee.aircraftModelId == 0 ? null : this.sourceEmployee.aircraftModelId;
                 this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
+                if (this.sourceEmployee.scheduleDate) {
+                    let d= new Date(this.sourceEmployee.scheduleDate);
+                    this.sourceEmployee.scheduleDate =`${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+    
+                }
+                if (this.sourceEmployee.completionDate) {
+                    
+                    let comdt= new Date(this.sourceEmployee.completionDate);
+                    this.sourceEmployee.completionDate =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                }
+                if (this.sourceEmployee.completionDate < this.setExpireDate) {
+                    this.setExpireDate = new Date();
+                } else {
+                    let comdt= new Date(this.sourceEmployee.completionDate);
+                    this.setExpireDate =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                }
+                if (this.sourceEmployee.expirationDate != null) {
+                    let comdt= new Date(this.sourceEmployee.expirationDate);
+                    this.sourceEmployee.expirationDate  =`${comdt.getMonth() + 1}/${comdt.getDate()}/${comdt.getFullYear()}`;
+                }
                 this.employeeService.updateTrainingDetails(this.sourceEmployee).subscribe(
                     data => {
                         this.onUploadDocumentListNew();
@@ -1144,6 +1165,10 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
             }
         }
     }
+
+    changeOfTab(event) {
+
+	}
 
     enableSave() {
         if (this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0) {

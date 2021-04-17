@@ -92,9 +92,14 @@ export class SalesMarginComponent implements OnInit {
   }
 
   onChangeQuantityFromThis(event) {
+
     if (Number(this.part.quantityFromThis) != 0) {
       if (this.part['qtyRemainedToQuote']) {
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted && Number(this.part.quantityFromThis) > Number(this.part['qtyRemainedToQuote']);
+      }
+      else if (Number(this.part.quantityFromThis) < 0)
+      {
+        this.invalidQuantityenteredForQuantityFromThis = true;
       }
       else {
         this.invalidQuantityenteredForQuantityFromThis = this.part.quantityFromThis > this.part.quantityToBeQuoted;

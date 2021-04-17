@@ -42,7 +42,7 @@
                                     <div class="card-body header-body">
                                         <!-- pageSizeForDomestic -->
                                         <p-table #domesticShipInfo
-                                                 class="rpo-table-cstm rro-table-cstm"
+                                                 class="rpo-table-cstm lastcol-fix"
                                                  [value]="allActions" [metaKeySelection]="true"
                                                  [rows]="pageSizeForDomestic" [paginator]="true"
                                                  [pageLinks]="3"
@@ -143,21 +143,21 @@
                                             </ng-template>
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns" class="table-column-width">
+                                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
                                                 <tr>
-                                                    <th class="table-column-width">Flag</th>
+                                                    <th class="width-50">Flag</th>
                                                     <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'"
                                                         pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                                         {{col.header}}
                                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                                     </th>
-                                                    <th  class="table-actions-column" style="width:150px !important">Actions</th>
+                                                    <th class="headerList" class="table-actions-column" style="width:150px !important">Actions</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="table-column-width"></th>
+                                                    <th class="width-50"></th>
                                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                                         [hidden]="col.field == 'isPrimary'">
                                                         <input class="table-header-input-width" pInputText type="text"
@@ -169,14 +169,14 @@
                                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                                     (dblclick)="openView(view,rowData)">
-                                                    <td class="table-column-width">
+                                                    <td class="width-50">
                                                         <span class="flag">
                                                             <i *ngIf="rowData.isPrimary == true"
                                                                [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                                                class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                                         </span>
                                                     </td>
-                                                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" style="width: 140px !important;"
+                                                    <td class="table-column-width ui-resizable-column" *ngFor="let col of columns"
                                                         [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                                         {{rowData[col.field]}}
                                                     </td>
@@ -497,7 +497,7 @@
                                         <div class="modal-body" *ngIf="auditHistory">
                                             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                                 <div class="tableFixHead">  
-                                                <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
+                                                <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                     <thead>
                                                         <tr>
                                                             <th>Tag Name <span class="clr-red"></span></th>
@@ -506,7 +506,7 @@
                                                             <th>Address1 <span class="clr-red">*</span></th>
                                                             <th>Address2</th>
                                                             <th>City <span class="clr-red">*</span></th>
-                                                            <th>State/Prov <span class="clr-red">*</span></th>
+                                                            <th style="width:72px">State/Prov <span class="clr-red">*</span></th>
                                                             <th>Postal Code <span class="clr-red">*</span></th>
                                                             <th>Country <span class="clr-red">*</span></th>
                                                             <th>Is Primary</th>
@@ -759,7 +759,7 @@
                                                     </ng-template>
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <th class="table-column-width">Flag</th>
+                                                            <th class="width-50">Flag</th>
                                                             <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                                 [pSortableColumn]="col.field">
                                                                 {{col.header}}
@@ -768,7 +768,7 @@
                                                             <th class="table-actions-column">Actions</th>
                                                         </tr>
                                                         <tr>
-                                                            <th class="table-column-width"></th>
+                                                            <th class="width-50"></th>
                                                             <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                                                 [hidden]="col.field == 'isPrimary'">
                                                                 <input class="table-header-input-width" pInputText type="text"
@@ -780,7 +780,7 @@
                                                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                                             (dblclick)="openDomesticShipViaonDbl(rowData)">
-                                                            <td class="table-column-width">
+                                                            <td class="width-50">
                                                                 <span class="flag">
                                                                     <i *ngIf="rowData.isPrimary == true"
                                                                        [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
@@ -788,7 +788,7 @@
                                                                 </span>
                                                             </td>
                                                             <ng-container *ngFor="let col of columns">
-                                                                <td class="table-column-width" class="ui-resizable-column" *ngIf="col.field != 'memo'"
+                                                                <td class="table-column-width ui-resizable-column"  *ngIf="col.field != 'memo'"
                                                                 pReorderableRowHandle>
                                                                 {{
                                                                   col.field == 'createdDate'
@@ -1111,7 +1111,7 @@
                             
                                     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                         <div class="tableFixHead">  
-                                        <table class="table table-bordered header-table-width">
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Ship Via</th>
@@ -1194,7 +1194,7 @@
                                         <div class="modal-body">
                                             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                                 <div class="tableFixHead">  
-                                                <table class="table table-bordered header-table-width">
+                                                <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th>Ship Via</th>
@@ -1397,12 +1397,12 @@
 
                                             <ng-template pTemplate="colgroup" let-columns>
                                                 <colgroup>
-                                                    <col *ngFor="let col of columns" class="table-column-width">
+                                                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
                                                 </colgroup>
                                             </ng-template>
                                             <ng-template pTemplate="header" let-columns>
                                                 <tr>
-                                                    <th class="table-column-width">Flag</th>
+                                                    <th class="width-50">Flag</th>
                                                     <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn
                                                         pReorderableColumn [pSortableColumn]="col.field">
                                                         {{col.header}}
@@ -1411,7 +1411,7 @@
                                                     <th class="headerList" class="table-actions-column" style="width:150px !important">Actions</th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="table-column-width"></th>
+                                                    <th class="width-50"></th>
                                                     <th class="table-column-width" *ngFor="let col of columns"
                                                         [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                                         <input class="table-header-input-width" pInputText type="text" *ngIf="col.field != 'expirationDate' && col.field != 'isPrimary' && col.field != 'startDate'"
@@ -1426,16 +1426,16 @@
                                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                                     (dblclick)="openInternationalView(rowData)">
-                                                    <td class="table-column-width">
+                                                    <td class="width-50">
                                                         <span class="flag">
                                                             <i *ngIf="rowData.isPrimary == true"
                                                                [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                                                class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                                         </span>
                                                     </td>
-                                                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'"
+                                                    <td class="table-column-width ui-resizable-column" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                                         pReorderableRowHandle>
-                                                        <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
+                                                        <ng-container *ngIf="col.field != 'amount' && col.field == 'createdDate' || col.field == 'updatedDate' && col.field != 'amount'">
                                                             {{
                                                                           col.field == 'createdDate'
                                                                             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
@@ -1444,10 +1444,12 @@
                                                                             : rowData[col.field]
                                                             }}
                                                         </ng-container>
-                                                        <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+                                                        <ng-container style="text-align: right !important;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                                                             {{col.field == 'amount' ? (rowData[col.field] | twoDecimalGlobalNumberFormatPipe):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
                                                         </ng-container>
+                                                       
                                                     </td>
+                                                    
                                                     <td class="action-icons-cstm table-column-width" style="width:150px !important">
                                                         <div *ngIf="currentDeletedstatusIntenational==false">
                                                             <ng-container *ngIf="!isViewMode">
@@ -1618,7 +1620,7 @@
 
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">  
-            <table class="table table-bordered header-table-width">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Memo</th>
@@ -1711,7 +1713,7 @@
                     </ng-template>
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th class="table-column-width">Flag</th>
+                            <th class="width-50">Flag</th>
                             <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                 [pSortableColumn]="col.field">
                                 {{col.header}}
@@ -1719,7 +1721,7 @@
                             </th>
                         </tr>
                         <tr>
-                            <th class="table-column-width"></th>
+                            <th class="width-50"></th>
                             <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                 [hidden]="col.field == 'isPrimary'">
                                 <input class="table-header-input-width" pInputText type="text"
@@ -1730,7 +1732,7 @@
                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                             (dblclick)="openDomesticShipViaonDbl(rowData)">
-                            <td class="table-column-width">
+                            <td class="width-50">
                                 <span class="flag">
                                     <i *ngIf="rowData.isPrimary == true"
                                        [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
@@ -1738,7 +1740,7 @@
                                 </span>
                             </td>
                             <ng-container *ngFor="let col of columns">
-                            <td class="table-column-width" *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
+                            <td class="table-column-width ui-resizable-column" *ngIf="col.field != 'memo'" pReorderableRowHandle>
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                             </td>
                             <td *ngIf="col.field == 'memo'">
@@ -1993,7 +1995,7 @@
                                  [reorderableColumns]="true" [loading]="loaderForInterShipVia">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th class="table-column-width">Flag</th>
+                                    <th class="width-50">Flag</th>
                                     <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{col.header}}
@@ -2002,7 +2004,7 @@
                                 </tr>
 
                                 <tr>
-                                    <th class="table-column-width"></th>
+                                    <th class="width-50"></th>
                                     <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                         [hidden]="col.field == 'isPrimary'">
                                         <input class="table-header-input-width" pInputText type="text"
@@ -2014,7 +2016,7 @@
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                     (dblclick)="openInterShipViaonDbl(rowData)">
-                                    <td class="table-column-width">
+                                    <td class="width-50">
                                         <span class="flag">
                                             <i *ngIf="rowData.isPrimary == true"
                                                [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
@@ -2022,7 +2024,7 @@
                                         </span>
                                     </td>
                                     <ng-container *ngFor="let col of columns">
-                                    <td class="table-column-width" *ngIf="col.field != 'memo'" class="ui-resizable-column" pReorderableRowHandle>
+                                    <td class="table-column-width ui-resizable-column" *ngIf="col.field != 'memo'" pReorderableRowHandle>
                                         {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                     </td>
                                     <td class="table-column-width" *ngIf="col.field == 'memo'">
@@ -2133,7 +2135,7 @@
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">  
-                    <table class="table table-bordered header-table-width">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Export License</th>
@@ -2151,6 +2153,7 @@
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
+                        <tbody>
                         <tr *ngFor="let audit of intershippingViaauditHisory; let i = index;">
                             <td [ngStyle]="{'color':  getColorCodeForInternationalHistory(i, 'exportLicense', audit.exportLicense)  ? 'black' : 'red'  }">
                                 {{audit.exportLicense}}
@@ -2200,6 +2203,7 @@
                                 </span>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                     </div>
                 </div>
@@ -2408,7 +2412,7 @@
                              [reorderableColumns]="true" [loading]="loaderForInterShipVia">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th class="table-column-width">Flag</th>
+                                <th class="width-50">Flag</th>
                                 <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                     [pSortableColumn]="col.field">
                                     {{col.header}}
@@ -2418,7 +2422,7 @@
                             </tr>
 
                             <tr>
-                                <th class="table-column-width"></th>
+                                <th class="width-50"></th>
                                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                     [hidden]="col.field == 'isPrimary'">
                                     <input class="table-header-input-width" pInputText type="text"
@@ -2431,7 +2435,7 @@
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                 (dblclick)="openInterShipViaonDbl(rowData)">
-                                <td class="table-column-width">
+                                <td class="width-50">
                                     <span class="flag">
                                         <i *ngIf="rowData.isPrimary == true"
                                            [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
@@ -2675,7 +2679,7 @@
             <div class="modal-body">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                     <div class="tableFixHead">  
-                    <table class="table table-bordered header-table-width">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Ship Via</th>

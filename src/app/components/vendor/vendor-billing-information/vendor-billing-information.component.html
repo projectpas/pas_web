@@ -42,7 +42,7 @@
                     </div>              
                         <div>
                             <div class="card-body header-body"> 
-                                <p-table #dt class="ptable-custom lastcol-fix" 
+                                <p-table #dt class="rpo-table-cstm lastcol-fix" 
                                             [value]="allActions"                                             
                                             [metaKeySelection]="true" 
                                             [rows]="pageSize" 
@@ -170,12 +170,12 @@
                                     </ng-template>
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns" class="table-column-width" />
+                                            <col *ngFor="let col of columns"  [ngStyle]="{'width': col.width}"/>
                                         </colgroup>
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th class="table-column-width">Flag</th>
+                                            <th class="width-50">Flag</th>
                                             <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 {{ col.header }}
@@ -184,7 +184,7 @@
                                             <th class="table-actions-column">Actions</th>
                                         </tr>
                                         <tr>
-                                            <th class="table-column-width"></th>
+                                            <th class="width-50"></th>
                                             <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                                 [ngSwitch]="col.field">
                                                 <input class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value,
@@ -194,10 +194,10 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-                                        <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
+                                        <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                                             (dblclick)="openView(view,rowData)">
 
-                                            <td class="table-column-width">
+                                            <td class="width-50">
                                                 <span class="flag">
                                                     <i *ngIf="rowData.isPrimary == true"
                                                        [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
@@ -205,7 +205,7 @@
                                                 </span>
                                             </td>
 
-                                            <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column"
+                                            <td class="table-column-width ui-resizable-column" *ngFor="let col of columns" 
                                                 [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a '):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                             </td>
@@ -352,7 +352,7 @@
     <div class="modal-body" *ngIf="billingauditHisory">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">  
-            <table class="table table-bordered header-table-width" *ngIf="billingauditHisory.length> 0 else noDatavailable">
+            <table class="table table-bordered" *ngIf="billingauditHisory.length> 0 else noDatavailable">
                 <thead>
                     <tr>
                         <th>Tag <span class="clr-red"></span></th>
@@ -361,7 +361,7 @@
                         <th>Address1 <span class="clr-red">*</span></th>
                         <th>Address2</th>
                         <th>City <span class="clr-red">*</span></th>
-                        <th>State/Prov <span class="clr-red">*</span></th>
+                        <th style="width:72px">State/Prov <span class="clr-red">*</span></th>
                         <th>Postal Code <span class="clr-red">*</span></th>
                         <th>Country <span class="clr-red">*</span></th>
                         <th>Is Primary</th>

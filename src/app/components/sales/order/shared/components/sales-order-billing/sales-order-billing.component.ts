@@ -501,7 +501,12 @@ export class SalesOrderBillingComponent implements OnInit {
 
     getShipCustomerNameList(usertype) {
         let userShipingIdList = [];
-        userShipingIdList.push(0);
+        if (this.shipToAddress.userId != null) {
+            userShipingIdList.push(this.shipToAddress.userId);
+        }
+        else {
+            userShipingIdList.push(0);
+        }
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
             this.userShipingList = res;
         }, err => { });
@@ -509,7 +514,13 @@ export class SalesOrderBillingComponent implements OnInit {
 
     getSoldCustomerNameList(usertype) {
         let userBillinngIdList = [];
-        userBillinngIdList.push(0);
+        if (this.billToAddress.userId != null) {
+            userBillinngIdList.push(this.billToAddress.userId);
+        }
+        else {
+            userBillinngIdList.push(0);
+        }
+        
         this.commonService.autoSuggestionSmartuserDropDownList(usertype, '', true, 20, userBillinngIdList.join()).subscribe(res => {
             this.userBillingList = res;
         }, err => { });

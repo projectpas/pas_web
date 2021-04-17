@@ -119,15 +119,21 @@
         <div class="form-group">
           <label>Billing Intervals (Days)<span class="clr-red">*</span></label>
           <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
-            name="billingIntervalDays" (ngModelChange)="part.billingIntervalDays=formatStringToNumberGlobal($event)" [ngModel]="part.billingIntervalDays  | globalNmberFormat"
+            name="billingIntervalDays" (ngModelChange)="part.billingIntervalDays=formatStringToNumberGlobal($event)" (blur)="addSchesuleBilling($event)" [ngModel]="part.billingIntervalDays  | globalNmberFormat"
             />
         </div>
       </div>
       <div class="col-3 column">
         <div class="form-group">
           <label>Curr</label>
-          <input type="text" class="form-control quantityTextBox text-right" pInputText
-            name="curr" [ngModel]="part.curr"/>
+          <!-- <input type="text" class="form-control quantityTextBox text-right" pInputText
+            name="curr" [ngModel]="part.curr"/> -->
+            <select class="form-control quantityTextBox"
+              [(ngModel)]="part.exchangeCurrencyId" [disabled]="true">
+              <option value="" selected>Select</option>
+              <option *ngFor="let markUp of currencyArr" [value]="markUp.value">{{ markUp.label }}
+              </option>
+            </select>
         </div>
       </div>
       <div class="col-3 column">
@@ -173,19 +179,19 @@
               </td>
               <td>
                 <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
-                name="periodicBillingAmount" [ngModel]="partList.periodicBillingAmount  | twoDecimalGlobalNumberFormatPipe"
-                (ngModelChange)="partList.periodicBillingAmount=formatStringToNumberGlobal($event)" />
+                name="periodicBillingAmount{{row_index}}" id="periodicBillingAmount{{row_index}}" [ngModel]="partList.periodicBillingAmount  | twoDecimalGlobalNumberFormatPipe"
+                (ngModelChange)="partList.periodicBillingAmount=formatStringToNumberGlobal($event)" (blur)="calculateCOGS(row_index)"/>
               </td>
               <td>
                 <!-- (change)="onChangeInput()" -->
-                <select style="width:90%" name ="cogs{{row_index}}" id="cogs{{row_index}}" [(ngModel)]="partList.cogs">
+                <select style="width:90%" name ="cogs{{row_index}}" (change)="calculateCOGS(row_index)" id="cogs{{row_index}}" [(ngModel)]="partList.cogs">
                   <option [ngValue]="0">Select</option>
                   <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
                 </select>
               </td>
               <td>
                 <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
-                name="cogsAmount" [ngModel]="partList.cogsAmount  | twoDecimalGlobalNumberFormatPipe"
+                name="cogsAmount{{row_index}}" id="cogsAmount{{row_index}}" [ngModel]="partList.cogsAmount  | twoDecimalGlobalNumberFormatPipe"
                 (ngModelChange)="partList.cogsAmount=formatStringToNumberGlobal($event)" />
               </td>
             </tr>
@@ -193,6 +199,35 @@
         </tbody>
       </table>
     </form>
+  </div>
+  <div class="row margin-row">
+    <div class="col-md-12 col-sm-12 col-12">
+      <div class="col-3 column">
+        <div class="form-group">
+          <label>
+            <input type="checkbox" name="isRemark" [(ngModel)]="part.isRemark" />
+            <span class="cr"><i class="cr-icon pi"></i></span>
+            Print
+          </label>
+          <div class="rpma-input memo-popup-cstm col-sm-12 m-t-15" *ngIf="part.isRemark">
+            <div class="col-sm-11">
+              <span>
+                <div class="form-group memo-popup-cstm mat_emo">
+                  <div [innerHTML]="part.remarkText" [matTooltip]="parsedText(part.remarkText)" matTooltipPosition="above"
+                    class="form-control quantityTextBox" style="width: 63%;" class="text_editor_box"></div>
+                </div>
+              </span>
+            </div>
+            <div class="col-sm-1">
+              <span style="margin-left:-95px"><a class="btn nobg" data-toggle="modal" data-target="#memo-popup"
+                  (click)="onClickRemarktext('remarkText')" matTooltip="Add Memo" matTooltipPosition="above"><i
+                    class="fa fa-pencil"></i></a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- <div class="row margin-row row-table calculation">
     <table>
@@ -309,6 +344,46 @@
   <button type="button" (click)="onClose($event)" class="btn btn-danger">
     Close
   </button>
+</div>
+<div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Edit Memo</h4>
+      </div>
+      <div class="modal-body">
+        <p-editor
+        spellcheck="true"
+        (ngModelChange)="enableSaveMemo()"
+         [(ngModel)]="memoPopupContent"
+         [style]="{ height: '320px' }"
+         name="memoPopupContent"
+         required
+       ></p-editor>
+        <div class="editor-buttons">
+          <button
+            type="button"
+            class="btn btn-primary editor-buttons-margin"
+            data-dismiss="modal"
+            (click)="onClickPopupSave()"
+            [disabled]="disableSaveMemo"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger editor-buttons-margin"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <ng-template #errorMessagePop let-c="close" let-d="dismiss">
   <div class="modal-header">

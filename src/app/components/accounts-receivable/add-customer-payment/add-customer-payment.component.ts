@@ -28,6 +28,7 @@ export class AddCustomerPaymentComponent implements OnInit {
   @Input() customerId;
   @Input() customerPayment;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() triggerTabChange = new EventEmitter();
   @ViewChild("addCheckMemo", { static: false }) addCheckMemo: ElementRef;
   @ViewChild("addWireMemo", { static: false }) addWireMemo: ElementRef;
   //@ViewChild("addEFTMemo", { static: false }) addEFTMemo: ElementRef;
@@ -85,6 +86,9 @@ export class AddCustomerPaymentComponent implements OnInit {
   adjustReasonList: any = [];
   employeesList: any = [];
   employee: any;
+  isDeposite: boolean = false;
+  cnt: number = 0;
+  arSettingsData: any;
 
   constructor(public customerService: CustomerService, private commonService: CommonService,
     private invoicePaymentService: InvoicePaymentService,
@@ -98,7 +102,6 @@ export class AddCustomerPaymentComponent implements OnInit {
 
   ngOnInit() {
     this.paymentMethod = this.IsSingleOption ? 1 : 2;
-    this.paymentType = 1;
     this.fetchData();
     this.payment.dateProcessed = new Date();
     this.chkreferenceId = 1;
@@ -125,7 +128,7 @@ export class AddCustomerPaymentComponent implements OnInit {
       { field: "currencyCode", header: "Curr", width: "180px" },
       { field: "fxRate", header: "FX Rate", width: "100px" },
       { field: "wosoNum", header: "WO/SO Num", width: "130px" },
-      { field: "paymentStatus", header: "Status", width: "130px" },
+      { field: "status", header: "Status", width: "130px" },
       { field: "dsi", header: "DSI", width: "130px" },
       { field: "dso", header: "DSO", width: "180px" },
       { field: "amountPastDue", header: "Amount Past Due", width: "130px" },
@@ -148,7 +151,26 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.loadBankFeesType();
     this.loadAdjustReason();
 
+    this.getARSettings();
     this.employeedata('', this.currentUserManagementStructureId);
+  }
+
+  bindDefaults() {
+    this.paymentType = 1;
+    if (this.paymentType == 1 && this.arSettingsData != null) {
+      this.tradeReceivableGL = this.arSettingsData.tradeARAccount;
+    }
+  }
+
+  getARSettings() {
+    this.isSpinnerVisible = true;
+    this.customerPaymentsService.getAllARSettings().subscribe(res => {
+      this.arSettingsData = res[0];
+      this.bindDefaults();
+      this.isSpinnerVisible = false;
+    }, err => {
+      this.isSpinnerVisible = false;
+    })
   }
 
   arrayCurrencyList: any = [];
@@ -210,11 +232,28 @@ export class AddCustomerPaymentComponent implements OnInit {
     })
   }
 
-  onDepositeClick() {
+  onDepositeClick(e) {
+    if (e.target.checked && this.cnt >= 2) {
+      e.preventDefault();
+
+      this.alertService.showMessage(
+        "Success",
+        `More than 2 options are not allowed`,
+        MessageSeverity.warn
+      );
+    }
+    else if (!e.target.checked && this.cnt == 1) {
+      e.preventDefault();
+    }
+    else if (e.target.checked) {
+      this.cnt++;
+    }
+    else if (!e.target.checked) {
+      this.cnt--;
+    }
   }
 
   enableSave() {
-
   }
 
   onPaymentMethodClick(value) {
@@ -225,6 +264,7 @@ export class AddCustomerPaymentComponent implements OnInit {
     else {
       this.objInvoicePayment.isMultiplePaymentMethod = true;
       this.objInvoicePayment.isCheckPayment = true;
+      this.cnt = 1;
     }
   }
 
@@ -293,13 +333,6 @@ export class AddCustomerPaymentComponent implements OnInit {
       this.objInvoicePayment.invoiceWireTransferPayment.customerId = this.customerId;
       this.objInvoicePayment.invoiceWireTransferPayment.soBillingInvoicingId = 1;
     }
-    // if (this.objInvoicePayment.isEFT) {
-    //   this.objInvoicePayment.invoiceEFTPayment.createdBy = this.userName;
-    //   this.objInvoicePayment.invoiceEFTPayment.updatedBy = this.userName;
-    //   this.objInvoicePayment.invoiceEFTPayment.masterCompanyId = this.masterCompanyId;
-    //   this.objInvoicePayment.invoiceEFTPayment.customerId = this.customerId;
-    //   this.objInvoicePayment.invoiceEFTPayment.soBillingInvoicingId = 1;
-    // }
     if (this.objInvoicePayment.isCCDCPayment) {
       this.objInvoicePayment.invoiceCreditDebitCardPayment.createdBy = this.userName;
       this.objInvoicePayment.invoiceCreditDebitCardPayment.updatedBy = this.userName;
@@ -314,9 +347,6 @@ export class AddCustomerPaymentComponent implements OnInit {
     if (!this.objInvoicePayment.isWireTransfer) {
       this.objInvoicePayment.invoiceWireTransferPayment = null;
     }
-    // if (!this.objInvoicePayment.isEFT) {
-    //   this.objInvoicePayment.invoiceEFTPayment = null;
-    // }
     if (!this.objInvoicePayment.isCCDCPayment) {
       this.objInvoicePayment.invoiceCreditDebitCardPayment = null;
     }
@@ -325,9 +355,8 @@ export class AddCustomerPaymentComponent implements OnInit {
     this.objInvoicePayment.updatedBy = this.userName;
     this.objInvoicePayment.masterCompanyId = this.masterCompanyId;
     this.objInvoicePayment.customerId = this.customerId;
-    this.objInvoicePayment.soBillingInvoicingId = 1;
-
     this.isSpinnerVisible = true;
+
     this.invoicePaymentService.ProcessPayment(this.objInvoicePayment).subscribe(result => {
       this.isSpinnerVisible = false;
       this.alertService.showMessage(
@@ -639,6 +668,12 @@ export class AddCustomerPaymentComponent implements OnInit {
     }
   }
 
+  onSelectRow(invoice) {
+    if (!invoice.selected) {
+      invoice.paymentAmount = parseFloat(invoice.newRemainingBal) == 0 ? parseFloat(invoice.remainingAmount) : parseFloat(invoice.newRemainingBal);
+    }
+  }
+
   clearCustSearch() {
     this.customerDetails = {};
     this.openInvoices = [];
@@ -660,23 +695,13 @@ export class AddCustomerPaymentComponent implements OnInit {
     else {
       return true;
     }
-    // if (((!this.objInvoicePayment.isMultiplePaymentMethod && this.chkPaymentMethod == 2) ||
-    //   (this.objInvoicePayment.isMultiplePaymentMethod && this.objInvoicePayment.isWireTransfer)) && (this.wireForm && this.wireForm.valid)) {
-    //   return false;
-    // }
-    // else
-    //   return true;
   }
 
   onSubmit() {
     let haveError = false;
     if (haveError) {
-      // let content = this.errorMessagePop;
-      // this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-      // this.display = true;
     }
     else {
-      //this.display = false;
       this.isSpinnerVisible = true;
       this.customerReceipt = new CustomerReceiptInfo();
 
@@ -712,7 +737,9 @@ export class AddCustomerPaymentComponent implements OnInit {
         ele.receiptId = this.customerReceipt.customerPayments.receiptId;
         ele.customerId = this.customerId;
         ele.isMultiplePaymentMethod = this.paymentMethod == 2 ? true : false;
-        ele.status = "Open";
+        ele.isDeposite = this.isDeposite;
+        ele.isTradeReceivable = this.paymentType == 1 ? true : false;
+        ele.tradeReceivableORMiscReceiptGLAccnt = this.paymentType == 1 ? this.tradeReceivableGL : this.miscReceiptsGL;
 
         if (this.paymentMethod == 2) { // Multiple Method
           ele.isCheckPayment = this.objInvoicePayment.isCheckPayment;
@@ -742,10 +769,10 @@ export class AddCustomerPaymentComponent implements OnInit {
             `Payment information updated successfully for Customer`,
             MessageSeverity.success
           );
-
-          this.router.navigateByUrl(
-            `accountreceivable/accountreceivablepages/app-customer-payment-list`
-          );
+          this.triggerTabChange.next();
+          // this.router.navigateByUrl(
+          //   `accountreceivable/accountreceivablepages/app-customer-payment-list`
+          // );
         }, error => {
           this.isSpinnerVisible = false;
         });
