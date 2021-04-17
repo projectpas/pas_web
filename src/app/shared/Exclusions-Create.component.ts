@@ -162,7 +162,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         if(consitionIds && consitionIds.length ==0){
             consitionIds.push(0)
         }
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, consitionIds)
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, consitionIds,this.authService.currentUser.masterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.conditionList = res;
@@ -320,7 +320,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         // part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
         if (part && part.partNumber && part.conditionId) {
                         this.isSpinnerVisible = true;
-                        this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionId)
+                        this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionId,this.authService.currentUser.masterCompanyId)
                             .subscribe(
                                 partDetail => {
                                     this.isSpinnerVisible = false;

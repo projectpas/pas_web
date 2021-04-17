@@ -73,6 +73,7 @@ export class WorkOrderSettingsListComponent {
     ) {
         this.workFlowGridSource = new MatTableDataSource();
         this.workOrderService = null;
+    
     }
 
     ngOnInit() {
@@ -87,10 +88,12 @@ export class WorkOrderSettingsListComponent {
     }
 
     public allWorkFlows: any[] = [];
-
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
     private getAllWorkflows() {
         this.alertService.startLoadingMessage();
-        this.receivingCustomerWorkOrderService.getAllWorkFlows().subscribe(
+        this.receivingCustomerWorkOrderService.getAllWorkFlows(this.currentUserMasterCompanyId).subscribe(
            
             results => this.onWorkflowLoadSuccessful(results[0]),
            
@@ -116,6 +119,7 @@ export class WorkOrderSettingsListComponent {
             { field: 'defaultScope', header: 'Default Scope' },
             // { field: 'woListDefaultRB', header: ' WOListDefaultRB' },
             { field: 'defaultPriority', header: 'Priority' },
+            { field: 'laborHoursMedthodId', header: 'Labor Hours Method' },
             //
         ];
 
@@ -134,7 +138,17 @@ export class WorkOrderSettingsListComponent {
     private onWorkflowLoadSuccessful(allWorkFlows: any[]) {
         this.alertService.stopLoadingMessage();
         this.workFlowGridSource.data = allWorkFlows;
-        this.workflowList = allWorkFlows;
+        const data=allWorkFlows
+        // data.forEach(element => {
+        //     if(element.laborHoursMedthodId==1){ 
+        //         element.laborHoursMedthod='Labor Hours';
+        //     }else if(element.laborHoursMedthodId==2){
+        //         element.laborHoursMedthod=='Labor ClockIn/Out';
+        //     }else if(element.laborHoursMedthodId==3){
+        //         element.laborHoursMedthod='Scan';
+        //     }
+        // });
+              this.workflowList = data; 
     }
 
     confirmDelete(confirmDeleteTemplate, rowData) {

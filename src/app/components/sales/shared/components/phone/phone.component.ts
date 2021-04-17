@@ -107,7 +107,7 @@ export class PhoneComponent implements OnInit, OnChanges {
     }
      
     getAllPhoneList(refernceId,moduleId,PartNo){
-        this.communicationService.getPhoneList(refernceId, moduleId, PartNo)
+        this.communicationService.getPhoneList(refernceId, moduleId, PartNo,1)
         .subscribe(
             (res)=>{
                 this.data = res;

@@ -113,7 +113,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         }
         const strText = value ? value : '';
         // 190
-        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.ContactList = res.map(x => {
                 return {
                     ...x,
@@ -260,7 +260,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     getAllPhoneList() {
         this.data = [];
         this.isSpinnerVisible = true;
-        this.communicationService.getCommonPhoneData(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type)
+        this.communicationService.getCommonPhoneData(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
                     res = res.map(x => { return { ...x, 'notesData': this.getString(x.notes) } })

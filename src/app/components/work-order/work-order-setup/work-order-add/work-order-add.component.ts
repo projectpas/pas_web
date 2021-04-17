@@ -413,7 +413,7 @@ setTimeout(() => {
     }
 
     dropdownlistSubWoMpn() {
-        this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId).subscribe(res => {
+        this.workOrderService.getMpnDropdownlistSubWo(this.workOrderId,this.currentUserMasterCompanyId).subscribe(res => {
             this.mpnDropdownList = res.map(x => {
                 return {
                     value:
@@ -685,7 +685,7 @@ setTimeout(() => {
             this.arrayCustomerIdList.push(0);
         }
         if (this.isRecCustomer) {
-            this.commonService.getReceivingCustomers(value).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getReceivingCustomers(value,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.customerNamesList = res;
             },
                 err => {
@@ -802,7 +802,7 @@ setTimeout(() => {
         }
         if (value == 'shipping') {
             this.isSpinnerVisible = true;
-            this.workOrderService.viewWorkOrderHeader(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.viewWorkOrderHeader(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 const data = res;
                 this.managementStructureId = res.managementStructureId;
@@ -846,7 +846,7 @@ setTimeout(() => {
         }
         if (this.workFlowWorkOrderId > 0) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getworkOrderTearDownData(this.workFlowWorkOrderId, this.isSubWorkOrder).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getworkOrderTearDownData(this.workFlowWorkOrderId, this.isSubWorkOrder,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.saveTearDownData = res;
             },
@@ -1002,7 +1002,7 @@ setTimeout(() => {
             customerContactId: getValueFromObjectByKey('customerContactId', this.myCustomerContact),
             createdBy: this.userName,
             updatedBy: this.userName,
-            revisedPartId: this.revisedPartId,
+            revisedPartId: this.revisedPartId == 0 ? null :  this.revisedPartId,
             partNumbers: generalInfo.partNumbers.map(x => {
                 return {
                     ...x,
@@ -1014,12 +1014,15 @@ setTimeout(() => {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
-                    cMMId:x.cMMId==0 ? null :x.cMMId
+                    cMMId:x.cMMId==0 ? null :x.cMMId,
+                    masterCompanyId : this.currentUserMasterCompanyId,
+                    workflowId: this.workOrderGeneralInformation.workflowId == 0 ? null : this.workOrderGeneralInformation.workflowId,
+                    revisedPartId: this.workOrderGeneralInformation.revisedPartId ? this.workOrderGeneralInformation.revisedPartId : null,
                 }
             })
         };
         if (this.isEdit && this.isRecCustomer === false) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
                     this.isSpinnerVisible = false;
@@ -1037,7 +1040,7 @@ setTimeout(() => {
                 }
             );
         } else {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.createNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
                     this.isSpinnerVisible = false;
@@ -1187,7 +1190,7 @@ setTimeout(() => {
 
     onSelectedTechnician(object, currentRecord) {
         if (object.employeeId != undefined && object.employeeId > 0) {
-            this.commonService.getTechnicianStation(object.employeeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.commonService.getTechnicianStation(object.employeeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 currentRecord.techStationId = res.stationId;
             },
                 err => {
@@ -1204,7 +1207,7 @@ setTimeout(() => {
         itemMasterId = editValueAssignByCondition('itemMasterId', itemMasterId)
         if (itemMasterId !== 0 && conditionId !== null) {
             this.isSpinnerVisible = true;
-            await this.workOrderService.getStockLineByItemMasterId(itemMasterId, conditionId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            await this.workOrderService.getStockLineByItemMasterId(itemMasterId, conditionId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this['stockLineList' + index] = res.map(x => {
                     return {
@@ -1225,7 +1228,7 @@ setTimeout(() => {
 
     async getPartPublicationByItemMasterId(currentRecord, itemMasterId) {
         this.isSpinnerVisible = true;
-        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getPartPublicationByItemMaster(itemMasterId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.cmmList = res.map(x => {
                 return {
@@ -1280,7 +1283,7 @@ setTimeout(() => {
 
         if ((stockLineId !== null && stockLineId !== 0) && (conditionId !== null && conditionId !== 0)) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getSerialNoByStockLineId(stockLineId, conditionId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getSerialNoByStockLineId(stockLineId, conditionId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     workOrderPart.serialNumber = res.serialNumber;
@@ -1303,7 +1306,7 @@ setTimeout(() => {
     const { workOrderScopeId } = workOrderPart;
     if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
         this.isSpinnerVisible = true;
-        this.workOrderService.getWorkFlowByPNandScope(itemMasterId, workOrderScopeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getWorkFlowByPNandScope(itemMasterId, workOrderScopeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
          if(res && res.length!=0){
             this.workFlowList = res.map(x => {
@@ -1331,7 +1334,7 @@ setTimeout(() => {
             const label = getValueFromArrayOfObjectById('label', 'value', currentRecord.workOrderScopeId, this.workScopesList);
             if (itemMasterId !== undefined && currentRecord.workOrderScopeId !== undefined) {
                 this.isSpinnerVisible = true
-                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                this.workOrderService.getNTEandSTDByItemMasterId(itemMasterId, currentRecord.workOrderScopeId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                     this.isSpinnerVisible = false;
                     if (res !== null) {
                         currentRecord.nte = res.nteHours;
@@ -1349,7 +1352,7 @@ setTimeout(() => {
         this.selectedWorkFlowId = this.savedWorkOrderData.partNumbers[0].workflowId;
         if (this.selectedWorkFlowId != null) {
             this.isSpinnerVisible = true; 
-            this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId)
+            this.workFlowtService.getWorkFlowDataByIdForEdit(this.selectedWorkFlowId,this.currentUserMasterCompanyId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
                     (workFlowData) => {
                         this.isSpinnerVisible = false;
@@ -1409,7 +1412,7 @@ setTimeout(() => {
         }
         else if (this.gridActiveTab === 'documents') {
             this.gridTabChange('documents');
-            this.getDocumentsByWorkOrderId();
+            // this.getDocumentsByWorkOrderId();/
         }
         else if (this.gridActiveTab === 'workComplete') {
             this.gridTabChange('workComplete');
@@ -1450,6 +1453,7 @@ setTimeout(() => {
                 element.partNumber=element.partNumber.name
             });
         }
+        workFlowDataObject.masterCompanyId=workFlowDataObject.masterCompanyId ? workFlowDataObject.masterCompanyId : this.currentUserMasterCompanyId;
         workFlowDataObject.publication.forEach(element => {element.allDashNumbers=""; })
         this.workOrderService.createWorkFlowWorkOrder(workFlowDataObject).subscribe(res => { 
             this.isSpinnerVisible = false;
@@ -1473,7 +1477,7 @@ setTimeout(() => {
                     )
                     this.editWorkFlowData = undefined;
                     this.isSpinnerVisible = true; 
-                    this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+                    this.workFlowtService.getWorkFlowDataByIdForEdit(this.workFlowId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                         this.isSpinnerVisible = false;
                         this.workFlowtService.listCollection = res[0];
                         this.workFlowtService.enableUpdateMode = true;
@@ -1491,12 +1495,14 @@ setTimeout(() => {
                 this.handleError(err);
             })
     } 
-
+    closeModel(){
+        
+    }
     //for multiple mpn controll dropdown bellow all tabs
     getWorkOrderWorkFlowNos() {
         if (this.workOrderId) {
             this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderWorkFlowNumbers(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false
                 this.workOrderWorkFlowOriginalData = res;
                 if (this.isEdit && res.length === 1 && this.workOrderGeneralInformation.isSinglePN == true) {
@@ -1570,7 +1576,7 @@ setTimeout(() => {
                     taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.createSubWorkOrderMaterialList(materialArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
@@ -1601,7 +1607,7 @@ setTimeout(() => {
                     taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.createWorkOrderMaterialList(materialArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
@@ -1898,6 +1904,7 @@ setTimeout(() => {
         return this.result;
     }
     saveReservedPartorIssue(alternatePartData) {  
+        alternatePartData.masterCompanyId=alternatePartData.masterCompanyId ? alternatePartData.masterCompanyId : this.currentUserMasterCompanyId;
         if (this.isSubWorkOrder == true) {
             this.workOrderService.saveSubWoReservedPartorIssue(alternatePartData).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.alertService.showMessage(
@@ -1987,37 +1994,37 @@ setTimeout(() => {
                 })
         }
     }
-    getDocumentsByWorkOrderId() {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.documentsDestructuredData = [];
-            this.isSpinnerVisible = true;
-            this.workOrderService.getDocumentsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId ? this.subWOPartNoId : 0).subscribe(res => {
-                this.isSpinnerVisible = false;
-                let arr = [];
-                const data = res.map(x => {
-                    for (var i = 0; i < x.attachmentDetails.length; i++) {
-                        const y = x.attachmentDetails;
-                        arr.push({
-                            ...x,
-                            fileName: y[i].fileName,
-                            fileCreatedDate: y[i].createdDate,
-                            fileCreatedBy: y[i].createdBy,
-                            fileUpdatedBy: y[i].updatedBy,
-                            fileUpdatedDate: y[i].updatedDate,
-                            fileSize: y[i].fileSize,
-                            link: y[i].link,
-                            attachmentDetailId: y[i].attachmentDetailId
-                        })
-                    }
-                })
-                this.documentsDestructuredData = arr;
-            }, err => {
-                this.handleError(err);
-                this.isSpinnerVisible = false;
-                this.documentsDestructuredData = [];
-            })
-        }
-    }
+    // getDocumentsByWorkOrderId() {
+    //     if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+    //         this.documentsDestructuredData = [];
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.getDocumentsList(this.workFlowWorkOrderId, this.workOrderId, this.isSubWorkOrder, this.subWOPartNoId ? this.subWOPartNoId : 0).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             let arr = [];
+    //             const data = res.map(x => {
+    //                 for (var i = 0; i < x.attachmentDetails.length; i++) {
+    //                     const y = x.attachmentDetails;
+    //                     arr.push({
+    //                         ...x,
+    //                         fileName: y[i].fileName,
+    //                         fileCreatedDate: y[i].createdDate,
+    //                         fileCreatedBy: y[i].createdBy,
+    //                         fileUpdatedBy: y[i].updatedBy,
+    //                         fileUpdatedDate: y[i].updatedDate,
+    //                         fileSize: y[i].fileSize,
+    //                         link: y[i].link,
+    //                         attachmentDetailId: y[i].attachmentDetailId
+    //                     })
+    //                 }
+    //             })
+    //             this.documentsDestructuredData = arr;
+    //         }, err => {
+    //             this.handleError(err);
+    //             this.isSpinnerVisible = false;
+    //             this.documentsDestructuredData = [];
+    //         })
+    //     }
+    // }
     clearLaborList() {
         if (this.taskList && this.taskList.length > 0) {
             for (let task of this.taskList) {
@@ -2128,7 +2135,7 @@ setTimeout(() => {
         if (value === 'charges') {
             this.getChargesListByWorkOrderId();
         } else if (value === 'exclusions') {
-            this.getExclusionListByWorkOrderId();
+            // this.getExclusionListByWorkOrderId();
         } else if (value === 'freight') {
             this.getFreightListByWorkOrderId();
         }
@@ -2150,7 +2157,7 @@ setTimeout(() => {
             this.workOrderService.getSubWorkOrderChargesList(this.subWOPartNoId,this.chargesDeletedStatus,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
 
-                for (let charge in res) {
+                for (let charge in res) { 
                     res[charge]['unitCost'] = res[charge]['unitCost'] ? formatNumberAsGlobalSettingsModule(res[charge]['unitCost'], 2) : '0.00';
                     res[charge]['extendedCost'] = res[charge]['extendedCost'] ? formatNumberAsGlobalSettingsModule(res[charge]['extendedCost'], 2) : '0.00';
                     res[charge]['unitPrice'] = res[charge]['unitPrice'] ? formatNumberAsGlobalSettingsModule(res[charge]['unitPrice'], 2) : '0.00';
@@ -2187,51 +2194,51 @@ setTimeout(() => {
         }
     }
 
-    getExclusionListByWorkOrderId() {
-        if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
-            this.isSpinnerVisible = true;
-            this.workOrderService.getWorkOrderExclusionsList(this.workFlowWorkOrderId, this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.workOrderExclusionsList = res;
-                for (let charge in this.workOrderExclusionsList) {
-                    this.workOrderExclusionsList[charge]['unitCost'] = this.workOrderExclusionsList[charge]['unitCost'].toFixed(2);
-                    this.workOrderExclusionsList[charge]['extendedCost'] = this.workOrderExclusionsList[charge]['extendedCost'].toFixed(2);
-                }
-            },
-                err => {
-                    this.handleError(err);
-                })
-        }
-    }
+    // getExclusionListByWorkOrderId() {
+    //     if (this.workFlowWorkOrderId !== 0 && this.workOrderId) {
+    //         this.isSpinnerVisible = true;
+    //         this.workOrderService.getWorkOrderExclusionsList(this.workFlowWorkOrderId, this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //             this.isSpinnerVisible = false;
+    //             this.workOrderExclusionsList = res;
+    //             for (let charge in this.workOrderExclusionsList) {
+    //                 this.workOrderExclusionsList[charge]['unitCost'] = this.workOrderExclusionsList[charge]['unitCost'].toFixed(2);
+    //                 this.workOrderExclusionsList[charge]['extendedCost'] = this.workOrderExclusionsList[charge]['extendedCost'].toFixed(2);
+    //             }
+    //         },
+    //             err => {
+    //                 this.handleError(err);
+    //             })
+    //     }
+    // }
 
-    saveWorkOrderExclusionsList(data) {
-        const exclusionsArr = data.exclusions.map(x => {
-            return {
-                ...x,
-                masterCompanyId: this.authService.currentUser.masterCompanyId,
-                isActive: true,
-                createdBy: this.userName,
-                updatedBy: this.userName,
-                workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
-                estimtPercentOccurranceId: x.estimtPercentOccurranceId
-            }
-        });
-        this.isSpinnerVisible = true;
-        this.workOrderService.createWorkOrderExclusionList(exclusionsArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.workFlowObject.charges = [];
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saved Work Order Exclusions  Succesfully',
-                MessageSeverity.success
-            );
-            this.getExclusionListByWorkOrderId();
-        },
-            err => {
-                this.isSpinnerVisible = false;
-                this.errorHandling(err)
-            })
-    }
+    // saveWorkOrderExclusionsList(data) {
+    //     const exclusionsArr = data.exclusions.map(x => {
+    //         return {
+    //             ...x,
+    //             masterCompanyId: this.authService.currentUser.masterCompanyId,
+    //             isActive: true,
+    //             createdBy: this.userName,
+    //             updatedBy: this.userName,
+    //             workOrderId: this.workOrderId, workFlowWorkOrderId: this.workFlowWorkOrderId,
+    //             estimtPercentOccurranceId: x.estimtPercentOccurranceId
+    //         }
+    //     });
+    //     this.isSpinnerVisible = true;
+    //     this.workOrderService.createWorkOrderExclusionList(exclusionsArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.isSpinnerVisible = false;
+    //         this.workFlowObject.charges = [];
+    //         this.alertService.showMessage(
+    //             this.moduleName,
+    //             'Saved Work Order Exclusions  Succesfully',
+    //             MessageSeverity.success
+    //         );
+    //         // this.getExclusionListByWorkOrderId();
+    //     },
+    //         err => {
+    //             this.isSpinnerVisible = false;
+    //             this.errorHandling(err)
+    //         })
+    // }
 
     updateWorkOrderExclusionsList(data) {
         const exclusionsArr = data.exclusions.map(x => {
@@ -2253,7 +2260,7 @@ setTimeout(() => {
                 'Update Work Order Exclusions  Succesfully',
                 MessageSeverity.success
             );
-            this.getExclusionListByWorkOrderId();
+            // this.getExclusionListByWorkOrderId();
         },
             err => {
                 this.isSpinnerVisible = false;
@@ -2426,7 +2433,7 @@ setTimeout(() => {
             this.commonService.getExpertise(this.currentUserMasterCompanyId).subscribe(res => { 
                 res.map(x => {
                   if(x.empExpCode =='TECHNICIAN'){
-                    this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId).subscribe(res => {
+                    this.commonService.getExpertiseEmployeesByCategory(x.employeeExpertiseId,this.currentUserMasterCompanyId).subscribe(res => {
                         this.technicianByExpertiseTypeList = res;
                         this.technicianList = this.technicianByExpertiseTypeList;
                         if(this.technicianByExpertiseTypeList && this.technicianByExpertiseTypeList.length !=0){
@@ -2527,7 +2534,7 @@ setTimeout(() => {
     getWorkOrderDetailsFromHeader() {
         this.isSpinnerVisible = true;
         this.workOrderId = this.isSubWorkOrder ? this.subWorkOrderDetails.workOrderId : this.workOrderId;
-        this.workOrderService.viewWorkOrderHeader(this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.viewWorkOrderHeader(this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             const data = res;
             this.billing = new Billing();
@@ -2553,12 +2560,12 @@ setTimeout(() => {
     getQuoteIdByWfandWorkOrderId() {
         this.isSpinnerVisible = true;
         if (this.workFlowWorkOrderId && this.workOrderId) {
-            this.quoteService.getQuoteIdByWfandWorkOrderId(this.workFlowWorkOrderId, this.workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.quoteService.getQuoteIdByWfandWorkOrderId(this.workFlowWorkOrderId, this.workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 if (res) {
                     this.quoteData = res;
                     this.workOrderQuoteId = res.quoteDetailId;
-                    this.quoteService.getSavedQuoteDetails(this.workFlowWorkOrderId)
+                    this.quoteService.getSavedQuoteDetails(this.workFlowWorkOrderId,this.currentUserMasterCompanyId)
                         .subscribe(
                             res => {
                                 if (this.quotestatusofCurrentPart == "Approved") {
@@ -2675,7 +2682,7 @@ setTimeout(() => {
 
     getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId) {
         this.isSpinnerVisible = true;
-        this.quoteService.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId)
+        this.quoteService.getWorkOrderQuoteDetail(workOrderId, workFlowWorkOrderId,this.currentUserMasterCompanyId)
             .pipe(takeUntil(this.onDestroy$)).subscribe(
                 (res: any) => {
                     this.isSpinnerVisible = false;
@@ -2690,7 +2697,7 @@ setTimeout(() => {
     }
 
     async getPartNosByCustomer(customerId, workOrderId) {
-        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
            if(res && res.length!=0){
                this.partNumberOriginalData = res;
            }else{
@@ -2708,7 +2715,7 @@ setTimeout(() => {
     }
 
     async getMultiplePartsNumbers() {
-        await this.workOrderService.getMultipleParts().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getMultipleParts(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.partNumberOriginalData = res;
         },
             err => {
@@ -2719,7 +2726,7 @@ setTimeout(() => {
     getWorkOrderDatesFoRTat() {
         this.workOrderId = this.workOrderGeneralInformation ? this.workOrderGeneralInformation.workOrderId : this.workOrderId;
         if (this.workOrderId) {
-            this.workOrderService.getWorkOrderDatesFoRTat(this.workOrderId)
+            this.workOrderService.getWorkOrderDatesFoRTat(this.workOrderId,this.currentUserMasterCompanyId)
                 .pipe(takeUntil(this.onDestroy$)).subscribe(
                     (res: any) => {
                         if (res) {
@@ -2765,7 +2772,7 @@ setTimeout(() => {
     }
 
     getAllCustomerContact(id, type) {
-        this.commonService.getCustomerContactsById(id).subscribe(res => {
+        this.commonService.getCustomerContactsById(id,this.currentUserMasterCompanyId).subscribe(res => {
             this.customerContactList = res.map(x => {
                 return {
                     ...x,
@@ -2869,7 +2876,7 @@ setTimeout(() => {
 
     validateWarnings(customerId, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
-        this.commonService.customerWarnings(cusId, id).subscribe((res: any) => {
+        this.commonService.customerWarnings(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.currentWarningMessage=res.warningMessage;
                 this.warningMessage = res.warningMessage;
@@ -2891,7 +2898,7 @@ setTimeout(() => {
     customerResctrictions(customerId, warningMessage, id) {
         let cusId = (customerId.customerId) ? customerId.customerId : customerId;
         this.restrictMessage = '';
-        this.commonService.customerResctrictions(cusId, id).subscribe((res: any) => {
+        this.commonService.customerResctrictions(cusId, id,this.currentUserMasterCompanyId).subscribe((res: any) => {
             if (res) {
                 this.restrictMessage = res.restrictMessage;
                 this.restrictID = res.customerWarningId;
@@ -2974,7 +2981,7 @@ setTimeout(() => {
         var userType = this.sourcePoApproval.shipToUserTypeId ? parseInt(this.sourcePoApproval.shipToUserTypeId) : 0;
         if (id != 0 && id != null) {
             this.isSpinnerVisible = true;
-            this.commonService.getShipViaDetailsById(id, userType).subscribe(res => {
+            this.commonService.getShipViaDetailsById(id, userType,this.currentUserMasterCompanyId).subscribe(res => {
                 this.isSpinnerVisible = false;
                 const responseData = res;
                 this.sourcePoApproval.shippingAcctNum = responseData.shippingAccountInfo;
@@ -2994,7 +3001,7 @@ setTimeout(() => {
     }
     getMaterialListByWorkOrderIdForSubWO() {
         this.workOrderMaterialList = [];
-        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.authService.currentUser.masterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getSubWorkOrderMaterialList(this.subWOPartNoId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             if (res.length > 0) {
                 res.forEach(element => {
                     this.getValues(element)
@@ -3084,7 +3091,7 @@ setTimeout(() => {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId).subscribe(res => {
+        this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.setEditArray.join(), this.msId,this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.employeesOriginalData = res.map(x => {
                     return {

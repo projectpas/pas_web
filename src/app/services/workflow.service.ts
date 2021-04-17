@@ -18,6 +18,7 @@ import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { WorkFlowAction } from '../models/work-flow-action.model';
 import { UserEdit } from '../models/user-edit.model';
+import { masterCompanyId } from '../common-masterData/mastercompany-details';
 
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = { roles: Role[] | string[], operation: RolesChangedOperation };
@@ -135,8 +136,8 @@ export class WorkFlowtService {
 	getWorkFlowDataById(workFlowId) {
 		return this.workflowEndpoint.getWorkFlowDataById(workFlowId);
 	}
-	getWorkFlowDataByIdForEdit(workFlowId) {
-		return this.workflowEndpoint.getWorkFlowDataByIdForEdit(workFlowId);
+	getWorkFlowDataByIdForEdit(workFlowId,masterCompanyId) {
+		return this.workflowEndpoint.getWorkFlowDataByIdForEdit(workFlowId,masterCompanyId);
 	}
 	getPublicationsByItemMasterId(itemMasterId) {
 		return this.workflowEndpoint.getPublicationsByItemMasterId(itemMasterId);

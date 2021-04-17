@@ -285,9 +285,9 @@ export class SalesOrderCreateComponent implements OnInit {
     forkJoin(this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
       this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name'),
-      this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join()),
-      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
-      this.salesOrderService.getAllSalesOrderSettings()).subscribe(result => {
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', true, 100, [accountTypeId].join(), this.masterCompanyId),
+      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(), this.masterCompanyId),
+      this.salesOrderService.getAllSalesOrderSettings(this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.setJobTitles(result[1]);
@@ -1359,7 +1359,7 @@ export class SalesOrderCreateComponent implements OnInit {
     this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
 
     this.isSpinnerVisible = true;
-    this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
+    this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID, this.masterCompanyId).subscribe(res => {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
@@ -1452,23 +1452,33 @@ export class SalesOrderCreateComponent implements OnInit {
     this.employeedata('', this.salesQuote.managementStructureId);
   }
 
+  arraySOStatuslist: any[] = [];
   loadSOStatus() {
-    this.commonservice.smartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name').subscribe(response => {
-      if (response) {
-        this.soStatusList = response;
-        this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-      }
-    }, err => {
+    if (this.arraySOStatuslist.length == 0) {
+      this.arraySOStatuslist.push(0);
+    }
+    this.isSpinnerVisible = true;
+    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 20, this.arraySOStatuslist.join(), this.masterCompanyId).subscribe(res => {
+      this.soStatusList = res;
+      this.soStatusList = this.soStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
     });
   }
 
+  arraySOTypelist: any[] = [];
   loadSOType() {
-    this.commonservice.smartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name').subscribe(response => {
-      if (response) {
-        this.soTypeList = response;
-        this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-      }
-    }, err => {
+    if (this.arraySOTypelist.length == 0) {
+      this.arraySOTypelist.push(0);
+    }
+    this.isSpinnerVisible = true;
+    this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Name', '', true, 20, this.arraySOTypelist.join(), this.masterCompanyId).subscribe(res => {
+      this.soTypeList = res;
+      this.soTypeList = this.soTypeList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+      this.isSpinnerVisible = false;
+    }, error => {
+      this.isSpinnerVisible = false;
     });
   }
 

@@ -355,7 +355,7 @@
                                         </label>
                                     </span>
                                 </th> -->
-                                <th>SplitShipment</th>
+                                <th class="th-width">SplitShipment</th>
                                 <th>PN <span class="clr-red">*</span></th>
                                 <th>ALT/Equiv PN</th>
                                 <th>PN Description</th>                               
@@ -364,20 +364,20 @@
                                 <th>Priority <span class="clr-red">*</span></th>
                                 <th>Need By <span class="clr-red">*</span></th>
                                 <th>Cond <span class="clr-red">*</span></th>
-                                <th>Order Qty <span class="clr-red">*</span></th>
-                                <th>Vend List Price <span class="clr-red">*</span></th>
+                                <th class="th-width-90">Order Qty <span class="clr-red">*</span></th>
+                                <th style="min-width:98px">Vend List Price <span class="clr-red">*</span></th>
                                 <th>Disc Percent</th>
-                                <th>Disc./unit</th>
-                                <th>Disc. Amount</th> <!--Disc. Cost/unit-->
-                                <th>Unit Cost</th>
-                                <th>Ext Cost</th>
+                                <th class="th-width-90">Disc./unit</th>
+                                <th class="th-width-90">Disc. Amount</th> <!--Disc. Cost/unit-->
+                                <th class="th-width-90">Unit Cost</th>
+                                <th class="th-width-90">Ext Cost</th>
                                 <th>Functional CUR <span class="clr-red">*</span></th>
-                                <th>FX Rate <span class="clr-red">*</span></th>
+                                <th class="th-width-90">FX Rate <span class="clr-red">*</span></th>
                                 <th>Report CUR <span class="clr-red">*</span></th>
-                                <th>WO Num</th>
-                                <th>Sub-WO Num</th>
-                                <th>RO Num</th>
-                                <th>SO Num</th>
+                                <th class="th-width-90">WO Num</th>
+                                <th class="th-width-90">Sub-WO Num</th>
+                                <th class="th-width-90">RO Num</th>
+                                <th class="th-width-90">SO Num</th>
                                 <th>Item Type</th>
                                 <th>GL Account</th>
                                 <th>UOM</th>                                
@@ -861,7 +861,7 @@
                                 <th>Approver Name</th>
                                 <th>Approver Code</th>
                                 <th>Approver Email</th>
-                                <th>Total PO Cost</th>
+                                <th style="width:60px !important">Total PO Cost</th>
                                 <th>Approver Rule</th>
                                 <th>Memo</th>                                
                                 <th>Message</th>
@@ -897,7 +897,7 @@
         <p-tabPanel *ngIf="posettingModel.IsEnforceApproval"  class="pas-tabpanel-po" header="Approver Process">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead"> 
-            <table class="table table-bordered header-table-width">
+            <table class="table table-bordered">
                     <thead>
                         <tr class="pad_workflo">
                             <th class="approver-th-align th-width" >
@@ -919,12 +919,12 @@
                                 <input *ngIf="!approver.isParent" type="checkbox" [(ngModel)]="approver.isSelected" (change)="selectApproval(approver)" [disabled]= "!getPartToDisableOrNot(approver)" />
                             </td> 
                             <ng-container *ngFor="let field of approvalProcessHeader">
-                                <td  class="qty-width" *ngIf="field.field == 'qty'
+                                <td class="qty-width"  *ngIf="field.field == 'qty'
                                       || field.field == 'unitCost'
                                       || field.field == 'extCost'"  >
-                                    <p [ngClass]="fields.includes(field.field)?'text-right':''" class="minwidth-80">{{approver[field.field]}}</p>
+                                    <p [ngClass]="fields.includes(field.field)?'text-right':''"  class="minwidth-80">{{approver[field.field]}}</p>
                                 </td>
-                                <td   *ngIf="field.field != 'sentDate'
+                                <td *ngIf="field.field != 'sentDate'
                                       && field.field != 'approvedDate'
                                       && field.field != 'statusId'
                                       && field.field != 'approvedBy'
@@ -936,7 +936,7 @@
                                       && field.field != 'extCost'" >
                                     <p [ngClass]="fields.includes(field.field)?'text-right':''" class="minwidth-120">{{approver[field.field]}}</p>
                                 </td>
-                                <td class="date-td-width" *ngIf="field.field == 'sentDate' && approver.isSelected == true && approver['actionId'] == 1">
+                                <td class="date-td-width" style="min-width:80px" *ngIf="field.field == 'sentDate' && approver.isSelected == true && approver['actionId'] == 1">
                                     <p-calendar [showIcon]="true" class="calender-cstm"
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 name="openDate" #openDate="ngModel" required
@@ -944,10 +944,10 @@
                                                 [minDate]="currentDate" appendTo="body">
                                     </p-calendar>
                                 </td>
-                                <td  class="date-td-width" *ngIf="field.field == 'sentDate' && (approver.isSelected == null || approver.isSelected == false) && approver['actionId'] == 1">
+                                <td  class="date-td-width" style="min-width:80px" *ngIf="field.field == 'sentDate' && (approver.isSelected == null || approver.isSelected == false) && approver['actionId'] == 1">
                                    &nbsp;
                                 </td>                               
-                                <td  class="date-td-width" *ngIf="field.field == 'sentDate' && approver['actionId']  > 1">
+                                <td  class="date-td-width" style="min-width:80px" *ngIf="field.field == 'sentDate' && approver['actionId']  > 1">
                                     {{ approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                                 </td>
                                 <td *ngIf="field.field == 'statusId'">
@@ -986,7 +986,7 @@
                                     </div>
 
                                 </td>
-                                <td *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
+                                <td style="min-width:80px" *ngIf="field.field == 'approvedDate' && approver['actionId'] != 5" >
                                     <!-- <p-calendar [showIcon]="true" class="calender-cstm"
                                                 (change)="onStatusChange(approver)"
                                                 name="openDate" #openDate="ngModel" required
@@ -997,7 +997,7 @@
                                     </p-calendar> -->
                                  
                                 </td>
-                                <td *ngIf="field.field == 'approvedDate' && approver['actionId'] == 5 " >
+                                <td style="min-width:80px" *ngIf="field.field == 'approvedDate' && approver['actionId'] == 5 " >
                                     <!-- <p-calendar [showIcon]="true" class="calender-cstm"
                                                 (change)="onStatusChange(approver)"
                                                 name="openDate" #openDate="ngModel" required
@@ -1008,13 +1008,13 @@
                                     </p-calendar> -->
                                     {{ approver[field.field] | date: 'MM/dd/yyyy h:mm a' }}
                                 </td>
-                                <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] != 1 " >
+                                <td style="min-width:80px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] != 1 " >
                                   
                                 </td>
-                                <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1  && approver['statusId'] != 3 " >
+                                <td style="min-width:80px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1  && approver['statusId'] != 3 " >
                                   
                                 </td>
-                                <td *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1 && approver['statusId'] == 3" >
+                                <td style="min-width:80px" *ngIf="field.field == 'rejectedDate' && approver['actionId'] == 1 && approver['statusId'] == 3" >
                                     
                                     {{ approver[field.field] | date: 'MM/dd/yyyy h:mm a' }}
                                 </td>

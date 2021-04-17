@@ -533,12 +533,15 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.deleteSoSetting(salesOrdersettingsId, updatedBy)
     );
   }
-  getAllSalesOrderSettings() {
-    return this.salesOrderEndPointSevice.getAllSalesOrderSettings();
+  
+  getAllSalesOrderSettings(masterCompanyId) {
+    return this.salesOrderEndPointSevice.getAllSalesOrderSettings(masterCompanyId);
   }
+
   saveOrUpdateSOSetting(data) {
     return this.salesOrderEndPointSevice.saveOrUpdateSOSettings(data);
   }
+
   getSOSettingHistory(id) {
     return this.salesOrderEndPointSevice.getSOSettingHistory(id);
   }

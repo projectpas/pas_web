@@ -726,7 +726,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         //this.sourceEmployee.jobTitleId = this.sourceEmployee.jobTitleId;
         //this.sourceEmployee.employeeExpertiseId = this.sourceEmployee.employeeExpertiseId;
         this.empCreationForm.controls['JobTypeId'].setValue(this.sourceEmployee.jobTypeId);
-        this.supervisorId = this.sourceEmployee.supervisorId;
+        this.supervisorId = this.sourceEmployee.supervisor[0];
         if (this.employeeId) {
             this.sourceEmployee.startDate = new Date(this.sourceEmployee.startDate);
         } else {
@@ -816,11 +816,10 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         }
     }
     filterSupervisorList(event){
-        
         this.supervisorList=this.allEmployeeinfo;
         if (event.query !== undefined && event.query !== null) {
             const supervisorlist = [...this.allEmployeeinfo.filter(x => {
-                return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+                return x.name.toLowerCase().includes(event.query.toLowerCase())
             })]
             this.supervisorList = supervisorlist;
         }
@@ -919,7 +918,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             let d=new Date(this.sourceEmployee.dateOfBirth);
             this.sourceEmployee.dateOfBirth = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
         }
-        this.sourceEmployee.SupervisorId = this.supervisorId;
+        this.sourceEmployee.SupervisorId = this.supervisorId.employeeId;
         this.sourceEmployee.stationId = this.sourceEmployee.stationId == 0 ? null : this.sourceEmployee.stationId;
         if (this.sourceEmployee.inMultipleShifts == true) {
             this.sourceEmployee.shiftId = '';
@@ -969,8 +968,16 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             );
         }
         else {
-            this.sourceEmployee.isHourly = this.sourceEmployee.isHourly;
-            this.sourceEmployee.HourlyPay = this.sourceEmployee.hourlyPay;
+            if (this.sourceEmployee.isHourly == true) {
+                this.model = { option: 'Hourly' };
+                this.sourceEmployee.isHourly = true;
+                this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay;
+            }
+            else {
+                this.model = { option: 'Monthly' };
+                this.sourceEmployee.isHourly = false;
+                this.sourceEmployee.hourlyPay = this.sourceEmployee.hourlyPay;
+            }
             this.employeeService.newAddEmployee(this.sourceEmployee).subscribe(
                 results => {
                     if (results) {
@@ -1179,13 +1186,14 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     private loadData() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.employeeService.getEmployeeNamesList().subscribe(
+        this.employeeService.getEmployeeNamesList(this.currentUserMasterCompanyId).subscribe(
             results => this.onDataLoadSuccessful(results[0]),
             error =>  {this.isSpinnerVisible = false}
         );
         this.selectedColumns = this.cols;
 
     }
+    
     private loadMasterCompanies() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;

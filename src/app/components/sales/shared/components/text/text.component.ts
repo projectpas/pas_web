@@ -168,7 +168,7 @@ export class TextComponent implements OnInit, OnChanges {
     }
 
     getAllTextList(referenceId,moduleId,PartNo){
-        this.communicationService.getTextList(referenceId, moduleId, PartNo)
+        this.communicationService.getTextList(referenceId, moduleId, PartNo,1)
         .subscribe(
             (res)=>{
                 this.data = res;

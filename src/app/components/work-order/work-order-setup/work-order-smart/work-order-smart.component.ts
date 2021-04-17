@@ -98,7 +98,7 @@ export class WorkOrderSmartComponent implements OnInit {
                 this.recCustomerId = 0;
             }
             this.isSpinnerEnable = true;
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 setTimeout(() => {
                     this.isSpinnerEnable = false;
                 }, 3000)
@@ -159,7 +159,7 @@ export class WorkOrderSmartComponent implements OnInit {
     }
     getExpertiseEmployeeByExpertiseId(value) {
 
-        this.commonService.getExpertiseEmployeesByCategory(value).subscribe(res => {
+        this.commonService.getExpertiseEmployeesByCategory(value,this.currentUserMasterCompanyId).subscribe(res => {
             this.technicianByExpertiseTypeList = res;
         })
     }
@@ -215,7 +215,7 @@ export class WorkOrderSmartComponent implements OnInit {
 
         if (Agentsid[0].jobTitleId > 0)
             this.arayJobTitleIds.push(Agentsid[0].jobTitleId);
-        this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds).subscribe(res => {
+        this.commonService.getAllSalesEmployeeListByJobTitle(this.arayJobTitleIds,this.currentUserMasterCompanyId).subscribe(res => {
             if (res) {
                 this.csrOriginalList = res.filter(x => {
                     if (CSRid[0].jobTitleId == x.jobTitleId) {
@@ -240,7 +240,7 @@ export class WorkOrderSmartComponent implements OnInit {
         })
     }
     getAllWorkOrderStages(): void {
-        this.workOrderService.getWorkOrderStageAndStatus().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getWorkOrderStageAndStatus(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStagesList = res.map(x => {
                 return {
                     ...x,
@@ -252,7 +252,7 @@ export class WorkOrderSmartComponent implements OnInit {
         })
     }
     async getPartNosByCustomer(customerId, workOrderId) {
-        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        await this.workOrderService.getPartNosByCustomer(customerId, workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.partNumberOriginalData = res;
         });
     }
@@ -268,7 +268,7 @@ export class WorkOrderSmartComponent implements OnInit {
         } else {
             this.setEditArray.push(0);
         }
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'ID', 'Description', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.workOrderTypes = res.map(x => {
                 return {
                     id: x.value,
@@ -292,7 +292,7 @@ export class WorkOrderSmartComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderStatus', 'ID', 'Description', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
         })
     }

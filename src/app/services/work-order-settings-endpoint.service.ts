@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
+import { masterCompanyId } from '../common-masterData/mastercompany-details';
 
 @Injectable()
 export class WorkOrderSettingsEndpointService extends EndpointFactory {
@@ -35,11 +36,11 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
             });
     }
 
-    getAllworkorderEndpoint<T>(): Observable<T> {
+    getAllworkorderEndpoint<T>(masterCompanyId): Observable<T> {
 
-        return this.http.get<T>(this.workorderAllUrl, this.getRequestHeaders())
+        return this.http.get<T>(`${this.workorderAllUrl}?masterCompanyId=${masterCompanyId}`, this.getRequestHeaders())
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getAllworkorderEndpoint());
+                return this.handleErrorCommon(error, () => this.getAllworkorderEndpoint(masterCompanyId));
             });
     }
     getworkorderLiteEndpoint<T>(): Observable<T> {

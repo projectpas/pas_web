@@ -72,17 +72,9 @@
            
             <p-radioButton (ngModelChange)="checkValid(5)"  (change)="headerMaintanance()" [ngClass]="{pointerEvents :isView}" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" label="Labor Clock In/Out " [value]="2"
               [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
-
-
             <p-radioButton (ngModelChange)="checkValid(6)" [ngClass]="{pointerEvents :isView}"  (change)="headerMaintanance()" class="p-radiobutton-label-horizontal p-radiobutton-cstm jda" name="HoursorClockorScan" [value]="3"
               label="Scan" [(ngModel)]="laborForm.hoursorClockorScan" ></p-radioButton>
-
-
-
-{{laborForm.hoursorClockorScan}}--1
-
-
-
+ 
                   </div> 
               </div>
                 <div class="col-sm-8" 
@@ -489,12 +481,15 @@
                   laborForm.hoursorClockorScan !== 1"></td>
             <td *ngIf="!isQuote">
                <!-- <input type="number" class="form-control with_75" [(ngModel)]="laborForm.totalWorkHours" disabled /> -->
-               {{laborForm.totalWorkHours}}
+               <!-- {{laborForm.totalWorkHours}} -->
             </td>
             <td *ngIf="isQuote" class="content-to-end" style="text-align:right !important">
               {{laborForm.totalWorkHours}}
             </td>
-            <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustment():''}}</b></td>
+            <td class="content-to-end" style="text-align:right !important">
+              <!-- <b>
+              {{(!isQuote)?calculateTotalAdjustment():''}}</b> -->
+            </td>
             <td class="content-to-end" style="text-align:right !important"><b>{{(!isQuote)?calculateTotalAdjustedHours():''}}</b></td>
             <td></td>
             <ng-container *ngIf="isQuote">

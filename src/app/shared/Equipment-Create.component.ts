@@ -5,6 +5,7 @@ import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from "../services/auth.service";
 declare var $ : any; 
 @Component({
     selector: 'grd-equipment',
@@ -42,7 +43,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     modal: NgbModalRef;
     disableUpdate:boolean=true;
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
-         private modalService: NgbModal,
+         private modalService: NgbModal,   private authService: AuthService,
         private alertService: AlertService) {
     }
 
@@ -159,7 +160,10 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             this.ptnumberlistdata('');
         }
     }
-  
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     private ptnumberlistdata(value) {
         this.isSpinnerVisible = true;
         let equipmentIds = [];
@@ -169,7 +173,8 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 equipmentIds.push(acc.assetTypeId);
             })
         }
-        this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds)
+
+        this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds,this.currentUserMasterCompanyId)
             .subscribe(results => {
                 this.isSpinnerVisible = false;
                 this.allPartnumbersInfo = results.map(x => {
