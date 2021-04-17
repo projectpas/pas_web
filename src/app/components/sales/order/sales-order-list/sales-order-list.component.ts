@@ -325,7 +325,7 @@ export class SalesOrderListComponent implements OnInit {
 
   getStatusList() {
     forkJoin(this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
-      this.salesService.getAllSalesOrderSettings()).subscribe(res => {
+      this.salesService.getAllSalesOrderSettings(this.currentUserMasterCompanyId)).subscribe(res => {
         this.statusList = res[0];
         this.settingsList = res[1];
         if (this.settingsList.length > 0) {

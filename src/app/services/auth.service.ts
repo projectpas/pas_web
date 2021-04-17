@@ -207,7 +207,6 @@ private defaultEmployeeDetails= new Subject<any>()
         if (!this.isLoggedIn) {
             this.configurations.import(decodedAccessToken.configuration);
         }
-        debugger;
 
         let user = new User(
             decodedAccessToken.sub,

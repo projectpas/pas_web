@@ -1896,7 +1896,6 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     saveMaterialListForWO(data) {
         this.disableMat=false;
         console.log("dattaaa",data)
-        debugger;
         data['materialList'].forEach( 
             mData => {
                 if (mData.billingRate) {
