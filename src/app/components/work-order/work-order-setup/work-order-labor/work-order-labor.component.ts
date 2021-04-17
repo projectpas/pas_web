@@ -477,7 +477,7 @@ laborTaskData:any;
     }
   }
   calculateHoursDifference(obj) {
-    debugger;
+    // debugger;
     if (obj.hours != null && obj.adjustments != null) {
       this.totalWorkHours = 0;
       if (!obj.totalMinutes) {
