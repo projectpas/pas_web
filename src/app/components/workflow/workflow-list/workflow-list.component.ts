@@ -152,6 +152,12 @@ export class WorkflowListComponent implements OnInit {
         }
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     ngOnChanges(changes: SimpleChanges) {
         // if (changes.workFlowId) {
         //     console.log("hello res ng ononChanges")
@@ -182,6 +188,7 @@ export class WorkflowListComponent implements OnInit {
 
     getList(data) {
         this.isSpinnerVisible = true;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;   
         this.workFlowtService.getAllWorkFlowList(data).subscribe(res => {
 
             this.workflowList = res[0]['results'].map(x => {
@@ -210,7 +217,7 @@ export class WorkflowListComponent implements OnInit {
                 this.totalPages = 0;
                 this.isSpinnerVisible = false;
             }
-        }, error => this.onDataLoadFailed(error))
+        }, error => {this.isSpinnerVisible = false;})
     }
 
     globalSearch(value) {
@@ -291,9 +298,9 @@ export class WorkflowListComponent implements OnInit {
         this.workFlowGridSource.filter = filterValue;
     }
 
-    private onDataLoadFailed(error: any) {
-        this.isSpinnerVisible = false;
-    }
+    // private onDataLoadFailed(error: any) {
+    //     this.isSpinnerVisible = false;
+    // }
 
     confirmDelete(confirmDeleteTemplate, rowData) {
         this.currentWorkflow = rowData;
@@ -329,7 +336,7 @@ export class WorkflowListComponent implements OnInit {
             this.modal.close();
             this.getDeleteListByStatus(this.currentDeletedstatus)
             this.alertService.showMessage("Success", `Record was Restored successfully. `, MessageSeverity.success);
-        }, error => this.onDataLoadFailed(error))
+        }, error =>  { this.isSpinnerVisible = false;})
     }
 
     toggleIsActive(workflow: any, event): void {
@@ -860,7 +867,7 @@ if(element.exclusions){
     exportCSV(dt){
 		this.isSpinnerVisible = true;
         const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":isdelete,"masterCompanyId":this.authService.currentUser.masterCompanyId},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"masterCompanyId":this.currentUserMasterCompanyId,"status":this.status,"isDeleted":isdelete},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
@@ -878,7 +885,7 @@ if(element.exclusions){
 			dt.exportCSV();
 			dt.value = this.workflowList;
         	this.isSpinnerVisible = false;
-        },error => this.onDataLoadFailed(error))
+        },error => {this.isSpinnerVisible = false;})
     }
     documentList:any=[]; 
     openView(content,publication){

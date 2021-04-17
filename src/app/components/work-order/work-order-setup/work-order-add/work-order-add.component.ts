@@ -1002,7 +1002,7 @@ setTimeout(() => {
             customerContactId: getValueFromObjectByKey('customerContactId', this.myCustomerContact),
             createdBy: this.userName,
             updatedBy: this.userName,
-            revisedPartId: this.revisedPartId,
+            revisedPartId: this.revisedPartId == 0 ? null :  this.revisedPartId,
             partNumbers: generalInfo.partNumbers.map(x => {
                 return {
                     ...x,
@@ -1014,12 +1014,15 @@ setTimeout(() => {
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     workOrderId: this.workOrderGeneralInformation.workOrderId ? this.workOrderGeneralInformation.workOrderId : 0,
-                    cMMId:x.cMMId==0 ? null :x.cMMId
+                    cMMId:x.cMMId==0 ? null :x.cMMId,
+                    masterCompanyId : this.currentUserMasterCompanyId,
+                    workflowId: this.workOrderGeneralInformation.workflowId == 0 ? null : this.workOrderGeneralInformation.workflowId,
+                    revisedPartId: this.workOrderGeneralInformation.revisedPartId ? this.workOrderGeneralInformation.revisedPartId : null,
                 }
             })
         };
         if (this.isEdit && this.isRecCustomer === false) {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.updateNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
                     this.isSpinnerVisible = false;
@@ -1037,7 +1040,7 @@ setTimeout(() => {
                 }
             );
         } else {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.createNewWorkOrder(data1).pipe(takeUntil(this.onDestroy$)).subscribe(
                 result => {
                     this.isSpinnerVisible = false;
@@ -1571,7 +1574,7 @@ setTimeout(() => {
                     taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.createSubWorkOrderMaterialList(materialArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
@@ -1602,7 +1605,7 @@ setTimeout(() => {
                     taskId:(typeof x.taskId == 'object')? x.taskId.taskId :x.taskId 
                 }
             })
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = true;            
             this.workOrderService.createWorkOrderMaterialList(materialArr).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.workFlowObject.materialList = [];
