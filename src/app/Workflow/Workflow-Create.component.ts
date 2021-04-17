@@ -556,7 +556,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     }
     private getAllPercentages(): void {
         this.isSpinnerVisible = true;
-        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, this.currentUserMasterCompanyId)
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 0, 0,this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.totalPercent = res.sort((a, b) => a.label.localeCompare(b.label, 'es', { sensitivity: 'base' }))

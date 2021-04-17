@@ -517,7 +517,7 @@ export class WorkOrderChargesComponent implements OnChanges, OnInit {
       )
     } 
     const newTotal = total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
-    return total;
+    return total ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
   }
   getTotalBillingRate() {
     let total = 0;

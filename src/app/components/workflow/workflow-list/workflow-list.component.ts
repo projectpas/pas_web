@@ -172,7 +172,7 @@ export class WorkflowListComponent implements OnInit {
         this.lazyLoadEventDataInput = event;
 
         if (this.filterText == '') {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus,masterCompanyId:this.authService.currentUser.masterCompanyId }
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         } else {
@@ -219,7 +219,7 @@ export class WorkflowListComponent implements OnInit {
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
         this.lazyLoadEventDataInput.globalFilter = value;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus,masterCompanyId:this.authService.currentUser.masterCompanyId };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
@@ -227,7 +227,7 @@ export class WorkflowListComponent implements OnInit {
     getListByStatus(status) {
         this.lazyLoadEventDataInput.first = 0;
         this.status = status;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, isDeleted: this.currentDeletedstatus };
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, isDeleted: this.currentDeletedstatus,masterCompanyId:this.authService.currentUser.masterCompanyId };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
@@ -247,7 +247,7 @@ export class WorkflowListComponent implements OnInit {
             else if (field == 'workflowExpirationDate') {
                 this.dateObject = { 'workflowExpirationDate': date }
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject,masterCompanyId:this.authService.currentUser.masterCompanyId };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         } else {
@@ -264,14 +264,15 @@ export class WorkflowListComponent implements OnInit {
             if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.workflowExpirationDate) {
                 delete this.lazyLoadEventDataInput.filters.workflowExpirationDate;
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject,masterCompanyId:this.authService.currentUser.masterCompanyId };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.getList(PagingData);
         }
     }
 
     getDeleteListByStatus(value) {
-        this.lazyLoadEventDataInput.filters.isDeleted = value
+        this.lazyLoadEventDataInput.filters.isDeleted = value;
+        this.lazyLoadEventDataInput.filters.masterCompanyId=this.authService.currentUser.masterCompanyId;
         this.currentDeletedstatus = value;
         if (value == true) {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
@@ -859,7 +860,7 @@ if(element.exclusions){
     exportCSV(dt){
 		this.isSpinnerVisible = true;
         const isdelete=this.currentDeletedstatus ? true:false;
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":isdelete},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":isdelete,"masterCompanyId":this.authService.currentUser.masterCompanyId},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;

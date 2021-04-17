@@ -162,7 +162,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         if(consitionIds && consitionIds.length ==0){
             consitionIds.push(0)
         }
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, consitionIds)
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, consitionIds,this.authService.currentUser.masterCompanyId)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.conditionList = res;
