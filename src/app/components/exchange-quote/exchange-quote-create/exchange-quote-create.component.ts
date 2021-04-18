@@ -573,10 +573,10 @@ export class ExchangeQuoteCreateComponent implements OnInit {
         //   this.alertService.resetStickyMessage();
         //   this.alertService.showStickyMessage('Sales Order', "Please select valid Dates for Sales Order PartsList!", MessageSeverity.error);
         // } else {
-          // this.marginSummary.exchangeQuoteId = this.id;
-          // this.exchangequoteService.createSOMarginSummary(this.marginSummary).subscribe(result => {
-          //   this.marginSummary.exchangeQuoteMarginSummaryId = result;
-        //   });
+          this.marginSummary.exchangeQuoteId = this.id;
+          this.exchangequoteService.createExchangeQuoteMarginSummary(this.marginSummary).subscribe(result => {
+            this.marginSummary.exchangeQuoteMarginSummaryId = result;
+           });
           this.exchangequoteService.update(this.exchangeQuoteView).subscribe(data => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
@@ -664,7 +664,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       //   this.load(this.salesOrderQuoteObj.managementStructureId);
       // }
 
-      // this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
+      this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(this.exchangequoteService.selectedParts, this.marginSummary);
       // this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       //this.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.exchangeQuote.type = this.exchangeQuoteObj.type.toString();
