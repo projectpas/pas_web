@@ -252,7 +252,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.exchangeQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.exchangeQuote.customerServiceRepId, this.exchangeQuote.salesPersonId),
-      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
+      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
       this.exchangequoteService.getAllExchangeQuoteSettings()).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
@@ -697,9 +697,6 @@ export class ExchangeQuoteCreateComponent implements OnInit {
       this.exchangeQuote.creditLimit = this.exchangeQuoteObj.creditLimit;
       this.exchangeQuote.creditTermId = this.exchangeQuoteObj.creditTermId;
       this.exchangeQuote.masterCompanyId = this.exchangeQuoteObj.masterCompanyId;
-      // this.salesQuote.buId = this.salesOrderQuoteObj.buId;
-      // this.salesQuote.divisionId = this.salesOrderQuoteObj.divisionId;
-      // this.salesQuote.departmentId = this.salesOrderQuoteObj.departmentId;
       if (this.exchangeQuoteObj.approvedDate)
         this.exchangeQuote.approvedDate = new Date(
           this.exchangeQuoteObj.approvedDate
@@ -721,7 +718,7 @@ export class ExchangeQuoteCreateComponent implements OnInit {
   onPartsSaveEvent(savedParts) {
     if (savedParts) {
       this.marginSummary = this.exchangequoteService.getExchangeQuoteHeaderMarginDetails(savedParts, this.marginSummary);
-      //this.updateMarginSummary();
+      this.updateMarginSummary();
       console.log("summarydata",this.marginSummary);
       this.getExchQuoteInstance(this.id, true);
     }
