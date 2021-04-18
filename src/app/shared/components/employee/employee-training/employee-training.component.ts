@@ -35,6 +35,7 @@ declare let $: any;
 export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     @ViewChild("tabRedirectConfirmationModal3", { static: false }) public tabRedirectConfirmationModal3: ElementRef;
     @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
+    uploadedFileLength = 0;
     activeIndex: number;
     alltrainingTypes: any[];
     allPurchaseUnitOfMeasureinfo: any[];
@@ -1070,7 +1071,13 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     }
 
     removeFile(event) {
-        //this.formData.delete(event.file.name)
+        this.formData.delete(event.file.name)
+        this.uploadedFileLength--;
+        this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
+        if(this.selectedFileAttachment.length == 0){
+        this.disableSave = true;
+        }
+       
     }
 
     getPageCount(totalNoofRecords, pageSize) {

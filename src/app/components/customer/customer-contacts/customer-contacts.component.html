@@ -757,10 +757,9 @@
               <div class="form-group">
                 <div class="form-group primary-contact-div">
                   <span class="checkbox-cstm">
+                    <input type="checkbox" name="isDefaultContact" [(ngModel)]="contactInformation.isDefaultContact"
+                    (ngModelChange)="enableSave()" [disabled]="contactInformation.isDefaultContact && isPrimatyContactData  &&  ediData" />
                     <label>
-                      <input type="checkbox" name="isDefaultContact" [(ngModel)]="contactInformation.isDefaultContact"
-                        (ngModelChange)="enableSave()" [disabled]="contactInformation.isDefaultContact && isPrimatyContactData  &&  ediData" />
-                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                       Primary Contact
                     </label>
                   </span>

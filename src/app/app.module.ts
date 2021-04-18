@@ -222,7 +222,7 @@ import { CustomerViewComponent } from './shared/components/customer/customer-vie
 import { StocklineViewComponent } from './shared/components/stockline/stockline-view/stockline-view.component';
 import { StocklineHistoryComponent } from './shared/components/stockline/stockline-history/stockline-history.component';
 import { CommonService } from './services/common.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { StageCodeService } from './services/work-order-stagecode.service';
 import { RefreshAlert } from './directive/refreshalert.directive';
@@ -361,6 +361,7 @@ import { InvoicePaymentEndpointService } from './services/invoice-payment.endpoi
     AssetAcquisitionTypeEndpointService,
     AccountService,
     AccountEndpoint,
+    DecimalPipe ,
     DashNumberService,
     DashNumberEndpointService,
     AircraftManufacturerService,

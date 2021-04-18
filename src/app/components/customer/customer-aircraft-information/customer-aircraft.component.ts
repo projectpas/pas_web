@@ -93,7 +93,7 @@ export class CustomerAircraftComponent implements OnInit {
     isViewMode: boolean = false;
     stopmulticlicks: boolean;
     currentDeletedstatus:boolean=false;
-    restorerecord:any={}
+    restorerecord: any = {};
 
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
@@ -598,7 +598,13 @@ export class CustomerAircraftComponent implements OnInit {
         if(this.id > 0)
         {
             this.customerService.getMappedAirCraftDetails(this.id).subscribe(res => {
-                this.aircraftListDataValues = res;
+                this.aircraftListDataValues = res.map(x => {
+                    return {
+                        ...x,
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy') : '',
+                    }
+                });
                 if (this.aircraftListDataValues.length > 0) {
                     this.totalRecords = this.aircraftListDataValues.length;
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
