@@ -29,44 +29,49 @@ import { MenuItem } from 'primeng/api';
 @Component({
   selector: 'app-calibration-mgmt-listing',
   templateUrl: './calibration-mgmt-listing.component.html',
-  styleUrls: ['./calibration-mgmt-listing.component.scss']
+  styleUrls: ['./calibration-mgmt-listing.component.scss'],
+  animations: [fadeInOut],
+  providers:[DatePipe]
 })
 export class CalibrationMgmtListingComponent implements OnInit {
 
   breadcrumbs: MenuItem[];
 
   cols = [
-    { field: 'name', header: 'Asset ID', colspan: '1' },
-    { field: 'assetId', header: 'Asset Name', colspan: '1' },
-    { field: 'alternateAssetId', header: 'Alt Asset ID', colspan: '1' },
-    { field: 'manufacturerName', header: 'Serial Num', colspan: '1' },
-    { field: 'isSerializedNew', header: 'Control Num', colspan: '1' },
-    { field: 'calibrationRequiredNew', header: 'Item Type', colspan: '1' },
-    { field: 'assetClass', header: 'Asset Type', colspan: '1' },
-    { field: 'deprAmort', header: 'Certify Type', colspan: '1' },
-    // { field: 'companyName', header: 'Level 01', colspan: '1' },
-    // { field: 'buName', header: 'Level 02', colspan: '1' },
-    // { field: 'deptName', header: 'Level 03', colspan: '1' },
-    // { field: 'divName', header: 'Level 04', colspan: '1' },
-    { field: 'assetType', header: 'UOM', colspan: '1' },
-    { field: 'assetType', header: 'Qty', colspan: '1' },
-    { field: 'assetType', header: 'Currency', colspan: '1' },
-    { field: 'assetType', header: 'Updated Cost', colspan: '1' },
-    { field: 'assetType', header: 'In Service Date', colspan: '1' },
-    { field: 'assetType', header: 'Asset Status', colspan: '1' },
-    { field: 'assetType', header: 'Last Calibration Date', colspan: '1' },
-    { field: 'assetType', header: 'Last Calibrated by', colspan: '1' },
-    { field: 'assetType', header: 'Last Calibration Notes', colspan: '1' },
-    { field: 'assetType', header: 'Next Calibration Date', colspan: '1' },
-    { field: 'assetType', header: 'Last Calibration Date', colspan: '1' },
-    { field: 'assetType', header: 'Last Calibrated by', colspan: '1' },
-    { field: 'assetType', header: 'Last Calibration Notes', colspan: '1' },
-    { field: 'assetType', header: 'Next Calibration Date', colspan: '1' },
-    { field: 'createdDate', header: 'Created Date' },
-    { field: 'createdBy', header: 'Created By' },
-    { field: 'updatedDate', header: 'Updated Date' },
-    { field: 'updatedBy', header: 'Updated By' },
-    { field: 'updatedBy', header: 'Locaton' },
+    { field: 'assetId', header: 'Asset ID', colspan: '1' },
+    { field: 'assetName', header: 'Asset Name', colspan: '1' },
+    { field: 'altAssetId', header: 'Alt Asset ID', colspan: '1' },
+    { field: 'serialNum', header: 'Serial Num', colspan: '1' },
+    { field: 'controlName', header: 'Control Num', colspan: '1' },
+    { field: 'itemtype', header: 'Item Type', colspan: '1' },
+    { field: 'companyName', header: 'Level 01', colspan: '1' },
+    { field: 'buName', header: 'Level 02', colspan: '1' },
+    { field: 'deptName', header: 'Level 03', colspan: '1' },
+    { field: 'divName', header: 'Level 04', colspan: '1' },
+    { field: 'assetType', header: 'Asset Type', colspan: '1' },
+    { field: 'certifyType', header: 'Certify Type', colspan: '1' },
+    { field: 'uOM', header: 'UOM', colspan: '1' },
+    { field: 'qty', header: 'Qty', colspan: '1' },
+    { field: 'currencyName', header: 'Currency', colspan: '1' },
+    { field: 'unitCost', header: 'Updated Cost', colspan: '1' },
+    { field: 'inservicesdate', header: 'In Service Date', colspan: '1' },
+    { field: 'assetStatus', header: 'Asset Status', colspan: '1' },
+    { field: 'lastCalibrationDate', header: 'Last Calibration Date', colspan: '1' },
+    { field: 'lastcalibrationby', header: 'Last Calibrated by', colspan: '1' },
+    { field: 'lastcalibrationmemo', header: 'Last Calibration Notes', colspan: '1' },
+    { field: 'nextCalibrationDate', header: 'Next Calibration Date', colspan: '1' },
+    { field: 'lastcheckedinby', header: 'Last Checked IN By', colspan: '1' },
+    { field: 'lastcheckedindate', header: 'Last Checked IN Date', colspan: '1' },
+    { field: 'lastcheckedinmemo', header: 'Last Checked IN Memo', colspan: '1' },
+    { field: 'lastcheckedoutdate', header: 'Last Checked OUT Date', colspan: '1' },
+    { field: 'lastcheckedoutby', header: 'Last Checked OUT By', colspan: '1' },
+    { field: 'lastcheckedoutmemo', header: 'Last Checked OUT Memo', colspan: '1' },
+    { field: 'locations', header: 'Locaton' , colspan: '1'},
+    // { field: 'createdDate', header: 'Created Date' },
+    // { field: 'createdBy', header: 'Created By' },
+    // { field: 'updatedDate', header: 'Updated Date' },
+    // { field: 'updatedBy', header: 'Updated By' },
+    // { field: 'updatedBy', header: 'Locaton' },
 ]; 
 isSaving: boolean;
 activeIndex: number;
@@ -79,6 +84,7 @@ private isEditMode: boolean = false;
 selectedRows:any=[];
 manufacturerId: any;
 currencyId: any;
+Calibrationtype:string = 'Calibration';
 glAccountId: any;
 Active: string;
 assetTypeToUpdate: any;
@@ -142,7 +148,7 @@ targetData: any;
         private modalService: NgbModal, private glAccountService: GlAccountService,
         public assetattrService1: AssetAcquisitionTypeService, private vendorService: VendorService,
         private vendorEndpointService: VendorEndpointService, private depriciationMethodService: DepriciationMethodService, private commonservice: CommonService,
-       private datePipe: DatePipe,
+        private datePipe: DatePipe,
         private assetLocationService: AssetLocationService, private authService: AuthService, public unitService: UnitOfMeasureService
   ) { }
 
