@@ -38,12 +38,12 @@ export class RoListComponent implements OnInit {
     orderType: string ='Repair Order';
     PovendorId:number;
     headers = [
-		{ field: 'repairOrderNumber', header: 'RO Num' },
-        { field: 'openDate', header: 'Open Date' },
+		{ field: 'repairOrderNumber', header: 'RO Num',width:"90px" },
+        { field: 'openDate', header: 'Open Date',width:"100px" },
        // { field: 'closedDate', header: 'Closed/Can Date' },
         { field: 'vendorName', header: 'Vendor Name' },
         //{ field: 'vendorCode', header: 'Vendor Code' },
-        { field: 'status', header: 'Status' },
+        { field: 'status', header: 'Status', width:"90px" },
         { field: 'requestedBy', header: 'Requested By' },
         { field: 'approvedBy', header: 'Approved By' },        
         { field: 'createdDate', header: 'Created Date' },
