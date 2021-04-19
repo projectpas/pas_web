@@ -34,9 +34,6 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { emailPattern, urlPattern, phonePattern } from '../../../../validations/validation-pattern';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 
-import { phonePattern } from '../../../../validations/validation-pattern';
-
-
 @Component({
     selector: 'app-employee-general-information',
     templateUrl: './employee-general-information.component.html',

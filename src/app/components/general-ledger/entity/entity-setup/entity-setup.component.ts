@@ -22,7 +22,6 @@ import { CurrencyService } from "../../../../services/currency.service";
 import { Currency } from "../../../../models/currency.model";
 import { AuditHistory } from "../../../../models/audithistory.model";
 import { TreeNode, MenuItem, MessageService } from "primeng/api";
-import { CommonService } from "../../../../services/common.service";
 
 import { CommonService } from '../../../../services/common.service';
 import { validateRecordExistsOrNotForInput } from '../../../../generic/autocomplete';

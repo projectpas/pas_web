@@ -61,6 +61,7 @@ import { ConditionService } from '../../../services/condition.service';
 // import { e } from '@angular/core/src/render3';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
 import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-item-master-stock',
@@ -542,6 +543,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     purchaseCurrencyInfo: any = [];
     salesCurrencyInfo: any = [];
     arrayCurrancylist:any[] = [];
+    itemMasterReferenceId: number;
     isAircraftAdd:boolean=true;
     isAircraftEdit:boolean=true;
     isAircraftDownload:boolean=true;
