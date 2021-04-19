@@ -873,7 +873,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step2">PN Mapping</a>
+                    <a *ngIf="isPNMapping" class="collapsed" data-toggle="collapse" href="#step2">PN Mapping</a>
                   </h4>
                 </div>
                 <div id="step2" class="panel-collapse collapse">
@@ -959,7 +959,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
+                    <a *ngIf="isAirCraft" class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
                   </h4>
                 </div>
                 <div id="step3" class="panel-collapse collapse">
@@ -1049,7 +1049,7 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#step4">ATA Chapter</a>
+                    <a *ngIf="isATA" class="collapsed" data-toggle="collapse" href="#step4">ATA Chapter</a>
                   </h4>
                 </div>
                 <div id="step4" class="panel-collapse collapse">

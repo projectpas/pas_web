@@ -98,6 +98,19 @@ export class EndpointFactory {
         return { headers: headers };
     }
 
+    getFormReqHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
+        let headers = new HttpHeaders({
+            'Authorization': 'Bearer ' + this.authService.accessToken,
+            // 'Content-Type': 'multipart/form-data;',
+            // 'Content-Disposition':'form-data',
+            'Accept': `*/*`,
+            'App-Version': ConfigurationService.appVersion,
+            'Access-Control-Allow-Origin':'*'
+        });
+
+        return { headers: headers };
+    }
+
     handleError(error, continuation: () => Observable<any>) {
         if(error.status==404){
             error.error="Not Authorize User";
