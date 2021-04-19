@@ -12,6 +12,7 @@ export class AssetEndpoint extends EndpointFactory {
     private readonly _assetlistNewUrl: string =this.baseUrl + "/api/AssetModule/assetlist";
     // private readonly _assetInventorylistUrl: string = "/api/AssetModule/GetAssetInventory";
     private readonly _assetInventorylistUrl: string = this.baseUrl +"/api/AssetModule/assetinventorylist";
+    private readonly _calibrationlistUrl: string = this.baseUrl +"/api/AssetModule/getcalibrationmgmtlist";
     private readonly _allAssetlistUrl: string = this.baseUrl +"/api/AssetModule/GetAll";
     private readonly _addAssetUrlNew: string =this.baseUrl + "/api/AssetModule/AddAsset";
     private readonly _addAssetIntangibleUrl: string = this.baseUrl +"/api/AssetModule/AddIntangibleAsset";
@@ -231,6 +232,14 @@ export class AssetEndpoint extends EndpointFactory {
         return this.http.post<T>(this._assetInventorylistUrl, JSON.stringify(data),this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAssetInventoryList(data));
+            });
+    }
+
+    GetCalibarationMgmtList<T>(data: any): Observable<T> {
+
+        return this.http.post<T>(this._calibrationlistUrl, JSON.stringify(data),this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetCalibarationMgmtList(data));
             });
     }
 
