@@ -192,18 +192,6 @@ export class SalesOrderShippingComponent {
         });
     }
 
-    calculateExpiryDate() {
-    }
-
-    getCustomerNameList() {
-        let userShipingIdList = [];
-        userShipingIdList.push(0);
-        this.commonService.autoSuggestionSmartuserDropDownList(this.shipUsertype, '', true, 20, userShipingIdList.join()).subscribe(res => {
-            this.customerNamesList = res;
-        }, err => {
-        });
-    }
-
     getShipCustomerNameList(usertype) {
         let userShipingIdList = [];
         if (this.shipToAddress.userId != null) {
@@ -234,8 +222,12 @@ export class SalesOrderShippingComponent {
         });
     }
 
+    arrayShipVialist: any[] = [];
     getShipVia() {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe((res) => {
+        if (this.arrayShipVialist.length == 0) {
+            this.arrayShipVialist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', '', true, 20, this.arrayShipVialist.join(), this.currentUserMasterCompanyId).subscribe((res) => {
             this.shipViaList = res;
         }, err => {
         });
@@ -258,15 +250,23 @@ export class SalesOrderShippingComponent {
             });
     }
 
+    arrayCountrieslist: any[] = [];
     getCountriesList() {
-        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+        if (this.arrayCountrieslist.length == 0) {
+            this.arrayCountrieslist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', '', true, 20, this.arrayCountrieslist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.countryList = res;
         }, err => {
         });
     }
 
+    arrayUOMlist: any[] = [];
     getUnitOfMeasure() {
-        this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName').subscribe((res) => {
+        if (this.arrayUOMlist.length == 0) {
+            this.arrayUOMlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUOMlist.join(), this.currentUserMasterCompanyId).subscribe((res) => {
             this.allWeightUnitOfMeasureInfo = res;
         }, err => {
         });
