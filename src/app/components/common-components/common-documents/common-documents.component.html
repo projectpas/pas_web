@@ -88,12 +88,9 @@
         </tr>
         <tr>
           <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-            <!-- *ngIf=" col.field != 'createdDate' && col.field != 'updatedDate'" -->
             <input type="text" class="incorn_border ui-widget table-header-input-width"
               [disabled]="col.field == 'fileName'" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
               (input)="documents.filter($event.target.value,col.field,'contains')" pInputText>
-            <!-- <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )"> 
-                    <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )"> -->
             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
               name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
             <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"

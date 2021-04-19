@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import * as moment from 'moment';
 declare const google: any;
 @Component({
     selector: 'app-vendor-billing-information',
@@ -136,6 +137,7 @@ export class VendorBillingInformationComponent {
     editSiteName: string = '';
     arrayTagNamelist:any=[];
     tagNamesList:any=[];
+    allActionsOriginal: any[];
 
     constructor(private http: HttpClient, private router: Router,private activeRoute: ActivatedRoute,
         private authService: AuthService, private modalService: NgbModal,
@@ -242,6 +244,22 @@ export class VendorBillingInformationComponent {
             });
         }        
     }
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.allActions = this.allActionsOriginal;
+            const data = [...this.allActions.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.allActions = data;
+        } else {
+            this.allActions = this.allActionsOriginal;
+        }
+    }
+	
 
     private loadData() {
         this.isSpinnerVisible = true;
@@ -767,6 +785,7 @@ export class VendorBillingInformationComponent {
 				this.allActions= newarry;
 			}
         }
+        this.allActionsOriginal=this.allActions;
         this.totalRecords = this.allActions.length ;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
