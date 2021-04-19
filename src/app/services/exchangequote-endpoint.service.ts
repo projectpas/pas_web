@@ -10,6 +10,7 @@ import { IExchangeQuoteSearchParameters } from "../models/exchange/IExchangeQuot
 import { environment } from 'src/environments/environment';
 import { IExchangeQuoteView } from "../models/exchange/IExchangeQuoteView";
 import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
+import{ExchangeQUoteMarginSummary} from '../models/exchange/ExchangeQUoteMarginSummary';
 @Injectable()
 export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getNewExchangeQuoteInstanceUrl: string = environment.baseUrl + "/api/exchangequote/new";
@@ -17,6 +18,8 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly searchExchangeQuote: string = environment.baseUrl + "/api/exchangequote/exchangequotesearch";
     private readonly getExchangeQuoteDetails: string = environment.baseUrl + "/api/exchangequote/get";
     private readonly getExchngeQuoteeSetting: string = environment.baseUrl + "/api/exchangequote/getExchangeQuoteSettinglist";
+    private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangequote/get-exchange-quote-margin-data";
+    private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangequote/create-exchange-quote-margin-data";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -81,6 +84,34 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
         .put(url, JSON.stringify(exchangeQuote), this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.create(exchangeQuote));
+        });
+    }
+
+    approverslistbyTaskId(taskId, id) {
+      return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+        });
+    }
+
+    getExchangeQuoteMarginSummary(exchangeQuoteId: number): Observable<ExchangeQUoteMarginSummary> {
+      const URL = `${this.getExchangeQuoteMarginSummarydetails}/${exchangeQuoteId}`;
+      return this.http
+        .get<ExchangeQUoteMarginSummary>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteMarginSummary(exchangeQuoteId));
+        });
+    }
+
+    createExchangeQuoteMarginSummary(marginSummary: ExchangeQUoteMarginSummary) {
+      return this.http
+        .post(
+          this.exchangeQuoteqMarginSummary,
+          JSON.stringify(marginSummary),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createExchangeQuoteMarginSummary(marginSummary));
         });
     }
 }  

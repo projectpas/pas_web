@@ -175,6 +175,7 @@ export class ExchangeQuotePartNumberComponent {
           this.part.exchangeListPrice = this.selectedPart.exchangeListPrice;
           this.part.exchangeOverhaulPrice = this.selectedPart.exchangeOverhaulPrice;
           this.part.exchangeOutrightPrice = this.selectedPart.exchangeOutrightPrice;
+          this.part.exchangeOverhaulCost = this.selectedPart.exchangeOverhaulCost;
           this.part.exchangeCurrencyId = this.selectedPart.exchangeCurrencyId;
           this.part.loanCurrencyId = this.selectedPart.loanCurrencyId;
           this.part.entryDate = this.exchangeQuote.openDate;

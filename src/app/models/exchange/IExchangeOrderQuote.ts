@@ -42,4 +42,5 @@ export interface IExchangeOrderQuote {
 	restrictDER: boolean;
 	cogs:number;
 	daysForCoreReturn:number;
+	employeeId:number;
 }

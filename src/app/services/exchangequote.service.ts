@@ -20,6 +20,7 @@ import { IPartJson } from "../components/sales/shared/models/ipart-json";
 import { PartDetail } from "../components/exchange-quote/shared/components/models/part-detail";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { ExchangeQuotePart } from '../models/exchange/ExchangeQuotePart';
+import { ExchangeQUoteMarginSummary } from '../models/exchange/ExchangeQUoteMarginSummary';
 export type RolesChangedEventArg = {
   roles: Role[] | string[];
   operation: RolesChangedOperation;
@@ -255,6 +256,94 @@ export class ExchangequoteService {
     partNumberObj.depositeAmount=selectedPart.depositeAmount;
     partNumberObj.coreDueDate=selectedPart.coreDueDate;
     return partNumberObj;
+  }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.exchangeQuoteEndpointService.approverslistbyTaskId(taskId, id);
+  }
+
+  getExchangeQuoteMarginSummary(exchangeQuoteId) {
+    return this.exchangeQuoteEndpointService.getExchangeQuoteMarginSummary(exchangeQuoteId);
+  }
+
+  getExchangeQuoteHeaderMarginDetails(selectedParts, marginSummary) {
+    // let marginSummary;
+    // if (isQuote) {
+    //   marginSummary = new SOQuoteMarginSummary();
+    // } else {
+    //   marginSummary = new MarginSummary();
+    // }
+    let sales = 0;
+    let misc = 0;
+    let productCost = 0;
+    let exchangefees=0;
+    let overhaulprice=0;
+    let othercharges=0;
+    let totalestrevenue=0;
+    let cogsfees=0;
+    let overhaulcost=0;
+    let othercost=0;
+    let marginamount=0;
+    let marginpercentage=0;
+    let totalestcost=0;
+    console.log("marginSummary",marginSummary);
+    console.log("selectedParts",selectedParts);
+    if (selectedParts && selectedParts.length > 0) {
+      selectedParts.forEach(part => {
+        // this.checkNullValuesList.forEach(key => {
+        //   if (!part[key]) {
+        //     part[key] = 0;
+        //   }
+        // })
+        exchangefees=parseFloat(part.exchangeListPrice);
+        overhaulprice=parseFloat(part.exchangeOverhaulPrice);
+        othercharges=0;
+        //const totalestrevenue = parseFloat(parseFloat(exchangefees) + parseFloat(overhaulprice))
+        cogsfees=parseFloat(part.exchangeQuoteScheduleBilling[0].cogsAmount);
+        overhaulcost=parseFloat(part.exchangeOverhaulCost);
+        othercost=0;
+        //const marginamount=(parseFloat(totalestrevenue)-parseFloat(totalestcost));
+        //const marginpercentage=(parseFloat(marginamount)/parseFloat(totalestrevenue));
+        //const totalestcost=parseFloat(parseFloat(cogsfees) + parseFloat(overhaulcost));
+      })
+      marginSummary.exchangeFees = exchangefees;
+      marginSummary.overhaulPrice = overhaulprice;
+      marginSummary.totalEstRevenue = marginSummary ? this.getTotalEstRevenue(marginSummary) : 0;
+      marginSummary.cogsFees = cogsfees;
+      marginSummary.overhaulCost = overhaulcost;
+      marginSummary.totalEstCost = marginSummary ? this.getTotalEstCost(marginSummary) : 0;;
+      marginSummary.marginAmount = marginSummary ? this.getMarginAmount(marginSummary) : 0;;
+      marginSummary.marginPercentage = marginSummary ? this.getMarginPercentage(marginSummary) : 0;
+    }
+    return marginSummary;
+  }
+
+  getTotalEstRevenue(marginSummary) {
+    let totalEstRevenue: number = 0;
+    totalEstRevenue = marginSummary.exchangeFees + marginSummary.overhaulPrice;
+    return totalEstRevenue;
+  }
+
+  getMarginAmount(marginSummary) {
+    let marginAmount: number = 0;
+    marginAmount = marginSummary.totalEstRevenue - marginSummary.totalEstCost;
+    return marginAmount;
+  }
+
+  getMarginPercentage(marginSummary) {
+    let marginPercentage: number = 0;
+    marginPercentage = marginSummary.marginAmount / marginSummary.totalEstRevenue;
+    return marginPercentage;
+  }
+
+  getTotalEstCost(marginSummary) {
+    let totalEstCost: number = 0;
+    totalEstCost = marginSummary.cogsFees + marginSummary.overhaulCost;
+    return totalEstCost;
+  }
+
+  createExchangeQuoteMarginSummary(marginSummary: ExchangeQUoteMarginSummary) {
+    return this.exchangeQuoteEndpointService.createExchangeQuoteMarginSummary(marginSummary);
   }
 
 }

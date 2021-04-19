@@ -488,8 +488,8 @@ export class SalesQuoteService {
     return this.salesQuoteEndPointSevice.getAllSalesOrderTypes<WorkOrderType[]>();
   }
 
-  getAllSalesOrderQuoteSettings() {
-    return this.salesQuoteEndPointSevice.getAllSalesOrderQuoteSettings();
+  getAllSalesOrderQuoteSettings(masterCompanyId) {
+    return this.salesQuoteEndPointSevice.getAllSalesOrderQuoteSettings(masterCompanyId);
   }
 
   getAllSalesOrderQuoteAnalysis(id) {

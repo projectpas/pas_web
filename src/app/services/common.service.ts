@@ -878,9 +878,9 @@ export class CommonService extends EndpointFactory {
   getPOAddressById(poId): any {
   }
 
-  getShipVia() {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/getAllShipVia`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.getShipVia());
+  getShipVia(masterCompanyId) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/getAllShipVia?Id=${masterCompanyId}`, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.getShipVia(masterCompanyId));
     });
   }
 

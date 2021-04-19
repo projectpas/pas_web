@@ -15,6 +15,7 @@ import { formatStringToNumber } from "../../../../../../generic/autocomplete";
 import { SummaryPart } from "../../../../../../models/exchange/SummaryPart";
 import { AlertService, MessageSeverity } from "../../../../../../services/alert.service";
 import { Subscription } from 'rxjs';
+import { AuthService } from "../../../../../../services/auth.service";
 
 @Component({
   selector: 'app-exchange-part-number-filter',
@@ -60,7 +61,8 @@ export class ExchangePartNumberFilterComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     public conditionService: ConditionService,
     private changeDetector: ChangeDetectorRef,
-    private exchangequoteService: ExchangequoteService) {
+    private exchangequoteService: ExchangequoteService,
+    private authService: AuthService) {
     this.partDetails = [];
     this.query = new ItemMasterSearchQuery();
     this.partDetail = {
@@ -245,6 +247,12 @@ export class ExchangePartNumberFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
   bindPartsDroppdown(query) {
     this.searchDisabled = true;
     let partSearchParamters = {
@@ -256,7 +264,8 @@ export class ExchangePartNumberFilterComponent implements OnInit, OnDestroy {
       "custRestrictPMA": this.exchangeQuote.restrictPMA,
       "includeAlternatePartNumber": this.query.partSearchParamters.includeAlternatePartNumber,
       "includeEquivalentPartNumber": this.query.partSearchParamters.includeEquivalentPartNumber,
-      "idlist": '0'
+      "idlist": '0',
+      "masterCompanyId": this.masterCompanyId
     };
     this.subscription = this.itemMasterService.searchPartNumberAdvanced(partSearchParamters).subscribe(
       (result: any) => {

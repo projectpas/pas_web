@@ -42,5 +42,6 @@ export class ExchangeOrderQuote implements IExchangeOrderQuote {
 	restrictDER: boolean;
 	cogs:number;
 	daysForCoreReturn:number;
+	employeeId:number;
     constructor() { }
 }

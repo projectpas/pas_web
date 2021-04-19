@@ -479,7 +479,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       });
     }
     this.arrayVendlsit.push(0);
-    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join()).subscribe(res => {
+    this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
       this.allVendors = res.map(x => {
         return {
           vendorId: x.vendorId,

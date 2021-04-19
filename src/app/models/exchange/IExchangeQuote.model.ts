@@ -39,4 +39,5 @@ export interface IExchangeQuote {
 	restrictDER: boolean;
 	cogs:number;
 	daysForCoreReturn:number;
+	employeeId:number;
 }

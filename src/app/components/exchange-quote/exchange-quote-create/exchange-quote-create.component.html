@@ -112,7 +112,8 @@
                         <label>Open Date<span class="clr-red">*</span></label>
                         <p-calendar name="openDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                           [(ngModel)]="exchangeQuote.openDate" [showIcon]="true" id="openDate" #openDate="ngModel"
-                          required (onSelect)="onChangeOpenDate()">
+                          required>
+                          <!-- (onSelect)="onChangeOpenDate()"-->
                         </p-calendar>
                         <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)"
                           class="alert alert-danger alert-danger-cstm">
@@ -254,7 +255,7 @@
                             <label>Cust Req Date</label>
                             <p-calendar name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
                               yearRange="1900:2100" [(ngModel)]="exchangeQuote.customerRequestDate" [showIcon]="true"
-                              id="customerRequestDate" #customerRequestDate="ngModel">
+                              id="customerRequestDate" [minDate]="exchangeQuote.openDate" #customerRequestDate="ngModel">
                             </p-calendar>
                             <!-- <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
                               class="alert alert-danger alert-danger-cstm">
@@ -267,7 +268,7 @@
                             <label>Promise Date<span class="clr-red">*</span></label>
                             <p-calendar name="promiseDate" [yearNavigator]="true" [monthNavigator]="true"
                               yearRange="1900:2100" [(ngModel)]="exchangeQuote.promiseDate" [showIcon]="true"
-                              id="promiseDate" #promiseDate="ngModel" required>
+                              id="promiseDate" [minDate]="exchangeQuote.openDate" #promiseDate="ngModel" required>
                             </p-calendar>
                             <div *ngIf="promiseDate.invalid && (promiseDate.dirty || promiseDate.touched)"
                               class="alert alert-danger alert-danger-cstm">
@@ -280,7 +281,7 @@
                             <label>Est Ship Date</label>
                             <p-calendar name="estimateShipDate" [yearNavigator]="true" [monthNavigator]="true"
                               yearRange="1900:2100" [(ngModel)]="exchangeQuote.estimateShipDate" [showIcon]="true"
-                              id="estimateShipDate" #estimateShipDate="ngModel">
+                              id="estimateShipDate" [minDate]="exchangeQuote.openDate" #estimateShipDate="ngModel">
                             </p-calendar>
                             <!-- <div *ngIf="estimateShipDate.invalid && (estimateShipDate.dirty || estimateShipDate.touched)"
                               class="alert alert-danger alert-danger-cstm">
@@ -337,10 +338,10 @@
                         [exchangeQuoteView]="exchangeQuoteView" (on-parts-save)="onPartsSaveEvent($event)">
                     </app-exchange-quote-part-number>
                 </p-tabPanel>
-                <!-- <p-tabPanel header="Internal Approvers">
+                <p-tabPanel header="Internal Approvers">
                   <app-exchange-quote-approve>
                   </app-exchange-quote-approve>
-                </p-tabPanel> -->
+                </p-tabPanel>
                 <p-tabPanel header="Address">
                   <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="exchangeQuoteId">
                   </app-address-component>
@@ -366,3 +367,17 @@
       <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
   </div>
 </ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+</div>

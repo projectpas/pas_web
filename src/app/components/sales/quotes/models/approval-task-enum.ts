@@ -4,5 +4,6 @@ export enum ApprovalTaskEnum {
     POApproval = 3,
     ROApproval = 4,
     SOApproval = 5,
-    SalesQuoteApproval = 6
+    SalesQuoteApproval = 6,
+    ExchangeQuoteApproval = 7,
 }
