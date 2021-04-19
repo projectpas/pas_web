@@ -68,9 +68,9 @@ export class EmployeeService {
         return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeCommonEndpoint<any[]>(managementStructureId));
     }
-    getEmployeeNamesList() {
+    getEmployeeNamesList(mastercompanyId) {
         return Observable.forkJoin(
-            this.employeeEndpoint.getEmployeeNamesEndpoint<any[]>());
+            this.employeeEndpoint.getEmployeeNamesEndpoint<any[]>(mastercompanyId));
     }
 
     getEmployeeListforView(employeeId: any) {

@@ -48,7 +48,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     technicianOriginalList: Object;
     inspectorsOriginalList: any;
     isSpinnerEnable: boolean = false;
-    masterCompanyId = 1;
+    masterCompanyId = 0;
     workorderSettings: any;
     expertiseTypeList: any;
     technicianByExpertiseTypeList: any;
@@ -96,7 +96,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         if (this.workOrderId || this.recCustomerId) {
 
             this.recCustomerId = 0;
-            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.workOrderService.getWorkOrderById(this.workOrderId, this.recCustomerId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.isSpinnerEnable = true; 
                 this.isEdit = true;
 
@@ -135,7 +135,7 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
  
     getWorkOrderDefaultSetting(value?) {
       const  value1 = value ? value : this.workOrderGeneralInformation.workOrderTypeId;
-        this.commonService.workOrderDefaultSettings(this.masterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, value1).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             
             if (res.length > 0) {
                 const data = res[0];
@@ -182,11 +182,11 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
         })
     }
 
-    getAllCreditTerms(): void {
-        this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.creditTerms = res;
-        })
-    }
+    // getAllCreditTerms(): void {
+    //     this.commonService.smartDropDownList('CreditTerms', 'CreditTermsId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.creditTerms = res;
+    //     })
+    // }
 
 
     getJobTitles() {
@@ -199,22 +199,22 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     employeesOriginalData:any=[];
  
 
-    async getAllTecStations() {
-        await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-            this.techStationList = res.map(x => {
-                return {
-                    ...x,
-                    techStationId: x.value,
-                    name: x.label
-                }
-            });
-        })
-    }
+    // async getAllTecStations() {
+    //     await this.commonService.smartDropDownList('EmployeeStation', 'EmployeeStationId', 'StationName').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    //         this.techStationList = res.map(x => {
+    //             return {
+    //                 ...x,
+    //                 techStationId: x.value,
+    //                 name: x.label
+    //             }
+    //         });
+    //     })
+    // }
  
 
 
     getAllWorkOrderStages(): void {
-        this.workOrderService.getWorkOrderStageAndStatus().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getWorkOrderStageAndStatus(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
    
             this.workOrderStagesList = res.map(x => {
                 return {
@@ -228,14 +228,14 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
  
 
     getMultiplePartsNumbers() {
-        this.workOrderService.getMultipleParts().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+        this.workOrderService.getMultipleParts(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.partNumberOriginalData = res;
         })
     }
 
 
     async getPartNosByCustomer(customerId, workOrderId) {
-       await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+       await this.workOrderService.getPartNosByCustomer(customerId, workOrderId,this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
 
             this.partNumberOriginalData = res;
         });

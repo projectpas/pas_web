@@ -1,5 +1,4 @@
 ﻿import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
-import { ItemMasterService } from "../../../../../services/itemMaster.service";
 import { ItemSearchType } from "../../../quotes/models/item-search-type";
 import { PartDetail } from "../../models/part-detail";
 import { IPartJson } from "../../models/ipart-json";
@@ -7,7 +6,6 @@ import { ISalesQuote } from "../../../../../models/sales/ISalesQuote.model";
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import { SalesOrderService } from "../../../../../services/salesorder.service";
 import { PartAction } from "../../models/part-action";
-import { CommonService } from "../../../../../services/common.service";
 import { AlertService, MessageSeverity } from "../../../../../services/alert.service";
 import { AuthService } from "../../../../../services/auth.service";
 import { getObjectById } from "../../../../../generic/autocomplete";
@@ -47,7 +45,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
     altParts: PartAction[] = [];
     euqParts: PartAction[] = [];
 
-    constructor(private itemMasterService: ItemMasterService, private salesOrderService: SalesOrderService, private commonService: CommonService, private authService: AuthService,
+    constructor(private salesOrderService: SalesOrderService, private authService: AuthService,
         private alertService: AlertService) {
         this.searchType = ItemSearchType.ItemMaster;
     }
@@ -127,8 +125,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
     getReserverdParts() {
         this.startTimer();
         this.isSpinnerVisible = true;
-        // this.salesOrderService.getReservestockpartlists
-        //     (this.part.salesOrderId, this.part.itemMasterId)
         this.salesOrderService.getReservestockpartlistsBySOId
             (this.salesOrderId)
             .subscribe(data => {
@@ -137,7 +133,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.onlyParts = data[0];
 
                 this.bindProperValues();
-                
+
                 this.parts.forEach((item, index) => {
                     if (item !== undefined) {
                         if (item.soReservedAltParts && item.soReservedAltParts.length > 0) {
@@ -159,8 +155,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
 
     getUnreservedParts() {
         this.isSpinnerVisible = true;
-        // this.salesOrderService.getunreservedstockpartslist
-        //     (this.part.salesOrderId, this.part.itemMasterId)
         this.salesOrderService.getunreservedstockpartslistBySOId
             (this.salesOrderId)
             .subscribe(data => {
@@ -292,7 +286,17 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 if (x.isSelected == true) {
                     tempParts.push(x);
                 }
-            })
+
+                x.soReservedAltParts.filter(x => {
+                    x.createdBy = this.userName;
+                    x.updatedBy = this.userName;
+                });
+
+                x.soReservedEquParts.filter(x => {
+                    x.createdBy = this.userName;
+                    x.updatedBy = this.userName;
+                });
+            });
             parts = [];
             parts = [...tempParts];
 
@@ -307,6 +311,8 @@ export class SalesReserveUnreserveComponent implements OnInit {
                         MessageSeverity.success
                     );
                     this.close.emit(true);
+                }, err => {
+                    this.isSpinnerVisible = false;
                 });
         }
     }
@@ -327,17 +333,11 @@ export class SalesReserveUnreserveComponent implements OnInit {
             this.minutes = (this.seconds < 0) ? --this.minutes : this.minutes;
 
             if (this.minutes < 0) {
-                // this.minutes='00';
-                // this.seconds='00';
-                // timer2== "10:01";
                 clearInterval(this.interval);
-                // this.closeMaterial(); 
-                // $('#reserve').modal("hide");
             }
 
             this.seconds = (this.seconds < 0) ? 59 : this.seconds;
             this.seconds = (this.seconds < 10) ? '0' + this.seconds : this.seconds;
-            //   this.minutes = (this.minutes < 10) ?  this.minutes : this.minutes;
             $('.clockdiv').html('Session Expire in' + ' ' + this.minutes + ':' + this.seconds);
             timer2 = this.minutes + ':' + this.seconds;
             if (this.minutes == 0 && this.seconds == 0) {
@@ -347,7 +347,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 clearInterval(this.interval)
                 $('#reserve').modal("hide");
             }
-            // timer2== "1:01";
         }, 1000);
     }
 
@@ -361,8 +360,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.counter.sec = 59
             }
             else this.counter.sec -= 1
-            //   if(this.counter.min >10)
-            //   this.counter.min = (this.counter.min < 10) ? '0' + this.counter.min : this.counter.min;
             if (this.counter.min == 0 && this.counter.sec == 0) {
                 clearInterval(intervalId)
                 $('#reserve').modal("hide");

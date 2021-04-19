@@ -124,7 +124,7 @@
         </tr>
         </td>
         </ng-container>
-        <td class="table-actions-column action-icons-cstm table-column-width" *ngIf="isViewMode == false">
+        <td class="table-actions-column action-icons-cstm table-column-width" style="width:131px !important" *ngIf="isViewMode == false">
           <div *ngIf="currentDeletedstatus==true">
             <span>
               <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#commondocView"
@@ -136,7 +136,7 @@
                 matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
             </span>
             <span><button class="btn nobg greyHistory" data-toggle="modal" data-target="#commoncontentAuditHist"
-                (click)="openHistory(rowData)" [disabled]="rowData.attachmentId ==0" matTooltip="History"
+                (click)="openHistory(rowData)" [class.disabled]="rowData.attachmentId == 0" matTooltip="History"
                 matTooltipPosition="above"><i class="fa fa-history"></i></button>
             </span>
           </div>
@@ -150,24 +150,26 @@
             <span data-toggle="modal" *ngIf="isViewMode == false" data-target="#commonaddDocumentDetails">
               <a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                   class="fa fa-pencil"></i></a> </span>
-            <span *ngIf="isViewMode == false"><a class="btn nobg"
+            <span *ngIf="isViewMode == false">
+              <a class="btn nobg"
                 (click)="openDelete(deleteContent, rowData); documents.reset()" matTooltip="Delete"
                 matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
-            <span><button class="btn nobg greyHistory" data-toggle="modal" data-target="#commoncontentAuditHist"
-                (click)="openHistory(rowData)" [disabled]="rowData.attachmentId ==0" matTooltip="History"
-                matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
+                
+            <span><a class="btn nobg greyHistory" data-toggle="modal" data-target="#commoncontentAuditHist"
+                (click)="openHistory(rowData)" [class.disabled]="rowData.attachmentId == 0" matTooltip="History"
+                matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
           </div>
         </td>
-        <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
+        <td class="action-icons-cstm table-column-width" style="width:131px !important" *ngIf="isViewMode == true">
           <span>
             <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#commondocView"
               (click)="openDocument(rowData)" matTooltip="View" matTooltipPosition="above">
               <i class="fa fa-eye"></i>
             </a>
           </span>
-          <span><button class="btn nobg" data-toggle="modal" data-target="#commoncontentAuditHist"
-              (click)="openHistory(rowData)" [disabled]="rowData.attachmentId ==0" matTooltip="History"
-              matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
+          <span><a class="btn nobg" data-toggle="modal" data-target="#commoncontentAuditHist"
+              (click)="openHistory(rowData)" [class.disabled]="rowData.attachmentId == 0" matTooltip="History"
+              matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
         </td>
         </tr>
       </ng-template>
@@ -192,7 +194,8 @@
       </ng-template>
     </p-table>
   </div>
-  <div class="margin-bottom-30" *ngIf="isViewMode == false && offLineUpload==true">
+  <div *ngIf="moduleName !='ItemMaster'">
+    <div class="margin-bottom-30" *ngIf="isViewMode == false && offLineUpload==true">
     <!-- <div style="margin-top:-40px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
             <div style="margin-top:-10px;margin-bottom: 15px;" *ngIf="isViewMode == false && offLineUpload==true"> -->
     <button [disabled]="isEnableUpdateButton" type="button" class="btn btn-primary pull-right submit-btn"
@@ -200,9 +203,10 @@
       <span *ngIf="enableUpdate"> Update </span>
       <span *ngIf="!enableUpdate">Save </span>
     </button>
-    <button type="button" *ngIf="moduleId==30" class="btn btn-primary pull-right submit-btn"
+    <button type="button" *ngIf="moduleName == 'LegalEntity'" class="btn btn-primary pull-right submit-btn"
       (click)="backClick()">Previous</button>
-  </div>
+   </div>
+  </div>  
   <!-- <div style="margin-top:10px" *ngIf="isViewMode == false && moduleId==30"> -->
   <!-- <button type="button" class="btn btn-primary pull-right submit-btn"
             (click)="savedocument()" [routerLink]="[
@@ -488,9 +492,9 @@
                 <textarea class="form-control" name="descriptionDocs" [(ngModel)]="documentInformation.docDescription"
                   type="text" (ngModelChange)="enableSave()"></textarea>
               </div>
-              <div class="form-group">
+              <div class="form-group" style="margin-top:-7px">
                 <span class="label">Memo </span>
-                <div class="col-sm-11">
+                <div class="col-sm-11" style="margin-left:-3px">
                   <span>
                     <div class="form-group memo-popup-cstm mat_emo">
                       <div [innerHTML]="documentInformation.docMemo ? documentInformation.docMemo.trim() : ''"
@@ -675,7 +679,7 @@
                 </div> -->
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                   <div class="tableFixHead">
-          <table class="table table-bordered header-table-width">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>Name <span class="clr-red">*</span></th>
@@ -715,11 +719,11 @@
               </tr>
               </td>
               <!-- <td [ngStyle]="{'color': getColorCodeForHistory(i, 'fileName', audit.fileName)  ? 'black' : 'red'  }">{{audit.fileName}}</td> -->
-              <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-              <td>{{audit.createdBy}}</td>
+              <td >{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+              <td style="width:60px">{{audit.createdBy}}</td>
               <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-              <td>{{audit.updatedBy}}</td>
-              <td class="text-center">
+              <td style="width:60px">{{audit.updatedBy}}</td>
+              <td class="text-center width-60">
                 <span class="value">
                   <label class="wauto">
                     <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
@@ -793,17 +797,18 @@
   </div>
 </div>
 <div class="modal fade" id="createDocumentType" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog partsList-modal">
+  <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="resetAddressShipViaForm()">&times;</button>
         <h4 class="modal-title">Add Document Type</h4>
       </div>
+      <form #addDocumenttypeForm="ngForm" class="form-horizontal">
       <div class="modal-body">
         <div class="form-row">
-          <form #addDocumenttypeForm="ngForm" class="form-horizontal">
+        
             <div class="form-group col-md-12">
-              <div class="col-md-6"><label>Document Name <span class="clr-red">*</span> :</label></div>
+              <div class="col-md-4"><label>Document Name <span class="clr-red">*</span> :</label></div>
               <p-autoComplete class="autocomp-customer-cstm col-md-6" name="name" [(ngModel)]="addNew.name"
                 [suggestions]="lstfilterDocumentType" emptyMessage="No Match Found" field="name"
                 (onKeyUp)="checkDocumentTypeExist($event.target.value)"
@@ -816,7 +821,7 @@
               </div>
             </div>
             <div class="form-group col-md-12">
-              <div class="col-md-6"><label class="col-md-6">Rev Num <span class="clr-red"></span> :</label></div>
+              <div class="col-md-4"><label class="col-md-6">Rev Num <span class="clr-red"></span> :</label></div>
               <p-autoComplete class="autocomp-customer-cstm col-md-6" name="revNum" [(ngModel)]="addNew.revNum"
                 [suggestions]="lstfilterDocumentTypeRevNum" emptyMessage="No Match Found" field="revNum"
                 (onKeyUp)="checkDocumentRevnumExist($event.target.value)"
@@ -830,12 +835,12 @@
               </div>
             </div>
             <div class="form-group col-md-12">
-              <div class="col-md-6"><label class="col-md-6">Description <span class="clr-red">*</span> :</label></div>
+              <div class="col-md-4"><label class="col-md-6">Description <span class="clr-red">*</span> :</label></div>
               <input type="text" class="form-control col-md-6" name="description" [(ngModel)]="addNew.description"
                 required>
             </div>
             <div class="form-group col-md-12">
-              <div class="col-md-6"><label class="col-md-6" style="vertical-align: top;">Memo:</label></div>
+              <div class="col-md-4"><label class="col-md-6" style="vertical-align: top;">Memo:</label></div>
               <div class="col-md-6">
                 <div class="form-group memo-popup-cstm">
                   <div [innerHTML]="addNew.memo" class="form-control" [matTooltip]="parsedText(addNew.memo)"
@@ -847,7 +852,7 @@
                 </div>
               </div>
             </div>
-          </form>
+          
         </div>
       </div>
       <div class="modal-footer">
@@ -858,9 +863,11 @@
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         <!-- (click)="resetAddressShippingForm(); -->
       </div>
+    </form>
+     
     </div>
   </div>
-</div>
+
 <div class="modal fade" id="documenttype-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static"
   data-keyboard="false">
   <div class="modal-dialog">
@@ -881,4 +888,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

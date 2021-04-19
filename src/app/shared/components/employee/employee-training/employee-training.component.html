@@ -139,16 +139,22 @@
                                               <div class="col">
                                                 <h4 class="header-name">Training Certificate Received</h4>
                                               </div>
-                                              <div>
-                                                <a data-toggle="modal" data-target="#addDocumentDetails">
+                                              <div>                                                 
+                                                <!-- <a data-toggle="modal" data-target="#addDocumentDetails">
                                                   <button type="button" class="btn-sm header-button"  matTooltip="Add Documents" matTooltipPosition="above" (click)="addDocumentDetails();">
                                                     Add Certificate
                                                   </button>
-                                                </a>              
+                                                </a>               -->
                                               </div>
                                             </div>
-                                          </div>                                        
-                                        <div>
+                                          </div>   
+                                         <div>
+                                            <div class="clear"></div>
+                                            <hr /> 
+                                            <app-common-documents (tab)="changeOfTab($event)" [moduleName]="moduleName" [referenceId]="employeeId" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
+                                         </div>
+                                          
+                                        <!-- <div>
                                             <div class="clear"></div>
                                             <hr /> 
                                            <div class="checkbox-cstm setDelts" >
@@ -170,17 +176,9 @@
                                           
                                        <ng-template pTemplate="colgroup" let-columns>
                                            <colgroup>
-                                               <col *ngFor="let col of columns" class="table-column-width" />
+                                               <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="table-column-width" />
                                            </colgroup>
-                                       </ng-template>
-                                       <!-- <ng-template pTemplate="header" let-columns>
-                                           <tr>
-                                               <th *ngFor="let col of columns" style="width: 100px;">
-                                                   {{ col.header }}
-                                               </th>
-                                               <th style="width: 100px;">Action</th>
-                                           </tr>
-                                       </ng-template> -->
+                                       </ng-template>                                       
                                        <ng-template pTemplate="header" let-columns>
                                            <tr>
                                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
@@ -303,7 +301,7 @@
    
                                    </p-table>
                                          
-                                        </div>
+                                        </div> -->
                                         </div>
                               
                                     <div class="buttons-margin">
@@ -482,7 +480,7 @@
         <div class="modal-body">
             <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                 <div class="tableFixHead">
-                  <table class="table table-bordered header-table-width">
+                  <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th> Name</th>
@@ -536,10 +534,10 @@
                                 {{ audit.fileName }}
                             </td>    
                             <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                            <td>{{ audit.createdBy }}</td>
+                            <td style="width:60px !important">{{ audit.createdBy }}</td>
                             <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                            <td>{{ audit.updatedBy }}</td>
-                            <td> <input type="checkbox"  name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
+                            <td style="width:60px !important">{{ audit.updatedBy }}</td>
+                            <td style="width:60px !important"> <input type="checkbox"  name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
                         </tr>
                     </tbody>
                 </table>

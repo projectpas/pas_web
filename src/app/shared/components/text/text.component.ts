@@ -203,7 +203,7 @@ export class TextComponent implements OnInit, OnChanges {
 
     getAllTextList(){
         this.isSpinnerVisible = true;
-        this.communicationService.getTextList(this.referenceId, this.moduleId, this.partNo)
+        this.communicationService.getTextList(this.referenceId, this.moduleId, this.partNo,this.authService.currentUser.masterCompanyId)
         .subscribe(
             (res)=>{
                 res = res.map(x=>{return {...x, notesData: this.getString(x.notes)}})

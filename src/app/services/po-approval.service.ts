@@ -10,43 +10,43 @@ export class POApprovalService extends EndpointFactory {
   private readonly _getPoDataUrl: string = environment.baseUrl + "/api/approvalRule/approvalrulelist";
   private readonly _approvalrulestatusUrl: string = environment.baseUrl + "/api/approvalRule/approvalrulestatus";
   private readonly _approvalrulelistbyTaskURL: string =
-  environment.baseUrl + "/api/approvalRule/approvalrulelistbyTask";
+    environment.baseUrl + "/api/approvalRule/approvalrulelistbyTask";
   private readonly _createOrUpdatePOApproval: string =
-  environment.baseUrl + "/api/approvalRule/createapprovalrule";
+    environment.baseUrl + "/api/approvalRule/createapprovalrule";
   private readonly _createapprovalrulecommon: string =
-  environment.baseUrl + "/api/approvalRule/createapprovalrulecommon";
+    environment.baseUrl + "/api/approvalRule/createapprovalrulecommon";
   private readonly _approvalrulebyidwithEmployee: string =
-  environment.baseUrl + "/api/approvalRule/approvalrulebyidwithEmployee?approvalRuleId=";
+    environment.baseUrl + "/api/approvalRule/approvalrulebyidwithEmployee?approvalRuleId=";
   private readonly _getApprovalById: string =
-  environment.baseUrl + "/api/approvalRule/approvalrulebyid?approvalRuleId=";
-    private readonly _getApprovalRuleHistorycommon?: string =
-    environment.baseUrl + "/api/approvalRule/getApprovalRuleHistorycommon?approvalRuleId=";  
+    environment.baseUrl + "/api/approvalRule/approvalrulebyid?approvalRuleId=";
+  private readonly _getApprovalRuleHistorycommon?: string =
+    environment.baseUrl + "/api/approvalRule/getApprovalRuleHistorycommon?approvalRuleId=";
   private readonly _deleteApprovalById: string =
-  environment.baseUrl + "/api/approvalRule/deleteapprovalrule";
-    private readonly _restoreApprovalById: string =
+    environment.baseUrl + "/api/approvalRule/deleteapprovalrule";
+  private readonly _restoreApprovalById: string =
     environment.baseUrl + "/api/approvalRule/restoreApprovalRule";
   private readonly excelUpload: string =
-  environment.baseUrl + "/api/Provision/uploadProvisionCustomdata";
+    environment.baseUrl + "/api/Provision/uploadProvisionCustomdata";
 
   getAllPOApprovalData<T>(): Observable<T> {
     return this.http.get<T>(this._getPoDataUrl, this.getRequestHeaders());
   }
 
-  getAllApprovalDataByTaskId<T>(taskID,isDeleted,currentStatus): Observable<T> {   
+  getAllApprovalDataByTaskId<T>(taskID, isDeleted, currentStatus, masterCompanyId = 1): Observable<T> {
     return this.http
       .get<T>(
-        `${this._approvalrulelistbyTaskURL}?taskID=${taskID}&currentStatus=${currentStatus}&isDeleted=${isDeleted}`,
+        `${this._approvalrulelistbyTaskURL}?taskID=${taskID}&masterCompanyId=${masterCompanyId}&currentStatus=${currentStatus}&isDeleted=${isDeleted}`,
         this.getRequestHeaders()
       )
       .catch((error) => {
         return this.handleErrorCommon(error, () =>
-          this.getAllApprovalDataByTaskId(taskID,isDeleted,currentStatus)
+          this.getAllApprovalDataByTaskId(taskID, isDeleted, currentStatus, masterCompanyId)
         );
       });
   }
 
-  
-  updateActionforActive<T>(ruleId,status,user): Observable<T> {
+
+  updateActionforActive<T>(ruleId, status, user): Observable<T> {
     return this.http
       .get<T>(
         `${this._approvalrulestatusUrl}?approvalRuleId=${ruleId}&status=${status}&updatedBy=${user}`,
@@ -54,10 +54,10 @@ export class POApprovalService extends EndpointFactory {
       )
       .catch((error) => {
         return this.handleErrorCommon(error, () =>
-          this.updateActionforActive<T>(ruleId,status,user)
+          this.updateActionforActive<T>(ruleId, status, user)
         );
       });
-  }  
+  }
 
   createOrUpdatePOApproval(data) {
     return this.http.post(
@@ -107,7 +107,7 @@ export class POApprovalService extends EndpointFactory {
       });
   }
 
-  
+
 
   getApprovalById<T>(id): Observable<T> {
     return this.http.get<T>(
@@ -116,24 +116,24 @@ export class POApprovalService extends EndpointFactory {
     );
   }
 
-  restoreApprovalById(id,name) {
+  restoreApprovalById(id, name) {
     return this.http.get(
       `${this._restoreApprovalById}?approvalRuleId=${id}&updatedBy=${name}`,
       this.getRequestHeaders()
     ).catch((error) => {
       return this.handleErrorCommon(error, () =>
-        this.restoreApprovalById(id,name)
+        this.restoreApprovalById(id, name)
       );
     });
   }
 
-  deleteApprovalById(id,name) {
+  deleteApprovalById(id, name) {
     return this.http.get(
       `${this._deleteApprovalById}?approvalRuleId=${id}&updatedBy=${name}`,
       this.getRequestHeaders()
     ).catch((error) => {
       return this.handleErrorCommon(error, () =>
-        this.deleteApprovalById(id,name)
+        this.deleteApprovalById(id, name)
       );
     });
   }

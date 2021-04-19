@@ -1,17 +1,8 @@
 ﻿<div [@fadeInOut] class="page-content">
-
     <div class="right_col" role="main">
         <div class="x_panel">
             <div class="x_content">
-                <!-- <div style="text-align:center">
-                    <h4 class="page-heading clr-green">Management Structure data</h4>
-                    <a (click)="open(contentEdit)"  matTooltipPosition="above" matTooltip="Add Root Entity" class="btn btn-success nobg"><span><i class="fa fa-plus"></i></span></a>
-                </div> -->
-                <!--<p-toast [style]="{marginTop: '80px'}"></p-toast>-->
-               
                 <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
-
-
                 <div class="card-header header">
                     <div class="row">
                         <div class="col">
@@ -25,37 +16,40 @@
                             </button>
                         </div>
                     </div>
-                </div>  
-                <hr /> 
-                <div style="margin-bottom: -20px">
-                    <button class="btn btn-primary" (click)="exapandORcollapse(gridData)" (click)="toggle_ms_header=!toggle_ms_header" style="margin-left: 20px;">
-                        {{toggle_ms_header ? 'Expand All' : 'Collapse All'}}
-                    </button> 
                 </div>
-             
-                        <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                            <label style="width: auto !important;margin-top: 3px;">
-                                <!--  -->
-                                <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
-                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                Show  Deleted List
-                            </label>
-                            <!-- <button (click)="expandAll($event)">Expand All</button> -->
-                        </div> 
-                    
-                <p-treeTable class="rpo-table-cstm rro-table-cstm" [value]="gridData" [columns]="cols1" [metaKeySelection]="true" selectionMode="multiple" [(selection)]="selectedNode">
+                <hr />
+                <div style="margin-bottom: -20px">
+                    <button class="btn btn-primary" (click)="exapandORcollapse(gridData)"
+                        (click)="toggle_ms_header=!toggle_ms_header" style="margin-left: 20px;">
+                        {{toggle_ms_header ? 'Expand All' : 'Collapse All'}}
+                    </button>
+                </div>
+
+                <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
+                    <label style="width: auto !important;margin-top: 3px;">                      
+                        <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
+                            (click)="getDeleteListByStatus($event.target.checked)" />
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Show Deleted List
+                    </label>
+                    <!-- <button (click)="expandAll($event)">Expand All</button> -->
+                </div>
+
+                <p-treeTable class="rpo-table-cstm rro-table-cstm" [value]="gridData" [columns]="cols1"
+                    [metaKeySelection]="true" selectionMode="multiple" [(selection)]="selectedNode">
 
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th class="table-column-width" *ngFor="let col of columns"  [ngStyle]= "{'width': col.field == 'code'  ? '180px' : ''  }">
+                            <th class="table-column-width" *ngFor="let col of columns"
+                                [ngStyle]="{'width': col.field == 'code'  ? '180px' : ''  }">
                                 {{col.header}}
                             </th>
-                            <th class="table-actions-column" >Actions</th>
+                            <th class="table-actions-column">Actions</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
 
-                        <tr *ngIf="!rowData.isDeleted" [ttSelectableRow]="rowNode">                           
+                        <tr *ngIf="!rowData.isDeleted" [ttSelectableRow]="rowNode">
                             <td class="table-column-width" *ngFor="let col of columns; let i = index">
 
                                 <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
@@ -78,11 +72,9 @@
                                        matTooltipPosition="above"><i  *ngIf="isEdit" class="fa fa-pencil"></i></a>
                                 </span>
                                 <span data-toggle="modal" data-target="#view">
-                                    <a class="btn viewBtn boxed-float-btn nobg"
-                                       data-toggle="tooltip" title=""
-                                       data-original-title="View" matTooltip="View"
-                                       matTooltipPosition="above"
-                                       (click)="showViewData(contentView,rowData)">
+                                    <a class="btn viewBtn boxed-float-btn nobg" data-toggle="tooltip" title=""
+                                        data-original-title="View" matTooltip="View" matTooltipPosition="above"
+                                        (click)="showViewData(contentView,rowData)">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </span>
@@ -98,8 +90,8 @@
 
 
                                 <span>
-                                    <a class="btn viewBtn nobg" data-target="#poHistory"
-                                       matTooltip="History" (click)="getAuditHistoryById(rowData)" matTooltipPosition="above">
+                                    <a class="btn viewBtn nobg" data-target="#poHistory" matTooltip="History"
+                                        (click)="getAuditHistoryById(rowData)" matTooltipPosition="above">
                                         <i class="fa fa-history"></i>
                                     </a>
                                 </span>
@@ -114,24 +106,22 @@
                             </td>
                         </tr>
                         <tr *ngIf="rowData.isDeleted && currentDeletedstatus" [ttSelectableRow]="rowNode">
-                            
-                             <td class="table-column-width" *ngFor="let col of columns; let i = index">
- 
-                                 <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-                                 {{ col.field == 'createdDate' || col.field == 'updatedDate'  ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a') : rowData[col.field]}}
-                                 <!-- {{ col.field}} {{
+
+                            <td class="table-column-width" *ngFor="let col of columns; let i = index">
+
+                                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                                {{ col.field == 'createdDate' || col.field == 'updatedDate'  ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a') : rowData[col.field]}}
+                                <!-- {{ col.field}} {{
                                      rowData[col.field]
                                      col.field == 'createdDate' || col.field == 'updatedDate' ?
                                        (rowData[col.field] | date: 'MM/dd/yyyy') : rowData[col.field])
                                      }} -->
-                             </td>
- 
-                             <td class="action-icons-cstm table-column-width">                                
-                                 <span data-toggle="modal" data-target="#view">
-                                     <a class="btn viewBtn boxed-float-btn nobg"
-                                        data-toggle="tooltip" title=""
-                                        data-original-title="View" matTooltip="View"
-                                        matTooltipPosition="above"
+                            </td>
+
+                            <td class="action-icons-cstm table-column-width">
+                                <span data-toggle="modal" data-target="#view">
+                                    <a class="btn viewBtn boxed-float-btn nobg" data-toggle="tooltip" title=""
+                                        data-original-title="View" matTooltip="View" matTooltipPosition="above"
                                         (click)="showViewData(contentView,rowData)">
                                          <i class="fa fa-eye"></i>
                                      </a>
@@ -149,18 +139,18 @@
                                        matTooltip="Restore" matTooltipPosition="above">
                                         <i class="fa fa-undo"></i>
                                     </a>
-                                </span>  
- 
- 
- 
- 
-                                 <!-- <button class="btn-history" mat-icon-button matTooltip="history"
+                                </span>
+
+
+
+
+                                <!-- <button class="btn-history" mat-icon-button matTooltip="history"
                                   matTooltipPosition="above">
                                      <mat-icon color="green">history</mat-icon>
                                  </button> -->
-                             </td>
-                         </tr>
-                            
+                            </td>
+                        </tr>
+
 
                     </ng-template>
                 </p-treeTable>
@@ -178,40 +168,64 @@
                             <div class="modal-body" *ngIf="auditHistory">
                                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                     <div class="tableFixHead">
-                                        <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
-                                        <thead>
-                                            <tr>
-                                                <th>Code <span class="clr-red">*</span></th>
-                                                <th>Name <span class="clr-red">*</span></th>
-                                                <th>Description</th>
-                                                <th>IsActive</th>
-                                                <th>Created Date</th>
-                                                <th>Created By</th>
-                                                <th>Updated Date</th>
-                                                <th>Updated By</th>
-                                                <th>Is Deleted</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="audithistory-cstm">
-                                            <!--*ngIf="auditHistory.length> 0"-->
-                                            <tr *ngFor="let audit of auditHistory; let i = index;">
-                                                <!-- auditHistory[i>0 ? i-1 : i] -->
-                                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'code', audit.code)  ? 'black' : 'red'  }">{{audit.code}}</td>
-                                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">{{audit.name}}</td>
-                                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">{{audit.description}}</td>
-                                                <td><p style="background-color: #fff !important;"> <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled></p></td>
-                                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">{{audit.createdBy}}</td>
-                                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">{{audit.updatedBy}}</td>
-                                                <td><p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <table class="table table-bordered header-table-width"
+                                            *ngIf="auditHistory.length> 0 else noDatavailable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Code <span class="clr-red">*</span></th>
+                                                    <th>Name <span class="clr-red">*</span></th>
+                                                    <th>Description</th>
+                                                    <th>IsActive</th>
+                                                    <th>Created Date</th>
+                                                    <th>Created By</th>
+                                                    <th>Updated Date</th>
+                                                    <th>Updated By</th>
+                                                    <th>Is Deleted</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="audithistory-cstm">
+                                                <!--*ngIf="auditHistory.length> 0"-->
+                                                <tr *ngFor="let audit of auditHistory; let i = index;">
+                                                    <!-- auditHistory[i>0 ? i-1 : i] -->
+                                                    <td
+                                                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'code', audit.code)  ? 'black' : 'red'  }">
+                                                        {{audit.code}}</td>
+                                                    <td
+                                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
+                                                        {{audit.name}}</td>
+                                                    <td
+                                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+                                                        {{audit.description}}</td>
+                                                    <td>
+                                                        <p style="background-color: #fff !important;"> <input
+                                                                type="checkbox" name="isActive"
+                                                                [(ngModel)]=" audit.isActive" disabled></p>
+                                                    </td>
+                                                    <td
+                                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                                        {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                                    <td
+                                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                                        {{audit.createdBy}}</td>
+                                                    <td
+                                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                                        {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                                    <td
+                                                        [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                                        {{audit.updatedBy}}</td>
+                                                    <td>
+                                                        <p style="background-color: #fff !important;"> <input
+                                                                type="checkbox" name="isDeleted"
+                                                                [(ngModel)]="audit.isDeleted" disabled></p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <ng-template #noDatavailable>
                                         <div class="text-center">
-                                            <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+                                            <img src="../../../../assets/images/binoculars.png"
+                                                class="no-history-found-image">
                                             <h4 class="no-history-found-msg">No History Found </h4>
                                         </div>
                                     </ng-template>
@@ -221,13 +235,21 @@
                                 <div class="loading">
                                     <div class="lds-roller">
                                         <div>
-                                        </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                                        </div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
                                     </div>
                                 </div>
                             </div>
                             <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+                                <button type="button" class="btn btn-danger"
+                                    (click)="closeHistoryModal()">Close</button>
                             </div>
                         </div>
 
@@ -259,45 +281,65 @@
                 <form #addMSForm="ngForm" method="post" id="" name="" class="form-horizontal add-custustomer">
                     <div class="col-sm-12 managemet-data-block-bg">
                         <div class="col-sm-8">
-                            <div  class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Legal Entity : <span _ngcontent-c22="" class="clr-red">*</span></label>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4 text-left">Legal Entity : <span _ngcontent-c22=""
+                                        class="clr-red">*</span></label>
                                 <div class="col-sm-8">
                                     <div class="inner-addon right-addon inline-block">
-
-                                        <select  class="form-control" [ngModelOptions]="{standalone: true}" (ngModelChange)="msAddChange()" [(ngModel)]="sourceLegalEntity.legalEntityId" required>
+                                        <select class="form-control" [disabled]="disableonchild"
+                                            [ngModelOptions]="{standalone: true}" (ngModelChange)="msAddChange()"
+                                            [(ngModel)]="sourceLegalEntity.legalEntityId" required>
                                             <option value="0"> Select</option>
-                                            <option *ngFor="let legalDP of dropDownLegalEntityList" [ngValue]="legalDP.value">  {{legalDP.label}}</option>
+                                            <option *ngFor="let legalDP of dropDownLegalEntityList"
+                                                [ngValue]="legalDP.value"> {{legalDP.label}}</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Code : <span _ngcontent-c22="" class="clr-red">*</span></label>
+                                <label class="control-label col-sm-4 text-left">Code : <span _ngcontent-c22=""
+                                        class="clr-red">*</span></label>
                                 <div class="col-sm-8">
-                                    <div class="inner-addon right-addon inline-block"> <input type="text" (ngModelChange)="msAddChange()" class="form-control names" id="label" name="label" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.code" required> </div>
+                                    <div class="inner-addon right-addon inline-block"> <input type="text"
+                                            (ngModelChange)="msAddChange()" class="form-control names" id="label"
+                                            name="label" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="sourceLegalEntity.code" required> </div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
-                                <label class="control-label col-sm-4 text-left">Name : <span _ngcontent-c22="" class="clr-red">*</span></label>
+                                <label class="control-label col-sm-4 text-left">Name : <span _ngcontent-c22=""
+                                        class="clr-red">*</span></label>
                                 <div class="col-sm-8">
-                                    <div class="inner-addon right-addon inline-block"> <input type="text" (ngModelChange)="msAddChange()" class="form-control names" id="alias" name="alias" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.name" required> </div>
+                                    <div class="inner-addon right-addon inline-block"> <input type="text"
+                                            (ngModelChange)="msAddChange()" class="form-control names" id="alias"
+                                            name="alias" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="sourceLegalEntity.name" required> </div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <label class="control-label col-sm-4 text-left">Description :</label>
                                 <div class="col-sm-8">
-                                    <div class="inner-addon right-addon inline-block"> <input type="text" (ngModelChange)="msAddChange()" class="form-control names" id="alias" name="alias" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.description"> </div>
+                                    <div class="inner-addon right-addon inline-block"> <input type="text"
+                                            (ngModelChange)="msAddChange()" class="form-control names" id="alias"
+                                            name="alias" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="sourceLegalEntity.description"> </div>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12 leaf-block" *ngIf="sourceLegalEntity.isLastChild">
-                                <div class="col-sm-12 text-left"> <label class="text-left" style="width:auto"> <input type="checkbox" class="assign-entity" id="" name="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.isAssignable"> Assign Legal Entity</label> </div>
+                                <div class="col-sm-12 text-left"> <label class="text-left" style="width:auto"> <input
+                                            type="checkbox" class="assign-entity" id="" name=""
+                                            [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="sourceLegalEntity.isAssignable"> Assign Legal Entity</label>
+                                </div>
                             </div>
                             <div class="form-group col-sm-12 entity-block" *ngIf="sourceLegalEntity.isAssignable">
                                 <label class="control-label col-sm-6 text-left">Select Legal Entity</label>
                                 <div class="col-sm-7">
                                     <div class="inner-addon right-addon inline-block">
-                                        <select [ngModelOptions]="{standalone: true}" (change)="msAddChange()" [(ngModel)]="sourceLegalEntity.legalEntityId">
-                                            <option *ngFor="let CustomerType of allATAMaininfo" [ngValue]="CustomerType.legalEntityId">{{CustomerType.name}}</option>
+                                        <select [ngModelOptions]="{standalone: true}" (change)="msAddChange()"
+                                            [(ngModel)]="sourceLegalEntity.legalEntityId">
+                                            <option *ngFor="let CustomerType of allATAMaininfo"
+                                                [ngValue]="CustomerType.legalEntityId">{{CustomerType.name}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -306,14 +348,13 @@
                         </div>
                     </div>
                     <div class="form-group col-sm-12">
-                        <button type="button" class="btn btn-danger pull-right"
-                                (click)="dismissModel()">
+                        <button type="button" class="btn btn-danger pull-right" (click)="dismissModel()">
                             Cancel
                         </button>
 
-                        <button type="submit" [disabled]="!(addMSForm.valid && msAddbutton)" class="btn btn-primary pull-right submit-btn"
-                                (click)="editItemAndCloseModel()">
-                                {{sourceLegalEntity.managementStructureId ? 'Update' : 'Save'}}
+                        <button type="submit" [disabled]="!(addMSForm.valid && msAddbutton)"
+                            class="btn btn-primary pull-right submit-btn" (click)="editItemAndCloseModel()">
+                            {{sourceLegalEntity.managementStructureId ? 'Update' : 'Save'}}
                         </button>
 
 
@@ -330,6 +371,23 @@
         </div>
 
     </div>
+    <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+
 
 
 </ng-template>
@@ -342,13 +400,30 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">Code :  {{sourceAction.code}}</h6>
+        <h6 class="modal-body">Code : {{sourceAction.code}}</h6>
     </div>
 
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
+    <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+
 </ng-template>
 
 <ng-template #contentRestore let-c="close" let-d="dismiss">
@@ -359,7 +434,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <h6 class="modal-body">Code :  {{sourceAction.code}}</h6>
+        <h6 class="modal-body">Code : {{sourceAction.code}}</h6>
     </div>
 
     <div class="modal-footer">
@@ -368,9 +443,8 @@
     </div>
 </ng-template>
 
-<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
-          [width]="350" [minWidth]="200" [responsive]="true"
-          [minY]="1050" [baseZIndex]="1100000">
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px"
+    maximizedTop="140px" [width]="350" [minWidth]="200" [responsive]="true" [minY]="1050" [baseZIndex]="1100000">
 
     <h5 [ngStyle]="{'color':'red'}">
         There is No data
@@ -391,29 +465,34 @@
                 <div class="col-sm-12 managemet-data-block-bg">
                     <div class="col-sm-12">
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">LegalEntity : <span _ngcontent-c22="" class="clr-red"> *</span></label>
+                            <label class="control-label col-sm-4 text-left">LegalEntity : <span _ngcontent-c22=""
+                                    class="clr-red"> *</span></label>
                             <div class="col-sm-8">
-                                <div class="inner-addon right-addon inline-block">  {{managementViewData.legalEntityName}} </div>
+                                <div class="inner-addon right-addon inline-block">
+                                    {{managementViewData.legalEntityName}} </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Code : <span _ngcontent-c22="" class="clr-red">*</span></label>
+                            <label class="control-label col-sm-4 text-left">Code : <span _ngcontent-c22=""
+                                    class="clr-red">*</span></label>
                             <div class="col-sm-8">
-                                <div class="inner-addon right-addon inline-block">  {{managementViewData.code}} </div>
+                                <div class="inner-addon right-addon inline-block"> {{managementViewData.code}} </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Name : <span _ngcontent-c22="" class="clr-red">*</span></label>
+                            <label class="control-label col-sm-4 text-left">Name : <span _ngcontent-c22=""
+                                    class="clr-red">*</span></label>
                             <div class="col-sm-8">
                                 <div class="inner-addon right-addon inline-block"> {{managementViewData.name}} </div>
                             </div>
                         </div>
 
                         <div class="form-group col-sm-12">
-                            <label class="control-label col-sm-4 text-left">Description :  </label>
+                            <label class="control-label col-sm-4 text-left">Description : </label>
                             <div class="col-sm-8">
-                                <div class="inner-addon right-addon inline-block"> {{managementViewData.description}} </div>
+                                <div class="inner-addon right-addon inline-block"> {{managementViewData.description}}
+                                </div>
                             </div>
                         </div>
 
@@ -426,7 +505,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" id="" name=""
-                    (click)="dismissModel()">
+                (click)="dismissModel()">
                 Close
             </button>
         </div>
@@ -436,3 +515,23 @@
         <!-- </div> -->
     </div>
 </ng-template>
+
+<div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+</div>

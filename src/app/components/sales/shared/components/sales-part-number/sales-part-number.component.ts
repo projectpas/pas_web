@@ -231,7 +231,7 @@ export class SalesPartNumberComponent {
       { field: 'quantityToBeQuoted', header: 'Qty To Quote', width: "84px" },
       { field: 'quantityAlreadyQuoted', header: 'Qty Prev Qted', width: "84px" },
       { field: 'quantityAvailable', header: 'Qty Avail', width: "75px" },
-      { field: 'quantityOnHand', header: 'Qty on Hand', width: "75px" },
+      { field: 'qtyOnHand', header: 'Qty on Hand', width: "75px" },
       { field: 'currencyDescription', header: 'Curr', width: "80px" },
       { field: 'fixRate', header: 'FX Rate', width: "80px" },
       { field: 'uom', header: 'UOM', width: "58px" },
@@ -350,7 +350,7 @@ export class SalesPartNumberComponent {
           this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.serialNumber = this.selectedPart.serialNumber;
           this.part.qtyAvailable = this.selectedPart.qtyAvailable;
-          this.part.qtyOnHand = this.selectedPart.qtyOnHand;
+          this.part.quantityOnHand = this.selectedPart.quantityOnHand;
           // if (this.selectedPart.itemClassification) {
           //   this.part.masterCompanyId = this.selectedPart.itemClassification.masterCompanyId;
           // } else {
@@ -781,6 +781,8 @@ export class SalesPartNumberComponent {
     parts.forEach(part => {
       uniquePart.quantityToBeQuoted = this.getSum(uniquePart.quantityToBeQuoted, part.quantityFromThis);
       uniquePart.quantityAlreadyQuoted = uniquePart.quantityToBeQuoted;
+      uniquePart.qtyAvailable = this.getSum(uniquePart.qtyAvailable, part.qtyAvailable);
+      uniquePart.qtyOnHand = this.getSum(uniquePart.qtyOnHand ? uniquePart.qtyOnHand : 0, part.quantityOnHand);
       uniquePart.grossSalePrice = this.getSum(uniquePart.grossSalePrice, part.grossSalePrice);
       uniquePart.salesDiscountExtended = this.getSum(uniquePart.salesDiscountExtended, part.salesDiscountExtended);
       uniquePart.netSalesPriceExtended = this.getSum(uniquePart.netSalesPriceExtended, part.netSalesPriceExtended);
@@ -812,7 +814,7 @@ export class SalesPartNumberComponent {
     uniquePart.marginPercentageExtended = (uniquePart.marginPercentageExtended) / parts.length;
     uniquePart.itemNo = parts[0].itemNo;
     uniquePart.quantityAvailable = parts[0].qtyAvailable;
-    uniquePart.quantityOnHand = parts[0].qtyOnHand;
+    uniquePart.quantityOnHand = parts[0].quantityOnHand;
     this.countItemNo = parts[0].itemNo;
     return uniquePart;
   }

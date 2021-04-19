@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from "@angular/core";
 import {
   NgForm,
   FormBuilder,
@@ -242,6 +242,9 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.deleteApproversWhileCopieng = true;
         }
         this.getSalesQuoteInstance(params['copyref']);
+        setTimeout(() => {
+          this.toggle_po_header = true;
+        }, 1600);
       }
     });
     this.isSpinnerVisible = false;
@@ -340,11 +343,11 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
       this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name'),
-      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join()),
-      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
-      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join()),
+      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join(),this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join(),this.masterCompanyId),
+      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join(),this.masterCompanyId),
 
-      this.salesQuoteService.getAllSalesOrderQuoteSettings()).subscribe(result => {
+      this.salesQuoteService.getAllSalesOrderQuoteSettings(this.masterCompanyId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
         this.customerDetails = result[0];
@@ -614,7 +617,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       let accountTypeId = result.customerTypeId ? result.customerTypeId : 0;
 
       this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '',
-        true, 100, [accountTypeId].join()).subscribe(accountTypes => {
+        true, 100, [accountTypeId].join(),this.masterCompanyId).subscribe(accountTypes => {
           this.accountTypes = accountTypes;
         })
     }
@@ -624,7 +627,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEdit ? editMSID = id : 0;
     this.isSpinnerVisible = true;
-    this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+    this.commonService.getManagmentStrctureData(id, empployid, editMSID,this.masterCompanyId).subscribe(response => {
       this.isSpinnerVisible = false;
       if (response) {
         const result = response;
@@ -718,7 +721,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     //   currentEmployeeId = this.employeeId;
     // }
     this.isSpinnerVisible = true;
-    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
+    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID,this.masterCompanyId).subscribe(res => {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
@@ -1100,10 +1103,10 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.errorMessages.push("Please select Open Date");
       haveError = true;
     }
-    if (this.salesQuote.validForDays < 1) {
-      this.errorMessages.push("Please enter Valid For (Days)");
-      haveError = true;
-    }
+    // if (this.salesQuote.validForDays < 1) {
+    //   this.errorMessages.push("Please enter Valid For (Days)");
+    //   haveError = true;
+    // }
     if (!this.salesQuote.quoteExpiryDate) {
       this.errorMessages.push("Please select Quote Expiry Date");
       haveError = true;

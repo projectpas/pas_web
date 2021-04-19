@@ -10,11 +10,16 @@ import { IExchangeQuoteSearchParameters } from "../models/exchange/IExchangeQuot
 import { environment } from 'src/environments/environment';
 import { IExchangeQuoteView } from "../models/exchange/IExchangeQuoteView";
 import { IExchangeOrderQuote } from "../models/exchange/IExchangeOrderQuote";
+import{ExchangeQUoteMarginSummary} from '../models/exchange/ExchangeQUoteMarginSummary';
 @Injectable()
 export class ExchangeQuoteEndpointService extends EndpointFactory {
     private readonly getNewExchangeQuoteInstanceUrl: string = environment.baseUrl + "/api/exchangequote/new";
     private readonly exchangequote: string = environment.baseUrl + "/api/exchangequote";
     private readonly searchExchangeQuote: string = environment.baseUrl + "/api/exchangequote/exchangequotesearch";
+    private readonly getExchangeQuoteDetails: string = environment.baseUrl + "/api/exchangequote/get";
+    private readonly getExchngeQuoteeSetting: string = environment.baseUrl + "/api/exchangequote/getExchangeQuoteSettinglist";
+    private readonly getExchangeQuoteMarginSummarydetails: string = environment.baseUrl + "/api/exchangequote/get-exchange-quote-margin-data";
+    private readonly exchangeQuoteqMarginSummary: string = environment.baseUrl + "/api/exchangequote/create-exchange-quote-margin-data";
     constructor(
       http: HttpClient,
       configurations: ConfigurationService,
@@ -53,6 +58,60 @@ export class ExchangeQuoteEndpointService extends EndpointFactory {
       return this.http.post(this.searchExchangeQuote, params, this.getRequestHeaders())
         .catch(error => {
           return this.handleErrorCommon(error, () => this.search(exchangeQuoteSearchParameters));
+        });
+    }
+
+    getExchangeQuote(exchangeQuoteId: number): Observable<any> {
+      const URL = `${this.getExchangeQuoteDetails}/${exchangeQuoteId}`;
+      return this.http
+        .get<IExchangeQuote>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuote(exchangeQuoteId));
+        });
+    }
+
+    getAllExchangeQuoteSettings<T>(): Observable<T> {
+      let endPointUrl = this.getExchngeQuoteeSetting;
+      return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getAllExchangeQuoteSettings());
+        });
+    }
+
+    update(exchangeQuote: IExchangeQuoteView): Observable<IExchangeQuote> {
+      let url: string = `${this.exchangequote}/${exchangeQuote.exchangeOrderQuote.exchangeQuoteId}`;
+      return this.http
+        .put(url, JSON.stringify(exchangeQuote), this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.create(exchangeQuote));
+        });
+    }
+
+    approverslistbyTaskId(taskId, id) {
+      return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+        });
+    }
+
+    getExchangeQuoteMarginSummary(exchangeQuoteId: number): Observable<ExchangeQUoteMarginSummary> {
+      const URL = `${this.getExchangeQuoteMarginSummarydetails}/${exchangeQuoteId}`;
+      return this.http
+        .get<ExchangeQUoteMarginSummary>(URL, this.getRequestHeaders())
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.getExchangeQuoteMarginSummary(exchangeQuoteId));
+        });
+    }
+
+    createExchangeQuoteMarginSummary(marginSummary: ExchangeQUoteMarginSummary) {
+      return this.http
+        .post(
+          this.exchangeQuoteqMarginSummary,
+          JSON.stringify(marginSummary),
+          this.getRequestHeaders()
+        )
+        .catch(error => {
+          return this.handleErrorCommon(error, () => this.createExchangeQuoteMarginSummary(marginSummary));
         });
     }
 }  

@@ -5,14 +5,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 exports.ManagementStructureComponent = void 0;
 var core_1 = require("@angular/core");
 var animations_1 = require("../../../../services/animations");
-var $ = require("jquery");
 var alert_service_1 = require("../../../../services/alert.service");
 var material_1 = require("@angular/material");
 var currency_model_1 = require("../../../../models/currency.model");
+var ModuleConstant_1 = require("src/app/generic/ModuleConstant");
 //import { TreeTableModule } from 'primeng/treetable';
 var ManagementStructureComponent = /** @class */ (function () {
     function ManagementStructureComponent(messageService, authService, _fb, alertService, currency, msService, modalService, activeModal, dialog, masterComapnyService, commonService) {
@@ -37,11 +44,14 @@ var ManagementStructureComponent = /** @class */ (function () {
         this.childCollection = [];
         this.isSpinnerVisible = true;
         this.currentDeletedstatus = false;
+        this.rowDataToDelete = {};
         this.sourceLegalEntity = {};
         this.msAddbutton = false;
         this.allComapnies = [];
         this.allATAMaininfo = [];
         this.isEditMode = false;
+        this.toggle = true;
+        this.toggle_ms_header = true;
         this.sourceAction = [];
         this.GeneralInformationValue = true;
         this.LockboxValue = false;
@@ -52,18 +62,24 @@ var ManagementStructureComponent = /** @class */ (function () {
         this.domesticWireStyle = false;
         this.internationalStyle = false;
         this.managementViewData = {};
+        this.isAdd = true;
+        this.isEdit = true;
+        this.isDelete = true;
         this.allWorkFlows = [];
+        this.disableonchild = false;
         this.dataSource = new material_1.MatTableDataSource();
+        this.isAdd = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.ManagementStructure + "." + ModuleConstant_1.PermissionConstants.Add]);
+        this.isEdit = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.ManagementStructure + "." + ModuleConstant_1.PermissionConstants.Update]);
+        this.isDelete = this.authService.checkPermission([ModuleConstant_1.ModuleConstants.ManagementStructure + "." + ModuleConstant_1.PermissionConstants.Delete]);
     }
     ManagementStructureComponent.prototype.ngOnInit = function () {
-        //this.CurrencyData();
-        //this.loadData();
         this.loadManagementdata();
         this.getAllLegalEntityList();
         this.breadcrumbs = [
-            { label: 'Organization' },
-            { label: 'Management Structure' },
+            { label: "Organization" },
+            { label: "Management Structure" },
         ];
+        this.isSpinnerVisible = false;
     };
     ManagementStructureComponent.prototype.ngAfterViewInit = function () {
         this.dataSource.paginator = this.paginator;
@@ -81,23 +97,20 @@ var ManagementStructureComponent = /** @class */ (function () {
         var _this = this;
         this.isSpinnerVisible = true;
         $("#poHistory").modal("show");
-        this.msService.getMSHistoryDataById(rowData.managementStructureId).subscribe(function (res) {
+        this.msService
+            .getMSHistoryDataById(rowData.managementStructureId)
+            .subscribe(function (res) {
             _this.auditHistory = res;
             _this.isSpinnerVisible = false;
         }, function (err) {
             _this.isSpinnerVisible = false;
-            var errorLog = err;
-            _this.errorMessageHandler(errorLog);
         });
-    };
-    ManagementStructureComponent.prototype.errorMessageHandler = function (log) {
-        this.alertService.showMessage('Error', log.error, alert_service_1.MessageSeverity.error);
     };
     ManagementStructureComponent.prototype.getColorCodeForHistory = function (i, field, value) {
         var data = this.auditHistory;
         var dataLength = data.length;
         if (i >= 0 && i <= dataLength) {
-            if ((i + 1) === dataLength) {
+            if (i + 1 === dataLength) {
                 return true;
             }
             else {
@@ -108,35 +121,49 @@ var ManagementStructureComponent = /** @class */ (function () {
     ManagementStructureComponent.prototype.loadMasterCompanies = function () {
         var _this = this;
         this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.masterComapnyService.getMasterCompanies().subscribe(function (results) { return _this.onDataMasterCompaniesLoadSuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.isSpinnerVisible = true;
+        this.masterComapnyService.getMasterCompanies().subscribe(function (results) { return _this.onDataMasterCompaniesLoadSuccessful(results[0]); }, function (error) {
+            _this.isSpinnerVisible = false;
+        });
     };
     ManagementStructureComponent.prototype.expandAll = function (toggle) {
         this.gridData.map(function (node) {
             node.expanded = toggle;
         });
     };
+    ManagementStructureComponent.prototype.exapandORcollapse = function (nodes) {
+        for (var _i = 0, nodes_1 = nodes; _i < nodes_1.length; _i++) {
+            var node = nodes_1[_i];
+            this.expandNode(node);
+        }
+        this.gridData = __spreadArrays(nodes);
+    };
+    ManagementStructureComponent.prototype.expandNode = function (node) {
+        node.expanded = !node.expanded;
+        if (node.children) {
+            for (var _i = 0, _a = node.children; _i < _a.length; _i++) {
+                var cn = _a[_i];
+                this.expandNode(cn);
+            }
+        }
+    };
     ManagementStructureComponent.prototype.loadManagementdata = function () {
         var _this = this;
+        this.isSpinnerVisible = true;
         this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.msService.getManagemententity().subscribe(function (results) { return _this.onManagemtntdataLoad(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
-        // this.cols = [
-        // 	//{ field: 'ataMainId', header: 'ATAMain Id' },
-        // 	{ field: 'code', header: 'Code' },
-        // 	{ field: 'description', header: 'Description' },
-        // 	//{ field: 'cageCode', header: 'CageCode' },
-        // 	//{ field: 'doingLegalAs', header: 'DoingLegalAs' },
-        // 	{ field: 'createdBy', header: 'Created By' },
-        // 	{ field: 'updatedBy', header: 'Updated By' },
-        // 	{ field: 'updatedDate', header: 'Updated Date' },
-        // 	{ field: 'createdDate', header: 'createdDate' }
-        // ];
+        this.isSpinnerVisible = true;
+        this.msService
+            .getManagemententity(this.currentUserMasterCompanyId)
+            .subscribe(function (results) { return _this.onManagemtntdataLoad(results[0]); }, function (error) {
+            _this.isSpinnerVisible = false;
+        });
         this.selectedColumns = this.cols;
     };
     ManagementStructureComponent.prototype.getAllLegalEntityList = function () {
         var _this = this;
-        this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(function (res) {
+        this.commonService
+            .autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", "", true, 0, "0", this.currentUserMasterCompanyId)
+            .subscribe(function (res) {
             _this.dropDownLegalEntityList = res;
         });
     };
@@ -146,39 +173,47 @@ var ManagementStructureComponent = /** @class */ (function () {
     ManagementStructureComponent.prototype.loadData = function () {
         var _this = this;
         this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.msService.getEntityList().subscribe(function (results) { return _this.onDataLoadSuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
+        this.isSpinnerVisible = true;
+        this.msService.getEntityList().subscribe(function (results) { return _this.onDataLoadSuccessful(results[0]); }, function (error) {
+            _this.isSpinnerVisible = false;
+        });
         this.cols = [
             //{ field: 'ataMainId', header: 'ATAMain Id' },
-            { field: 'name', header: 'Name' },
-            { field: 'description', header: 'Description' },
-            { field: 'cageCode', header: 'CageCode' },
-            { field: 'doingLegalAs', header: 'DoingLegalAs' },
-            { field: 'createdBy', header: 'Created By' },
-            { field: 'updatedBy', header: 'Updated By' },
-            { field: 'updatedDate', header: 'Updated Date' },
-            { field: 'createdDate', header: 'createdDate' }
+            { field: "name", header: "Name" },
+            { field: "description", header: "Description" },
+            { field: "cageCode", header: "CageCode" },
+            { field: "doingLegalAs", header: "DoingLegalAs" },
+            { field: "createdDate", header: "createdDate" },
+            { field: "createdBy", header: "Created By" },
+            { field: "updatedDate", header: "Updated Date" },
+            { field: "updatedBy", header: "Updated By" },
         ];
         this.selectedColumns = this.cols;
     };
     ManagementStructureComponent.prototype.onDataLoadSuccessful = function (getAtaMainList) {
-        // alert('success');
         this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        this.isSpinnerVisible = false;
         this.dataSource.data = getAtaMainList;
         this.allATAMaininfo = getAtaMainList;
-        //debugger;
     };
     ManagementStructureComponent.prototype.nodeSelect = function (event) {
-        this.messageService.add({ severity: 'info', summary: 'Node Selected', detail: event.node.data.name });
+        this.messageService.add({
+            severity: "info",
+            summary: "Node Selected",
+            detail: event.node.data.name
+        });
     };
     ManagementStructureComponent.prototype.nodeUnselect = function (event) {
-        this.messageService.add({ severity: 'info', summary: 'Node Unselected', detail: event.node.data.name });
+        this.messageService.add({
+            severity: "info",
+            summary: "Node Unselected",
+            detail: event.node.data.name
+        });
     };
     ManagementStructureComponent.prototype.onManagemtntdataLoad = function (getAtaMainList) {
-        // alert('success');
+        this.isSpinnerVisible = true;
         this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        this.isSpinnerVisible = false;
         this.dataSource.data = getAtaMainList;
         this.allManagemtninfo = getAtaMainList;
         for (var i = 0; i < this.allManagemtninfo.length; i++) {
@@ -186,32 +221,61 @@ var ManagementStructureComponent = /** @class */ (function () {
                 this.tagNameCollection.push(this.allManagemtninfo[i]);
             }
         }
-        //debugger;
         if (this.allManagemtninfo) {
             this.gridData = this.makeNestedObj(this.allManagemtninfo, null);
         }
         this.cols1 = [
-            { field: 'code', header: 'Code' },
-            { field: 'name', header: 'Name' },
-            { field: 'description', header: 'Description' },
-            { field: 'createdBy', header: 'Created By' },
-            { field: 'createdDate', header: 'createdDate' },
-            { field: 'updatedBy', header: 'Updated By' },
-            { field: 'updatedDate', header: 'Updated Date' }
-            //{ field: 'legalEntityId', header: 'ID' },
+            { field: "code", header: "Code" },
+            { field: "name", header: "Name" },
+            { field: "description", header: "Description" },
+            { field: "legalEntityName", header: "Legal Entity" },
+            { field: "createdDate", header: "Created Date" },
+            { field: "createdBy", header: "Created By" },
+            { field: "updatedDate", header: "Updated Date" },
+            { field: "updatedBy", header: "Updated By" },
         ];
+        this.isSpinnerVisible = false;
     };
     ManagementStructureComponent.prototype.openDelete = function (content, row) {
         this.isEditMode = false;
         this.isDeleteMode = true;
+        this.isRestoreMode = false;
         this.sourceAction = row;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
+    };
+    ManagementStructureComponent.prototype.openRestore = function (content, row) {
+        this.isEditMode = false;
+        this.isDeleteMode = false;
+        this.isRestoreMode = true;
+        this.sourceAction = row;
+        this.modal = this.modalService.open(content, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
     };
     ManagementStructureComponent.prototype.deleteItemAndCloseModel = function () {
         var _this = this;
         this.isSaving = true;
         this.sourceAction.updatedBy = this.userName;
-        this.msService["delete"](this.sourceAction.managementStructureId).subscribe(function (data) {
+        this.msService["delete"](this.sourceAction.managementStructureId)
+            .subscribe(function (data) {
+            _this.saveCompleted(_this.sourceLegalEntity);
+            _this.loadManagementdata();
+        });
+        this.modal.close();
+    };
+    ManagementStructureComponent.prototype.restoreItemAndCloseModel = function () {
+        var _this = this;
+        this.isSaving = true;
+        this.sourceAction.updatedBy = this.userName;
+        this.msService
+            .restore(this.sourceAction.managementStructureId)
+            .subscribe(function (data) {
             _this.saveCompleted(_this.sourceLegalEntity);
             _this.loadManagementdata();
         });
@@ -219,17 +283,22 @@ var ManagementStructureComponent = /** @class */ (function () {
     };
     ManagementStructureComponent.prototype.showViewData = function (viewContent, row) {
         this.managementViewData.legalEntityId = row.legalEntityId;
+        this.managementViewData.legalEntityName = row.legalEntityName;
         this.managementViewData.code = row.code;
         this.managementViewData.name = row.name;
         this.managementViewData.description = row.description;
-        this.modal = this.modalService.open(viewContent, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(viewContent, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
     };
     ManagementStructureComponent.prototype.makeNestedObj = function (arr, parent) {
         var out = [];
         for (var i in arr) {
             if (arr[i].parentId == parent) {
                 var children = this.makeNestedObj(arr, arr[i].managementStructureId);
-                arr[i] = { "data": arr[i] };
+                arr[i] = { data: arr[i] };
                 if (children.length) {
                     arr[i].children = children;
                 }
@@ -301,18 +370,42 @@ var ManagementStructureComponent = /** @class */ (function () {
     ManagementStructureComponent.prototype.showDomesticWire = function () {
         this.DomesticWire();
     };
-    ManagementStructureComponent.prototype.openContentEdit = function (content, row) {
+    ManagementStructureComponent.prototype.openContentEdit = function (content, row, rowNode) {
+        this.isSpinnerVisible = true;
         this.headerofMS = row.code;
         this.msAddbutton = false;
+        var findIndex = -1;
+        this.sourceLegalEntity = {};
+        this.sourceLegalEntity.legalEntityId = 0;
+        this.dropDownLegalEntityList.forEach(function (legEntity, index) {
+            if (legEntity.value == row.legalEntityId) {
+                findIndex = index;
+            }
+        });
+        if (findIndex == -1) {
+            var obj = {
+                label: row.legalEntityName,
+                value: row.legalEntityId
+            };
+            this.dropDownLegalEntityList.push(obj);
+        }
         this.sourceLegalEntity = row;
         if (row.isLastChild == true) {
             this.sourceLegalEntity.isAssignable = true;
         }
-        console.log(this.sourceLegalEntity);
-        this.modal1 = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        this.modal1.result.then(function () {
-            console.log('When user closes');
-        }, function () { console.log('Backdrop click'); });
+        this.isParent = rowNode.node.parent;
+        if (this.isParent) {
+            this.disableonchild = true;
+        }
+        else {
+            this.disableonchild = false;
+        }
+        this.modal1 = this.modalService.open(content, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
+        this.isSpinnerVisible = false;
     };
     ManagementStructureComponent.prototype.closeHistoryModal = function () {
         $("#poHistory").modal("hide");
@@ -322,43 +415,32 @@ var ManagementStructureComponent = /** @class */ (function () {
         this.sourceLegalEntity = {};
         this.isEditMode = false;
         this.isDeleteMode = false;
+        this.isRestoreMode = false;
         this.sourceLegalEntity.legalEntityId = 0;
         this.msAddbutton = false;
+        this.disableonchild = false;
         this.isSaving = true;
         this.loadMasterCompanies();
         //this.sourceLegalEntity = new ATAMain();
         this.sourceLegalEntity.isActive = true;
         this.entityName = "";
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
     };
     ManagementStructureComponent.prototype.onDataMasterCompaniesLoadSuccessful = function (allComapnies) {
-        // alert('success');
+        this.toggle_ms_header = false;
         this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        this.isSpinnerVisible = false;
         this.allComapnies = allComapnies;
-    };
-    ManagementStructureComponent.prototype.CurrencyData = function () {
-        var _this = this;
-        // 
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.currency.getCurrencyList().subscribe(function (results) { return _this.oncurrencySuccessful(results[0]); }, function (error) { return _this.onDataLoadFailed(error); });
-    };
-    ManagementStructureComponent.prototype.oncurrencySuccessful = function (getCreditTermsList) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        //this.dataSource.data = getCreditTermsList;
-        this.allCurrencyInfo = getCreditTermsList;
-    };
-    ManagementStructureComponent.prototype.onDataLoadFailed = function (error) {
-        // alert(error);
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
     };
     Object.defineProperty(ManagementStructureComponent.prototype, "userName", {
         get: function () {
-            return this.authService.currentUser ? this.authService.currentUser.userName : "";
+            return this.authService.currentUser
+                ? this.authService.currentUser.userName
+                : "";
         },
         enumerable: false,
         configurable: true
@@ -366,18 +448,40 @@ var ManagementStructureComponent = /** @class */ (function () {
     ManagementStructureComponent.prototype.openCurrency = function (content) {
         this.isEditMode = false;
         this.isDeleteMode = false;
+        this.isRestoreMode = false;
         this.isSaving = true;
         this.loadMasterCompanies();
         this.sourceAction = new currency_model_1.Currency();
         this.sourceAction.isActive = true;
         this.currencyName = "";
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
     };
+    Object.defineProperty(ManagementStructureComponent.prototype, "currentUserMasterCompanyId", {
+        get: function () {
+            return this.authService.currentUser
+                ? this.authService.currentUser.masterCompanyId
+                : null;
+        },
+        enumerable: false,
+        configurable: true
+    });
     ManagementStructureComponent.prototype.editItemAndCloseModel = function () {
         var _this = this;
-        if (!(this.sourceLegalEntity.code && this.sourceLegalEntity.name && this.sourceLegalEntity.legalEntityId)) {
-            this.display = true;
-            this.modelValue = true;
+        if (!this.sourceLegalEntity.code) {
+            this.alertService.showMessage("Error", "Managment Strcture code is required!", alert_service_1.MessageSeverity.error);
+            return;
+        }
+        if (!this.sourceLegalEntity.name) {
+            this.alertService.showMessage("Error", "Managment Strcture name is required!", alert_service_1.MessageSeverity.error);
+            return;
+        }
+        if (!this.sourceLegalEntity.legalEntityId) {
+            this.alertService.showMessage("Error", "Managment Strcture LegalEntity is required!", alert_service_1.MessageSeverity.error);
+            return;
         }
         //this.isSaving = true;
         if (this.sourceLegalEntity.code && this.sourceLegalEntity.name) {
@@ -385,7 +489,9 @@ var ManagementStructureComponent = /** @class */ (function () {
                 this.sourceLegalEntity.createdBy = this.userName;
                 this.sourceLegalEntity.updatedBy = this.userName;
                 this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
-                this.msService.getmanagementPost(this.sourceLegalEntity).subscribe(function (data) {
+                this.msService
+                    .getmanagementPost(this.sourceLegalEntity)
+                    .subscribe(function (data) {
                     _this.saveSuccessHelper(_this.sourceLegalEntity);
                     //this.selectedNode1.children.data = data;
                     _this.loadManagementdata();
@@ -395,7 +501,9 @@ var ManagementStructureComponent = /** @class */ (function () {
                 this.sourceLegalEntity.createdBy = this.userName;
                 this.sourceLegalEntity.updatedBy = this.userName;
                 this.sourceLegalEntity.masterCompanyId = this.currentUserMasterCompanyId;
-                this.msService.updateManagementEntity(this.sourceLegalEntity).subscribe(function (data) {
+                this.msService
+                    .updateManagementEntity(this.sourceLegalEntity)
+                    .subscribe(function (data) {
                     _this.saveCompleted(_this.sourceLegalEntity);
                     _this.loadManagementdata();
                 });
@@ -408,6 +516,7 @@ var ManagementStructureComponent = /** @class */ (function () {
     ManagementStructureComponent.prototype.saveSuccessHelper = function (role) {
         this.isSaving = false;
         this.alertService.showMessage("Success", "MS Added successfully", alert_service_1.MessageSeverity.success);
+        this.getAllLegalEntityList();
         //this.loadData();
     };
     ManagementStructureComponent.prototype.saveCompleted = function (user) {
@@ -416,8 +525,13 @@ var ManagementStructureComponent = /** @class */ (function () {
             this.alertService.showMessage("Success", "MS deleted successfully", alert_service_1.MessageSeverity.success);
             this.isDeleteMode = false;
         }
+        else if (this.isRestoreMode == true) {
+            this.alertService.showMessage("Success", "MS restored successfully", alert_service_1.MessageSeverity.success);
+            this.isRestoreMode = false;
+        }
         else {
             this.alertService.showMessage("Success", "MS Updated successfully", alert_service_1.MessageSeverity.success);
+            this.getAllLegalEntityList();
         }
         //this.loadData();
     };
@@ -446,34 +560,39 @@ var ManagementStructureComponent = /** @class */ (function () {
         }
     };
     ManagementStructureComponent.prototype.openEdit = function (content, rowNode) {
+        this.isSpinnerVisible = true;
+        this.sourceLegalEntity.legalEntityId = 0;
         this.headerofMS = rowNode.node.data.code;
         this.selectedNode1 = rowNode.node;
-        //this.isEditMode = true;
         this.sourceLegalEntity = {};
         this.isSaving = true;
         this.msAddbutton = false;
-        this.loadMasterCompanies();
-        //this.sourceAction = row;
         this.sourceLegalEntity.legalEntityId = rowNode.node.data.legalEntityId;
         this.sourceLegalEntity.parentId = rowNode.node.data.managementStructureId;
-        //this.entityName = this.sourceLegalEntity.entityName;
+        this.isParent = rowNode.node.parent;
+        this.disableonchild = true;
         this.loadMasterCompanies();
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, {
+            size: "sm",
+            backdrop: "static",
+            keyboard: false
+        });
+        this.isSpinnerVisible = false;
     };
     ManagementStructureComponent.prototype.openHist = function (content, row) {
         this.sourceLegalEntity = row;
     };
     __decorate([
-        core_1.ViewChild(material_1.MatPaginator)
+        core_1.ViewChild(material_1.MatPaginator, { static: false })
     ], ManagementStructureComponent.prototype, "paginator");
     __decorate([
-        core_1.ViewChild(material_1.MatSort)
+        core_1.ViewChild(material_1.MatSort, { static: false })
     ], ManagementStructureComponent.prototype, "sort");
     ManagementStructureComponent = __decorate([
         core_1.Component({
-            selector: 'app-managemententity-structure',
-            templateUrl: './entity-setup.component.html',
-            styleUrls: ['./entity-setup.component.scss'],
+            selector: "app-managemententity-structure",
+            templateUrl: "./entity-setup.component.html",
+            styleUrls: ["./entity-setup.component.scss"],
             animations: [animations_1.fadeInOut]
         })
         /** EntitySetup component*/

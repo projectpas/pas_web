@@ -111,7 +111,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.isSpinnerVisible = true;
         forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId, this.deletedStatusInfo),
             this.actionService.getCharges(),
-            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
@@ -130,7 +130,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             });
         }
         this.arrayVendlsit.push(0);
-        this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join()).subscribe(res => {
+        this.vendorService.getVendorNameCodeListwithFilter(value, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allVendors = res.map(x => {
                 return {
                     vendorId: x.vendorId,

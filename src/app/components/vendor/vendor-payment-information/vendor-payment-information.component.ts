@@ -481,15 +481,15 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 			this.arrayCountrylist.push(0);
 		}
 
-		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 300, this.arrayCountrylist.join(), this.currentUserMasterCompanyId).subscribe(res => {
-			this.allCountryinfo = res.map(x => {
-				return {
-					nice_name: x.label, countries_id: x.value
-				}
-			})
-			this.countrycollection = this.allCountryinfo;
-			this.countrycollection = [...this.allCountryinfo.filter(x => {
-				return x.nice_name.toLowerCase().includes(strText.toLowerCase())
+		this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name',strText,true,0,this.arrayCountrylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+            this.allCountryinfo = res.map(x => {
+                return {
+                    nice_name: x.label, countries_id: x.value 
+                }
+            })
+            this.countrycollection = this.allCountryinfo;
+            this.countrycollection = [...this.allCountryinfo.filter(x => {
+                return x.nice_name.toLowerCase().includes(strText.toLowerCase())
 			})]
 		})
 	}

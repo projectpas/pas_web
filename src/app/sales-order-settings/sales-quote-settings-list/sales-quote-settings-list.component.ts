@@ -112,6 +112,12 @@ export class SalesQuoteSettingsListComponent {
             : "";
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+          ? this.authService.currentUser.masterCompanyId
+          : null;
+      }
+
     edit(rowData) {
         this.salesQuoteService.isEditSOQuoteSettingsList = true;
         let editeddRow = this.soqSettingsList.find(setting => setting.accountTypeId == rowData.accountTypeId);
@@ -156,7 +162,7 @@ export class SalesQuoteSettingsListComponent {
 
     getAllSOQuoteSettings(): void {
         this.isSpinnerVisible = true;
-        this.salesQuoteService.getAllSalesOrderQuoteSettings().pipe(takeUntil(this.onDestroy$)).subscribe(
+        this.salesQuoteService.getAllSalesOrderQuoteSettings(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(
             result => {
                 this.isSpinnerVisible = false;
                 let response: any = result;
@@ -195,7 +201,7 @@ export class SalesQuoteSettingsListComponent {
     exportCSV(dt) {
         this.isSpinnerVisible = true;
         this.salesQuoteService
-            .getAllSalesOrderQuoteSettings().subscribe(res => {
+            .getAllSalesOrderQuoteSettings(this.currentUserMasterCompanyId).subscribe(res => {
                 let response: any = res;
                 const vList = response.map(x => {
                     return {

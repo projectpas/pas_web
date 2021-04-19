@@ -20,7 +20,12 @@ body {
 .myCustomModalClass .modal-dialog {
   max-width: 90% !important;
 }
-
+.jda .p-radiobutton-label-horizontal .ui-radiobutton-label{
+  width: 100px !important;
+}
+.adj .p-radiobutton-label-horizontal .ui-radiobutton-label{
+  width: 80px !important;
+}
 @media print {
   body {
     -webkit-print-color-adjust: exact;
@@ -39,7 +44,7 @@ body {
 }
 
 body .ui-widget {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 .delete-emoji {
@@ -12908,7 +12913,7 @@ p-dialog .ui-widget.ui-widget-content {
   padding: 0;
   display: inline-block;
   vertical-align: top;
-  padding-top: 2px;
+  // padding-top: 2px;
 }
 
 .modal-body p .value {
@@ -14634,7 +14639,7 @@ body .ui-datepicker table td>a.ui-state-active {
 }
 
 .ui-g-4 {
-  font-size: 10.5px !important;
+  // font-size: 10.5px;
 }
 
 .fs12 {

@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-declare var $ : any;
+declare var $: any;
 import { getObjectById } from '../../../../generic/autocomplete';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';
@@ -33,7 +33,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
     lazyLoadEventData: any;
     disableSaveMemo: boolean = true;
     pageSize: number = 10;
-     memoPopupContent: any;
+    memoPopupContent: any;
     pageIndex: number = 0;
     //selectedOnly: boolean = false;
     selectedOnly: any;
@@ -76,7 +76,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
     deletingRecord: any;
     phonePattern = phonePattern();
     constructor(private activeModal: NgbActiveModal,
-        private communicationService: CommunicationService,private datePipe: DatePipe,
+        private communicationService: CommunicationService, private datePipe: DatePipe,
         private modalService: NgbModal,
         private commonService: CommonService, private alertService: AlertService, private authService: AuthService) { }
 
@@ -98,7 +98,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
 
     ngOnChanges(): void {
         this.getAllTextList();
-        if(this.isView==false){
+        if (this.isView == false) {
             this.getAllEmployees();
             if (this.type == 1) {
                 this.customerContacts('');
@@ -124,7 +124,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
         }
         const strText = value ? value : '';
         // 190
-        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.ContactList = res.map(x => {
                 return {
                     ...x,
@@ -206,23 +206,23 @@ export class TextCommonComponent implements OnInit, OnChanges {
         }
     }
 
-  
+
     onClickMemo() {
         this.memoPopupContent = this.addList[0].notes;
-    
+
         this.disableSaveMemo = true;
-    }   
+    }
     onClickPopupSave() {
         this.addList[0].notes = this.memoPopupContent;
         this.memoPopupContent = '';
-        this.updateDisabledText=false;
+        this.updateDisabledText = false;
         $('#text-memo-popup').modal("hide");
     }
     closeMemoModel() {
         $('#text-memo-popup').modal("hide");
     }
     addText() {
-        this.isEdit=false;
+        this.isEdit = false;
         this.addList = [];
         this.addList.push({ mobile: '', contactId: this.authService.currentEmployee, notes: '' })
         if (this.ContactList.length > 0) {
@@ -244,30 +244,30 @@ export class TextCommonComponent implements OnInit, OnChanges {
             event.preventDefault();
         }
     }
-    editTextData:any={};
+    editTextData: any = {};
     edit(rowData, index) {
         this.isEdit = true;
-        this.editTextData=rowData;
+        this.editTextData = rowData;
         // this.isSpinnerVisible=true;
-        this.updateDisabledText=true;
-        
+        this.updateDisabledText = true;
+
         this.customerContact = {
             'contactId': rowData.customerContactId,
             'firstName': rowData.customerContact
         };
         // this.customerContacts('');
         this.getAllEmployees('');
-     
-        
+
+
         if (rowData.contactId == this.authService.currentEmployee.employeeId) {
             rowData.contactId = this.authService.currentEmployee;
         } else {
-           // rowData.contactId = getObjectById('employeeId', rowData.contactId, this.employees);
-          
-           setTimeout(() => {
-            this.addList[0].contactId= getObjectById('employeeId', rowData.contactId, this.employees);
-         
-        }, 1000);
+            // rowData.contactId = getObjectById('employeeId', rowData.contactId, this.employees);
+
+            setTimeout(() => {
+                this.addList[0].contactId = getObjectById('employeeId', rowData.contactId, this.employees);
+
+            }, 1000);
         }
         this.addList = [{
             ...rowData
@@ -276,14 +276,14 @@ export class TextCommonComponent implements OnInit, OnChanges {
     }
     arrayContactlist: any = []
     getAllEmployees(strText = '') {
-        this.arrayContactlist=[];
-        if (this.isEdit==true) {
-            if(this.editTextData && typeof this.editTextData.contactId == 'string'){
-                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId :0);
-            }else{
-                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId.value :0);
-            }  
-        }else{
+        this.arrayContactlist = [];
+        if (this.isEdit == true) {
+            if (this.editTextData && typeof this.editTextData.contactId == 'string') {
+                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId : 0);
+            } else {
+                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId.value : 0);
+            }
+        } else {
             this.arrayContactlist.push(0);
         }
         this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
@@ -300,21 +300,21 @@ export class TextCommonComponent implements OnInit, OnChanges {
             this.errorMessageHandler();
         })
     }
-    exportCSV(dt){
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
     }
     closeDeleteModal() {
-		$("#textdownloadConfirmation").modal("hide");
-	}
+        $("#textdownloadConfirmation").modal("hide");
+    }
     savePhone() {
-        this.updateDisabledText=true;
+        this.updateDisabledText = true;
         if (this.isEdit) {
             let payload = this.formData(this.addList);
             this.isSpinnerVisible = true;
@@ -331,7 +331,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
                 )
         }
         else {
-           let payload = this.formData(this.addList);
+            let payload = this.formData(this.addList);
             this.isSpinnerVisible = true;
             this.communicationService.saveCommonText(payload[0])
                 .subscribe(
@@ -382,9 +382,9 @@ export class TextCommonComponent implements OnInit, OnChanges {
             return null;
         }
     }
-    updateDisabledText:boolean=false;
-    setvaliDate(){
-        this.updateDisabledText=false;
+    updateDisabledText: boolean = false;
+    setvaliDate() {
+        this.updateDisabledText = false;
     }
 
 
@@ -423,15 +423,19 @@ export class TextCommonComponent implements OnInit, OnChanges {
         this.getAllTextList();
     }
     deletedStatusInfo: boolean = false;
-    dataOriginal:any=[];
+    dataOriginal: any = [];
     getAllTextList() {
         this.isSpinnerVisible = true;
-        this.communicationService.getCOmmonTextList(this.referenceId, this.moduleId, this.deletedStatusInfo)
+        this.communicationService.getCOmmonTextList(this.referenceId, this.moduleId, this.deletedStatusInfo,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
-                    if(res && res.length !=0){
-                        res = res.map(x => { return { ...x, notesData: this.getString(x.notes), createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '', } })
+                    if (res && res.length != 0) {
+                        res = res.map(x => {
+                            return {
+                                ...x, notesData: this.getString(x.notes), createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                            }
+                        })
                     }
                     this.isSpinnerVisible = false;
                     this.data = res;
@@ -454,7 +458,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
 
     deleteText(rowData) {
         this.isSpinnerVisible = true;
-        this.communicationService.deleteCommonTextList(rowData.communicationTextId,this.userName)
+        this.communicationService.deleteCommonTextList(rowData.communicationTextId, this.userName)
             .subscribe(
                 res => {
                     this.isSpinnerVisible = false;
@@ -509,7 +513,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = false;
     }
 
-    enableSave() {}
+    enableSave() { }
 
     dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
@@ -525,5 +529,9 @@ export class TextCommonComponent implements OnInit, OnChanges {
         } else {
             this.data = this.dataOriginal;
         }
+    }
+
+    getmemo() {
+        this.updateDisabledText = false;
     }
 }

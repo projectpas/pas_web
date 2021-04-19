@@ -103,7 +103,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         this.isSpinnerVisible = true;
         this.arrayEmplsit.push(0);
         forkJoin(this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId, this.deletedStatusInfo),
-            this.commonService.getShipVia()
+            this.commonService.getShipVia(this.currentUserMasterCompanyId)
         ).subscribe(response => {
             this.isSpinnerVisible = false;
             this.setFreightsData(response[0]);
@@ -129,7 +129,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.unitOfMeasureList = res;
         }, err => {
             this.isSpinnerVisible = false;
@@ -148,7 +148,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             this.currencyList = res;
         }, err => {
             this.isSpinnerVisible = false;
@@ -614,7 +614,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
 
     RefreshAfterAddShipVia(ShippingViaId) {
         if (ShippingViaId != undefined || ShippingViaId > 0) {
-            this.commonService.getShipVia().subscribe(response => {
+            this.commonService.getShipVia(this.currentUserMasterCompanyId).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setShipViaList(response);
                 this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;

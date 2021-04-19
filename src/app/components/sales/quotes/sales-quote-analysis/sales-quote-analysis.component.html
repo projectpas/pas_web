@@ -1,89 +1,74 @@
 <div class="card new-card">
   <div class="card-body header-body">
-    <p-table #dt [value]="sales"
-     class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize" paginator="true"
+    <p-table #dt [value]="sales" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize" paginator="true"
       [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
       [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true" (onLazyLoad)="loadData($event)"
       [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
       <ng-template pTemplate="caption">
-        <!-- <div class="row"> -->
-          <!-- <div class="col">
-            <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" optionLabel="header"
-              selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"
-              style="float:left"></p-multiSelect>
-          </div> -->
-          <!-- <div class="col"> -->
-            <!-- <div style="width: auto !important; float: right;"
-              class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
-              <i class="fa fa-search"></i>
-              <input type="text" pInputText size="50" class="form-control" (input)="globalSearch($event.target.value)"
-                placeholder="Filter">
-            </div> -->
-          <!-- </div>
-        </div> -->
         <div class="row">
           <div class="col">
-            <p-multiSelect [options]="headers" 
-            class="multiselect-field" [(ngModel)]="selectedColumns" optionLabel="header"
-              selectedItemsLabel="{0} columns selected"               
-               defaultLabel="Choose Columns"
-              ></p-multiSelect>
+            <p-multiSelect [options]="headers" class="multiselect-field" [(ngModel)]="selectedColumns"
+              optionLabel="header" selectedItemsLabel="{0} columns selected" defaultLabel="Choose Columns">
+            </p-multiSelect>
           </div>
           <div class="col">
-            <div					
-						class="global-search-field inner-addon right-addon inline-block"
-					  >             </div>
+            <div class="global-search-field inner-addon right-addon inline-block"> </div>
           </div>
-         
-        </div>          
-          <div class="row">
-            <div class="col">             
-                <button type="button"
-                 class="btn btn-primary exports-button"
-                  matTooltip="Download Data"
-                  matTooltipPosition="above" pButton icon="fa-download"
-                   iconPos="left" label="Export Data"
-                  (click)="dt.exportCSV()"></button>
-                <button type="button" class="btn btn-primary exports-button"
-                 matTooltip="Download Selected Data"
-                  matTooltipPosition="above" pButton icon="fa-download"
-                   iconPos="left" label="Export Selected Data"
-                  (click)="dt.exportCSV({ selectionOnly: true })"></button>
-             
-            </div>
-         
-            <div class="pull-right buttons-div-align">
-              <div class="col">
+        </div>
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
+              (click)="dt.exportCSV()"></button>
+            <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+              (click)="dt.exportCSV({ selectionOnly: true })"></button>
+          </div>
+          <div class="pull-right buttons-div-align">
+            <div class="col">
               <div class="col buttons-top-padding">
                 <div class="form-group" [hidden]="isApproverlist">
-                <div class="pull-left radio-buttons-align">
-              <label class="radio-cstm wauto">
-                <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
-                  (click)="changeOfStatus('','pnview')">
-                <span class="checkmark"></span>PN View
-              </label>
-            </div>
-            <div class="pull-left radio-buttons-align">
-              <label class="radio-cstm wauto">
-                <input type="radio" name="viewType" class="form-control" value="detailedview" [(ngModel)]="viewType"
-                  (click)="changeOfStatus('','detailedview')">
-                <span class="checkmark"></span>Detailed View
-              </label>
-            </div>
-            </div>
-            </div>
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
+                        (click)="changeOfStatus('','pnview')">
+                      <span class="checkmark"></span>PN View
+                    </label>
+                  </div>
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="viewType" class="form-control" value="detailedview"
+                        [(ngModel)]="viewType" (click)="changeOfStatus('','detailedview')">
+                      <span class="checkmark"></span>Detailed View
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          
         </div>
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"/>
+          <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr *ngIf="!pnViewSelected">
+          <th class="table-column-width" colspan="12">&nbsp;
+          </th>
+          <th class="table-column-width" colspan="4">Revenue
+          </th>
+          <th class="table-column-width" colspan="2">Cost
+          </th>
+          <th class="table-column-width" colspan="2">Margin
+          </th>
+          <th class="table-column-width" colspan="2">&nbsp;
+          </th>
+          <th class="table-column-width" colspan="1">&nbsp;
+          </th>
+        </tr>
+        <!-- <tr *ngIf="!pnViewSelected">
           <th class="table-column-width" colspan="11">&nbsp;
           </th>
           <th class="table-column-width" colspan="3">Per Unit Revenue
@@ -98,8 +83,7 @@
           </th>
           <th class="table-column-width" colspan="5">
           </th>
-        </tr>
-
+        </tr> -->
         <tr>
           <th *ngFor="let col of columns" class="table-column-width" [pSortableColumn]="col.field">
             {{ col.header }}
@@ -108,10 +92,8 @@
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded" let-columns="columns">
         <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
-          <td *ngFor="let col of columns" class="table-column-width"
-         
-            [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
-            [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
+          <td *ngFor="let col of columns" class="table-column-width" [matTooltip]="mouseOverData(col.field,  rowData)"
+            matTooltipPosition="above" [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
             [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
             <span *ngIf="col.field == 'markupPerUnit' || col.field == 'grossSalePricePerUnit'
                 || col.field == 'discountAmount'
@@ -154,10 +136,42 @@
                 && col.field != 'notes'">
               {{convertDate(col.field , rowData)}}
             </span>
-
           </td>
         </tr>
         <tr *ngIf="!pnViewSelected && rowIndex == (sales.length-1)" class="footer">
+          <td class="table-column-width" colspan="11">&nbsp;
+          </td>
+          <td class="table-column-width"><label>Total</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
+          </td>
+          <td class="table-column-width content-to-end"><label
+              class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('unitCost')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginPercentage')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getPercentage('freight')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
+          </td>
+          <td class="content-to-end table-column-width">
+          </td>
+        </tr>
+        <!-- <tr *ngIf="!pnViewSelected && rowIndex == (sales.length-1)" class="footer">
           <td class="table-column-width" colspan="14">&nbsp;
           </td>
           <td class="table-column-width"><label>Total</label>
@@ -172,35 +186,78 @@
           </td>
           <td class="table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
+          <td class="table-column-width" class="content-to-end"><label
+              class="margin-0">{{getTotalAmount('totalSales')}}</label>
           </td>
           <td>&nbsp;
           </td>
-          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
+          <td class="table-column-width" class="content-to-end"><label
+              class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
+          <td class="table-column-width" class="content-to-end"><label
+              class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getPercentage('marginPercentage')}}</label>
+          <td class="table-column-width" class="content-to-end"><label
+              class="margin-0">{{getPercentage('marginPercentage')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('freight')}}</label>
+          <td class="table-column-width" class="content-to-end"><label
+              class="margin-0">{{getTotalAmount('freight')}}</label>
           </td>
-          <td class="table-column-width" class="content-to-end"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
+          <td class="table-column-width" class="content-to-end"><label
+              class="margin-0">{{getTotalAmount('taxAmount')}}</label>
           </td>
-          <td class="table-column-width content-to-end"><label class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
+          <td class="table-column-width content-to-end"><label
+              class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
           </td>
           <td>&nbsp;
+          </td>
+        </tr> -->
+        <tr *ngIf="pnViewSelected && rowIndex == (sales.length-1)" class="footer">
+          <td colspan="6">&nbsp;
+          </td>
+          <td class="table-column-width"><label style="width: 60px">Total</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('grossSalePricePerUnit')}}</label>
+          </td>
+          <td class="table-column-width content-to-end"><label
+              class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('misc')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('unitCost')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginPercentage')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getPercentage('freight')}}</label>
+          </td>
+          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
+          </td>
+          <td class="content-to-end table-column-width">
           </td>
         </tr>
-        <tr *ngIf="pnViewSelected && rowIndex == (sales.length-1)" class="footer">
+        <!-- <tr *ngIf="pnViewSelected && rowIndex == (sales.length-1)" class="footer">
           <td colspan="6">&nbsp;
           </td>
           <td class="table-column-width"><label>Total</label>
           </td>
-          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('markupExtended')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('markupExtended')}}</label>
           </td>
-          <td class="table-column-width content-to-end"><label class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
+          <td class="table-column-width content-to-end"><label
+              class="margin-0">{{getTotalAmount('grossSalePrice')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('salesDiscountExtended')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('salesDiscountExtended')}}</label>
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('netSales')}}</label>
           </td>
@@ -208,19 +265,23 @@
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalSales')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('unitCostExtended')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('marginAmountExtended')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label class="margin-0">{{getPercentage('marginPercentage')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getPercentage('marginPercentage')}}</label>
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('freight')}}</label>
           </td>
           <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('taxAmount')}}</label>
           </td>
-          <td class="content-to-end table-column-width"><label class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
+          <td class="content-to-end table-column-width"><label
+              class="margin-0">{{getTotalAmount('totalRevenue')}}</label>
           </td>
-        </tr>
+        </tr> -->
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns *ngIf="sales.length == 0">
         <tr>
@@ -229,13 +290,11 @@
           </td>
         </tr>
       </ng-template>
-      <ng-template pTemplate="summary" id="footer" >
-
+      <ng-template pTemplate="summary" id="footer">
         <label id="footer" class="footer">Total:</label>
         <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
         &nbsp;&nbsp;
         <label id="footer" class="footer1">Pages Count:</label>
-
         <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
       </ng-template>
     </p-table>

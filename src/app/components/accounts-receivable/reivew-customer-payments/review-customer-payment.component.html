@@ -2,7 +2,7 @@
   <div class="card card-stock" style="margin-top: 5px;">
     <div class="card-body" style="padding: 10px;">
       <div class="form-group">
-        <div class="row">
+        <div class="row" *ngIf="dataForReview.customerPayments">
           <div class="col-md-12 col-sm-12 col-12">
             <div class="col-2 column">
               <div class="form-group">
@@ -35,22 +35,25 @@
             <div class="col-2 column">
               <div class="form-group">
                 <label>Amount</label>
-                <input type="text" class="form-control" name="amount"
-                  [(ngModel)]="dataForReview.customerPayments.amount" [disabled]="true" />
+                <input type="text" class="form-control" style="text-align: right;" name="amount"
+                  [ngModel]="dataForReview.customerPayments.amount | twoDecimalGlobalNumberFormatPipe"
+                  [disabled]="true" />
               </div>
             </div>
             <div class="col-2 column">
               <div class="form-group">
                 <label>Applied</label>
-                <input type="text" class="form-control" name="amtApplied"
-                  [(ngModel)]="dataForReview.customerPayments.amtApplied" [disabled]="true" />
+                <input type="text" class="form-control" style="text-align: right;" name="amtApplied"
+                  [ngModel]="dataForReview.customerPayments.amtApplied | twoDecimalGlobalNumberFormatPipe"
+                  [disabled]="true" />
               </div>
             </div>
             <div class="col-2 column">
               <div class="form-group">
                 <label>Amt Remaining</label>
-                <input type="text" class="form-control" name="amtRemaining"
-                  [(ngModel)]="dataForReview.customerPayments.amtRemaining" [disabled]="true" />
+                <input type="text" class="form-control" style="text-align: right;" name="amtRemaining"
+                  [ngModel]="dataForReview.customerPayments.amtRemaining | twoDecimalGlobalNumberFormatPipe"
+                  [disabled]="true" />
               </div>
             </div>
           </div>
@@ -68,29 +71,33 @@
                         {{ summaryColumn.header }}
                       </span>
                     </th>
-                    <th colspan="25"></th>
+                    <th colspan="24"></th>
                     <th></th>
                   </tr>
                   <ng-container *ngIf="dataForReview">
                     <ng-container *ngFor="let summaryPart of dataForReview.paymentsByCustomer;let rowIndex=index;">
                       <tbody>
                         <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                          <td *ngFor="let summaryColumn of custheaders"
-                            style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle>
-                            <span>
-                              {{summaryPart.customerDetails[summaryColumn.field]}}
-                            </span>
-                          </td>
-                          <td colspan="25"></td>
+                          <ng-container *ngFor="let summaryColumn of custheaders">
+                            <td style="width:auto; background-color: #EAF2C5 !important; text-align: right;"
+                              pReorderableRowHandle
+                              *ngIf="summaryColumn.field == 'amount' || summaryColumn.field == 'amountRemaining'">
+                              <span>
+                                {{summaryPart.customerDetails[summaryColumn.field]  | twoDecimalGlobalNumberFormatPipe }}
+                              </span>
+                            </td>
+                            <td style="width:auto; background-color: #EAF2C5 !important;" pReorderableRowHandle
+                              *ngIf="summaryColumn.field != 'amount' && summaryColumn.field != 'amountRemaining'">
+                              <span>
+                                {{summaryPart.customerDetails[summaryColumn.field]}}
+                              </span>
+                            </td>
+                          </ng-container>
+                          <td colspan="24"></td>
                           <td></td>
                         </tr>
                         <tr class="child-header splitship-head child-header-back">
                           <th></th>
-                          <!-- <th *ngFor="let summaryColumn of headers">
-                            <span>
-                              {{ summaryColumn.header }}
-                            </span>
-                          </th> -->
                           <th>Doc Type</th>
                           <th>Doc Num</th>
                           <th>Doc Date</th>
@@ -115,7 +122,6 @@
                           <th style="min-width: 85px;">AR Bal</th>
                           <th style="min-width: 125px;">Credit Term</th>
                           <th style="min-width: 140px;">Cntrl Num</th>
-                          <th style="min-width: 125px;">Employee</th>
                           <th style="min-width: 175px;">CO</th>
                           <th style="min-width: 175px;">BU</th>
                           <th style="min-width: 175px;">Div</th>
@@ -126,24 +132,57 @@
                           *ngFor="let invoice of summaryPart.invoices; let stockIndex = index">
                           <td></td>
                           <ng-container *ngFor="let field of headers">
-                            <td class="table-column-width">
-                              <span *ngIf="field.field == 'documentType'
+                            <td class="table-column-width" style="text-align: right;" *ngIf="field.field == 'originalAmount' ||
+                            field.field == 'remainingAmount' ||
+                            field.field == 'amountPastDue'">
+                              <span *ngIf="field.field == 'originalAmount'">
+                                {{invoice[field.field]  | twoDecimalGlobalNumberFormatPipe}}
+                              </span>
+                              <span *ngIf="field.field == 'remainingAmount'">
+                                {{invoice[field.field]  | twoDecimalGlobalNumberFormatPipe}}
+                              </span>
+                              <span *ngIf="field.field == 'amountPastDue'">
+                                {{invoice[field.field]  | twoDecimalGlobalNumberFormatPipe}}
+                              </span>
+                            </td>
+                            <td class="table-column-width" *ngIf="field.field == 'documentType'
                             || field.field == 'docNum'
-                            || field.field == 'originalAmount'
-                            || field.field == 'remainingAmount'
                             || field.field == 'newRemainingBal'
                             || field.field == 'glARAccount'
                             || field.field == 'currencyCode'
                             || field.field == 'fxRate'
                             || field.field == 'wosoNum'
-                            || field.field == 'paymentStatus'
+                            || field.field == 'status'
                             || field.field == 'dsi'
                             || field.field == 'dso'
-                            || field.field == 'amountPastDue'
                             || field.field == 'arBalance'
                             || field.field == 'creditTermName'
-                            || field.field == 'cntrlNum'
-                            || field.field == 'employee'
+                            || field.field == 'ctrlNum'
+                            || field.field == 'invoiceDate'
+                            || field.field == 'paymentAmount'
+                            || field.field == 'discAmount'
+                            || field.field == 'discType'
+                            || field.field == 'bankFeeAmount'
+                            || field.field == 'bankFeeType'
+                            || field.field == 'otherAdjustAmt'
+                            || field.field == 'reason'
+                            || field.field == 'level1'
+                            || field.field == 'level2'
+                            || field.field == 'level3'
+                            || field.field == 'level4'">
+                              <span *ngIf="field.field == 'documentType'
+                            || field.field == 'docNum'
+                            || field.field == 'newRemainingBal'
+                            || field.field == 'glARAccount'
+                            || field.field == 'currencyCode'
+                            || field.field == 'fxRate'
+                            || field.field == 'wosoNum'
+                            || field.field == 'status'
+                            || field.field == 'dsi'
+                            || field.field == 'dso'
+                            || field.field == 'arBalance'
+                            || field.field == 'creditTermName'
+                            || field.field == 'ctrlNum'
                             || field.field == 'level1'
                             || field.field == 'level2'
                             || field.field == 'level3'
@@ -156,93 +195,73 @@
                               <span *ngIf="field.field == 'paymentAmount'">
                                 <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'discAmount'">
                                 <input type="text" class="form-control" style="text-align: right;" name="discAmount"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'discType'">
                                 <select [(ngModel)]="invoice[field.field]" name="discType"
-                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                  <option value="0">Select</option>
-                                  <option value="1">Early pay (Earned)</option>
-                                  <option value="2">Early Pay (Not Earned)</option>
-                                  <option value="3">Dispute Price</option>
+                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected"
+                                  [required]="invoice['discAmount'] != null && invoice['discAmount'] > 0">
+                                  <option value='-1'>--Select--</option>
+                                  <option *ngFor="let item of discTypeList" [ngValue]="item.value">
+                                    {{ item.label }}</option>
                                 </select>
                               </span>
                               <span *ngIf="field.field == 'bankFeeAmount'">
                                 <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'bankFeeType'">
                                 <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
                                   (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                  <option value="0">Select</option>
-                                  <option value="1">Wire/ACH Fees</option>
-                                  <option value="2">FX Fees</option>
+                                  <option value='-1'>--Select--</option>
+                                  <option *ngFor="let item of bankFeesTypeList" [ngValue]="item.value">
+                                    {{ item.label }}</option>
                                 </select>
                               </span>
                               <span *ngIf="field.field == 'otherAdjustAmt'">
                                 <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
                                   [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
+                                  (ngModelChange)="invoice[field.field]=$event"
                                   (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
                               </span>
                               <span *ngIf="field.field == 'reason'">
-                                <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
-                                  [(ngModel)]="invoice[field.field]" id="reason" />
+                                <select [(ngModel)]="invoice[field.field]" name="reason"
+                                  (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
+                                  <option value='-1'>--Select--</option>
+                                  <option *ngFor="let item of adjustReasonList" [ngValue]="item.value">
+                                    {{ item.label }}</option>
+                                </select>
                               </span>
                             </td>
                           </ng-container>
                           <td class="zui-sticky-col">
                             <span>
                               <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                matTooltip="View Stockline">
+                                matTooltip="View Document" (click)="ViewDocument(invoice);">
                                 <i class="fa fa-eye"></i>
                               </a>
                             </span>
                             <span>
                               <button class="btn nobg" mat-icon-button matTooltip="Edit" matTooltipPosition="above"
-                                (click)="editPayment(invoice)"
-                                style="font-weight: bold;">
+                                (click)="editPayment(invoice)" style="font-weight: bold;">
                                 <i class="fa fa-pencil"></i>
                               </button>
                             </span>
                           </td>
-                          <!-- <td colspan="2"></td>
-                          <td class="zui-sticky-col" style="width:107px !important">
-                            <span>
-                              <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"
-                                (click)="printPickTicket(part);"><i class="fa fa-print"></i></a>
-                            </span>
-                            <span>
-                              <button class="btn nobg" mat-icon-button (click)="ConfirmPTpopup(confirm,part)"
-                                matTooltip="Confirm" matTooltipPosition="above" style="font-weight: bold;"
-                                [disabled]="part.isConfirmed">
-                                <i class="fa fa-check"></i>
-                              </button>
-                            </span>
-                            <span>
-                              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                (click)="viewStockSelectedRow(part)" matTooltip="View Stockline">
-                                <i class="fa fa-eye"></i>
-                              </a>
-                            </span>
-                            <span>
-                              <button class="btn nobg" mat-icon-button
-                                (click)="pickticketItemInterfaceedit(part,pickticketieminterface)" matTooltip="Edit"
-                                matTooltipPosition="above" style="font-weight: bold;" [disabled]="part.isConfirmed">
-                                <i class="fa fa-pencil"></i>
-                              </button>
-                            </span>
-                          </td> -->
                         </tr>
                       </tbody>
                     </ng-container>
                   </ng-container>
-                  <ng-container *ngIf="dataForReview == undefined">
+                  <ng-container *ngIf="dataForReview.customerPayments == null">
                     <tbody>
                       <tr>
                         <td colspan="48"
@@ -255,112 +274,51 @@
                 </table>
               </div>
             </div>
-
-            <!-- <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex">
-              <div class="tableFixHead">
-                <table class="table table-bordered header-table-width" id="mpn-list-table">
-                  <thead>
-                    <tr class="pad_workflo">
-                      <th class="approver-th-align th-width">
-                        <input type="checkbox" (click)="selectAllApproval('internal', selectall)"
-                          [(ngModel)]="selectall" />
-                      </th>
-                      <th *ngFor="let header of headers">{{header.header}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngIf="!openInvoices || openInvoices.length == 0">
-                      <tr>
-                        <td colspan="21" class="no-records-cstm">
-                          No records found
-                        </td>
-                      </tr>
-                    </ng-container>
-                    <ng-container *ngIf="openInvoices">
-                      <tr class="mpn-row" style="display: table-row;"
-                        *ngFor="let invoice of openInvoices; let i=index;">
-                        <td>
-                          <input type="checkbox" [(ngModel)]="invoice.selected"
-                            [disabled]="isView || !getPartToDisableOrNot(invoice)" />
-                        </td>
-                        <ng-container *ngFor="let field of headers">
-                          <td class="table-column-width">
-                            <span *ngIf="field.field == 'documentType'
-                          || field.field == 'docNum'
-                          || field.field == 'invoiceDate'
-                          || field.field == 'originalAmount'
-                          || field.field == 'remainingAmount'
-                          || field.field == 'newRemainingBal'
-                          || field.field == 'glARAccount'
-                          || field.field == 'currencyCode'
-                          || field.field == 'fxRate'
-                          || field.field == 'wosoNum'
-                          || field.field == 'paymentStatus'
-                          || field.field == 'dsi'
-                          || field.field == 'dso'
-                          || field.field == 'amountPastDue'
-                          || field.field == 'arBalance'
-                          || field.field == 'creditTermName'
-                          || field.field == 'cntrlNum'
-                          || field.field == 'employee'
-                          || field.field == 'level1'
-                          || field.field == 'level2'
-                          || field.field == 'level3'
-                          || field.field == 'level4'">
-                              {{invoice[field.field]}}
-                            </span>
-                            <span *ngIf="field.field == 'paymentAmount'">
-                              <input type="text" class="form-control" style="text-align: right;" name="paymentAmount"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangePaymentAmount($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'discAmount'">
-                              <input type="text" class="form-control" style="text-align: right;" name="discAmount"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangeDiscAmount($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'discType'">
-                              <select [(ngModel)]="invoice[field.field]" name="discType"
-                                (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                <option value="0">Select</option>
-                                <option value="1">Early pay (Earned)</option>
-                                <option value="2">Early Pay (Not Earned)</option>
-                                <option value="3">Dispute Price</option>
-                              </select>
-                            </span>
-                            <span *ngIf="field.field == 'bankFeeAmount'">
-                              <input type="text" class="form-control" style="text-align: right;" name="bankFeeAmount"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangeBankFee($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'bankFeeType'">
-                              <select [(ngModel)]="invoice[field.field]" name="bankFeeType"
-                                (ngModelChange)="enableHeaderSave()" [disabled]="!invoice.selected">
-                                <option value="0">Select</option>
-                                <option value="1">Wire/ACH Fees</option>
-                                <option value="2">FX Fees</option>
-                              </select>
-                            </span>
-                            <span *ngIf="field.field == 'otherAdjustAmt'">
-                              <input type="text" class="form-control" style="text-align: right;" name="otherAdjustAmt"
-                                [ngModel]="invoice[field.field] | twoDecimalGlobalNumberFormatPipe"
-                                (change)="onChangeOtherAdjustAmt($event, invoice);" [disabled]="!invoice.selected" />
-                            </span>
-                            <span *ngIf="field.field == 'reason'">
-                              <input type="text" class="form-control" name="reason" [disabled]="!invoice.selected"
-                                [(ngModel)]="invoice[field.field]" id="reason" />
-                            </span>
-                          </td>
-                        </ng-container>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-                </table>
-              </div>
-            </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-12">
+            <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+              (click)="onUpdatePayments()" [disabled]="!isEdit">
+              Update
+            </button>
+            <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+              [disabled]="dataForReview.customerPayments != nul && dataForReview.customerPayments.amtRemaining > 0"
+              (click)="onSavePostPayments()">
+              Save & Post
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #printPost let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="closeDocument()">&times;</button>
+    <h4 class="modal-title">Document</h4>
+  </div>
+  <div class="modal-body">
+    <!-- <app-sales-order-print-invoice [salesOrderbillingInvoicingId]="DocId" [salesOrderId]="salesOrderId">
+    </app-sales-order-print-invoice> -->
+  </div>
+  <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeDocument()">Close</button>
+  </div>
+</ng-template>

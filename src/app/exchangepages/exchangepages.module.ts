@@ -36,6 +36,16 @@ import { ExchangeQuoteComponent } from "../components/exchange-quote/exchange-qu
 import { CommonService } from "../services/common.service";
 import { ExchangequoteService } from "../services/exchangequote.service";
 import { ExchangeQuoteEndpointService } from "../services/exchangequote-endpoint.service";
+import { ExchangeQuotePartNumberComponent } from "../components/exchange-quote/shared/components/exchange-quote-part-number/exchange-quote-part-number.component";
+import { AddExchangePartNumberComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/add-exchange-part-number.component";
+import { ExchangeCustomerDetailsComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-customer-details/exchange-customer-details.component";
+import { ExchangePartDetailsComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-details/exchange-part-details.component";
+import { ExchangePartNumberFilterComponent } from "../components/exchange-quote/shared/components/add-exchange-part-number/exchange-part-number-filter/exchange-part-number-filter.component";
+import { ExchangeMerginComponent } from "../components/exchange-quote/shared/components/exchange-mergin/exchange-mergin.component";
+import { CommonModulesModule } from "../common-modules/common-modules.module";
+import { ExchangeQuoteApprovalRuleComponent } from "../components/exchange-quote/shared/components/exchange-quote-approval-rule/exchange-quote-approval-rule.component";
+import { ExchangeQuoteApproveComponent } from "../components/exchange-quote/shared/components/exchange-quote-approve/exchange-quote-approve.component";
+//import { ExchangeQuoteCustomerApprovalComponent } from "../components/exchange-quote/shared/components/exchange-quote-customer-approval/exchange-quote-customer-approval.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -71,12 +81,22 @@ import { ExchangeQuoteEndpointService } from "../services/exchangequote-endpoint
     AppSharedModule,
     EditorModule,
     SplitButtonModule,
+    CommonModulesModule,
   ],
   declarations: [
     ExchangepagesComponent,
     ExchangeQuoteListComponent,
     ExchangeQuoteCreateComponent,
-    ExchangeQuoteComponent
+    ExchangeQuoteComponent,
+    ExchangeQuotePartNumberComponent,
+    AddExchangePartNumberComponent,
+    ExchangeCustomerDetailsComponent,
+    ExchangePartDetailsComponent,
+    ExchangePartNumberFilterComponent,
+    ExchangeMerginComponent,
+    ExchangeQuoteApprovalRuleComponent,
+    ExchangeQuoteApproveComponent,
+    //ExchangeQuoteCustomerApprovalComponent
   ],
   providers: [CommonService,DatePipe,ExchangequoteService,ExchangeQuoteEndpointService],
   entryComponents: []

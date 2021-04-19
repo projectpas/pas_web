@@ -262,7 +262,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
         //     this.workOrderId=this.subWorkOrderDetails.subWorkOrderId;
         // }
         // this.isSpinnerVisible = true;
-        this.communicationService.getCommonMemoList(this.referenceId, this.moduleId, this.deletedStatusInfo)
+        this.communicationService.getCommonMemoList(this.referenceId, this.moduleId, this.deletedStatusInfo,this.authService.currentUser.masterCompanyId)
             .subscribe(
                 (res) => {
                     if (res && res.length > 0) {

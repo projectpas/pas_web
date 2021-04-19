@@ -154,7 +154,7 @@
 
           <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
-              <col *ngFor="let col of columns" class="table-column-width"
+              <col *ngFor="let col of columns" class="table-column-width" [ngStyle]="{'width': col.width}"
                 [ngClass]="{ update_withFlag: col.field == 'isDefaultContact' }" />
             </colgroup>
           </ng-template>
@@ -354,36 +354,36 @@
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
-					<table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+					<table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Tag</th>
-                <th>Attention</th>
-                <th>Prefix</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
-                <th>Suffix</th>
-                <th>Contact Title</th>
-                <th>Email</th>
-                <th>Work Phone</th>
-                <th>Mobile Phone</th>
-                <th>Alternate Phone</th>
-                <th>Fax</th>
+                <th class="width-130" >Attention</th>
+                <th class="width-130">Prefix</th>
+                <th class="width-130">First Name</th>
+                <th class="width-130">Middle Name</th>
+                <th class="width-130">Last Name</th>
+                <th class="width-130">Suffix</th>
+                <th class="width-130">Contact Title</th>
+                <th class="width-130">Email</th>
+                <th class="width-130">Work Phone</th>
+                <th class="width-130">Mobile Phone</th>
+                <th class="width-130">Alternate Phone</th>
+                <th class="width-130">Fax</th>
 
                 <th>Website URL</th>
-                <th>Primary Contact</th>
-                <th>Memo</th>
-                <th>Is Active</th>                
-                <th>Created Date</th>
+                <th class="width-60">Primary Contact</th>
+                <th class="width-130">Memo</th>
+                <th class="width-60">Is Active</th>                
+                <th style="min-width:120px">Created Date</th>
                 <th>Created By</th>
-                <th>Updated Date</th>
+                <th style="min-width:120px">Updated Date</th>
                 <th>Updated By</th>                
-                <th>Is Deleted</th>
+                <th class="width-60">Is Deleted</th>
               </tr>
             </thead>
             <tbody style="overflow-x: scroll !important;" *ngIf="auditHistory.length > 0">
-              <tr *ngFor="let audit of auditHistory; let i = index">
+              <tr class="width-130" *ngFor="let audit of auditHistory; let i = index">
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'tagName', audit.tagName)
                       ? 'black'
@@ -761,10 +761,9 @@
               <div class="form-group">
                 <div class="form-group primary-contact-div">
                   <span class="checkbox-cstm">
+                    <input type="checkbox" name="isDefaultContact" [(ngModel)]="contactInformation.isDefaultContact"
+                    (ngModelChange)="enableSave()" [disabled]="contactInformation.isDefaultContact && isPrimatyContactData  &&  ediData" />
                     <label>
-                      <input type="checkbox" name="isDefaultContact" [(ngModel)]="contactInformation.isDefaultContact"
-                        (ngModelChange)="enableSave()" [disabled]="contactInformation.isDefaultContact && isPrimatyContactData  &&  ediData" />
-                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                       Primary Contact
                     </label>
                   </span>

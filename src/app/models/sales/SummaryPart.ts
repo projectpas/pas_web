@@ -26,4 +26,6 @@ export class SummaryPart {
     hidePart: boolean = false;
     partId: number;
     conditionId: number;
+    qtyAvailable: number = 0;
+    quantityOnHand: number = 0;
 }

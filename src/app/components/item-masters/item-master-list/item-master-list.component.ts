@@ -536,7 +536,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 				this.isSpinnerVisible = false;
 			},
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false}
 		);
 	}
 
@@ -561,7 +561,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.totalPagesNonStock = Math.ceil(this.totalRecordsNonStock / this.nonStockPageSize);
 				this.isSpinnerVisible = false;
 			},
-			error => this.onDataLoadFailed(error)
+			error => {this.isSpinnerVisible = false}
 		);
 	}
 
@@ -592,7 +592,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 		this.itemMasterService.getRolesData().subscribe(
 			results => this.onRolesLoadSuccessfull(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -810,7 +810,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.loadingIndicator = true;
 		this.itemMasterService.getItemNonstockList().subscribe(
 			results => this.onitemnonstockSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -823,7 +823,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.loadingIndicator = true;
 		this.itemMasterService.getItemeStockList().subscribe(
 			results => this.onitemStockSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -835,7 +835,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.loadingIndicator = true;
 		this.itemMasterService.getItemEquipmentList().subscribe(
 			results => this.onitemequipmntSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -844,11 +844,11 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.allEquipmentInfo = allWorkFlows;
 	}
 
-	private onDataLoadFailed(error: any) {
-		this.isSpinnerVisible = false;
-		this.alertService.stopLoadingMessage();
-		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-	}
+	// private onDataLoadFailed(error: any) {
+	// 	this.isSpinnerVisible = false;
+	// 	this.alertService.stopLoadingMessage();
+	// 	this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+	// }
 
 	private loadMasterCompanies() {
 		this.alertService.startLoadingMessage();
@@ -856,7 +856,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 		this.masterComapnyService.getMasterCompanies().subscribe(
 			results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -902,7 +902,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 							this.isSpinnerVisible = false;
 							this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
 					} ,
-					error => { this.errorMessageHandler(error)})
+					error => { this.isSpinnerVisible = false})
 			} else {
 				this.itemMasterService.updateActionforNonstock(rowData).subscribe(
 					response => {
@@ -926,7 +926,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 							this.isSpinnerVisible = false;
 							this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
 					},
-					error => { this.errorMessageHandler(error) } )
+					error => { this.isSpinnerVisible = false } )
 			}
 		}
 		else {
@@ -965,7 +965,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 							this.isSpinnerVisible = false;
 							this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
 					} ,
-					error => { this.errorMessageHandler(error)})
+					error => { this.isSpinnerVisible = false})
 			} else {
 				this.itemMasterService.updateActionforNonstock(rowData).subscribe(
 					response => {
@@ -989,7 +989,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 							this.isSpinnerVisible = false;
 							this.alertService.showMessage("Success", `Successfully Updated Status `, MessageSeverity.success)
 					},
-					error => { this.errorMessageHandler(error) } )
+					error => { this.isSpinnerVisible = false } )
 			}
 		}
 	}
@@ -1001,21 +1001,21 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		}
 	}
 
-	errorMessageHandler(log) {
-		this.isSpinnerVisible = false;
-		this.alertService.showMessage(
-			'Error',
-			log.error,
-			MessageSeverity.error
-		);
-	}
+	// errorMessageHandler(log) {
+	// 	this.isSpinnerVisible = false;
+	// 	this.alertService.showMessage(
+	// 		'Error',
+	// 		log.error,
+	// 		MessageSeverity.error
+	// 	);
+	// }
 
-	private saveFailedHelper(error: any) {
-		this.isSaving = false;
-		this.isSpinnerVisible = false;
-		this.alertService.stopLoadingMessage();
-		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-	}
+	// private saveFailedHelper(error: any) {
+	// 	this.isSaving = false;
+	// 	this.isSpinnerVisible = false;
+	// 	this.alertService.stopLoadingMessage();
+	// 	this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+	// }
 
 	columnsChanges() {
 		this.refreshList();
@@ -1339,7 +1339,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.isSpinnerVisible = false;
 		}, err => {
 			this.isSpinnerVisible = false;
-			this.errorMessageHandler(err);
+			
 		})
 		
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
@@ -1554,7 +1554,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			}
 			this.itemser.getDescriptionbypart(event).subscribe(
 				results => this.onpartnumberloadsuccessfull(results[0]),
-				error => this.onDataLoadFailed(error)
+				error => {this.loadingIndicator=false}
 			);
 			this.disableSavepartDescription = true;
 		}
@@ -1574,7 +1574,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.loadingIndicator = true;
 		this.commonService.smartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber').subscribe(
             results => this.onptnmbersSuccessful(results),
-            error => this.onDataLoadFailed(error)   
+            error => {this.loadingIndicator=false} 
         )
 	}
 
@@ -1643,7 +1643,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.totalRecords = results[0]['totalRecordsCount']
 				this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 			},
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -1685,7 +1685,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.totalRecordsNonStock = results[0]['totalRecordsCount']
 				this.totalPagesNonStock = Math.ceil(this.totalRecordsNonStock / this.nonStockPageSize);
 			},
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 
 	}
@@ -1846,7 +1846,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				dt.value = this.allStockInfo;
 				this.isSpinnerVisible = false;
 			},
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 
@@ -1875,7 +1875,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				dt.value = this.allNonstockInfo;
 				this.isSpinnerVisible = false;
 			},
-			error => this.onDataLoadFailed(error)
+			error => {this.loadingIndicator=false}
 		);
 	}
 

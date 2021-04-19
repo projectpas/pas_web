@@ -56,4 +56,5 @@ export class SalesOrderShipping {
     trackingNum: number = 0;
     houseAirwayBill: number = 0;
     noOfContainer: number = 0;
+    shippingAccountNo: string;
 }

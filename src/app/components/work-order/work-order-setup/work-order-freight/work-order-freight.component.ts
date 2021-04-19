@@ -112,7 +112,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
         this.getShipViaByCustomerId();
         this.getUOMList('');
         this.getCurrencyList('');
-        this.getCarrierList();
+        // this.getCarrierList();
         this.getTaskList();
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
@@ -128,11 +128,12 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
     originalList:any=[]
     ngOnChanges() {
         this.originalList=this.workOrderFreightList;
-        if(this.originalList && this.originalList[0].workOrderQuoteDetailsId){
-            this.disableFrt=true;
-        }else{
-            this.disableFrt=false;
-        }
+        // console.log("hello",this.originalList)
+        // if(this.originalList && this.originalList[0] && this.originalList[0].workOrderQuoteDetailsId !=undefined){
+        //     this.disableFrt=true;
+        // }else{
+        // }
+        this.disableFrt=false;
         if (this.workOrderFreightList && this.workOrderFreightList.length > 0 && this.workOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.workOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.workOrderFreightList[0].headerMarkupId);
@@ -184,7 +185,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
             const strText= value ? value:'';
-        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName',strText,true,20,this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName',strText,true,20,this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.unitOfMeasureList = res;
         },err => {			
     })
@@ -214,18 +215,18 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
             this.setEditArray.push(0);
         }
             const strText= value ? value:'';
-        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code',strText,true,20,this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.currencyList = res;
         },err => {			
     })
 }
-    getCarrierList() {
-        this.commonService.smartDropDownList('Carrier', 'CarrierId', 'Description').subscribe(res => {
-            this.carrierList = res;
-        })
-    }
+    // getCarrierList() {
+    //     this.commonService.smartDropDownList('Carrier', 'CarrierId', 'Description').subscribe(res => {
+    //         this.carrierList = res;
+    //     })
+    // }
     getShipViaByCustomerId() {
-     this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.subWorkOrderDetails ? this.subWorkOrderDetails.customerId : this.customerId).subscribe(res => {
+     this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.subWorkOrderDetails ? this.subWorkOrderDetails.customerId : this.customerId,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.shipViaList = res.map(x => {
                 return {
                     label: x.name,
@@ -423,7 +424,10 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
   }
     delete() {
         if (this.isQuote) {
-            this.currentRow.isDeleted = true;
+// if(this.currentRow.workOrderFreightId !=null){
+    this.currentRow.isDeleted = true;
+// }
+this.refreshData.emit();
             $('#addNewFreight').modal('hide');
             this.isEdit = false;
             this.disableFrt=false;
@@ -436,7 +440,7 @@ export class WorkOrderFreightComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     '',
-                    'Deleted WorkOrder Freight Successfully',
+                    'Deleted WorkOrder Freight Successfully', 
                     MessageSeverity.success
                 );
             })

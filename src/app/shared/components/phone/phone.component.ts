@@ -111,7 +111,7 @@ export class PhoneComponent implements OnInit, OnChanges {
     partNo:any;
     getAllPhoneList(){
         this.isSpinnerVisible = true;
-        this.communicationService.getPhoneList(this.workOrderId, this.moduleId, this.partNo)
+        this.communicationService.getPhoneList(this.workOrderId, this.moduleId, this.partNo,this.authService.currentUser.masterCompanyId)
         .subscribe(
             (res)=>{
                 res = res.map(x=>{ return {...x, 'notesData': this.getString(x.notes)}})

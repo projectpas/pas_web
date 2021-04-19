@@ -510,6 +510,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSalesQuoteDocumentAuditHistory(id) {
     return this.http.get<any>(`${this._geSaleQuoteDocumentHistory}/${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesQuoteDocumentAuditHistory(id));
+      });
   }
 
   createFreight(salesOrderFreights: ISOFreight[]): Observable<any> {
@@ -538,10 +541,16 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSalesOrderFreights(id, isDeleted) {
     return this.http.get<any>(`${this._getFreights}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getSalesOrderFreights(id, isDeleted));
+    });
   }
 
   getSalesOrderCharges(id, isDeleted) {
     return this.http.get<any>(`${this._getCharges}?SalesOrderId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getSalesOrderCharges(id, isDeleted));
+    });
   }
 
   getSalesOrderChargesById(id, isDeleted) {
@@ -571,12 +580,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
-  getAllSalesOrderSettings<T>(): Observable<T> {
-    let endPointUrl = this.getSalesOrderSetting;
+  getAllSalesOrderSettings<T>(masterCompanyId): Observable<T> {
+    let endPointUrl = `${this.getSalesOrderSetting}?masterCompanyId=${masterCompanyId}`;
 
     return this.http.get<T>(endPointUrl, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getAllSalesOrderSettings());
+        return this.handleErrorCommon(error, () => this.getAllSalesOrderSettings(masterCompanyId));
       });
   }
 
@@ -603,14 +612,23 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSOSettingHistory(id) {
     return this.http.get<any>(`${this.getSalesOrderSettingsAuditHistory}/${id}`, this.getRequestHeaders())
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.getSOSettingHistory(id));
+    });
   }
 
   getSOFreightsHistory(id) {
     return this.http.get<any>(`${this.getFreightAudihistory}/?SalesOrderFreightId=${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOFreightsHistory(id));
+      })
   }
 
   getSOChargesHistory(id) {
     return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOChargesHistory(id));
+      });
   }
 
   getSOHistory(salesOrderId) {
@@ -641,6 +659,9 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSalesOrderPartsViewById(salesOrderId) {
     return this.http.get<any>(`${this._getSalesOrderPartsViewByIdUrl}/${salesOrderId}`, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesOrderPartsViewById(salesOrderId));
+      });
   }
 
   updatePickTicket(data) {
@@ -690,7 +711,6 @@ export class SalesOrderEndpointService extends EndpointFactory {
   }
 
   getPickTicketPrint(salesOrderId: number, salesOrderPartId: number, soPickTicketId: number): Observable<any> {
-    //const URL = `${this.getSalesOrdePickTicketPrint}/${salesOrderId}&`;
     const URL = `${this.getSalesOrdePickTicketPrint}?salesOrderId=${salesOrderId}&salesOrderPartId=${salesOrderPartId}&soPickTicketId=${soPickTicketId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
@@ -780,7 +800,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   updateSalesOrderBillingInvoicing(sobillingInvoicingId: number, billingInvoicing: any): Observable<any> {
     let url: string = `${this.updateSalesOrderBillingInvoicingURL}/${sobillingInvoicingId}`;
     return this.http
-    .put(url, JSON.stringify(billingInvoicing), this.getRequestHeaders())
+      .put(url, JSON.stringify(billingInvoicing), this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.updateSalesOrderBillingInvoicing(sobillingInvoicingId, billingInvoicing));
       });

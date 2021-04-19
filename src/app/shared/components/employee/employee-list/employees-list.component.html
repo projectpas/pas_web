@@ -154,9 +154,9 @@
 
           </td>
 
-          <td class="action-icons-cstm table-column-width">
-            <div *ngIf="currentDeletedstatus == false">
-              <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                  <td class="action-icons-cstm table-column-width" style="width:131px !important">
+                      <div *ngIf="currentDeletedstatus == false">
+                          <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch> -->
               <p-inputSwitch *ngIf="isEdit" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"
@@ -388,14 +388,13 @@
                                   ? allEmployeelist.lastName
                                   : '-'
                                               }}
-                                </span>
-                              </p>
-                              <p>
-                                <span class="label"><b>Employee Id: <span class="clr-red">*</span></b></span><span
-                                  class="value">
-                                  {{
-                                allEmployeelist.employeeId
-                                  ? allEmployeelist.employeeId
+                                          </span>
+                                      </p>
+                                      <p>
+                                          <span class="label"><b>Employee Id: <span class="clr-red">*</span></b></span><span class="value">
+                                              {{
+                                allEmployeelist.employeeCode
+                                  ? allEmployeelist.employeeCode
                                   : '-'
                                               }}
                                 </span>
@@ -855,53 +854,74 @@
                                 </span>
                               </p>
                             </div>
+                           
+                            <div class="col-md-10 tableview"
+                                 style="max-width: 100%;">
+                                <h4 class="panel-title">
+                                  Certification Received
+                                </h4>
+                                <div>
+                                  <div class="clear"></div>
+                                  <hr /> 
+                                  <app-common-documents [moduleName]="moduleName" [referenceId]="viewEmpID" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
+                               </div>
 
-                            <div class="col-md-10 tableview" style="max-width: 100%;">
-                              <h4 class="panel-title">
-                                Certification Received
-                              </h4>
-                              <div class="clear"></div>
-                              <hr />
-                              <div class="checkbox-cstm setDelts" style="margin-bottom: 10px;">
-                                <label style="width: auto !important;margin-top: 3px;">
+                                <!-- <div class="clear"></div>
+                                            <hr /> 
+                                           <div class="checkbox-cstm setDelts" style="margin-bottom: 10px;" >
+                                                <label style="width: auto !important;margin-top: 3px;">
+                                                 
+                                                  <input type="checkbox" [(ngModel)]="currenDocDeletedstatus" name="cparent1" id="cparent1"  (click)="getDeleteDocumentListByStatus($event.target.checked,allEmployeelist.employeeId)"
+                                                    />
+                                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Show  Deleted List 
+                                                </label>
+                                            </div>  
+                                            <div class="clear"></div>
+                                <p-table #count
+                                         class="ptable-custom lastcol-fix"
+                                         [paginator]="true"
+                                         allEmployeeTrainingDocumentsList.length="0"
+                                         [value]="allEmployeeTrainingDocumentsList"
+                                         [rows]="pageSize"
+                                         [pageLinks]="3"
+                                         [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                         [columns]="documentTableColumns"
+                                         [scrollable]="true"
+                                         scrollHeight="450px"
+                                         (onPage)="pageIndexChange($event)">
+                               
 
-                                  <input type="checkbox" [(ngModel)]="currenDocDeletedstatus" name="cparent1"
-                                    id="cparent1"
-                                    (click)="getDeleteDocumentListByStatus($event.target.checked,allEmployeelist.employeeId)" />
-                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                  Show Deleted List
-                                </label>
-                              </div>
-                              <div class="clear"></div>
-                              <p-table #count class="ptable-custom lastcol-fix" [paginator]="true"
-                                allEmployeeTrainingDocumentsList.length="0" [value]="allEmployeeTrainingDocumentsList"
-                                [rows]="pageSize" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
-                                [columns]="documentTableColumns" [scrollable]="true" scrollHeight="450px"
-                                (onPage)="pageIndexChange($event)">
-
-
-                                <ng-template pTemplate="colgroup" let-columns>
-                                  <colgroup>
-                                    <col *ngFor="let col of columns" class="table-column-width" />
-                                  </colgroup>
-                                </ng-template>
-                                <ng-template pTemplate="header" let-columns>
-                                  <tr>
-                                    <th *ngFor="let col of columns" class="table-column-width" pResizableColumn
-                                      pReorderableColumn [pSortableColumn]="col.field">
-                                      <div>
-                                        {{ col.header }}
-                                        <p-sortIcon *ngIf="
+                                       <ng-template pTemplate="colgroup" let-columns>
+                                            <colgroup>
+                                                <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" 
+                                                />
+                                            </colgroup>
+                                        </ng-template>
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns"
+                                                class="table-column-width"
+                                                    pResizableColumn
+                                                    pReorderableColumn
+                                                    [pSortableColumn]="col.field">
+                                                  
+                                                        {{ col.header }}
+                                                        <p-sortIcon *ngIf="
                                             col.field != 'download' &&
                                             col.field != 'delete'
-                                          " [field]="col.field">
-                                        </p-sortIcon>
-                                      </div>
-                                    </th>
-                                  </tr>
-                                  <tr>
-                                    <th *ngFor="let col of columns" class="table-column-width" [ngSwitch]="col.field">
-                                      <input type="text" class="table-header-input-width" (input)="
+                                          "
+                                                                    [field]="col.field">
+                                                        </p-sortIcon>
+                                                    
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th *ngFor="let col of columns"
+                                                class="table-column-width"
+                                                    [ngSwitch]="col.field">
+                                                    <input type="text" class="table-header-input-width"
+                                                           (input)="
                                           table3.filter(
                                             $event.target.value,
                                             col.field,
@@ -920,30 +940,34 @@
                                             col.field
                                           )
                                         " />
-                                      <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                      <input type="date" class="hidePlaceHolder table-header-input-width"
-                                        *ngIf="col.field == 'updatedDate'" name="updatedDate" (change)="
+                                                                                                       <input type="date"
+                                                           class="hidePlaceHolder table-header-input-width"
+                                                           *ngIf="col.field == 'updatedDate'"
+                                                           name="updatedDate"
+                                                           (change)="
                                           dateFilterForTable(
                                             $event.target.value,
                                             col.field
                                           )
                                         " />
-                                    </th>
-                                    <!-- <th style="width:140px;position:sticky"></th> -->
-                                    <!-- <th></th> -->
-                                  </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
-                                  <tr *ngIf="
+                                                </th>
+                                               
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body"
+                                                     let-rowData
+                                                     let-columns="columns"
+                                                     let-i="rowIndex">
+                                            <tr *ngIf="
                                                 allEmployeeTrainingDocumentsList.length>
                                                 0
-                                                ">
-                                    <td *ngFor="let col of columns" class="table-column-width">
-                                      <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
-                                      <!-- <ng-container > -->
-                                      <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
-                                        <span>
-                                          {{
+                                                "
+                                                >
+                                                <td *ngFor="let col of columns" class="table-column-width">
+                                                    
+                                                    <div *ngIf="col.field != 'download' && col.field != 'docMemo'">
+                                                        <span>
+                                                            {{
                                             col.field == 'createdDate'
                                               ? (rowData[col.field]
                                                 | date: 'MM/dd/yyyy h:mm a')
@@ -953,12 +977,10 @@
                                                 | date: 'MM/dd/yyyy h:mm a')
                                               : rowData[col.field]
                                                             }}
-                                        </span>
-                                        <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
-                        rowData[col.field]
-                        </span> -->
-                                      </div>
-                                      <div *ngIf="col.field == 'docMemo'">
+                                                        </span>
+                                                       
+                                                    </div>
+                                                    <div *ngIf="col.field == 'docMemo'">
 
                                         <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
                                       </div>
@@ -977,11 +999,13 @@
                                         </span>
                                       </div>
 
-                                      <!-- </ng-container> -->
-                                    </td>
-                                  </tr>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage" let-columns *ngIf="
+                                                   
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage"
+                                                     let-columns
+                                                     *ngIf="
                                     allEmployeeTrainingDocumentsList.length == 0
                                   ">
                                   <tr>
@@ -1001,10 +1025,10 @@
                                     pInputText type="text" />
                                 </ng-template>
 
-                              </p-table>
+                                    </p-table> -->
 
 
-                            </div>
+                           </div>
                           </div>
                         </div>
                       </div>
@@ -1077,25 +1101,28 @@
                     <div class="modal-body">
                       <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                         <div class="tableFixHead">
-                          <table class="table table-bordered header-table-width">
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Memo</th>
-                                <th>File Name</th>
-                                <th>File Size</th>
-                                <th>Created Date</th>
-                                <th>Created By</th>
-                                <th>Updated Date</th>
-                                <th>Updated By</th>
-                                <th>Is Deleted</th>
-
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
-                              <tr *ngFor="
+                          <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Memo</th>
+                              <th>File Name</th>
+                              <th>File Size</th>
+                              <th>Created Date</th>
+                              <th>Created By</th>
+                              <th>Updated Date</th>
+                              <th>Updated By</th>
+                              <th>Is Deleted</th>
+                           
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="let audit of sourceViewforDocumentAudit"
+                            ></tr>
+                            <tr
+                              *ngFor="
                                 let audit of sourceViewforDocumentAudit;
                                 let i = index
                               ">
@@ -1141,31 +1168,31 @@
                                   )
                                     ? 'black'
                                     : 'red'
-                                }">
-                                  {{ audit.fileName }}
-                                </td>
-                                <td>{{ audit.fileSize }}</td>
-
-                                <td>
-                                  {{
+                                }"
+                              >
+                                {{ audit.fileName }}
+                              </td>
+                              <td style="width:60px !important ">{{ audit.fileSize }}</td>  
+                             
+                              <td>
+                                {{
                                   audit.createdDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
-                                </td>
-                                <td>{{ audit.createdBy }}</td>
-
-                                <td>
-                                  {{
+                              </td>
+                              <td style="width:60px !important ">{{ audit.createdBy }}</td>
+                                                    
+                              <td>
+                                {{
                                   audit.updatedDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
-                                </td>
-                                <td>{{ audit.updatedBy }}</td>
-
-
-                                <td> <input type="checkbox" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                              </td>
+                              <td style="width:60px !important ">{{ audit.updatedBy }}</td>     
+                             
+                              
+                              <td style="width:60px !important "> <input type="checkbox"  name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
+                            </tr>
+                          </tbody>
+                        </table>
                         </div>
                       </div>
                     </div>
@@ -1261,32 +1288,35 @@
       </div>
       <div class="modal-body">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-          <div class="tableFixHead">
-            <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
-              <thead>
-                <tr>
-                  <th>First Name <span class="clr-red">*</span></th>
-                  <th>Last Name <span class="clr-red">*</span></th>
-                  <th>Emp ID</th>
-                  <th>Job Title <span class="clr-red">*</span></th>
-                  <th>Emp Expertise <span class="clr-red">*</span></th>
-                  <!-- <th>Job Type</th> -->
-                  <th>Start Date <span class="clr-red">*</span></th>
-                  <th>Company</th>
-                  <th>Pay Type</th>
-                  <th>Is Active</th>
-                  <th>Created Date</th>
-                  <th>Created By</th>
-                  <th>Updated Date</th>
-                  <th>Updated By</th>
-                  <th>Is Deleted</th>
-                </tr>
-              </thead>
-              <tbody class="audithistory-cstm">
-                <!--*ngIf="auditHistory.length> 0"-->
-                <tr *ngFor="let audit of auditHistory; let i = index">
-                  <!-- auditHistory[i>0 ? i-1 : i] -->
-                  <td [ngStyle]="{
+					<div class="tableFixHead">
+						<table class="table table-bordered"
+            *ngIf="auditHistory.length > 0; else noDatavailable"
+          >
+            <thead>
+              <tr>
+                <th>First Name <span class="clr-red">*</span></th>
+                <th>Last Name <span class="clr-red">*</span></th>
+                <th>Emp ID</th>
+                <th>Job Title <span class="clr-red">*</span></th>
+                <th>Emp Expertise <span class="clr-red">*</span></th>
+                <!-- <th>Job Type</th> -->
+                <th>Start Date <span class="clr-red">*</span></th>
+                <th>Company</th>
+                <th>Pay Type</th>
+                <th>Is Active</th>               
+                <th>Created Date</th>
+                <th>Created By</th>               
+                <th>Updated Date</th>
+                <th>Updated By</th>
+                <th>Is Deleted</th>
+              </tr>
+            </thead>
+            <tbody class="audithistory-cstm">
+              <!--*ngIf="auditHistory.length> 0"-->
+              <tr *ngFor="let audit of auditHistory; let i = index">
+                <!-- auditHistory[i>0 ? i-1 : i] -->
+                <td
+                  [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'firstName',
@@ -1301,10 +1331,12 @@
                     color: getColorCodeForHistory(i, 'lastName', audit.lastName)
                       ? 'black'
                       : 'red'
-                  }">
-                    {{ audit.lastName }}
-                  </td>
-                  <td [ngStyle]="{
+                  }"
+                >
+                  {{ audit.lastName }}
+                </td>
+                <td style="width:60px !important"
+                  [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'employeeId',
@@ -1342,19 +1374,22 @@
                     )
                       ? 'black'
                       : 'red'
-                  }">
-                    {{ audit.startDate | date: 'MM/dd/yyyy' }}
-                  </td>
-                  <td [ngStyle]="{'color': getColorCodeForHistory(i, 'company', audit.company)  ? 'black' : 'red'  }">
-                    {{audit.company}}</td>
-                  <td [ngStyle]="{
+                  }"
+                >
+                  {{ audit.startDate | date: 'MM/dd/yyyy' }}
+                </td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'company', audit.company)  ? 'black' : 'red'  }">{{audit.company}}</td>
+                <td style="width:60px !important"
+                  [ngStyle]="{
                     color: getColorCodeForHistory(i, 'payType', audit.payType)
                       ? 'black'
                       : 'red'
-                  }">
-                    {{ audit.payType }}
-                  </td>
-                  <td class="text-center" [ngStyle]="{
+                  }"
+                >
+                  {{ audit.payType }}
+                </td>
+                <td class="text-center" style="width:60px !important"
+                  [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
                       ? 'black'
                       : 'red'
@@ -1366,10 +1401,12 @@
                 color: getColorCodeForHistory(i, 'createdDate', audit.createdDate)
                   ? 'black'
                   : 'red'
-              }">
-                    {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}
-                  </td>
-                  <td [ngStyle]="{
+              }"
+            >
+              {{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}
+            </td>
+            <td style="width:60px !important"
+                [ngStyle]="{
                   color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
                     ? 'black'
                     : 'red'
@@ -1381,17 +1418,21 @@
               color: getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)
                 ? 'black'
                 : 'red'
-            }">
-                    {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}
-                  </td>
-                  <td [ngStyle]="{
+            }"
+          >
+            {{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}
+          </td>
+          <td style="width:60px !important"
+          [ngStyle]="{
             color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)
               ? 'black'
               : 'red'
-          }">
-                    {{ audit.updatedBy }}
-                  </td>
-                  <td class="text-center" [ngStyle]="{
+          }"
+        >
+          {{ audit.updatedBy }}
+        </td>
+          <td class="text-center" style="width:60px !important"
+          [ngStyle]="{
             color: getColorCodeForHistory(i, 'isDeleted', audit.isDeleted)
               ? 'black'
               : 'red'

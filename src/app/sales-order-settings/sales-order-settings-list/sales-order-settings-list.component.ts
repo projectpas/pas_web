@@ -1,5 +1,5 @@
 ﻿import { Component, ViewEncapsulation } from "@angular/core";
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Subject } from "rxjs";
@@ -55,8 +55,7 @@ export class SalesOrderSettingsListComponent {
     selectedOnly: boolean = false;
     noDatavailable: any;
 
-    constructor(private router: ActivatedRoute,
-        public customerService: CustomerService,
+    constructor(public customerService: CustomerService,
         public salesQuoteService: SalesQuoteService,
         public salesOrderService: SalesOrderService,
         public alertService: AlertService,
@@ -154,9 +153,15 @@ export class SalesOrderSettingsListComponent {
         }
     }
 
+    get currentUserMasterCompanyId(): number {
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
+    }
+
     getAllSOSettings(): void {
         this.isSpinnerVisible = true;
-        this.salesOrderService.getAllSalesOrderSettings().pipe(takeUntil(this.onDestroy$)).subscribe(
+        this.salesOrderService.getAllSalesOrderSettings(this.currentUserMasterCompanyId).pipe(takeUntil(this.onDestroy$)).subscribe(
             result => {
                 this.isSpinnerVisible = false;
                 let response: any = result;
@@ -197,7 +202,7 @@ export class SalesOrderSettingsListComponent {
     exportCSV(dt) {
         this.isSpinnerVisible = true;
         this.salesOrderService
-            .getAllSalesOrderSettings().subscribe(res => {
+            .getAllSalesOrderSettings(this.currentUserMasterCompanyId).subscribe(res => {
                 let response: any = res;
                 const vList = response.map(x => {
                     return {

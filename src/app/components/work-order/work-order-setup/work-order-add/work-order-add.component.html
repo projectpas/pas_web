@@ -519,7 +519,7 @@
                                      <td>
                                         <p-dropdown filter="true" class="min_selct_height" name="cmm{{i}}" #cmm="ngModel"  (ngModelChange)="getValid()"  [autoWidth]="false" [style]="pDropdownStyle"
                                                     [options]="cmmList" class="p-dropdown-custom-md1 p-dropdown-mh120"
-                                                    [(ngModel)]="workOrderPartNumber.cmmId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
+                                                    [(ngModel)]="workOrderPartNumber.cMMId" [disabled]="isView || quotestatusofCurrentPart =='Approved'" appendTo="body">
                                         </p-dropdown>
                                     </td>
                                     <td class="lign_flex">
@@ -534,7 +534,13 @@
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                        </span> 
+                                        </span>  
+
+                                        <span>
+                                            <input type="checkbox" name="tranferwflw{{i}}" #tranferwflw="ngModel"  (ngModelChange)="getValid()" 
+                                            class="form-control w60  mr10" [(ngModel)]="isworkflowTranfer" (click)="tranferCheckbox($event)" matTooltip="Transfer Workflow To Work Order"
+                                            matTooltipPosition="above"> 
+                                        </span>
                                     </td> 
                                     <td>
                                         <input type="text" class="form-control w100" name="itemGroup{{i}}"
@@ -1131,6 +1137,92 @@
         </div>
     </div>
 </div>
+
+<div id="warningForCmmWorkflow" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xsm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title warning_color"  >Warning</h4>
+              </div>
+            <div class="pad_msf">
+                <p  class="mar_o warning_color"> workflow is expired </p>
+                <!-- <input type="checkbox" name="contract" #contract="ngModel"  (ngModelChange)="getValid()" 
+                class="form-control w60 width-100"> -->
+
+             </div>
+            <div class="modal-footer footer-padding"> 
+                <!-- <button type="button" class="btn btn-primary" data-dismiss="modal"
+                (click)="WarnRescticModel()">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                  (click)="movetoworkorderlist()">No</button> -->
+                <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="removeWorkflow()"
+                  >Ok </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="warningForCmmPublication" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xsm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title warning_color">Warning</h4>
+              </div>
+            <div class="pad_msf">
+                <p  class="mar_o warning_color"> Publication is expired </p>
+             </div>
+            <div class="modal-footer footer-padding"> 
+                <!-- <button type="button" class="btn btn-primary" data-dismiss="modal"
+                (click)="WarnRescticModel()">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                  (click)="movetoworkorderlist()">No</button> -->
+                <button class="btn btn-primary footer-button-padding" data-dismiss="modal" (click)="removePublication()"
+                  >Ok </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="workFlowTransfer" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xsm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title warning_color">Transfer Workfow To Work Order</h4>
+              </div>
+            <div class="pad_msf">
+                <!-- <p  class="mar_o warning_color"> Publication is expired </p> -->
+<div class="wo_canges">
+    <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Material List"
+    [(ngModel)]="isTaskCompletedByOne"  (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+</div>
+<div class="wo_canges">
+    <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Target Labor Hours"
+    [(ngModel)]="isTaskCompletedByOne" (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+</div>
+<div class="wo_canges">
+    <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Tools"
+    [(ngModel)]="isTaskCompletedByOne"  (onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+</div>
+      <div class="wo_canges">
+        <p-checkbox href="#" class="p-checkbox-label task-completed-by-one" name="task" binary="false" label="Misc Charges"
+        [(ngModel)]="isTaskCompletedByOne"(onChange)="taskComletedByConfirmation($event)"></p-checkbox>
+      </div>
+             </div>
+            <div class="modal-footer footer-padding"> 
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                (click)="transferWorkflow()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                   >Close</button>
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

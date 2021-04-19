@@ -153,7 +153,7 @@ export class AssetListingComponent implements OnInit {
         this.assetService.alertObj.next(this.assetService.ShowPtab); //steps
         this.assetService.indexObj.next(this.activeIndex);
         if (this.isWorkOrder) {
-            this.assetService.getAssetsById(this.assetsId).subscribe(res => {
+            this.assetService.getAssetsById(this.assetsId,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.openView('', res[0]); 
                 }, err => {
                     const errorLog = err;
