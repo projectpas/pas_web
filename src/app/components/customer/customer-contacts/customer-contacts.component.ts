@@ -23,6 +23,7 @@ import { emailPattern, urlPattern, titlePattern, phonePattern, mobilePattern } f
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 import { AtaMainService } from '../../../services/atamain.service';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-customer-contacts',
@@ -162,6 +163,7 @@ export class CustomerContactsComponent implements OnInit {
 	restoreATArecord: any = {}
 	arrayContactlist: any[] = [];
 	resetinputmodel: any;
+	customerContactsOriginal: any;
 
 	constructor(private router: ActivatedRoute,
 		private route: Router,
@@ -348,9 +350,25 @@ export class CustomerContactsComponent implements OnInit {
 				this.customerContacts = newarry;
 			}
 		}
+		this.customerContactsOriginal=this.customerContacts
 		this.totalRecords = this.customerContacts.length;
 		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 	}
+	dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.customerContacts = this.customerContactsOriginal;
+            const data = [...this.customerContacts.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.customerContacts = data;
+        } else {
+            this.customerContacts = this.customerContactsOriginal;
+        }
+    }
 
 	restore(content, rowData) {
 		this.restorerecord = rowData;

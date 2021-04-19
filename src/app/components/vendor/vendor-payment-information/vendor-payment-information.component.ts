@@ -27,6 +27,7 @@ import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
+import * as moment from 'moment';
 declare const google: any;
 
 @Component({
@@ -160,6 +161,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	vendorCodeandName: any;
 	contact: any;
 	editSiteName: any
+	allActionsOriginal: any[];
 
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
@@ -543,6 +545,21 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
         }
         this.geListByStatus(this.status ? this.status : this.currentstatus)
 	}
+	dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.allActions = this.allActionsOriginal;
+            const data = [...this.allActions.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.allActions = data;
+        } else {
+            this.allActions = this.allActionsOriginal;
+        }
+    }
 	
     geListByStatus(status) {
         const newarry=[];
@@ -595,7 +612,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				});
 				this.allActions= newarry;
 			}
-        }
+		}
+		this.allActionsOriginal=this.allActions;
          this.totalRecords = this.allActions.length ;
          this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 		}
@@ -989,9 +1007,10 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.internationalSaveObj.createdBy = this.userName;
 				this.internationalSaveObj.updatedBy = this.userName;
 				this.internationalSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
+				this.internationalSaveObj.beneficiaryCustomer=editValueAssignByCondition('vendorName', this.internationalSaveObj.vendorName),
 				this.vendorService.addInternationalinfo({
 					...this.internationalSaveObj,
-					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),
+					
 					beneficiaryCustomerId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),		
 					countryId: editValueAssignByCondition('countries_id', this.internationalSaveObj.countryId),
 				}).subscribe(data => {
@@ -1014,7 +1033,7 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 				this.internationalSaveObj.masterCompanyId = this.currentUserMasterCompanyId;
 				this.internationalSaveObj.createdBy = this.userName;
 				this.internationalSaveObj.updatedBy = this.userName;
-
+				this.internationalSaveObj.beneficiaryCustomer=editValueAssignByCondition('vendorName', this.internationalSaveObj.vendorName),
 				this.vendorService.vendorInternationalUpdate({
 					...this.internationalSaveObj,
 					//vendorId :editValueAssignByCondition('vendorId', this.internationalSaveObj.vendorName),	
