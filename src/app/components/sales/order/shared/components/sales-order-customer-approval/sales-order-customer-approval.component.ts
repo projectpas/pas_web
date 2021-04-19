@@ -112,6 +112,13 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     }
   }
 
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
+  arrayApprovalStatuslst: any[] = [];
   refresh(marginSummary: MarginSummary, salesOrderId, salesQuoteId, isViewMode = false, customerContactList = []) {
     this.isSpinnerVisible = true;
     this.salesOrderId = salesOrderId;
@@ -122,7 +129,10 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       this.setAllCustomerContact(this.customerContactList);
       this.setDefaultContact();
     }
-    forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
+    if (this.arrayApprovalStatuslst.length == 0) {
+      this.arrayApprovalStatuslst.push(0);
+    }
+    forkJoin(this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.masterCompanyId),
       this.salesOrderService.approverslistbyTaskId(ApprovalTaskEnum.SOApproval, this.salesOrderId),
       this.salesOrderService.getCustomerApprovalList(this.salesOrderId)
     ).subscribe(response => {
@@ -154,7 +164,10 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   getApproverStatusList() {
-    this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(res => {
+    if (this.arrayApprovalStatuslst.length == 0) {
+      this.arrayApprovalStatuslst.push(0);
+    }
+    this.commonService.autoSuggestionSmartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name', '', true, 100, this.arrayApprovalStatuslst.join(), this.masterCompanyId).subscribe(res => {
       this.statusList = res.map(x => {
         return {
           ...x,
@@ -323,24 +336,12 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
 
       if (approval.internalSentDate) {
         instance.internalSentDate = new Date(approval.internalSentDate);
-        // if (!approval.internalApprovedDate) {
-        //   instance.internalApprovedDate = new Date();
-        // }
       }
-      // else if (!approval.internalSentDate) {
-      //   instance.internalSentDate = new Date();
-      // }
       if (approval.customerSentDate) {
         instance.customerSentDate = new Date(approval.customerSentDate);
-        // if (!approval.customerApprovedDate) {
-        //   instance.customerApprovedDate = new Date();
-        // }
       }
       if (approval.internalApprovedDate) {
         instance.internalApprovedDate = new Date(approval.internalApprovedDate);
-        // if (!approval.customerSentDate) {
-        //   instance.customerSentDate = new Date();
-        // }
       }
       if (approval.customerApprovedDate) {
         instance.customerApprovedDate = new Date(approval.customerApprovedDate);
@@ -490,12 +491,12 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
             "CustomerStatusId": x.customerStatusId,
             "InternalMemo": x.internalMemo,
             "CustomerMemo": x.customerMemo,
-            "UpdatedBy": "admin",
+            "UpdatedBy": this.userName,
             "salesOrderApprovalId": x.salesOrderApprovalId,
             "ApprovalActionId": x.approvalActionId,
             "IsInternalApprove": x.isInternalApprove,
-            "createdBy": "admin",
-            "updatedBy": "admin",
+            "createdBy": this.userName,
+            "updatedBy": this.userName,
             "createdDate": new Date().toDateString(),
             "updatedDate": new Date().toDateString(),
             "isActive": true,
@@ -682,5 +683,24 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       }
     }
     return str;
+  }
+
+  checkAnyRowSelected() {
+    var result = false;
+    var keepGoing = true;
+    if (this.salesOrderCustomerApprovalListView && this.salesOrderCustomerApprovalListView.length > 0) {
+      this.salesOrderCustomerApprovalListView.forEach(
+        (x) => {
+          if (keepGoing) {
+            if (x.selected) {
+              result = true;
+              keepGoing = false;
+            }
+          }
+        }
+      )
+    }
+
+    return result;
   }
 }
