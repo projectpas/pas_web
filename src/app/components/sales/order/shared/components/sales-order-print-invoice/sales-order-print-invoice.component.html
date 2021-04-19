@@ -361,11 +361,11 @@
                                 </tr>
                                 <tr>
                                     <td class="border-transparent" colspan="2"></td>
-                                    <td class="border-transparent" colspan="2" rowspan="6">
-                                        <span>{{this.mailToBankingInformation }}</span>
+                                    <td colspan="2" rowspan="6">
+                                        <div style="width: 100%; height: 100%" [innerHTML]="this.salesOrderInvoice.mailToBankingInformation"></div>
                                     </td>
-                                    <td class="border-transparent" colspan="3" rowspan="6">
-                                        <span>{{this.wireTransferBankingInformation }}</span>
+                                    <td colspan="3" rowspan="6">
+                                        <div style="width: 100%; height: 100%;" [innerHTML]="this.salesOrderInvoice.wireTransferBankingInformation"></div>
                                     </td>
                                     <td class="border-transparent" colspan="2">
                                         <b>BALANCE DUE</b>
