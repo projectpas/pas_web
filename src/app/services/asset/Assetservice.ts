@@ -119,10 +119,6 @@ export class AssetService {
         return Observable.forkJoin(this.assetEndpoint.getAssetInventoryList<any[]>(data));
    
     } 
-    GetCalibarationMgmtList(data) {
-        return Observable.forkJoin(this.assetEndpoint.GetCalibarationMgmtList<any[]>(data));
-   
-    } 
 
     getAssetCapesAudit(assetcapesId: number) {
         return this.assetEndpoint.getAssetCapesAuditById<any[]>(assetcapesId);

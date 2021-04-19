@@ -1,5 +1,4 @@
-﻿import { CalibrationMgmtListingComponent } from './../components/Asset-Management/calibration-mgmt-listing/calibration-mgmt-listing.component';
-import { NgModule } from '@angular/core';
+﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
@@ -34,7 +33,6 @@ const assetPagesRoutes: Routes = [
             { path: "app-edit-asset/:id", component: CreateAssetComponent, data: { title: "Asset Edit" } },
             { path: "app-view-asset", component: ViewAssetComponent, data: { title: "Asset View" } },
             { path: "app-asset-adjustment/:id", component: AssetAdjustmentComponent, data: { title: "Asset Adjustment" } },
-            { path: "app-calibration-mgmt-listing", component: CalibrationMgmtListingComponent, data: { title: "Calibration Mgmt Listing" } },
         ]
     }
 ];
