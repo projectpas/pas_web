@@ -620,7 +620,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             }
             this.employeeIdTemp = this.sourceEmployee.employeeCode ? this.sourceEmployee.employeeCode : 'Creating';
             this.empCreationForm.controls['JobTypeId'].setValue(this.sourceEmployee.jobTypeId);
-            this.supervisorId = this.sourceEmployee.supervisorId;
+            this.supervisorId = this.sourceEmployee.supervisor[0];
             if (this.employeeId) {
                 this.sourceEmployee.startDate = new Date(this.sourceEmployee.startDate);
             } else {
