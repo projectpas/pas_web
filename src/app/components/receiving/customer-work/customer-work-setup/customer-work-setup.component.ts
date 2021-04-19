@@ -15,6 +15,8 @@ import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { timePattern } from '../../../../validations/validation-pattern';
+
 @Component({
     selector: 'app-customer-work-setup',
     templateUrl: './customer-work-setup.component.html',
@@ -30,6 +32,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     isEditMode: boolean = false;
     private onDestroy$: Subject<void> = new Subject<void>();
     uploadDocs: Subject<boolean> = new Subject();
+    timePattern = timePattern();
     breadcrumbs: MenuItem[] = [
         { label: 'Receiving' },
         { label: 'Customer Work List' },
@@ -183,10 +186,12 @@ export class CustomerWorkSetupComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+	}
+
     get currentUserManagementStructureId(): number {
-        return this.authService.currentUser
-          ? this.authService.currentUser.managementStructureId
-          : null;
+        return this.authService.currentUser ? this.authService.currentUser.managementStructureId : null;
       }
 
     filterPartNumbers(event) {
@@ -205,10 +210,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.setEditArray.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoCompleteSmartDropDownItemMasterList(strText, true, 20, this.setEditArray.join(), mcId).subscribe(res => {
+        this.commonService.autoCompleteSmartDropDownItemMasterList(strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allPartnumbersList = res;
             this.partNumbersInfo = this.allPartnumbersList;
         })
@@ -263,13 +265,9 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.receivingForm.owner?  this.receivingForm.owner.value :0,
                 this.receivingForm.obtainFrom? this.receivingForm.obtainFrom.value :0); 
         }else{
-
             this.arrayVendlsit.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendlsit.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName', strText, true, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allVendorsList = res;
             this.vendorsList = this.allVendorsList;
         })
@@ -290,13 +288,9 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.receivingForm.owner?this.receivingForm.owner.value :0,
                 this.receivingForm.obtainFrom? this.receivingForm.obtainFrom.value :0); 
         }else{
-
             this.arrayVendlsit.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-      this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayVendlsit.join(),mcId).subscribe(res => {
+      this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCompanyList = res;
             this.companyList = this.allCompanyList;
         })
@@ -311,10 +305,7 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allConditionInfo = res.map(x => {
                     return {
@@ -356,11 +347,8 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.setEditArray.push(0);
         }
-        const strText = value ? value : '';
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        const strText = value ? value : '';        
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allTagTypes = res;
             }
@@ -583,10 +571,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else { 
             this.arrayCustlist.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.allCustomersInfo = res.map(x => {
                 return {
                     ...x,
@@ -613,11 +598,7 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.arrayCustlist.push(0);
         }
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(),mcId).subscribe(res => {
-
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.workScopeList = res;
         });
     }
@@ -670,14 +651,10 @@ export class CustomerWorkSetupComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = '';
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.allSites = res.map(x => {
                     return {
-
                         siteId: x.value,
                         name: x.label,
                         ...x
@@ -829,9 +806,6 @@ export class CustomerWorkSetupComponent implements OnInit {
                 this.setEditArray.push(0);
             }
             const strText = '';
-            const mcId= this.authService.currentUser
-            ? this.authService.currentUser.masterCompanyId
-            : null;
             this.commonService.autoDropListCustomerContacts(id, strText, 20, this.setEditArray.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
                 this.customerContactList = res.map(x => {
                     return {
@@ -1073,10 +1047,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     getCustomerWarningsList(): void {
         const strText='Receive MPN';
         this.setEditArray.push(0);
-    const mcId= this.authService.currentUser
-    ? this.authService.currentUser.masterCompanyId
-    : null;
-        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(), this.currentUserMasterCompanyId).subscribe(res => {
          res.forEach(element => {
                 if (element.label == 'Receive MPN') {
                     this.customerWarningListId = element.value;
@@ -1319,11 +1290,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     }
 
     getWorkOrderDefaultSetting() {
-        const mcId= this.authService.currentUser
-        ? this.authService.currentUser.masterCompanyId
-        : null;
-          this.commonService.workOrderDefaultSettings(mcId, 1).subscribe(res => {
-         
+          this.commonService.workOrderDefaultSettings(this.currentUserMasterCompanyId, 1).subscribe(res => {         
             this.receivingForm.siteId=res[0].defaultSiteId;
             this.receivingForm.warehouseId=res[0].defaultWearhouseId;
             this.receivingForm.locationId=res[0].defaultLocationId;
