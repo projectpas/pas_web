@@ -121,6 +121,7 @@ export class EntityContactComponent implements OnInit {
 	companyCode: string;
 	@ViewChild('ATAADD', { static: false }) myModal;
 	isViewMode: boolean = false;
+	entityContactsOriginal: any;
 
 	constructor(private router: ActivatedRoute,
 		public legalEntityService: LegalEntityService,
@@ -723,13 +724,8 @@ export class EntityContactComponent implements OnInit {
 				// setTimeout(() => {
 				this.isSpinnerVisible = false;
 				// }, 1200);
-				this.entityContacts = data[0]['results'].map(x => {
-					return {
-						...x,
-						createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
-						updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
-					}
-				});
+				this.entityContacts = data[0]['results'];
+				this.entityContactsOriginal=data[0]['results'];
 				if (this.entityContacts.length > 0) {
 					this.totalRecordsContacts = data[0]['totalRecordsCount'];
 					this.totalPages = Math.ceil(this.totalRecordsContacts / this.pageSize);
@@ -779,32 +775,20 @@ export class EntityContactComponent implements OnInit {
 	allAssetInfoOriginal: any = [];
 	dateObject: any = {}
 	dateFilterForTable(date, field) {
-		this.dateObject = {}
-		date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-		if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-			if (field == 'createdDate') {
-				this.dateObject = { 'createdDate': date }
-			} else if (field == 'updatedDate') {
-				this.dateObject = { 'updatedDate': date }
-			}
-
-			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-			const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-			this.getList(PagingData);
-		} else {
-			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-			if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
-				delete this.lazyLoadEventDataInput.filters.createdDate;
-			}
-			if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
-				delete this.lazyLoadEventDataInput.filters.updatedDate;
-			}
-			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-			const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-			this.getList(PagingData);
-		}
-
-	}
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.entityContacts = this.entityContactsOriginal;
+            const data = [...this.entityContacts.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.entityContacts = data;
+        } else {
+            this.entityContacts = this.entityContactsOriginal;
+        }
+    }
 
 	customContactExcelUpload(event) {
 		const file = event.target.files;

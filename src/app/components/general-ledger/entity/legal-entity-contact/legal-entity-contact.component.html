@@ -792,15 +792,12 @@ col.field == 'createdDate'?
                             <div class="form-group">
                                 <div class="form-group primary-contact">
                                     <span class="checkbox-cstm">
-                                        <label>
+                                        <label> Primary Contact </label>
                                             <input type="checkbox" name="isDefaultContact"
                                                 (ngModelChange)="enableSave()"
                                                 [(ngModel)]="contactInformation.isDefaultContact"
                                                 [disabled]="contactInformation.isDefaultContact && isPrimatyContactData"
                                                 (ngModelChange)="enableSave()">
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Primary Contact
-                                        </label>
                                     </span>
                                 </div>
                             </div>

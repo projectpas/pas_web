@@ -143,6 +143,10 @@ export class EntityShippingComponent implements OnInit {
     auditHisory: any;
     isEditMode: boolean;
     sourceAction: any;
+    internationalShippingViaDataOriginal: any;
+    demosticShippingViaDataOriginal: any;
+    domesticShippingDataOriginal: any[];
+    internationalShippingDataOriginal: any[];
 
     constructor(private legalEntityService: LegalEntityService, private authService: AuthService,
         private alertService: AlertService, private activeModal: NgbActiveModal, private modalService: NgbModal, private configurations: ConfigurationService,
@@ -1175,6 +1179,7 @@ export class EntityShippingComponent implements OnInit {
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                     }
                 });
+                this.domesticShippingDataOriginal=this.domesticShippingData;
                 if (this.domesticShippingData.length > 0) {
                     this.totalRecords = data[0]['totalRecordsCount'];
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -1197,28 +1202,18 @@ export class EntityShippingComponent implements OnInit {
     allAssetInfoOriginal: any = [];
     dateObject: any = {}
     dateFilterForTable(date, field) {
-        this.dateObject = {}
-        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForDomestic(PagingData);
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.internationalShippingViaData = this.internationalShippingViaDataOriginal;
+            const data = [...this.internationalShippingViaData.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.internationalShippingViaData = data;
         } else {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
-                delete this.lazyLoadEventDataInput.filters.createdDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
-                delete this.lazyLoadEventDataInput.filters.updatedDate;
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForDomestic(PagingData);
+            this.internationalShippingViaData = this.internationalShippingViaDataOriginal;
         }
     }
 
@@ -1313,6 +1308,7 @@ export class EntityShippingComponent implements OnInit {
                         expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MM/dd/yyyy hh:mm a') : '',
                     }
                 });
+                this.internationalShippingDataOriginal=this.internationalShippingData
                 if (this.internationalShippingData.length > 0) {
                     this.totalRecordsForInternationalShipping = data[0]['totalRecordsCount'];
                     this.totalPages = Math.ceil(this.totalRecordsForInternationalShipping / this.pageSize);
@@ -1328,38 +1324,22 @@ export class EntityShippingComponent implements OnInit {
     }
 
     dateFilterForTableForInternational(date, field) {
-        this.dateObject = {}
-        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            } else if (field == 'startDate') {
-                this.dateObject = { 'startDate': date }
-            } else if (field == 'expirationDate') {
-                this.dateObject = { 'expirationDate': date }
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForInternational(PagingData);
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.internationalShippingData = this.internationalShippingDataOriginal;
+            const data = [...this.internationalShippingData.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }else if (moment(x.startDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'startDate') {
+                    return x;
+                }else if (moment(x.expirationDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'expirationDate') {
+                    return x;
+                }
+            })]
+            this.internationalShippingData = data;
         } else {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
-                delete this.lazyLoadEventDataInput.filters.createdDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
-                delete this.lazyLoadEventDataInput.filters.updatedDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.startDate) {
-                delete this.lazyLoadEventDataInput.filters.startDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.expirationDate) {
-                delete this.lazyLoadEventDataInput.filters.expirationDate;
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForInternational(PagingData);
+            this.internationalShippingData = this.internationalShippingDataOriginal;
         }
     }
 
@@ -1449,6 +1429,7 @@ export class EntityShippingComponent implements OnInit {
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                     }
                 });
+                this.demosticShippingViaDataOriginal=this.demosticShippingViaData;
                 if (this.demosticShippingViaData.length > 0) {
                     this.totalRecordsForDomesticShipVia = data[0]['totalRecordsCount'];
                     this.totalPages = Math.ceil(this.totalRecordsForDomesticShipVia / this.pageSize);
@@ -1463,33 +1444,36 @@ export class EntityShippingComponent implements OnInit {
             })
         }
     }
-
-    dateFilterForTableDomesticShipVia(date, field) {
-        this.dateObject = {}
-        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForDomesticShipVia(PagingData);
+    dateFilterForDomesticTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.domesticShippingData = this.domesticShippingDataOriginal;
+            const data = [...this.domesticShippingData.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.domesticShippingData = data;
         } else {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
-                delete this.lazyLoadEventDataInput.filters.createdDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
-                delete this.lazyLoadEventDataInput.filters.updatedDate;
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForDomesticShipVia(PagingData);
+            this.domesticShippingData = this.domesticShippingDataOriginal;
         }
     }
-    //International  shipping  Via 
+    dateFilterForTableDomesticShipVia(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.demosticShippingViaData = this.demosticShippingViaDataOriginal;
+            const data = [...this.demosticShippingViaData.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.demosticShippingViaData = data;
+        } else {
+            this.demosticShippingViaData = this.demosticShippingViaDataOriginal;
+        }
+    }
 
     loadDatasInternationalShipVia(event) {
         event.filters.status = this.currentStatusForinternationalShipVia ? this.currentStatusForinternationalShipVia : 'Active'
@@ -1580,6 +1564,7 @@ export class EntityShippingComponent implements OnInit {
                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                     }
                 });
+                this.internationalShippingViaDataOriginal=this.internationalShippingViaData
                 if (this.internationalShippingViaData.length > 0) {
                     this.totalRecordsForInterShipVia = data[0]['totalRecordsCount'];
                     this.totalPages = Math.ceil(this.totalRecordsForInterShipVia / this.pageSize);
@@ -1592,32 +1577,6 @@ export class EntityShippingComponent implements OnInit {
                 this.isSpinnerVisibleInernShipVia = false;
                 this.isSpinnerVisible = false;
             })
-        }
-    }
-
-    dateFilterForTableinternationalShipVia(date, field) {
-        this.dateObject = {}
-        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
-            if (field == 'createdDate') {
-                this.dateObject = { 'createdDate': date }
-            } else if (field == 'updatedDate') {
-                this.dateObject = { 'updatedDate': date }
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForinternationalShipVia(PagingData);
-        } else {
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
-                delete this.lazyLoadEventDataInput.filters.createdDate;
-            }
-            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
-                delete this.lazyLoadEventDataInput.filters.updatedDate;
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getListForinternationalShipVia(PagingData);
         }
     }
 
