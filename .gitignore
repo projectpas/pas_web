@@ -4,3 +4,6 @@ dist
 /.vs
 /package-lock.json
 /.dist
+/dist_PAS_DEV_20032021.rar
+/dist_PAS_UAT_20032021.rar
+/dist/MyApp

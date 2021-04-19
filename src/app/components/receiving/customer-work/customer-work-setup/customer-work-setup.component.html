@@ -381,96 +381,201 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Remaining</td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="cyclesRemaining" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.cyclesRemaining">
-                                                    </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="timeRemaining" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.timeRemaining">
-                                                    </td>
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text" 
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="cyclesRemaining"
+                                                            [(ngModel)]="sourceTimeLife.cyclesRemaining" />
+                                                        <div *ngIf="cyclesRemaining.errors">
+                                                            <div *ngIf="cyclesRemaining.errors" [ngClass]="'error'">
+                                                                <div *ngIf="cyclesRemaining.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>     
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="timeRemaining"
+                                                            [(ngModel)]="sourceTimeLife.timeRemaining" />
+                                                        <div *ngIf="timeRemaining.errors">
+                                                            <div *ngIf="timeRemaining.errors" [ngClass]="'error'">
+                                                                <div *ngIf="timeRemaining.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>                                               
                                                     <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since New</td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="cyclesSinceNew" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNew">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="cyclesSinceNew"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNew" />
+                                                        <div *ngIf="cyclesSinceNew.errors">
+                                                            <div *ngIf="cyclesSinceNew.errors" [ngClass]="'error'">
+                                                                <div *ngIf="cyclesSinceNew.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="timeSinceNew" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceNew">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="timeSinceNew"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceNew" />
+                                                        <div *ngIf="timeSinceNew.errors">
+                                                            <div *ngIf="timeSinceNew.errors" [ngClass]="'error'">
+                                                                <div *ngIf="timeSinceNew.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="lastSinceNew" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.lastSinceNew">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="lastSinceNew"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceNew" />
+                                                        <div *ngIf="lastSinceNew.errors">
+                                                            <div *ngIf="lastSinceNew.errors" [ngClass]="'error'">
+                                                                <div *ngIf="lastSinceNew.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Ovh</td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="cyclesSinceOVH" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVH">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="cyclesSinceOVH"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVH" />
+                                                        <div *ngIf="cyclesSinceOVH.errors">
+                                                            <div *ngIf="cyclesSinceOVH.errors" [ngClass]="'error'">
+                                                                <div *ngIf="cyclesSinceOVH.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="timeSinceOVH" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceOVH">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="timeSinceOVH"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceOVH" />
+                                                        <div *ngIf="timeSinceOVH.errors">
+                                                            <div *ngIf="timeSinceOVH.errors" [ngClass]="'error'">
+                                                                <div *ngIf="timeSinceOVH.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="lastSinceOVH" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.lastSinceOVH">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="lastSinceOVH"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceOVH" />
+                                                        <div *ngIf="lastSinceOVH.errors">
+                                                            <div *ngIf="lastSinceOVH.errors" [ngClass]="'error'">
+                                                                <div *ngIf="lastSinceOVH.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Insp</td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="cyclesSinceInspection" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspection">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern"
+                                                            #cyclesSinceInspection="ngModel" mask="000:00"
+                                                            (ngModelChange)="enableSave()" name="cyclesSinceInspection"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspection" />
+                                                        <div *ngIf="cyclesSinceInspection.errors">
+                                                            <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
+                                                                <div *ngIf="cyclesSinceInspection.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="timeSinceInspection" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceInspection">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="timeSinceInspection"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceInspection" />
+                                                        <div *ngIf="timeSinceInspection.errors">
+                                                            <div *ngIf="timeSinceInspection.errors" [ngClass]="'error'">
+                                                                <div *ngIf="timeSinceInspection.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="lastSinceInspection" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.lastSinceInspection">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="lastSinceInspection"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceInspection" />
+                                                        <div *ngIf="lastSinceInspection.errors">
+                                                            <div *ngIf="lastSinceInspection.errors" [ngClass]="'error'">
+                                                                <div *ngIf="lastSinceInspection.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Repair</td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="cyclesSinceRepair" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepair">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="cyclesSinceRepair"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepair" />
+                                                        <div *ngIf="cyclesSinceRepair.errors">
+                                                            <div *ngIf="cyclesSinceRepair.errors" [ngClass]="'error'">
+                                                                <div *ngIf="cyclesSinceRepair.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="clr2 text-center">
-                                                        <input type="number" (keypress)="restrictMinus($event)"
-                                                            class="w60 form-control" placeholder="hours"
-                                                            name="timeSinceRepair" (ngModelChange)="getActive()"
-                                                            [(ngModel)]="sourceTimeLife.timeSinceRepair">
+                                                    <td class="clr2">
+                                                        <input class="form-control width-input" matInput type="text"
+                                                            placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel"
+                                                            mask="000:00" (ngModelChange)="getActive()" name="timeSinceRepair"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceRepair" />
+                                                        <div *ngIf="timeSinceRepair.errors">
+                                                            <div *ngIf="timeSinceRepair.errors" [ngClass]="'error'">
+                                                                <div *ngIf="timeSinceRepair.errors.pattern">
+                                                                    <span class="clr-red">Please enter valid time format
+                                                                        (hhh:mm)</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                     <td></td>
                                                 </tr>
