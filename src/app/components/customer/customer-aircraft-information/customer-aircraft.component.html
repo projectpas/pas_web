@@ -179,7 +179,7 @@
             {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
           </ng-container>
           <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
-              {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
+              {{rowData[col.field] }}
           </ng-container> 
         </td>
         <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">

@@ -346,8 +346,11 @@ export class CommonDocumentsComponent implements OnInit, OnDestroy {
     removeFile(event) {
         this.formData.delete(event.file.name)
         this.uploadedFileLength--;
-        this.disableSave = true;
         this.selectedFileAttachment = this.selectedFileAttachment.filter(({ fileName }) => fileName !== event.file.name);
+        if(this.selectedFileAttachment.length == 0){
+        this.disableSave = true;
+        }
+       
     }
 
     selectedFileAttachment: any = [];
