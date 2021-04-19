@@ -61,7 +61,7 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
     CurrencyData(strText = '') {
         if(this.arrayCurrancylist.length == 0) {			
             this.arrayCurrancylist.push(0); }
-          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 200, this.arrayCurrancylist.join()).subscribe(res => {
+          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 200, this.arrayCurrancylist.join(),this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.allCurrencyInfo = res;
             this.exchCurrencyInfo = this.allCurrencyInfo;
             this.loanCurrencyInfo = this.allCurrencyInfo;
@@ -86,7 +86,7 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
                     if (res != null) {
                             this.arrayCurrancylist.push(res.exchangeCurrencyId);
                             this.arrayCurrancylist.push(res.loanCurrencyId);
-                            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', false, 200, this.arrayCurrancylist.join()).subscribe(curres => {
+                            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', false, 200, this.arrayCurrancylist.join(),this.authService.currentUser.masterCompanyId).subscribe(curres => {
                                 this.allCurrencyInfo = curres;
                                 this.exchCurrencyInfo = this.allCurrencyInfo;
                                 this.loanCurrencyInfo = this.allCurrencyInfo;
@@ -125,7 +125,7 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
             }
             
             let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id,this.authService.currentUser.masterCompanyId).subscribe(res => {
                 obj = res[0];
                 if(currName == 'exch') {
                     this.exchCurrencyInfo = [...originalData, obj];
@@ -193,7 +193,7 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
 
     getDefaultCurrency() {
         this.legalEntityId = 19;
-        this.commonService.getDefaultCurrency(this.legalEntityId).subscribe(res => {
+        this.commonService.getDefaultCurrency(this.legalEntityId,this.authService.currentUser.masterCompanyId).subscribe(res => {
         })
     }
 

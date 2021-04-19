@@ -644,7 +644,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         else {
             this.arrayItemMasterIdlist.push(itemMasterId);
         }
-        this.commonService.getPartnumList(strvalue).subscribe(res => {
+        this.commonService.getPartnumList(strvalue,this.authService.currentUser.masterCompanyId).subscribe(res => {
             this.isSpinnerVisible = false;
             this.partCollection = res.map(x => {
                 if (initialCall && this.sourceWorkFlow.partNumber == x.partNumber) {
