@@ -323,10 +323,6 @@ export class CustomerWorkSetupComponent implements OnInit {
                         description: x.label
                     }
                 });
-                // if (!this.receivingCustomerWorkId) {
-                //     this.receivingForm.conditionId = this.allConditionInfo[0].conditionId
-                //     this.onSelectCondition()
-                // }
             }
         })
     }
@@ -901,31 +897,16 @@ export class CustomerWorkSetupComponent implements OnInit {
     onSelectObrainFrom(value) {     
         this.receivingForm.obtainFrom = undefined;
         this.receivingForm.obtainFromTypeId = value;
-        // if(value==1){
-        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
-        //     this.receivingForm.owner =  this.receivingForm.customerId;;
-        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
-        // }
     }
 
     onSelectOwner(value) {
         this.receivingForm.owner = undefined;
         this.receivingForm.ownerTypeId = value;
-        // if(value==1){
-        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
-        //     this.receivingForm.owner =  this.receivingForm.customerId;;
-        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
-        // }
     }
 
     onSelectTraceableTo(value) {
         this.receivingForm.traceableTo = undefined;
         this.receivingForm.traceableToTypeId = value;
-        // if(value==1){
-        //     this.receivingForm.obtainFrom = this.receivingForm.customerId;
-        //     this.receivingForm.owner =  this.receivingForm.customerId;;
-        //     this.receivingForm.traceableTo =  this.receivingForm.customerId;;
-        // }
     }
 
     onSelectCondition() {
@@ -1029,49 +1010,25 @@ export class CustomerWorkSetupComponent implements OnInit {
         }
         else {
         
-            // if (receivingInfo.obtainFromTypeId == 1 && receivingInfo.obtainFrom !=null) {
-            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.customerId;
-            // } else if (receivingInfo.obtainFromTypeId = 2 && receivingInfo.obtainFrom !=null) {
-            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
-            // } else if (receivingInfo.obtainFromTypeId == 9 && receivingInfo.obtainFrom !=null) {
-            //     receivingInfo.obtainFrom = receivingInfo.obtainFrom.value;
-            // }
-            // if (receivingInfo.ownerTypeId == 1 && receivingInfo.owner !=null) {
-            //     receivingInfo.owner = receivingInfo.owner.customerId;
-            // } else if (receivingInfo.ownerTypeId = 2 && receivingInfo.owner !=null) {
-            //     receivingInfo.owner = receivingInfo.owner.value;
-            // } else if (receivingInfo.ownerTypeId == 9 && receivingInfo.owner !=null) {
-            //     receivingInfo.owner = receivingInfo.owner.value;
-            // }
-            // if (receivingInfo.traceableToTypeId == 1 && receivingInfo.traceableTo !=null) {
-            //     receivingInfo.traceableTo = receivingInfo.traceableTo.customerId;
-            // } else if (receivingInfo.traceableToTypeId = 2 && receivingInfo.traceableTo !=null) {
-            //     receivingInfo.traceableTo = receivingInfo.traceableTo.value;
-            // } else if (receivingInfo.traceableToTypeId == 9 && receivingInfo.traceableTo !=null) {
-            //     receivingInfo.traceableTo = receivingInfo.traceableTo.value;
-            // }
             receivingInfo.ownerTypeId=(receivingInfo.ownerTypeId==0 || receivingInfo.ownerTypeId==false)? null :receivingInfo.ownerTypeId;
             receivingInfo.obtainFromTypeId=(receivingInfo.obtainFromTypeId==0 || receivingInfo.obtainFromTypeId==false)? null :receivingInfo.obtainFromTypeId;
             receivingInfo.traceableToTypeId=(receivingInfo.traceableToTypeId==0 || receivingInfo.traceableToTypeId==0)? null :receivingInfo.traceableToTypeId;
 
-if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
-    receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
-}else{
-    receivingInfo.obtainFrom=null;
-}
-if(receivingInfo.ownerTypeId !=null && receivingInfo.owner !=null){
-    receivingInfo.owner =  (typeof  receivingInfo.owner=='object')? receivingInfo.owner.value : receivingInfo.owner;
-}else{
-    receivingInfo.owner =null
-}
-
-if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
-    receivingInfo.traceableTo = (typeof receivingInfo.traceableTo=='object')? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
-}else{
-    receivingInfo.traceableTo=null;  
-}
-
-
+            if(receivingInfo.obtainFromTypeId !=null && receivingInfo.obtainFrom !=null){
+                receivingInfo.obtainFrom = (typeof receivingInfo.obtainFrom=='object' )? receivingInfo.obtainFrom.value: receivingInfo.obtainFrom;
+            }else{
+                receivingInfo.obtainFrom=null;
+            }
+            if(receivingInfo.ownerTypeId !=null && receivingInfo.owner !=null){
+                receivingInfo.owner =  (typeof  receivingInfo.owner=='object')? receivingInfo.owner.value : receivingInfo.owner;
+            }else{
+                receivingInfo.owner =null
+            }
+            if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
+                receivingInfo.traceableTo = (typeof receivingInfo.traceableTo=='object')? receivingInfo.traceableTo.value: receivingInfo.traceableTo;
+            }else{
+                receivingInfo.traceableTo=null;  
+            }
             if (receivingInfo.tagType && receivingInfo.tagType.length > 0) {
                 this.allTagTypes.forEach(element1 => {
                     receivingInfo.tagType.forEach(element2 => {
@@ -1286,9 +1243,6 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
                 this.managementStructure.buId = 0;
                 this.managementStructure.divisionId = 0;
                 this.managementStructure.departmentId = 0;
-                // if(from=='html'){
-                //     this.receivingForm.employeeId=null;
-                // }
             })
             this.disableMagmtStruct = false;
         } else {
@@ -1307,9 +1261,6 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
                 this.divisionList = res;
                 this.managementStructure.divisionId = 0;
                 this.managementStructure.departmentId = 0;
-                // if(from=='html'){
-                //     this.receivingForm.employeeId=null;
-                // }
             })
         }
     }
@@ -1321,9 +1272,6 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
             this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
                 this.departmentList = res;
                 this.managementStructure.departmentId = 0;
-                // if(from=='html'){
-                //     this.receivingForm.employeeId=null;
-                // }
             })
         }
     }
@@ -1333,9 +1281,6 @@ if(receivingInfo.traceableToTypeId !=null && receivingInfo.traceableTo !=null){
             this.managementStructure.departmentId = departmentId;
             this.receivingForm.managementStructureId = departmentId;
         }
-        // if(from=='html'){
-        //     this.receivingForm.employeeId=null;
-        // }
     }
 
     onClickMemo() {

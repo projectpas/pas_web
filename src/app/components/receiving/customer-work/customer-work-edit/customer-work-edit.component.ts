@@ -191,6 +191,10 @@ export class CustomerWorkEditComponent {
 
     }
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
     sourcereceving: any = {};
     sourcerecevingForWorkOrder: any = {};
     ngAfterViewInit() {
@@ -373,7 +377,7 @@ export class CustomerWorkEditComponent {
             this.sourcereceving.updatedBy = this.userName;
             this.sourceTimeLife.createdBy = this.userName;
             this.sourceTimeLife.updatedBy = this.userName;
-            this.sourcereceving.masterCompanyId = 1;
+            this.sourcereceving.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourcereceving.isActive = true;
 
             this.sourcerecevingForWorkOrder = this.sourcereceving;
@@ -435,8 +439,6 @@ export class CustomerWorkEditComponent {
                         role => this.saveSuccessHelper(role,content),
                         error => this.saveFailedHelper(error));
                     this.sourcereceving = {};
-                   // this.router.navigateByUrl('receivingmodule/receivingpages/app-customer-works-list');
-
                 }
             }
         }
@@ -445,7 +447,7 @@ export class CustomerWorkEditComponent {
 
             this.sourcereceving.updatedBy = this.userName;
             this.sourcereceving.createdBy = this.userName;
-            this.sourcereceving.masterCompanyId = 1;
+            this.sourcereceving.masterCompanyId = this.currentUserMasterCompanyId;
             this.receivingCustomerWorkService.updateReason(this.sourcereceving).subscribe(
                 response => this.saveCompleted(this.sourcereceving),
                 error => this.saveFailedHelper(error));
