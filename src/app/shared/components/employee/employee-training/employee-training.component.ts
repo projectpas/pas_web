@@ -23,6 +23,7 @@ import { ConfigurationService } from '../../../../services/configuration.service
 import { AircraftModelService } from '../../../../services/aircraft-model/aircraft-model.service';
 //import * as $ from 'jquery';
 import * as moment from 'moment';
+import { ModuleConstants, PermissionConstants } from 'src/app/generic/ModuleConstant';
 declare let $: any;
 
 @Component({
@@ -137,6 +138,8 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     arrayTrainingtypelist: any = [];
     arrayFrequencyTrainingInfolist: any = [];
     arrayaircraftmodelarraylist: any = [];
+    isAdd: boolean=true;
+    isEdit: boolean=true;
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -157,7 +160,8 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         let user = this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
         this.userA = user.userName;
         this.translationService.closeCmpny = false;
-
+        this.isAdd = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.Add]);
+        this.isEdit = this.authService.checkPermission([ModuleConstants.Employees_Training + '.' + PermissionConstants.Update]);
     }
     ngOnInit(): void {
         this.isSpinnerVisible = true;

@@ -763,7 +763,9 @@ export class EmployeesListComponent implements OnInit {
         this.toGetEmployeeDetailsByEmpId(row.employeeId);
         this.toGetDocumentsListNew(row.employeeId);
         this.viewEmpID = row.employeeId;
+        if(this.isMgmtStruct==true){
         this.loadEmployeeRoles(row.employeeId);
+        }
         this.isSpinnerVisible = false;
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
