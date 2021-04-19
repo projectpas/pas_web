@@ -55,10 +55,10 @@
                                 <tr class="child-data splitship-child child-data-back"
                                     *ngFor="let bill of summaryPart.salesOrderBillingInvoiceChild; let poIndex = index">
                                     <td></td>
-                                    <td class="table-column-width" *ngIf="bill.qtyBilled > 0">
+                                    <td class="table-column-width" *ngIf="bill.invoiceDate != null">
                                         <label style="color: #0F9D58">{{ bill.invoiceStatus }}</label>
                                     </td>
-                                    <td class="table-column-width" *ngIf="bill.qtyBilled == 0">
+                                    <td class="table-column-width" *ngIf="bill.invoiceDate == null">
                                         <input id="{{poIndex}}" name="bill.selected{{poIndex}}" type="checkbox"
                                             (change)="checked($event, bill);" [(ngModel)]="bill.selected" />
                                     </td>

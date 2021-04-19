@@ -74,9 +74,7 @@ export class SalesOrderViewComponent implements OnInit {
   constructor(
     private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
-    private alertService: AlertService,
     private modalService: NgbModal,
-    private router: Router,
     private customerService: CustomerService,
     public employeeService: EmployeeService,
     private commonservice: CommonService,

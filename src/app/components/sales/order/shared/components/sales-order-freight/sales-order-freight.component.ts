@@ -104,9 +104,9 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.arrayPercentList.push(0);
         forkJoin(this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, 0),
             this.commonService.getShipVia(),
-            this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join()),
-            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
-            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())).subscribe(response => {
+            this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join(), this.currentUserMasterCompanyId),
+            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join(), this.currentUserMasterCompanyId),
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join(), this.currentUserMasterCompanyId)).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
